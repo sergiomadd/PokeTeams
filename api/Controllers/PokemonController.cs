@@ -1,5 +1,6 @@
 ﻿using api.Data;
 using api.Models;
+using api.Services.PokemonService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,25 +11,27 @@ namespace api.Controllers
     [ApiController]
     public class PokemonController : ControllerBase
     {
-        private readonly DataContext context;
-
-        public PokemonController(DataContext dataContext)
+        private readonly IPokemonService _pokemonService;
+        public PokemonController(IPokemonService pokemonService)
         {
-            context = dataContext;
+            _pokemonService = pokemonService;
         }
 
-        public DataContext DataContext { get; }
-
-        [HttpGet]
+        [HttpGet(Name = "GetAllPokemon")]
         public async Task<ActionResult<List<Pokemon>>> Get()
         {
-            return Ok(await context.Pokemon.ToArrayAsync());
+            var pokemons = await _pokemonService.GetAllPokemon();
+            if (pokemons == null)
+            {
+                return BadRequest("Pokemons not found.");
+            }
+            return Ok(pokemons);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetPokemonById")]
         public async Task<ActionResult<Pokemon>> Get(int id)
         {
-            var pokemon = await context.Pokemon.FindAsync(id);
+            var pokemon = await _pokemonService.GetPokemonById(id);
             if(pokemon == null)
             {
                 return BadRequest("Pokemon not found.");
