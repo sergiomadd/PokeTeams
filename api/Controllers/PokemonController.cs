@@ -29,7 +29,7 @@ namespace api.Controllers
         }
 
         [HttpGet("{id}", Name = "GetPokemonById")]
-        public async Task<ActionResult<Pokemon>> Get(int id)
+        public async Task<ActionResult<Pokemon>> Get(int id) 
         {
             var pokemon = await _pokemonService.GetPokemonById(id);
             if(pokemon == null)
