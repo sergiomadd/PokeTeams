@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Pokemon } from 'src/app/models/pokemon';
+import { Pokemon } from 'src/app/models/pokemon.model';
 
 @Component({
   selector: 'app-team',
@@ -16,6 +16,24 @@ export class TeamComponent {
 
   constructor()
   {
-    this.pokemons = [new Pokemon('poke1'), new Pokemon('poke2')];
+    this.pokemons = 
+    [
+      {
+        name: "ditto",
+        nickname: "ameba",
+        number: 1,
+        item: "",
+        ability: "",
+        nature: "",
+        teraType: "",
+        moves: [],
+        evs: [],
+        ivs: [],
+        level: 1,
+        stats: [],
+        shiny: false,
+        gender: "",
+      }
+    ];
   }
 }
