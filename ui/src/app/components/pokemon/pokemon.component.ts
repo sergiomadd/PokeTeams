@@ -3,11 +3,7 @@ import { Pokemon } from 'src/app/models/pokemon';
 
 @Component({
   selector: 'app-pokemon',
-  template: `
-  <div>
-    Pokemon: {{pokemon.name}}
-  </div>
-  `
+  templateUrl: './pokemon.component.html'
   ,
   styleUrls: ['./pokemon.component.scss']
 })

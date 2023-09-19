@@ -1,0 +1,75 @@
+<div>
+    <div class='side-left'>
+      <div className="back-frame">
+        <div className="frame">
+          <div className="sprite">
+            <img src={img} alt=""/>
+          </div>
+          <div className="shiny-wrapper">
+            <img src={props.shiny ? '/img/shiny_icon.png' : ''} alt=""/>
+          </div>
+          <div className="teratype-wrapper">
+            <img src={'/img/teratypes/ground_teratype_icon.png'} alt=""/>
+          </div>
+          <div className="gender-wrapper">
+            <img src={props.gender ? '/img/female.png' : '/img/male.png'} alt=""/>
+          </div>
+          <div className="types-wrapper">
+            <div className="types">
+              {props.types.map((type) => 
+                <div key={type.slot}>
+                  <img src={img} alt={type.name} className="type"></img>
+              </div>)}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="profile">
+        <div className="name piece multi-piece">
+        #{props.pokemon.id} {props.pokemonName} {props.nickname}
+          <div className="nickname">
+            
+          </div>
+        </div>
+        
+        <div className="piece multi-piece">
+          <Nature nature={props.nature}/>
+        </div>
+        <div className="piece multi-piece">
+          IVs: {props.ivs}
+        </div>
+      </div>
+      <div className="stats piece">
+          {props.stats.map((stat, index) =>
+          <Stat key={index} stat={stat}/>
+          )}
+      </div>
+    </div>
+    <div class='side-right'>
+      <div className="side right-side">
+        <div className="right-top">
+          <div className="item piece">
+            <div className="item-name">
+              {props.item ? getName(props.item.names) : ""}
+            </div>
+            <img className="item-img"
+            src={props.item ? props.item.sprites.default : ""} 
+            alt={props.item ? getName(props.item.names) : ""} />
+          </div>
+          <div className="ability piece">
+            {name}
+          </div>
+        </div>
+        <div className="moves">
+          {props.moves.map((move) =>
+            <Move key={move.id} move={move}/>
+          )}
+        </div>
+        <div className="stats piece">
+          {props.stats.map((stat, index) =>
+            <Stat key={index} stat={stat}/>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
