@@ -8,5 +8,6 @@ namespace api.Services.PokemonService
         Task<Item?> GetItemByName(string name);
         Task<Ability?> GetAbilityByName(string name);
         Task<Nature?> GetNatureByName(string name);
+        Task<Move?> GetMoveByName(string name);
     }
 }
