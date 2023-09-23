@@ -4,8 +4,7 @@ namespace api.Services.PokemonService
 {
     public interface IPokemonService
     {
-        Task<List<Pokemon>?> GetAllPokemon();
-        Task<Pokemon?> GetPokemonById(int id);
+        Task<Pokemon?> GetPokemonByName(string name);
         Task<Item?> GetItemByName(string name);
         Task<Ability?> GetAbilityByName(string name);
         Task<Nature?> GetNatureByName(string name);

@@ -17,21 +17,10 @@ namespace api.Controllers
             _pokemonService = pokemonService;
         }
 
-        [HttpGet(Name = "GetAllPokemon")]
-        public async Task<ActionResult<List<Pokemon>>> GetAllPokemon()
+        [HttpGet("{pokemonName}", Name = "GetPokemonById")]
+        public async Task<ActionResult<Pokemon>> GetPokemonByName(string pokemonName) 
         {
-            var pokemons = await _pokemonService.GetAllPokemon();
-            if (pokemons == null)
-            {
-                return BadRequest("Pokemons not found.");
-            }
-            return Ok(pokemons);
-        }
-
-        [HttpGet("{pokemonId}", Name = "GetPokemonById")]
-        public async Task<ActionResult<Pokemon>> GetPokemonById(int id) 
-        {
-            var pokemon = await _pokemonService.GetPokemonById(id);
+            var pokemon = await _pokemonService.GetPokemonByName(pokemonName);
             if(pokemon == null)
             {
                 return BadRequest("Pokemon not found.");

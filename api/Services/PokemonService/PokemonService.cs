@@ -14,32 +14,48 @@ namespace api.Services.PokemonService
             _context = dataContext;
         }
 
-        public async Task<Pokemon?> GetPokemonById(int id)
+        public async Task<Pokemon?> GetPokemonByName(string name)
         {
-            return await _context.Pokemon.FindAsync(id);
+            /*
+             * Problem: multiple pokemons with same name but different local_language_id
+             * Change local_language_id to received parameter, as in used selected lang option
+            */
+            Pokemon pokemonData = null;
+            Pokemon_species_names pokemonName = await _context.Pokemon_species_names.FindAsync(name);
+            if (pokemonName != null)
+            {
+                List<string> stats = new List<string>();
+                for(int i=1; i<7;i++)
+                {
+                    Pokemon_stats pokemonStat = await _context.Pokemon_stats.FindAsync(pokemonName.pokemon_species_id, i);
+                    Stat_names statNames = await _context.Stat_names.FindAsync(i, 9); //change 9 to local_language_id
+                    if (pokemonStat != null && statNames != null) 
+                    {
+                        stats.Add(statNames.name + ' ' + pokemonStat.base_stat.ToString());
+                    }
+                }
+                pokemonData = new Pokemon(name, pokemonName.pokemon_species_id, stats);
+            }
+            return pokemonData;
         }
 
-        public async Task<List<Pokemon>?> GetAllPokemon()
-        {
-            return await _context.Pokemon.ToListAsync();
-        }
 
         public async Task<Item?> GetItemByName(string name)
         {
             //Problem: only works with exact match (case sensitive name)
 
-            Item itemModel = null;
-            Item_names item = await _context.Item_names.FindAsync(name);
-            if(item != null)
+            Item item = null;
+            Item_names itemNames = await _context.Item_names.FindAsync(name);
+            if(itemNames != null)
             {
-                Item_prose itemProse = await _context.Item_prose.FindAsync(item.item_id);
+                Item_prose itemProse = await _context.Item_prose.FindAsync(itemNames.item_id);
                 if (itemProse != null)
                 {
-                    itemModel = new Item(name, itemProse.effect);
+                    item = new Item(name, itemProse.effect);
                 }
 
             }
-            return itemModel;
+            return item;
         }
 
         public async Task<Ability?> GetAbilityByName(string name)
