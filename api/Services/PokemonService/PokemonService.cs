@@ -1,4 +1,5 @@
 ﻿using api.Data;
+using api.Models;
 using api.Models.DBModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,9 +32,12 @@ namespace api.Services.PokemonService
             Item_names item = await _context.Item_names.FindAsync(name);
             if(item != null)
             {
-                Item_prose prose = await _context.Item_prose.FindAsync(item.item_id);
+                Item_prose itemProse = await _context.Item_prose.FindAsync(item.item_id);
+                if (itemProse != null)
+                {
+                    itemModel = new Item(name, itemProse.effect);
+                }
 
-                itemModel = new Item(name, prose.effect);
             }
             return itemModel;
         }
