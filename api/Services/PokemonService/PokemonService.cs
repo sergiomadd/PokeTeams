@@ -22,5 +22,21 @@ namespace api.Services.PokemonService
         {
             return await _context.Pokemon.ToListAsync();
         }
+
+        public async Task<ItemModel?> GetItemByName(string name)
+        {
+            //Problem: only works with exact match (case sensitive name)
+
+            ItemModel itemModel = null;
+            Item_names item = await _context.Item_names.FindAsync(name);
+            if(item != null)
+            {
+                Item_prose prose = await _context.Item_prose.FindAsync(item.item_id);
+
+                itemModel = new ItemModel(name, prose.effect);
+            }
+
+            return itemModel;
+        }
     }
 }

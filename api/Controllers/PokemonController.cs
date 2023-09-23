@@ -18,7 +18,7 @@ namespace api.Controllers
         }
 
         [HttpGet(Name = "GetAllPokemon")]
-        public async Task<ActionResult<List<Pokemon>>> Get()
+        public async Task<ActionResult<List<Pokemon>>> GetAllPokemon()
         {
             var pokemons = await _pokemonService.GetAllPokemon();
             if (pokemons == null)
@@ -28,8 +28,8 @@ namespace api.Controllers
             return Ok(pokemons);
         }
 
-        [HttpGet("{id}", Name = "GetPokemonById")]
-        public async Task<ActionResult<Pokemon>> Get(int id) 
+        [HttpGet("{pokemonId}", Name = "GetPokemonById")]
+        public async Task<ActionResult<Pokemon>> GetPokemonById(int id) 
         {
             var pokemon = await _pokemonService.GetPokemonById(id);
             if(pokemon == null)
@@ -38,5 +38,7 @@ namespace api.Controllers
             }
             return Ok(pokemon);
         }
+
+
     }
 }

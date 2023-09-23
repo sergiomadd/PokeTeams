@@ -6,7 +6,7 @@ namespace api.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Identifier { get; set; }
+        public string ?Identifier { get; set; }
         public int Species_id { get; set; }
         public int Height { get; set; }
         public int Weight { get; set; }
