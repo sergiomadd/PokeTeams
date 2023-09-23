@@ -7,6 +7,6 @@ namespace api.Models.DBModels
         public int pokemon_species_id { get; set; }
         public int local_language_id { get; set; }
         [Key]
-        public string name { get; set; }
+        public string? name { get; set; }
     }
 }
