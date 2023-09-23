@@ -1,0 +1,13 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace api.Models.DBModels
+{
+    public class Natures
+    {
+        [Key]
+        public int id { get; set; }
+        public int decreased_stat_id { get; set; }
+        public int increased_stat_id { get; set; }
+    }
+}

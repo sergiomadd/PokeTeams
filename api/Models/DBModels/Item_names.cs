@@ -6,7 +6,6 @@ namespace api.Models
     {
         public int item_id { get; set; }
         public int local_language_id { get; set; }
-
         [Key]
         public string name { get; set; }
     }
