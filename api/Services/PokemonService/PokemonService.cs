@@ -1,5 +1,5 @@
 ﻿using api.Data;
-using api.Models;
+using api.Models.DBModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Services.PokemonService
@@ -23,20 +23,34 @@ namespace api.Services.PokemonService
             return await _context.Pokemon.ToListAsync();
         }
 
-        public async Task<ItemModel?> GetItemByName(string name)
+        public async Task<Item?> GetItemByName(string name)
         {
             //Problem: only works with exact match (case sensitive name)
 
-            ItemModel itemModel = null;
+            Item itemModel = null;
             Item_names item = await _context.Item_names.FindAsync(name);
             if(item != null)
             {
                 Item_prose prose = await _context.Item_prose.FindAsync(item.item_id);
 
-                itemModel = new ItemModel(name, prose.effect);
+                itemModel = new Item(name, prose.effect);
             }
-
             return itemModel;
+        }
+
+        public async Task<Ability?> GetAbilityByName(string name)
+        {
+            Ability ability = null;
+            Ability_names abilityNames = await _context.Ability_names.FindAsync(name);
+            if (abilityNames != null)
+            {
+                Ability_prose abilityProse = await _context.Ability_prose.FindAsync(abilityNames.ability_id, abilityNames.local_language_id); ;
+                if(abilityProse != null)
+                {
+                    ability = new Ability(name, abilityProse.effect);
+                }
+            }
+            return ability;
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace api.Models
+namespace api.Models.DBModels
 {
     public class Pokemon
     {
         [Key]
         public int Id { get; set; }
-        public string ?Identifier { get; set; }
+        public string? Identifier { get; set; }
         public int Species_id { get; set; }
         public int Height { get; set; }
         public int Weight { get; set; }

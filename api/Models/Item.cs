@@ -1,11 +1,11 @@
 ﻿namespace api.Models
 {
-    public class ItemModel
+    public class Item
     {
         public string Name { get; set; }
         public string Prose { get; set; }
 
-        public ItemModel(string name, string prose)
+        public Item(string name, string prose)
         {
             Name = name;
             Prose = prose;

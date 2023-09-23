@@ -1,10 +1,12 @@
-﻿namespace api.Services.PokemonService
+﻿using api.Models.DBModels;
+
+namespace api.Services.PokemonService
 {
     public interface IPokemonService
     {
         Task<List<Pokemon>?> GetAllPokemon();
         Task<Pokemon?> GetPokemonById(int id);
-        Task<List<Item_names?>> GetItems();
-        Task<ItemModel?> GetItemByName(string name);
+        Task<Item?> GetItemByName(string name);
+        Task<Ability?> GetAbilityByName(string name);
     }
 }

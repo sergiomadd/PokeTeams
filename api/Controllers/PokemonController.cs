@@ -1,5 +1,5 @@
 ﻿using api.Data;
-using api.Models;
+using api.Models.DBModels;
 using api.Services.PokemonService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +38,5 @@ namespace api.Controllers
             }
             return Ok(pokemon);
         }
-
-
     }
 }

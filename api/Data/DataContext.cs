@@ -1,4 +1,4 @@
-﻿using api.Models;
+﻿using api.Models.DBModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
@@ -13,5 +13,7 @@ namespace api.Data
         public DbSet<Pokemon> Pokemon { get; set; }
         public DbSet<Item_names> Item_names { get; set; }
         public DbSet<Item_prose> Item_prose { get; set; }
+        public DbSet<Ability_names> Ability_names { get; set; }
+        public DbSet<Ability_prose> Ability_prose { get; set; }
     }
 }

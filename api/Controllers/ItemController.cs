@@ -17,19 +17,8 @@ namespace api.Controllers
             _pokemonService = pokemonService;
         }
 
-        [HttpGet(Name = "GetItems")]
-        public async Task<ActionResult<List<Item_names>>> GetItems()
-        {
-            var item = await _pokemonService.GetItems();
-            if (item == null)
-            {
-                return BadRequest("Items not found.");
-            }
-            return Ok(item);
-        }
-
         [HttpGet("{itemName}", Name = "GetItemByName")]
-        public async Task<ActionResult<ItemModel>> GetItemByName(string itemName)
+        public async Task<ActionResult<Item>> GetItemByName(string itemName)
         {
             var item = await _pokemonService.GetItemByName(itemName);
             if (item == null)
