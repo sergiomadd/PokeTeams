@@ -28,4 +28,127 @@ $spe: #F85888;
 
 
 
+.pokemon
+{
+  width: 80vw;
+  height: 50vh;
 
+  .profile
+  {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    border: 1px black solid;
+
+    .left
+    {
+      border: 1px black solid;
+      display: grid;
+      grid-template-columns: 50% 50%;
+
+      .extra
+      {
+        display: grid;
+        grid-template-rows: 25% 25% 25% 25%;
+        height: 100%;
+
+        .name
+        {
+          display: grid;
+          grid-template-rows: 60% 40%;
+
+          .species
+          {
+            display: flex;
+          }
+        }
+
+        .item
+        {
+          display: flex;
+        }
+
+      }
+
+      .picture
+      {
+        display: grid;
+        grid-template-rows: 20% 60% 20%;
+        height: 30vh;
+
+        .types
+        {
+          display: flex;
+          justify-content: space-between;
+
+          .base-types
+          {
+            display: flex;
+          }
+        }
+
+        .photo
+        {
+          width: 100%;
+        }
+
+        .photo-extra
+        {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+    }
+
+    .right
+    {
+      border: 1px black solid;
+
+      .moves
+      {
+        display: grid;
+        grid-template-rows: 25% 25% 25% 25%;
+        height: 100%;
+
+        .move
+        {
+          display: grid;
+          grid-template-columns: 20% 80%;
+          width: 100%;
+
+          .icons
+          {
+
+          }
+
+          .name
+          {
+           
+
+          }
+
+          .meta-move
+          {
+            visibility: hidden;
+            position: relative;
+            bottom: 10vh;
+
+            background-color: green;
+            width: 100%;
+            height: 20px;
+          }
+
+          &:hover .meta-move
+          {
+            visibility: visible;
+          }
+        }
+      }
+    }
+  }
+
+  .stats
+  {
+    border: 1px black solid;
+
+  }
+}
