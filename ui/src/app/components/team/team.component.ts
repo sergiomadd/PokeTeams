@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Pokemon } from 'src/app/models/pokemon.model';
+import { HttpService } from 'src/app/services/http.service';
 
 @Component({
   selector: 'app-team',
@@ -13,9 +14,12 @@ import { Pokemon } from 'src/app/models/pokemon.model';
 export class TeamComponent {
 
   pokemons: Pokemon[];
+  posts: any;
 
-  constructor()
+  constructor(private httpService: HttpService)
   {
+    this.pokemons = [];
+    /*
     this.pokemons = 
     [
       {
@@ -35,5 +39,33 @@ export class TeamComponent {
         gender: "",
       }
     ];
+    */
   }
+
+  ngOnInit()
+  {
+
+    this.httpService.getPosts().subscribe(
+      {
+        next: (response) => 
+        {
+           this.posts = response;
+           console.log('response: ', response);
+        },
+        error: (error) => { console.log(error); }
+      }
+    );
+
+    this.httpService.getPokemon('Metagross').subscribe(
+      {
+        next: (response) => 
+        {
+           this.posts = response;
+           console.log('pokemon: ', response);
+        },
+        error: (error) => { console.log(error); }
+      }
+    );
+  }
+
 }
