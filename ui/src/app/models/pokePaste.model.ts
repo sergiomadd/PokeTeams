@@ -7,7 +7,7 @@ export interface PokePaste
   item: string,
   ability?: string,
   nature?: string,
-  moves?: object[],
+  moves?: string[],
   stats?: string[],
   ivs?: string[],
   evs?: string[],
