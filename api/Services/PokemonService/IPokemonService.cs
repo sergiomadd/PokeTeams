@@ -9,5 +9,7 @@ namespace api.Services.PokemonService
         Task<Ability?> GetAbilityByName(string name);
         Task<Nature?> GetNatureByName(string name);
         Task<Move?> GetMoveByName(string name);
+        Task<string?> GetStatNameByIdentifier(string identifier);
+
     }
 }

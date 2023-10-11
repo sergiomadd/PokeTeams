@@ -73,7 +73,7 @@ namespace api.Services.PokemonService
             Item_names? itemNames = await _context.Item_names.FindAsync(name);
             if(itemNames != null)
             {
-                Item_prose? itemProse = await _context.Item_prose.FindAsync(itemNames.item_id);
+                Item_prose? itemProse = await _context.Item_prose.FindAsync(itemNames.item_id, 9);
                 if (itemProse != null)
                 {
                     item = new Item(itemNames.name, itemProse.effect);
@@ -193,6 +193,20 @@ namespace api.Services.PokemonService
                 }
             }
             return move;
+        }
+
+        public async Task<string?> GetStatNameByIdentifier(string identifier)
+        {
+            List<Stats?> stats = _context.Stats.Where(s => s.identifier == identifier).ToList();
+            if (stats.Count > 0)
+            {
+                Stat_names? stat_names = await _context.Stat_names.FindAsync(stats[0]?.id, 9); //change for local languague id
+                if (stat_names != null)
+                {
+                    return stat_names.name;
+                }
+            }
+            return null;
         }
     }
 }
