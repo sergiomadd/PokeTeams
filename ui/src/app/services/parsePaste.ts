@@ -1,22 +1,20 @@
+import { splitNsName } from '@angular/compiler';
 import { PokePaste } from '../models/pokePaste.model';
 import { PokePasteData } from '../models/pokePasteData.model';
+import { ComponentFactoryResolver } from '@angular/core';
 
 export function parsePaste(paste: string): PokePasteData
 {
-  let pokePasteData: PokePasteData = <PokePasteData>{}
-
   console.log("Input paste: ", paste);
-
+  let pokePasteData: PokePasteData = <PokePasteData>{}
   let pokemons = paste.split("\n\n");
-  console.log('pokemons', pokemons);
   pokePasteData.pokemons = [];
+  console.log(paste)
 
-  pokemons.forEach((pokemon, index) => 
+  pokemons.forEach((pokemon) => 
   {
     let pokePaste: PokePaste = <PokePaste>{}; 
-
     let lines = pokemon.split(/\r?\n|\r|\n/g);
-    console.log('lines', lines);
     for(let i=0;i<lines.length;i++)
     {
       let line = lines[i];
@@ -32,15 +30,15 @@ export function parsePaste(paste: string): PokePasteData
       {
         if(line.includes("Ability") || line.includes("ability"))
         {
-          pokePaste.ability = formatValue(line.split(" ").slice(1).join(" "));
+          pokePaste.ability = formatValue(line.split(":").slice(1).join(" "));
         }
         if(line.includes("Level") || line.includes("level"))
         {
-          pokePaste.level = Number(formatValue(line.split(" ").slice(1).join(" ")));
+          pokePaste.level = Number(formatValue(line.split(":").slice(1).join(" ")));
         }
         if(line.includes("Shiny") || line.includes("shiny"))
         {
-          pokePaste.shiny = stringToBool(line.split(" ")[1]);
+          pokePaste.shiny = stringToBool(line.split(":")[1]);
         }
         if(line.includes("EV") || line.includes("Ev") || line.includes("ev"))
         {
@@ -50,21 +48,20 @@ export function parsePaste(paste: string): PokePasteData
         {
           pokePaste.ivs = getStats(line, "iv");
         }
-        if(line.includes("Tera") || line.includes("tera"))
+        if(line.includes("Tera") || line.includes("tera") || line.includes("Teratype") || line.includes("teratype"))
         {
-          pokePaste.teratype = formatValue(line.split(" ").slice(1).join(" "));
+          pokePaste.teratype = formatValue(line.split(":").slice(1).join(" "));
         }
       }
       if(line.includes("Nature") || line.includes("nature"))
       {
-        pokePaste.nature = formatValue(lines[4].split(" ").slice(0, -1).join(" "));
+        pokePaste.nature = formatValue(lines[4].split(" ").slice(0, -1).join(" "), {whiteSpace: true});
       }
     }
     pokePaste.moves = getMoves(lines.slice(lines.length-4, lines.length));
-
+    if(!pokePaste.ivs) { pokePaste.ivs = getStats('', "noiv"); }
     pokePasteData.pokemons.push(pokePaste);
   });
-
 
   console.log("Generated paste: ", pokePasteData);
   return pokePasteData;
@@ -72,98 +69,91 @@ export function parsePaste(paste: string): PokePasteData
 
 function getName(pokePaste: PokePaste, line: string)
 {
-  //Handle Exception: "Type: Null"
-  let profile = line.split(" @ ")[0];
-  //Case 1: Only species name
+  let profile: string = line.split(" @ ")[0];
+  //Case 1: Only species name 'Mamoswine'
   if(!profile.includes("("))
   {
-    pokePaste.name = formatValue(profile);
+    pokePaste.name = formatValue(profile, {whiteSpace: true});
   }
+  //Case 2: Species + nickname 'Pickle (Mamoswine)' (only 1 '(')
   else if(profile.includes("(") && profile.split("(").length === 2)
   {
     pokePaste.nickname = formatValue(profile.split("(")[0]);
-    pokePaste.name = formatValue(profile.split("(")[1]);
+    pokePaste.name = formatValue(profile.split("(")[1], {rightParen: true, whiteSpace: true});
   }
+  //Case 3: Species + nickname + gender 'Pickle (Mamoswine) (F)'  (2 '(')
   else if(profile.includes("(") && profile.split("(").length === 3)
   {
     pokePaste.nickname = formatValue(profile.split("(")[0]);
-    pokePaste.name = formatValue(profile.split("(")[1]);
-    pokePaste.gender = formatValue(profile.split("(")[2]);
+    pokePaste.name = formatValue(profile.split("(")[1], {rightParen: true, whiteSpace: true});
+    pokePaste.gender = formatValue(profile.split("(")[2], {rightParen: true});
   }
   else
   {
-    console.log(`Error: Pokemon profile ${profile} format not recognized. Too many parenthesis`)
+    console.log(`Error: Pokemon profile ${profile} format not recognized.`)
   }
 }
 
-function getMoves(lines: string[]) : object[]
+function getMoves(lines: string[]) : string[]
 {
   let moves = [];
   for(let i=0;i<lines.length;i++)
   {
-    let move = 
-    {
-      id: i,
-      name: formatValue(lines[i].split("- ")[1]),
-    };
+    let move = formatValue(lines[i].split("- ")[1], {});
     moves.push(move);
   }
   return moves;
 }
 
-function getStats(line: string, type: string) : any[]
+function getStats(line: string, type: string) : string[][]
 {
   let statNames = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"];
-  let temp = line.split(":")[1].split("/");
-  console.log(temp);
-  let list = [];
-  for(let i=0;i<temp.length;i++)
+  let statIdentifiers = ["hp", "attack", "defense", "special-attack", "special-defense", "speed"];
+
+  let stats: any[][] = [];
+  if(type === 'noiv')
   {
-    let stat = temp[i].split(" ");
-    let ev = 
+    for(let i=0;i<statNames.length;i++)
     {
-      name: stat[2],
-      value: parseInt(stat[1])
+      let stat: (string | number)[] = [];
+      stat.push(statIdentifiers[i]);
+      stat.push(31);
+      stats.push(stat);
     }
-    list.push(ev);
+    return stats;
   }
+
+  let singleStats = line.split(":")[1].split("/");
   for(let i=0;i<statNames.length;i++)
   {
-    if(!list.find(e => e.name === statNames[i]))
+    let stat: (string | number)[] = [];
+    let statIndex = singleStats.findIndex(s => s.includes(statNames[i]));
+    if(statIndex != -1)
     {
-      let ev = 
-      {
-        name: statNames[i],
-        value: type=="ev" ? 0 : 31
-      }
-      list.push(ev);
+      stat.push(statIdentifiers[i]);
+      stat.push(parseInt(singleStats[statIndex].split(" ")[1]));
     }
+    else
+    {
+      stat.push(statIdentifiers[i]);
+      stat.push((type=="ev") ? 0 : 31);
+    }
+    stats.push(stat);
   }
-  list = sortStats(list);
-  return list;
+  return stats;
 }
 
-function sortStats(stats: any[]) : (string | undefined)[]
+function formatValue(value: string, options?: any): string
 {
-  let statNames = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"];
-  let sortedStats = [];
-  for(let i=0;i<statNames.length;i++)
-  {
-    sortedStats.push(stats.find(e => e.name === statNames[i]));
-  }
-  return sortedStats;
-}
+  let newValue: string = value;
 
-function formatValue(value: string)
-{
-  let newValue = value?.replace("(", "");
-  newValue = newValue?.replace(")", "");
-  newValue = newValue?.replaceAll(" ", "-");
-  newValue = newValue?.toLowerCase();
-  if(newValue?.slice(-1) === '-')
-  {
-    newValue = newValue.slice(0, newValue.length-1);
-  }
+  if(options?.leftParen){ newValue = value.replace("(", "") }
+  if(options?.rightParen){ newValue = value.replace(")", "") }
+  if(options?.whiteSpace){ newValue = newValue.replaceAll(" ", "");}
+  if(options?.lowercase){newValue = newValue.toLowerCase();}
+  newValue = newValue?.trimStart();
+  newValue = newValue?.trimEnd();
+
   return newValue;
 }
 

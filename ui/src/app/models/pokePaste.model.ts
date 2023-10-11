@@ -9,8 +9,8 @@ export interface PokePaste
   nature?: string,
   moves?: string[],
   stats?: string[],
-  ivs?: string[],
-  evs?: string[],
+  ivs?: string[][],
+  evs?: string[][],
   level?: number,
   shiny?: boolean,
   gender?: string

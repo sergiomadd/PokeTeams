@@ -24,7 +24,7 @@ export interface Pokemon
 	ivs?: Stat[],
 	evs?: Stat[],
 	level?: number,
-	shiny?: false,
+	shiny?: boolean,
 	gender?: string,
 }
   
