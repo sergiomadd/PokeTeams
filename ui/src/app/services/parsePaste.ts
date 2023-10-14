@@ -50,12 +50,12 @@ export function parsePaste(paste: string): PokePasteData
         }
         if(line.includes("Tera") || line.includes("tera") || line.includes("Teratype") || line.includes("teratype"))
         {
-          pokePaste.teratype = formatValue(line.split(":").slice(1).join(" "));
+          pokePaste.teratype = formatValue(line.split(":").slice(1).join(" "), {whiteSpace: true, lowercase: true});
         }
       }
       if(line.includes("Nature") || line.includes("nature"))
       {
-        pokePaste.nature = formatValue(lines[4].split(" ").slice(0, -1).join(" "), {whiteSpace: true});
+        pokePaste.nature = formatValue(lines[4].split(" ").slice(0, -1).join(" "));
       }
     }
     pokePaste.moves = getMoves(lines.slice(lines.length-4, lines.length));
