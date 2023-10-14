@@ -1,7 +1,10 @@
+import { Type } from "./type.model"
+
+
 export interface Move
 {
   name: string,
-  type: string,
+  type: Type,
   damageClass: 
   {
     name: string,

@@ -1,16 +1,10 @@
+import { Type } from "./type.model"
+import { Stat } from "./stat.model"
+
 export interface PokemonData
 {
   name: string,
   dexNumber: number,
-  types: 		
-  {
-    id: number,
-    type: string
-  }[],
-  stats: 	
-  {
-		identifier: string,
-		name: string,
-		stat: number
-	}[]
+  types: Type[],
+  stats: Stat[]
 }
