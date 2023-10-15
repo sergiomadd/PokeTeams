@@ -2,6 +2,7 @@ import { Ability } from "./ability.model"
 import { Item } from "./item.model"
 import { Move } from "./move.model"
 import { Nature } from "./nature.model"
+import { Sprites } from "./sprites.model"
 import { Stat } from "./stat.model"
 import { Type } from "./type.model"
 
@@ -23,5 +24,6 @@ export interface Pokemon
 	level?: number,
 	shiny?: boolean,
 	gender?: string,
+	sprites: Sprites
 }
   

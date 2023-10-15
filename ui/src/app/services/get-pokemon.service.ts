@@ -48,6 +48,7 @@ export class GetPokemonService
       pokemon.level = pokePaste.level ? pokePaste.level : undefined;
       pokemon.shiny = pokePaste.shiny ? pokePaste.shiny : undefined;
       pokemon.gender = pokePaste.gender ? pokePaste.gender : undefined;
+      pokemon.sprites = pokemonData.sprites;
 
       console.log('Generated pokemon: ', pokemon);
       pokemons.push(pokemon);
