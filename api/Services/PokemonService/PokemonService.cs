@@ -2,6 +2,10 @@
 using api.Models;
 using api.Models.DBModels;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Numerics;
+using System.Xml.Linq;
 using static api.Models.Move;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -30,17 +34,12 @@ namespace api.Services.PokemonService
                 Pokemon_types? pokemonType1 = await _context.Pokemon_types.FindAsync(pokemonName.pokemon_species_id ,1);
                 if(pokemonType1 != null)
                 {
-                    Types? type1 = await _context.Types.FindAsync(pokemonType1.type_id);
-                    Type_names? typeName1 = await _context.Type_names.FindAsync(pokemonType1.type_id, 9);
-                    pokeTypes.Add(new PokeType(type1.identifier, typeName1.name));
-
-                    Pokemon_types? pokemonType2 = await _context.Pokemon_types.FindAsync(pokemonName.pokemon_species_id, 2);
-                    if(pokemonType2 != null)
-                    {
-                        Types? type2 = await _context.Types.FindAsync(pokemonType2.type_id);
-                        Type_names? typeName2 = await _context.Type_names.FindAsync(pokemonType2.type_id, 9);
-                        pokeTypes.Add(new PokeType(type2.identifier, typeName2.name));
-                    }
+                    pokeTypes.Add(GetTypeById(pokemonType1.type_id).Result);
+                }
+                Pokemon_types? pokemonType2 = await _context.Pokemon_types.FindAsync(pokemonName.pokemon_species_id, 2);
+                if (pokemonType2 != null)
+                {
+                    pokeTypes.Add(GetTypeById(pokemonType2.type_id).Result);
                 }
 
                 List<Stat> pokeStats = new List<Stat>();
@@ -59,26 +58,61 @@ namespace api.Services.PokemonService
                         });
                     }
                 }
-                pokemonData = new Pokemon(pokemonName.name, pokemonName.pokemon_species_id, pokeTypes, pokeStats);
+                pokemonData = new Pokemon(pokemonName.name, pokemonName.pokemon_species_id, pokeTypes, pokeStats, getSprites(pokemonName.pokemon_species_id));
             }
             return pokemonData;
+        }
+
+        //TODO: move out of service
+        public Sprites getSprites(int dexNumber)
+        {
+            string urlStartBase = "https://localhost:7134/images/sprites/pokemon/";
+            string urlStartVersions = "https://localhost:7134/images/sprites/pokemon/versions/";
+            string urlStartOther = "https://localhost:7134/images/sprites/pokemon/other/";
+
+            string urlEndPng = "/" + dexNumber + ".png";
+            string urlEndGif = "/" + dexNumber + ".gif";
+
+            Sprites sprites = new Sprites
+            {
+                Base = new SpriteStructure("Base", "none", urlStartBase + "" + urlEndPng, urlStartBase + "female" + urlEndPng, urlStartBase + "shiny" + urlEndPng, urlStartBase + "shiny/female" + urlEndPng),
+                RedBlue = new SpriteStructure("Red/Blue", "1", urlStartVersions + "generation-i/red-blue" + urlEndPng, urlStartVersions + "generation-i/red-blue/gray" + urlEndPng),
+                Yellow = new SpriteStructure("Yellow", "1", urlStartVersions + "generation-i/yellow" + urlEndPng, urlStartVersions + "generation-i/yellow/gray" + urlEndPng),
+                Gold = new SpriteStructure("Gold", "2", urlStartVersions + "generation-ii/gold" + urlEndPng, urlStartVersions + "generation-ii/gold/shiny" + urlEndPng),
+                Silver = new SpriteStructure("Silver", "2", urlStartVersions + "generation-ii/silver" + urlEndPng, urlStartVersions + "generation-ii/silver/shiny" + urlEndPng),
+                Crystal = new SpriteStructure("Crystal", "2", urlStartVersions + "generation-ii/crystal" + urlEndPng, urlStartVersions + "generation-ii/crystal/shiny" + urlEndPng),
+                RubySapphire = new SpriteStructure("Ruby/Sapphire", "3", urlStartVersions + "generation-iii/ruby-sapphire" + urlEndPng, urlStartVersions + "generation-iii/ruby-sapphire/shiny" + urlEndPng),
+                FireredLeafgreen = new SpriteStructure("Firered/Leafgreen", "3", urlStartVersions + "generation-iii/firered-leafgreen" + urlEndPng, urlStartVersions + "generation-iii/firered-leafgreen/shiny" + urlEndPng),
+                Emerald = new SpriteStructure("Emerald", "3", urlStartVersions + "generation-iii/emerald" + urlEndPng, urlStartVersions + "generation-iii/emerald/shiny" + urlEndPng),
+                DiamondPearl = new SpriteStructure("Diamond/Pearl", "4", urlStartVersions + "generation-iv/diamond-pearl" + urlEndPng, urlStartVersions + "generation-iv/diamond-pearl/shiny" + urlEndPng, urlStartVersions + "generation-iv/diamond-pearl/female" + urlEndPng, urlStartVersions + "generation-iv/diamond-pearl/shiny/female" + urlEndPng),
+                HeartgoldSoulsilver = new SpriteStructure("Heartgold/Soulsilver", "4", urlStartVersions + "generation-iv/heartgold-soulsilver" + urlEndPng, urlStartVersions + "generation-iv/heartgold-soulsilver/shiny" + urlEndPng, urlStartVersions + "generation-iv/heartgold-soulsilver/female" + urlEndPng, urlStartVersions + "generation-iv/heartgold-soulsilver/shiny/female" + urlEndPng),
+                Platinum = new SpriteStructure("Platinum", "4", urlStartVersions + "generation-iv/platinum" + urlEndPng, urlStartVersions + "generation-iv/platinum/shiny" + urlEndPng, urlStartVersions + "generation-iv/platinum/female" + urlEndPng, urlStartVersions + "generation-iv/platinum/shiny/female" + urlEndPng),
+                BlackWhite = new SpriteStructure("Black/White", "5", urlStartVersions + "generation-v/black-white" + urlEndPng, urlStartVersions + "generation-v/black-white/shiny" + urlEndPng, urlStartVersions + "generation-v/black-white/female" + urlEndPng, urlStartVersions + "generation-v/black-white/shiny/female" + urlEndPng),
+                BlackWhiteAnimated = new SpriteStructure("Black/White Animated", "5", urlStartVersions + "generation-v/black-white/animated" + urlEndGif, urlStartVersions + "generation-v/black-white/animated/shiny" + urlEndGif, urlStartVersions + "generation-v/black-white/animated/female" + urlEndGif, urlStartVersions + "generation-v/black-white/animated/shiny/female" + urlEndGif),
+                XY = new SpriteStructure("XY", "6", urlStartVersions + "generation-vi/x-y" + urlEndPng, urlStartVersions + "generation-vi/x-y/shiny" + urlEndPng, urlStartVersions + "generation-vi/x-y/female" + urlEndPng, urlStartVersions + "generation-vi/x-y/shiny/female" + urlEndPng),
+                OmegarubyAlphasapphire = new SpriteStructure("Omegaruby/Alphasapphire", "6", urlStartVersions + "generation-vi/omegaruby-alphasapphire" + urlEndPng, urlStartVersions + "generation-vi/omegaruby-alphasapphire/female" + urlEndPng, urlStartVersions + "generation-vi/omegaruby-alphasapphire/shiny" + urlEndPng, urlStartVersions + "generation-vi/omegaruby-alphasapphire/shiny/female" + urlEndPng),
+                UltraSunUltraMoon = new SpriteStructure("UltraSun/UltraMoon", "7", urlStartVersions + "generation-vii/ultra-sun-ultra-moon" + urlEndPng, urlStartVersions + "generation-vii/ultra-sun-ultra-moon/shiny" + urlEndPng, urlStartVersions + "generation-vii/ultra-sun-ultra-moon/female" + urlEndPng, urlStartVersions + "generation-vii/ultra-sun-ultra-moon/shiny/female" + urlEndPng),
+                SwordShield = new SpriteStructure("Sword/Shield", "8", urlStartVersions + "generation-viii/icons" + urlEndPng),
+                Showdown = new SpriteStructure("Showdown", "none", urlStartOther + "other/showdown" + urlEndGif, urlStartOther + "other/showdown/female" + urlEndGif, urlStartOther + "other/showdown/shiny/female" + urlEndGif, urlStartOther + "other/showdown/shiny/female" + urlEndGif),
+                Home = new SpriteStructure("Home", "none", urlStartOther + "home" + urlEndPng, urlStartOther + "home/female" + urlEndPng, urlStartOther + "home/shiny" + urlEndPng, urlStartOther + "home/shiny/female" + urlEndPng),
+                OfficialArtwork = new SpriteStructure("Official Artwork", "none", urlStartOther + "official-artwork" + urlEndPng, urlStartOther + "official-artwork/shiny" + urlEndPng)
+            };    
+            return sprites;
         }
 
 
         public async Task<Item?> GetItemByName(string name)
         {
-            //Problem: only works with exact match (case sensitive name)
-
             Item? item = null;
             Item_names? itemNames = await _context.Item_names.FindAsync(name);
             if(itemNames != null)
             {
                 Item_prose? itemProse = await _context.Item_prose.FindAsync(itemNames.item_id, 9);
-                if (itemProse != null)
+                Items? items = await _context.Items.FindAsync(itemNames.item_id);
+                if (itemProse != null && items != null)
                 {
-                    item = new Item(itemNames.name, itemProse.effect);
+                    item = new Item(items.Identifier, itemNames.name, itemProse.effect);
                 }
-
             }
             return item;
         }
@@ -155,7 +189,8 @@ namespace api.Services.PokemonService
                     move = new Move
                     {
                         Name = name,
-                        PokeType = new PokeType(type.identifier, typeName.name),
+
+                        PokeType = new PokeType(type.identifier, typeName.name, GetTypeEffectivenessAttack((int)moves.type_id).Result, GetTypeEffectivenessDefense((int)moves.type_id).Result),
                         DamageClass = new MoveDamageClass
                         {
                             Name = damageClass.name,
@@ -207,6 +242,95 @@ namespace api.Services.PokemonService
                 }
             }
             return null;
+        }
+
+        private async Task<PokeType?> GetTypeById(int id)
+        {
+            PokeType? pokeType = null;
+            Types? targetType = await _context.Types.FirstOrDefaultAsync(t => t.id == id);
+            if (targetType != null)
+            {
+                Type_names? targetTypeName = await _context.Type_names.FindAsync(targetType.id, 9);
+                if (targetTypeName != null)
+                {
+                    pokeType = new PokeType(targetType.identifier, targetTypeName.name,
+                        GetTypeEffectivenessAttack(targetType.id).Result, GetTypeEffectivenessDefense(targetType.id).Result);
+                }
+            }
+            return pokeType;
+        }
+
+        public async Task<PokeType?> GetTypeByIdentifier(string identifier)
+        {
+            PokeType? pokeType = null;
+            Types? targetType = await _context.Types.FirstOrDefaultAsync(t => t.identifier == identifier);
+
+            if (targetType != null)
+            {
+                Type_names? targetTypeName = await _context.Type_names.FindAsync(targetType.id, 9);
+                if (targetTypeName != null)
+                {
+                    pokeType = new PokeType(targetType.identifier, targetTypeName.name,
+                        GetTypeEffectivenessAttack(targetType.id).Result, GetTypeEffectivenessDefense(targetType.id).Result);
+                }
+            }
+            return pokeType;
+        }
+
+
+        public async Task<List<Tuple<string, int>>?> GetTypeEffectivenessAttack(int id)
+        {
+            List<Tuple<string, int>> effectivenessAttack = new List<Tuple<string, int>>();
+            List<Type_efficacy> typeEfficacyList = _context.Type_efficacy.Where(t => t.damage_type_id == id && t.damage_factor != 100).ToList();
+            //List<Type_efficacy> typeEfficacyList = _context.Type_efficacy.Any(t => t.damage_type_id == id && t.damage_factor != 100).ToList();
+            if (typeEfficacyList != null)
+            {
+                foreach(var typeEfficacy in typeEfficacyList)
+                {
+                    if (typeEfficacy.damage_factor != 100)
+                    {
+                        Type_names? targetTypeName = await _context.Type_names.FindAsync(typeEfficacy.damage_type_id, 9);
+                        if (targetTypeName != null)
+                        {
+                            effectivenessAttack.Add(Tuple.Create(targetTypeName.name, typeEfficacy.damage_factor));
+                            //System.Diagnostics.Debug.WriteLine("TYPE-----------");
+                            //System.Diagnostics.Debug.WriteLine(targetTypeName.name);
+
+                            //System.Diagnostics.Debug.WriteLine("dnmg-----------");
+                            //System.Diagnostics.Debug.WriteLine(typeEfficacy.damage_factor);
+                        }
+
+                    } 
+                }    
+            }
+            return effectivenessAttack;
+        }
+
+        public async Task<List<Tuple<string, int>>?> GetTypeEffectivenessDefense(int id)
+        {
+            List<Tuple<string, int>> effectivenessDefense = new List<Tuple<string, int>>();
+            List<Type_efficacy> typeEfficacyList = _context.Type_efficacy.Where(t => t.target_type_id == id && t.damage_factor != 100).ToList();
+            if (typeEfficacyList != null)
+            {
+                foreach (var typeEfficacy in typeEfficacyList)
+                {
+                    if (typeEfficacy.damage_factor != 100)
+                    {
+                        Type_names? targetTypeName = await _context.Type_names.FindAsync(typeEfficacy.damage_type_id, 9);
+                        if (targetTypeName != null)
+                        {
+                            effectivenessDefense.Add(Tuple.Create(typeEfficacy.target_type_id.ToString(), typeEfficacy.damage_factor));
+                            //System.Diagnostics.Debug.WriteLine("TYPE-----------");
+                            //System.Diagnostics.Debug.WriteLine(targetTypeName.name);
+                           // System.Diagnostics.Debug.WriteLine(typeEfficacy.target_type_id);
+                            //System.Diagnostics.Debug.WriteLine("dnmg-----------");
+                            //System.Diagnostics.Debug.WriteLine(typeEfficacy.damage_factor);
+                        }
+
+                    }
+                }
+            }
+            return effectivenessDefense;
         }
     }
 }
