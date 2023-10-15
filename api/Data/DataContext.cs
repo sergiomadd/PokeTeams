@@ -14,6 +14,7 @@ namespace api.Data
         public DbSet<Pokemon_species_names> Pokemon_species_names { get; set; }
         public DbSet<Pokemon_types> Pokemon_types { get; set; }
         public DbSet<Pokemon_stats> Pokemon_stats { get; set; }
+        public DbSet<Items> Items { get; set; }
         public DbSet<Item_names> Item_names { get; set; }
         public DbSet<Item_prose> Item_prose { get; set; }
         public DbSet<Ability_names> Ability_names { get; set; }
@@ -32,6 +33,7 @@ namespace api.Data
         //
         public DbSet<Types> Types { get; set; }
         public DbSet<Type_names> Type_names { get; set; }
+        public DbSet<Type_efficacy> Type_efficacy { get; set; }
         public DbSet<Stats> Stats { get; set; }
         public DbSet<Stat_names> Stat_names { get; set; }
 
