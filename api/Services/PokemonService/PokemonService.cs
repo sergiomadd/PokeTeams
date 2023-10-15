@@ -75,7 +75,7 @@ namespace api.Services.PokemonService
 
             Sprites sprites = new Sprites
             {
-                Base = new SpriteStructure("Base", "none", urlStartBase + "" + urlEndPng, urlStartBase + "female" + urlEndPng, urlStartBase + "shiny" + urlEndPng, urlStartBase + "shiny/female" + urlEndPng),
+                Base = new SpriteStructure("Base", "none", urlStartBase + "" + urlEndPng, urlStartBase + "shiny" + urlEndPng, urlStartBase + "female" + urlEndPng, urlStartBase + "shiny/female" + urlEndPng),
                 RedBlue = new SpriteStructure("Red/Blue", "1", urlStartVersions + "generation-i/red-blue" + urlEndPng, urlStartVersions + "generation-i/red-blue/gray" + urlEndPng),
                 Yellow = new SpriteStructure("Yellow", "1", urlStartVersions + "generation-i/yellow" + urlEndPng, urlStartVersions + "generation-i/yellow/gray" + urlEndPng),
                 Gold = new SpriteStructure("Gold", "2", urlStartVersions + "generation-ii/gold" + urlEndPng, urlStartVersions + "generation-ii/gold/shiny" + urlEndPng),
@@ -90,11 +90,11 @@ namespace api.Services.PokemonService
                 BlackWhite = new SpriteStructure("Black/White", "5", urlStartVersions + "generation-v/black-white" + urlEndPng, urlStartVersions + "generation-v/black-white/shiny" + urlEndPng, urlStartVersions + "generation-v/black-white/female" + urlEndPng, urlStartVersions + "generation-v/black-white/shiny/female" + urlEndPng),
                 BlackWhiteAnimated = new SpriteStructure("Black/White Animated", "5", urlStartVersions + "generation-v/black-white/animated" + urlEndGif, urlStartVersions + "generation-v/black-white/animated/shiny" + urlEndGif, urlStartVersions + "generation-v/black-white/animated/female" + urlEndGif, urlStartVersions + "generation-v/black-white/animated/shiny/female" + urlEndGif),
                 XY = new SpriteStructure("XY", "6", urlStartVersions + "generation-vi/x-y" + urlEndPng, urlStartVersions + "generation-vi/x-y/shiny" + urlEndPng, urlStartVersions + "generation-vi/x-y/female" + urlEndPng, urlStartVersions + "generation-vi/x-y/shiny/female" + urlEndPng),
-                OmegarubyAlphasapphire = new SpriteStructure("Omegaruby/Alphasapphire", "6", urlStartVersions + "generation-vi/omegaruby-alphasapphire" + urlEndPng, urlStartVersions + "generation-vi/omegaruby-alphasapphire/female" + urlEndPng, urlStartVersions + "generation-vi/omegaruby-alphasapphire/shiny" + urlEndPng, urlStartVersions + "generation-vi/omegaruby-alphasapphire/shiny/female" + urlEndPng),
+                OmegarubyAlphasapphire = new SpriteStructure("Omegaruby/Alphasapphire", "6", urlStartVersions + "generation-vi/omegaruby-alphasapphire" + urlEndPng, urlStartVersions + "generation-vi/omegaruby-alphasapphire/shiny" + urlEndPng, urlStartVersions + "generation-vi/omegaruby-alphasapphire/female" + urlEndPng, urlStartVersions + "generation-vi/omegaruby-alphasapphire/shiny/female" + urlEndPng),
                 UltraSunUltraMoon = new SpriteStructure("UltraSun/UltraMoon", "7", urlStartVersions + "generation-vii/ultra-sun-ultra-moon" + urlEndPng, urlStartVersions + "generation-vii/ultra-sun-ultra-moon/shiny" + urlEndPng, urlStartVersions + "generation-vii/ultra-sun-ultra-moon/female" + urlEndPng, urlStartVersions + "generation-vii/ultra-sun-ultra-moon/shiny/female" + urlEndPng),
                 SwordShield = new SpriteStructure("Sword/Shield", "8", urlStartVersions + "generation-viii/icons" + urlEndPng),
-                Showdown = new SpriteStructure("Showdown", "none", urlStartOther + "other/showdown" + urlEndGif, urlStartOther + "other/showdown/female" + urlEndGif, urlStartOther + "other/showdown/shiny/female" + urlEndGif, urlStartOther + "other/showdown/shiny/female" + urlEndGif),
-                Home = new SpriteStructure("Home", "none", urlStartOther + "home" + urlEndPng, urlStartOther + "home/female" + urlEndPng, urlStartOther + "home/shiny" + urlEndPng, urlStartOther + "home/shiny/female" + urlEndPng),
+                Showdown = new SpriteStructure("Showdown", "none", urlStartOther + "showdown" + urlEndGif, urlStartOther + "showdown/shiny" + urlEndGif, urlStartOther + "showdown/female" + urlEndGif, urlStartOther + "showdown/shiny/female" + urlEndGif),
+                Home = new SpriteStructure("Home", "none", urlStartOther + "home" + urlEndPng, urlStartOther + "home/shiny" + urlEndPng, urlStartOther + "home/female" + urlEndPng, urlStartOther + "home/shiny/female" + urlEndPng),
                 OfficialArtwork = new SpriteStructure("Official Artwork", "none", urlStartOther + "official-artwork" + urlEndPng, urlStartOther + "official-artwork/shiny" + urlEndPng)
             };    
             return sprites;
@@ -292,7 +292,6 @@ namespace api.Services.PokemonService
                     }
                 }    
             }
-            //effectivenessAttack.Sort((x, y) => y.Item1.CompareTo(x.Item1))
             return effectivenessAttack.OrderByDescending(t => t.Item2).ToList();
         }
 
