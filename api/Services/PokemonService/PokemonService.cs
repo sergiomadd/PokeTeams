@@ -182,7 +182,7 @@ namespace api.Services.PokemonService
                                 BaseStat = null
                             },
                             Change = metaStatChange.change,
-                            StatChance = meta.stat_chance
+                            ChangeChance = meta.stat_chance
                         }; 
                     }
 
@@ -207,9 +207,9 @@ namespace api.Services.PokemonService
                         },
                         Effect = new MoveEffect
                         {
-                            ShortEffect = effect.short_effect,
-                            LongEffect = effect.effect,
-                            EffectChance = moves.effect_chance
+                            Short = effect.short_effect,
+                            Long = effect.effect,
+                            Chance = moves.effect_chance
                         },
                         Meta = new Metadata
                         {
