@@ -27,9 +27,9 @@
 
         public class MoveEffect
         {
-            public string ShortEffect { get; set; }
-            public string LongEffect { get; set; }
-            public int? EffectChance { get; set; }
+            public string Short { get; set; }
+            public string Long { get; set; }
+            public int? Chance { get; set; }
         }
 
         public class Metadata
@@ -50,7 +50,7 @@
         {
             public Stat? Stat { get; set; }
             public int? Change { get; set; }
-            public int? StatChance { get; set; }
+            public int? ChangeChance { get; set; }
 
         }
 

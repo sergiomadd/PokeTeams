@@ -4,7 +4,7 @@ import { Type } from "./type.model"
 export interface Move
 {
   name: string,
-  type: Type,
+  pokeType: Type,
   damageClass: 
   {
     name: string,
@@ -21,9 +21,9 @@ export interface Move
   },
   effect: 
   {
-    shortEffect: string,
-    longEffect: string,
-    effectChance: number
+    short: string,
+    long: string,
+    chance: number
   },
   metadata: 
   {
@@ -45,7 +45,7 @@ export interface Move
         baseStat: number
       },
       change: number,
-      statChance: number
+      schangeChance: number
     }
   },
 }
