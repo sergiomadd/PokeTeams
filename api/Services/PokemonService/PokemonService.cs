@@ -3,6 +3,7 @@ using api.Models;
 using api.Models.DBModels;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
@@ -64,39 +65,52 @@ namespace api.Services.PokemonService
         }
 
         //TODO: move out of service
-        public Sprites getSprites(int dexNumber)
+        public List<Sprite> getSprites(int dexNumber)
         {
-            string urlStartBase = "https://localhost:7134/images/sprites/pokemon/";
-            string urlStartVersions = "https://localhost:7134/images/sprites/pokemon/versions/";
-            string urlStartOther = "https://localhost:7134/images/sprites/pokemon/other/";
+            const string urlStart = "https://localhost:7134/images/sprites/pokemon/";
+            string urlEnd = dexNumber + ".png";
+            string urlEndGif = dexNumber + ".gif";
+            const string shiny = "shiny/";
+            const string female = "female/";
+            const string shinyFemale = "shiny/female/";
 
-            string urlEndPng = "/" + dexNumber + ".png";
-            string urlEndGif = "/" + dexNumber + ".gif";
-
-            Sprites sprites = new Sprites
+            List<Sprite> sprites = new List<Sprite>();
+            List<string> spriteKeys = new List<string>
+            { 
+                "",
+                "versions/generation-i/fire-red/", "versions/generation-i/yellow/",
+                "versions/generation-ii/gold/", "versions/generation-ii/silver/", "versions/generation-ii/crystal/",
+                "versions/generation-iii/ruby-sapphire/", "versions/generation-iii/firered-leafgreen/", "versions/generation-iii/emerald/",
+                "versions/generation-iv/diamond-pearl/", "versions/generation-iv/heartgold-soulsilver/", "versions/generation-iv/platinum/",
+                "versions/generation-v/black-white/", "versions/generation-v/black-white/animated/",
+                "versions/generation-vi/x-y/", "versions/generation-vi/omegaruby-alphasapphire/",
+                "versions/generation-vii/ultra-sun-ultra-moon/",
+                "versions/generation-viii/icons/",
+                "other/showdown/",
+                "other/home/",
+                "other/official-artwork/",
+            };
+            List<string> animatedSpriteKeys = new List<string> { "versions/generation-v/black-white/animated/", "other/showdown/" };
+            foreach (string key in spriteKeys)
             {
-                Base = new SpriteStructure("Base", "none", urlStartBase + "" + urlEndPng, urlStartBase + "shiny" + urlEndPng, urlStartBase + "female" + urlEndPng, urlStartBase + "shiny/female" + urlEndPng),
-                RedBlue = new SpriteStructure("Red/Blue", "1", urlStartVersions + "generation-i/red-blue" + urlEndPng, urlStartVersions + "generation-i/red-blue/gray" + urlEndPng),
-                Yellow = new SpriteStructure("Yellow", "1", urlStartVersions + "generation-i/yellow" + urlEndPng, urlStartVersions + "generation-i/yellow/gray" + urlEndPng),
-                Gold = new SpriteStructure("Gold", "2", urlStartVersions + "generation-ii/gold" + urlEndPng, urlStartVersions + "generation-ii/gold/shiny" + urlEndPng),
-                Silver = new SpriteStructure("Silver", "2", urlStartVersions + "generation-ii/silver" + urlEndPng, urlStartVersions + "generation-ii/silver/shiny" + urlEndPng),
-                Crystal = new SpriteStructure("Crystal", "2", urlStartVersions + "generation-ii/crystal" + urlEndPng, urlStartVersions + "generation-ii/crystal/shiny" + urlEndPng),
-                RubySapphire = new SpriteStructure("Ruby/Sapphire", "3", urlStartVersions + "generation-iii/ruby-sapphire" + urlEndPng, urlStartVersions + "generation-iii/ruby-sapphire/shiny" + urlEndPng),
-                FireredLeafgreen = new SpriteStructure("Firered/Leafgreen", "3", urlStartVersions + "generation-iii/firered-leafgreen" + urlEndPng, urlStartVersions + "generation-iii/firered-leafgreen/shiny" + urlEndPng),
-                Emerald = new SpriteStructure("Emerald", "3", urlStartVersions + "generation-iii/emerald" + urlEndPng, urlStartVersions + "generation-iii/emerald/shiny" + urlEndPng),
-                DiamondPearl = new SpriteStructure("Diamond/Pearl", "4", urlStartVersions + "generation-iv/diamond-pearl" + urlEndPng, urlStartVersions + "generation-iv/diamond-pearl/shiny" + urlEndPng, urlStartVersions + "generation-iv/diamond-pearl/female" + urlEndPng, urlStartVersions + "generation-iv/diamond-pearl/shiny/female" + urlEndPng),
-                HeartgoldSoulsilver = new SpriteStructure("Heartgold/Soulsilver", "4", urlStartVersions + "generation-iv/heartgold-soulsilver" + urlEndPng, urlStartVersions + "generation-iv/heartgold-soulsilver/shiny" + urlEndPng, urlStartVersions + "generation-iv/heartgold-soulsilver/female" + urlEndPng, urlStartVersions + "generation-iv/heartgold-soulsilver/shiny/female" + urlEndPng),
-                Platinum = new SpriteStructure("Platinum", "4", urlStartVersions + "generation-iv/platinum" + urlEndPng, urlStartVersions + "generation-iv/platinum/shiny" + urlEndPng, urlStartVersions + "generation-iv/platinum/female" + urlEndPng, urlStartVersions + "generation-iv/platinum/shiny/female" + urlEndPng),
-                BlackWhite = new SpriteStructure("Black/White", "5", urlStartVersions + "generation-v/black-white" + urlEndPng, urlStartVersions + "generation-v/black-white/shiny" + urlEndPng, urlStartVersions + "generation-v/black-white/female" + urlEndPng, urlStartVersions + "generation-v/black-white/shiny/female" + urlEndPng),
-                BlackWhiteAnimated = new SpriteStructure("Black/White Animated", "5", urlStartVersions + "generation-v/black-white/animated" + urlEndGif, urlStartVersions + "generation-v/black-white/animated/shiny" + urlEndGif, urlStartVersions + "generation-v/black-white/animated/female" + urlEndGif, urlStartVersions + "generation-v/black-white/animated/shiny/female" + urlEndGif),
-                XY = new SpriteStructure("XY", "6", urlStartVersions + "generation-vi/x-y" + urlEndPng, urlStartVersions + "generation-vi/x-y/shiny" + urlEndPng, urlStartVersions + "generation-vi/x-y/female" + urlEndPng, urlStartVersions + "generation-vi/x-y/shiny/female" + urlEndPng),
-                OmegarubyAlphasapphire = new SpriteStructure("Omegaruby/Alphasapphire", "6", urlStartVersions + "generation-vi/omegaruby-alphasapphire" + urlEndPng, urlStartVersions + "generation-vi/omegaruby-alphasapphire/shiny" + urlEndPng, urlStartVersions + "generation-vi/omegaruby-alphasapphire/female" + urlEndPng, urlStartVersions + "generation-vi/omegaruby-alphasapphire/shiny/female" + urlEndPng),
-                UltraSunUltraMoon = new SpriteStructure("UltraSun/UltraMoon", "7", urlStartVersions + "generation-vii/ultra-sun-ultra-moon" + urlEndPng, urlStartVersions + "generation-vii/ultra-sun-ultra-moon/shiny" + urlEndPng, urlStartVersions + "generation-vii/ultra-sun-ultra-moon/female" + urlEndPng, urlStartVersions + "generation-vii/ultra-sun-ultra-moon/shiny/female" + urlEndPng),
-                SwordShield = new SpriteStructure("Sword/Shield", "8", urlStartVersions + "generation-viii/icons" + urlEndPng),
-                Showdown = new SpriteStructure("Showdown", "none", urlStartOther + "showdown" + urlEndGif, urlStartOther + "showdown/shiny" + urlEndGif, urlStartOther + "showdown/female" + urlEndGif, urlStartOther + "showdown/shiny/female" + urlEndGif),
-                Home = new SpriteStructure("Home", "none", urlStartOther + "home" + urlEndPng, urlStartOther + "home/shiny" + urlEndPng, urlStartOther + "home/female" + urlEndPng, urlStartOther + "home/shiny/female" + urlEndPng),
-                OfficialArtwork = new SpriteStructure("Official Artwork", "none", urlStartOther + "official-artwork" + urlEndPng, urlStartOther + "official-artwork/shiny" + urlEndPng)
-            };    
+                if (animatedSpriteKeys.Contains(key))
+                {
+                    sprites.Add(new Sprite(key,
+                        urlStart + key + urlEndGif,
+                        urlStart + key + shiny + urlEndGif,
+                        urlStart + key + female + urlEndGif,
+                        urlStart + key + shinyFemale + urlEndGif));
+                }
+                else
+                {
+                    sprites.Add(new Sprite(key,
+                        urlStart + key + urlEnd,
+                        urlStart + key + shiny + urlEnd,
+                        urlStart + key + female + urlEnd,
+                        urlStart + key + shinyFemale + urlEnd));
+                }
+            }
+
             return sprites;
         }
 
@@ -183,7 +197,7 @@ namespace api.Services.PokemonService
                             },
                             Change = metaStatChange.change,
                             ChangeChance = meta.stat_chance
-                        }; 
+                        };
                     }
 
                     move = new Move
@@ -211,6 +225,7 @@ namespace api.Services.PokemonService
                             Long = effect.effect,
                             Chance = moves.effect_chance
                         },
+
                         Meta = new Metadata
                         {
                             MinHits = meta.min_hits,
@@ -224,6 +239,13 @@ namespace api.Services.PokemonService
                             FlinchChance = meta.flinch_chance,
                             StatChange = statChange,
                         }
+
+                        /*
+                        Meta = new List<Metadata>
+                        {
+                            meta.min_hits
+                        };
+                        */
                     };
                 }
             }
