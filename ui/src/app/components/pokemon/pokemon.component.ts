@@ -8,27 +8,20 @@ import { Pokemon } from 'src/app/models/pokemon.model';
   styleUrls: ['./pokemon.component.scss']
 })
 
-
 export class PokemonComponent 
 {
-
   @Input() pokemon!: Pokemon;
-  itemSpritePath: string = '';
   pokemonSpritePath?: string = '';
-  pokemonChoosenSpriteCategory: any = '';
+  spriteCategory: number = 0;
 
   constructor() 
   {
-    this.pokemonChoosenSpriteCategory = spriteCategories.base;
+
   }
 
   ngOnInit()
   {
-    type StatusKey1 = keyof typeof this.pokemon.sprites;
-    let category: StatusKey1 = this.pokemonChoosenSpriteCategory;
-
-
-    let choosenVariationPath = this.pokemon.sprites[category];
+    let choosenVariationPath = this.pokemon.sprites[this.spriteCategory];
 
     if(this.pokemon.gender === "female")
     {
@@ -41,31 +34,5 @@ export class PokemonComponent
     
 
 
-    this.itemSpritePath = 'https://localhost:7134/images/sprites/items/' + this.pokemon.item?.identifier + '.png';
   }
-}
-
-enum spriteCategories 
-{
-  base = "base",
-  redBlue = "redBlue",
-  yellow = "yellow",
-  gold = "gold",
-  silver = "silver",
-  crystal = "crystal",
-  rubySapphire = "rubySapphire",
-  fireredLeafgreen = "fireredLeafgreen",
-  emerald = "emerald",
-  diamondPearl = "diamondPearl",
-  heartgoldSoulsilver = "heartgoldSoulsilver",
-  platinum = "platinum",
-  blackWhite = "blackWhite",
-  blackWhiteAnimated = "blackWhiteAnimated",
-  xy = "xy",
-  omegarubyAlphasapphire = "omegarubyAlphasapphire",
-  ultraSunUltraMoon = "ultraSunUltraMoon",
-  swordShield = "swordShield",
-  showdown = "showdown",
-  home = "home",
-  officialArtwork = "officialArtwork"
 }

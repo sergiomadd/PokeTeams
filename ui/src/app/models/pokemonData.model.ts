@@ -1,6 +1,6 @@
 import { Type } from "./type.model"
 import { Stat } from "./stat.model"
-import { Sprites } from "./sprites.model"
+import { Sprite } from "./sprite.model"
 
 export interface PokemonData
 {
@@ -8,5 +8,5 @@ export interface PokemonData
   dexNumber: number,
   types: Type[],
   stats: Stat[],
-  sprites: Sprites
+  sprites: Sprite[]
 }

@@ -1,4 +1,4 @@
-export interface spriteStruture
+export interface Sprite
 {
   base?: string,
   shiny?: string,

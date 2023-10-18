@@ -25,7 +25,7 @@ export interface Move
     long: string,
     chance: number
   },
-  metadata: 
+  meta: 
   {
     minHits: number,
     maxHits: number,
@@ -45,7 +45,7 @@ export interface Move
         baseStat: number
       },
       change: number,
-      schangeChance: number
+      changeChance: number
     }
   },
 }
