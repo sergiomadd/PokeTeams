@@ -126,8 +126,7 @@ namespace api.Services.PokemonService
                 Items? items = await _context.Items.FindAsync(itemNames.item_id);
                 if (itemProse != null && items != null)
                 {
-                    string pathStart = "https://localhost:7134/images/sprites/items/";
-                    item = new Item(items.Identifier, itemNames.name, itemProse.effect, pathStart);
+                    item = new Item(items.Identifier, itemNames.name, itemProse.effect);
                 }
             }
             return item;
@@ -210,8 +209,9 @@ namespace api.Services.PokemonService
                         DamageClass = new MoveDamageClass
                         {
                             Name = damageClass.name,
-                            Description = damageClass.description
-                        },
+                            Description = damageClass.description,
+                            IconPath = $"https://localhost:7134/images/sprites/misc/damage-class/{damageClass.name}.png"
+                },
                         Power = moves.power,
                         Pp = moves.pp,
                         Accuracy = moves.accuracy,
@@ -277,6 +277,7 @@ namespace api.Services.PokemonService
                 Type_names? targetTypeName = await _context.Type_names.FindAsync(targetType.id, 9);
                 if (targetTypeName != null)
                 {
+
                     pokeType = new PokeType(targetType.identifier, targetTypeName.name,
                         GetTypeEffectivenessAttack(targetType.id).Result, GetTypeEffectivenessDefense(targetType.id).Result);
                 }
