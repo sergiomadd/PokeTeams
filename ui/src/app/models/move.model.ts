@@ -8,7 +8,8 @@ export interface Move
   damageClass: 
   {
     name: string,
-    description: string
+    description: string,
+    iconPath: string
   },
   power: number,
   pp: number,

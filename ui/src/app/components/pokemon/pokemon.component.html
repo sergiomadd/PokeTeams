@@ -35,7 +35,7 @@
           </div>
           <div class="base-types">
             <div class="type" *ngFor="let type of pokemon.types">
-              {{type.name}}
+              <img src="{{type.iconPath}}" alt="" class="type-icon">
             </div>
           </div>
         </div>
@@ -65,10 +65,10 @@
         <div class="move" *ngFor="let move of pokemon.moves">
           <div class="icons">
             <div class="type">
-              {{move.pokeType.name}}
+              <img src="{{move.pokeType.iconPath}}" alt="" class="type-icon">
             </div>
             <div class="class">
-              {{move.damageClass.name}}
+              <img src="{{move.damageClass.iconPath}}" alt="" class="type-icon">
             </div>
           </div>
           <div class="name">

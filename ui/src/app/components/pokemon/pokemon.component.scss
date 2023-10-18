@@ -110,6 +110,13 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
           .base-types
           {
             display: flex;
+
+            .type-icon
+            {
+              
+              width: 20px;
+              height: 20px;;
+            }
           }
         }
 
@@ -159,6 +166,14 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
           .icons
           {
             overflow: hidden;
+            display: flex;
+
+            .type-icon
+            {
+              
+              width: 20px;
+              height: 20px;;
+            }
           }
 
           .name
