@@ -8,6 +8,7 @@ using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 using static api.Models.Move;
+using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace api.Services.PokemonService
@@ -125,7 +126,8 @@ namespace api.Services.PokemonService
                 Items? items = await _context.Items.FindAsync(itemNames.item_id);
                 if (itemProse != null && items != null)
                 {
-                    item = new Item(items.Identifier, itemNames.name, itemProse.effect);
+                    string pathStart = "https://localhost:7134/images/sprites/items/";
+                    item = new Item(items.Identifier, itemNames.name, itemProse.effect, pathStart);
                 }
             }
             return item;
