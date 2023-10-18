@@ -26,59 +26,86 @@ $spa: #6890F0;
 $spd: #78C850;
 $spe: #F85888;
 
+//----------
+
+$cardWidth: 25vw;
+
+$profileHeight: 20vh;
+$statsHeight: 5vh;
+$cardheight: $profileHeight;
+
+$moveHeight: calc($profileHeight/4);
+$metaMoveHeight: $profileHeight;
+
+
+
+$cardBackgroundColor: rgba(17, 42, 97, 0.8);
+
 
 
 .pokemon
 {
-  width: 80vw;
-  height: 50vh;
+  width: $cardWidth;
+  height: $cardheight;
+  background-color: $cardBackgroundColor;
+  color: white;
+  border-radius: 5px;
 
   .profile
   {
     display: grid;
-    grid-template-columns: 50% 50%;
-    border: 1px black solid;
+    grid-template-columns: 60% 40%;
+    height: 100%;
+
 
     .left
     {
-      border: 1px black solid;
+      text-align: left;
       display: grid;
-      grid-template-columns: 50% 50%;
+      justify-content: left;
+      grid-template-columns: 60% 40%;
+      padding: 0.5vw;
 
       .extra
       {
         display: grid;
         grid-template-rows: 25% 25% 25% 25%;
-        height: 100%;
+        align-items: center;
 
-        .name
+        .species
         {
-          display: grid;
-          grid-template-rows: 60% 40%;
+          display: flex;
 
-          .species
+          .dex-number
           {
-            display: flex;
+            color: rgb(255, 85, 85);
+            margin-right: 0.5vh;
+          }
+          .nickname
+          {
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
           }
         }
 
         .item
         {
           display: flex;
-        }
+          align-items: center;
 
+        }
       }
 
       .picture
       {
         display: grid;
-        grid-template-rows: 20% 60% 20%;
-        height: 30vh;
+        grid-template-rows: 15% 70% 15%;
 
         .types
         {
           display: flex;
           justify-content: space-between;
+          align-items: center;
 
           .base-types
           {
@@ -86,38 +113,52 @@ $spe: #F85888;
           }
         }
 
-        .photo
+        .sprite-background
         {
           width: 100%;
+          background-color: rgba(17, 42, 97, 0.9);;
+          border: 1px solid black;
+          border-radius: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .sprite
+          {
+
+          }
         }
 
-        .photo-extra
+        .picture-extra
         {
           display: flex;
           justify-content: space-between;
+          align-items: center;
+          
         }
       }
     }
 
     .right
     {
-      border: 1px black solid;
+      padding: 0.5vw;
 
       .moves
       {
+        height: 100%;
         display: grid;
         grid-template-rows: 25% 25% 25% 25%;
-        height: 100%;
 
         .move
         {
           display: grid;
           grid-template-columns: 20% 80%;
-          width: 100%;
+          height: 100%;
+          align-items: center;
 
           .icons
           {
-
+            overflow: hidden;
           }
 
           .name
@@ -126,18 +167,63 @@ $spe: #F85888;
 
           }
 
-          .meta-move
+          .meta-move-position
           {
-            visibility: hidden;
-            position: relative;
-            bottom: 10vh;
+            position: relative; 
+            width: 0; 
+            height: 0;
 
-            background-color: green;
-            width: 100%;
-            height: 20px;
+            .meta-move
+            {
+              visibility: hidden;
+              position: relative;
+              left: calc($cardWidth*40/100);
+              bottom: calc($metaMoveHeight/4);
+              background-color: dimgray;
+              width: calc($cardWidth/1.5);
+              height: $metaMoveHeight;
+
+              .meta-move-top
+              {
+                display: flex;
+                overflow: hidden;
+                justify-content: space-between;
+              }
+
+              .meta-move-body
+              {
+                text-align: center;
+              }
+
+              .meta-move-bottom
+              {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                text-align: center;
+
+                .atribute
+                {
+                  padding: 0 0.2vw 0 0.2vw;
+                }
+
+                .primary
+                {
+                  display: flex;
+                  justify-content: center;
+                  text-align: center;
+                }
+              }
+
+              .meta-move-highlight
+              {
+                color: gold;
+                font-weight: bold;
+              }
+            }
+            
           }
-
-          &:hover .meta-move
+          &:hover .meta-move-position .meta-move
           {
             visibility: visible;
           }
@@ -148,7 +234,6 @@ $spe: #F85888;
 
   .stats
   {
-    border: 1px black solid;
 
   }
 }

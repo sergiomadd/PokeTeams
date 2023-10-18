@@ -11,6 +11,12 @@ import { PokePasteData } from '../../models/pokePasteData.model';
     <div class="pokemons" *ngFor="let pokemon of (pokemons| async)">
       <app-pokemon [pokemon]="pokemon"></app-pokemon>
     </div>
+    <div class="pokemons" *ngFor="let pokemon of (pokemons| async)">
+      <app-pokemon [pokemon]="pokemon"></app-pokemon>
+    </div>
+    <div class="pokemons" *ngFor="let pokemon of (pokemons| async)">
+      <app-pokemon [pokemon]="pokemon"></app-pokemon>
+    </div>
   </div>
   `,
   styleUrls: ['./team.component.scss']
