@@ -2,5 +2,6 @@ export interface Item
 {
   identifier: string,
   name: string,
-  prose: string	
+  prose: string,
+  iconPath: string
 }
