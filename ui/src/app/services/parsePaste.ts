@@ -38,7 +38,7 @@ export function parsePaste(paste: string): PokePasteData
         }
         if(line.includes("Shiny") || line.includes("shiny"))
         {
-          pokePaste.shiny = stringToBool(line.split(":")[1]);
+          pokePaste.shiny = stringToBool(formatValue(line.split(":")[1], {whiteSpace: true}));
         }
         if(line.includes("EV") || line.includes("Ev") || line.includes("ev"))
         {
@@ -159,6 +159,7 @@ function formatValue(value: string, options?: any): string
 
 function stringToBool(string: string) : boolean
 {
+  console.log(string);
   if(string === "Yes")
   {
     return true;
