@@ -37,7 +37,7 @@ export class GetPokemonService
       pokemon.nickname = pokePaste.nickname;
       pokemon.dexNumber = pokemonData.dexNumber;
       pokemon.types = pokemonData.types;
-      pokemon.teraType = pokePaste.teratype ? await this.getType(pokePaste.teratype) : undefined;
+      pokemon.teraType = pokePaste.teratype ? await this.getType(pokePaste.teratype, true) : undefined;
       pokemon.item = pokePaste.item ? await this.getItem(pokePaste.item) : undefined; 
       pokemon.ability = pokePaste.ability ? await this.getAbility(pokePaste.ability) : undefined;
       pokemon.nature = pokePaste.nature ? await this.getNature(pokePaste.nature) : undefined;
@@ -154,11 +154,11 @@ export class GetPokemonService
     return moves;
   }
 
-  async getType(typeName: string) : Promise<Type>
+  async getType(typeName: string, teratype?: boolean) : Promise<Type>
   {
     console.log('type',typeName)
     let type: Type = <Type>{};
-    let url = this.apiUrl + 'type/' + typeName;
+    let url = this.apiUrl + 'type/' + (teratype ? 'teratype/' : '') + typeName;
     this.http.get<Type>(url).subscribe
     try
     {
