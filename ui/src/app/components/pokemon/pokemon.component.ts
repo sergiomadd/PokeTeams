@@ -13,6 +13,9 @@ export class PokemonComponent
   @Input() pokemon!: Pokemon;
   pokemonSpritePath?: string = '';
   spriteCategory: number = 0;
+  shinyIconPath: string = '';
+  maleIconPath: string = '';
+  femaleIconPath: string = '';
 
   constructor() 
   {
@@ -32,7 +35,9 @@ export class PokemonComponent
       this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shiny : choosenVariationPath.base
     }
     
-
+    this.shinyIconPath = "https://localhost:7134/images/sprites/shiny/gen-vii_pokedex.png";
+    this.maleIconPath = "https://localhost:7134/images/sprites/gender/male.png";
+    this.femaleIconPath = "https://localhost:7134/images/sprites/gender/female.png";
 
   }
 }

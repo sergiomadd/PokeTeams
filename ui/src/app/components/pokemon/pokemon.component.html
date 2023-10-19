@@ -31,11 +31,13 @@
       <div class="picture">
         <div class="types">
           <div class="tera-type">
-            {{pokemon.teraType?.name}}
+            <div *ngIf="pokemon.teraType">
+              <img src="{{pokemon.teraType.iconPath}}" alt="" class="icon">
+            </div>
           </div>
           <div class="base-types">
             <div class="type" *ngFor="let type of pokemon.types">
-              <img src="{{type.iconPath}}" alt="" class="type-icon">
+              <img src="{{type.iconPath}}" alt="" class="icon">
             </div>
           </div>
         </div>
@@ -45,17 +47,20 @@
         <div class="picture-extra">
           <div class="shiny" >
             <div *ngIf="pokemon.shiny">
-              SHINY
+              <img src={{shinyIconPath}} alt="" class="icon">
             </div>
-            <ng-template #shiny>
-              NO SHINY
-            </ng-template>
+            <ng-template #shiny></ng-template>
           </div>
           <div class="level">
             {{pokemon.level}}
           </div>
           <div class="gender">
-            {{pokemon.gender}}
+            <div *ngIf="pokemon.gender==='F'; else gender">
+              <img src={{femaleIconPath}} alt="" class="icon">
+            </div>
+            <ng-template #gender>
+              <img src={{maleIconPath}} alt="" class="icon">
+            </ng-template>          
           </div>
         </div>
       </div>
@@ -65,10 +70,10 @@
         <div class="move" *ngFor="let move of pokemon.moves">
           <div class="icons">
             <div class="type">
-              <img src="{{move.pokeType.iconPath}}" alt="" class="type-icon">
+              <img src="{{move.pokeType.iconPath}}" alt="" class="icon">
             </div>
             <div class="class">
-              <img src="{{move.damageClass.iconPath}}" alt="" class="type-icon">
+              <img src="{{move.damageClass.iconPath}}" alt="" class="icon">
             </div>
           </div>
           <div class="name">
