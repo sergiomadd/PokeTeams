@@ -10,6 +10,7 @@ namespace api.Services.PokemonService
         Task<Nature?> GetNatureByName(string name);
         Task<Move?> GetMoveByName(string name);
         Task<PokeType?> GetTypeByIdentifier(string identifier);
+        Task<PokeType?> GetTeraTypeByIdentifier(string identifier);
         Task<string?> GetStatNameByIdentifier(string identifier);
 
     }

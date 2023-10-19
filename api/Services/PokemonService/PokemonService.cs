@@ -302,6 +302,23 @@ namespace api.Services.PokemonService
             return pokeType;
         }
 
+        public async Task<PokeType?> GetTeraTypeByIdentifier(string identifier)
+        {
+            PokeType? pokeType = null;
+            Types? targetType = await _context.Types.FirstOrDefaultAsync(t => t.identifier == identifier);
+
+            if (targetType != null)
+            {
+                Type_names? targetTypeName = await _context.Type_names.FindAsync(targetType.id, 9);
+                if (targetTypeName != null)
+                {
+                    pokeType = new PokeType(targetType.identifier, targetTypeName.name,
+                        GetTypeEffectivenessAttack(targetType.id).Result, GetTypeEffectivenessDefense(targetType.id).Result, true);
+                }
+            }
+            return pokeType;
+        }
+
         public async Task<List<Tuple<string, int>>?> GetTypeEffectivenessAttack(int id)
         {
             List<Tuple<string, int>> effectivenessAttack = new List<Tuple<string, int>>();

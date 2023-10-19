@@ -24,5 +24,16 @@ namespace api.Controllers
             }
             return Ok(type);
         }
+
+        [HttpGet("teratype/{typeName}", Name = "GetTeraTypeByIdentifier")]
+        public async Task<ActionResult<PokeType>> GetTeraTypeByIdentifier(string typeName)
+        {
+            var type = await _pokemonService.GetTeraTypeByIdentifier(typeName);
+            if (type == null)
+            {
+                return BadRequest("Yype not found.");
+            }
+            return Ok(type);
+        }
     }
 }

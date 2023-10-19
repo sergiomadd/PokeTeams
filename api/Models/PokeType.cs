@@ -7,16 +7,20 @@
         public string IconPath { get; set; }
         public List<Tuple<string, int>> EffectivenessAttack { get; set; }
         public List<Tuple<string, int>> EffectivenessDefense { get; set; }
+        string pathStart;
 
-        string pathStart = "https://localhost:7134/images/sprites/types/generation-viii/";
 
-
-        public PokeType(string identifier, string name, List<Tuple<string, int>> effectivenessAttack, List<Tuple<string, int>> effectivenessDefense)
+        public PokeType(string identifier, string name, List<Tuple<string, int>> effectivenessAttack, List<Tuple<string, int>> effectivenessDefense, bool teraType = false)
         {
             Identifier = identifier;
             Name = name;
             EffectivenessAttack = effectivenessAttack;
             EffectivenessDefense = effectivenessDefense;
+            pathStart = "https://localhost:7134/images/sprites/types/generation-viii/";
+            if (teraType)
+            {
+                pathStart = "https://localhost:7134/images/sprites/teratypes/";
+            }
 
             IconPath = $"{pathStart}{identifier}.png";
         }
