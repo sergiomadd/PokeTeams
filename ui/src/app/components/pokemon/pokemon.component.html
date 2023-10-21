@@ -46,7 +46,7 @@
         </div>
         <div class="picture-extra">
           <div class="shiny" >
-            <div *ngIf="pokemon.shiny">
+            <div *ngIf="pokemon.shiny && editorOptions.shiny">
               <img src={{shinyIconPath}} alt="" class="icon">
             </div>
             <ng-template #shiny></ng-template>
@@ -67,12 +67,15 @@
     </div>
     <div class="right">
       <div class="moves">
-        <div class="move" *ngFor="let move of pokemon.moves">
+        <div class="move" 
+        *ngFor="let move of pokemon.moves; index as i" 
+        (click)="clickMove(i)"
+        [ngClass]="{'move-selected':  displayMoves[i]}">
           <div class="icons">
-            <div class="type">
+            <div class="type-icon">
               <img src="{{move.pokeType.iconPath}}" alt="" class="icon">
             </div>
-            <div class="class">
+            <div class="type-icon">
               <img src="{{move.damageClass.iconPath}}" alt="" class="icon">
             </div>
           </div>
@@ -80,7 +83,7 @@
             {{move.name}}
           </div>
           <div class="meta-move-position">
-            <div class="meta-move">
+            <div class="meta-move" [ngClass]="{'meta-move-visible':  displayMoves[i]}">
               <div class="meta-move-top">
                 <div>
                   {{move.pokeType.name}}

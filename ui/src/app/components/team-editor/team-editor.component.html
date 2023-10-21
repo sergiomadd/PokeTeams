@@ -1,0 +1,22 @@
+<div class="team-editor">
+  <div class="options">
+    <div class="option">
+      <form>
+        <input type="checkbox" id="shiny" name="shiny" class="toggle"
+         [checked]="shinySelect"
+         (change)="onShinySelect()"/>
+        <label for="shiny">Display shiny icon</label>
+        <select name="shinyOptions" id="shinyOptions" [disabled]="!shinySelect">
+          <option [value]="item" *ngFor="let item of editorData.shinyPaths">{{item.name}}</option>
+        </select>
+      </form>
+    </div>
+  </div>
+  <label class="switch">
+    <input type="checkbox">
+    <span class="slider"></span>
+  </label>
+  <div class="team-holder">
+    <app-team [pokemons]="pokemons"  [editorOptions]="editorOptions"></app-team>
+  </div>
+</div>

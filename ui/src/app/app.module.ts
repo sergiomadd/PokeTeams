@@ -7,20 +7,30 @@ import { AppComponent } from './app.component';
 import { TeamComponent } from './components/team/team.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { PokemonComponent } from './components/pokemon/pokemon.component';
+import { TeamEditorComponent } from './components/team-editor/team-editor.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     TeamComponent,
     NavbarComponent,
-    PokemonComponent
+    PokemonComponent,
+    TeamEditorComponent
   ],
   exports: [NavbarComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
-  ],
+    HttpClientModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
