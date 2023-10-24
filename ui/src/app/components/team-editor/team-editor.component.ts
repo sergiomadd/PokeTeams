@@ -140,6 +140,6 @@ export class TeamEditorComponent
 
   checkEvent($event) 
   {
-    this.shinySelect = $event;
+    this.editorOptions.shiny = $event;
   }
 }

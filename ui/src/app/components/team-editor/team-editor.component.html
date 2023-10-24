@@ -7,7 +7,7 @@
         [label]="shinyCheckLabel" 
         (checkEvent)="checkEvent($event)"
         ></app-switch>
-        <select name="shinyOptions" id="shinyOptions" [disabled]="!shinySelect">
+        <select name="shinyOptions" id="shinyOptions" [disabled]="!this.editorOptions.shiny">
           <option [value]="item" *ngFor="let item of editorData.shinyPaths">{{item.name}}</option>
         </select>
       </form>

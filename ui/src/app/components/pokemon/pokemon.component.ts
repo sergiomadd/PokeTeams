@@ -44,7 +44,7 @@ export class PokemonComponent
     this.shinyIconPath = "https://localhost:7134/images/sprites/shiny/gen-vii_pokedex.png";
     this.maleIconPath = "https://localhost:7134/images/sprites/gender/male.png";
     this.femaleIconPath = "https://localhost:7134/images/sprites/gender/female.png";
-    console.log(this.editorOptions);
+    console.log("editor options", this.editorOptions);
   }
 
   clickMove(index: number)
