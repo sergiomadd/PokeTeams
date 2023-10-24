@@ -96,7 +96,7 @@ function getName(pokePaste: PokePaste, line: string)
 
 function getMoves(lines: string[]) : string[]
 {
-  let moves = [];
+  let moves: string[] = [];
   for(let i=0;i<lines.length;i++)
   {
     let move = formatValue(lines[i].split("- ")[1], {});

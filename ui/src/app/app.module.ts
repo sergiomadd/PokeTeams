@@ -11,6 +11,7 @@ import { TeamEditorComponent } from './components/team-editor/team-editor.compon
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { SwitchComponent } from './components/pieces/switch/switch.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { CommonModule } from '@angular/common';
     TeamComponent,
     NavbarComponent,
     PokemonComponent,
-    TeamEditorComponent
+    TeamEditorComponent,
+    SwitchComponent
   ],
   exports: [NavbarComponent],
   imports: [

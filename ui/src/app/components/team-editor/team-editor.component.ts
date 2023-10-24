@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { Pokemon } from 'src/app/models/pokemon.model';
 import { GetPokemonService } from 'src/app/services/get-pokemon.service';
 import { parsePaste } from 'src/app/services/parsePaste';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { EditorData } from 'src/app/models/editorData.model';
 import { FormControl } from '@angular/forms';
+import { SwitchComponent } from '../pieces/switch/switch.component';
 
 @Component({
   selector: 'app-team-editor',
@@ -15,6 +16,8 @@ export class TeamEditorComponent
 {
   getPokemon = inject(GetPokemonService);
 
+  @ViewChild(SwitchComponent) switch!: SwitchComponent;
+
   pokemons!: Promise<Pokemon[]>;
   posts: any;
   paste: string = '';
@@ -24,6 +27,8 @@ export class TeamEditorComponent
 
   disableSelect = new FormControl(false);
   shinySelect: boolean = true;
+
+  shinyCheckLabel: string = "Display shiny icon?";
 
   constructor()
   {
@@ -72,6 +77,11 @@ export class TeamEditorComponent
 
     this.getEditorData();
     this.getOptions();
+  }
+
+  ngAfterViewInit() 
+  {
+    this.shinySelect = this.switch.state;
   }
 
   getEditorData()
@@ -128,8 +138,8 @@ export class TeamEditorComponent
 
   }
 
-  onShinySelect()
+  checkEvent($event) 
   {
-    this.shinySelect = !this.shinySelect;
+    this.shinySelect = $event;
   }
 }
