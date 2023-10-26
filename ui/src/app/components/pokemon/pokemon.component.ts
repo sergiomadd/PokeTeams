@@ -19,9 +19,8 @@ export class PokemonComponent
   maleIconPath: string = '';
   femaleIconPath: string = '';
 
-  displayedMove: number = 0;
-  displayMove: boolean = false;
-  displayMoves: boolean[] = [false, false, false, false];
+  metaLeft: boolean[] = [false, false, false, false];
+  metaRight: boolean[] = [false, false, false, false];
 
   constructor() 
   {
@@ -47,18 +46,29 @@ export class PokemonComponent
     console.log("editor options", this.editorOptions);
   }
 
-  clickMove(index: number)
+  clickMeta(index: number, type: string)
   {
-    if(this.displayMoves[index])
+    let list: boolean[] = [];
+    switch(type)
     {
-      this.displayMoves[index] = false;
+      case "right":
+        list = this.metaRight;
+        break;
+      case "left":
+        list = this.metaLeft;
+      break;
+
+    }
+    if(list[index])
+    {
+      list[index] = false;
     }
     else
     {
-      for(var i = 0; i < this.displayMoves.length; i++) {
-        this.displayMoves[i] = false;
+      for(var i = 0; i < list.length; i++) {
+        list[i] = false;
       }
-      this.displayMoves[index] = true;
+      list[index] = true;
     }
   }
 }
