@@ -2,7 +2,7 @@
   <div class="profile">
     <div class="left">
       <div class="extra">
-        <div class="species">
+        <div class="species clickable">
           <div class="dex-number">
             #{{pokemon.dexNumber}} 
           </div>
@@ -13,7 +13,7 @@
             </div>
           </div>
         </div>
-        <div class="item">
+        <div class="item clickable">
           <div>
             <img src="{{pokemon.item?.iconPath}}" alt="">
           </div>
@@ -21,10 +21,24 @@
             {{pokemon.item?.name}}
           </div>
         </div>
-        <div>
+        <div 
+        class="clickable"
+        (click)="clickMeta(2, 'left')"
+        [ngClass]="{'meta-selected':  metaLeft[2]}"
+        >
           Ability: {{pokemon.ability?.name}}
+          <div class="meta-wrapper">
+            <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[2]}">
+              <div class="meta-name">
+                {{pokemon.ability?.name}}
+              </div>
+              <div class="meta-prose">
+                {{pokemon.ability?.prose}}
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
+        <div class="clickable">
           Nature: {{pokemon.nature?.name}}
         </div>
       </div>
@@ -69,8 +83,8 @@
       <div class="moves">
         <div class="move" 
         *ngFor="let move of pokemon.moves; index as i" 
-        (click)="clickMove(i)"
-        [ngClass]="{'move-selected':  displayMoves[i]}">
+        (click)="clickMeta(i, 'right')"
+        [ngClass]="{'meta-selected':  metaRight[i]}">
           <div class="icons">
             <div class="type-icon">
               <img src="{{move.pokeType.iconPath}}" alt="" class="icon">
@@ -82,8 +96,8 @@
           <div class="name">
             {{move.name}}
           </div>
-          <div class="meta-move-position">
-            <div class="meta-move" [ngClass]="{'meta-move-visible':  displayMoves[i]}">
+          <div class="meta-wrapper">
+            <div class="meta meta-right" [ngClass]="{'meta-visible':  metaRight[i]}">
               <div class="meta-move-top">
                 <div>
                   {{move.pokeType.name}}

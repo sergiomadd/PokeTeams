@@ -29,14 +29,16 @@ $spe: #F85888;
 //----------
 
 $cardWidth: 25vw;
-
+$iconWidth: 1vw;
+$padding: 0.5vw;
 $profileHeight: 20vh;
 $statsHeight: 5vh;
 $cardheight: $profileHeight;
 
+$metaWidth: calc($cardWidth/1.5);
 $moveHeight: calc($profileHeight/4);
 $metaMoveHeight: $profileHeight;
-$iconWidth: 1vw;
+
 
 
 $cardBackgroundColor: rgba(17, 42, 97, 0.8);
@@ -148,7 +150,6 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
 
     .right
     {
-      $paddingRight: 0.5vw;
       padding: 0.5vw;
 
       .moves
@@ -175,83 +176,15 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
 
             }
           }
-
           .name
           {
            
             width: 100%;
-
-          }
-
-          .meta-move-position
-          {
-            position: relative; 
-            width: 0; 
-            height: 0;
-
-            .meta-move
-            {
-              visibility: hidden;
-              position: relative;
-              left: $paddingRight;
-              bottom: calc($metaMoveHeight/4 - $paddingRight*2);
-              background-color: dimgray;
-              width: calc($cardWidth/1.5);
-              height: $metaMoveHeight;
-
-              .meta-move-top
-              {
-                display: flex;
-                overflow: hidden;
-                justify-content: space-between;
-              }
-
-              .meta-move-body
-              {
-                text-align: center;
-              }
-
-              .meta-move-bottom
-              {
-                display: flex;
-                justify-content: center;
-                flex-direction: column;
-                text-align: center;
-
-                .atribute
-                {
-                  padding: 0 0.2vw 0 0.2vw;
-                }
-
-                .primary
-                {
-                  display: flex;
-                  justify-content: center;
-                  text-align: center;
-                }
-              }
-
-              .meta-move-highlight
-              {
-                color: gold;
-                font-weight: bold;
-              }
-            }
-            
           }
           &:hover .meta-move-position .meta-move .move
           {
             //visibility: visible;
           }
-          .meta-move-visible
-          {
-            visibility: visible !important;
-          }
-        }
-
-        .move-selected
-        {
-          background-color:  rgba(49, 89, 175, 0.8);
         }
       }
     }
@@ -266,5 +199,91 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
 .icon
 {
   width: 20px;
-  height: 20px;;
+  height: 20px;
+}
+
+.clickable
+{
+  cursor: pointer;
+}
+
+.meta-wrapper
+{
+  position: relative; 
+  width: 0; 
+  height: 0;
+}
+
+.meta
+{
+  visibility: visible;
+  background-color: dimgray;
+  height: 20vh;
+  background-color: dimgray;
+  width: $metaWidth;
+}
+
+.meta-selected
+{
+  background-color:  rgba(49, 89, 175, 0.8);
+}
+
+.meta-left
+{
+  position: relative;
+  right: calc($metaWidth + $padding);
+  bottom: 2vw;
+  visibility: hidden;
+}
+
+.meta-right
+{
+  visibility: hidden;
+  position: relative;
+  left: $padding;
+  bottom: calc($metaMoveHeight/4 - $padding*2);
+  height: $metaMoveHeight;
+
+  .meta-move-top
+  {
+    display: flex;
+    overflow: hidden;
+    justify-content: space-between;
+  }
+
+  .meta-move-body
+  {
+    text-align: center;
+  }
+
+  .meta-move-bottom
+  {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+
+    .atribute
+    {
+      padding: 0 0.2vw 0 0.2vw;
+    }
+
+    .primary
+    {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+    }
+  }
+
+  .meta-move-highlight
+  {
+    color: gold;
+    font-weight: bold;
+  }
+}
+
+.meta-visible
+{
+  visibility: visible !important;
 }
