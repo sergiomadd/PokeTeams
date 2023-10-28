@@ -20,7 +20,9 @@ export class PokemonComponent
   femaleIconPath: string = '';
 
   metaLeft: boolean[] = [false, false, false, false];
+  metaMiddle: boolean[] = [false, false, false, false, false, false];
   metaRight: boolean[] = [false, false, false, false];
+  
 
   constructor() 
   {
@@ -51,13 +53,15 @@ export class PokemonComponent
     let list: boolean[] = [];
     switch(type)
     {
-      case "right":
-        list = this.metaRight;
-        break;
       case "left":
         list = this.metaLeft;
       break;
-
+      case "middle":
+        list = this.metaMiddle;
+        break;
+      case "right":
+        list = this.metaRight;
+        break;
     }
     if(list[index])
     {

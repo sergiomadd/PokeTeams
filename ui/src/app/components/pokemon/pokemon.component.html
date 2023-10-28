@@ -2,7 +2,11 @@
   <div class="profile">
     <div class="left">
       <div class="extra">
-        <div class="species clickable">
+        <div 
+        class="species section"
+        (click)="clickMeta(0, 'left')"
+        [ngClass]="{'meta-selected':  metaLeft[0]}"
+        >
           <div class="dex-number">
             #{{pokemon.dexNumber}} 
           </div>
@@ -13,7 +17,11 @@
             </div>
           </div>
         </div>
-        <div class="item clickable">
+        <div 
+        class="item section"
+        (click)="clickMeta(1, 'left')"
+        [ngClass]="{'meta-selected':  metaLeft[1]}"
+        >
           <div>
             <img src="{{pokemon.item?.iconPath}}" alt="">
           </div>
@@ -22,53 +30,82 @@
           </div>
         </div>
         <div 
-        class="clickable"
+        class="section"
         (click)="clickMeta(2, 'left')"
         [ngClass]="{'meta-selected':  metaLeft[2]}"
         >
-          Ability: {{pokemon.ability?.name}}
-          <div class="meta-wrapper">
-            <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[2]}">
-              <div class="meta-name">
-                {{pokemon.ability?.name}}
-              </div>
-              <div class="meta-prose">
-                {{pokemon.ability?.prose}}
-              </div>
+        <div class="meta-wrapper">
+          <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[2]}">
+            <div class="meta-name">
+              {{pokemon.ability?.name}}
+            </div>
+            <div class="meta-prose">
+              {{pokemon.ability?.prose}}
             </div>
           </div>
         </div>
-        <div class="clickable">
+          Ability: {{pokemon.ability?.name}} 
+        </div>
+        <div 
+        class="section"
+        (click)="clickMeta(3, 'left')"
+        [ngClass]="{'meta-selected':  metaLeft[3]}"
+        >
           Nature: {{pokemon.nature?.name}}
         </div>
       </div>
       <div class="picture">
-        <div class="types">
-          <div class="tera-type">
-            <div *ngIf="pokemon.teraType">
+        <div class="types section">
+          <div *ngIf="pokemon.teraType; else empty">
+            <div 
+            class="tera-type"
+            (click)="clickMeta(0, 'middle')"
+            [ngClass]="{'meta-selected':  metaMiddle[0]}"
+            >
               <img src="{{pokemon.teraType.iconPath}}" alt="" class="icon">
             </div>
           </div>
-          <div class="base-types">
+          <div
+          class="base-types"
+          (click)="clickMeta(1, 'middle')"
+          [ngClass]="{'meta-selected':  metaMiddle[1]}"
+          >
             <div class="type" *ngFor="let type of pokemon.types">
               <img src="{{type.iconPath}}" alt="" class="icon">
             </div>
           </div>
         </div>
-        <div class="sprite-background">
+        <div 
+        class="section sprite-background"
+        (click)="clickMeta(2, 'middle')"
+        [ngClass]="{'meta-selected':  metaMiddle[2]}"
+        >
           <img src={{pokemonSpritePath}} alt="" class="sprite">
         </div>
         <div class="picture-extra">
-          <div class="shiny" >
-            <div *ngIf="pokemon.shiny && editorOptions.shiny">
+          <div 
+          class="shiny section"
+          (click)="clickMeta(3, 'middle')"
+          [ngClass]="{'meta-selected':  metaMiddle[3]}"
+          >
+            <div *ngIf="pokemon.shiny && editorOptions.shiny; else empty">
               <img src={{shinyIconPath}} alt="" class="icon">
             </div>
-            <ng-template #shiny></ng-template>
           </div>
-          <div class="level">
-            {{pokemon.level}}
+          <div 
+          class="level section"
+          (click)="clickMeta(4, 'middle')"
+          [ngClass]="{'meta-selected':  metaMiddle[4]}"
+          >
+            <div *ngIf="pokemon.level; else empty">
+              {{pokemon.level}}
+            </div>
           </div>
-          <div class="gender">
+          <div 
+          class="gender section"
+          (click)="clickMeta(5, 'middle')"
+          [ngClass]="{'meta-selected':  metaMiddle[5]}"
+          >
             <div *ngIf="pokemon.gender==='F'; else gender">
               <img src={{femaleIconPath}} alt="" class="icon">
             </div>
@@ -81,7 +118,7 @@
     </div>
     <div class="right">
       <div class="moves">
-        <div class="move" 
+        <div class="move section" 
         *ngFor="let move of pokemon.moves; index as i" 
         (click)="clickMeta(i, 'right')"
         [ngClass]="{'meta-selected':  metaRight[i]}">
@@ -158,3 +195,5 @@
   </div>
   -->
 </div>
+
+<ng-template #empty><div class="empty"></div></ng-template>

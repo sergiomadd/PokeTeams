@@ -29,7 +29,7 @@ $spe: #F85888;
 //----------
 
 $cardWidth: 25vw;
-$iconWidth: 1vw;
+$iconSize: 1vw;
 $padding: 0.5vw;
 $profileHeight: 20vh;
 $statsHeight: 5vh;
@@ -94,7 +94,6 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
         {
           display: flex;
           align-items: center;
-
         }
       }
 
@@ -112,22 +111,12 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
           .base-types
           {
             display: flex;
-
-            .type-icon
-            {
-              
-              width: 20px;
-              height: 20px;
-            }
+            align-items: center;
           }
         }
 
         .sprite-background
         {
-          width: 100%;
-          background-color: rgba(17, 42, 97, 0.9);;
-          border: 1px solid black;
-          border-radius: 20px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -160,16 +149,12 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
 
         .move
         {
-          display: flex;
           height: 100%;
-          width: 100%;
-          align-items: center;
-          cursor: pointer;
+          width: calc(100% - 1vw);
 
           .icons
           {
             display: flex;
-            //width: calc($iconWidth*2);
 
             .type-icon
             {
@@ -178,12 +163,7 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
           }
           .name
           {
-           
             width: 100%;
-          }
-          &:hover .meta-move-position .meta-move .move
-          {
-            //visibility: visible;
           }
         }
       }
@@ -198,13 +178,8 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
 
 .icon
 {
-  width: 20px;
-  height: 20px;
-}
-
-.clickable
-{
-  cursor: pointer;
+  width: $iconSize;
+  height: $iconSize;
 }
 
 .meta-wrapper
@@ -225,13 +200,15 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
 
 .meta-selected
 {
-  background-color:  rgba(49, 89, 175, 0.8);
+  background-color: rgba(17, 42, 97, 0.9);;
+  border: 1px solid black;
+  border-radius: 20px;
 }
 
 .meta-left
 {
   position: relative;
-  right: calc($metaWidth + $padding);
+  right: calc($metaWidth + $padding *2);
   bottom: 2vw;
   visibility: hidden;
 }
@@ -240,8 +217,8 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
 {
   visibility: hidden;
   position: relative;
-  left: $padding;
-  bottom: calc($metaMoveHeight/4 - $padding*2);
+  left: calc($padding + 0.5vw);
+  bottom: calc($metaMoveHeight/4 - $padding*1.5);
   height: $metaMoveHeight;
 
   .meta-move-top
@@ -286,4 +263,28 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
 .meta-visible
 {
   visibility: visible !important;
+}
+
+.section
+{
+  height: 100%;
+  //width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5vw 0 0.5vw;
+
+
+  &:hover .meta
+  {
+    //visibility: visible;
+  }
+
+}
+
+.empty
+{
+  width: $iconSize;
+  height: $iconSize;
+  cursor: auto !important;
 }
