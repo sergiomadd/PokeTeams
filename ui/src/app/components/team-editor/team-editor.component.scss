@@ -2,18 +2,11 @@
 {
   margin: 0 15% 0 15%;
 
-  background-color: antiquewhite;
+  //background-color: antiquewhite;
   .options
   {
-    .option
-    {
-      display: flex;
-
-      .toggle
-      {
-
-      }
-    }
+    display: flex;
+    justify-content: space-around;
   }
 
   .team-holder

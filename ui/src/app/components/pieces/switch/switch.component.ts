@@ -15,7 +15,6 @@ import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
     >
     <span class="slider"></span>
   </label>
-  <label for="switch">{{label}}</label>
   `,
   styleUrls: ['./switch.component.scss']
 })

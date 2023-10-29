@@ -1,0 +1,21 @@
+<div class="option">
+  <div class="top">
+    <div>{{label}}</div>
+    <app-switch
+    [inputState]="true"
+    (checkEvent)="checkEvent($event)"
+    ></app-switch>
+  </div>
+  <div class="select">
+    <select 
+    (change)="selectEvent($event.target)"
+    [disabled]="!selectDisable"
+    [(ngModel)]="selectedOption"
+    >
+      <option 
+      [value]="data" 
+      *ngFor="let data of selectData"
+      >{{data.name}}</option>
+    </select>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+.option
+{
+  display: flex;
+  flex-direction: column;
+  background-color: #4b6986;
+  color: white;
+  border-radius: 10px 10px 0 0;
+  padding: 0.5vw;
+
+  .top
+  {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0.25vw 0.5vw  0.25vw;
+  }
+}
+
+
+
+select {
+  appearance: none;
+  outline: 10px red;
+  border: 0;
+  box-shadow: none;
+  flex: 1;
+  padding: 0 1em;
+  color: #fff;
+  background-color: #34495e;
+  cursor: pointer;
+}
+
+select::-ms-expand 
+{
+  display: none;
+}
+
+.select 
+{
+  position: relative;
+  display: flex;
+  width: 12vw;
+  height: 2em;
+  border-radius: .25em;
+  overflow: hidden;
+}
+
+.select::after
+{
+  content: '\25BC';
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.5em;
+  background-color: #34495e !important;
+  transition: .25s all ease;
+  pointer-events: none;
+}
+
+.select:hover::after
+{
+  color: #f39c12;
+}

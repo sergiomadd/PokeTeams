@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SwitchComponent } from './components/pieces/switch/switch.component';
+import { OptionComponent } from './components/option/option.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { SwitchComponent } from './components/pieces/switch/switch.component';
     NavbarComponent,
     PokemonComponent,
     TeamEditorComponent,
-    SwitchComponent
+    SwitchComponent,
+    OptionComponent
   ],
   exports: [NavbarComponent],
   imports: [

@@ -16,19 +16,13 @@ export class TeamEditorComponent
 {
   getPokemon = inject(GetPokemonService);
 
-  @ViewChild(SwitchComponent) switch!: SwitchComponent;
-
   pokemons!: Promise<Pokemon[]>;
   posts: any;
   paste: string = '';
+
   editorData!: EditorData;
   editorOptions!: EditorOptions;
 
-
-  disableSelect = new FormControl(false);
-  shinySelect: boolean = true;
-
-  shinyCheckLabel: string = "Display shiny icon?";
 
   constructor()
   {
@@ -79,11 +73,6 @@ export class TeamEditorComponent
     this.getOptions();
   }
 
-  ngAfterViewInit() 
-  {
-    this.shinySelect = this.switch.state;
-  }
-
   getEditorData()
   {
     this.editorData = 
@@ -95,7 +84,11 @@ export class TeamEditorComponent
           identifier: "gen-vii_pokedex",
           path:"https://localhost:7134/images/sprites/shiny/gen-vii_pokedex.png"
         },
-        
+        {
+          name: "Generation 8: Legend Arceus Pokedex",
+          identifier: "gen-viii_legend-arceus_pokedex",
+          path:"https://localhost:7134/images/sprites/shiny/gen-viii_legend-arceus_pokedex.png"
+        },
       ],
       genderPaths: 
       [
@@ -138,8 +131,5 @@ export class TeamEditorComponent
 
   }
 
-  checkEvent($event) 
-  {
-    this.editorOptions.shiny = $event;
-  }
+
 }

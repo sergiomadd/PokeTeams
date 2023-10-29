@@ -89,7 +89,7 @@
           [ngClass]="{'meta-selected':  metaMiddle[3]}"
           >
             <div *ngIf="pokemon.shiny && editorOptions.shiny; else empty">
-              <img src={{shinyIconPath}} alt="" class="icon">
+              <img src={{editorOptions.shinyPath.path}} alt="" class="icon">
             </div>
           </div>
           <div 

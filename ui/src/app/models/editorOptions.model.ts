@@ -7,4 +7,16 @@ export interface EditorOptions
   gender: boolean,
   genderPath: EditorOption,
   showLevel: boolean
+  //showDexNumber: boolean
+  //typeIconsGen
+  //spritesGen? si no hay de esa gen que hago
+  //lang?
+  //showNickname
+  //showBaseStats: boolean
+  //showIVs: boolean
+  //showEVs: boolean
+  //theme?
+  //player data?
+  //tournament data?
+  //display short effect or long effect?
 }
