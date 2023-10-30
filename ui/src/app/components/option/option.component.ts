@@ -17,19 +17,16 @@ export class OptionComponent
   @Input() editorOptionsSelectSelector?: string;
   @Input() label?: string;
 
-  selectedOption: EditorOption = <EditorOption>{};
-
   checkEvent($event)
   {
     this.editorOptions[this.editorOptionsSwitchSelector] = $event;
   }
 
-  selectEvent(value)
+  selectEvent($event)
   {
-    const option = value as HTMLSelectElement;
     if(this.editorOptionsSelectSelector && this.selectData)
     {
-      this.editorOptions[this.editorOptionsSelectSelector] = this.selectData[option.selectedIndex];
+      this.editorOptions[this.editorOptionsSelectSelector] = $event;
     }
   }
 }

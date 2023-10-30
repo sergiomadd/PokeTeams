@@ -1,0 +1,29 @@
+<div 
+class="dropdown"
+[ngClass]="{'disabled': !disable}"
+>
+  <div 
+  class="dropdown-selector"
+  (click)="onClick()"
+  >
+    <div *ngIf="selectedOption.path">
+      <img src="{{selectedOption.path}}" alt="" class="icon">
+    </div>
+    {{selectedOption.name}}
+  </div>
+  <div 
+  class="dropdown-options"
+  [ngClass]="{'dropdown-options-visible': showOptions && disable}"
+  >
+    <div
+    *ngFor="let option of options"
+    class="dropdown-option"
+    (click)="onSelect(option)"
+    >
+      <div *ngIf="option.path">
+        <img src="{{option.path}}" alt="" class="icon">
+      </div>
+      {{option.name}}
+    </div>
+  </div>
+</div>

@@ -88,7 +88,7 @@ export class TeamEditorComponent
           name: "Generation 8: Legend Arceus Pokedex",
           identifier: "gen-viii_legend-arceus_pokedex",
           path:"https://localhost:7134/images/sprites/shiny/gen-viii_legend-arceus_pokedex.png"
-        },
+        }
       ],
       genderPaths: 
       [

@@ -6,16 +6,10 @@
     (checkEvent)="checkEvent($event)"
     ></app-switch>
   </div>
-  <div class="select">
-    <select 
-    (change)="selectEvent($event.target)"
-    [disabled]="!selectDisable"
-    [(ngModel)]="selectedOption"
-    >
-      <option 
-      [value]="data" 
-      *ngFor="let data of selectData"
-      >{{data.name}}</option>
-    </select>
-  </div>
+  <app-dropdown
+  [options]="selectData"
+  [selectedOption]="editorOptions.shinyPath"
+  [disable]="selectDisable"
+  (selectEvent)="selectEvent($event)"
+  ></app-dropdown>
 </div>

@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SwitchComponent } from './components/pieces/switch/switch.component';
 import { OptionComponent } from './components/option/option.component';
+import { DropdownComponent } from './components/pieces/dropdown/dropdown.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { OptionComponent } from './components/option/option.component';
     PokemonComponent,
     TeamEditorComponent,
     SwitchComponent,
-    OptionComponent
+    OptionComponent,
+    DropdownComponent,
   ],
   exports: [NavbarComponent],
   imports: [
