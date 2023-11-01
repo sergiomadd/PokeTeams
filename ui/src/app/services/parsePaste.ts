@@ -1,7 +1,5 @@
-import { splitNsName } from '@angular/compiler';
 import { PokePaste } from '../models/pokePaste.model';
 import { PokePasteData } from '../models/pokePasteData.model';
-import { ComponentFactoryResolver } from '@angular/core';
 
 export function parsePaste(paste: string): PokePasteData
 {
@@ -9,7 +7,6 @@ export function parsePaste(paste: string): PokePasteData
   let pokePasteData: PokePasteData = <PokePasteData>{}
   let pokemons = paste.split("\n\n");
   pokePasteData.pokemons = [];
-  console.log(paste)
 
   pokemons.forEach((pokemon) => 
   {
@@ -55,7 +52,8 @@ export function parsePaste(paste: string): PokePasteData
       }
       if(line.includes("Nature") || line.includes("nature"))
       {
-        pokePaste.nature = formatValue(lines[4].split(" ").slice(0, -1).join(" "));
+        //pokePaste.nature = formatValue(lines[4].split(" ").slice(0, -1).join(" "));
+        pokePaste.nature = formatValue(line.split("Nature")[0], {whiteSpace: true});
       }
     }
     pokePaste.moves = getMoves(lines.slice(lines.length-4, lines.length));

@@ -1,0 +1,21 @@
+
+
+.pasteBox
+{
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+}
+
+.input-textArea
+{
+  resize: none;
+}
+
+.submit
+{
+  width: 5vw;
+  height: 2vw;
+
+  margin: auto;
+}

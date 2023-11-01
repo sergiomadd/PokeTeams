@@ -7,8 +7,8 @@ import { Pokemon } from 'src/app/models/pokemon.model';
   selector: 'app-team',
   template: `
   <div class="team">
-    <div class="pokemons" *ngFor="let pokemon of (pokemons| async)">
-      <app-pokemon [pokemon]="pokemon"  [editorOptions]="editorOptions"></app-pokemon>
+    <div class="pokemons">
+      <app-pokemon [pokemon]="pokemon"  [editorOptions]="editorOptions" *ngFor="let pokemon of (pokemons| async)"></app-pokemon>
     </div>
   </div>
   `,

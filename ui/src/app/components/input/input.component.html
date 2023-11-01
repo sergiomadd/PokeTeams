@@ -1,0 +1,25 @@
+<div class="input">
+  <div class="title">
+
+  </div>
+  <div>
+    <form 
+    [formGroup] = "formData"
+    (ngSubmit)="onSubmit(formData.value)" 
+    >
+      <div class="pasteBox">
+        <textarea 
+        formControlName="paste"
+        rows="20" 
+        cols="60" 
+        class="input-textArea" 
+        spellcheck="false">
+        </textarea>
+        <button 
+        type="submit"
+        class="submit"
+        >Load</button>
+      </div>
+    </form>
+  </div>
+</div>

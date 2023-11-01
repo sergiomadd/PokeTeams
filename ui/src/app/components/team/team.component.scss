@@ -1,9 +1,15 @@
 .team
 {
 
+  background-color: aqua;
+}
+
+.pokemons
+{
   display: grid;
   grid-template-columns: 50% 50%;
+  column-gap: 2vw;
   row-gap: 2vh;
-  justify-self: center;
-  justify-items: center
+  justify-content: center;
+  justify-items: center;
 }

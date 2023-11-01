@@ -14,6 +14,8 @@ import { CommonModule } from '@angular/common';
 import { SwitchComponent } from './components/pieces/switch/switch.component';
 import { OptionComponent } from './components/option/option.component';
 import { DropdownComponent } from './components/pieces/dropdown/dropdown.component';
+import { InputComponent } from './components/input/input.component';
+import { VgcComponent } from './components/vgc/vgc.component';
 
 
 @NgModule({
@@ -26,6 +28,8 @@ import { DropdownComponent } from './components/pieces/dropdown/dropdown.compone
     SwitchComponent,
     OptionComponent,
     DropdownComponent,
+    InputComponent,
+    VgcComponent,
   ],
   exports: [NavbarComponent],
   imports: [
