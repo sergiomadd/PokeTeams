@@ -210,7 +210,7 @@ namespace api.Services.PokemonService
                         {
                             Name = damageClass.name,
                             Description = damageClass.description,
-                            IconPath = $"https://localhost:7134/images/sprites/misc/damage-class/{damageClass.name}.png"
+                            IconPath = $"https://localhost:7134/images/sprites/damage-class/{damageClass.name}.png"
                 },
                         Power = moves.power,
                         Pp = moves.pp,
