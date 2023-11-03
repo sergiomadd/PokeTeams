@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Pokemon } from 'src/app/models/pokemon.model';
 
 @Component({
@@ -9,10 +10,10 @@ import { Pokemon } from 'src/app/models/pokemon.model';
 export class VgcComponent 
 {
   pokemons!: Promise<Pokemon[]>;
+  editorOptions!: EditorOptions;
 
   receivePokemons($event) 
   {
-    console.log("received", $event)
     this.pokemons = $event
   }
 }

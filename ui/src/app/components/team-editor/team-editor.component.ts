@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
 import { Pokemon } from 'src/app/models/pokemon.model';
 import { GetPokemonService } from 'src/app/services/get-pokemon.service';
 import { parsePaste } from 'src/app/services/parsePaste';
@@ -6,6 +6,8 @@ import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { EditorData } from 'src/app/models/editorData.model';
 import { FormControl } from '@angular/forms';
 import { SwitchComponent } from '../pieces/switch/switch.component';
+import { Team } from 'src/app/models/team.model';
+import { GenerateTeamService } from 'src/app/services/generate-team.service';
 
 @Component({
   selector: 'app-team-editor',
@@ -14,7 +16,12 @@ import { SwitchComponent } from '../pieces/switch/switch.component';
 })
 export class TeamEditorComponent 
 {
+  genTeam = inject(GenerateTeamService);
+
   @Input() pokemons!: Promise<Pokemon[]>;
+  @Output() outputTeam = new EventEmitter<Team>();
+
+
   posts: any;
   paste: string = '';
 
@@ -89,6 +96,18 @@ export class TeamEditorComponent
   onSelect(value: string)
   {
 
+  }
+
+  async generateTeam()
+  {
+    let team: Team = 
+    {
+      pokemons: await this.pokemons,
+      settings: this.editorOptions
+    }
+    let teamLink: Promise<string> = this.genTeam.saveTeam(team);
+    //open new tab with team link
+    console.log("genearting ", team);
   }
 
 

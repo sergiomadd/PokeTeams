@@ -12,6 +12,7 @@ import { parsePaste } from 'src/app/services/parsePaste';
 export class InputComponent 
 {
   getPokemon = inject(GetPokemonService);
+  
   @Output() outPokemons = new EventEmitter<Promise<Pokemon[]>>();
   pokemons!: Promise<Pokemon[]>;
 
