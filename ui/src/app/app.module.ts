@@ -29,7 +29,7 @@ import { VgcComponent } from './components/vgc/vgc.component';
     OptionComponent,
     DropdownComponent,
     InputComponent,
-    VgcComponent,
+    VgcComponent
   ],
   exports: [NavbarComponent],
   imports: [
