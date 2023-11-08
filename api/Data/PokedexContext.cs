@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
 {
-    public class DataContext : DbContext
+    public class PokedexContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> option) : base(option)
+        public PokedexContext(DbContextOptions<PokedexContext> option) : base(option)
         {
 
         }

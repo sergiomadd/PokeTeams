@@ -1,0 +1,57 @@
+﻿using api.Data;
+using api.Models.DBModels;
+using api.Models.DBPoketeamModels;
+using System;
+
+namespace api.Services.TeamService
+{
+    public class TeamService : ITeamService
+    {
+        private readonly PoketeamContext _context;
+        private static Random random = new Random();
+
+        public TeamService(PoketeamContext dataContext)
+        {
+            _context = dataContext;
+        }
+
+        public async Task<string?> GetTeam(string id)
+        {
+            Teams? team = await _context.Teams.FindAsync(id);
+            if (team != null)
+            {
+                return team.team;
+            }
+            return null;
+        }
+
+        //change input string to team model?
+        public async Task<string?> Post(string inputTeam)
+        {
+            string id = GenerateId(10);
+            Teams? team = await _context.Teams.FindAsync(id);
+            //loop maybe too ineficent? seek another way to get unused ids?
+            while(team != null)
+            {
+                id = GenerateId(10);
+                team = await _context.Teams.FindAsync(id);
+            }
+            Teams newTeam = new Teams
+            {
+                id = id,
+                team = inputTeam
+            };
+            await _context.Teams.AddAsync(newTeam);
+            await _context.SaveChangesAsync();
+            return id;
+        }
+
+        public string GenerateId(int length)
+        {
+            const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        
+    }
+}

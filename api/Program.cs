@@ -2,6 +2,7 @@ global using api.Models;
 
 using api.Data;
 using api.Services.PokemonService;
+using api.Services.TeamService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer")));
+builder.Services.AddDbContext<PokedexContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPokedex")));
+builder.Services.AddDbContext<PoketeamContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPoketeam")));
 builder.Services.AddScoped<IPokemonService, PokemonService>();
+builder.Services.AddScoped<ITeamService, TeamService>();
+
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 

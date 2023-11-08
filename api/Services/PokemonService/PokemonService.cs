@@ -15,9 +15,9 @@ namespace api.Services.PokemonService
 {
     public class PokemonService : IPokemonService
     {
-        private readonly DataContext _context;
+        private readonly PokedexContext _context;
 
-        public PokemonService(DataContext dataContext)
+        public PokemonService(PokedexContext dataContext)
         {
             _context = dataContext;
         }
