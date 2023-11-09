@@ -3,6 +3,6 @@
     public interface ITeamService
     {
         Task<string?> GetTeam(string id);
-        Task<string?> Post(string team);
+        Task<string?> Post(Team team);
     }
 }

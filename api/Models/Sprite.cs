@@ -3,11 +3,16 @@
     public class Sprite
     {
         public string Name { get; set; }
-        public string Gen { get; set; }
+        public string? Gen { get; set; }
         public string? Base { get; set; }
         public string? Shiny { get; set; }
         public string? Female { get; set; }
         public string? ShinyFemale { get; set; }
+
+        public Sprite()
+        {
+
+        }
 
         public Sprite(string name, string _base = null, string shiny = null, string female = null, string shinyFemale = null)
         {

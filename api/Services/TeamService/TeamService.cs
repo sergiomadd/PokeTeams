@@ -2,6 +2,8 @@
 using api.Models.DBModels;
 using api.Models.DBPoketeamModels;
 using System;
+using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace api.Services.TeamService
 {
@@ -26,7 +28,7 @@ namespace api.Services.TeamService
         }
 
         //change input string to team model?
-        public async Task<string?> Post(string inputTeam)
+        public async Task<string?> Post(Team inputTeam)
         {
             string id = GenerateId(10);
             Teams? team = await _context.Teams.FindAsync(id);
@@ -36,10 +38,12 @@ namespace api.Services.TeamService
                 id = GenerateId(10);
                 team = await _context.Teams.FindAsync(id);
             }
+            var options = new JsonSerializerOptions{ IncludeFields = false };
+            var teamString = JsonSerializer.Serialize(inputTeam, options);
             Teams newTeam = new Teams
             {
                 id = id,
-                team = inputTeam
+                team = teamString
             };
             await _context.Teams.AddAsync(newTeam);
             await _context.SaveChangesAsync();

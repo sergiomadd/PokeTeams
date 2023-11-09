@@ -7,6 +7,7 @@
         public string IconPath { get; set; }
         public List<Tuple<string, int>> EffectivenessAttack { get; set; }
         public List<Tuple<string, int>> EffectivenessDefense { get; set; }
+        public bool Teratype { get; set; }
         string pathStart;
 
 
@@ -16,6 +17,7 @@
             Name = name;
             EffectivenessAttack = effectivenessAttack;
             EffectivenessDefense = effectivenessDefense;
+            Teratype = teraType ? teraType : false;
             pathStart = "https://localhost:7134/images/sprites/types/generation-viii/";
             if (teraType)
             {
