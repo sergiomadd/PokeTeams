@@ -103,11 +103,14 @@ export class TeamEditorComponent
     let team: Team = 
     {
       pokemons: await this.pokemons,
-      settings: this.editorOptions
+      //settings: this.editorOptions
+      //pokemons: "pokemons",
+      settings: "options"
     }
     let teamLink: Promise<string> = this.genTeam.saveTeam(team);
     //open new tab with team link
     console.log("genearting ", team);
+    console.log("generated: ", teamLink);
   }
 
 

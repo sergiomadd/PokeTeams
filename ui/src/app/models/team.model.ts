@@ -4,5 +4,7 @@ import { Pokemon } from "./pokemon.model";
 export interface Team
 {
   pokemons: Pokemon[],
-  settings: EditorOptions
+  //settings: EditorOptions
+  //pokemons: string,
+  settings: string
 }

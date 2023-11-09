@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Team } from '../models/team.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { getErrorMessage } from './util';
 import { lastValueFrom } from 'rxjs';
 
@@ -20,11 +20,12 @@ export class GenerateTeamService
   async saveTeam(team: Team)
   {
     let teamLink: string = "";
-    let url = this.apiUrl + 'pokemon/' + name;
+    let url = this.apiUrl + 'team';
     try
     {
       const teamLink$ = this.http.post<string>(url, team);
       teamLink = await lastValueFrom(teamLink$);
+      console.log("teamlink in service", teamLink);
     }
     catch(error)
     {
@@ -34,4 +35,20 @@ export class GenerateTeamService
     return teamLink;
   }
 
+  async getTeam(id: string)
+  {
+    let team: Team = <Team>{}
+    let url = this.apiUrl + 'team' + id;
+    try
+    {
+      const team$ = this.http.get<Team>(url);
+      team = await lastValueFrom(team$);
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    console.log("team gotten:", team);
+    return team; 
+  }
 }
