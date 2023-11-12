@@ -11,33 +11,33 @@ export interface Move
     description: string,
     iconPath: string
   },
-  power: number,
-  pp: number,
-  accuracy: number,
-  priority: number,
-  target: 
+  power?: number,
+  pp?: number,
+  accuracy?: number,
+  priority?: number,
+  target?: 
   {
     name: string,
     description: string
   },
-  effect: 
+  effect?: 
   {
     short: string,
     long: string,
-    chance: number
+    chance?: number
   },
-  meta: 
+  meta?: 
   {
-    minHits: number,
-    maxHits: number,
-    minTurns: number,
-    maxTurns: number,
-    drain: number,
-    healing: number,
-    critRate: number,
-    statusChance: number,
-    flinchChance: number,
-    statChange:
+    minHits?: number,
+    maxHits?: number,
+    minTurns?: number,
+    maxTurns?: number,
+    drain?: number,
+    healing?: number,
+    critRate?: number,
+    statusChance?: number,
+    flinchChance?: number,
+    statChange?:
     {
       stat:
       {

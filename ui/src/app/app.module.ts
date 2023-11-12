@@ -18,6 +18,7 @@ import { InputComponent } from './components/input/input.component';
 import { VgcComponent } from './components/vgc/vgc.component';
 import { TeamViewComponent } from './components/team-view/team-view.component';
 import { AboutComponent } from './components/about/about.component';
+import { MainComponent } from './components/main/main.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { AboutComponent } from './components/about/about.component';
     InputComponent,
     VgcComponent,
     TeamViewComponent,
-    AboutComponent
+    AboutComponent,
+    MainComponent
   ],
   exports: [NavbarComponent],
   imports: [

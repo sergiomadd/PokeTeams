@@ -4,12 +4,14 @@ import { AppComponent } from './app.component';
 import { TeamViewComponent } from './components/team-view/team-view.component';
 import { AboutComponent } from './components/about/about.component';
 import { VgcComponent } from './components/vgc/vgc.component';
+import { MainComponent } from './components/main/main.component';
 
 
 const routes: Routes = [
-  { path: '', component: VgcComponent},
+  { path: '', component: MainComponent},
   { path: 'about', component: AboutComponent},
   { path: ':id', component: TeamViewComponent },
+  //{path: '**', component: PageNotFoundComponent}
 ];
 
 @NgModule({
