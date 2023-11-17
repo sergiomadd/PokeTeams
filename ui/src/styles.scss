@@ -1,12 +1,24 @@
-/* You can add global styles to this file, and also import other style files */
-
 html,
 body {
   height: 100%;
 }
 
-body {
+body 
+{
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: rgb(26, 26, 26) !important;
+  background-color: var(--background);
 }
+
+button
+{
+  border-radius: 5px;
+  background-color: var(--bg-color-2);
+  color: var(--text-color);
+  border: 2px solid var(--bg-color-5);
+  border-radius: 5px;
+}
+
+
+
+

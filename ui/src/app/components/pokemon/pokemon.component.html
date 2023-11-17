@@ -46,25 +46,9 @@
         </div>
           Ability: {{pokemon.ability?.name}} 
         </div>
-        <div 
-        class="section"
-        (click)="clickMeta(3, 'left')"
-        [ngClass]="{'meta-selected':  metaLeft[3]}"
-        >
-          Nature: {{pokemon.nature?.name}}
-        </div>
       </div>
       <div class="picture">
         <div class="types section">
-          <div *ngIf="pokemon.teraType; else empty">
-            <div 
-            class="tera-type"
-            (click)="clickMeta(0, 'middle')"
-            [ngClass]="{'meta-selected':  metaMiddle[0]}"
-            >
-              <img src="{{pokemon.teraType.iconPath}}" alt="" class="icon">
-            </div>
-          </div>
           <div
           class="base-types"
           (click)="clickMeta(1, 'middle')"
@@ -72,6 +56,16 @@
           >
             <div class="type" *ngFor="let type of pokemon.types">
               <img src="{{type.iconPath}}" alt="" class="icon">
+            </div>
+          </div>
+          <div class="vertical-divider"></div>
+          <div *ngIf="pokemon.teraType; else empty">
+            <div 
+            class="tera-type"
+            (click)="clickMeta(0, 'middle')"
+            [ngClass]="{'meta-selected':  metaMiddle[0]}"
+            >
+              <img src="{{pokemon.teraType.iconPath}}" alt="" class="icon">
             </div>
           </div>
         </div>
@@ -181,8 +175,9 @@
 
               </div>
             </div>
-          </div>
-
+          </div>    
+          <div class="move-footer" 
+          [ngStyle]="{'background': getMoveColor(move)}"></div>
         </div>
       </div>
     </div>
@@ -192,6 +187,13 @@
     stats <br>
     evs <br>
     ivs
+            <div 
+        class="section"
+        (click)="clickMeta(3, 'left')"
+        [ngClass]="{'meta-selected':  metaLeft[3]}"
+        >
+          Nature: {{pokemon.nature?.name}}
+        </div>
   </div>
   -->
 </div>

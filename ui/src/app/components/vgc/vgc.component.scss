@@ -1,9 +1,8 @@
-@use '../../styles/darkTheme' as dark;
-
 .vgc
 {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2vh;
+  background-color: var(--bg-color-1);
 }

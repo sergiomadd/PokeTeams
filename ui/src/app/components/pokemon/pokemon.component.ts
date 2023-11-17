@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
+import { Move } from 'src/app/models/move.model';
 import { Pokemon } from 'src/app/models/pokemon.model';
-
+import { Colors } from 'src/app/styles/pokemonColors';
 @Component({
   selector: 'app-pokemon',
   templateUrl: './pokemon.component.html',
@@ -71,5 +72,11 @@ export class PokemonComponent
       }
       list[index] = true;
     }
+  }
+
+  getMoveColor(move)
+  {
+    let name = move.pokeType?.name;
+    return Colors[name?.toLowerCase()];
   }
 }

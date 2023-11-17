@@ -1,32 +1,4 @@
-//Type colors
-$normal: #A8A77A;
-$fire: #EE8130;
-$water: #6390F0;
-$electric: #F7D02C;
-$grass: #7AC74C;
-$ice: #96d9d6;
-$fighting: #C22E28;
-$poison: #A33EA1;
-$ground: #e2bf65;
-$flying: #A98FF3;
-$psychic: #F95587;
-$bug: #A6B91A;
-$rock: #B6A136;
-$ghost: #735797;
-$dragon: #6F35FC;
-$dark: #705746;
-$steel: #B7B7CE;
-$fairy: #D685AD;
 
-//stats
-$hp: #FF0000;
-$atk: #F08030;
-$def: #F8D030;
-$spa: #6890F0;
-$spd: #78C850;
-$spe: #F85888;
-
-//----------
 
 $cardWidth: 25vw;
 $iconSize: 1vw;
@@ -39,18 +11,15 @@ $metaWidth: calc($cardWidth/1.5);
 $moveHeight: calc($profileHeight/4);
 $metaMoveHeight: $profileHeight;
 
-
-
 $cardBackgroundColor: rgba(17, 42, 97, 0.8);
-
-
+$pokemonBackgroundColor: var(--pokemonBackgroundColor);
 
 .pokemon
 {
   width: $cardWidth;
   height: $cardheight;
-  background-color: $cardBackgroundColor;
-  color: white;
+  background-color: var(--bg-color-3);
+  color: var(--text-color);
   border-radius: 5px;
 
   .profile
@@ -71,7 +40,7 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
       .extra
       {
         display: grid;
-        grid-template-rows: 25% 25% 25% 25%;
+        grid-template-rows: 33% 33% 33%;
         align-items: center;
 
         .species
@@ -105,13 +74,21 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
         .types
         {
           display: flex;
-          justify-content: space-between;
+          justify-content: flex-end;
           align-items: center;
+
+          .vertical-divider
+          {
+            border: 0.5px solid grey;
+            height: $iconSize;
+            margin: 0 4px;
+          }
 
           .base-types
           {
             display: flex;
             align-items: center;
+            flex-direction: row-reverse;            
           }
         }
 
@@ -151,6 +128,7 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
         {
           height: 100%;
           width: calc(100% - 1vw);
+          position: relative;
 
           .icons
           {
@@ -164,6 +142,16 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
           .name
           {
             width: 100%;
+          }
+
+          .move-footer
+          {
+            position: absolute;
+            width: 100%;
+            height: 20%;
+            bottom: 0;
+            left: 0;
+            //background-color: $fire;
           }
         }
       }
@@ -189,20 +177,21 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
   height: 0;
 }
 
+.meta-selected
+{
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: var(--bg-color-2);
+}
+
 .meta
 {
   visibility: visible;
-  background-color: dimgray;
   height: 20vh;
-  background-color: dimgray;
   width: $metaWidth;
-}
-
-.meta-selected
-{
-  background-color: rgba(17, 42, 97, 0.9);;
   border: 1px solid black;
-  border-radius: 20px;
+  border-radius: 5px;
+  background-color: var(--bg-color-2);
 }
 
 .meta-left
@@ -272,7 +261,7 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
   cursor: pointer;
   display: flex;
   align-items: center;
-  padding: 0 0.5vw 0 0.5vw;
+  //padding: 0 0.5vw 0 0.5vw;
 
 
   &:hover .meta
@@ -288,3 +277,4 @@ $cardBackgroundColor: rgba(17, 42, 97, 0.8);
   height: $iconSize;
   cursor: auto !important;
 }
+
