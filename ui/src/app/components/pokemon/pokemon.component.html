@@ -7,13 +7,18 @@
         (click)="clickMeta(0, 'left')"
         [ngClass]="{'meta-selected':  metaLeft[0]}"
         >
-          <div class="dex-number">
-            #{{pokemon.dexNumber}} 
+          <div *ngIf="editorOptions.showDexNumber; else empty">
+            <div class="dex-number">
+              #{{pokemon.dexNumber}} 
+            </div>
           </div>
+
           <div class="name">
             {{pokemon.name}}
-            <div class="nickname">
-              {{pokemon.nickname}}
+            <div *ngIf="editorOptions.showNickname; else empty">
+              <div class="nickname">
+                {{pokemon.nickname}}
+              </div>
             </div>
           </div>
         </div>
@@ -82,7 +87,7 @@
           (click)="clickMeta(3, 'middle')"
           [ngClass]="{'meta-selected':  metaMiddle[3]}"
           >
-            <div *ngIf="pokemon.shiny && editorOptions.shiny; else empty">
+            <div *ngIf="pokemon.shiny && editorOptions.shinyPath.identifier!='none'; else empty">
               <img src={{editorOptions.shinyPath.path}} alt="" class="icon">
             </div>
           </div>
@@ -91,7 +96,7 @@
           (click)="clickMeta(4, 'middle')"
           [ngClass]="{'meta-selected':  metaMiddle[4]}"
           >
-            <div *ngIf="pokemon.level; else empty">
+            <div *ngIf="pokemon.level && editorOptions.showLevel; else empty">
               {{pokemon.level}}
             </div>
           </div>
@@ -182,20 +187,19 @@
       </div>
     </div>
   </div>
-  <!--
-  <div class="stats">
-    stats <br>
-    evs <br>
-    ivs
-            <div 
-        class="section"
-        (click)="clickMeta(3, 'left')"
-        [ngClass]="{'meta-selected':  metaLeft[3]}"
-        >
-          Nature: {{pokemon.nature?.name}}
-        </div>
+  <div *ngIf="editorOptions.showStats; else empty">
+    <div class="stats">
+      stats <br>
+      evs <br>
+      ivs
+              <div 
+          class="section"
+          (click)="clickMeta(3, 'left')"
+          [ngClass]="{'meta-selected':  metaLeft[3]}"
+          >
+            Nature: {{pokemon.nature?.name}}
+          </div>
+    </div>
   </div>
-  -->
 </div>
-
 <ng-template #empty><div class="empty"></div></ng-template>

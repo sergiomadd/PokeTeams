@@ -1,36 +1,75 @@
 <div class="team-editor">
-  <div class="options">
-    <app-option 
-    [editorOptions]="editorOptions"
-    [editorOptionsSwitchSelector]="'shiny'"
-    [selectData]="editorData.shinyPaths"
-    [selectDisable]="editorOptions.shiny"
-    [editorOptionsSelectSelector]="'shinyPath'"
-    [label]="'Display shiny icon?'"
-    ></app-option>
-    <app-option 
-    [editorOptions]="editorOptions"
-    [editorOptionsSwitchSelector]="'shiny'"
-    [selectData]="editorData.shinyPaths"
-    [selectDisable]="editorOptions.shiny"
-    [editorOptionsSelectSelector]="'shinyPath'"
-    [label]="'Display shiny icon?'"
-    ></app-option>
-    <app-option 
-    [editorOptions]="editorOptions"
-    [editorOptionsSwitchSelector]="'shiny'"
-    [selectData]="editorData.shinyPaths"
-    [selectDisable]="editorOptions.shiny"
-    [editorOptionsSelectSelector]="'shinyPath'"
-    [label]="'Display shiny icon?'"
-    ></app-option>
+  <div class="top-options">
+
   </div>
-  
-  <div class="team-holder">
-    <app-team 
-    [pokemons]="pokemons"  
-    [editorOptions]="editorOptions"></app-team>
+  <div class="central-row">
+    <div class="left-options">
+      <app-left-option
+      [editorOptions]="editorOptions"
+      [selectData]="editorData.shinyPaths"
+      [editorOptionsSelectSelector]="'shinyPath'"
+      [label]="'Shiny icon:'"
+      (selectEvent)="updateTeam($event)"
+      ></app-left-option>
+      <app-left-option
+      [editorOptions]="editorOptions"
+      [selectData]="editorData.pokemonSpritesPaths"
+      [editorOptionsSelectSelector]="'pokemonSpritesGen'"
+      [label]="'Pokemon sprite:'"
+      (selectEvent)="updateTeam($event)"
+      ></app-left-option>
+    </div>
+    <div class="team-holder">
+      <app-team 
+      [pokemons]="pokemons"  
+      [editorOptions]="editorOptions"></app-team>
+    </div>
+    <div class="right-options">
+      <app-right-option
+      [editorOptions]="editorOptions"
+      [editorOptionsSwitchSelector]="'showStats'"
+      [label]="'Stats'"
+      [hoverText]="'Show Stats'"
+      ></app-right-option>
+      <app-right-option
+      [editorOptions]="editorOptions"
+      [editorOptionsSwitchSelector]="'showIVs'"
+      [label]="'IVs'"
+      [hoverText]="'Show IVs'"
+      ></app-right-option>
+      <app-right-option
+      [editorOptions]="editorOptions"
+      [editorOptionsSwitchSelector]="'showEVs'"
+      [label]="'EVs'"
+      [hoverText]="'Show EVs'"
+      ></app-right-option>
+      <app-right-option
+      [editorOptions]="editorOptions"
+      [editorOptionsSwitchSelector]="'showNature'"
+      [label]="'Nature'"
+      [hoverText]="'Show nature'"
+      ></app-right-option>
+      <app-right-option
+      [editorOptions]="editorOptions"
+      [editorOptionsSwitchSelector]="'showLevel'"
+      [label]="'LvL'"
+      [hoverText]="'Show level'"
+      ></app-right-option>
+      <app-right-option
+      [editorOptions]="editorOptions"
+      [editorOptionsSwitchSelector]="'showDexNumber'"
+      [label]="'Dex'"
+      [hoverText]="'Show pokedex number'"
+      ></app-right-option>
+      <app-right-option
+      [editorOptions]="editorOptions"
+      [editorOptionsSwitchSelector]="'showNickname'"
+      [label]="'Nick'"
+      [hoverText]="'Show nickname'"
+      ></app-right-option>
+    </div>
   </div>
+
 
   <div class="output">
     <button

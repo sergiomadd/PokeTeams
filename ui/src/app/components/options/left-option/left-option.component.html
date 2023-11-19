@@ -1,0 +1,75 @@
+<div 
+class="left-option"
+>
+  <div class="content" (click)="onOpen()">
+    <div class="label">{{label}}</div>
+    <div>
+      <div class="selected">
+        <div 
+        class="option"
+        (mouseenter) ="onMouseEnter(active)"
+        (mouseleave) ="onMouseLeave()"
+        >
+          <img src="{{active.path}}" alt="{{active.name}}" class="icon">
+          <div class="details" [ngClass]="{visible: active.identifier===hover.identifier}">
+            <div class="name">
+              {{active.name}}
+            </div>
+            <div class="name">
+              <img src="{{active.path}}" alt="{{active.name}}" class="expanded-icon">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="open; else closed">
+    <hr>
+    <div class="options">
+      <ng-container 
+      *ngFor="let icon of selectData"
+      >
+        <ng-container *ngIf="icon.identifier==active.identifier;else inactive">
+          <div 
+          class="option active" 
+          (click)="onSelect(icon)"
+          >
+            <img src="{{icon.path}}" alt="{{icon.name}}" class="icon">
+          </div>
+        </ng-container>
+        <ng-template #inactive>
+          <div class="option" 
+          (click)="onSelect(icon)"
+          (mouseenter) = "onMouseEnter(icon)"
+          (mouseleave) = "onMouseLeave()"
+          >
+            <img src="{{icon.path}}" alt="{{icon.name}}" class="icon">
+            <div class="details" [ngClass]="{visible: icon.identifier===hover.identifier}">
+              <div class="name">
+                {{icon.name}}
+              </div>
+              <div class="name">
+                <img src="{{icon.path}}" alt="{{icon.name}}" class="expanded-icon">
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+  <ng-template #closed>
+
+  </ng-template>
+  <div class="expand" (click)="onOpen()">
+    <div *ngIf="open; else show">
+      <div class="show-more">
+        Show less
+      </div>
+    </div>
+    <ng-template #show>
+      <div class="show-more">
+        Show more
+      </div>
+    </ng-template>
+  </div>
+</div>

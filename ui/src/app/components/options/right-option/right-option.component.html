@@ -1,0 +1,20 @@
+<div 
+class="side-option"
+(click)="clickEvent()"
+(mouseenter) ="mouseEnter()"
+(mouseleave) ="mouseLeave()"
+>
+  <div class="toggle">
+    <input 
+    type="checkbox"
+    [checked]="checked"
+    class="check"
+    >
+  </div>
+  <div *ngIf="hover; else closed">
+    <div>{{hoverText}}</div>
+  </div>
+  <ng-template #closed>
+    <div>{{label}}</div>
+  </ng-template>
+</div>

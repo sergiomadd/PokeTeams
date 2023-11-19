@@ -4,5 +4,6 @@ export interface EditorData
 {
   shinyPaths: EditorOption[],
   genderPaths: EditorOption[],
-  pokemonSprites: EditorOption[]
+  pokemonSpritesPaths: EditorOption[],
+  typeIconPaths: EditorOption[],
 }

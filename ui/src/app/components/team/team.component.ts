@@ -18,4 +18,10 @@ export class TeamComponent
 {
   @Input() pokemons!: Promise<Pokemon[]>;
   @Input() editorOptions!: EditorOptions;
+
+  forceChange(options: EditorOptions)
+  {
+    console.log("change team")
+    this.editorOptions = structuredClone(options);
+  }
 }

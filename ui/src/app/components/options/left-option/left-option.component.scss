@@ -1,0 +1,115 @@
+$optionSize: 1vw;
+
+.left-option
+{
+  display: flex;
+  width: 6vw;
+  background-color: var(--bg-color-3);
+  border-radius: 15px 0 0 15px;
+  padding: 0 0.2vw;
+  border: 1px solid var(--bg-color-4);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  .content
+  {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding-top: 0.2vw;
+
+    .label
+    {
+      margin-right: 0.2vw;
+    }
+  }
+
+  .show-more
+  {
+    font-weight: 600;
+    font-size: small;
+    text-decoration: underline;
+    padding: 0.2vw;
+    cursor: pointer;
+
+    &:hover
+    {
+      background-color: var(--bg-color-4);
+      border-radius: 20px;
+    }
+  }
+
+  .options
+  {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    gap: 0.2vw;
+
+    .active
+    {
+      background-color: var(--bg-color-4);
+      border: 1px solid var(--bg-color-2);
+    }
+  }
+
+  .option
+  {
+    border: 1px solid var(--bg-color-4);
+    background-color: var(--bg-color-3);
+    width: $optionSize;
+    height: $optionSize;
+    padding: 0.2vw;
+    border-radius: 5px;
+    position: relative;
+    cursor: pointer;
+
+    &:hover
+    {
+      background-color: var(--bg-color-2);
+    }
+
+    .icon
+    {
+      width: inherit;
+      height: inherit;
+    }
+  }
+}
+
+.selected
+{
+  display: flex;
+  align-items: center;
+}
+
+.details
+{
+  width: 6vw;
+  background-color: var(--bg-color-3);
+  z-index: 2;
+  position: absolute;
+  bottom: $optionSize * 2;
+  left: 50%;
+  transform: translate(-50%, 0);
+  border-radius: 5px;
+  border: 1px solid var(--bg-color-4);
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.2vw;
+}
+
+.visible
+{
+  visibility: visible !important;
+}
+
+.expanded-icon
+{
+  width: 5vw;
+  height: 5vw;
+}

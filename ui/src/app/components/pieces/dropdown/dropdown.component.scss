@@ -82,6 +82,7 @@ $optionWidth: calc($selectorWidth + $arrowWidth);
   cursor: pointer;
   font-size: small;
   align-items: center;
+  z-index: 2;
 }
 
 .dropdown-option
@@ -95,7 +96,7 @@ $optionWidth: calc($selectorWidth + $arrowWidth);
 
 .dropdown-option:hover
 {
-  background-color: var(--bg-color-4);
+  background-color: var(--bg-color-2);
 }
 
 .dropdown-options-visible 

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Move } from 'src/app/models/move.model';
 import { Pokemon } from 'src/app/models/pokemon.model';
@@ -23,7 +23,6 @@ export class PokemonComponent
   metaMiddle: boolean[] = [false, false, false, false, false, false];
   metaRight: boolean[] = [false, false, false, false];
   
-
   constructor() 
   {
 
@@ -31,7 +30,7 @@ export class PokemonComponent
 
   ngOnInit()
   {
-    let choosenVariationPath = this.pokemon.sprites[this.spriteCategory];
+    let choosenVariationPath = this.pokemon.sprites[parseInt(this.editorOptions.pokemonSpritesGen.identifier)];
 
     if(this.pokemon.gender === "female")
     {
@@ -44,6 +43,21 @@ export class PokemonComponent
     
     this.maleIconPath = "https://localhost:7134/images/sprites/gender/male.png";
     this.femaleIconPath = "https://localhost:7134/images/sprites/gender/female.png";
+  }
+
+  ngOnChanges(changes: SimpleChanges)
+  {
+    console.log("onchanges")
+    let choosenVariationPath = this.pokemon.sprites[this.editorOptions.pokemonSpritesGen.identifier];
+
+    if(this.pokemon.gender === "female")
+    {
+      this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shinyFemale : choosenVariationPath.female
+    }
+    else
+    {
+      this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shiny : choosenVariationPath.base
+    }
   }
 
   clickMeta(index: number, type: string)

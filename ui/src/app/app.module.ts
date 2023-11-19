@@ -12,13 +12,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SwitchComponent } from './components/pieces/switch/switch.component';
-import { OptionComponent } from './components/option/option.component';
 import { DropdownComponent } from './components/pieces/dropdown/dropdown.component';
 import { InputComponent } from './components/input/input.component';
 import { VgcComponent } from './components/vgc/vgc.component';
 import { TeamViewComponent } from './components/team-view/team-view.component';
 import { AboutComponent } from './components/about/about.component';
 import { MainComponent } from './components/main/main.component';
+import { LeftOptionComponent } from './components/options/left-option/left-option.component';
+import { RightOptionComponent } from './components/options/right-option/right-option.component';
 
 
 @NgModule({
@@ -29,13 +30,14 @@ import { MainComponent } from './components/main/main.component';
     PokemonComponent,
     TeamEditorComponent,
     SwitchComponent,
-    OptionComponent,
     DropdownComponent,
     InputComponent,
     VgcComponent,
     TeamViewComponent,
     AboutComponent,
-    MainComponent
+    MainComponent,
+    LeftOptionComponent,
+    RightOptionComponent
   ],
   exports: [NavbarComponent],
   imports: [
