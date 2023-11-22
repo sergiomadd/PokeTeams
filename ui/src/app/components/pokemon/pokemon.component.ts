@@ -2,6 +2,7 @@ import { Component, Input, SimpleChanges } from '@angular/core';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Move } from 'src/app/models/move.model';
 import { Pokemon } from 'src/app/models/pokemon.model';
+import { Stat } from 'src/app/models/stat.model';
 import { Colors } from 'src/app/styles/pokemonColors';
 @Component({
   selector: 'app-pokemon',
@@ -47,7 +48,6 @@ export class PokemonComponent
 
   ngOnChanges(changes: SimpleChanges)
   {
-    console.log("onchanges")
     let choosenVariationPath = this.pokemon.sprites[this.editorOptions.pokemonSpritesGen.identifier];
 
     if(this.pokemon.gender === "female")
@@ -93,4 +93,59 @@ export class PokemonComponent
     let name = move.pokeType?.name;
     return Colors[name?.toLowerCase()];
   }
+
+  //stats
+
+  calculateTotal(baseStat: Stat, ivs?: Stat, evs?: Stat)
+  {
+    let total: number = baseStat.value
+    if(ivs && this.editorOptions.showIVs)
+    {
+      total += ivs?.value;
+    }
+    if(evs && this.editorOptions.showEVs)
+    {
+      total += Math.round(evs?.value / 4);
+    }
+
+    return total
+  }
+
+  getStatHeight(stat: Stat, type: string)
+  {
+    if(type === "evs")
+    {
+      return `${stat.value / 252 / 4 * 100 * 4}px`;
+    }
+    return `${stat.value / 252 * 100 * 4}px`;
+  }
+  
+  getStatName(stat: Stat)
+  {
+    const nameDict = 
+    {
+      "hp": "HP",
+      "attack": "Atk",
+      "defense": "Def",
+      "special-attack": "SpA", //cant put speacial-attack
+      "special-defense": "SpD",
+      "speed": "Spe"
+    }
+    return nameDict[stat.identifier];
+  }
+
+  getStatColor(stat: Stat)
+  {
+    const statColors = 
+    {
+      "hp": "#FF0000",
+      "attack": "#F08030",
+      "defense": "#F8D030",
+      "special-attack": "#6890F0",
+      "special-defense": "#78C850",
+      "speed": "#F85888"
+    };
+    return statColors[stat.identifier];
+  }
+  
 }

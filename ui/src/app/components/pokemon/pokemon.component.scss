@@ -1,5 +1,4 @@
 
-
 $cardWidth: 25vw;
 $iconSize: 1vw;
 $padding: 0.5vw;
@@ -11,13 +10,10 @@ $metaWidth: calc($cardWidth/1.5);
 $moveHeight: calc($profileHeight/4);
 $metaMoveHeight: $profileHeight;
 
-$cardBackgroundColor: rgba(17, 42, 97, 0.8);
-$pokemonBackgroundColor: var(--pokemonBackgroundColor);
-
 .pokemon
 {
   width: $cardWidth;
-  height: $cardheight;
+  min-height: $cardheight;
   background-color: var(--bg-color-3);
   color: var(--text-color);
   border-radius: 5px;
@@ -44,6 +40,7 @@ $pokemonBackgroundColor: var(--pokemonBackgroundColor);
         .species
         {
           display: flex;
+          align-items: center;
 
           .dex-number
           {
@@ -269,10 +266,89 @@ $pokemonBackgroundColor: var(--pokemonBackgroundColor);
 
 }
 
+.stats-wrapper
+{
+  //height: $cardheight/2;
+  background-color: var(--bg-color-2);
+  width: 100%;
+
+  .stats
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 0.2vw;
+
+    .stat
+    {
+      height: inherit;
+      display: grid;
+      align-items: center;
+      grid-template-columns: 10% 80% 10%;
+
+      &:hover
+      {
+        background-color: lightgrey;
+      }
+
+      .values
+      {
+        height: 1.5vh;
+        display: flex;
+
+
+        .bar
+        {
+          cursor: pointer;
+          color: white;
+          transition: visibility 1s ease;
+
+          &:hover .value
+          {
+            visibility: visible;
+          }
+
+          &:hover
+          {
+            filter:brightness(0.7);
+          }
+        }
+
+        .base
+        {
+          border-radius: 15px 0 0 15px;
+        }
+
+        .ivs
+        {
+          background-color: lightblue;
+        }
+
+        .evs
+        {
+          background-color: gold;
+          border-radius: 0 15px 15px 0;
+        }
+
+        .maxed
+        {
+          border: 0.4vh solid black;
+        }
+      }
+
+      .value
+      {
+        visibility: hidden;
+      }
+    }
+  }
+}
+
 .empty
 {
   width: $iconSize;
   height: $iconSize;
   cursor: auto !important;
 }
+
 

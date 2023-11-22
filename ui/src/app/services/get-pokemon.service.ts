@@ -198,7 +198,7 @@ export class GetPokemonService
       let stat: Stat = <Stat>{}
       stat.identifier = statData[0];
       stat.name = (await this.getStatName(statData[0]));
-      stat.stat = Number(statData[1]);
+      stat.value = Number(statData[1]);
       let index: number = statIdentifiers.indexOf(statData[0]);
       stats.splice(index, 0, stat); //instead of push to keep stats ordered after http get
     });

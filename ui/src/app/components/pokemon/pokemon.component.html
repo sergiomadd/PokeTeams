@@ -7,7 +7,7 @@
         (click)="clickMeta(0, 'left')"
         [ngClass]="{'meta-selected':  metaLeft[0]}"
         >
-          <div *ngIf="editorOptions.showDexNumber; else empty">
+          <div *ngIf="editorOptions.showDexNumber; else void">
             <div class="dex-number">
               #{{pokemon.dexNumber}} 
             </div>
@@ -15,7 +15,7 @@
 
           <div class="name">
             {{pokemon.name}}
-            <div *ngIf="editorOptions.showNickname; else empty">
+            <div *ngIf="editorOptions.showNickname; else void">
               <div class="nickname">
                 {{pokemon.nickname}}
               </div>
@@ -188,18 +188,63 @@
     </div>
   </div>
   <div *ngIf="editorOptions.showStats; else empty">
-    <div class="stats">
-      stats <br>
-      evs <br>
-      ivs
+    <div class="stats-wrapper">
+      <div class="stats">
+        <ng-container *ngIf="pokemon.stats">
+          <div class="stat" *ngFor="let stat of pokemon.stats; index as i">
+            <div class="name">
+              {{getStatName(stat)}}
+              </div>
+            <div class="values">
               <div 
-          class="section"
-          (click)="clickMeta(3, 'left')"
-          [ngClass]="{'meta-selected':  metaLeft[3]}"
-          >
-            Nature: {{pokemon.nature?.name}}
+              class="base bar"
+              [ngStyle]="{width: getStatHeight(stat, ''), backgroundColor: getStatColor(stat)}"
+              >
+                <div class="value">
+                  {{stat.value}}
+                </div>
+              </div>
+              <ng-container *ngIf="editorOptions.showIVs">
+                <div 
+                class="ivs bar"
+                [ngStyle]="{width: pokemon.ivs ? getStatHeight(pokemon.ivs[i], '') : 'none'}"
+                >
+                  <div class="value">
+                    {{pokemon.ivs ? pokemon.ivs[i].value : 'a'}}
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="editorOptions.showEVs">
+                <div class="evs bar" 
+                [ngStyle]="{width: pokemon.evs ? getStatHeight(pokemon.evs[i], 'evs') : 'none'}"
+                [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}"
+                >
+                  <div 
+                  class="value" 
+                  >
+                    {{pokemon.evs ? (pokemon.evs[i].value) : 'a'}} = {{pokemon.evs ? (pokemon.evs[i].value / 4) : 'a'}}
+                  </div>
+                </div>
+            </ng-container>
+            <div class="total">
+                {{calculateTotal(stat, pokemon.ivs ? pokemon.ivs[i] : undefined, pokemon.evs ? pokemon.evs[i] : undefined)}}
+            </div>
+            </div>
           </div>
+        </ng-container>
+      </div>
+              <!--
+        <div 
+        class="section"
+        (click)="clickMeta(3, 'left')"
+        [ngClass]="{'meta-selected':  metaLeft[3]}"
+        >
+          Nature: {{pokemon.nature?.name}}
+        </div>
+        -->
     </div>
+
   </div>
 </div>
 <ng-template #empty><div class="empty"></div></ng-template>
+<ng-template #void></ng-template>

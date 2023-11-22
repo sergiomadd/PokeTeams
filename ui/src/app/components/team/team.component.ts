@@ -21,7 +21,6 @@ export class TeamComponent
 
   forceChange(options: EditorOptions)
   {
-    console.log("change team")
     this.editorOptions = structuredClone(options);
   }
 }
