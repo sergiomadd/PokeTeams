@@ -1,0 +1,38 @@
+<div class="team">
+  <div class="top">
+    <div class="info">
+      <div class="autor">
+        Author: 
+      </div>
+      <div class="tournament">
+        Tournament: 
+      </div>
+    </div>
+    <div class="options">
+      <div 
+      class="option"
+      (click)="clickOptions(0)"
+      [ngClass]="{active: options[0]}"
+      >
+        <img src="assets/align-left.png" alt="" class="icon">
+      </div>
+      <div 
+      class="option" 
+      (click)="clickOptions(1)"
+      [ngClass]="{active: options[1]}"
+      >
+        <img src="assets/edit.png" alt="" class="icon">
+      </div>
+      <div 
+      class="option" 
+      (click)="clickOptions(2)"
+      [ngClass]="{active: options[2]}"
+      >
+        <img src="assets/copy.png" alt="" class="icon">
+      </div>
+    </div>
+  </div>
+  <div class="pokemons">
+    <app-pokemon [pokemon]="pokemon"  [editorOptions]="editorOptions" *ngFor="let pokemon of (pokemons| async)"></app-pokemon>
+  </div>
+</div>

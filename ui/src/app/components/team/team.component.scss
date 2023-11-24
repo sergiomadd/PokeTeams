@@ -1,14 +1,45 @@
 .team
 {
 
+  
+  .top
+  {
+    display: grid;
+    grid-template-columns: 90% 10%;
+    margin-bottom: 1vh;
+
+    .options
+    {
+      display: flex;
+      justify-content: space-around;
+
+      .option
+      {
+        cursor: pointer;
+
+        .icon
+        {
+          width: 1.5vw;
+          height: 1.5vw;
+        }
+      }
+
+      .active
+      {
+        background-color: var(--bg-color-3);
+      }
+    }
+  }
+
+  .pokemons
+  {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    row-gap: 2vh;
+    column-gap: 2vh;
+    justify-content: center;
+    justify-items: center;
+  }
 }
 
-.pokemons
-{
-  display: grid;
-  grid-template-columns: 50% 50%;
-  row-gap: 2vh;
-  column-gap: 2vh;
-  justify-content: center;
-  justify-items: center;
-}
+
