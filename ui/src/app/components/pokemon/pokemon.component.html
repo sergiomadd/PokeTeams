@@ -28,10 +28,10 @@
         [ngClass]="{'meta-selected':  metaLeft[1]}"
         >
           <div>
-            <img src="{{pokemon.item?.iconPath}}" alt="">
+            {{pokemon.item?.name}}
           </div>
           <div>
-            {{pokemon.item?.name}}
+            <img src="{{pokemon.item?.iconPath}}" alt="">
           </div>
         </div>
         <div 
@@ -39,17 +39,43 @@
         (click)="clickMeta(2, 'left')"
         [ngClass]="{'meta-selected':  metaLeft[2]}"
         >
-        <div class="meta-wrapper">
-          <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[2]}">
-            <div class="meta-name">
-              {{pokemon.ability?.name}}
-            </div>
-            <div class="meta-prose">
-              {{pokemon.ability?.prose}}
+          <div class="meta-wrapper">
+            <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[2]}">
+              <div class="meta-name">
+                {{pokemon.ability?.name}}
+              </div>
+              <div class="meta-prose">
+                {{pokemon.ability?.prose}}
+              </div>
             </div>
           </div>
+          {{pokemon.ability?.name}} 
         </div>
-          Ability: {{pokemon.ability?.name}} 
+        <div 
+        class="item options"
+        [ngClass]=""
+        >
+          <div 
+          class="option"
+          (click)="clickMeta(0, 'down')"
+          [ngClass]="{active: metaDown[0]}"
+          >
+            <img src="assets/align-left.png" alt="" class="icon">
+          </div>
+          <div 
+          class="option" 
+          (click)="clickMeta(1, 'down')"
+          [ngClass]="{active: metaDown[1]}"
+          >
+            <img src="assets/edit.png" alt="" class="icon">
+          </div>
+          <div 
+          class="option" 
+          (click)="clickMeta(2, 'down')"
+          [ngClass]="{active: metaDown[2]}"
+          >
+            <img src="assets/copy.png" alt="" class="icon">
+          </div>
         </div>
       </div>
       <div class="picture">
@@ -187,7 +213,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="editorOptions.showStats; else empty">
+  <div *ngIf="metaDown[0]; else void">
     <div class="stats-wrapper">
       <div class="stats">
         <ng-container *ngIf="pokemon.stats">
@@ -243,7 +269,11 @@
         </div>
         -->
     </div>
-
+  </div>
+  <div *ngIf="metaDown[1]; else void">
+    <div class="notes">
+      NOTES
+    </div>
   </div>
 </div>
 <ng-template #empty><div class="empty"></div></ng-template>

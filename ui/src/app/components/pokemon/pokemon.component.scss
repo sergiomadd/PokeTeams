@@ -22,7 +22,7 @@ $metaMoveHeight: $profileHeight;
   {
     display: grid;
     grid-template-columns: 60% 40%;
-    height: 100%;
+    height: $cardheight;
     .left
     {
       text-align: left;
@@ -34,7 +34,7 @@ $metaMoveHeight: $profileHeight;
       .extra
       {
         display: grid;
-        grid-template-rows: 33% 33% 33%;
+        grid-template-rows: 25% 25% 25% 25%;
         align-items: center;
 
         .species
@@ -165,12 +165,7 @@ $metaMoveHeight: $profileHeight;
   height: $iconSize;
 }
 
-.meta-wrapper
-{
-  position: relative; 
-  width: 0; 
-  height: 0;
-}
+
 
 .meta-selected
 {
@@ -179,75 +174,85 @@ $metaMoveHeight: $profileHeight;
   background-color: var(--bg-color-2);
 }
 
-.meta
+.meta-wrapper
 {
-  visibility: visible;
-  height: 20vh;
-  width: $metaWidth;
-  border: 1px solid black;
-  border-radius: 5px;
-  background-color: var(--bg-color-2);
-}
+  position: relative; 
+  width: 0; 
+  height: 0;
 
-.meta-left
-{
-  position: relative;
-  right: calc($metaWidth + $padding *2);
-  bottom: 2vw;
-  visibility: hidden;
-}
-
-.meta-right
-{
-  visibility: hidden;
-  position: relative;
-  left: calc($padding + 0.5vw);
-  bottom: calc($metaMoveHeight/4 - $padding*1.5);
-  height: $metaMoveHeight;
-
-  .meta-move-top
+  .meta
   {
-    display: flex;
-    overflow: hidden;
-    justify-content: space-between;
+    visibility: visible;
+    height: 20vh;
+    width: $metaWidth;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: var(--bg-color-2);
+    padding: 0.2vw;
+    outline: gold 0.4vw double;
+    //box-shadow: 0 0 0 3px #000, 0 0 0 6px gold, 0 0 0 9px #000;
   }
 
-  .meta-move-body
+  .meta-left
   {
-    text-align: center;
+    position: relative;
+    right: calc($metaWidth + $padding *2);
+    bottom: 2vw;
+    visibility: hidden;
   }
 
-  .meta-move-bottom
+  .meta-right
   {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
+    visibility: hidden;
+    position: relative;
+    left: calc($padding + 0.5vw);
+    bottom: calc($metaMoveHeight/4 - $padding*1.5);
+    height: $metaMoveHeight;
 
-    .atribute
+    .meta-move-top
     {
-      padding: 0 0.2vw 0 0.2vw;
+      display: flex;
+      overflow: hidden;
+      justify-content: space-between;
     }
 
-    .primary
+    .meta-move-body
+    {
+      text-align: center;
+    }
+
+    .meta-move-bottom
     {
       display: flex;
       justify-content: center;
+      flex-direction: column;
       text-align: center;
+
+      .atribute
+      {
+        padding: 0 0.2vw 0 0.2vw;
+      }
+
+      .primary
+      {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+
+    .meta-move-highlight
+    {
+      color: gold;
+      font-weight: bold;
     }
   }
 
-  .meta-move-highlight
+  .meta-visible
   {
-    color: gold;
-    font-weight: bold;
+    visibility: visible !important;
   }
-}
-
-.meta-visible
-{
-  visibility: visible !important;
-}
+  }
 
 .section
 {
@@ -343,6 +348,44 @@ $metaMoveHeight: $profileHeight;
     }
   }
 }
+
+.options
+{
+  display: flex;
+  justify-content: space-around;
+  width: 80%;
+
+  .option
+  {
+    width: 1.5vw;
+    height: 1.5vw;
+   //border: 1px solid black;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .icon
+    {
+      width: 1vw;
+      height: 1vw;
+    }
+  }
+  
+  .active
+  {
+    background-color: var(--bg-color-4);
+  }
+}
+
+.notes
+{
+  background-color: var(--bg-color-2);
+  height: $cardheight;
+  
+}
+
+
 
 .empty
 {

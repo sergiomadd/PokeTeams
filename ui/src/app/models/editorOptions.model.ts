@@ -11,7 +11,6 @@ export interface EditorOptions
   typeIconsGen: string,
   //theme: string
   //right
-  showStats: boolean,
   showIVs: boolean,
   showEVs: boolean,
   showNature: boolean,

@@ -74,7 +74,6 @@ export class TeamEditorComponent
       genderPath: this.editorData.shinyPaths[0],
       pokemonSpritesGen: this.editorData.pokemonSpritesPaths[0],
       typeIconsGen: "gen-ix",
-      showStats: true,
       showIVs: true,
       showEVs: true,
       showNature: true,

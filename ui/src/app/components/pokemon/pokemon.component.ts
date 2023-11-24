@@ -20,10 +20,12 @@ export class PokemonComponent
   maleIconPath: string = '';
   femaleIconPath: string = '';
 
-  metaLeft: boolean[] = [false, false, false, false];
+
+  metaLeft: boolean[] = [false, false, false];
   metaMiddle: boolean[] = [false, false, false, false, false, false];
   metaRight: boolean[] = [false, false, false, false];
-  
+  metaDown: boolean[] = [false, false, false]
+
   constructor() 
   {
 
@@ -74,6 +76,9 @@ export class PokemonComponent
       case "right":
         list = this.metaRight;
         break;
+      case "down":
+        list = this.metaDown;
+        break;
     }
     if(list[index])
     {
@@ -87,6 +92,7 @@ export class PokemonComponent
       list[index] = true;
     }
   }
+
 
   getMoveColor(move)
   {
