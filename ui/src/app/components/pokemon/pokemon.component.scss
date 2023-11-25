@@ -289,7 +289,7 @@ $metaMoveHeight: $profileHeight;
       height: inherit;
       display: grid;
       align-items: center;
-      grid-template-columns: 10% 80% 10%;
+      grid-template-columns: 10% 90%;
 
       &:hover
       {
@@ -338,6 +338,38 @@ $metaMoveHeight: $profileHeight;
         .maxed
         {
           border: 0.4vh solid black;
+        }
+
+        .nature
+        {
+          margin-left: 0.2vw;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          border-radius:50px;
+          width: 0.8vw;
+          height: 0.8vw;
+          
+          &:hover
+          {
+            background-color: var(--bg-color-4);
+          }
+
+          .icon
+          {
+            width: 0.5vw;
+            height: 0.5vw;
+          }
+
+          .neutral
+          {
+            height: 30%;
+            width: 80%;
+            border-radius: 30px;
+            background-color: grey;
+            
+          }
         }
       }
 

@@ -251,23 +251,32 @@
                     {{pokemon.evs ? (pokemon.evs[i].value) : 'a'}} = {{pokemon.evs ? (pokemon.evs[i].value / 4) : 'a'}}
                   </div>
                 </div>
-            </ng-container>
-            <div class="total">
+              </ng-container>
+              <div class="total">
                 {{calculateTotal(stat, pokemon.ivs ? pokemon.ivs[i] : undefined, pokemon.evs ? pokemon.evs[i] : undefined)}}
-            </div>
+              </div>
+              <ng-container *ngIf="!(stat.name===pokemon.nature?.increasedStat
+              && stat.name===pokemon.nature?.decreasedStat); else neutral">
+                <ng-container *ngIf="stat.name===pokemon.nature?.increasedStat">
+                  <div class="nature">
+                    <img src="assets/up-arrow.png" alt="" class="icon">
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="stat.name===pokemon.nature?.decreasedStat">
+                  <div class="nature">
+                    <img src="assets/down-arrow.png" alt="" class="icon">
+                  </div>
+                </ng-container>
+              </ng-container>
+              <ng-template #neutral>
+                <div class="nature">
+                  <div class="neutral"></div>
+                </div>
+              </ng-template>
             </div>
           </div>
         </ng-container>
       </div>
-              <!--
-        <div 
-        class="section"
-        (click)="clickMeta(3, 'left')"
-        [ngClass]="{'meta-selected':  metaLeft[3]}"
-        >
-          Nature: {{pokemon.nature?.name}}
-        </div>
-        -->
     </div>
   </div>
   <div *ngIf="metaDown[1]; else void">
