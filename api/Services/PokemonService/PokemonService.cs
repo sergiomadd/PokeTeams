@@ -56,7 +56,7 @@ namespace api.Services.PokemonService
                         {
                             Identifier = stats.identifier,
                             Name = statNames.name,
-                            BaseStat = pokemonStats.base_stat
+                            Value = pokemonStats.base_stat
                         });
                     }
                 }
@@ -194,7 +194,7 @@ namespace api.Services.PokemonService
                             {
                                 Identifier = metaStat.identifier,
                                 Name = metaStatName.name,
-                                BaseStat = null
+                                Value = null
                             },
                             Change = metaStatChange.change,
                             ChangeChance = meta.stat_chance
