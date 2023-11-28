@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { PokemonData } from '../models/pokemonData.model';
 import { HttpClient } from  '@angular/common/http';
 import { Pokemon } from '../models/pokemon.model';
-import { PokePasteData } from '../models/pokePasteData.model';
-import { Observable, lastValueFrom, map } from 'rxjs';
+import { lastValueFrom, timeout } from 'rxjs';
 import { Ability } from '../models/ability.model';
 import { Item } from '../models/item.model';
 import { Move } from '../models/move.model';
@@ -11,6 +10,7 @@ import { Nature } from '../models/nature.model';
 import { Stat } from '../models/stat.model';
 import { getErrorMessage } from './util';
 import { Type } from '../models/type.model';
+import { PokePaste } from '../models/pokePaste.model';
 
 
 @Injectable({
@@ -25,35 +25,54 @@ export class GetPokemonService
 
   }
 
-  async buildPokemon(paste: PokePasteData) : Promise<Pokemon[]>
+  async buildPokemon(pokePaste: PokePaste) : Promise<Pokemon>
   {
-    let pokemons: Pokemon[] = [];
-    paste.pokemons.forEach(async (pokePaste) => 
+    const now = new Date().getTime();
+    let pokemon: Pokemon = <Pokemon>{};
+    try 
     {
-      let pokemon: Pokemon = <Pokemon>{};
-      let pokemonData: PokemonData = await this.getPokemon(pokePaste.name);
       
-      pokemon.name = pokemonData.name;
-      pokemon.nickname = pokePaste.nickname;
-      pokemon.dexNumber = pokemonData.dexNumber;
-      pokemon.types = pokemonData.types;
-      pokemon.teraType = pokePaste.teratype ? await this.getType(pokePaste.teratype, true) : undefined;
-      pokemon.item = pokePaste.item ? await this.getItem(pokePaste.item) : undefined; 
-      pokemon.ability = pokePaste.ability ? await this.getAbility(pokePaste.ability) : undefined;
-      pokemon.nature = pokePaste.nature ? await this.getNature(pokePaste.nature) : undefined;
-      pokemon.moves = pokePaste.moves ? await this.getMoves(pokePaste.moves) : undefined;
-      pokemon.stats = pokemonData.stats;
-      pokemon.ivs = pokePaste.ivs ? await this.createStats(pokePaste.ivs) : undefined;
-      pokemon.evs = pokePaste.evs ? await this.createStats(pokePaste.evs) : undefined;
-      pokemon.level = pokePaste.level ? pokePaste.level : undefined;
-      pokemon.shiny = pokePaste.shiny ? pokePaste.shiny : undefined;
-      pokemon.gender = pokePaste.gender ? pokePaste.gender : undefined;
-      pokemon.sprites = pokemonData.sprites;
-
+      const pokemonDataPromise: Promise<PokemonData> | undefined = pokePaste.name ? this.getPokemon(pokePaste.name) : undefined;
+      const teraTypePromise: Promise<Type> | undefined = pokePaste.teratype ? this.getType(pokePaste.teratype, true) : undefined;
+      const itemPromise: Promise<Item> | undefined = pokePaste.item ? this.getItem(pokePaste.item) : undefined;
+      const abilityPromise: Promise<Ability> | undefined = pokePaste.ability ? this.getAbility(pokePaste.ability) : undefined;
+      const naturePromise: Promise<Nature> | undefined = pokePaste.nature ? this.getNature(pokePaste.nature) : undefined;
+      const movesPromise: Promise<Move[]> | undefined = pokePaste.moves ? this.getMoves(pokePaste.moves) : undefined;
+      const ivsPromise: Promise<Stat[]> | undefined = pokePaste.ivs ? this.getStats(pokePaste.ivs) : undefined;
+      const evsPromise: Promise<Stat[]> | undefined = pokePaste.evs ? this.getStats(pokePaste.evs) : undefined; 
+      
+      Promise.allSettled([pokemonDataPromise, teraTypePromise, itemPromise, abilityPromise, naturePromise, movesPromise, ivsPromise, evsPromise])
+      .then(([pokemonData, teraType, itemPromise, abilityPromise, naturePromise, movesPromise, ivsPromise, evsPromise]) => 
+      {
+        pokemon.name = pokemonData.status == "fulfilled" ? pokemonData.value?.name : '';
+        pokemon.dexNumber = pokemonData.status == "fulfilled" ? pokemonData.value?.dexNumber : 0;
+        pokemon.types = pokemonData.status == "fulfilled" ? pokemonData.value?.types : [];
+        pokemon.stats = pokemonData.status == "fulfilled" ? pokemonData.value?.stats : [];
+        pokemon.sprites = pokemonData.status == "fulfilled" ? pokemonData.value?.sprites : [];
+        pokemon.nickname = pokePaste.nickname;
+        pokemon.level = pokePaste.level ? pokePaste.level : undefined;
+        pokemon.shiny = pokePaste.shiny ? pokePaste.shiny : undefined;
+        pokemon.gender = pokePaste.gender ? pokePaste.gender : undefined;
+        pokemon.teraType = teraType.status == "fulfilled" ? teraType.value : undefined;
+        pokemon.item = itemPromise.status == "fulfilled" ? itemPromise.value : undefined; 
+        pokemon.ability = abilityPromise.status == "fulfilled" ? abilityPromise.value : undefined; 
+        pokemon.nature = naturePromise.status == "fulfilled" ? naturePromise.value : undefined; 
+        pokemon.moves = movesPromise.status == "fulfilled" ? movesPromise.value : undefined; 
+        pokemon.ivs = ivsPromise.status == "fulfilled" ? ivsPromise.value : undefined; 
+        pokemon.evs = evsPromise.status == "fulfilled" ? evsPromise.value : undefined; 
+      });
+    } 
+    catch (error) 
+    {
+      console.log("Error getting pokemons.", error);
+    }
+    finally 
+    {
       console.log('Generated pokemon: ', pokemon);
-      pokemons.push(pokemon);
-    });
-    return pokemons;
+
+    }
+    console.log("Time to generate pokemon: ", new Date().getTime() - now);
+    return pokemon;
   }
 
   /*
@@ -128,6 +147,16 @@ export class GetPokemonService
     return nature;
   }
 
+  async getMoves(movesData: string[]) : Promise<Move[]>
+  {
+    const movePromises: Promise<Move>[] = [];
+    for (const moveData of movesData)
+    {
+      movePromises.push(this.getMove(moveData));
+    }
+    return await Promise.all(movePromises);
+  }
+
   async getMove(name: string) : Promise<Move>
   {
     let move: Move = <Move>{}
@@ -144,19 +173,8 @@ export class GetPokemonService
     return move;
   }
 
-  getMoves(movesData: string[]) : Move[]
-  {
-    let moves: Move[] = []
-    movesData.forEach(async move => 
-    {
-      moves.push(await this.getMove(move));
-    });
-    return moves;
-  }
-
   async getType(typeName: string, teratype?: boolean) : Promise<Type>
   {
-    console.log('type',typeName)
     let type: Type = <Type>{};
     let url = this.apiUrl + 'type/' + (teratype ? 'teratype/' : '') + typeName;
     this.http.get<Type>(url).subscribe
@@ -172,14 +190,35 @@ export class GetPokemonService
     return type;
   }
 
+  async getStats(statsData: string[][]) : Promise<Stat[]>
+  {
+    const statPromises: Promise<Stat>[] = [];
+    for (const statData of statsData)
+    {
+      statPromises.push(this.createStat(statData));
+    }
+    return await Promise.all(statPromises);
+  }
+
+  async createStat(statData: string[]) : Promise<Stat>
+  {
+    return this.getStatName(statData[0]).then((value) => 
+    {
+      let stat: Stat = <Stat>{}
+      stat.identifier = statData[0];
+      stat.name = value;
+      stat.value = Number(statData[1]);
+      return stat;
+    })
+  }
+
   async getStatName(identifier: string) : Promise<string>
   {
     let statName: string = '';
     let url = this.apiUrl + 'stat/' + identifier;
-    this.http.get<string>(url).subscribe
     try
     {
-      const statName$ = this.http.get(url, {responseType: 'text'});
+      const statName$ = this.http.get(url, {responseType: 'text'}).pipe(timeout(5000));
       statName = await lastValueFrom(statName$);
     }
     catch(error)
@@ -187,21 +226,5 @@ export class GetPokemonService
       console.log("Error: ", getErrorMessage(error));
     }
     return statName;
-  }
-
-  createStats(statsData :string[][]) : Stat[]
-  {
-    let statIdentifiers = ["hp", "attack", "defense", "special-attack", "special-defense", "speed"];
-    let stats: Stat[] = [];
-    statsData.forEach(async statData => 
-    {
-      let stat: Stat = <Stat>{}
-      stat.identifier = statData[0];
-      stat.name = (await this.getStatName(statData[0]));
-      stat.value = Number(statData[1]);
-      let index: number = statIdentifiers.indexOf(statData[0]);
-      stats.splice(index, 0, stat); //instead of push to keep stats ordered after http get
-    });
-    return stats;
   }
 } 
