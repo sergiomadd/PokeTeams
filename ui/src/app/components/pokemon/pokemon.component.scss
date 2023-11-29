@@ -95,7 +95,8 @@ $metaMoveHeight: $profileHeight;
 
           .sprite
           {
-
+            width: 100%;
+            height: 100%S;
           }
         }
 
@@ -276,6 +277,7 @@ $metaMoveHeight: $profileHeight;
   //height: $cardheight/2;
   background-color: var(--bg-color-2);
   width: 100%;
+  border-radius: 0 0 5px 5px;
 
   .stats
   {
@@ -321,7 +323,7 @@ $metaMoveHeight: $profileHeight;
 
         .base
         {
-          border-radius: 15px 0 0 15px;
+          //border-radius: 15px 0 0 15px;
         }
 
         .ivs
@@ -333,13 +335,19 @@ $metaMoveHeight: $profileHeight;
         {
           background-color: gold;
           border-radius: 0 15px 15px 0;
+          border-radius: none;
         }
 
+        .total
+        {
+          margin-left: 0.2vw;
+        }
+        
         .maxed
         {
           border: 0.4vh solid black;
         }
-
+        
         .nature
         {
           margin-left: 0.2vw;
@@ -391,11 +399,11 @@ $metaMoveHeight: $profileHeight;
   {
     width: 1.5vw;
     height: 1.5vw;
-   //border: 1px solid black;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 5px;
 
     .icon
     {

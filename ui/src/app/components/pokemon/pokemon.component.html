@@ -224,36 +224,46 @@
             <div class="values">
               <div 
               class="base bar"
-              [ngStyle]="{width: getStatHeight(stat, ''), backgroundColor: getStatColor(stat)}"
+              [ngStyle]="
+              {
+                width: getStatSize(calculateBaseStat(stat)),
+                backgroundColor: getStatColor(stat),
+                borderRadius: (editorOptions.showIVs && pokemon.ivs ? (pokemon.ivs[i].value / 4) === 0 ? false : true : false)  ||
+                 (editorOptions.showEVs && pokemon.evs ? (pokemon.evs[i].value / 4) === 0 ? false : true : false) ? ('15px 0 0 15px') : '15px'
+              }"
               >
                 <div class="value">
-                  {{stat.value}}
+                  {{calculateBaseStat(stat)}}
                 </div>
               </div>
               <ng-container *ngIf="editorOptions.showIVs">
                 <div 
                 class="ivs bar"
-                [ngStyle]="{width: pokemon.ivs ? getStatHeight(pokemon.ivs[i], '') : 'none'}"
+                [ngStyle]="
+                {
+                  width: pokemon.ivs ? getStatSize(pokemon.ivs[i].value) : 'none',
+                  borderRadius: editorOptions.showEVs && (pokemon.evs ? (pokemon.evs[i].value / 4) == 0 ? false : true : false) ? '0' : '0 15px 15px 0'
+                }"
                 >
                   <div class="value">
-                    {{pokemon.ivs ? pokemon.ivs[i].value : 'a'}}
+                    {{pokemon.ivs ? pokemon.ivs[i].value : ''}}
                   </div>
                 </div>
               </ng-container>
               <ng-container *ngIf="editorOptions.showEVs">
                 <div class="evs bar" 
-                [ngStyle]="{width: pokemon.evs ? getStatHeight(pokemon.evs[i], 'evs') : 'none'}"
+                [ngStyle]="{width: pokemon.evs ? getStatSize(pokemon.evs[i].value / 4) : 'none'}"
                 [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}"
                 >
                   <div 
                   class="value" 
                   >
-                    {{pokemon.evs ? (pokemon.evs[i].value) : 'a'}} = {{pokemon.evs ? (pokemon.evs[i].value / 4) : 'a'}}
+                    {{pokemon.evs ? (pokemon.evs[i].value / 4) : ''}}
                   </div>
                 </div>
               </ng-container>
               <div class="total">
-                {{calculateTotal(stat, pokemon.ivs ? pokemon.ivs[i] : undefined, pokemon.evs ? pokemon.evs[i] : undefined)}}
+                {{calculatedStats[i].value}}
               </div>
               <ng-container *ngIf="!(stat.name===pokemon.nature?.increasedStat
               && stat.name===pokemon.nature?.decreasedStat); else neutral">

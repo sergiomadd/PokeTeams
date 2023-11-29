@@ -1,6 +1,7 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Move } from 'src/app/models/move.model';
+import { Nature } from 'src/app/models/nature.model';
 import { Pokemon } from 'src/app/models/pokemon.model';
 import { Stat } from 'src/app/models/stat.model';
 import { Colors } from 'src/app/styles/pokemonColors';
@@ -19,7 +20,15 @@ export class PokemonComponent
   spriteCategory: number = 0;
   maleIconPath: string = '';
   femaleIconPath: string = '';
+  oldChanges = 
+  {
+    sprites: undefined,
+    stats: undefined,
+    ivs: undefined,
+    evs: undefined
+  }
 
+  calculatedStats: Stat[] = [];
 
   metaLeft: boolean[] = [false, false, false];
   metaMiddle: boolean[] = [false, false, false, false, false, false];
@@ -33,33 +42,78 @@ export class PokemonComponent
 
   ngOnInit()
   {
-    let choosenVariationPath = this.pokemon.sprites[parseInt(this.editorOptions.pokemonSpritesGen.identifier)];
+    this.calculateStats();
+    this.pokemon.sprites ? this.loadSprite() : this.oldChanges.sprites = this.pokemon.sprites;
+    this.pokemon.stats ? this.calculateStats() : this.oldChanges.stats = this.pokemon.stats;
+    this.pokemon.ivs ? this.calculateStats() : this.oldChanges.ivs = this.pokemon.ivs;
+    this.pokemon.evs ? this.calculateStats() : this.oldChanges.evs = this.pokemon.evs;
 
-    if(this.pokemon.gender === "female")
-    {
-      this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shinyFemale : choosenVariationPath.female
-    }
-    else
-    {
-      this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shiny : choosenVariationPath.base
-    }
-    
     this.maleIconPath = "https://localhost:7134/images/sprites/gender/male.png";
     this.femaleIconPath = "https://localhost:7134/images/sprites/gender/female.png";
   }
-
-  ngOnChanges(changes: SimpleChanges)
+  
+  //Have to use custom change detetor for array items that are used onInit
+  ngDoCheck() 
   {
-    let choosenVariationPath = this.pokemon.sprites[this.editorOptions.pokemonSpritesGen.identifier];
-
-    if(this.pokemon.gender === "female")
+    if(this.pokemon.sprites !== this.oldChanges.sprites) 
     {
-      this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shinyFemale : choosenVariationPath.female
+      this.loadSprite();
+    }
+
+    if(this.pokemon.stats  !== this.oldChanges.stats
+      || this.pokemon.ivs  !== this.oldChanges.ivs
+      || this.pokemon.evs  !== this.oldChanges.evs)
+    {
+      this.calculateStats();
+    }
+  }
+
+  loadSprite()
+  {
+    if(this.pokemon.sprites)
+    {
+      let choosenVariationPath = this.pokemon.sprites[this.editorOptions.pokemonSpritesGen.identifier];
+      if(this.pokemon.gender === "female")
+      {
+        this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shinyFemale : choosenVariationPath.female
+      }
+      else
+      {
+        this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shiny : choosenVariationPath.base
+      }
+    }
+  }
+
+  calculateStats()
+  {
+    if(this.pokemon.stats)
+    {
+      this.pokemon.stats.forEach((stat, index) => 
+      {
+        this.calculatedStats[index] = 
+        {
+          identifier: stat.identifier,
+          name: stat.name,
+          value: this.calculateStat(stat, this.pokemon.ivs ? this.pokemon.ivs[index] : undefined,
+            this.pokemon.evs ? this.pokemon.evs[index] : undefined, this.pokemon.nature ? this.pokemon.nature : undefined)
+        }
+      });
     }
     else
     {
-      this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shiny : choosenVariationPath.base
+      for(let i=0; i<6; i++) 
+      {
+        let stat: Stat = 
+        {
+          identifier: 'error',
+          name: 'error',
+          value: this.calculateStat(undefined, this.pokemon.ivs ? this.pokemon.ivs[i] : undefined,
+            this.pokemon.evs ? this.pokemon.evs[i] : undefined, this.pokemon.nature ? this.pokemon.nature : undefined)
+        }
+        this.calculatedStats[i] = stat;
+      }
     }
+
   }
 
   clickMeta(index: number, type: string)
@@ -101,29 +155,64 @@ export class PokemonComponent
   }
 
   //stats
-
-  calculateTotal(baseStat: Stat, ivs?: Stat, evs?: Stat)
+  calculateStat(baseStat?: Stat, ivs?: Stat, evs?: Stat, nature?: Nature) : number
   {
-    let total: number = baseStat.value
-    if(ivs && this.editorOptions.showIVs)
+    let total: number;
+    let natureValue: number = this.getNatureValue(baseStat, nature);
+    //HP: (((2 * base + iv + (ev/4)) * level) / 100) + level + 10
+    if(baseStat ? baseStat.identifier === "hp" : false)
     {
-      total += ivs?.value;
+      total = Math.floor((((2 * (baseStat ? baseStat.value : 0) + (ivs ? ivs.value : 0) + 
+      (evs ? Math.floor(evs.value / 4) : 0)) * (this.pokemon.level ? this.pokemon.level : 100))
+       / 100) + (this.pokemon.level ? this.pokemon.level : 100) + 10);
     }
-    if(evs && this.editorOptions.showEVs)
-    {
-      total += Math.round(evs?.value / 4);
+    //Rest: ((((2 * base + iv + (ev/4)) * level) / 100) + 5) * nature
+    else
+    {(
+      total = Math.floor((Math.floor(((2 * (baseStat ? baseStat.value : 0) + (ivs ? ivs.value : 0)
+       + (evs ? Math.floor(evs.value / 4) : 0)) * (this.pokemon.level ? this.pokemon.level : 100))
+      / 100) + 5) * natureValue));
     }
-
-    return total
+    return total;
   }
 
-  getStatHeight(stat: Stat, type: string)
+  calculateBaseStat(baseStat: Stat) : number
   {
-    if(type === "evs")
+    return this.calculateStat(baseStat, undefined, undefined, undefined);
+  } 
+  
+  getNatureValue(baseStat?: Stat, nature?: Nature) : number
+  {
+    let natureValue: number;
+    if(baseStat)
     {
-      return `${stat.value / 252 / 4 * 100 * 4}px`;
+      if(nature ? nature.increasedStat === baseStat.name && nature.decreasedStat === baseStat.name : false)
+      {
+        natureValue = 1;
+      }
+      else if(nature ? nature.increasedStat === baseStat.name : false)
+      {
+        natureValue = 1.1;
+      }
+      else if(nature ? nature.decreasedStat === baseStat.name : false)
+      {
+        natureValue = 0.9;
+      }
+      else
+      {
+        natureValue = 1;
+      }
     }
-    return `${stat.value / 252 * 100 * 4}px`;
+    else
+    {
+      natureValue = 1;
+    }
+    return natureValue;
+  }
+
+  getStatSize(value: number)
+  {
+    return `${value / 252 * 100 * 2}px`;
   }
   
   getStatName(stat: Stat)
