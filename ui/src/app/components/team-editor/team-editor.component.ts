@@ -20,7 +20,7 @@ export class TeamEditorComponent
 {
   genTeam = inject(GenerateTeamService);
 
-  @Input() pokemons!: Promise<Pokemon[]>;
+  @Input() pokemons!: Pokemon[];
 
   @Output() outputTeam = new EventEmitter<Team>();
 

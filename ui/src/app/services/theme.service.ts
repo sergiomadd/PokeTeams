@@ -34,7 +34,7 @@ export class ThemeService
         '--bg-color-3': '#144272',
         '--bg-color-4': '#2C74B3',
         '--bg-color-5': '#0075BE',
-        '--text-color': '#FFFFFF',
+        '--text-color': '#d3d3d3',
         '--text-color-contrast': '#000000',
         '--text-color-highlight': '#D5A100'
       }

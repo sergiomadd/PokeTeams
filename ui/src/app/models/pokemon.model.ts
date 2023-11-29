@@ -9,21 +9,21 @@ import { Type } from "./type.model"
 
 export interface Pokemon 
 {
-	name: string,
+	name?: string,
 	nickname?: string,
-	dexNumber: number,
-	types: Type[],
+	dexNumber?: number,
+	types?: Type[],
 	teraType?: Type,
 	item?: Item,
 	ability?: Ability,
 	nature?: Nature,
 	moves?: Move[],
-	stats: Stat[],
+	stats?: Stat[],
 	ivs?: Stat[],
 	evs?: Stat[],
 	level?: number,
 	shiny?: boolean,
 	gender?: string,
-	sprites: Sprite[]
+	sprites?: Sprite[]
 }
   

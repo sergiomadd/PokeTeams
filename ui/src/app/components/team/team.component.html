@@ -33,6 +33,8 @@
     </div>
   </div>
   <div class="pokemons">
-    <app-pokemon [pokemon]="pokemon"  [editorOptions]="editorOptions" *ngFor="let pokemon of (pokemons| async)"></app-pokemon>
+    <ng-container *ngFor="let pokemon of (pokemons)">
+      <app-pokemon [pokemon]="pokemon" [editorOptions]="editorOptions"></app-pokemon>
+    </ng-container>
   </div>
 </div>

@@ -4,9 +4,9 @@ import { Sprite } from "./sprite.model"
 
 export interface PokemonData
 {
-  name: string,
-  dexNumber: number,
-  types: Type[],
-  stats: Stat[],
-  sprites: Sprite[]
+  name?: string,
+  dexNumber?: number,
+  types?: Type[],
+  stats?: Stat[],
+  sprites?: Sprite[]
 }

@@ -9,11 +9,11 @@ import { Pokemon } from 'src/app/models/pokemon.model';
 })
 export class VgcComponent 
 {
-  pokemons!: Promise<Pokemon[]>;
+  pokemons: Pokemon[] = [];
   editorOptions!: EditorOptions;
 
-  receivePokemons($event) 
+  receivePokemon($event) 
   {
-    this.pokemons = $event
+    this.pokemons.push($event);
   }
 }

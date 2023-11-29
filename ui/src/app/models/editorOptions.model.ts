@@ -3,12 +3,11 @@ import { EditorOption } from "./editorOption.model";
 export interface EditorOptions
 {
   //left
+  pokemonSpritesGen: EditorOption,
+  typeIconsGen: string,
   shinyPath: EditorOption,
   gender: boolean,
   genderPath: EditorOption,
-  //top
-  pokemonSpritesGen: EditorOption,
-  typeIconsGen: string,
   //theme: string
   //right
   showIVs: boolean,
@@ -17,6 +16,7 @@ export interface EditorOptions
   showLevel: boolean,
   showDexNumber: boolean,
   showNickname: boolean
+  //showTeratype
   //---
   //lang?
   //display short effect or long effect?

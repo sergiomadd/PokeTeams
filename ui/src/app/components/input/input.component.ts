@@ -13,9 +13,8 @@ export class InputComponent
 {
   getPokemon = inject(GetPokemonService);
   
-  @Output() outPokemons = new EventEmitter<Promise<Pokemon[]>>();
-  pokemons!: Promise<Pokemon[]>;
-
+  @Output() outPokemon = new EventEmitter<Pokemon>();
+  
   formData;
   pasteHolder: string;
 
@@ -23,6 +22,19 @@ export class InputComponent
   {
     this.pasteHolder = 
     `
+    monito (Garchomp) @ Soul Dew  
+    Ability: Technician  
+    Level: 78  
+    Shiny: Yes  
+    Tera Type: Dark  
+    EVs: 74 HP / 190 Atk / 91 Def / 48 SpA / 84 SpD / 23 Spe  
+    Adamant Nature  
+    IVs: 24 HP / 12 Atk / 30 Def / 16 SpA / 23 SpD / 5 Spe  
+    - Scary Face  
+    - Smack Down  
+    - Sunny Day  
+    - Sunny Day
+
     Pickle (Mamoswine) (F) @ Never-Melt Ice
     Ability: Thick Fat
     Shiny: Yes
@@ -35,7 +47,7 @@ export class InputComponent
 
     Kyogre @ Mystic Water
     Ability: Drizzle
-    Level: 50
+    Level: 100
     EVs: 116 HP / 28 Def / 108 SpA / 4 SpD / 252 Spe
     Timid Nature
     IVs: 0 Atk
@@ -44,7 +56,7 @@ export class InputComponent
     - Ice Beam
     - Protect
 
-    monito (Ambipom) @ Soul Dew  
+    monito (Ambidftgpom) @ Soul Dew  
     Ability: Technician  
     Level: 56  
     Shiny: Yes  
@@ -66,12 +78,15 @@ export class InputComponent
     });
   }
 
-  onSubmit(formData)
+  async onSubmit(formData)
   {
-    console.log("submittinh", formData)
+    const nowAll = new Date().getTime();
+    console.log("Submitting: ", formData)
     let data = parsePaste(formData.paste);
-    this.pokemons = this.getPokemon.buildPokemon(data);
-    console.log("pokes", this.pokemons)
-    this.outPokemons.emit(this.pokemons);
+    for (const pokePaste of data.pokemons)
+    {
+      this.outPokemon.emit(await this.getPokemon.buildPokemon(pokePaste));
+    };
+    console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
   }
 }

@@ -11,7 +11,7 @@ import { PokemonComponent } from '../pokemon/pokemon.component';
 })
 export class TeamComponent 
 {
-  @Input() pokemons!: Promise<Pokemon[]>;
+  @Input() pokemons!: Pokemon[];
   @Input() editorOptions!: EditorOptions;
 
   @ViewChildren(PokemonComponent) pokemonComponents!:QueryList<PokemonComponent>;
