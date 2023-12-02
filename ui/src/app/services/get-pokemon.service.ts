@@ -27,7 +27,7 @@ export class GetPokemonService
 
   async buildPokemon(pokePaste: PokePaste) : Promise<Pokemon>
   {
-    const now = new Date().getTime();
+    //const now = new Date().getTime();
     let pokemon: Pokemon = <Pokemon>{};
     try 
     {
@@ -69,9 +69,8 @@ export class GetPokemonService
     finally 
     {
       console.log('Generated pokemon: ', pokemon);
-
     }
-    console.log("Time to generate pokemon: ", new Date().getTime() - now);
+    //console.log("Time to generate pokemon: ", new Date().getTime() - now);
     return pokemon;
   }
 

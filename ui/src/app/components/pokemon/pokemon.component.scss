@@ -183,15 +183,113 @@ $metaMoveHeight: $profileHeight;
 
   .meta
   {
-    visibility: visible;
-    height: 20vh;
-    width: $metaWidth;
+    visibility: hidden;
+    min-height: 20vh;
+    min-width: $metaWidth;
     border: 1px solid black;
     border-radius: 5px;
     background-color: var(--bg-color-2);
-    padding: 0.2vw;
-    outline: gold 0.4vw double;
     //box-shadow: 0 0 0 3px #000, 0 0 0 6px gold, 0 0 0 9px #000;
+    resize: both;
+    z-index: 3;
+
+    /*
+    &::-webkit-scrollbar
+    {
+      width: $scollbarWidth;
+      border-radius: 20px;
+    }
+
+    &::-webkit-scrollbar-track
+    {
+      background-color: var(--bg-color-2);
+    }
+
+    &::-webkit-scrollbar-thumb
+    {
+      background-color: var(--bg-color-4);
+    }
+
+    &::-webkit-scrollbar-corner
+    {
+      background-color: transparent;
+      width: 0;
+      height: 0;
+    }
+    */
+
+    .head
+    {
+      background-color: var(--bg-color-3);
+      font-size: larger;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5vw;
+      border-radius: 5px 5px 0 0;
+    }
+
+    .body
+    {
+      padding: 0.2vw;
+
+      .property
+      {
+        display: flex;
+        margin-bottom: 0.2vw;
+
+        .title
+        {
+          font-weight: bold;
+          margin-right: 0.2vw;
+        }
+
+        .content
+        {
+
+        }
+      }
+
+      .move-bottom
+      {
+        display: grid;
+  
+        .title
+        {
+          font-weight: bold;
+          margin-right: 0.2vw;
+        }
+  
+        .primary
+        {
+          display: grid;
+          justify-content: center;
+          text-align: center;
+          grid-template-columns: 25% 15% 30% 25%;
+          margin-bottom: 0.2vw;
+
+          column-gap: 0.2vw;
+          margin: 0.2vw;
+        }
+
+        .secondary
+        {
+          display: flex;
+          margin: 0.2vw;
+          justify-content: center;
+        }
+
+        .atribute
+        {
+          padding: 0 0.2vw 0 0.2vw;
+          display: flex;
+          flex-direction: column;
+          border: 1px solid black;
+          border-radius: 5%;
+          background-color: var(--bg-color-3);
+        }
+      }
+    }
   }
 
   .meta-left
@@ -199,53 +297,20 @@ $metaMoveHeight: $profileHeight;
     position: relative;
     right: calc($metaWidth + $padding *2);
     bottom: 2vw;
-    visibility: hidden;
   }
 
   .meta-right
   {
-    visibility: hidden;
     position: relative;
     left: calc($padding + 0.5vw);
     bottom: calc($metaMoveHeight/4 - $padding*1.5);
-    height: $metaMoveHeight;
 
-    .meta-move-top
+    .move-head
     {
       display: flex;
       overflow: hidden;
       justify-content: space-between;
-    }
-
-    .meta-move-body
-    {
-      text-align: center;
-    }
-
-    .meta-move-bottom
-    {
-      display: flex;
-      justify-content: center;
-      flex-direction: column;
-      text-align: center;
-
-      .atribute
-      {
-        padding: 0 0.2vw 0 0.2vw;
-      }
-
-      .primary
-      {
-        display: flex;
-        justify-content: center;
-        text-align: center;
-      }
-    }
-
-    .meta-move-highlight
-    {
-      color: gold;
-      font-weight: bold;
+      align-items: center;
     }
   }
 
@@ -253,7 +318,7 @@ $metaMoveHeight: $profileHeight;
   {
     visibility: visible !important;
   }
-  }
+}
 
 .section
 {

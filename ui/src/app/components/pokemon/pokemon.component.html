@@ -7,6 +7,16 @@
         (click)="clickMeta(0, 'left')"
         [ngClass]="{'meta-selected':  metaLeft[0]}"
         >
+        <div class="meta-wrapper">
+          <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[0]}">
+            <div class="meta-name">
+              {{pokemon.ability?.name}}
+            </div>
+            <div class="meta-prose">
+              {{pokemon.ability?.prose}}
+            </div>
+          </div>
+        </div>
           <div *ngIf="editorOptions.showDexNumber; else void">
             <div class="dex-number">
               #{{pokemon.dexNumber}} 
@@ -21,12 +31,28 @@
               </div>
             </div>
           </div>
+
         </div>
         <div 
         class="item section"
         (click)="clickMeta(1, 'left')"
         [ngClass]="{'meta-selected':  metaLeft[1]}"
         >
+          <div class="meta-wrapper">
+            <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[1]}">
+              <div class="meta-head">
+                <div class="meta-name">
+                  {{pokemon.item?.name}}
+                </div>
+              </div>
+              <div class="meta-body">
+                <div class="meta-prose">
+                  {{pokemon.item?.prose}}
+                </div>
+              </div>
+
+            </div>
+          </div>
           <div>
             {{pokemon.item?.name}}
           </div>
@@ -41,11 +67,15 @@
         >
           <div class="meta-wrapper">
             <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[2]}">
-              <div class="meta-name">
-                {{pokemon.ability?.name}}
+              <div class="meta-head">
+                <div class="meta-name">
+                  {{pokemon.ability?.name}}
+                </div>
               </div>
-              <div class="meta-prose">
-                {{pokemon.ability?.prose}}
+              <div class="meta-body">
+                <div class="meta-prose">
+                  {{pokemon.ability?.prose}}
+                </div>
               </div>
             </div>
           </div>
@@ -158,52 +188,65 @@
           <div class="name">
             {{move.name}}
           </div>
-          <div class="meta-wrapper">
+          <div class="meta-wrapper" (click)="clickMeta(i, 'right')">
             <div class="meta meta-right" [ngClass]="{'meta-visible':  metaRight[i]}">
-              <div class="meta-move-top">
+              <div class="head move-head">
                 <div>
-                  {{move.pokeType?.name}}
+                  <img src="{{move.pokeType?.iconPath}}" alt="" class="icon">
                 </div>
                 <div>
                   {{move?.name}}
                 </div>
                 <div>
-                  {{move.damageClass?.name}}
+                  <img src="{{move.damageClass?.iconPath}}" alt="" class="icon">
                 </div>
               </div>
-              <div class="meta-move-body">
-                <div>
-                  Effect: 
-                  <div>
-                    {{move.effect?.short}}
-                    Effect Chance: {{move.effect?.chance}}
+              <div class="body">
+                <div class="property">
+                  <span class="title">Effect:</span>{{move.effect?.short}}
+                </div>
+                <ng-container *ngIf="move.effect?.chance">
+                  <div class="property">
+                    <span class="title">Effect Chance:</span>{{move.effect?.chance}}%
+                  </div>
+                </ng-container>
+                <div class="property">
+                  <span class="title">Target:</span>{{move.target?.description}}
+                </div>
+                <div class="move-bottom">
+                  <div class="primary">
+                    <div class="atribute"><span class="title">Power</span>{{move?.power}}</div>
+                    <div class="atribute"><span class="title">PP</span>{{move?.pp}}</div>
+                    <div class="atribute"><span class="title">Accuracy</span>{{move?.accuracy}}%</div>
+                    <div class="atribute"><span class="title">Priority</span>{{move?.priority}}</div>
+                  </div>
+                  <div class="secondary">
+                    <ng-container *ngIf="move.meta?.minHits">
+                      <div class="atribute"><span class="title">minHits</span>{{move.meta?.minHits}}</div>
+                    </ng-container>
+                    <ng-container *ngIf="move.meta?.maxHits">
+                      <div class="atribute"><span class="title">maxHits</span>{{move.meta?.maxHits}}</div>
+                    </ng-container>
+                    <ng-container *ngIf="move.meta?.minTurns">
+                      <div class="atribute"><span class="title">minTurns</span>{{move.meta?.minTurns}}</div>
+                    </ng-container>
+                    <ng-container *ngIf="move.meta?.maxTurns">
+                      <div class="atribute"><span class="title">maxTurns</span>{{move.meta?.maxTurns}}</div>
+                    </ng-container>
+                    <ng-container *ngIf="move.meta?.drain">
+                      <div class="atribute"><span class="title">drain</span>{{move.meta?.drain}}</div>
+                    </ng-container>
+                    <ng-container *ngIf="move.meta?.healing">
+                      <div class="atribute"><span class="title">healing</span>{{move.meta?.healing}}</div>
+                    </ng-container>
+                    <ng-container *ngIf="move.meta?.statusChance">
+                      <div class="atribute"><span class="title">statusChance</span>{{move.meta?.statusChance}}</div>
+                    </ng-container>
+                    <ng-container *ngIf="move.meta?.flinchChance">
+                      <div class="atribute"><span class="title">flinchChance</span>{{move.meta?.flinchChance}}</div>
+                    </ng-container>
                   </div>
                 </div>
-                <div>
-                </div>
-                <div>
-                  Target: {{move.target?.description}}
-                </div>
-              </div>
-              <div class="meta-move-bottom">
-                <div class="primary">
-                  <div class="atribute"><span class="meta-move-highlight">Power: </span>{{move?.power}}</div>
-                  <div class="atribute"><span class="meta-move-highlight">PP: </span>{{move?.pp}}</div>
-                  <div class="atribute"><span class="meta-move-highlight">Accuracy: </span>{{move?.accuracy}}</div>
-                  <div class="atribute"><span class="meta-move-highlight">Priority: </span>{{move?.priority}}</div>
-                </div>
-                <div class="secondary">
-                  minHits: {{move.meta?.minHits}}
-                  maxHits: {{move.meta?.maxHits}}
-                  minTurns: {{move.meta?.minTurns}}
-                  maxTurns: {{move.meta?.maxTurns}}
-                  drain: {{move.meta?.drain}}
-                  healing: {{move.meta?.healing}}
-                  statusChance: {{move.meta?.statusChance}}
-                  flinchChance: {{move.meta?.flinchChance}}
-                  
-                </div>
-
               </div>
             </div>
           </div>    

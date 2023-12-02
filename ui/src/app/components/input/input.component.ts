@@ -56,7 +56,7 @@ export class InputComponent
     - Ice Beam
     - Protect
 
-    monito (Ambidftgpom) @ Soul Dew  
+    monito (Ambipom) @ Soul Dew  
     Ability: Technician  
     Level: 56  
     Shiny: Yes  
@@ -80,13 +80,13 @@ export class InputComponent
 
   async onSubmit(formData)
   {
-    const nowAll = new Date().getTime();
+    //const nowAll = new Date().getTime();
     console.log("Submitting: ", formData)
     let data = parsePaste(formData.paste);
     for (const pokePaste of data.pokemons)
     {
       this.outPokemon.emit(await this.getPokemon.buildPokemon(pokePaste));
     };
-    console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
+    //console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
   }
 }
