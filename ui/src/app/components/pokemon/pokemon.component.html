@@ -40,17 +40,12 @@
         >
           <div class="meta-wrapper">
             <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[1]}">
-              <div class="meta-head">
-                <div class="meta-name">
-                  {{pokemon.item?.name}}
-                </div>
+              <div class="head">
+                {{pokemon.item?.name}}
               </div>
-              <div class="meta-body">
-                <div class="meta-prose">
-                  {{pokemon.item?.prose}}
-                </div>
+              <div class="body">
+                {{pokemon.item?.prose}}
               </div>
-
             </div>
           </div>
           <div>
@@ -67,15 +62,11 @@
         >
           <div class="meta-wrapper">
             <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[2]}">
-              <div class="meta-head">
-                <div class="meta-name">
-                  {{pokemon.ability?.name}}
-                </div>
+              <div class="head">
+                {{pokemon.ability?.name}}
               </div>
-              <div class="meta-body">
-                <div class="meta-prose">
-                  {{pokemon.ability?.prose}}
-                </div>
+              <div class="body">
+                {{pokemon.ability?.prose}}
               </div>
             </div>
           </div>
