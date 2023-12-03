@@ -1,8 +1,10 @@
+import { Effectiveness } from "./effectiveness.model";
+
 export interface Type
 {
   identifier: string,
   name: string,
   iconPath: string,
-  effectivenessAttack: [string, number][],
-  effectivenessDefense: [string, number][]
+  effectivenessAttack: Effectiveness,
+  effectivenessDefense: Effectiveness
 }

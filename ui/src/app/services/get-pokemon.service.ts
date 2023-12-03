@@ -46,7 +46,7 @@ export class GetPokemonService
       {
         pokemon.name = pokemonData.status == "fulfilled" ? pokemonData.value?.name : '';
         pokemon.dexNumber = pokemonData.status == "fulfilled" ? pokemonData.value?.dexNumber : 0;
-        pokemon.types = pokemonData.status == "fulfilled" ? pokemonData.value?.types : [];
+        pokemon.types = pokemonData.status == "fulfilled" ? pokemonData.value?.types : undefined;
         pokemon.stats = pokemonData.status == "fulfilled" ? pokemonData.value?.stats : [];
         pokemon.sprites = pokemonData.status == "fulfilled" ? pokemonData.value?.sprites : [];
         pokemon.nickname = pokePaste.nickname;

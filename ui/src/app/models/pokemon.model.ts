@@ -5,6 +5,7 @@ import { Nature } from "./nature.model"
 import { Sprite } from "./sprite.model"
 import { Stat } from "./stat.model"
 import { Type } from "./type.model"
+import { Types } from "./types.model"
 
 
 export interface Pokemon 
@@ -12,7 +13,7 @@ export interface Pokemon
 	name?: string,
 	nickname?: string,
 	dexNumber?: number,
-	types?: Type[],
+	types?: Types,
 	teraType?: Type,
 	item?: Item,
 	ability?: Ability,

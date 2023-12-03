@@ -1,14 +1,13 @@
 
 $cardWidth: 25vw;
 $iconSize: 1vw;
-$padding: 0.5vw;
-$profileHeight: 20vh;
+$paddingBig: 0.5vw;
+$padding: 0.2vw;
 $statsHeight: 5vh;
-$cardheight: $profileHeight;
-
+$cardheight: 20vh;
+$moveHeight: calc($cardheight/4);
 $metaWidth: calc($cardWidth/1.5);
-$moveHeight: calc($profileHeight/4);
-$metaMoveHeight: $profileHeight;
+
 
 .pokemon
 {
@@ -29,7 +28,7 @@ $metaMoveHeight: $profileHeight;
       display: grid;
       justify-content: left;
       grid-template-columns: 60% 40%;
-      padding: 0.5vw;
+      padding: $paddingBig;
 
       .extra
       {
@@ -79,11 +78,11 @@ $metaMoveHeight: $profileHeight;
             margin: 0 4px;
           }
 
-          .base-types
+          .type
           {
             display: flex;
             align-items: center;
-            flex-direction: row-reverse;            
+            flex-direction: row-reverse;     
           }
         }
 
@@ -112,7 +111,7 @@ $metaMoveHeight: $profileHeight;
 
     .right
     {
-      padding: 0.5vw;
+      padding: $paddingBig;
 
       .moves
       {
@@ -126,7 +125,7 @@ $metaMoveHeight: $profileHeight;
           width: calc(100% - 1vw);
           position: relative;
 
-          .icons
+          .move-icons
           {
             display: flex;
 
@@ -170,7 +169,8 @@ $metaMoveHeight: $profileHeight;
 
 .meta-selected
 {
-  border: 1px solid black;
+  outline: 1px solid black;
+  outline-offset: 0.1vw;
   border-radius: 5px;
   background-color: var(--bg-color-2);
 }
@@ -178,45 +178,17 @@ $metaMoveHeight: $profileHeight;
 .meta-wrapper
 {
   position: relative; 
-  width: 0; 
+  width: 0;
   height: 0;
+  overflow: visible;
 
   .meta
   {
     visibility: hidden;
-    min-height: 20vh;
-    min-width: $metaWidth;
     border: 1px solid black;
     border-radius: 5px;
     background-color: var(--bg-color-2);
-    //box-shadow: 0 0 0 3px #000, 0 0 0 6px gold, 0 0 0 9px #000;
-    resize: both;
     z-index: 3;
-
-    /*
-    &::-webkit-scrollbar
-    {
-      width: $scollbarWidth;
-      border-radius: 20px;
-    }
-
-    &::-webkit-scrollbar-track
-    {
-      background-color: var(--bg-color-2);
-    }
-
-    &::-webkit-scrollbar-thumb
-    {
-      background-color: var(--bg-color-4);
-    }
-
-    &::-webkit-scrollbar-corner
-    {
-      background-color: transparent;
-      width: 0;
-      height: 0;
-    }
-    */
 
     .head
     {
@@ -225,23 +197,23 @@ $metaMoveHeight: $profileHeight;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0.5vw;
+      padding: $paddingBig;
       border-radius: 5px 5px 0 0;
     }
 
     .body
     {
-      padding: 0.2vw;
+      padding: $padding;
 
       .property
       {
         display: flex;
-        margin-bottom: 0.2vw;
+        margin-bottom: $padding;
 
         .title
         {
           font-weight: bold;
-          margin-right: 0.2vw;
+          margin-right: $padding;
         }
 
         .content
@@ -253,12 +225,7 @@ $metaMoveHeight: $profileHeight;
       .move-bottom
       {
         display: grid;
-  
-        .title
-        {
-          font-weight: bold;
-          margin-right: 0.2vw;
-        }
+
   
         .primary
         {
@@ -266,22 +233,20 @@ $metaMoveHeight: $profileHeight;
           justify-content: center;
           text-align: center;
           grid-template-columns: 25% 15% 30% 25%;
-          margin-bottom: 0.2vw;
-
-          column-gap: 0.2vw;
-          margin: 0.2vw;
+          margin-bottom: $padding;
+          column-gap: $padding;
+          margin: $padding;
         }
 
         .secondary
         {
           display: flex;
-          margin: 0.2vw;
           justify-content: center;
         }
 
         .atribute
         {
-          padding: 0 0.2vw 0 0.2vw;
+          padding: 0 $padding 0 $padding;
           display: flex;
           flex-direction: column;
           border: 1px solid black;
@@ -294,30 +259,104 @@ $metaMoveHeight: $profileHeight;
 
   .meta-left
   {
+    min-width: $metaWidth;
+    height: fit-content;
     position: relative;
-    right: calc($metaWidth + $padding *2);
-    bottom: 2vw;
+    left: 50%;
+    top: 50%;
+    transform: translate(calc(-100% - $paddingBig - $padding), calc(-50% - $padding*2));
     text-align: center;
   }
 
   .meta-right
   {
+    min-width: $metaWidth;
+    height: fit-content;
     position: relative;
-    left: calc($padding + 0.5vw);
-    bottom: calc($metaMoveHeight/4 - $padding*1.5);
-
+    left: 50%;
+    top: 50%;
+    transform: translate(calc($paddingBig*3 + $padding), calc(-50% - $padding*2));
+    
     .move-head
     {
       display: flex;
       overflow: hidden;
       justify-content: space-between;
       align-items: center;
+      overflow: visible;
+
+      .meta-move-type
+      {
+        &:hover .meta-top-move
+        {
+          visibility: visible;
+        }
+      }
+    }
+  }
+
+  .meta-top-move
+  {
+    transform: translate(-(calc($iconSize/2)), calc(-100% - $iconSize - 1vw)) !important;
+    visibility: hidden;
+  }
+
+  .meta-top
+  {
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+    left: 50%;
+    top: 100%;
+    transform: translate(calc(-50% - $iconSize), calc(-100% - $iconSize - $padding*2));
+    padding: $padding;
+    display: flex;
+    justify-content: center;
+    z-index: 5;
+
+    .meta-types
+    {
+      display: flex;
+      justify-content: center;
+
+
+      .category
+      { 
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        padding: 0.2vw;
+
+        .text
+        {
+          display: flex;
+          justify-content: end;
+        }
+
+        .icons
+        {
+          display: grid;
+          grid-template-columns: 50% 50%;
+        }
+      }
+
+      .divider
+      {
+
+      }
     }
   }
 
   .meta-visible
   {
     visibility: visible !important;
+  }
+
+  .title
+  {
+    font-weight: bold;
+    margin-right: $padding;
   }
 }
 
@@ -350,7 +389,7 @@ $metaMoveHeight: $profileHeight;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding: 0.2vw;
+    padding: $padding;
 
     .stat
     {
@@ -406,7 +445,7 @@ $metaMoveHeight: $profileHeight;
 
         .total
         {
-          margin-left: 0.2vw;
+          margin-left: $padding;
         }
         
         .maxed
@@ -416,7 +455,7 @@ $metaMoveHeight: $profileHeight;
         
         .nature
         {
-          margin-left: 0.2vw;
+          margin-left: $padding;
           display: flex;
           align-items: center;
           justify-content: center;
