@@ -32,17 +32,19 @@ namespace api.Services.PokemonService
             Pokemon_species_names? pokemonName = await _context.Pokemon_species_names.FindAsync(name);
             if (pokemonName != null)
             {
-                List<PokeType> pokeTypes = new List<PokeType>();
-                Pokemon_types? pokemonType1 = await _context.Pokemon_types.FindAsync(pokemonName.pokemon_species_id ,1);
+;               PokeType type1 = null;
+                Pokemon_types? pokemonType1 = await _context.Pokemon_types.FindAsync(pokemonName.pokemon_species_id, 1);
                 if(pokemonType1 != null)
                 {
-                    pokeTypes.Add(GetTypeById(pokemonType1.type_id).Result);
+                    type1 = GetTypeById(pokemonType1.type_id).Result;
                 }
+                PokeType type2 = null;
                 Pokemon_types? pokemonType2 = await _context.Pokemon_types.FindAsync(pokemonName.pokemon_species_id, 2);
                 if (pokemonType2 != null)
                 {
-                    pokeTypes.Add(GetTypeById(pokemonType2.type_id).Result);
+                    type2 = GetTypeById(pokemonType2.type_id).Result;                    
                 }
+                PokeTypes pokeTypes = new PokeTypes(type1, type2);
 
                 List<Stat> pokeStats = new List<Stat>();
                 for(int i=1; i<7;i++)
@@ -319,40 +321,65 @@ namespace api.Services.PokemonService
             return pokeType;
         }
 
-        public async Task<List<Tuple<string, int>>?> GetTypeEffectivenessAttack(int id)
+        public async Task<Effectiveness?> GetTypeEffectivenessAttack(int id)
         {
-            List<Tuple<string, int>> effectivenessAttack = new List<Tuple<string, int>>();
+            Effectiveness effectiveness = null;
+            List<Tuple<string, double>> allValues = new List<Tuple<string, double>>();
             List<Type_efficacy> typeEfficacyList = _context.Type_efficacy.Where(t => t.damage_type_id == id && t.damage_factor != 100).ToList();
             if (typeEfficacyList != null)
             {
                 foreach(var typeEfficacy in typeEfficacyList)
                 {
-                    Type_names? targetTypeName = await _context.Type_names.FindAsync(typeEfficacy.target_type_id, 9);
-                    if (targetTypeName != null)
+                    Types? targetType = await _context.Types.FindAsync(typeEfficacy.target_type_id);
+                    Type_names? targetTypeName = await _context.Type_names.FindAsync(targetType.id, 9);
+                    if (targetType != null && targetTypeName != null)
                     {
-                        effectivenessAttack.Add(Tuple.Create(targetTypeName.name, typeEfficacy.damage_factor));
+                        allValues.Add(new (targetType.identifier, (double)typeEfficacy.damage_factor / (double)100));
                     }
-                }    
+                }
+                effectiveness = new Effectiveness(allValues);
             }
-            return effectivenessAttack.OrderByDescending(t => t.Item2).ToList();
+            return effectiveness;
         }
 
-        public async Task<List<Tuple<string, int>>?> GetTypeEffectivenessDefense(int id)
+        public async Task<Effectiveness?> GetTypeEffectivenessDefense(int id)
         {
-            List<Tuple<string, int>> effectivenessDefense = new List<Tuple<string, int>>();
+            Effectiveness effectiveness = null;
+            List<Tuple<string, double>> allValues = new List<Tuple<string, double>>(); ;
             List<Type_efficacy> typeEfficacyList = _context.Type_efficacy.Where(t => t.target_type_id == id && t.damage_factor != 100).ToList();
             if (typeEfficacyList != null)
             {
                 foreach (var typeEfficacy in typeEfficacyList)
                 {
-                    Type_names? targetTypeName = await _context.Type_names.FindAsync(typeEfficacy.damage_type_id, 9);
-                    if (targetTypeName != null)
+                    /*
+                    Types? targetType = await _context.Types.FindAsync(typeEfficacy.damage_type_id);
+                    Type_names? targetTypeName = await _context.Type_names.FindAsync(damage_type_id.id, 9);
+                    if (targetType != null && targetTypeName != null)
                     {
-                        effectivenessDefense.Add(Tuple.Create(targetTypeName.name, typeEfficacy.damage_factor));
+                        switch (typeEfficacy.damage_factor)
+                        {
+                            case 200:
+                                effectiveness.SuperEffective.Add(new PokeType(targetType.identifier, targetTypeName.name));
+                                break;
+                            case 50:
+                                effectiveness.NotVeryEffective.Add(new PokeType(targetType.identifier, targetTypeName.name));
+                                break;
+                            case 0:
+                                effectiveness.Inmune.Add(new PokeType(targetType.identifier, targetTypeName.name));
+                                break;
+                        }
+                    }
+                    */
+                    Types? targetType = await _context.Types.FindAsync(typeEfficacy.damage_type_id);
+                    Type_names? targetTypeName = await _context.Type_names.FindAsync(typeEfficacy.damage_type_id, 9);
+                    if (targetType != null && targetTypeName != null)
+                    {
+                        allValues.Add(new (targetType.identifier, (double)typeEfficacy.damage_factor / (double)100));
                     }
                 }
+                effectiveness = new Effectiveness(allValues);
             }
-            return effectivenessDefense.OrderByDescending(t => t.Item2).ToList();
+            return effectiveness;
         }
     }
 }
