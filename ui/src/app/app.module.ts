@@ -20,7 +20,6 @@ import { AboutComponent } from './components/about/about.component';
 import { MainComponent } from './components/main/main.component';
 import { LeftOptionComponent } from './components/options/left-option/left-option.component';
 import { RightOptionComponent } from './components/options/right-option/right-option.component';
-import { MetaTypeComponent } from './components/meta-type/meta-type.component';
 
 
 @NgModule({
@@ -38,8 +37,7 @@ import { MetaTypeComponent } from './components/meta-type/meta-type.component';
     AboutComponent,
     MainComponent,
     LeftOptionComponent,
-    RightOptionComponent,
-    MetaTypeComponent
+    RightOptionComponent
   ],
   exports: [NavbarComponent],
   imports: [

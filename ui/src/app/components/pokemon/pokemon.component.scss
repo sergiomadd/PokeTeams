@@ -189,6 +189,7 @@ $metaWidth: calc($cardWidth/1.5);
     border-radius: 5px;
     background-color: var(--bg-color-2);
     z-index: 3;
+    cursor: auto;
 
     .head
     {
@@ -252,6 +253,7 @@ $metaWidth: calc($cardWidth/1.5);
           border: 1px solid black;
           border-radius: 5%;
           background-color: var(--bg-color-3);
+          cursor: pointer;
         }
       }
     }
@@ -287,6 +289,7 @@ $metaWidth: calc($cardWidth/1.5);
 
       .meta-move-type
       {
+        cursor: pointer;
         &:hover .meta-top-move
         {
           visibility: visible;
@@ -301,6 +304,16 @@ $metaWidth: calc($cardWidth/1.5);
     visibility: hidden;
   }
 
+  .single-type
+  {
+    transform: translate(calc(-50% - $iconSize/2), calc(-100% - $iconSize - $padding*2));
+  }
+
+  .dual-type
+  {
+    transform: translate(calc(-50% - $iconSize), calc(-100% - $iconSize - $padding*2));
+  }
+
   .meta-top
   {
     width: fit-content;
@@ -308,7 +321,6 @@ $metaWidth: calc($cardWidth/1.5);
     position: relative;
     left: 50%;
     top: 100%;
-    transform: translate(calc(-50% - $iconSize), calc(-100% - $iconSize - $padding*2));
     padding: $padding;
     display: flex;
     justify-content: center;

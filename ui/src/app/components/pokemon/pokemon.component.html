@@ -38,7 +38,7 @@
         (click)="clickMeta(1, 'left')"
         [ngClass]="{'meta-selected':  metaLeft[1]}"
         >
-          <div class="meta-wrapper">
+          <div class="meta-wrapper" (click)="clickMeta(1, 'left')">
             <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[1]}">
               <div class="head">
                 {{pokemon.item?.name}}
@@ -60,7 +60,7 @@
         (click)="clickMeta(2, 'left')"
         [ngClass]="{'meta-selected':  metaLeft[2]}"
         >
-          <div class="meta-wrapper">
+          <div class="meta-wrapper" (click)="clickMeta(2, 'left')">
             <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[2]}">
               <div class="head">
                 {{pokemon.ability?.name}}
@@ -107,9 +107,53 @@
             (click)="clickMeta(0, 'middle')"
             [ngClass]="{'meta-selected':  metaMiddle[0]}"
             >
-              <div class="meta-wrapper">
-                <div class="meta meta-top" [ngClass]="{'meta-visible':  metaMiddle[0]}">
-                  asdfasd
+              <div class="meta-wrapper" (click)="clickMeta(0, 'middle')">
+                <div 
+                class="meta meta-top single-type" 
+                [ngClass]="{'meta-visible':  metaMiddle[0]}"
+                >
+                  <div class="meta-types">
+                    <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.superEffective?.length ?? false">
+                      <div class="category">
+                        <div class="text">
+                          <span class="title">x2</span>
+                        </div>
+                        <div class="icons">
+                          <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.superEffective">
+                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                          </ng-container>
+                        </div>
+                      </div>
+                      <hr class="divider">
+                    </ng-container>
+                    <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.notVeryEffective?.length ?? false">
+                      <div class="category">
+                        <div class="text">
+                          <span class="title">x0.5</span>
+                        </div>
+                        <div class="icons">
+                          <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.notVeryEffective">
+                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                          </ng-container>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false">
+                        <hr class="divider">
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false">
+                      <div class="category">
+                        <div class="text">
+                          <span class="title">x0</span> 
+                        </div>
+                        <div class="icons">
+                          <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.inmune">
+                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                          </ng-container>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
                 </div>
               </div>
               <img src="{{pokemon.teraType.iconPath}}" alt="" class="icon">
@@ -121,8 +165,14 @@
           (click)="clickMeta(1, 'middle')"
           [ngClass]="{'meta-selected':  metaMiddle[1]}"
           >
-            <div class="meta-wrapper">
-              <div class="meta meta-top" [ngClass]="{'meta-visible':  metaMiddle[1]}">
+            <div class="meta-wrapper" (click)="clickMeta(1, 'middle')">
+              <div class="meta meta-top" [ngClass]="
+              {
+                'meta-visible':  metaMiddle[1], 
+                'single-type': !pokemon.types?.dualEffectiveness,
+                'dual-type': pokemon.types?.dualEffectiveness,
+              }"
+              >
                 <div class="meta-types">
                   <ng-container *ngIf="pokemon.types?.dualEffectiveness ?? false; else monotypeMeta">
                     <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleSuperEffective?.length ?? false">
@@ -132,12 +182,13 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleSuperEffective">
-                            <img src="{{type.iconPath}}" alt="" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
                       <hr class="divider">
                     </ng-container>
+                    
                     <ng-container *ngIf="pokemon.types?.dualEffectiveness?.superEffective?.length ?? false">
                       <div class="category">
                         <div class="text">
@@ -145,7 +196,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.superEffective">
-                            <img src="{{type.iconPath}}" alt="" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -158,7 +209,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.notVeryEffective">
-                            <img src="{{type.iconPath}}" alt="" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -171,7 +222,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleNotVeryEffective">
-                            <img src="{{type.iconPath}}" alt="" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -186,7 +237,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.inmune">
-                            <img src="{{type.iconPath}}" alt="" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -200,7 +251,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.superEffective">
-                            <img src="{{type.iconPath}}" alt="" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -213,7 +264,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.notVeryEffective">
-                            <img src="{{type.iconPath}}" alt="" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -228,7 +279,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.inmune">
-                            <img src="{{type.iconPath}}" alt="" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -238,11 +289,11 @@
               </div>
             </div>
             <ng-container *ngIf="pokemon.types?.dualEffectiveness ?? false; else monotype">
-              <img src="{{pokemon.types?.type1?.iconPath}}" alt="" class="icon">
-              <img src="{{pokemon.types?.type2?.iconPath}}" alt="" class="icon">
+              <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name}}" alt="{{pokemon.types?.type1?.name}}" class="icon">
+              <img src="{{pokemon.types?.type2?.iconPath}}" title="{{pokemon.types?.type2?.name}}" alt="{{pokemon.types?.type2?.name}}" class="icon">
             </ng-container>
             <ng-template #monotype>
-              <img src="{{pokemon.types?.type1?.iconPath}}" alt="" class="icon">
+              <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name}}" alt="{{pokemon.types?.type1?.name}}" class="icon">
             </ng-template>
           </div>
         </div>
@@ -295,7 +346,7 @@
         [ngClass]="{'meta-selected':  metaRight[i]}">
           <div class="move-icons">
             <div class="type-icon">
-              <img src="{{move.pokeType?.iconPath}}" alt="" class="icon">
+              <img src="{{move.pokeType?.iconPath}}" title="{{move.pokeType?.name}}" alt="{{move.pokeType?.name}}" class="icon">
             </div>
             <div class="type-icon">
               <img src="{{move.damageClass?.iconPath}}" alt="" class="icon">
@@ -310,7 +361,7 @@
             <div class="meta meta-right" [ngClass]="{'meta-visible':  metaRight[i]}">
               <div class="head move-head">
                 <div class="meta-move-type">
-                  <img src="{{move.pokeType?.iconPath}}" alt="" class="icon">
+                  <img src="{{move.pokeType?.iconPath}}" title="{{move.pokeType?.name}}" alt="{{move.pokeType?.name}}" class="icon">
                   <div class="meta-wrapper">
                     <div class="meta meta-top meta-top-move">
                       <div class="meta-types">
@@ -321,7 +372,7 @@
                             </div>
                             <div class="icons">
                               <ng-container *ngFor="let type of move.pokeType?.effectivenessAttack?.superEffective">
-                                <img src="{{type.iconPath}}" alt="" class="icon">
+                                <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
                               </ng-container>
                             </div>
                           </div>
@@ -334,7 +385,7 @@
                             </div>
                             <div class="icons">
                               <ng-container *ngFor="let type of move.pokeType?.effectivenessAttack?.notVeryEffective">
-                                <img src="{{type.iconPath}}" alt="" class="icon">
+                                <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
                               </ng-container>
                             </div>
                           </div>
