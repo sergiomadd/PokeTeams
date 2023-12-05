@@ -8,6 +8,7 @@ using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 using static api.Models.Move;
+using static Azure.Core.HttpHeader;
 using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -22,53 +23,106 @@ namespace api.Services.PokemonService
             _context = dataContext;
         }
 
+        public async Task<Pokemon?> GetPokemonById(int id)
+        {
+            Pokemon pokemonData = new Pokemon(
+                GetPokemonName(id),
+                id,
+                GetPokemonTypes(id).Result,
+                GetPokemonStats(id).Result,
+                GetSprites(id),
+                preEvolution: GetPokemonPreEvolution(id),
+                evolution: GetPokemonEvolution(id));
+            return pokemonData;
+        }
+
         public async Task<Pokemon?> GetPokemonByName(string name)
         {
             /*
              * Problem: multiple pokemons with same name but different local_language_id
              * Change local_language_id to received parameter, as in used selected lang option
             */
-            Pokemon? pokemonData = null;
-            Pokemon_species_names? pokemonName = await _context.Pokemon_species_names.FindAsync(name);
+            Pokemon_species_names? pokemonName = _context.Pokemon_species_names.Where(p => p.name == name && p.local_language_id == 9).SingleOrDefault();
             if (pokemonName != null)
             {
-;               PokeType type1 = null;
-                Pokemon_types? pokemonType1 = await _context.Pokemon_types.FindAsync(pokemonName.pokemon_species_id, 1);
-                if(pokemonType1 != null)
-                {
-                    type1 = GetTypeById(pokemonType1.type_id).Result;
-                }
-                PokeType type2 = null;
-                Pokemon_types? pokemonType2 = await _context.Pokemon_types.FindAsync(pokemonName.pokemon_species_id, 2);
-                if (pokemonType2 != null)
-                {
-                    type2 = GetTypeById(pokemonType2.type_id).Result;                    
-                }
-                PokeTypes pokeTypes = new PokeTypes(type1, type2);
-
-                List<Stat> pokeStats = new List<Stat>();
-                for(int i=1; i<7;i++)
-                {
-                    Pokemon_stats? pokemonStats = await _context.Pokemon_stats.FindAsync(pokemonName.pokemon_species_id, i);
-                    Stat_names? statNames = await _context.Stat_names.FindAsync(i, 9); //change 9 to local_language_id
-                    Stats? stats = await _context.Stats.FindAsync(i);
-                    if (pokemonStats != null && statNames != null && stats != null) 
-                    {
-                        pokeStats.Add(new Stat
-                        {
-                            Identifier = stats.identifier,
-                            Name = statNames.name,
-                            Value = pokemonStats.base_stat
-                        });
-                    }
-                }
-                pokemonData = new Pokemon(pokemonName.name, pokemonName.pokemon_species_id, pokeTypes, pokeStats, getSprites(pokemonName.pokemon_species_id));
+                return GetPokemonById(pokemonName.pokemon_species_id).Result;
             }
-            return pokemonData;
+            return null;
+        }
+
+        private string? GetPokemonName(int id)
+        {
+            Pokemon_species_names? pokemonSpeciesNames = _context.Pokemon_species_names.FirstOrDefault(p => p.pokemon_species_id == id && p.local_language_id == 9);
+            if(pokemonSpeciesNames != null)
+            {
+                return pokemonSpeciesNames?.name;
+            }
+            return null;
+        }
+
+        private async Task<PokeTypes> GetPokemonTypes(int id)
+        {
+            PokeType type1 = null;
+            Pokemon_types? pokemonType1 = await _context.Pokemon_types.FindAsync(id, 1);
+            if (pokemonType1 != null)
+            {
+                type1 = GetTypeById(pokemonType1.type_id).Result;
+            }
+            PokeType type2 = null;
+            Pokemon_types? pokemonType2 = await _context.Pokemon_types.FindAsync(id, 2);
+            if (pokemonType2 != null)
+            {
+                type2 = GetTypeById(pokemonType2.type_id).Result;
+            }
+            PokeTypes pokeTypes = new PokeTypes(type1, type2);
+            return pokeTypes;
+        }
+
+        private async Task<List<Stat>> GetPokemonStats(int id)
+        {
+            List<Stat> pokeStats = new List<Stat>();
+            for (int i = 1; i < 7; i++)
+            {
+                Pokemon_stats? pokemonStats = await _context.Pokemon_stats.FindAsync(id, i);
+                Stat_names? statNames = await _context.Stat_names.FindAsync(i, 9); //change 9 to local_language_id
+                Stats? stats = await _context.Stats.FindAsync(i);
+                if (pokemonStats != null && statNames != null && stats != null)
+                {
+                    pokeStats.Add(new Stat
+                    {
+                        Identifier = stats.identifier,
+                        Name = statNames.name,
+                        Value = pokemonStats.base_stat
+                    });
+                }
+            }
+            return pokeStats;
+        }
+
+        private Pokemon? GetPokemonPreEvolution(int id)
+        {
+            Pokemon_species? pokemonSpeciesPreEvolution = _context.Pokemon_species.FirstOrDefault(p => p.id == id);
+            if (pokemonSpeciesPreEvolution != null && pokemonSpeciesPreEvolution.evolves_from_species_id != null)
+            {
+                int newID = pokemonSpeciesPreEvolution.evolves_from_species_id ?? 0;
+                return new Pokemon(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, GetSprites(newID), preEvolution: GetPokemonPreEvolution(newID));
+            }
+            return null;
+        }
+
+        private Pokemon? GetPokemonEvolution(int id)
+        {
+            Pokemon_species? pokemonSpeciesEvolution = _context.Pokemon_species.FirstOrDefault(p => p.evolves_from_species_id == id);
+            if (pokemonSpeciesEvolution != null)
+            {
+                int newID = pokemonSpeciesEvolution.id;
+                return new Pokemon(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, GetSprites(newID), evolution: GetPokemonEvolution(newID));
+            }
+            return null;
         }
 
         //TODO: move out of service
-        public List<Sprite> getSprites(int dexNumber)
+        private List<Sprite> GetSprites(int dexNumber)
         {
             const string urlStart = "https://localhost:7134/images/sprites/pokemon/";
             string urlEnd = dexNumber + ".png";
@@ -351,25 +405,6 @@ namespace api.Services.PokemonService
             {
                 foreach (var typeEfficacy in typeEfficacyList)
                 {
-                    /*
-                    Types? targetType = await _context.Types.FindAsync(typeEfficacy.damage_type_id);
-                    Type_names? targetTypeName = await _context.Type_names.FindAsync(damage_type_id.id, 9);
-                    if (targetType != null && targetTypeName != null)
-                    {
-                        switch (typeEfficacy.damage_factor)
-                        {
-                            case 200:
-                                effectiveness.SuperEffective.Add(new PokeType(targetType.identifier, targetTypeName.name));
-                                break;
-                            case 50:
-                                effectiveness.NotVeryEffective.Add(new PokeType(targetType.identifier, targetTypeName.name));
-                                break;
-                            case 0:
-                                effectiveness.Inmune.Add(new PokeType(targetType.identifier, targetTypeName.name));
-                                break;
-                        }
-                    }
-                    */
                     Types? targetType = await _context.Types.FindAsync(typeEfficacy.damage_type_id);
                     Type_names? targetTypeName = await _context.Type_names.FindAsync(typeEfficacy.damage_type_id, 9);
                     if (targetType != null && targetTypeName != null)
