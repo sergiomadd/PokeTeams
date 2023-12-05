@@ -16,6 +16,8 @@ export class PokemonComponent
   @Input() pokemon!: Pokemon;
   @Input() editorOptions!: EditorOptions;
 
+  test: string = "test"
+
   pokemonSpritePath?: string = '';
   spriteCategory: number = 0;
   maleIconPath: string = '';
@@ -30,8 +32,8 @@ export class PokemonComponent
 
   calculatedStats: Stat[] = [];
 
-  metaLeft: boolean[] = [false, false, false];
-  metaMiddle: boolean[] = [false, false, false, false, false, false];
+  metaLeft: boolean[] = [false, false];
+  metaMiddle: boolean[] = [false, false, false, false, false, false, false];
   metaRight: boolean[] = [false, false, false, false];
   metaDown: boolean[] = [false, false, false]
 

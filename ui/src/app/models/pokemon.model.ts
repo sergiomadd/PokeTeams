@@ -13,6 +13,8 @@ export interface Pokemon
 	name?: string,
 	nickname?: string,
 	dexNumber?: number,
+	preEvolution?: Pokemon,
+	evolution?: Pokemon,
 	types?: Types,
 	teraType?: Type,
 	item?: Item,

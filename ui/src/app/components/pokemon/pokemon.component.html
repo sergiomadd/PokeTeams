@@ -4,25 +4,37 @@
       <div class="extra">
         <div 
         class="species section"
-        (click)="clickMeta(0, 'left')"
-        [ngClass]="{'meta-selected':  metaLeft[0]}"
+        (click)="clickMeta(0, 'middle')"
+        [ngClass]="{'meta-selected':  metaMiddle[0]}"
         >
-        <div class="meta-wrapper">
-          <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[0]}">
-            <div class="meta-name">
-              {{pokemon.ability?.name}}
-            </div>
-            <div class="meta-prose">
-              {{pokemon.ability?.prose}}
+          <div class="meta-wrapper">
+            <div class="meta meta-top evol" (click)="clickMeta(0, 'middle')" [ngClass]="{'meta-visible':  metaMiddle[0]}">
+              <div class="family">
+                <ng-container *ngIf="pokemon.preEvolution">
+                  <ng-container *ngIf="pokemon.preEvolution.preEvolution">
+                    <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon.preEvolution.preEvolution" [editorOptions]="editorOptions"></app-evolution>
+                    <img src="assets/right-arrow.png" alt="" class="icon">
+                  </ng-container>
+                  <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon.preEvolution" [editorOptions]="editorOptions"></app-evolution>
+                  <img src="assets/right-arrow.png" alt="" class="icon">
+                </ng-container>
+                <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon" [editorOptions]="editorOptions"></app-evolution>
+                <ng-container *ngIf="pokemon.evolution">
+                  <img src="assets/right-arrow.png" alt="" class="icon">
+                  <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon.evolution" [editorOptions]="editorOptions"></app-evolution>
+                  <ng-container *ngIf="pokemon.evolution.evolution">
+                    <img src="assets/right-arrow.png" alt="" class="icon">
+                    <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon.evolution.evolution" [editorOptions]="editorOptions"></app-evolution>
+                  </ng-container>
+                </ng-container>
+              </div>
             </div>
           </div>
-        </div>
           <div *ngIf="editorOptions.showDexNumber; else void">
             <div class="dex-number">
               #{{pokemon.dexNumber}} 
             </div>
           </div>
-
           <div class="name">
             {{pokemon.name}}
             <div *ngIf="editorOptions.showNickname; else void">
@@ -31,15 +43,14 @@
               </div>
             </div>
           </div>
-
         </div>
         <div 
         class="item section"
-        (click)="clickMeta(1, 'left')"
-        [ngClass]="{'meta-selected':  metaLeft[1]}"
+        (click)="clickMeta(0, 'left')"
+        [ngClass]="{'meta-selected':  metaLeft[0]}"
         >
-          <div class="meta-wrapper" (click)="clickMeta(1, 'left')">
-            <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[1]}">
+          <div class="meta-wrapper" (click)="clickMeta(0, 'left')">
+            <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[0]}">
               <div class="head">
                 {{pokemon.item?.name}}
               </div>
@@ -57,11 +68,11 @@
         </div>
         <div 
         class="section"
-        (click)="clickMeta(2, 'left')"
-        [ngClass]="{'meta-selected':  metaLeft[2]}"
+        (click)="clickMeta(1, 'left')"
+        [ngClass]="{'meta-selected':  metaLeft[1]}"
         >
-          <div class="meta-wrapper" (click)="clickMeta(2, 'left')">
-            <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[2]}">
+          <div class="meta-wrapper" (click)="clickMeta(1, 'left')">
+            <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[1]}">
               <div class="head">
                 {{pokemon.ability?.name}}
               </div>
@@ -100,17 +111,17 @@
         </div>
       </div>
       <div class="picture">
-        <div class="types section">
+        <div class="types">
           <ng-container *ngIf="pokemon.teraType; else empty">
             <div 
-            class="type"
-            (click)="clickMeta(0, 'middle')"
-            [ngClass]="{'meta-selected':  metaMiddle[0]}"
+            class="type section"
+            (click)="clickMeta(1, 'middle')"
+            [ngClass]="{'meta-selected':  metaMiddle[1]}"
             >
-              <div class="meta-wrapper" (click)="clickMeta(0, 'middle')">
+              <div class="meta-wrapper" (click)="clickMeta(1, 'middle')">
                 <div 
                 class="meta meta-top single-type" 
-                [ngClass]="{'meta-visible':  metaMiddle[0]}"
+                [ngClass]="{'meta-visible':  metaMiddle[1]}"
                 >
                   <div class="meta-types">
                     <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.superEffective?.length ?? false">
@@ -161,14 +172,14 @@
             <div class="vertical-divider"></div>
           </ng-container>
           <div
-          class="type"
-          (click)="clickMeta(1, 'middle')"
-          [ngClass]="{'meta-selected':  metaMiddle[1]}"
+          class="type section"
+          (click)="clickMeta(2, 'middle')"
+          [ngClass]="{'meta-selected':  metaMiddle[2]}"
           >
-            <div class="meta-wrapper" (click)="clickMeta(1, 'middle')">
+            <div class="meta-wrapper" (click)="clickMeta(2, 'middle')">
               <div class="meta meta-top" [ngClass]="
               {
-                'meta-visible':  metaMiddle[1], 
+                'meta-visible':  metaMiddle[2], 
                 'single-type': !pokemon.types?.dualEffectiveness,
                 'dual-type': pokemon.types?.dualEffectiveness,
               }"
@@ -299,16 +310,16 @@
         </div>
         <div 
         class="section sprite-background"
-        (click)="clickMeta(2, 'middle')"
-        [ngClass]="{'meta-selected':  metaMiddle[2]}"
+        (click)="clickMeta(3, 'middle')"
+        [ngClass]="{'meta-selected':  metaMiddle[3]}"
         >
           <img src={{pokemonSpritePath}} alt="" class="sprite">
         </div>
         <div class="picture-extra">
           <div 
           class="shiny section"
-          (click)="clickMeta(3, 'middle')"
-          [ngClass]="{'meta-selected':  metaMiddle[3]}"
+          (click)="clickMeta(4, 'middle')"
+          [ngClass]="{'meta-selected':  metaMiddle[4]}"
           >
             <div *ngIf="pokemon.shiny && editorOptions.shinyPath.identifier!='none'; else empty">
               <img src={{editorOptions.shinyPath.path}} alt="" class="icon">
@@ -316,8 +327,8 @@
           </div>
           <div 
           class="level section"
-          (click)="clickMeta(4, 'middle')"
-          [ngClass]="{'meta-selected':  metaMiddle[4]}"
+          (click)="clickMeta(5, 'middle')"
+          [ngClass]="{'meta-selected':  metaMiddle[5]}"
           >
             <div *ngIf="pokemon.level && editorOptions.showLevel; else empty">
               {{pokemon.level}}
@@ -325,8 +336,8 @@
           </div>
           <div 
           class="gender section"
-          (click)="clickMeta(5, 'middle')"
-          [ngClass]="{'meta-selected':  metaMiddle[5]}"
+          (click)="clickMeta(6, 'middle')"
+          [ngClass]="{'meta-selected':  metaMiddle[6]}"
           >
             <div *ngIf="pokemon.gender==='F'; else gender">
               <img src={{femaleIconPath}} alt="" class="icon">

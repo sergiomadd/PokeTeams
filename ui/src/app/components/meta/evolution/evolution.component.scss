@@ -1,0 +1,14 @@
+
+
+.stage
+{
+  display: flex;
+  flex-direction: column;  
+  align-items: center;
+
+  .sprite-small
+  {
+    width: 64px;
+    height: 64px;
+  }
+}

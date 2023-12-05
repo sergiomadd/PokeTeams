@@ -1,13 +1,12 @@
 
 $cardWidth: 25vw;
+$cardheight: 20vh;
+$metaWidth: calc($cardWidth/1.5);
+$moveHeight: calc($cardheight/4);
+$statsHeight: 5vh;
 $iconSize: 1vw;
 $paddingBig: 0.5vw;
 $padding: 0.2vw;
-$statsHeight: 5vh;
-$cardheight: 20vh;
-$moveHeight: calc($cardheight/4);
-$metaWidth: calc($cardWidth/1.5);
-
 
 .pokemon
 {
@@ -95,7 +94,7 @@ $metaWidth: calc($cardWidth/1.5);
           .sprite
           {
             width: 100%;
-            height: 100%S;
+            height: 100%;
           }
         }
 
@@ -306,21 +305,32 @@ $metaWidth: calc($cardWidth/1.5);
 
   .single-type
   {
+    position: relative;
+    left: 50%;
+    top: 100%;
     transform: translate(calc(-50% - $iconSize/2), calc(-100% - $iconSize - $padding*2));
   }
 
   .dual-type
   {
+    position: relative;
+    left: 50%;
+    top: 100%;
     transform: translate(calc(-50% - $iconSize), calc(-100% - $iconSize - $padding*2));
+  }
+
+  .evol
+  {
+    position: relative;
+    left: 50%;
+    top: 100%;
+    transform: translate(calc(-50% + $cardWidth/6), calc(-100% - $iconSize - $padding*2));
   }
 
   .meta-top
   {
     width: fit-content;
     height: fit-content;
-    position: relative;
-    left: 50%;
-    top: 100%;
     padding: $padding;
     display: flex;
     justify-content: center;
@@ -358,6 +368,18 @@ $metaWidth: calc($cardWidth/1.5);
 
       }
     }
+
+    .family
+    {
+      display: flex;
+      align-items: center;
+
+      .sprite-small
+      {
+        width: $iconSize*2;
+        height: $iconSize*2;
+      }
+    }
   }
 
   .meta-visible
@@ -375,23 +397,26 @@ $metaWidth: calc($cardWidth/1.5);
 .section
 {
   height: 100%;
-  //width: 100%;
   cursor: pointer;
   display: flex;
   align-items: center;
-  //padding: 0 0.5vw 0 0.5vw;
 
 
   &:hover .meta
   {
-    //visibility: visible;
+    visibility: visible;
+  }
+
+  &:hover
+  {
+    outline: dashed black 1px;
+    border-radius: 5px;
   }
 
 }
 
 .stats-wrapper
 {
-  //height: $cardheight/2;
   background-color: var(--bg-color-2);
   width: 100%;
   border-radius: 0 0 5px 5px;
