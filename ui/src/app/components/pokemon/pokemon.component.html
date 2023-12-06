@@ -94,21 +94,21 @@
         >
           <div 
           class="option"
-          (click)="clickMeta(0, 'down')"
+          (click)="clickMeta(0, 'options')"
           [ngClass]="{active: metaDown[0]}"
           >
             <img src="assets/align-left.png" alt="" class="icon">
           </div>
           <div 
           class="option" 
-          (click)="clickMeta(1, 'down')"
+          (click)="clickMeta(1, 'options')"
           [ngClass]="{active: metaDown[1]}"
           >
             <img src="assets/edit.png" alt="" class="icon">
           </div>
           <div 
           class="option" 
-          (click)="clickMeta(2, 'down')"
+          (click)="clickMeta(2, 'options')"
           [ngClass]="{active: metaDown[2]}"
           >
             <img src="assets/copy.png" alt="" class="icon">
@@ -487,83 +487,128 @@
       </div>
     </div>
   </div>
-  <div *ngIf="metaDown[0]; else void">
+  <div *ngIf="options[0]; else void">
     <div class="stats-wrapper">
       <div class="stats">
         <ng-container *ngIf="pokemon.stats">
-          <div class="stat" *ngFor="let stat of pokemon.stats; index as i">
-            <div class="name">
-              {{getStatName(stat)}}
-              </div>
-            <div class="values">
-              <div 
-              class="base bar"
-              [ngStyle]="
-              {
-                width: getStatSize(calculateBaseStat(stat)),
-                backgroundColor: getStatColor(stat),
-                borderRadius: (editorOptions.showIVs && pokemon.ivs ? (pokemon.ivs[i].value / 4) === 0 ? false : true : false)  ||
-                 (editorOptions.showEVs && pokemon.evs ? (pokemon.evs[i].value / 4) === 0 ? false : true : false) ? ('15px 0 0 15px') : '15px'
-              }"
-              >
-                <div class="value">
-                  {{calculateBaseStat(stat)}}
+          <ng-container *ngFor="let stat of pokemon.stats; index as i">
+            <div class="stat section" (click)="clickMeta(i, 'stat')" [ngClass]="{'meta-selected':  metaStats[i]}">
+              <div class="meta-wrapper" (click)="clickMeta(i, 'stat')">
+                <div class="meta meta-stat" [ngClass]="{'meta-visible':  metaStats[i]}">
+                  <div class="meta-name" [ngStyle]="{backgroundColor: getStatColor(stat)}">{{stat.name}}</div>
+                  <div class="content">
+                    <div class="col">
+                      <div class="item"></div>
+                      <div class="item">Initial</div>
+                      <div class="item"><span>LvL({{pokemon.level ?? 100}})</span></div>
+                    </div>
+                    <div class="col"  [ngStyle]="{backgroundColor: getStatColor(stat)}">
+                      <div class="item">Base</div>
+                      <div class="item">{{stat.value}}</div>
+                      <div class="item">{{calculateBaseStat(stat)}}</div>
+                    </div>
+                    <div class="col ivs">
+                      <div class="item">IVs</div>
+                      <div class="item">{{pokemon.ivs ? pokemon.ivs[i].value : 0}}</div>
+                      <div class="item">{{pokemon.ivs ? pokemon.ivs[i].value : 0}}</div>
+                    </div>
+                    <div class="col evs" [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}">
+                      <div class="item">EVs</div>
+                      <div class="item">{{pokemon.evs ? pokemon.evs[i].value : 0}}</div>
+                      <div class="item">{{pokemon.evs ? calculateEVValue(pokemon.evs[i]) : ''}}</div>
+                    </div>
+                    <div class="col">
+                      <div class="item">Nature</div>
+                      <div class="item">{{pokemon.nature ? pokemon.nature.name : '---'}}</div>
+                      <div class="item">
+                        <ng-container *ngIf="!(stat.name===pokemon.nature?.increasedStat
+                        && stat.name===pokemon.nature?.decreasedStat); else metaNeutral">
+                          <ng-container *ngIf="stat.name===pokemon.nature?.increasedStat">
+                            +10%
+                          </ng-container>
+                          <ng-container *ngIf="stat.name===pokemon.nature?.decreasedStat">
+                            -10%
+                          </ng-container>
+                          <ng-container *ngIf="stat.name!==pokemon.nature?.increasedStat
+                          && stat.name!==pokemon.nature?.decreasedStat">
+                            ---
+                          </ng-container>
+                        </ng-container>
+                        <ng-template #metaNeutral>
+                          Neutral
+                        </ng-template>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="item">Total</div>
+                      <div class="item">---</div>
+                      <div class="item">{{calculatedStats[i].value}}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <ng-container *ngIf="editorOptions.showIVs">
+              <div class="name">
+                {{getStatName(stat)}}
+                </div>
+              <div class="values">
                 <div 
-                class="ivs bar"
+                class="base bar"
                 [ngStyle]="
                 {
-                  width: pokemon.ivs ? getStatSize(pokemon.ivs[i].value) : 'none',
-                  borderRadius: editorOptions.showEVs && (pokemon.evs ? (pokemon.evs[i].value / 4) == 0 ? false : true : false) ? '0' : '0 15px 15px 0'
+                  width: getStatSize(calculateBaseStat(stat)),
+                  backgroundColor: getStatColor(stat),
+                  borderRadius: (editorOptions.showIVs && pokemon.ivs ? (pokemon.ivs[i].value / 4) === 0 ? false : true : false)  ||
+                   (editorOptions.showEVs && pokemon.evs ? (pokemon.evs[i].value / 4) === 0 ? false : true : false) ? ('15px 0 0 15px') : '15px'
                 }"
                 >
-                  <div class="value">
-                    {{pokemon.ivs ? pokemon.ivs[i].value : ''}}
-                  </div>
                 </div>
-              </ng-container>
-              <ng-container *ngIf="editorOptions.showEVs">
-                <div class="evs bar" 
-                [ngStyle]="{width: pokemon.evs ? getStatSize(pokemon.evs[i].value / 4) : 'none'}"
-                [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}"
-                >
+                <ng-container *ngIf="editorOptions.showIVs">
                   <div 
-                  class="value" 
+                  class="ivs bar"
+                  [ngStyle]="
+                  {
+                    width: pokemon.ivs ? getStatSize(pokemon.ivs[i].value) : 'none',
+                    borderRadius: editorOptions.showEVs && (pokemon.evs ? (pokemon.evs[i].value / 4) == 0 ? false : true : false) ? '0' : '0 15px 15px 0'
+                  }"
                   >
-                    {{pokemon.evs ? (pokemon.evs[i].value / 4) : ''}}
                   </div>
+                </ng-container>
+                <ng-container *ngIf="editorOptions.showEVs">
+                  <div class="evs bar" 
+                  [ngStyle]="{width: pokemon.evs ? getStatSize(pokemon.evs[i].value / 4) : 'none'}"
+                  [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}"
+                  >
+                  </div>
+                </ng-container>
+                <div class="total">
+                  {{calculatedStats[i].value}}
                 </div>
-              </ng-container>
-              <div class="total">
-                {{calculatedStats[i].value}}
+                <ng-container *ngIf="!(stat.name===pokemon.nature?.increasedStat
+                && stat.name===pokemon.nature?.decreasedStat); else neutral">
+                  <ng-container *ngIf="stat.name===pokemon.nature?.increasedStat">
+                    <div class="nature">
+                      <img src="assets/up-arrow.png" alt="" class="icon">
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="stat.name===pokemon.nature?.decreasedStat">
+                    <div class="nature">
+                      <img src="assets/down-arrow.png" alt="" class="icon">
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-template #neutral>
+                  <div class="nature">
+                    <div class="neutral"></div>
+                  </div>
+                </ng-template>
               </div>
-              <ng-container *ngIf="!(stat.name===pokemon.nature?.increasedStat
-              && stat.name===pokemon.nature?.decreasedStat); else neutral">
-                <ng-container *ngIf="stat.name===pokemon.nature?.increasedStat">
-                  <div class="nature">
-                    <img src="assets/up-arrow.png" alt="" class="icon">
-                  </div>
-                </ng-container>
-                <ng-container *ngIf="stat.name===pokemon.nature?.decreasedStat">
-                  <div class="nature">
-                    <img src="assets/down-arrow.png" alt="" class="icon">
-                  </div>
-                </ng-container>
-              </ng-container>
-              <ng-template #neutral>
-                <div class="nature">
-                  <div class="neutral"></div>
-                </div>
-              </ng-template>
             </div>
-          </div>
+          </ng-container>
         </ng-container>
       </div>
     </div>
   </div>
-  <div *ngIf="metaDown[1]; else void">
+  <div *ngIf="options[1]; else void">
     <div class="notes">
       NOTES
     </div>

@@ -36,6 +36,8 @@ export class PokemonComponent
   metaMiddle: boolean[] = [false, false, false, false, false, false, false];
   metaRight: boolean[] = [false, false, false, false];
   metaDown: boolean[] = [false, false, false]
+  options: boolean[] = [false, false, false]
+  metaStats: boolean[] = [false, false, false, false, false, false]
 
   constructor() 
   {
@@ -135,6 +137,12 @@ export class PokemonComponent
       case "down":
         list = this.metaDown;
         break;
+      case "options":
+        list = this.options;
+        break;
+      case "stat":
+        list = this.metaStats;
+        break;
     }
     if(list[index])
     {
@@ -181,6 +189,11 @@ export class PokemonComponent
   calculateBaseStat(baseStat: Stat) : number
   {
     return this.calculateStat(baseStat, undefined, undefined, undefined);
+  } 
+
+  calculateEVValue(stat: Stat) : number
+  {
+    return Math.floor(stat.value / 4);
   } 
   
   getNatureValue(baseStat?: Stat, nature?: Nature) : number

@@ -58,7 +58,7 @@ export class InputComponent
 
     monito (Eevee) @ Soul Dew  
     Ability: Technician  
-    Level: 56  
+    Level: 100  
     Shiny: Yes  
     Tera Type: Dark  
     EVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe  

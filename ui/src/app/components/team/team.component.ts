@@ -30,13 +30,13 @@ export class TeamComponent
       case 0:
         this.pokemonComponents.forEach(pokemon => 
         {
-          pokemon.metaDown[0] = !this.options[index];
+          pokemon.options[0] = !this.options[index];
         });
       break;
       case 1:
         this.pokemonComponents.forEach(pokemon => 
           {
-            pokemon.metaDown[1] = !this.options[index];
+            pokemon.options[1] = !this.options[index];
           });
         break;
       case 2:
