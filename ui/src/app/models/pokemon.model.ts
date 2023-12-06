@@ -14,7 +14,7 @@ export interface Pokemon
 	nickname?: string,
 	dexNumber?: number,
 	preEvolution?: Pokemon,
-	evolution?: Pokemon,
+	evolutions?: Pokemon[],
 	types?: Types,
 	teraType?: Type,
 	item?: Item,

@@ -19,13 +19,18 @@
                   <img src="assets/right-arrow.png" alt="" class="icon">
                 </ng-container>
                 <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon" [editorOptions]="editorOptions"></app-evolution>
-                <ng-container *ngIf="pokemon.evolution">
+                <ng-container *ngIf="pokemon.evolutions ? pokemon.evolutions.length > 0 ? true : false : false">
                   <img src="assets/right-arrow.png" alt="" class="icon">
-                  <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon.evolution" [editorOptions]="editorOptions"></app-evolution>
-                  <ng-container *ngIf="pokemon.evolution.evolution">
-                    <img src="assets/right-arrow.png" alt="" class="icon">
-                    <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon.evolution.evolution" [editorOptions]="editorOptions"></app-evolution>
+                  <ng-container *ngFor="let evolution of pokemon.evolutions">
+                    <app-evolution [sourcePokemon]="pokemon" [pokemon]="evolution" [editorOptions]="editorOptions"></app-evolution>
+                    <ng-container *ngIf="evolution.evolutions ? evolution.evolutions.length > 0 ? true : false : false">
+                      <img src="assets/right-arrow.png" alt="" class="icon">
+                      <ng-container *ngFor="let evolution of evolution.evolutions">
+                        <app-evolution [sourcePokemon]="pokemon" [pokemon]="evolution" [editorOptions]="editorOptions"></app-evolution>
+                      </ng-container>
+                    </ng-container>
                   </ng-container>
+
                 </ng-container>
               </div>
             </div>
