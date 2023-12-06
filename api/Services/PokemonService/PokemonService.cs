@@ -32,7 +32,7 @@ namespace api.Services.PokemonService
                 GetPokemonStats(id).Result,
                 GetSprites(id),
                 preEvolution: GetPokemonPreEvolution(id),
-                evolution: GetPokemonEvolution(id));
+                evolutions: GetPokemonEvolutions(id));
             return pokemonData;
         }
 
@@ -62,13 +62,13 @@ namespace api.Services.PokemonService
 
         private async Task<PokeTypes> GetPokemonTypes(int id)
         {
-            PokeType type1 = null;
+            PokeType? type1 = null;
             Pokemon_types? pokemonType1 = await _context.Pokemon_types.FindAsync(id, 1);
             if (pokemonType1 != null)
             {
                 type1 = GetTypeById(pokemonType1.type_id).Result;
             }
-            PokeType type2 = null;
+            PokeType? type2 = null;
             Pokemon_types? pokemonType2 = await _context.Pokemon_types.FindAsync(id, 2);
             if (pokemonType2 != null)
             {
@@ -110,15 +110,22 @@ namespace api.Services.PokemonService
             return null;
         }
 
-        private Pokemon? GetPokemonEvolution(int id)
+        private List<Pokemon?> GetPokemonEvolutions(int id)
         {
-            Pokemon_species? pokemonSpeciesEvolution = _context.Pokemon_species.FirstOrDefault(p => p.evolves_from_species_id == id);
-            if (pokemonSpeciesEvolution != null)
+            List<Pokemon?> evolutions = new List<Pokemon?>();
+            List<Pokemon_species?> pokemonSpeciesEvolutionList = _context.Pokemon_species.Where(p => p.evolves_from_species_id == id).ToList();
+            if(pokemonSpeciesEvolutionList.Count() > 0)
             {
-                int newID = pokemonSpeciesEvolution.id;
-                return new Pokemon(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, GetSprites(newID), evolution: GetPokemonEvolution(newID));
+                foreach(Pokemon_species pokemonSpeciesEvolution in pokemonSpeciesEvolutionList)
+                {
+                    if (pokemonSpeciesEvolution != null)
+                    {
+                        int newID = pokemonSpeciesEvolution.id;
+                        evolutions.Add(new Pokemon(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, GetSprites(newID), evolutions: GetPokemonEvolutions(newID)));
+                    }
+                }
             }
-            return null;
+            return evolutions;
         }
 
         //TODO: move out of service
@@ -170,7 +177,6 @@ namespace api.Services.PokemonService
 
             return sprites;
         }
-
 
         public async Task<Item?> GetItemByName(string name)
         {
@@ -267,7 +273,7 @@ namespace api.Services.PokemonService
                             Name = damageClass.name,
                             Description = damageClass.description,
                             IconPath = $"https://localhost:7134/images/sprites/damage-class/{damageClass.name}.png"
-                },
+                        },
                         Power = moves.power,
                         Pp = moves.pp,
                         Accuracy = moves.accuracy,
@@ -297,13 +303,6 @@ namespace api.Services.PokemonService
                             FlinchChance = meta.flinch_chance,
                             StatChange = statChange,
                         }
-
-                        /*
-                        Meta = new List<Metadata>
-                        {
-                            meta.min_hits
-                        };
-                        */
                     };
                 }
             }
@@ -312,7 +311,7 @@ namespace api.Services.PokemonService
 
         public async Task<string?> GetStatNameByIdentifier(string identifier)
         {
-            List<Stats?> stats = _context.Stats.Where(s => s.identifier == identifier).ToList();
+            List<Stats> stats = _context.Stats.Where(s => s.identifier == identifier).ToList();
             if (stats.Count > 0)
             {
                 Stat_names? stat_names = await _context.Stat_names.FindAsync(stats[0]?.id, 9); //change for local languague id
