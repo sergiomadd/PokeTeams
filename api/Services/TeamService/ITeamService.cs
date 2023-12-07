@@ -4,5 +4,6 @@
     {
         Task<string?> GetTeam(string id);
         Task<string?> Post(Team team);
+        Task<EditorData?> GetEditorData();
     }
 }

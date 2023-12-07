@@ -50,7 +50,7 @@
                     return string.Join(" ", tempList);
                 }
             }
-            return "Base";
+            return "PokeAPI";
         }
 
         public string GetGeneration(string key)

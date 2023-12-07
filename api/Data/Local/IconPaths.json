@@ -1,0 +1,112 @@
+{
+    "PokemonSpritesPaths" : [],
+    "TypeIconPaths":
+    [
+        {
+            "name": "Generation 9",
+            "identifier": "gen-ix",
+            "path": "https://localhost:7134/images/sprites/types/generation-ix/normal.png"
+        },
+        {
+            "name": "Generation 8",
+            "identifier": "gen-viii",
+            "path": "https://localhost:7134/images/sprites/types/generation-viii/normal.png"
+        },
+        {
+            "name": "Pokemon Go",
+            "identifier": "pogo",
+            "path": "https://localhost:7134/images/sprites/types/pokemongo/normal.png"
+        }
+    ],
+    "ShinyPaths":
+    [
+        {
+            "name": "None",
+            "identifier": "none",
+            "path": "https://localhost:7134/images/sprites/null.png"
+        },
+        {
+            "name": "Generation 2",
+            "identifier": "gen-ii",
+            "path": "https://localhost:7134/images/sprites/shiny/gen-ii.png"
+        },
+        {
+            "name": "Generation 3",
+            "identifier": "gen-iii",
+            "path": "https://localhost:7134/images/sprites/shiny/gen-iii.png"
+        },
+        {
+            "name": "Generation 4",
+            "identifier": "gen-iv",
+            "path": "https://localhost:7134/images/sprites/shiny/gen-iv.png"
+        },
+        {
+            "name": "Generation 5",
+            "identifier": "gen-v",
+            "path": "https://localhost:7134/images/sprites/shiny/gen-v.png"
+        },
+        {
+            "name": "Generation 6",
+            "identifier": "gen-vi",
+            "path": "https://localhost:7134/images/sprites/shiny/gen-vi.png"
+        },
+        {
+            "name": "Generation 7",
+            "identifier": "gen-vii",
+            "path": "https://localhost:7134/images/sprites/shiny/gen-vii.png"
+        },
+        {
+            "name": "Generation 7: Lets Go",
+            "identifier": "gen-vii_letsgo",
+            "path": "https://localhost:7134/images/sprites/shiny/gen-vii_letsgo.png"
+        },
+        {
+            "name": "Generation 7: Pokedex",
+            "identifier": "gen-vii_pokedex",
+            "path": "https://localhost:7134/images/sprites/shiny/gen-vii_pokedex.png"
+        },
+        {
+            "name": "Generation 8",
+            "identifier": "gen-viii",
+            "path": "https://localhost:7134/images/sprites/shiny/gen-viii.png"
+        },
+        {
+            "name": "Generation 8: Legend Arceus",
+            "identifier": "gen-viii_legend-arceus",
+            "path": "https://localhost:7134/images/sprites/shiny/gen-viii_legend-arceus.png"
+        },
+        {
+            "name": "Generation 8: Legend Arceus Pokedex",
+            "identifier": "gen-viii_legend-arceus_pokedex",
+            "path": "https://localhost:7134/images/sprites/shiny/gen-viii_legend-arceus_pokedex.png"
+        },
+        {
+            "name": "Pokemon Home",
+            "identifier": "home",
+            "path": "https://localhost:7134/images/sprites/shiny/home.png"
+        },
+        {
+            "name": "Pokemon Stadium 2",
+            "identifier": "stadium-ii",
+            "path": "https://localhost:7134/images/sprites/shiny/stadium-ii.png"
+        }
+    ],
+    "GenderPaths":
+    [
+        {
+            "name": "None",
+            "identifier": "none",
+            "path": "https://localhost:7134/images/sprites/null.png"
+        },
+        {
+            "name": "Male",
+            "identifier": "male",
+            "path": "https://localhost:7134/images/sprites/gender/male.png"
+        },
+        {
+            "name": "Female",
+            "identifier": "female",
+            "path": "https://localhost:7134/images/sprites/gender/female.png"
+        }
+    ]
+}

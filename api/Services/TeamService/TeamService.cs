@@ -10,11 +10,14 @@ namespace api.Services.TeamService
     public class TeamService : ITeamService
     {
         private readonly PoketeamContext _context;
+        private readonly LocalContext _localContext;
+
         private static Random random = new Random();
 
-        public TeamService(PoketeamContext dataContext)
+        public TeamService(PoketeamContext dataContext, LocalContext localContext)
         {
             _context = dataContext;
+            _localContext = localContext;
         }
 
         public async Task<string?> GetTeam(string id)
@@ -56,6 +59,13 @@ namespace api.Services.TeamService
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-        
+
+        public async Task<EditorData?> GetEditorData()
+        {
+            EditorData editorData = _localContext.GetEditorData();
+            
+            return editorData;
+        }
+
     }
 }
