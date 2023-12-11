@@ -1,9 +1,12 @@
-$optionSize: 1vw;
+$iconSize: 1vw;
+$spriteSize: $iconSize * 3;
+$leftOptionWidth: 6vw;
+$padding: 0.2vw;
 
 .left-option
 {
   display: flex;
-  width: 6vw;
+  width: $leftOptionWidth;
   background-color: var(--bg-color-3);
   border-radius: 15px 0 0 15px;
   padding: 0 0.2vw;
@@ -47,6 +50,7 @@ $optionSize: 1vw;
     display: grid;
     grid-template-columns: 33% 33% 33%;
     gap: 0.2vw;
+    max-height: 40vh;
 
     .active
     {
@@ -59,22 +63,95 @@ $optionSize: 1vw;
   {
     border: 1px solid var(--bg-color-4);
     background-color: var(--bg-color-3);
-    width: $optionSize;
-    height: $optionSize;
+    width: $iconSize;
+    height: $iconSize;
     padding: 0.2vw;
     border-radius: 5px;
     position: relative;
     cursor: pointer;
-
+    
     &:hover
     {
       background-color: var(--bg-color-2);
     }
 
+    .name
+    {
+      overflow: auto;
+      font-size: normal;
+    }
+
+
     .icon
     {
       width: inherit;
       height: inherit;
+    }
+  }
+
+  .sprites
+  {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2vw;
+    max-height: 40vh;
+    overflow-y: scroll;
+    overflow-x: auto;
+    margin-left: 0.6vw;
+    padding-right: 0.2vw;
+
+    .sprite
+    {
+      border: 1px solid var(--bg-color-4);
+      background-color: var(--bg-color-3);
+      width: calc($iconSize*4 - $padding*2);
+      padding: $padding;
+      border-radius: 5px;
+      cursor: pointer;
+
+  
+      &:hover
+      {
+        background-color: var(--bg-color-2);
+        border: dashed 1px black;
+      }
+  
+      .sprite-img
+      {
+        width: $spriteSize;
+        height: $spriteSize;
+      }
+
+      .name
+      {
+        overflow: hidden;
+        font-size: smaller;
+      }
+    }
+
+    /* width */
+    &::-webkit-scrollbar 
+    {
+      width: 0.4vw;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track 
+    {
+      background: transparent;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb 
+    {
+      background: var(--bg-color-4);
+      border-radius: 5px;
+    }
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover 
+    {
+      background: var(--bg-color-5);
     }
   }
 }
@@ -87,11 +164,11 @@ $optionSize: 1vw;
 
 .details
 {
-  width: 6vw;
+  width: $leftOptionWidth;
   background-color: var(--bg-color-3);
   z-index: 2;
   position: absolute;
-  bottom: $optionSize * 2;
+  bottom: $iconSize * 2;
   left: 50%;
   transform: translate(-50%, 0);
   border-radius: 5px;

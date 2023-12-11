@@ -19,9 +19,9 @@ export class RightOptionComponent
   hover: boolean = false;
   checked: boolean = false;
 
-  ngOnInit()
+  ngOnChanges()
   {
-    this.checked = this.editorOptions[this.editorOptionsSwitchSelector];
+    this.checked = this.editorOptions ? this.editorOptions[this.editorOptionsSwitchSelector] : undefined;
   }
 
   clickEvent()

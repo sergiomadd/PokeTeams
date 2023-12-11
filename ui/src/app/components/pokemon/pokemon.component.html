@@ -326,8 +326,8 @@
           (click)="clickMeta(4, 'middle')"
           [ngClass]="{'meta-selected':  metaMiddle[4]}"
           >
-            <div *ngIf="pokemon.shiny && editorOptions.shinyPath.identifier!='none'; else empty">
-              <img src={{editorOptions.shinyPath.path}} alt="" class="icon">
+            <div *ngIf="pokemon.shiny && editorOptions.shinyPath?.identifier!='none'; else empty">
+              <img src={{editorOptions.shinyPath?.path}} alt="" class="icon">
             </div>
           </div>
           <div 

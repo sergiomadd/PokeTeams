@@ -3,6 +3,7 @@ import { Team } from '../models/team.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { getErrorMessage } from './util';
 import { lastValueFrom } from 'rxjs';
+import { EditorData } from '../models/editorData.model';
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +51,22 @@ export class GenerateTeamService
     }
     console.log("team gotten:", team);
     return team; 
+  }
+
+  async getOptionsData()
+  {
+    let optionsData: EditorData = <EditorData>{}
+    let url = this.apiUrl + 'editor';
+    try
+    {
+      const optionsData$ = this.http.get<EditorData>(url);
+      optionsData = await lastValueFrom(optionsData$);
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    console.log("Options data gotten:", optionsData);
+    return optionsData; 
   }
 }

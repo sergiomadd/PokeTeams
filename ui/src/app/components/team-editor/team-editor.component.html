@@ -6,16 +6,16 @@
     <div class="left-options">
       <app-left-option
       [editorOptions]="editorOptions"
-      [selectData]="editorData.shinyPaths"
-      [editorOptionsSelectSelector]="'shinyPath'"
-      [label]="'Shiny icon:'"
+      [spritesData]="editorData?.pokemonSpritesPaths"
+      [editorOptionsSelectSelector]="'pokemonSpritesGen'"
+      [label]="'Pokemon sprite:'"
       (selectEvent)="updateTeam($event)"
       ></app-left-option>
       <app-left-option
       [editorOptions]="editorOptions"
-      [selectData]="editorData.pokemonSpritesPaths"
-      [editorOptionsSelectSelector]="'pokemonSpritesGen'"
-      [label]="'Pokemon sprite:'"
+      [selectData]="editorData?.shinyPaths" 
+      [editorOptionsSelectSelector]="'shinyPath'"
+      [label]="'Shiny icon:'"
       (selectEvent)="updateTeam($event)"
       ></app-left-option>
     </div>
