@@ -30,7 +30,6 @@
                       </ng-container>
                     </ng-container>
                   </ng-container>
-
                 </ng-container>
               </div>
             </div>
@@ -94,15 +93,15 @@
         >
           <div 
           class="option"
-          (click)="clickMeta(0, 'options')"
-          [ngClass]="{active: metaDown[0]}"
+          (click)="clickMeta(0, 'showStats')"
+          [ngClass]="{active: showStats[0]}"
           >
             <img src="assets/align-left.png" alt="" class="icon">
           </div>
           <div 
           class="option" 
-          (click)="clickMeta(1, 'options')"
-          [ngClass]="{active: metaDown[1]}"
+          (click)="clickMeta(0, 'showNotes')"
+          [ngClass]="{active: showNotes[0]}"
           >
             <img src="assets/edit.png" alt="" class="icon">
           </div>
@@ -485,7 +484,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="options[0]; else void">
+  <div *ngIf="showStats[0]; else void">
     <div class="stats-wrapper">
       <div class="stats">
         <ng-container *ngIf="pokemon.stats">
@@ -613,7 +612,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="options[1]; else void">
+  <div *ngIf="showNotes[0]; else void">
     <div class="notes">
       NOTES
     </div>

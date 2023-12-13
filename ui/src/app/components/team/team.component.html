@@ -12,21 +12,20 @@
       <div 
       class="option"
       (click)="clickOptions(0)"
-      [ngClass]="{active: options[0]}"
+      [ngClass]="{active: showAllStats}"
       >
         <img src="assets/align-left.png" alt="" class="icon">
       </div>
       <div 
       class="option" 
       (click)="clickOptions(1)"
-      [ngClass]="{active: options[1]}"
+      [ngClass]="{active: showAllNotes}"
       >
         <img src="assets/edit.png" alt="" class="icon">
       </div>
       <div 
       class="option" 
       (click)="clickOptions(2)"
-      [ngClass]="{active: options[2]}"
       >
         <img src="assets/copy.png" alt="" class="icon">
       </div>

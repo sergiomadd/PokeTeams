@@ -70,7 +70,8 @@ export class PokemonComponent
   metaMiddle: boolean[] = [false, false, false, false, false, false, false];
   metaRight: boolean[] = [false, false, false, false];
   metaDown: boolean[] = [false, false, false]
-  options: boolean[] = [false, false, false]
+  showStats: boolean[] = [false]
+  showNotes: boolean[] = [false]
   metaStats: boolean[] = [false, false, false, false, false, false]
 
   constructor() 
@@ -149,8 +150,11 @@ export class PokemonComponent
       case "down":
         list = this.metaDown;
         break;
-      case "options":
-        list = this.options;
+      case "showStats":
+        list = this.showStats;
+        break;
+      case "showNotes":
+        list = this.showNotes;
         break;
       case "stat":
         list = this.metaStats;

@@ -56,7 +56,7 @@ export class InputComponent
     - Ice Beam
     - Protect
 
-    monito (Eevee) @ Soul Dew  
+    monito (Eevesdfge) @ Soul Dew  
     Ability: Technician  
     Level: 49  
     Shiny: Yes  

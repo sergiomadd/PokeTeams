@@ -16,7 +16,8 @@ export class TeamComponent
 
   @ViewChildren(PokemonComponent) pokemonComponents!:QueryList<PokemonComponent>;
 
-  options: boolean[] = [false, false, false]
+  showAllStats: boolean = false;
+  showAllNotes: boolean = false;
 
   forceChange(options: EditorOptions)
   {
@@ -30,39 +31,20 @@ export class TeamComponent
       case 0:
         this.pokemonComponents.forEach(pokemon => 
         {
-          pokemon.options[0] = !this.options[index];
+          pokemon.showStats[0] = !this.showAllStats;
         });
+        this.showAllStats = !this.showAllStats;
       break;
       case 1:
         this.pokemonComponents.forEach(pokemon => 
           {
-            pokemon.options[1] = !this.options[index];
+            pokemon.showNotes[0] = !this.showAllNotes;
           });
+          this.showAllNotes = !this.showAllNotes;
         break;
       case 2:
         
         break;
-    }
-    
-    if(this.options[index])
-    {
-      this.options[index] = false;
-    }
-    else
-    {
-      for(var i = 0; i < this.options.length; i++) 
-      {
-        this.options[i] = false;
-        this.pokemonComponents.forEach(pokemon => 
-          {
-            pokemon.metaDown[i] = this.options[i];
-          })
-      }
-      this.options[index] = true;
-      this.pokemonComponents.forEach(pokemon => 
-        {
-          pokemon.metaDown[index] = this.options[index];
-        })
     }
   }
 }
