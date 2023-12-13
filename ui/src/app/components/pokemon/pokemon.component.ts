@@ -3,8 +3,31 @@ import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Move } from 'src/app/models/move.model';
 import { Nature } from 'src/app/models/nature.model';
 import { Pokemon } from 'src/app/models/pokemon.model';
+import { Sprite } from 'src/app/models/sprite.model';
 import { Stat } from 'src/app/models/stat.model';
 import { Colors } from 'src/app/styles/pokemonColors';
+
+
+interface OldChanges
+{
+  sprites: Sprite[] | undefined,
+  stats: Stat[] | undefined,
+  ivs: Stat[] | undefined,
+  evs: Stat[] | undefined,
+  showIVs: boolean,
+  showEVs: boolean,
+  showNature: boolean,
+}
+
+interface CalculatedStats
+{
+  base: Stat[],
+  ivs: Stat[],
+  evs: Stat[],
+  natures: Stat[],
+  total: Stat[]
+} 
+
 @Component({
   selector: 'app-pokemon',
   templateUrl: './pokemon.component.html',
@@ -13,6 +36,7 @@ import { Colors } from 'src/app/styles/pokemonColors';
 
 export class PokemonComponent 
 {
+
   @Input() pokemon!: Pokemon;
   @Input() editorOptions!: EditorOptions;
 
@@ -22,15 +46,25 @@ export class PokemonComponent
   spriteCategory: number = 0;
   maleIconPath: string = '';
   femaleIconPath: string = '';
-  oldChanges = 
+  oldChanges: OldChanges = 
   {
     sprites: undefined,
     stats: undefined,
     ivs: undefined,
-    evs: undefined
+    evs: undefined,
+    showIVs: false,
+    showEVs: false,
+    showNature: false
   }
 
-  calculatedStats: Stat[] = [];
+  calculatedStats: CalculatedStats = 
+  {
+    base: [],
+    ivs: [],
+    evs: [],
+    natures: [],
+    total: [],
+  };
 
   metaLeft: boolean[] = [false, false];
   metaMiddle: boolean[] = [false, false, false, false, false, false, false];
@@ -46,12 +80,10 @@ export class PokemonComponent
 
   ngOnInit()
   {
-    this.calculateStats();
     this.pokemon.sprites ? this.loadSprite() : this.oldChanges.sprites = this.pokemon.sprites;
     this.pokemon.stats ? this.calculateStats() : this.oldChanges.stats = this.pokemon.stats;
     this.pokemon.ivs ? this.calculateStats() : this.oldChanges.ivs = this.pokemon.ivs;
     this.pokemon.evs ? this.calculateStats() : this.oldChanges.evs = this.pokemon.evs;
-
     this.maleIconPath = "https://localhost:7134/images/sprites/gender/male.png";
     this.femaleIconPath = "https://localhost:7134/images/sprites/gender/female.png";
   }
@@ -64,11 +96,23 @@ export class PokemonComponent
       this.loadSprite();
     }
 
-    if(this.pokemon.stats  !== this.oldChanges.stats
-      || this.pokemon.ivs  !== this.oldChanges.ivs
-      || this.pokemon.evs  !== this.oldChanges.evs)
+    if(this.pokemon.stats !== this.oldChanges.stats
+      || this.pokemon.ivs !== this.oldChanges.ivs
+      || this.pokemon.evs !== this.oldChanges.evs)
     {
+      this.oldChanges.stats = this.pokemon.stats;
+      this.oldChanges.ivs = this.pokemon.ivs;
+      this.oldChanges.evs = this.pokemon.evs;
       this.calculateStats();
+    }
+    if(this.editorOptions.showIVs !== this.oldChanges.showIVs
+      || this.editorOptions.showEVs !== this.oldChanges.showEVs
+      || this.editorOptions.showNature !== this.oldChanges.showNature)
+    {
+      this.oldChanges.showIVs = this.editorOptions.showIVs;
+      this.oldChanges.showEVs = this.editorOptions.showEVs;
+      this.oldChanges.showNature = this.editorOptions.showNature;
+      this.calculateTotals();
     }
   }
 
@@ -76,7 +120,7 @@ export class PokemonComponent
   {
     if(this.pokemon.sprites)
     {
-      let choosenVariationPath = this.pokemon.sprites[this.editorOptions.pokemonSpritesGen.identifier];
+      let choosenVariationPath = this.pokemon.sprites[this.editorOptions.pokemonSpritesGen!.identifier];
       if(this.pokemon.gender === "female")
       {
         this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shinyFemale : choosenVariationPath.female
@@ -86,38 +130,6 @@ export class PokemonComponent
         this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shiny : choosenVariationPath.base
       }
     }
-  }
-
-  calculateStats()
-  {
-    if(this.pokemon.stats)
-    {
-      this.pokemon.stats.forEach((stat, index) => 
-      {
-        this.calculatedStats[index] = 
-        {
-          identifier: stat.identifier,
-          name: stat.name,
-          value: this.calculateStat(stat, this.pokemon.ivs ? this.pokemon.ivs[index] : undefined,
-            this.pokemon.evs ? this.pokemon.evs[index] : undefined, this.pokemon.nature ? this.pokemon.nature : undefined)
-        }
-      });
-    }
-    else
-    {
-      for(let i=0; i<6; i++) 
-      {
-        let stat: Stat = 
-        {
-          identifier: 'error',
-          name: 'error',
-          value: this.calculateStat(undefined, this.pokemon.ivs ? this.pokemon.ivs[i] : undefined,
-            this.pokemon.evs ? this.pokemon.evs[i] : undefined, this.pokemon.nature ? this.pokemon.nature : undefined)
-        }
-        this.calculatedStats[i] = stat;
-      }
-    }
-
   }
 
   clickMeta(index: number, type: string)
@@ -157,7 +169,6 @@ export class PokemonComponent
     }
   }
 
-
   getMoveColor(move)
   {
     let name = move.pokeType?.name;
@@ -165,37 +176,120 @@ export class PokemonComponent
   }
 
   //stats
-  calculateStat(baseStat?: Stat, ivs?: Stat, evs?: Stat, nature?: Nature) : number
+  calculateStats()
+  {
+    if(this.pokemon.stats)
+    {
+      this.pokemon.stats.forEach((stat, index) => 
+      {
+        this.calculatedStats.base[index] = 
+        {
+          identifier: stat.identifier,
+          name: stat.name,
+          value: this.calculateBaseStat(stat)
+        }
+        this.calculatedStats.ivs[index] = 
+        {
+          identifier: stat.identifier,
+          name: stat.name,
+          value: this.calculateIV(this.pokemon.ivs ? this.pokemon.ivs[index].value : 0)
+        }
+        this.calculatedStats.evs[index] = 
+        {
+          identifier: stat.identifier,
+          name: stat.name,
+          value: this.calculateEV(this.pokemon.evs ? this.pokemon.evs[index].value : 0)
+        }
+        this.calculatedStats.natures[index] = 
+        {
+          identifier: stat.identifier,
+          name: stat.name,
+          value: this.getNatureValue(stat, this.pokemon.nature)
+        }
+        this.calculatedStats.total[index] = 
+        {
+          identifier: stat.identifier,
+          name: stat.name,
+          value: this.calculateStat(
+            stat.value, 
+            this.pokemon.level ? this.pokemon.level : 50,
+            this.editorOptions.showIVs ? this.pokemon.ivs ? this.pokemon.ivs[index].value : 0 : 0,
+            this.editorOptions.showEVs ? this.pokemon.evs ? this.pokemon.evs[index].value : 0 : 0, 
+            this.editorOptions.showNature ? this.pokemon.nature ? this.calculatedStats.natures[index].value : 1 : 1,
+            stat.identifier === "hp" ? true : false)
+        }
+      });
+    }
+    /* TODO: handle no stats (wrong poke name) case
+    else
+    {
+      for(let i=0; i<6; i++) 
+      {
+        let stat: Stat = 
+        {
+          identifier: 'error',
+          name: 'error',
+          value: 0
+        }
+        this.calculatedStats[i] = stat;
+      }
+    }
+    */
+  }
+
+  calculateTotals()
+  {
+    if(this.pokemon.stats)
+    {
+      this.pokemon.stats.forEach((stat, index) => 
+      {
+        this.calculatedStats.total[index] = 
+        {
+          identifier: stat.identifier,
+          name: stat.name,
+          value: this.calculateStat(
+            stat.value, 
+            this.pokemon.level ? this.pokemon.level : 50,
+            this.editorOptions.showIVs ? this.pokemon.ivs ? this.pokemon.ivs[index].value : 0 : 0,
+            this.editorOptions.showEVs ? this.pokemon.evs ? this.pokemon.evs[index].value : 0 : 0, 
+            this.editorOptions.showNature ? this.pokemon.nature ? this.calculatedStats.natures[index].value : 1 : 1,
+            stat.identifier === "hp" ? true : false)
+        }
+      });
+    }
+  }
+  
+  calculateStat(base: number, level: number, iv: number, ev: number, nature: number, hp: boolean) : number
   {
     let total: number;
-    let natureValue: number = this.getNatureValue(baseStat, nature);
-    //HP: (((2 * base + iv + (ev/4)) * level) / 100) + level + 10
-    if(baseStat ? baseStat.identifier === "hp" : false)
+    //HP: ((2 * base + iv + (ev/4)) * level) / 100) + level + 10
+    if(hp)
     {
-      total = Math.floor((((2 * (baseStat ? baseStat.value : 0) + (ivs ? ivs.value : 0) + 
-      (evs ? Math.floor(evs.value / 4) : 0)) * (this.pokemon.level ? this.pokemon.level : 100))
-       / 100) + (this.pokemon.level ? this.pokemon.level : 100) + 10);
+      total = Math.floor((2 * base + iv + Math.floor(ev / 4)) * level / 100) + level + 10;
     }
     //Rest: ((((2 * base + iv + (ev/4)) * level) / 100) + 5) * nature
     else
-    {(
-      total = Math.floor((Math.floor(((2 * (baseStat ? baseStat.value : 0) + (ivs ? ivs.value : 0)
-       + (evs ? Math.floor(evs.value / 4) : 0)) * (this.pokemon.level ? this.pokemon.level : 100))
-      / 100) + 5) * natureValue));
+    {
+      total = Math.floor((Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + 5) * nature);
     }
     return total;
   }
 
   calculateBaseStat(baseStat: Stat) : number
   {
-    return this.calculateStat(baseStat, undefined, undefined, undefined);
-  } 
+    return this.calculateStat(baseStat.value, this.pokemon.level ? this.pokemon.level : 50, 0, 0, 1, baseStat.identifier === "hp" ? true : false);
+  }
 
-  calculateEVValue(stat: Stat) : number
+  calculateIV(iv: number) : number
   {
-    return Math.floor(stat.value / 4);
-  } 
-  
+    return Math.round((iv * (this.pokemon.level ? this.pokemon.level : 50)) / 100);
+  }
+
+  calculateEV(ev: number) : number
+  {
+    return Math.round((Math.floor(ev / 4) * (this.pokemon.level ? this.pokemon.level : 50)) / 100);
+  }
+
   getNatureValue(baseStat?: Stat, nature?: Nature) : number
   {
     let natureValue: number;

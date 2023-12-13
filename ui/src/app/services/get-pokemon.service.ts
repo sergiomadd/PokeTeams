@@ -52,7 +52,7 @@ export class GetPokemonService
         pokemon.stats = pokemonData.status == "fulfilled" ? pokemonData.value?.stats : [];
         pokemon.sprites = pokemonData.status == "fulfilled" ? pokemonData.value?.sprites : [];
         pokemon.nickname = pokePaste.nickname;
-        pokemon.level = pokePaste.level ? pokePaste.level : undefined;
+        pokemon.level = pokePaste.level ? pokePaste.level : 50;
         pokemon.shiny = pokePaste.shiny ? pokePaste.shiny : undefined;
         pokemon.gender = pokePaste.gender ? pokePaste.gender : undefined;
         pokemon.teraType = teraType.status == "fulfilled" ? teraType.value : undefined;

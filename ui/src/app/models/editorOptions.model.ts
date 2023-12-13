@@ -13,7 +13,6 @@ export interface EditorOptions
   showIVs: boolean,
   showEVs: boolean,
   showNature: boolean,
-  showLevel: boolean,
   showDexNumber: boolean,
   showNickname: boolean
   //showTeratype

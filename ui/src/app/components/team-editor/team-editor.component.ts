@@ -45,22 +45,12 @@ export class TeamEditorComponent
 
   async ngOnInit() 
   {
-    console.log("init")
-    //this.editorData ? await this.getEditorData() : this.oldChanges.editorData = this.editorData;
     this.editorData = await this.getEditorData();
-    console.log(this.editorData)
+    console.log("Editor data: ", this.editorData)
     this.getOptions();
+    console.log("Editor options: ", this.editorOptions);
   }
-  /*
-  ngDoCheck() 
-  {
-    if(this.editorData !== this.oldChanges.editorData) 
-    {
-      this.getEditorData();
-      this.getOptions();
-    }
-  }
-*/
+
   async generateTeam()
   {
     let team: Team = 
@@ -86,20 +76,34 @@ export class TeamEditorComponent
   {
     this.editorOptions = 
     {
-      shinyPath: this.editorData?.shinyPaths[8],
+      shinyPath: this.editorData.shinyPaths ? this.editorData.shinyPaths[8] :       
+      {
+        name: "error",
+        identifier: '0',
+        path: "error"
+      },
       gender: true,
-      genderPath: this.editorData?.genderPaths[0],
-      pokemonSpritesGen: 
+      genderPath: this.editorData.genderPaths ? this.editorData.genderPaths[0] : 
+      {
+        name: "error",
+        identifier: '0',
+        path: "error"
+      },
+      pokemonSpritesGen: this.editorData.pokemonSpritesPaths ? 
       {
         name: this.editorData?.pokemonSpritesPaths[0].name,
         identifier: '0',
         path: this.editorData?.pokemonSpritesPaths[0].base!
+      } :       
+      {
+        name: "error",
+        identifier: '0',
+        path: "error"
       },
       typeIconsGen: "gen-ix",
       showIVs: true,
       showEVs: true,
       showNature: true,
-      showLevel: true,
       showDexNumber: true,
       showNickname: true
     }
