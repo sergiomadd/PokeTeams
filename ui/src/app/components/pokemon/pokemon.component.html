@@ -519,16 +519,16 @@
                       <div class="item">{{editorOptions.showNature ? pokemon.nature ? pokemon.nature.name : '---' : "??"}}</div>
                       <div class="item">
                         <ng-container *ngIf="editorOptions.showNature; else notNature">
-                          <ng-container *ngIf="!(stat.name===pokemon.nature?.increasedStat
-                          && stat.name===pokemon.nature?.decreasedStat); else metaNeutral">
-                            <ng-container *ngIf="stat.name===pokemon.nature?.increasedStat">
+                          <ng-container *ngIf="!(stat.identifier===pokemon.nature?.increasedStat?.identifier
+                          && stat.identifier===pokemon.nature?.decreasedStat?.identifier); else metaNeutral">
+                            <ng-container *ngIf="stat.identifier===pokemon.nature?.increasedStat?.identifier">
                               +10%
                             </ng-container>
-                            <ng-container *ngIf="stat.name===pokemon.nature?.decreasedStat">
+                            <ng-container *ngIf="stat.identifier===pokemon.nature?.decreasedStat?.identifier">
                               -10%
                             </ng-container>
-                            <ng-container *ngIf="stat.name!==pokemon.nature?.increasedStat
-                            && stat.name!==pokemon.nature?.decreasedStat">
+                            <ng-container *ngIf="stat.identifier!==pokemon.nature?.increasedStat?.identifier
+                            && stat.identifier!==pokemon.nature?.decreasedStat?.identifier">
                               ---
                             </ng-container>
                           </ng-container>
@@ -586,14 +586,14 @@
                   {{calculatedStats.total[i].value}}
                 </div>
                 <ng-container *ngIf="editorOptions.showNature">
-                  <ng-container *ngIf="!(stat.name===pokemon.nature?.increasedStat
-                  && stat.name===pokemon.nature?.decreasedStat); else neutral">
-                    <ng-container *ngIf="stat.name===pokemon.nature?.increasedStat">
+                  <ng-container *ngIf="!(stat.identifier===pokemon.nature?.increasedStat?.identifier
+                  && stat.identifier===pokemon.nature?.decreasedStat?.identifier); else neutral">
+                    <ng-container *ngIf="stat.identifier===pokemon.nature?.increasedStat?.identifier">
                       <div class="nature">
                         <img src="assets/up-arrow.png" alt="" class="icon">
                       </div>
                     </ng-container>
-                    <ng-container *ngIf="stat.name===pokemon.nature?.decreasedStat">
+                    <ng-container *ngIf="stat.identifier===pokemon.nature?.decreasedStat?.identifier">
                       <div class="nature">
                         <img src="assets/down-arrow.png" alt="" class="icon">
                       </div>

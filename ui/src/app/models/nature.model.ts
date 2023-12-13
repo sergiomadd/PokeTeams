@@ -1,6 +1,8 @@
+import { Stat } from "./stat.model";
+
 export interface Nature
 {
   name: string,
-  increasedStat: string,
-  decreasedStat: string
+  increasedStat: Stat,
+  decreasedStat: Stat
 }

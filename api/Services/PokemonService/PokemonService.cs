@@ -90,12 +90,7 @@ namespace api.Services.PokemonService
                 Stats? stats = await _pokedexContext.Stats.FindAsync(i);
                 if (pokemonStats != null && statNames != null && stats != null)
                 {
-                    pokeStats.Add(new Stat
-                    {
-                        Identifier = stats.identifier,
-                        Name = statNames.name,
-                        Value = pokemonStats.base_stat
-                    });
+                    pokeStats.Add(new Stat(stats.identifier, statNames.name, pokemonStats.base_stat));
                 }
             }
             return pokeStats;
@@ -170,11 +165,14 @@ namespace api.Services.PokemonService
                 Natures? natures = await _pokedexContext.Natures.FindAsync(natureNames.nature_id);
                 if (natures != null)
                 {
+                    Stats? increasedStatIdentifier = await _pokedexContext.Stats.FindAsync(natures.increased_stat_id);
+                    Stats? decreasedStatIdentifier = await _pokedexContext.Stats.FindAsync(natures.decreased_stat_id);
                     Stat_names? increasedStatName = await _pokedexContext.Stat_names.FindAsync(natures.increased_stat_id, natureNames.local_language_id);
                     Stat_names? decreasedStatName = await _pokedexContext.Stat_names.FindAsync(natures.decreased_stat_id, natureNames.local_language_id);
-                    if(increasedStatName != null && decreasedStatName != null)
+
+                    if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
                     {
-                        nature = new Nature(natureNames.name, increasedStatName.name, decreasedStatName.name);
+                        nature = new Nature(natureNames.name, new Stat(increasedStatIdentifier.identifier, increasedStatName.name, 0), new Stat(decreasedStatIdentifier.identifier, decreasedStatName.name, 0));
                     }
                 }
             }
@@ -204,12 +202,7 @@ namespace api.Services.PokemonService
                         Stats? metaStat = await _pokedexContext.Stats.FindAsync(metaStatChange.stat_id);
                         statChange = new StatChange
                         {
-                            Stat = new Stat
-                            {
-                                Identifier = metaStat.identifier,
-                                Name = metaStatName.name,
-                                Value = null
-                            },
+                            Stat = new Stat(metaStat.identifier, metaStatName.name, null),
                             Change = metaStatChange.change,
                             ChangeChance = meta.stat_chance
                         };
