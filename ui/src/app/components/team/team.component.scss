@@ -34,12 +34,17 @@
 
   .pokemons
   {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    row-gap: 2vh;
+    display: flex;
     column-gap: 2vh;
     justify-content: center;
     justify-items: center;
+
+    .col
+    {
+      display: flex;
+      flex-direction: column;
+      row-gap: 2vh;
+    }
   }
 }
 

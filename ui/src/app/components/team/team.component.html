@@ -32,8 +32,19 @@
     </div>
   </div>
   <div class="pokemons">
-    <ng-container *ngFor="let pokemon of (pokemons)">
-      <app-pokemon [pokemon]="pokemon" [editorOptions]="editorOptions"></app-pokemon>
-    </ng-container>
+    <div class="col">
+      <ng-container *ngFor="let pokemon of pokemons; index as i">
+        <ng-container *ngIf="i % 2 === 0">
+          <app-pokemon [pokemon]="pokemon" [editorOptions]="editorOptions"></app-pokemon>
+        </ng-container>
+      </ng-container>
+    </div>
+    <div class="col">
+      <ng-container *ngFor="let pokemon of pokemons; index as i">
+        <ng-container *ngIf="i % 2 !== 0">
+          <app-pokemon [pokemon]="pokemon" [editorOptions]="editorOptions"></app-pokemon>
+        </ng-container>
+      </ng-container>
+    </div>
   </div>
 </div>
