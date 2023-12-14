@@ -92,24 +92,37 @@
         [ngClass]=""
         >
           <div 
-          class="option"
+          class="option section"
           (click)="clickMeta(0, 'showStats')"
           [ngClass]="{active: showStats[0]}"
           >
+            <div class="meta-wrapper">
+              <div class="meta meta-middle">
+                Show stats
+              </div>
+            </div>
             <img src="assets/align-left.png" alt="" class="icon">
           </div>
           <div 
-          class="option" 
+          class="option section" 
           (click)="clickMeta(0, 'showNotes')"
           [ngClass]="{active: showNotes[0]}"
           >
+          <div class="meta-wrapper">
+            <div class="meta meta-middle">
+              Show notes
+            </div>
+          </div>
             <img src="assets/edit.png" alt="" class="icon">
           </div>
           <div 
-          class="option" 
-          (click)="clickMeta(2, 'options')"
-          [ngClass]="{active: metaDown[2]}"
+          class="option section" 
           >
+            <div class="meta-wrapper">
+              <div class="meta meta-middle">
+                Copy pokemon
+              </div>
+            </div>
             <img src="assets/copy.png" alt="" class="icon">
           </div>
         </div>
@@ -317,23 +330,47 @@
         (click)="clickMeta(3, 'middle')"
         [ngClass]="{'meta-selected':  metaMiddle[3]}"
         >
+          <div class="meta-wrapper">
+            <div class="meta meta-sprite">
+              <div class="name">
+                {{pokemon.sprites ? pokemon.sprites[this.editorOptions.pokemonSpritesGen!.identifier].name : ''}}
+              </div>
+              <img src={{pokemonSpritePath}} alt="" class="spriteBig">
+            </div>
+          </div>
           <img src={{pokemonSpritePath}} alt="" class="sprite">
         </div>
         <div class="picture-extra">
-          <div 
-          class="shiny section"
-          (click)="clickMeta(4, 'middle')"
-          [ngClass]="{'meta-selected':  metaMiddle[4]}"
-          >
-            <div *ngIf="pokemon.shiny && editorOptions.shinyPath?.identifier!='none'; else empty">
-              <img src={{editorOptions.shinyPath?.path}} alt="" class="icon">
+          <ng-container *ngIf="pokemon.shiny && editorOptions.shinyPath?.identifier!='none'; else empty">
+            <div 
+            class="shiny section"
+            (click)="clickMeta(4, 'middle')"
+            [ngClass]="{'meta-selected':  metaMiddle[4]}"
+            >
+                <div class="meta-wrapper" 
+                (click)="clickMeta(5, 'middle')"
+                >
+                  <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[5]}">
+                    This pokemon is shiny
+                  </div>
+                </div>
+                <img src={{editorOptions.shinyPath?.path}} alt="" class="icon">
+              
             </div>
-          </div>
+          </ng-container>
           <div 
           class="level section"
           (click)="clickMeta(5, 'middle')"
           [ngClass]="{'meta-selected':  metaMiddle[5]}"
           >
+            <div class="meta-wrapper" 
+            (click)="clickMeta(5, 'middle')"
+            >
+              <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[5]}">
+                The Pokemon's level <br>
+                The default value is 50
+              </div>
+            </div>
             {{pokemon.level}}
           </div>
           <div 
@@ -341,9 +378,21 @@
           (click)="clickMeta(6, 'middle')"
           [ngClass]="{'meta-selected':  metaMiddle[6]}"
           >
-            <div *ngIf="pokemon.gender==='F'; else gender">
-              <img src={{femaleIconPath}} alt="" class="icon">
+            <div class="meta-wrapper" 
+            (click)="clickMeta(6, 'middle')"
+            >
+              <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[6]}">
+                <ng-container *ngIf="pokemon.gender==='F'; else genderText">
+                  This pokemon is male
+                </ng-container>
+                <ng-template #genderText>
+                  This pokemon is female
+                </ng-template>  
+              </div>
             </div>
+            <ng-container *ngIf="pokemon.gender==='F'; else gender">
+              <img src={{femaleIconPath}} alt="" class="icon">
+            </ng-container>
             <ng-template #gender>
               <img src={{maleIconPath}} alt="" class="icon">
             </ng-template>          

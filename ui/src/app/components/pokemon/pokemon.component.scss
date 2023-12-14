@@ -383,6 +383,46 @@ $padding: 0.2vw;
     }
   }
 
+  .meta-sprite
+  {
+    min-width: $cardWidth/3;
+    z-index: 5;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+    left: 50%;
+    top: 140%;
+    transform: translate(calc(-30%), calc(-140%));
+
+    .name
+    {
+      padding: $padding;
+      background-color: var(--bg-color-3);
+      border-radius: 5px 5px 0 0;
+    }
+  
+    .spriteBig
+    {
+      width: $spriteSize*2;
+      height: $spriteSize*2;
+    }
+  }
+
+  .meta-middle
+  {
+    width: $cardWidth/3;
+    z-index: 5;
+    padding: $padding;
+    text-align: center;
+
+    position: relative;
+    left: 50%;
+    top: 100%;
+    transform: translate(calc(-50% + $iconSize/2), calc(-100% - $iconSize));
+  }
+
   .meta-stat
   {
     width: fit-content;
