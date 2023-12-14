@@ -14,9 +14,11 @@ export interface EditorOptions
   showEVs: boolean,
   showNature: boolean,
   showDexNumber: boolean,
-  showNickname: boolean
+  showNickname: boolean,
   //showTeratype
   //---
   //lang?
   //display short effect or long effect?
+  //misc
+  maxLevel: number
 }

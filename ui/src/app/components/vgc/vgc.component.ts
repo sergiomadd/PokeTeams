@@ -15,5 +15,6 @@ export class VgcComponent
   receivePokemon($event) 
   {
     this.pokemons.push($event);
+    this.pokemons = [...this.pokemons];
   }
 }

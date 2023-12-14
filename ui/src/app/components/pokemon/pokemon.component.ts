@@ -273,7 +273,9 @@ export class PokemonComponent
 
   getStatSize(value: number)
   {
-    return `${value / 252 * 100 * 2}px`;
+    let maxValue: number = this.editorOptions.maxLevel; //the maximun stat value of all pokemons
+    let maxSize: number = 20; //the maximun size in vw
+    return `${value / maxValue * maxSize}vw`;
   }
   
   getStatName(stat: Stat)

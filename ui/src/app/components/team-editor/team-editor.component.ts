@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { Pokemon } from 'src/app/models/pokemon.model';
 import { GetPokemonService } from 'src/app/services/get-pokemon.service';
 import { parsePaste } from 'src/app/services/parsePaste';
@@ -18,30 +18,17 @@ import { TeamComponent } from '../team/team.component';
 })
 export class TeamEditorComponent 
 {
+  @Input() pokemons!: Pokemon[];
+  @Output() outputTeam = new EventEmitter<Team>();
+  @ViewChild(TeamComponent) team!:TeamComponent;
+
   generateTeamService = inject(GenerateTeamService);
 
-  @Input() pokemons!: Pokemon[];
-
-  @Output() outputTeam = new EventEmitter<Team>();
-
-  @ViewChild(TeamComponent) team!:TeamComponent;
+  editorData?: EditorData;
+  editorOptions: EditorOptions = <EditorOptions>{};
 
   posts: any;
   paste: string = '';
-
-  editorData!: EditorData;
-  editorOptions!: EditorOptions;
-
-  oldChanges = 
-  {
-    editorData: undefined
-  }
-
-
-  constructor()
-  {
-
-  }
 
   async ngOnInit() 
   {
@@ -49,6 +36,23 @@ export class TeamEditorComponent
     console.log("Editor data: ", this.editorData)
     this.getOptions();
     console.log("Editor options: ", this.editorOptions);
+  }
+
+  ngOnChanges(changes: SimpleChanges)
+  {
+    if(changes['pokemons'])
+    {
+      this.calculateMaxLevel();
+    }
+  }
+
+  //Gets the maximun calculated stat value of all pokemons
+  calculateMaxLevel()
+  {
+    this.editorOptions.maxLevel = this.team?.pokemonComponents ? 
+      Math.max(...this.team?.pokemonComponents.map(s => s.calculatedStats?.total ? 
+      Math.max(...s.calculatedStats?.total.map(v => v.value)) : 0)) : 0;
+    console.log(this.editorOptions.maxLevel)
   }
 
   async generateTeam()
@@ -76,20 +80,20 @@ export class TeamEditorComponent
   {
     this.editorOptions = 
     {
-      shinyPath: this.editorData.shinyPaths ? this.editorData.shinyPaths[8] :       
+      shinyPath: this.editorData?.shinyPaths ? this.editorData?.shinyPaths[8] :       
       {
         name: "error",
         identifier: '0',
         path: "error"
       },
       gender: true,
-      genderPath: this.editorData.genderPaths ? this.editorData.genderPaths[0] : 
+      genderPath: this.editorData?.genderPaths ? this.editorData?.genderPaths[0] : 
       {
         name: "error",
         identifier: '0',
         path: "error"
       },
-      pokemonSpritesGen: this.editorData.pokemonSpritesPaths ? 
+      pokemonSpritesGen: this.editorData?.pokemonSpritesPaths ? 
       {
         name: this.editorData?.pokemonSpritesPaths[0].name,
         identifier: '0',
@@ -105,7 +109,8 @@ export class TeamEditorComponent
       showEVs: true,
       showNature: true,
       showDexNumber: true,
-      showNickname: true
+      showNickname: true,
+      maxLevel: 0
     }
   }
 
