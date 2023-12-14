@@ -41,7 +41,7 @@ export class GetPokemonService
       const ivsPromise: Promise<Stat[]> | undefined = pokePaste.ivs ? this.getStats(pokePaste.ivs) : undefined;
       const evsPromise: Promise<Stat[]> | undefined = pokePaste.evs ? this.getStats(pokePaste.evs) : undefined; 
       
-      Promise.allSettled([pokemonDataPromise, teraTypePromise, itemPromise, abilityPromise, naturePromise, movesPromise, ivsPromise, evsPromise])
+      await Promise.allSettled([pokemonDataPromise, teraTypePromise, itemPromise, abilityPromise, naturePromise, movesPromise, ivsPromise, evsPromise])
       .then(([pokemonData, teraType, itemPromise, abilityPromise, naturePromise, movesPromise, ivsPromise, evsPromise]) => 
       {
         pokemon.name = pokemonData.status == "fulfilled" ? pokemonData.value?.name : '';

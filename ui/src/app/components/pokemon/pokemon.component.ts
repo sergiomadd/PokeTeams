@@ -7,18 +7,6 @@ import { Sprite } from 'src/app/models/sprite.model';
 import { Stat } from 'src/app/models/stat.model';
 import { Colors } from 'src/app/styles/pokemonColors';
 
-
-interface OldChanges
-{
-  sprites: Sprite[] | undefined,
-  stats: Stat[] | undefined,
-  ivs: Stat[] | undefined,
-  evs: Stat[] | undefined,
-  showIVs: boolean,
-  showEVs: boolean,
-  showNature: boolean,
-}
-
 interface CalculatedStats
 {
   base: Stat[],
@@ -36,7 +24,6 @@ interface CalculatedStats
 
 export class PokemonComponent 
 {
-
   @Input() pokemon!: Pokemon;
   @Input() editorOptions!: EditorOptions;
 
@@ -46,16 +33,6 @@ export class PokemonComponent
   spriteCategory: number = 0;
   maleIconPath: string = '';
   femaleIconPath: string = '';
-  oldChanges: OldChanges = 
-  {
-    sprites: undefined,
-    stats: undefined,
-    ivs: undefined,
-    evs: undefined,
-    showIVs: false,
-    showEVs: false,
-    showNature: false
-  }
 
   calculatedStats: CalculatedStats = 
   {
@@ -81,40 +58,11 @@ export class PokemonComponent
 
   ngOnInit()
   {
-    this.pokemon.sprites ? this.loadSprite() : this.oldChanges.sprites = this.pokemon.sprites;
-    this.pokemon.stats ? this.calculateStats() : this.oldChanges.stats = this.pokemon.stats;
-    this.pokemon.ivs ? this.calculateStats() : this.oldChanges.ivs = this.pokemon.ivs;
-    this.pokemon.evs ? this.calculateStats() : this.oldChanges.evs = this.pokemon.evs;
+    this.loadSprite()
+    this.calculateStats()
+
     this.maleIconPath = "https://localhost:7134/images/sprites/gender/male.png";
     this.femaleIconPath = "https://localhost:7134/images/sprites/gender/female.png";
-  }
-  
-  //Have to use custom change detetor for array items that are used onInit
-  ngDoCheck() 
-  {
-    if(this.pokemon.sprites !== this.oldChanges.sprites) 
-    {
-      this.loadSprite();
-    }
-
-    if(this.pokemon.stats !== this.oldChanges.stats
-      || this.pokemon.ivs !== this.oldChanges.ivs
-      || this.pokemon.evs !== this.oldChanges.evs)
-    {
-      this.oldChanges.stats = this.pokemon.stats;
-      this.oldChanges.ivs = this.pokemon.ivs;
-      this.oldChanges.evs = this.pokemon.evs;
-      this.calculateStats();
-    }
-    if(this.editorOptions.showIVs !== this.oldChanges.showIVs
-      || this.editorOptions.showEVs !== this.oldChanges.showEVs
-      || this.editorOptions.showNature !== this.oldChanges.showNature)
-    {
-      this.oldChanges.showIVs = this.editorOptions.showIVs;
-      this.oldChanges.showEVs = this.editorOptions.showEVs;
-      this.oldChanges.showNature = this.editorOptions.showNature;
-      this.calculateTotals();
-    }
   }
 
   loadSprite()
