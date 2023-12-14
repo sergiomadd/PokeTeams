@@ -157,7 +157,6 @@ function formatValue(value: string, options?: any): string
 
 function stringToBool(string: string) : boolean
 {
-  console.log(string);
   if(string === "Yes")
   {
     return true;

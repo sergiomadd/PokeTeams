@@ -341,7 +341,7 @@
           <img src={{pokemonSpritePath}} alt="" class="sprite">
         </div>
         <div class="picture-extra">
-          <ng-container *ngIf="pokemon.shiny && editorOptions.shinyPath?.identifier!='none'; else empty">
+          <ng-container *ngIf="pokemon.shiny && editorOptions.shinyPath.identifier!='none'; else empty">
             <div 
             class="shiny section"
             (click)="clickMeta(4, 'middle')"
@@ -354,7 +354,7 @@
                     This pokemon is shiny
                   </div>
                 </div>
-                <img src={{editorOptions.shinyPath?.path}} alt="" class="icon">
+                <img src={{editorOptions.shinyPath.path}} alt="" class="icon">
               
             </div>
           </ng-container>

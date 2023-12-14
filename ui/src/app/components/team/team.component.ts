@@ -18,7 +18,7 @@ export class TeamComponent
 
   showAllStats: boolean = false;
   showAllNotes: boolean = false;
-
+  
   forceChange(options: EditorOptions)
   {
     this.editorOptions = structuredClone(options);

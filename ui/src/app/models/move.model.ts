@@ -4,8 +4,8 @@ import { Type } from "./type.model"
 export interface Move
 {
   name: string,
-  pokeType: Type,
-  damageClass: 
+  pokeType?: Type,
+  damageClass?: 
   {
     name: string,
     description: string,
