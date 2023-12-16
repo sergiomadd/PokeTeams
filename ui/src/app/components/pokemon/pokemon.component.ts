@@ -1,10 +1,11 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, Input, SimpleChanges, ViewEncapsulation, inject } from '@angular/core';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Move } from 'src/app/models/move.model';
 import { Nature } from 'src/app/models/nature.model';
 import { Pokemon } from 'src/app/models/pokemon.model';
 import { Sprite } from 'src/app/models/sprite.model';
 import { Stat } from 'src/app/models/stat.model';
+import { LinkifierService } from 'src/app/services/linkifier.service';
 import { Colors } from 'src/app/styles/pokemonColors';
 
 interface CalculatedStats
@@ -19,13 +20,15 @@ interface CalculatedStats
 @Component({
   selector: 'app-pokemon',
   templateUrl: './pokemon.component.html',
-  styleUrls: ['./pokemon.component.scss']
+  styleUrls: ['./pokemon.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class PokemonComponent 
 {
   @Input() pokemon!: Pokemon;
   @Input() editorOptions!: EditorOptions;
+
 
   test: string = "test"
 

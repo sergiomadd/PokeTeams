@@ -80,8 +80,7 @@
               <div class="head">
                 {{pokemon.ability?.name}}
               </div>
-              <div class="body">
-                {{pokemon.ability?.prose}}
+              <div class="body" [innerHTML]="pokemon.ability?.prose">
               </div>
             </div>
           </div>
@@ -383,10 +382,10 @@
             >
               <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[6]}">
                 <ng-container *ngIf="pokemon.gender==='F'; else genderText">
-                  This pokemon is male
+                  This pokemon is female
                 </ng-container>
                 <ng-template #genderText>
-                  This pokemon is female
+                  This pokemon is male
                 </ng-template>  
               </div>
             </div>
@@ -482,11 +481,6 @@
                 <div class="property">
                   <span class="title">Effect:</span>{{move.effect?.short}}
                 </div>
-                <ng-container *ngIf="move.effect?.chance">
-                  <div class="property">
-                    <span class="title">Effect Chance:</span>{{move.effect?.chance}}%
-                  </div>
-                </ng-container>
                 <div class="property">
                   <span class="title">Target:</span>{{move.target?.description}}
                 </div>

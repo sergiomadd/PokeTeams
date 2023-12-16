@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { PokemonData } from '../models/pokemonData.model';
 import { HttpClient } from  '@angular/common/http';
 import { Pokemon } from '../models/pokemon.model';
@@ -11,6 +11,7 @@ import { Stat } from '../models/stat.model';
 import { getErrorMessage } from './util';
 import { Type } from '../models/type.model';
 import { PokePaste } from '../models/pokePaste.model';
+import { LinkifierService } from './linkifier.service';
 
 
 @Injectable({
@@ -19,6 +20,8 @@ import { PokePaste } from '../models/pokePaste.model';
 export class GetPokemonService 
 {
   private apiUrl = 'https://localhost:7134/api/';
+
+  linkifier = inject(LinkifierService);
 
   constructor(private http: HttpClient) 
   {
@@ -124,6 +127,7 @@ export class GetPokemonService
     {
       const ability$ = this.http.get<Ability>(url);
       ability = await lastValueFrom(ability$);
+      ability.prose = this.linkifier.linkify(ability.prose);
     }
     catch(error)
     {

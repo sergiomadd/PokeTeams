@@ -135,7 +135,7 @@ namespace api.Services.PokemonService
                 Items? items = await _pokedexContext.Items.FindAsync(itemNames.item_id);
                 if (itemProse != null && items != null)
                 {
-                    item = new Item(items.Identifier, itemNames.name, itemProse.effect);
+                    item = new Item(items.Identifier, itemNames.name, Util.FormatProse(itemProse.effect));
                 }
             }
             return item;
@@ -150,7 +150,7 @@ namespace api.Services.PokemonService
                 Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilityNames.ability_id, abilityNames.local_language_id); ;
                 if(abilityProse != null)
                 {
-                    ability = new Ability(abilityNames.name, abilityProse.effect);
+                    ability = new Ability(abilityNames.name, Util.FormatProse(abilityProse.effect));
                 }
             }
             return ability;
@@ -211,7 +211,6 @@ namespace api.Services.PokemonService
                     move = new Move
                     {
                         Name = name,
-
                         PokeType = new PokeType(type.identifier, typeName.name, GetTypeEffectivenessAttack((int)moves.type_id).Result, GetTypeEffectivenessDefense((int)moves.type_id).Result),
                         DamageClass = new MoveDamageClass
                         {
@@ -226,12 +225,12 @@ namespace api.Services.PokemonService
                         Target = new MoveTarget
                         {
                             Name = target.name,
-                            Description = target.description
+                            Description = Util.FormatProse(target.description)
                         },
                         Effect = new MoveEffect
                         {
-                            Short = effect.short_effect,
-                            Long = effect.effect,
+                            Short = Util.FormatProse(effect.short_effect, new string[] { moves.effect_chance.ToString() }),
+                            Long = Util.FormatProse(effect.effect, new string[] { moves.effect_chance.ToString() }),
                             Chance = moves.effect_chance
                         },
 

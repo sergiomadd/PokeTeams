@@ -21,6 +21,8 @@ import { MainComponent } from './components/main/main.component';
 import { LeftOptionComponent } from './components/options/left-option/left-option.component';
 import { RightOptionComponent } from './components/options/right-option/right-option.component';
 import { EvolutionComponent } from './components/meta/evolution/evolution.component';
+import { LinkerPipe } from './pipes/linker.pipe';
+
 
 
 @NgModule({
@@ -39,7 +41,8 @@ import { EvolutionComponent } from './components/meta/evolution/evolution.compon
     MainComponent,
     LeftOptionComponent,
     RightOptionComponent,
-    EvolutionComponent
+    EvolutionComponent,
+    LinkerPipe
   ],
   exports: [NavbarComponent],
   imports: [
