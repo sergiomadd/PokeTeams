@@ -58,44 +58,48 @@ namespace api.Services
             string originalName = originalValue.Split(':')[1].Split('}')[0];
             string formatedName = FormatNameForLink(originalName);
             string formatedCategory = "";
+            string end = "";
             string link = "";
 
             switch (category)
             {
                 case "pokemon":
                     formatedCategory = "_(Pokémon)"; //maybe change this for pokemon icon?
-                    link = formatedName + formatedCategory;
+                    end = formatedName + formatedCategory;
                     break;
                 case "type":
-                    link = typeStart + originalName + ".png";
-                    break;
+                    end = originalName + ".png";
+                    link = typeStart + end;
+                    return originalValue[1] == ']' ? originalValue.Insert(1, link) : ReplaceFirst(originalValue, originalName, link);
                 case "move":
                     formatedCategory = "_(move)";
-                    link = formatedName + formatedCategory;
+                    end = formatedName + formatedCategory;
                     break;
                 case "ability":
                     formatedCategory = "_(Ability)";
-                    link = formatedName + formatedCategory;
+                    end = formatedName + formatedCategory;
                     break;
                 case "mechanic":
                     formatedCategory = "_(status_condition)";
                     if (weatherConditions.Contains(originalName)) { formatedCategory = "_(weather_condition)"; }
 
-                    link = formatedName + formatedCategory;
+                    end = formatedName + formatedCategory;
 
-                    if (weather.Contains(originalName) || misc.Contains(originalName)) { link = formatedName; }
+                    if (weather.Contains(originalName) || misc.Contains(originalName)) { end = formatedName; }
                     if (stats.Contains(originalName)) 
                     {
                         formatedCategory = "Stat#";
-                        link = formatedCategory + formatedName;
-                        return originalValue[1] == ']' ? originalValue.Insert(1, wikiStart + link) : ReplaceFirst(originalValue, formatedName, wikiStart + link);
+                        end = formatedCategory + formatedName;
+                        link = wikiStart + end;
+                        return originalValue[1] == ']' ? originalValue.Insert(1, link) : ReplaceFirst(originalValue, formatedName, link);
                     }
-                    if (damage.Contains(originalName)) { link = "Type#Type_effectiveness"; }
-                    if (originalName.Equals("stat-modifier") || originalName.Equals("stage")) { link = "Stat_modifier#In-battle_modification"; }
-                    if (originalName.Equals("stat-modifier")) { link = "Stat_modifier#In-battle_modification"; }
+                    if (damage.Contains(originalName)) { end = "Type#Type_effectiveness"; }
+                    if (originalName.Equals("stat-modifier") || originalName.Equals("stage")) { end = "Stat_modifier#In-battle_modification"; }
+                    if (originalName.Equals("stat-modifier")) { end = "Stat_modifier#In-battle_modification"; }
                     break;
             }
 
+            link = wikiStart + end;
             return originalValue[1] == ']' ? originalValue.Insert(1, link) : ReplaceFirst(originalValue, originalName, link);
         }
 
