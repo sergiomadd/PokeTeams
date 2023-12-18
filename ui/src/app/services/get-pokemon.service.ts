@@ -111,6 +111,7 @@ export class GetPokemonService
     {
       const item$ = this.http.get<Item>(url);
       item = await lastValueFrom(item$);
+      item.prose = this.linkifier.linkifyProse(item.prose);
     }
     catch(error)
     {
@@ -127,7 +128,7 @@ export class GetPokemonService
     {
       const ability$ = this.http.get<Ability>(url);
       ability = await lastValueFrom(ability$);
-      ability.prose = this.linkifier.linkify(ability.prose);
+      ability.prose = this.linkifier.linkifyProse(ability.prose);
     }
     catch(error)
     {
@@ -170,6 +171,8 @@ export class GetPokemonService
     {
       const move$ = this.http.get<Move>(url);
       move = await lastValueFrom(move$);
+      move.effect ? move.effect.short = this.linkifier.linkifyProse(move.effect?.short) : null;
+      move.effect ? move.effect.long = this.linkifier.linkifyProse(move.effect?.long) : null;
     }
     catch(error)
     {

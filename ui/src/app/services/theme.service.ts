@@ -1,13 +1,31 @@
 import { Injectable } from '@angular/core';
 
+interface Theme
+{
+  name: string,
+  colors:
+  {
+    '--bg-color-1': string,
+    '--bg-color-2': string,
+    '--bg-color-3': string,
+    '--bg-color-4': string,
+    '--bg-color-5': string,
+    '--text-color': string,
+    '--text-color-contrast': string,
+    '--text-color-highlight': string,
+    '--text-color-link': string
+  }
+} 
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class ThemeService 
 {
   properties: string[] = 
   ['--bg-color-1', '--bg-color-2', '--bg-color-3','--bg-color-4', '--bg-color-5',
-  '--text-color', '--text-color-contrast', '--text-color-highlight']
+  '--text-color', '--text-color-contrast', '--text-color-highlight', '--text-color-link']
 
   themes: Theme[] = 
   [
@@ -22,7 +40,8 @@ export class ThemeService
         '--bg-color-5': '#484b6a',
         '--text-color': '#000000',
         '--text-color-contrast': '#ffffff',
-        '--text-color-highlight': '#D5A100'
+        '--text-color-highlight': '#D5A100',
+        '--text-color-link': '#0075BE'
       }
     },
     {
@@ -36,7 +55,8 @@ export class ThemeService
         '--bg-color-5': '#0075BE',
         '--text-color': '#d3d3d3',
         '--text-color-contrast': '#000000',
-        '--text-color-highlight': '#D5A100'
+        '--text-color-highlight': '#D5A100',
+        '--text-color-link': '#0075BE'
       }
     }
   ]
@@ -53,19 +73,3 @@ export class ThemeService
     })
   }
 }
-
-interface Theme
-{
-  name: string,
-  colors:
-  {
-    '--bg-color-1': string,
-    '--bg-color-2': string,
-    '--bg-color-3': string,
-    '--bg-color-4': string,
-    '--bg-color-5': string,
-    '--text-color': string,
-    '--text-color-contrast': string,
-    '--text-color-highlight': string
-  }
-} 

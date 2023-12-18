@@ -58,8 +58,7 @@
               <div class="head">
                 {{pokemon.item?.name}}
               </div>
-              <div class="body">
-                {{pokemon.item?.prose}}
+              <div class="body" [innerHTML]="formatItemProse(pokemon.item?.prose)">
               </div>
             </div>
           </div>
@@ -479,7 +478,7 @@
               </div>
               <div class="body">
                 <div class="property">
-                  <span class="title">Effect:</span>{{move.effect?.short}}
+                  <span class="title">Effect:</span> <span [innerHTML]="move.effect?.short"></span>
                 </div>
                 <div class="property">
                   <span class="title">Target:</span>{{move.target?.description}}

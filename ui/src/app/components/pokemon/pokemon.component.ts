@@ -124,6 +124,17 @@ export class PokemonComponent
     }
   }
 
+  formatItemProse(value: string | undefined) : string
+  {
+    if(value)
+    {
+      let aux = value?.split(':'); 
+      aux[0] = `<span class="bold">${aux[0]}</span>`
+      return aux.join(':');
+    }
+    return '';
+  }
+
   getMoveColor(move)
   {
     let name = move.pokeType?.name;
