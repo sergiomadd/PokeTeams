@@ -1,1 +1,23 @@
-<p>team-view works!</p>
+
+<div class="team-view">
+  <app-team [pokemons]="pokemons"
+   [editorOptions]="editorOptions"></app-team>
+
+  <div class="buttons">
+    <div class="copy">
+      <button 
+      (click)="copy()"
+      >Copy</button>
+    </div>
+    <div class="image">
+      <button
+      (click)="generateImage()"
+      >Generate Image</button>
+    </div>
+    <div class="share">
+      <button
+      (click)="share"
+      >Share</button>
+    </div>
+  </div> 
+</div>

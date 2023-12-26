@@ -2,21 +2,44 @@ import { Component, inject } from '@angular/core';
 import { Team } from 'src/app/models/team.model';
 import { GenerateTeamService } from 'src/app/services/generate-team.service';
 import { Router } from '@angular/router';
-
+import { Pokemon } from 'src/app/models/pokemon.model';
+import { EditorOptions } from 'src/app/models/editorOptions.model';
 
 @Component({
   selector: 'app-team-view',
   templateUrl: './team-view.component.html',
   styleUrls: ['./team-view.component.scss']
 })
+
+//5xlo3amwwd id
 export class TeamViewComponent 
 {
   teamService = inject(GenerateTeamService);
   router = inject(Router)
 
+  team: Team = <Team>{};
+  pokemons: Pokemon[] | undefined = [];
+  editorOptions: EditorOptions | undefined = <EditorOptions>{};
 
-  ngOnInit() 
+  async ngOnInit() 
   {
-    let team: Promise<Team> = this.teamService.getTeam(this.router.url);
+    this.team = await this.teamService.getTeam(this.router.url);
+    this.pokemons = this.team.pokemons;
+    this.editorOptions = this.team.options;
+  }
+
+  copy()
+  {
+
+  }
+
+  generateImage()
+  {
+
+  }
+
+  share()
+  {
+
   }
 }

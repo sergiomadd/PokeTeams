@@ -1,0 +1,19 @@
+
+.team-view
+{
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10vh;
+
+  .buttons
+  {
+    display: flex;
+    gap: 1vw;
+    margin-top: 3vh;
+  }
+}
+

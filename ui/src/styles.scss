@@ -12,11 +12,21 @@ body
 
 button
 {
+  min-width: 5vw;
+  min-height: 2vw;
   border-radius: 5px;
   background-color: var(--bg-color-2);
   color: var(--text-color);
   border: 2px solid var(--bg-color-5);
   border-radius: 5px;
+  cursor: pointer;
+  padding: 0.2vw;
+
+  &:hover
+  {
+    //opacity: 0.7;
+    border: 2px solid black !important;
+  }
 }
 
 
