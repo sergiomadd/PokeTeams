@@ -11,7 +11,7 @@ export class EvolutionComponent
 {
   @Input() sourcePokemon!: Pokemon;
   @Input() pokemon!: Pokemon;
-  @Input() editorOptions!: EditorOptions;
+  @Input() editorOptions?: EditorOptions;
 
   pokemonSpritePath?: string = '';
 
@@ -37,7 +37,7 @@ export class EvolutionComponent
   {
     if(this.pokemon.sprites)
     {
-      let choosenVariationPath = this.pokemon.sprites[this.editorOptions.pokemonSpritesGen.identifier];
+      let choosenVariationPath = this.pokemon.sprites[this.editorOptions!.pokemonSpritesGen.identifier];
       if(this.sourcePokemon.gender === "female")
       {
         this.pokemonSpritePath = this.sourcePokemon.shiny ? choosenVariationPath.shinyFemale : choosenVariationPath.female

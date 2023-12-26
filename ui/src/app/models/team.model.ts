@@ -3,8 +3,6 @@ import { Pokemon } from "./pokemon.model";
 
 export interface Team
 {
-  pokemons: Pokemon[],
-  //settings: EditorOptions
-  //pokemons: string,
-  settings: string
+  pokemons?: Pokemon[],
+  options?: EditorOptions
 }

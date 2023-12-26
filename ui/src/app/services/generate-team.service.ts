@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Team } from '../models/team.model';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { getErrorMessage } from './util';
+import { HttpClient } from '@angular/common/http';
+import { getErrorMessage, toCamelCase } from './util';
 import { lastValueFrom } from 'rxjs';
 import { EditorData } from '../models/editorData.model';
 
@@ -18,39 +18,21 @@ export class GenerateTeamService
 
   }
 
-  async saveTeam(team: Team)
-  {
-    let teamLink: string = "";
-    let url = this.apiUrl + 'team';
-    try
-    {
-      const teamLink$ = this.http.post<string>(url, team);
-      teamLink = await lastValueFrom(teamLink$);
-      console.log("teamlink in service", teamLink);
-    }
-    catch(error)
-    {
-      console.log("Error: ", getErrorMessage(error));
-    }
-    
-    return teamLink;
-  }
-
-  async getTeam(id: string)
+  async getTeam(id: string) : Promise<Team>
   {
     let team: Team = <Team>{}
     let url = this.apiUrl + 'team' + id;
     try
     {
       const team$ = this.http.get<Team>(url);
-      team = await lastValueFrom(team$);
+      team = await lastValueFrom(team$, { defaultValue: team });
     }
     catch(error)
     {
       console.log("Error: ", getErrorMessage(error));
     }
-    console.log("team gotten:", team);
-    return team; 
+    console.log("team gotten:", toCamelCase(team));
+    return toCamelCase(team); 
   }
 
   async getOptionsData()
@@ -68,5 +50,23 @@ export class GenerateTeamService
     }
     console.log("Options data gotten:", optionsData);
     return optionsData; 
+  }
+
+  async saveTeam(team: Team): Promise<string>
+  {
+    let teamLink: string = "";
+    let url = this.apiUrl + 'team';
+    try
+    {
+      const teamLink$ = this.http.post<string>(url, team);
+      teamLink = await lastValueFrom(teamLink$);
+      console.log("teamlink in service", teamLink);
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    
+    return teamLink;
   }
 }

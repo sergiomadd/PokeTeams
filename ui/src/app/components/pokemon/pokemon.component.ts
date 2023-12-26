@@ -27,7 +27,7 @@ interface CalculatedStats
 export class PokemonComponent 
 {
   @Input() pokemon!: Pokemon;
-  @Input() editorOptions!: EditorOptions;
+  @Input() editorOptions?: EditorOptions;
 
 
   test: string = "test"
@@ -72,7 +72,7 @@ export class PokemonComponent
   {
     if(this.pokemon.sprites)
     {
-      let choosenVariationPath = this.pokemon.sprites[this.editorOptions.pokemonSpritesGen!.identifier];
+      let choosenVariationPath = this.pokemon.sprites[this.editorOptions!.pokemonSpritesGen!.identifier];
       if(this.pokemon.gender === "female")
       {
         this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shinyFemale : choosenVariationPath.female
@@ -179,9 +179,9 @@ export class PokemonComponent
           value: this.calculateStat(
             stat.value, 
             this.pokemon.level ? this.pokemon.level : 50,
-            this.editorOptions.showIVs ? this.pokemon.ivs ? this.pokemon.ivs[index].value : 0 : 0,
-            this.editorOptions.showEVs ? this.pokemon.evs ? this.pokemon.evs[index].value : 0 : 0, 
-            this.editorOptions.showNature ? this.pokemon.nature ? this.calculatedStats.natures[index].value : 1 : 1,
+            this.editorOptions?.showIVs ? this.pokemon.ivs ? this.pokemon.ivs[index].value : 0 : 0,
+            this.editorOptions?.showEVs ? this.pokemon.evs ? this.pokemon.evs[index].value : 0 : 0, 
+            this.editorOptions?.showNature ? this.pokemon.nature ? this.calculatedStats.natures[index].value : 1 : 1,
             stat.identifier === "hp" ? true : false)
         }
       });
@@ -216,9 +216,9 @@ export class PokemonComponent
           value: this.calculateStat(
             stat.value, 
             this.pokemon.level ? this.pokemon.level : 50,
-            this.editorOptions.showIVs ? this.pokemon.ivs ? this.pokemon.ivs[index].value : 0 : 0,
-            this.editorOptions.showEVs ? this.pokemon.evs ? this.pokemon.evs[index].value : 0 : 0, 
-            this.editorOptions.showNature ? this.pokemon.nature ? this.calculatedStats.natures[index].value : 1 : 1,
+            this.editorOptions?.showIVs ? this.pokemon.ivs ? this.pokemon.ivs[index].value : 0 : 0,
+            this.editorOptions?.showEVs ? this.pokemon.evs ? this.pokemon.evs[index].value : 0 : 0, 
+            this.editorOptions?.showNature ? this.pokemon.nature ? this.calculatedStats.natures[index].value : 1 : 1,
             stat.identifier === "hp" ? true : false)
         }
       });
@@ -287,7 +287,7 @@ export class PokemonComponent
 
   getStatSize(value: number)
   {
-    let maxValue: number = this.editorOptions.maxLevel; //the maximun stat value of all pokemons
+    let maxValue: number = this.editorOptions?.maxLevel ?? 700; //the maximun stat value of all pokemons
     let maxSize: number = 20; //the maximun size in vw
     return `${value / maxValue * maxSize}vw`;
   }
