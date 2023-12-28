@@ -2,7 +2,7 @@
 {
     public class Move
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public PokeType? PokeType { get; set; }
         public MoveDamageClass? DamageClass { get; set; }
         public int? Power { get; set; }
@@ -32,15 +32,6 @@
             public string Long { get; set; }
             public int? Chance { get; set; }
         }
-        /*
-        public class Metadata
-        {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public string Identifier { get; set; }
-            public int Value { get; set;}
-        }
-        */
         
         public class Metadata
         {

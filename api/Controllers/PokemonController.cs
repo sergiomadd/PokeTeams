@@ -18,7 +18,7 @@ namespace api.Controllers
         }
 
         [HttpGet("{pokemonName}", Name = "GetPokemonById")]
-        public async Task<ActionResult<Pokemon>> GetPokemonByName(string pokemonName) 
+        public async Task<ActionResult<PokemonData>> GetPokemonByName(string pokemonName) 
         {
             var pokemon = await _pokemonService.GetPokemonByName(pokemonName);
             if(pokemon == null)

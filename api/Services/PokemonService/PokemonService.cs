@@ -25,9 +25,9 @@ namespace api.Services.PokemonService
             _localContext = localContext;
         }
 
-        public async Task<Pokemon?> GetPokemonById(int id)
+        public async Task<PokemonData?> GetPokemonById(int id)
         {
-            Pokemon pokemonData = new Pokemon(
+            PokemonData pokemonData = new PokemonData(
                 GetPokemonName(id),
                 id,
                 GetPokemonTypes(id).Result,
@@ -38,7 +38,7 @@ namespace api.Services.PokemonService
             return pokemonData;
         }
 
-        public async Task<Pokemon?> GetPokemonByName(string name)
+        public async Task<PokemonData?> GetPokemonByName(string name)
         {
             /*
              * Problem: multiple pokemons with same name but different local_language_id
@@ -96,20 +96,20 @@ namespace api.Services.PokemonService
             return pokeStats;
         }
 
-        private Pokemon? GetPokemonPreEvolution(int id)
+        private PokemonData? GetPokemonPreEvolution(int id)
         {
             Pokemon_species? pokemonSpeciesPreEvolution = _pokedexContext.Pokemon_species.FirstOrDefault(p => p.id == id);
             if (pokemonSpeciesPreEvolution != null && pokemonSpeciesPreEvolution.evolves_from_species_id != null)
             {
                 int newID = pokemonSpeciesPreEvolution.evolves_from_species_id ?? 0;
-                return new Pokemon(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), preEvolution: GetPokemonPreEvolution(newID));
+                return new PokemonData(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), preEvolution: GetPokemonPreEvolution(newID));
             }
             return null;
         }
 
-        private List<Pokemon?> GetPokemonEvolutions(int id)
+        private List<PokemonData?> GetPokemonEvolutions(int id)
         {
-            List<Pokemon?> evolutions = new List<Pokemon?>();
+            List<PokemonData?> evolutions = new List<PokemonData?>();
             List<Pokemon_species?> pokemonSpeciesEvolutionList = _pokedexContext.Pokemon_species.Where(p => p.evolves_from_species_id == id).ToList();
             if(pokemonSpeciesEvolutionList.Count() > 0)
             {
@@ -118,7 +118,7 @@ namespace api.Services.PokemonService
                     if (pokemonSpeciesEvolution != null)
                     {
                         int newID = pokemonSpeciesEvolution.id;
-                        evolutions.Add(new Pokemon(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), evolutions: GetPokemonEvolutions(newID)));
+                        evolutions.Add(new PokemonData(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), evolutions: GetPokemonEvolutions(newID)));
                     }
                 }
             }
