@@ -54,11 +54,11 @@ export class GenerateTeamService
 
   async saveTeam(team: Team): Promise<string>
   {
-    let teamLink: string = "";
+    let teamLink: object = {};
     let url = this.apiUrl + 'team';
     try
     {
-      const teamLink$ = this.http.post<string>(url, team);
+      const teamLink$ = this.http.post(url, team);
       teamLink = await lastValueFrom(teamLink$);
       console.log("teamlink in service", teamLink);
     }
@@ -67,6 +67,6 @@ export class GenerateTeamService
       console.log("Error: ", getErrorMessage(error));
     }
     
-    return teamLink;
+    return teamLink["content"];
   }
 }

@@ -57,17 +57,25 @@ export class TeamEditorComponent
 
   async generateTeam()
   {
-    let team: Team = 
+    if(this.pokemons.length > 0 && this.pokemons.length <= 6)
     {
-      pokemons: await this.pokemons,
-      //settings: this.editorOptions
-      //pokemons: "pokemons",
-      settings: "options"
+      let team: Team = 
+      {
+        pokemons: this.pokemons,
+        options: this.editorOptions
+      }
+      console.log("Generating team: ", team);
+      const w = window.open('', '_blank')!;
+      w.document.write("<html><head></head><body>Please wait while we redirect you</body></html>");
+      w.document.close();
+      w.location = await this.generateTeamService.saveTeam(team);
     }
-    let teamLink: Promise<string> = this.generateTeamService.saveTeam(team);
-    //open new tab with team link
-    console.log("genearting ", team);
-    console.log("generated: ", teamLink);
+    else
+    {
+      //display error paste not loaded
+      //display error too many pokemon
+      console.log("Error: paste not loaded, no pokemons to generate")
+    }
   }
 
   updateTeam(option)
