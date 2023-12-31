@@ -1,63 +1,97 @@
 ﻿using api.Data;
+using api.Models;
 using api.Models.DBModels;
 using api.Models.DBPoketeamModels;
+using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Transactions;
 
 namespace api.Services.TeamService
 {
     public class TeamService : ITeamService
     {
-        private readonly PoketeamContext _context;
+        private readonly PoketeamContext _teamContext;
         private readonly LocalContext _localContext;
 
         private static Random random = new Random();
 
         public TeamService(PoketeamContext dataContext, LocalContext localContext)
         {
-            _context = dataContext;
+            _teamContext = dataContext;
             _localContext = localContext;
         }
 
-        public async Task<string?> GetTeam(string id)
+        public async Task<TeamData?> GetTeam(string id)
         {
-            Teams? team = await _context.Teams.FindAsync(id);
+            Team team = await _teamContext.Team.FindAsync(id);
             if (team != null)
             {
-                return team.team;
+                List<Pokemon> pokemons = new List<Pokemon>();
+                IQueryable<TeamPokemon> teamPokemon = _teamContext.TeamPokemon.Where(t => t.TeamId == id);
+                foreach(var item in teamPokemon)
+                {
+                    try
+                    {
+                        Pokemon pokemon = JsonSerializer.Deserialize<Pokemon>(item.Pokemon, new JsonSerializerOptions { IncludeFields = false });
+                        pokemons.Add(pokemon);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+                return new TeamData(pokemons, team.options);
             }
             return null;
         }
 
-        //change input string to team model?
-        public async Task<string?> Post(Team inputTeam)
+        public async Task<string?> Post(TeamData inputTeam)
         {
-            string id = GenerateId(10);
-            Teams? team = await _context.Teams.FindAsync(id);
-            //loop maybe too ineficent? seek another way to get unused ids?
-            while(team != null)
+            string teamId = GenerateId(10);
+            try
             {
-                id = GenerateId(10);
-                team = await _context.Teams.FindAsync(id);
+                Team team = await _teamContext.Team.FindAsync(teamId);
+                //loop maybe too ineficent? seek another way to get unused ids?
+                while (team != null)
+                {
+                    teamId = GenerateId(10);
+                    team = await _teamContext.Team.FindAsync(teamId);
+                }
+
+                JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
+                string optionsString = JsonSerializer.Serialize(inputTeam.Options, options);
+                Team newTeam = new Team
+                {
+                    id = teamId,
+                    options = optionsString
+                };
+                await _teamContext.Team.AddAsync(newTeam);
+
+                foreach (Pokemon pokemon in inputTeam.Pokemons)
+                {
+                    string pokemonString = JsonSerializer.Serialize(pokemon, options);
+                    TeamPokemon newTeamPokemon = new TeamPokemon
+                    {
+                        TeamId = teamId,
+                        Pokemon = pokemonString
+                    };
+                    await _teamContext.TeamPokemon.AddAsync(newTeamPokemon);
+                }
+                await _teamContext.SaveChangesAsync();
+
             }
-            var options = new JsonSerializerOptions{ IncludeFields = false };
-            var teamString = JsonSerializer.Serialize(inputTeam, options);
-            Teams newTeam = new Teams
+            catch (Exception ex)
             {
-                id = id,
-                team = teamString
-            };
-            await _context.Teams.AddAsync(newTeam);
-            await _context.SaveChangesAsync();
-            return id;
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            return teamId;
         }
 
         public string GenerateId(int length)
         {
             const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
         public async Task<EditorData?> GetEditorData()

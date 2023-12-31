@@ -1,8 +1,6 @@
 ﻿using api.Models;
-using api.Services.PokemonService;
 using api.Services.TeamService;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace api.Controllers
 {
@@ -17,9 +15,8 @@ namespace api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<string>> Get(string id)
+        public async Task<ActionResult<TeamData>> Get(string id)
         {
-            System.Diagnostics.Debug.WriteLine("getting");
             var team = await _teamService.GetTeam(id);
             if (team == null)
             {
@@ -29,7 +26,7 @@ namespace api.Controllers
         }
         
         [HttpPost]
-        public async Task<ActionResult<string>> Post([FromBody] Team team)
+        public async Task<ActionResult<string>> Post([FromBody] TeamData team)
         {
             var id = await _teamService.Post(team);
             if (id == null)

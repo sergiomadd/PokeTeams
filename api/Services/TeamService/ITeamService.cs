@@ -2,8 +2,8 @@
 {
     public interface ITeamService
     {
-        Task<string?> GetTeam(string id);
-        Task<string?> Post(Team team);
+        Task<Models.TeamData?> GetTeam(string id);
+        Task<string?> Post(TeamData team);
         Task<EditorData?> GetEditorData();
     }
 }

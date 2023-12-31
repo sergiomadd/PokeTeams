@@ -10,6 +10,12 @@ namespace api.Data
         {
 
         }
-        public DbSet<Teams> Teams { get; set; }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
+
+        public DbSet<Team> Team { get; set; }
+        public DbSet<TeamPokemon> TeamPokemon { get; set; }
     }
 }

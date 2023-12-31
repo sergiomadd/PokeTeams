@@ -2,10 +2,10 @@
 
 namespace api.Models.DBPoketeamModels
 {
-    public class Teams
+    public class Team
     {
         [Key]
         public string id { get; set; }
-        public string team { get; set; }
+        public string options { get; set; }
     }
 }
