@@ -8,6 +8,7 @@
         public PokemonData? PreEvolution { get; set; }
         public List<PokemonData?>? Evolutions { get; set; }
         public PokeTypes? Types { get; set; }
+        public PokeType? TeraType { get; set; }
         public Item? Item { get; set; }
         public Ability? Ability { get; set; }
         public Nature? Nature { get; set; }

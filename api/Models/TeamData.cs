@@ -6,18 +6,22 @@ namespace api.Models
 {
     public class TeamData
     {
+        public string ID { get; set; }
         public List<Pokemon> Pokemons { get; set; }
         public EditorOptions? Options { get; set; }
+
 
         public TeamData()
         {
 
         }
 
-        public TeamData(List<Pokemon> pokemons, string options) 
+        public TeamData(string id, List<Pokemon> pokemons, string options) 
         {
+            ID = id;
             Pokemons = pokemons;
             Options = JsonSerializer.Deserialize<EditorOptions>(options, new JsonSerializerOptions { IncludeFields = false });
+            
         }
 
         /*

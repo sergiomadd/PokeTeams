@@ -41,7 +41,7 @@ namespace api.Services.TeamService
                     {
                     }
                 }
-                return new TeamData(pokemons, team.options);
+                return new TeamData(id, pokemons, team.options);
             }
             return null;
         }
