@@ -1,0 +1,14 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace api.Models.DTOs
+{
+    public class LogInDTO
+    {
+        [Required(ErrorMessage = "Username or email is required")]
+        public string UserNameOrEmail { get; set; }
+        [Required(ErrorMessage = "Password is required")]
+        public string Password { get; set; }
+        [Required(ErrorMessage = "Remember option is required")]
+        public bool RememberMe { get; set;}
+    }
+}
