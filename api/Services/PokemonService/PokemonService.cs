@@ -8,6 +8,7 @@ using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
 using static api.Models.Move;
+using api.Util;
 using static Azure.Core.HttpHeader;
 using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -135,7 +136,7 @@ namespace api.Services.PokemonService
                 Items? items = await _pokedexContext.Items.FindAsync(itemNames.item_id);
                 if (itemProse != null && items != null)
                 {
-                    item = new Item(items.Identifier, itemNames.name, Util.FormatProse(itemProse.effect));
+                    item = new Item(items.Identifier, itemNames.name, Formatter.FormatProse(itemProse.effect));
                 }
             }
             return item;
@@ -150,7 +151,7 @@ namespace api.Services.PokemonService
                 Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilityNames.ability_id, abilityNames.local_language_id); ;
                 if(abilityProse != null)
                 {
-                    ability = new Ability(abilityNames.name, Util.FormatProse(abilityProse.effect));
+                    ability = new Ability(abilityNames.name, Formatter.FormatProse(abilityProse.effect));
                 }
             }
             return ability;
@@ -225,12 +226,12 @@ namespace api.Services.PokemonService
                         Target = new MoveTarget
                         {
                             Name = target.name,
-                            Description = Util.FormatProse(target.description)
+                            Description = Formatter.FormatProse(target.description)
                         },
                         Effect = new MoveEffect
                         {
-                            Short = Util.FormatProse(effect.short_effect, new string[] { moves.effect_chance.ToString() }),
-                            Long = Util.FormatProse(effect.effect, new string[] { moves.effect_chance.ToString() }),
+                            Short = Formatter.FormatProse(effect.short_effect, new string[] { moves.effect_chance.ToString() }),
+                            Long = Formatter.FormatProse(effect.effect, new string[] { moves.effect_chance.ToString() }),
                             Chance = moves.effect_chance
                         },
 

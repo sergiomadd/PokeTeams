@@ -3,9 +3,9 @@ using System;
 using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 
-namespace api.Services
+namespace api.Util
 {
-    public static class Util
+    public static class Formatter
     {
         public static string FormatProse(string value, string[]? args = null)
         {
@@ -86,7 +86,7 @@ namespace api.Services
                     end = formatedName + formatedCategory;
 
                     if (weather.Contains(originalName) || misc.Contains(originalName)) { end = formatedName; }
-                    if (stats.Contains(originalName)) 
+                    if (stats.Contains(originalName))
                     {
                         formatedCategory = "Stat#";
                         end = formatedCategory + formatedName;
@@ -106,13 +106,13 @@ namespace api.Services
         public static string FormatNameForLink(string name)
         {
             string[] words = name.Split("-");
-            if(words.Count() > 1)
+            if (words.Count() > 1)
             {
-                for(var i=0; i<words.Length;i++)
+                for (var i = 0; i < words.Length; i++)
                 {
                     words[i] = FirstLetterToUpper(words[i]);
                 }
-                return String.Join("_", words).Replace(' ', '_');
+                return string.Join("_", words).Replace(' ', '_');
             }
             else
             {
