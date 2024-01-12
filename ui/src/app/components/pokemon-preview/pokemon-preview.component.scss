@@ -1,0 +1,64 @@
+.pokemon
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.2vw;
+  min-width: 6vw;
+  width: fit-content;
+  max-width: 7vw;
+
+  .top-wrapper
+  {
+    .top
+    {
+      display: flex;
+
+      .types
+      {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+
+  .section
+  {
+    padding: 0.1vw;
+    display: flex;
+  }
+
+  .ability
+  {
+    border-top: 1px grey solid;
+  }
+
+  .moves
+  {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .text-center
+  {
+    justify-content: center;
+  }
+
+  .sprite
+  {
+    width: 5vw;
+    height: 5vw;
+
+  }
+}
+
+.icon
+{
+  width: 1vw;
+  height: 1vw;
+}
+
+.bottom-icon
+{
+  margin-right: 0.2vw;
+}

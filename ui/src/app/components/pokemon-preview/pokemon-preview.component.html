@@ -1,0 +1,44 @@
+<div class="pokemon-preview">
+  <div class="pokemon">
+    <div class="top-wrapper">
+      <div class="top">
+        <div class="icon"></div>
+        <img [src]="pokemonSpritePath" alt="" class="sprite">
+        <div class="types">
+          <ng-container *ngIf="pokemon?.types?.dualEffectiveness ?? false; else monotype">
+            <img src="{{pokemon?.types?.type1?.iconPath}}" title="{{pokemon?.types?.type1?.name}}" alt="{{pokemon?.types?.type1?.name}}" class="icon">
+            <img src="{{pokemon?.types?.type2?.iconPath}}" title="{{pokemon?.types?.type2?.name}}" alt="{{pokemon?.types?.type2?.name}}" class="icon">
+          </ng-container>
+          <ng-template #monotype>
+            <img src="{{pokemon?.types?.type1?.iconPath}}" title="{{pokemon?.types?.type1?.name}}" alt="{{pokemon?.types?.type1?.name}}" class="icon">
+          </ng-template>
+          <ng-container *ngIf="pokemon?.teraType">
+            <img src="{{pokemon?.teraType?.iconPath}}" alt="" class="icon">
+          </ng-container>
+        </div>
+      </div>
+      <div class="text-center section">
+        {{pokemon?.name}}
+      </div>
+    </div>    
+    <ng-container *ngIf="expanded">
+      <div class="expanded">
+        <div class="ability text-center section">
+          {{pokemon?.ability?.name}}
+        </div>
+        <div class="section">
+          <img src="{{pokemon?.item?.iconPath}}" alt="" class="icon bottom-icon">
+          {{pokemon?.item?.name}}
+        </div>
+        <div class="moves">
+          <ng-container *ngFor="let move of pokemon?.moves">
+            <div class="section">
+              <img src="{{move?.pokeType?.iconPath}}" title="{{move.pokeType?.name}}" alt="{{move.pokeType?.name}}" class="icon bottom-icon">
+              {{move.name}}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
