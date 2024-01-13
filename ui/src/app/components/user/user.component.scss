@@ -1,0 +1,36 @@
+
+
+.user
+{
+  margin: auto;
+  width: 80%;
+
+  .profile
+  {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+    .picture
+    {
+      width: 4vw;
+      height: 4vw;
+      border: 1px solid black;
+      margin-right: 1vw;
+    }
+  
+    .names
+    {
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+    }
+  }
+
+  .teams
+  {
+    display: flex;
+    flex-direction: column;
+    padding: 0.6vw;
+  }
+}

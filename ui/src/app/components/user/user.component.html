@@ -1,0 +1,27 @@
+
+<div class="user">
+  <div class="profile">
+    <div class="picture">
+
+    </div>
+    <div class="names">
+      <div class="name">
+        {{user?.name}}
+      </div>
+      <div class="username">
+        <a href=""> @{{user?.username}}</a>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="teams">
+    <ng-container *ngIf="user?.teams; else noteams">
+      <ng-container *ngFor="let team of user?.teams">
+        <app-team-preview [team]="team" [mode]="'six'"></app-team-preview>
+      </ng-container>
+    </ng-container>
+    <ng-template #noteams>
+      NO TEAMS
+    </ng-template>
+  </div>
+</div>

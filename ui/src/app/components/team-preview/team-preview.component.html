@@ -1,0 +1,23 @@
+
+<div class="team">
+  <div class="top">
+    <div class="team-name">
+      My team <br>
+      Designed by: <br>
+      Tournament for: 
+    </div>
+    <button
+    class="button"
+    (click)="expand()"
+    >V</button>
+  </div>
+  <div class="pokemons">
+    <ng-container *ngFor="let pokemon of team?.pokemons">
+      <app-pokemon-preview [pokemon]="pokemon"></app-pokemon-preview>
+    </ng-container>
+  </div>
+  <div class="link">
+    <a href="{{team?.id}}" target=”_blank” >Open team</a>
+  </div>
+</div>
+

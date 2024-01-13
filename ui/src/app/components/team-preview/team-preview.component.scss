@@ -1,0 +1,50 @@
+
+.team
+{
+  //width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(167, 167, 167);
+  padding: 0.2vw;
+  border-radius: 5px;
+
+  .top
+  {
+    display: flex;
+    justify-content: space-between;
+
+    .top-right
+    {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .button
+    {
+      width: 4vw;
+      height: 2vw;
+    }
+  }
+
+  .pokemons
+  {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 0.2vw;
+    background-color: lightgrey;
+    border-radius: 5px;
+    padding: 0.2vw;
+  }
+
+  .link
+  {
+    padding: 0.2vw;
+    align-self: center;
+
+    a
+    {
+      text-decoration: none;
+      color: var(--text-color-link);
+    }
+  }
+}
