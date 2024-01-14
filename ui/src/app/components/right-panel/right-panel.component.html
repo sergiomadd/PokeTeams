@@ -1,0 +1,40 @@
+<div class="panel">
+  <div class="section">
+    <div class="user-preview">
+      <ng-container *ngIf="user; else anon">
+        <div class="row">
+          <div class="picture">
+
+          </div>
+          <div class="names">
+            <div class="name">
+              {{user?.name}}
+            </div>
+            <div class="username">
+              <a href=""> @{{user?.username}}</a>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          Total teams: {{user?.teams?.length}}
+
+        </div>
+        <div class="row">
+          Last team:
+
+        </div>
+      </ng-container>
+      <ng-template #anon>
+        <app-user-form></app-user-form>
+      </ng-template>
+    </div>
+
+  </div>
+  <div class="section">
+    POPULAR TEAMS
+    (team preview thick)
+  </div>
+  <div class="section">
+    RECENT TEAMS
+  </div>
+</div>
