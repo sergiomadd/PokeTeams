@@ -1,0 +1,106 @@
+
+
+.wrapper
+{
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.2vw;
+
+  .nav
+  {
+    margin-bottom: 0.4vw;
+    color: blue;
+    cursor: pointer;
+  }
+
+  
+  .signup
+  {
+    display: flex;
+    align-self: flex-end;
+  }
+  
+  form
+  {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4vw;
+    width: 100%;
+
+    .inputs
+    {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2vw;
+      padding: 0.4vw;
+      border: 1px solid black;
+      border-radius: 5px;
+      background-color: white;
+    }
+
+    .item
+    {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      label
+      {
+        font-weight: 500;
+      }
+
+      input
+      {
+        border: 2px solid rgba(128, 128, 128, 0.5);
+        border-radius: 5px;
+        outline: none;     
+        height: 1.5em;
+        font-size: 1em;
+
+      }
+
+      .invalid
+      {
+        border: 4px solid rgba(255, 0, 0, 0.479) !important;
+      }
+      
+      .button
+      {
+        width: 60% !important;
+      }
+    }
+  }
+}
+
+.entry
+{
+  padding: 0.4vw;
+  background-color: red;
+  border: 1px solid black;
+  border-radius: 5px;
+  color: white;
+  width: 4vw;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  align-self: center;
+
+  &:hover
+  {
+    opacity: 0.67;
+  }
+
+  &:disabled
+  {
+    opacity: 0.7;
+    cursor: auto;
+  }
+}
+
+.error
+{
+  font-size: 0.8em;
+  color: red;
+}
