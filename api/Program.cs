@@ -21,6 +21,8 @@ builder.Services.AddDbContext<UserContext>(options => options.UseSqlServer(build
 builder.Services.AddTransient<IPokemonService, PokemonService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 
+builder.Services.AddAuthentication("cookie").AddCookie("cookie");
+builder.Services.AddAuthorization();
 builder.Services.AddIdentity<User, IdentityRole>(
     options =>
     {
@@ -41,14 +43,21 @@ builder.Services.AddIdentity<User, IdentityRole>(
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<UserContext>();
 
-/*
-builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<UserContext>();
-//builder.Services.AddIdentityServer()
-//    .AddApiAuthorization<User, UserContext>();
-//builder.Services.AddAuthentication().AddIdentityServerJwt();*/
-
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
+var apiCorsPolicy = "_apiCorsPolicy";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: apiCorsPolicy,
+                      builder =>
+                      {
+                          builder.WithOrigins("http://localhost:4200", "https://localhost:7134/")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                      });
+});
+
 
 var app = builder.Build();
 
@@ -56,14 +65,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+    app.UseCors(apiCorsPolicy);
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseAuthorization();
-//app.UseIdentityServer();
 
 app.MapControllers();
 
