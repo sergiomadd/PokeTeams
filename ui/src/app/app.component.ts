@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ThemeService } from './services/theme.service';
+import { User } from './models/user.model';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,15 @@ export class AppComponent
   themes = inject(ThemeService)
 
   title = 'ui';
+
+  user: User | undefined = undefined;
+  /*
+  {
+    name: "sergio",
+    username: "sergiomadd",
+    picture: "url",
+    teams: []
+  }*/
 
   ngOnInit()
   {

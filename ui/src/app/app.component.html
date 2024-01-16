@@ -6,20 +6,7 @@
   <div>
     <router-outlet></router-outlet>
   </div>
-  <div class="right-panel">
-    <div class="user-box item">
-      USER <br>
-      logged in as: sergiomadd <br>
-      teams owned: 8 <br>
-      total views: 84575
-    </div>
-    <div class="popular-teams item">
-      POPULAR TEAMS
-    </div>
-    <div class="recent-teams item">
-      RECENT TEAMS
-    </div>
-  </div>
+  <app-right-panel [user]="user"></app-right-panel>
 </div>
 LIGHT
 <app-switch
@@ -27,4 +14,3 @@ LIGHT
 (checkEvent)="checkEvent($event)"
 ></app-switch>
 DARK
-

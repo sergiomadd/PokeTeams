@@ -1,18 +1,18 @@
 .nav 
 {
+  background-color: red;
+  color: #fff;
+  padding: 0 15%;
+  height: 6vh;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: red;
-  color: #fff;
-  padding: 0 10%;
-  height: 6vh;
 
   .title
   {
     font-size: 3vh;
     font-weight: 700;
-  }
+  }  
   
   .items
   {

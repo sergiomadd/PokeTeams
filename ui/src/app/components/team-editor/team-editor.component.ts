@@ -61,6 +61,7 @@ export class TeamEditorComponent
     {
       let team: Team = 
       {
+        id: "njw8dvel6o",
         pokemons: this.pokemons,
         options: this.editorOptions
       }

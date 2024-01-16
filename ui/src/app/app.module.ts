@@ -22,6 +22,11 @@ import { LeftOptionComponent } from './components/options/left-option/left-optio
 import { RightOptionComponent } from './components/options/right-option/right-option.component';
 import { EvolutionComponent } from './components/meta/evolution/evolution.component';
 import { LinkerPipe } from './pipes/linker.pipe';
+import { RightPanelComponent } from './components/right-panel/right-panel.component';
+import { UserComponent } from './components/user/user.component';
+import { TeamPreviewComponent } from './components/team-preview/team-preview.component';
+import { PokemonPreviewComponent } from './components/pokemon-preview/pokemon-preview.component';
+import { UserFormComponent } from './components/user-form/user-form.component';
 
 
 
@@ -42,7 +47,12 @@ import { LinkerPipe } from './pipes/linker.pipe';
     LeftOptionComponent,
     RightOptionComponent,
     EvolutionComponent,
-    LinkerPipe
+    LinkerPipe,
+    RightPanelComponent,
+    UserComponent,
+    TeamPreviewComponent,
+    PokemonPreviewComponent,
+    UserFormComponent
   ],
   exports: [NavbarComponent],
   imports: [

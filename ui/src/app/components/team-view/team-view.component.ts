@@ -11,7 +11,7 @@ import { EditorOptions } from 'src/app/models/editorOptions.model';
   styleUrls: ['./team-view.component.scss']
 })
 
-//l8yuv1nja7 id
+//njw8dvel6o id
 export class TeamViewComponent 
 {
   teamService = inject(GenerateTeamService);

@@ -8,22 +8,4 @@
     height: 100%;
     background-color: lightgray;
   }
-
-  .right-panel
-  {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4vh;
-    background-color: lightgray;
-    padding-top: 4vh;
-    height: 100%;
-  
-    .item
-    {
-      width: 80%;
-      height: 20vh;
-      border: 1px solid grey;
-    }
-  }
 }
