@@ -6,6 +6,7 @@ using api.Services.TeamService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,11 @@ builder.Services.AddDbContext<UserContext>(options => options.UseSqlServer(build
 builder.Services.AddTransient<IPokemonService, PokemonService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 
-builder.Services.AddAuthentication("cookie").AddCookie("cookie");
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+});
 builder.Services.AddAuthorization();
 builder.Services.AddIdentity<User, IdentityRole>(
     options =>
@@ -40,8 +45,19 @@ builder.Services.AddIdentity<User, IdentityRole>(
         options.Lockout.AllowedForNewUsers = true;
         options.Lockout.MaxFailedAccessAttempts = 5;
     })
+    .AddRoles<IdentityRole>()
+    .AddRoleManager<RoleManager<IdentityRole>>()
+    .AddSignInManager<SignInManager<User>>()
+    .AddUserManager<UserManager<User>>()
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<UserContext>();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(1800);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
@@ -71,6 +87,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
