@@ -17,5 +17,6 @@ namespace api.Data
 
         public DbSet<Team> Team { get; set; }
         public DbSet<TeamPokemon> TeamPokemon { get; set; }
+        public DbSet<UserTeam> UserTeam { get; set; }
     }
 }
