@@ -6,10 +6,10 @@ namespace api.Models
     public class User : IdentityUser
     {
         [PersonalData]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [PersonalData]
-        public string Country { get; set; }
+        public string? Country { get; set; }
         [PersonalData]
-        public DateTime DateCreated { get; set; }
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
     }
 }
