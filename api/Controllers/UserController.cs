@@ -19,12 +19,12 @@ namespace api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly UserContext _userContext;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
         public UserController(UserManager<User> userManager,
             SignInManager<User> signInManager,
             UserContext userContext,
-            UserService userService
+            IUserService userService
             )
         {
             _userManager = userManager;
@@ -37,7 +37,7 @@ namespace api.Controllers
         [HttpGet, Route("get")]
         public async Task<ActionResult<UserDTO>> GetUserByUserName(string userName)
         {
-            UserDTO user = await _userService.GetUserByUserName(userName);
+            UserDTO user = await _userService.BuildUserDTO(await _userService.GetUserByUserName(userName));
             if (user == null)
             {
                 return NotFound("Couldn't find user");
@@ -49,12 +49,12 @@ namespace api.Controllers
         [HttpGet, Route("delete")]
         public async Task<ActionResult<UserDTO>> DeleteUserByUserName(string userName)
         {
-            UserDTO user = await _userService.GetUserByUserName(userName);
-            if (user == null)
+            bool deleted = await _userService.DeleteUserByUserName(userName);
+            if (deleted)
             {
                 return NotFound("Couldn't find user");
             }
-            return Ok(user);
+            return Ok(deleted);
         }
 
         [AllowAnonymous]
@@ -70,7 +70,7 @@ namespace api.Controllers
                     var user = await _userManager.FindByNameAsync(User.Identity.Name);
                     if (user != null)
                     {
-                        userDTO = await _userService.GetUserByUserName(user.UserName);
+                        userDTO = await _userService.BuildUserDTO(await _userService.GetUserByUserName(user.UserName));
                     }
                     else
                     {
