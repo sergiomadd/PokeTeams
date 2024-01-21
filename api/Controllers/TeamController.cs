@@ -1,6 +1,10 @@
-﻿using api.Models;
+﻿using api.Models.DTOs;
 using api.Services.TeamService;
 using Microsoft.AspNetCore.Mvc;
+using api.Models.DBPoketeamModels;
+using Microsoft.AspNetCore.Components.Forms;
+using api.Services.UserService;
+using api.Util;
 
 namespace api.Controllers
 {
@@ -9,13 +13,16 @@ namespace api.Controllers
     public class TeamController : ControllerBase
     {
         private readonly ITeamService _teamService;
-        public TeamController(ITeamService teamService)
+        private readonly IUserService _userService;
+
+        public TeamController(ITeamService teamService, IUserService userService)
         {
             _teamService = teamService;
+            _userService = userService;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TeamData>> Get(string id)
+        public async Task<ActionResult<TeamDTO>> Get(string id)
         {
             var team = await _teamService.GetTeam(id);
             if (team == null)
@@ -26,18 +33,26 @@ namespace api.Controllers
         }
         
         [HttpPost]
-        public async Task<ActionResult<string>> Post([FromBody] TeamData team)
+        public async Task<ActionResult<string>> Post([FromBody] TeamDTO team)
         {
-            var id = await _teamService.Post(team);
-            if (id == null)
+            Team newTeam = await _teamService.SaveTeam(team);
+            if (newTeam == null)
             {
                 return BadRequest($"Failed to upload {team}.");
             }
+            if (newTeam.Uploaded != null)
+            {
+                bool teamAdded = await _userService.AddTeamToUser(newTeam?.Uploaded, newTeam.Id);
+                if (!teamAdded)
+                {
+                    Printer.Log($"Failed to add team {team.ID} to user.");
+                    //return BadRequest($"Failed to add team {team.ID} to user.");
+                }
+            }
             object response = new
             {
-                content = id
+                content = newTeam.Id
             };
-
             return Ok(response);
         }
     }

@@ -1,9 +1,12 @@
-﻿namespace api.Services.TeamService
+﻿using api.Models.DBPoketeamModels;
+using api.Models.DTOs;
+
+namespace api.Services.TeamService
 {
     public interface ITeamService
     {
-        Task<Models.TeamData?> GetTeam(string id);
-        Task<string?> Post(TeamData team);
-        Task<EditorData?> GetEditorData();
+        public Task<TeamDTO?> GetTeam(string id);
+        public Task<Team?> SaveTeam(TeamDTO team);
+        public Task<EditorData?> GetEditorData();
     }
 }

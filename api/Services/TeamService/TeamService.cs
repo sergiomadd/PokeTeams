@@ -1,12 +1,16 @@
 ﻿using api.Data;
-using api.Models;
 using api.Models.DBModels;
 using api.Models.DBPoketeamModels;
+using api.Models.DTOs;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Transactions;
+using api.Services.UserService;
+using api.Util;
+using Microsoft.AspNetCore.Components.Forms;
+using api.Models;
 
 namespace api.Services.TeamService
 {
@@ -14,17 +18,23 @@ namespace api.Services.TeamService
     {
         private readonly PoketeamContext _teamContext;
         private readonly LocalContext _localContext;
+        private readonly IUserService _userService;
 
         private static Random random = new Random();
 
-        public TeamService(PoketeamContext dataContext, LocalContext localContext)
+        public TeamService(
+            PoketeamContext dataContext,
+            LocalContext localContext,
+            IUserService userService)
         {
             _teamContext = dataContext;
             _localContext = localContext;
+            _userService = userService;
         }
 
-        public async Task<TeamData?> GetTeam(string id)
+        public async Task<TeamDTO?> GetTeam(string id)
         {
+            TeamDTO teamDTO = null;
             Team team = await _teamContext.Team.FindAsync(id);
             if (team != null)
             {
@@ -41,13 +51,34 @@ namespace api.Services.TeamService
                     {
                     }
                 }
-                return new TeamData(id, pokemons, team.options);
+                User uploaded = await _userService.GetUserById(team.Uploaded);
+                User designed = await _userService.GetUserById(team.Designed);
+                string uploadedUserName = null;
+                string designedUserName = null;
+                if (uploaded == null)
+                {
+                    uploadedUserName = team.Uploaded;
+                }
+                else
+                {
+                    uploadedUserName = uploaded.UserName;
+                }
+                if (designed == null)
+                {
+                    designedUserName = team.Designed;
+                }
+                else
+                {
+                    designedUserName = designed.UserName;
+                }
+                teamDTO = new TeamDTO(id, pokemons, team.Options, uploadedUserName, designedUserName);
             }
-            return null;
+            return teamDTO;
         }
 
-        public async Task<string?> Post(TeamData inputTeam)
+        public async Task<Team?> SaveTeam(TeamDTO inputTeam)
         {
+            Team newTeam = null;
             string teamId = GenerateId(10);
             try
             {
@@ -61,31 +92,51 @@ namespace api.Services.TeamService
 
                 JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
                 string optionsString = JsonSerializer.Serialize(inputTeam.Options, options);
-                Team newTeam = new Team
+
+                User uploaded = await _userService.GetUserByUserName(inputTeam.Uploaded);
+                User designed = await _userService.GetUserByUserName(inputTeam.Designed);
+
+                newTeam = new Team
                 {
-                    id = teamId,
-                    options = optionsString
+                    Id = teamId,
+                    Options = optionsString,
+                    Uploaded = uploaded != null ? uploaded.Id : inputTeam.Uploaded,
+                    Designed = designed != null ? designed.Id : inputTeam.Designed
                 };
                 await _teamContext.Team.AddAsync(newTeam);
+                await _teamContext.SaveChangesAsync();
+                await SaveTeamPokemons(newTeam, inputTeam.Pokemons);
+            }
+            catch (Exception ex)
+            {
+                Printer.Log(ex.Message);
+            }
+            return newTeam;
+        }
 
-                foreach (Pokemon pokemon in inputTeam.Pokemons)
+        private async Task<bool> SaveTeamPokemons(Team team, List<Pokemon> pokemons)
+        {
+            try
+            {
+                foreach (Pokemon pokemon in pokemons)
                 {
+                    JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
                     string pokemonString = JsonSerializer.Serialize(pokemon, options);
                     TeamPokemon newTeamPokemon = new TeamPokemon
                     {
-                        TeamId = teamId,
+                        TeamId = team.Id,
                         Pokemon = pokemonString
                     };
                     await _teamContext.TeamPokemon.AddAsync(newTeamPokemon);
                 }
                 await _teamContext.SaveChangesAsync();
-
+                return true;
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(ex.Message);
+                Printer.Log(ex.Message);
+                return false;
             }
-            return teamId;
         }
 
         public string GenerateId(int length)
