@@ -1,4 +1,4 @@
-export interface IdentityRespondeDTO
+export interface IdentityResponseDTO
 {
   success: boolean,
   errors: string[]
