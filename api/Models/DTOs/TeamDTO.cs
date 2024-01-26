@@ -9,8 +9,7 @@ namespace api.Models.DTOs
         public string ID { get; set; }
         public List<Pokemon> Pokemons { get; set; }
         public EditorOptions? Options { get; set; }
-        public string Uploaded { get; set; }
-        public string Designed { get; set; }
+        public string Player { get; set; }
 
 
         public TeamDTO()
@@ -22,15 +21,13 @@ namespace api.Models.DTOs
             string id,
             List<Pokemon> pokemons,
             string options,
-            string uploaded = null,
-            string designed = null
+            string uploaded = null
             )
         {
             ID = id;
             Pokemons = pokemons;
             Options = JsonSerializer.Deserialize<EditorOptions>(options, new JsonSerializerOptions { IncludeFields = false });
-            Uploaded = uploaded;
-            Designed = designed;
+            Player = uploaded;
         }
     }
 }

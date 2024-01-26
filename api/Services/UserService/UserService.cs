@@ -26,7 +26,7 @@ namespace api.Services.UserService
                 {
                     Name = user.Name,
                     Username = user.UserName,
-                    Teams = await GetUserTeams(user)
+                    TeamKeys = await GetUserTeamKeys(user)
                 };
             }
             return userDTO;
@@ -60,9 +60,9 @@ namespace api.Services.UserService
             return false;
         }
 
-        public async Task<List<string>> GetUserTeams(User user)
+        public async Task<List<string>> GetUserTeamKeys(User user)
         {
-            List<string> teams = new List<string>();
+            List<string> teamKeys = new List<string>();
             try
             {
                 IQueryable<UserTeam> userTeams = _pokeTeamsContext.UserTeam.Where(ut => ut.UserId == user.Id);
@@ -71,7 +71,7 @@ namespace api.Services.UserService
                     foreach (UserTeam userTeam in userTeams)
                     {
                         Team team = await _pokeTeamsContext.Team.FindAsync(userTeam.TeamId);
-                        teams.Add(team.Id);
+                        teamKeys.Add(team.Id);
                     }
                     await _pokeTeamsContext.SaveChangesAsync();
                 }
@@ -80,7 +80,7 @@ namespace api.Services.UserService
             {
                 Printer.Log(ex);
             }
-            return teams;
+            return teamKeys;
         }
 
         public async Task<bool> AddTeamToUser(string userID, string teamID)

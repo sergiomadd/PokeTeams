@@ -7,7 +7,7 @@ namespace api.Models.DBPoketeamModels
         [Key]
         public string Id { get; set; }
         public string Options { get; set; }
-        public string? Uploaded { get; set; }
-        public string? Designed { get; set; }
+        public string? Player { get; set; }
+        public string? AnonPlayer { get; set;}
     }
 }

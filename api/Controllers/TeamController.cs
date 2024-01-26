@@ -38,11 +38,11 @@ namespace api.Controllers
             Team newTeam = await _teamService.SaveTeam(team);
             if (newTeam == null)
             {
-                return BadRequest($"Failed to upload {team}.");
+                return BadRequest($"Failed to upload team.");
             }
-            if (newTeam.Uploaded != null)
+            if (newTeam.Player != null)
             {
-                bool teamAdded = await _userService.AddTeamToUser(newTeam?.Uploaded, newTeam.Id);
+                bool teamAdded = await _userService.AddTeamToUser(newTeam?.Player, newTeam.Id);
                 if (!teamAdded)
                 {
                     Printer.Log($"Failed to add team {team.ID} to user.");

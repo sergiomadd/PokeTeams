@@ -51,27 +51,18 @@ namespace api.Services.TeamService
                     {
                     }
                 }
-                User uploaded = await _userService.GetUserById(team.Uploaded);
-                User designed = await _userService.GetUserById(team.Designed);
-                string uploadedUserName = null;
-                string designedUserName = null;
-                if (uploaded == null)
+
+                string playerUserName = "Unkown";
+                if (team.Player != null)
                 {
-                    uploadedUserName = team.Uploaded;
+                    User player = await _userService.GetUserById(team.Player);
+                    playerUserName = player.UserName;
                 }
-                else
+                else if (team.AnonPlayer != null)
                 {
-                    uploadedUserName = uploaded.UserName;
+                    playerUserName = team.AnonPlayer;
                 }
-                if (designed == null)
-                {
-                    designedUserName = team.Designed;
-                }
-                else
-                {
-                    designedUserName = designed.UserName;
-                }
-                teamDTO = new TeamDTO(id, pokemons, team.Options, uploadedUserName, designedUserName);
+                teamDTO = new TeamDTO(id, pokemons, team.Options, playerUserName);
             }
             return teamDTO;
         }
@@ -93,15 +84,14 @@ namespace api.Services.TeamService
                 JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
                 string optionsString = JsonSerializer.Serialize(inputTeam.Options, options);
 
-                User uploaded = await _userService.GetUserByUserName(inputTeam.Uploaded);
-                User designed = await _userService.GetUserByUserName(inputTeam.Designed);
+                User player = await _userService.GetUserByUserName(inputTeam.Player);
 
                 newTeam = new Team
                 {
                     Id = teamId,
                     Options = optionsString,
-                    Uploaded = uploaded != null ? uploaded.Id : inputTeam.Uploaded,
-                    Designed = designed != null ? designed.Id : inputTeam.Designed
+                    Player = player != null ? player.Id : null,
+                    AnonPlayer = player == null ? inputTeam.Player : null,
                 };
                 await _teamContext.Team.AddAsync(newTeam);
                 await _teamContext.SaveChangesAsync();
@@ -110,6 +100,7 @@ namespace api.Services.TeamService
             catch (Exception ex)
             {
                 Printer.Log(ex.Message);
+                return null;
             }
             return newTeam;
         }

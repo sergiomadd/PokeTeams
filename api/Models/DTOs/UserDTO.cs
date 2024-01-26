@@ -5,6 +5,6 @@
         public string Name { get; set; }
         public string Username { get; set; }
         public string? Picture { get; set; }
-        public List<string> Teams { get; set; }
+        public List<string> TeamKeys { get; set; }
     }
 }
