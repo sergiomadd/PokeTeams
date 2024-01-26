@@ -1,5 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { IdentityResponseDTO } from 'src/app/models/identityResponseDTO.model';
+import { LogInDTO } from 'src/app/models/logindto.model';
+import { SignUpDTO } from 'src/app/models/signupdto.model';
+
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -27,7 +31,7 @@ export class UserFormComponent
   signUpFormSubmitted: boolean = false;
   signUpForm = this.formBuilder.group(
     {
-      userName: ['', [Validators.required, Validators.maxLength(256)]],
+      username: ['', [Validators.required, Validators.maxLength(256)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(256)]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.passwordsMatch()]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.passwordsMatch()]],
@@ -38,9 +42,23 @@ export class UserFormComponent
     this.logInFormSubmitted = true;
     if(this.logInForm.valid)
     {
-      console.log("login form", this.logInForm)
+      let loginDTO: LogInDTO = 
+      {
+        userNameOrEmail: this.logInForm.get('userNameOrEmail')?.value!,
+        password: this.logInForm.get('userNameOrEmail')?.value!,
+        rememberMe: true
+      }
+      let response: IdentityResponseDTO = await this.userService.logIn(loginDTO);
+      if(response)
+      {
+        this.errors = response.errors ?? [];
+      }
+      if(response.success)
+      {
+        console.log("success")
+        window.location.reload();
+      }
     }
-    //this.errors = [...(await this.userService.logIn("form")).errors]
   }
 
   async signUp()
@@ -48,7 +66,24 @@ export class UserFormComponent
     this.signUpFormSubmitted = true;
     if(this.signUpForm.valid)
     {
-      console.log("signup form", this.signUpForm)
+      let signupdto: SignUpDTO = 
+      {
+        username: this.signUpForm.get('username')?.value!,
+        email: this.signUpForm.get('email')?.value!,
+        password: this.signUpForm.get('password')?.value!,
+        confirmPassword: this.signUpForm.get('confirmPassword')?.value!
+      }
+      console.log("signup dto", signupdto)
+
+      let response: IdentityResponseDTO = await this.userService.signUp(signupdto);
+      if(response)
+      {
+        this.errors = response.errors ?? [];
+      }
+      if(response.success)
+      {
+        window.location.reload();
+      }
     }
   }
 

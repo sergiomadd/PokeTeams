@@ -26,6 +26,11 @@
           <span *ngIf="isInvalid('password', 'login')" class="error">{{getError('password', 'login')}}</span>
         </div>
       </div>
+      <ng-container *ngIf="errors">
+        <ng-container *ngFor="let error of errors">
+          <span class="error">{{error}}</span>
+        </ng-container>
+      </ng-container>
       <button 
       type="submit" 
       class="entry">Log In</button>
@@ -43,10 +48,10 @@
         <div class="item">
           <label>Username*</label>
           <input type="text" 
-          formControlName="userName"
-          [ngClass]="{invalid: isInvalid('userName', 'signup')}"
+          formControlName="username"
+          [ngClass]="{invalid: isInvalid('username', 'signup')}"
           >
-          <span *ngIf="isInvalid('userName', 'signup')" class="error">{{getError('userName', 'signup')}}</span>
+          <span *ngIf="isInvalid('username', 'signup')" class="error">{{getError('username', 'signup')}}</span>
         </div>
         <div class="item">
           <label>Email*</label>
@@ -73,6 +78,11 @@
           <span *ngIf="isInvalid('confirmPassword', 'signup')" class="error">{{getError('confirmPassword', 'signup')}}</span>
         </div>
       </div>
+      <ng-container *ngIf="errors">
+        <ng-container *ngFor="let error of errors">
+          <span class="error">{{error}}</span>
+        </ng-container>
+      </ng-container>
       <button 
       type="submit" 
       class="entry">Sign Up</button>

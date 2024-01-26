@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from "@angular/common/http";
 
 
 export function getErrorMessage(error: unknown) 
@@ -5,6 +6,10 @@ export function getErrorMessage(error: unknown)
   if(error instanceof Error)
   {
     return error.message;
+  } 
+  if(error instanceof HttpErrorResponse)
+  {
+    return error.error;
   } 
   return error;
 }
