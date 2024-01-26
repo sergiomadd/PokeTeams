@@ -1,41 +1,23 @@
 
 <div class="team">
   <div class="top">
-    <div class="team-details">
-      <div class="visibility"><div class="check"></div></div>
-      <div class="detail">
-        @{{team?.player}}
-      </div>
-      <div class="detail">
-        EUIC 2023
-      </div>
-      <div class="detail">
-        Regulation D
-      </div>
+    <div class="team-name">
+      My team <br>
+      Designed by: <br>
+      Tournament for: 
     </div>
-    <div>
-      {{team?.date}}
-    </div>
-    <div class="top-right">
-      <div class="link">
-        <a href="{{team?.id}}" target=”_blank” >Open</a>
-      </div>
-      <div class="link">
-        <a href="{{team?.id}}" target=”_blank” >Edit</a>
-      </div>
-      <div class="link">
-        <a href="{{team?.id}}" target=”_blank” >Delete</a>
-      </div>
-    </div>
-
+    <button
+    class="button"
+    (click)="expand()"
+    >V</button>
   </div>
-  <div class="pokemons"
-  (mouseenter)="expand()"
-  (mouseleave)="expand()"
-  >
+  <div class="pokemons">
     <ng-container *ngFor="let pokemon of team?.pokemons">
       <app-pokemon-preview [pokemon]="pokemon"></app-pokemon-preview>
     </ng-container>
+  </div>
+  <div class="link">
+    <a href="{{team?.id}}" target=”_blank” >Open team</a>
   </div>
 </div>
 
