@@ -2,7 +2,7 @@
   <div class="top">
     <div class="info">
       <div class="autor">
-        Author: 
+        Author: {{team?.player}}
       </div>
       <div class="tournament">
         Tournament: 
@@ -33,16 +33,16 @@
   </div>
   <div class="pokemons">
     <div class="col">
-      <ng-container *ngFor="let pokemon of pokemons; index as i">
+      <ng-container *ngFor="let pokemon of team?.pokemons; index as i">
         <ng-container *ngIf="i % 2 === 0">
-          <app-pokemon [pokemon]="pokemon" [editorOptions]="editorOptions"></app-pokemon>
+          <app-pokemon [pokemon]="pokemon" [editorOptions]="team?.options"></app-pokemon>
         </ng-container>
       </ng-container>
     </div>
     <div class="col">
-      <ng-container *ngFor="let pokemon of pokemons; index as i">
+      <ng-container *ngFor="let pokemon of team?.pokemons; index as i">
         <ng-container *ngIf="i % 2 !== 0">
-          <app-pokemon [pokemon]="pokemon" [editorOptions]="editorOptions"></app-pokemon>
+          <app-pokemon [pokemon]="pokemon" [editorOptions]="team?.options"></app-pokemon>
         </ng-container>
       </ng-container>
     </div>

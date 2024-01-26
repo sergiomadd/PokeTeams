@@ -21,7 +21,7 @@ export class GenerateTeamService
   async getTeam(id: string) : Promise<Team>
   {
     let team: Team = <Team>{}
-    let url = this.apiUrl + 'team' + id;
+    let url = this.apiUrl + 'team/' + id;
     try
     {
       const team$ = this.http.get<Team>(url);
@@ -65,6 +65,7 @@ export class GenerateTeamService
     catch(error)
     {
       console.log("Error: ", getErrorMessage(error));
+      return getErrorMessage(error);
     }
     
     return teamLink["content"];

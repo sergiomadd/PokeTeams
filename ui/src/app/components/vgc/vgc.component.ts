@@ -10,7 +10,6 @@ import { Pokemon } from 'src/app/models/pokemon.model';
 export class VgcComponent 
 {
   pokemons: Pokemon[] = [];
-  editorOptions!: EditorOptions;
 
   receivePokemon($event) 
   {

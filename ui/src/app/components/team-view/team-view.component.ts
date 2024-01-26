@@ -18,14 +18,10 @@ export class TeamViewComponent
   router = inject(Router)
 
   team: Team = <Team>{};
-  pokemons: Pokemon[] | undefined = [];
-  editorOptions: EditorOptions | undefined = <EditorOptions>{};
 
   async ngOnInit() 
   {
-    this.team = await this.teamService.getTeam(this.router.url);
-    this.pokemons = this.team.pokemons;
-    this.editorOptions = this.team.options;
+    this.team = await this.teamService.getTeam(this.router.url.slice(1));
   }
 
   copy()

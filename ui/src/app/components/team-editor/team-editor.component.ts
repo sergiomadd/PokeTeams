@@ -10,6 +10,8 @@ import { Team } from 'src/app/models/team.model';
 import { GenerateTeamService } from 'src/app/services/generate-team.service';
 import { EditorOption } from 'src/app/models/editorOption.model';
 import { TeamComponent } from '../team/team.component';
+import { TopOptionComponent } from '../options/top-option/top-option.component';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-team-editor',
@@ -20,12 +22,15 @@ export class TeamEditorComponent
 {
   @Input() pokemons!: Pokemon[];
   @Output() outputTeam = new EventEmitter<Team>();
-  @ViewChild(TeamComponent) team!:TeamComponent;
+  @ViewChild(TeamComponent) teamComponent!: TeamComponent;
+  @ViewChild(TopOptionComponent) details!: TopOptionComponent;
 
   generateTeamService = inject(GenerateTeamService);
 
   editorData?: EditorData;
   editorOptions: EditorOptions = <EditorOptions>{};
+
+  team: Team = <Team>{}
 
   posts: any;
   paste: string = '';
@@ -36,12 +41,26 @@ export class TeamEditorComponent
     console.log("Editor data: ", this.editorData)
     this.getOptions();
     console.log("Editor options: ", this.editorOptions);
+    this.team = 
+    {
+      id: '',
+      pokemons: this.pokemons,
+      options: this.editorOptions,
+      player: ''
+    }
+    console.log("loaded team", this.team);
+    this.details.detailsForm.valueChanges.subscribe((value) => 
+    {
+      this.team.player = value.uploaded;
+    });
   }
 
   ngOnChanges(changes: SimpleChanges)
   {
+    //console.log("changes", changes)
     if(changes['pokemons'])
     {
+      this.team.pokemons = changes['pokemons'].currentValue;
       this.calculateMaxLevel();
     }
   }
@@ -49,10 +68,9 @@ export class TeamEditorComponent
   //Gets the maximun calculated stat value of all pokemons
   calculateMaxLevel()
   {
-    this.editorOptions.maxLevel = this.team?.pokemonComponents ? 
-      Math.max(...this.team?.pokemonComponents.map(s => s.calculatedStats?.total ? 
+    this.editorOptions.maxLevel = this.teamComponent?.pokemonComponents ? 
+      Math.max(...this.teamComponent?.pokemonComponents.map(s => s.calculatedStats?.total ? 
       Math.max(...s.calculatedStats?.total.map(v => v.value)) : 0)) : 0;
-    console.log(this.editorOptions.maxLevel)
   }
 
   async generateTeam()
@@ -63,25 +81,41 @@ export class TeamEditorComponent
       {
         id: "njw8dvel6o",
         pokemons: this.pokemons,
-        options: this.editorOptions
+        options: this.editorOptions,
+        player: this.details.detailsForm.get('uploaded')?.value!
       }
       console.log("Generating team: ", team);
-      const w = window.open('', '_blank')!;
-      w.document.write("<html><head></head><body>Please wait while we redirect you</body></html>");
-      w.document.close();
-      w.location = await this.generateTeamService.saveTeam(team);
+      let result = await this.generateTeamService.saveTeam(team);
+      if(result !== "error")
+      {
+        const w = window.open('', '_blank')!;
+        w.document.write("<html><head></head><body>Please wait while we redirect you</body></html>");
+        w.document.close();
+        w.location = result;
+      }
+      else
+      {
+        console.log("response is error")
+      }
+
+    }
+    else if(this.pokemons.length <= 0)
+    {
+      console.log("Error: no pokemons loaded")
+    }
+    else if(this.pokemons.length > 6)
+    {
+      console.log("Error: too many pokemons, limit is 6")
     }
     else
     {
-      //display error paste not loaded
-      //display error too many pokemon
       console.log("Error: paste not loaded, no pokemons to generate")
     }
   }
 
   updateTeam(option)
   {
-    this.team.forceChange(this.editorOptions)
+    this.teamComponent.forceChange(this.editorOptions)
   }
 
 

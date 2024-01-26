@@ -1,6 +1,6 @@
 <div class="team-editor">
   <div class="top-options">
-
+    <app-top-option></app-top-option>
   </div>
   <div class="central-row">
     <div class="left-options">
@@ -20,9 +20,7 @@
       ></app-left-option>
     </div>
     <div class="team-holder">
-      <app-team 
-      [pokemons]="pokemons"  
-      [editorOptions]="editorOptions"></app-team>
+      <app-team [team]="team"></app-team>
     </div>
     <div class="right-options">
       <app-right-option
