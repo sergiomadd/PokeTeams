@@ -7,4 +7,5 @@ export interface Team
   pokemons: Pokemon[],
   options: EditorOptions,
   player?: string | null,
+  date?: string
 }
