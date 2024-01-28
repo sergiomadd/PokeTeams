@@ -20,6 +20,27 @@ export class UserService
 
   constructor(private http: HttpClient) { }
 
+  async getUser(userName: string): Promise<User>
+  {
+    let user: User = <User>{};
+    let url = this.apiUrl + userName;
+    try
+    {
+      const user$ = this.http.get<User>(url, {withCredentials: true});
+      user = await lastValueFrom(user$);
+      console.log("user in service", user);
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    if(user && user.teamKeys)
+    {
+      user.teams = await this.loadUserTeams(user.teamKeys);
+    }
+    return user;
+  }
+
   async loadUserTeams(teamKeys: string[]): Promise<Team[]>
   {
     let teams: Team[] = [];
