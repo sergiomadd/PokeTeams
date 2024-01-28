@@ -5,6 +5,6 @@ export interface User
   name: string,
   username: string,
   picture?: string,
-  teams?: Team[],
+  teams: Team[],
   teamKeys?: string[]
 }

@@ -2,7 +2,7 @@
 <div class="user">
   <div class="profile">
     <div class="picture">
-
+      <img src="{{user?.picture}}" alt="" class="picture">
     </div>
     <div class="names">
       <div class="name">
@@ -12,16 +12,59 @@
         <a href=""> @{{user?.username}}</a>
       </div>
     </div>
+    
   </div>
   <hr>
-  <div class="teams">
-    <ng-container *ngIf="user?.teams; else noteams">
-      <ng-container *ngFor="let team of user?.teams">
-        <app-team-preview [team]="team" [mode]="'six'"></app-team-preview>
-      </ng-container>
+  <div class="sections">
+    <div class="section" (click)="changeSection(0)" [ngClass]="{selected: sections[0]}">
+      TEAMS
+    </div>
+    <div class="section" (click)="changeSection(1)" [ngClass]="{selected: sections[1]}">
+      USER DETAILS
+    </div>
+    <ng-container *ngIf="logged">
+      <div class="section" (click)="changeSection(2)" [ngClass]="{selected: sections[2]}">
+        OPTIONS
+      </div>
     </ng-container>
-    <ng-template #noteams>
-      NO TEAMS
-    </ng-template>
   </div>
+  <ng-container *ngIf="sections[0]">
+    <div class="bar">
+      <div class="sorter">
+        Sort by: DATE
+      </div>
+      <div class="search">
+        <label for="">Search: </label>
+        <input type="text" name="" id="">
+      </div>
+    </div>
+    <div class="teams">
+      <ng-container *ngIf="user?.teams; else noteams">
+        <ng-container *ngFor="let team of user?.teams">
+          <app-team-preview [team]="team" [mode]="'six'"></app-team-preview>
+        </ng-container>
+      </ng-container>
+      <ng-template #noteams>
+        NO TEAMS
+      </ng-template>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="sections[1]">
+    Profile Details
+    - Stats
+      - number of Teams
+      - most common pokemon or pokemon popularity ranking table 
+      - most used moves 
+  </ng-container>
+  <ng-container *ngIf="logged">
+    <ng-container *ngIf="sections[2]">
+      Options
+      <form action="">
+        <div class="item">
+          <label for="">profile Private/Public</label>
+          <input type="checkbox" name="" id="">
+        </div>
+      </form>
+    </ng-container>
+  </ng-container>
 </div>
