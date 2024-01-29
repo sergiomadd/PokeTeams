@@ -16,7 +16,6 @@ import { DropdownComponent } from './components/pieces/dropdown/dropdown.compone
 import { InputComponent } from './components/input/input.component';
 import { VgcComponent } from './components/vgc/vgc.component';
 import { TeamViewComponent } from './components/team-view/team-view.component';
-import { AboutComponent } from './components/about/about.component';
 import { MainComponent } from './components/main/main.component';
 import { LeftOptionComponent } from './components/options/left-option/left-option.component';
 import { RightOptionComponent } from './components/options/right-option/right-option.component';
@@ -27,6 +26,9 @@ import { UserComponent } from './components/user/user.component';
 import { TeamPreviewComponent } from './components/team-preview/team-preview.component';
 import { PokemonPreviewComponent } from './components/pokemon-preview/pokemon-preview.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
+import { TopOptionComponent } from './components/options/top-option/top-option.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { TeamIconsComponent } from './components/team-icons/team-icons.component';
 
 
 
@@ -42,7 +44,6 @@ import { UserFormComponent } from './components/user-form/user-form.component';
     InputComponent,
     VgcComponent,
     TeamViewComponent,
-    AboutComponent,
     MainComponent,
     LeftOptionComponent,
     RightOptionComponent,
@@ -52,7 +53,10 @@ import { UserFormComponent } from './components/user-form/user-form.component';
     UserComponent,
     TeamPreviewComponent,
     PokemonPreviewComponent,
-    UserFormComponent
+    UserFormComponent,
+    TopOptionComponent,
+    FooterComponent,
+    TeamIconsComponent
   ],
   exports: [NavbarComponent],
   imports: [
