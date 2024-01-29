@@ -36,7 +36,7 @@ namespace api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet, Route("get")]
+        [HttpGet, Route("{userName}")]
         public async Task<ActionResult<UserDTO>> GetUserByUserName(string userName)
         {
             UserDTO user = await _userService.BuildUserDTO(await _userService.GetUserByUserName(userName));
@@ -167,7 +167,8 @@ namespace api.Controllers
                     UserName = model.UserName,
                     Email = model.Email,
                     PasswordHash = model.Password,
-                    EmailConfirmed = false
+                    EmailConfirmed = false,
+                    Picture = "blastoise"
                 };
                 var signUpResult = await _userManager.CreateAsync(user, model.Password);
                 if (!signUpResult.Succeeded)

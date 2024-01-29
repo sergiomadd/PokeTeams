@@ -62,7 +62,15 @@ namespace api.Services.TeamService
                 {
                     playerUserName = team.AnonPlayer;
                 }
-                teamDTO = new TeamDTO(id, pokemons, team.Options, playerUserName);
+                teamDTO = new TeamDTO(
+                    id,
+                    pokemons, 
+                    team.Options,
+                    playerUserName,
+                    team.Tournament,
+                    team.Regulation,
+                    team.ViewCount,
+                    team.DateAdded);
             }
             return teamDTO;
         }
@@ -92,6 +100,10 @@ namespace api.Services.TeamService
                     Options = optionsString,
                     Player = player != null ? player.Id : null,
                     AnonPlayer = player == null ? inputTeam.Player : null,
+                    Tournament = inputTeam.Tournament ?? null,
+                    Regulation = inputTeam.Regulation ?? null,
+                    ViewCount = 0,
+                    DateAdded = DateTime.Now.ToString("dd/MM/yyyy")
                 };
                 await _teamContext.Team.AddAsync(newTeam);
                 await _teamContext.SaveChangesAsync();
