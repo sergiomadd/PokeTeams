@@ -11,6 +11,7 @@ using api.Models.DBPoketeamModels;
 using api.Services.UserService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace api.Controllers
 {
@@ -48,7 +49,7 @@ namespace api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet, Route("delete")]
+        [HttpPost, Route("delete")]
         public async Task<ActionResult<UserDTO>> DeleteUserByUserName(string userName)
         {
             bool deleted = await _userService.DeleteUserByUserName(userName);
@@ -57,6 +58,30 @@ namespace api.Controllers
                 return NotFound("Couldn't find user");
             }
             return Ok(deleted);
+        }
+
+        [AllowAnonymous]
+        [HttpGet, Route("check/username/{userName}")]
+        public async Task<ActionResult<IdentityResponseDTO>> UserNameAvailable(string userName)
+        {
+            bool available = await _userService.UserNameAvailable(userName);
+            if (!available)
+            {
+                return Conflict(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Username already taken." } });
+            }
+            return Ok(new IdentityResponseDTO { Success = true });
+        }
+
+        [AllowAnonymous]
+        [HttpGet, Route("check/email/{email}")]
+        public async Task<ActionResult<IdentityResponseDTO>> EmailAvailable(string email)
+        {
+            User user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                return Conflict( new IdentityResponseDTO { Success = false, Errors = new List<string> { "Email already taken." } });
+            }
+            return Ok(new IdentityResponseDTO { Success = true });
         }
 
         [AllowAnonymous]
@@ -185,7 +210,7 @@ namespace api.Controllers
                 Printer.Log(ex.Message);
                 return BadRequest("Signup error, exception, Model not valid");
             }
-            return Ok();
+            return Ok(new IdentityResponseDTO { Success = true });
         }
 
         [AllowAnonymous]

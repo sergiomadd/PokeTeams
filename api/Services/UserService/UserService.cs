@@ -26,7 +26,8 @@ namespace api.Services.UserService
                 {
                     Name = user.Name,
                     Username = user.UserName,
-                    TeamKeys = await GetUserTeamKeys(user)
+                    TeamKeys = await GetUserTeamKeys(user),
+                    Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.jpeg"
                 };
             }
             return userDTO;
@@ -44,9 +45,28 @@ namespace api.Services.UserService
             return user;
         }
 
+        public async Task<bool> UserNameAvailable(string userName)
+        {
+            User user = _userContext.Users.FirstOrDefault(u => u.UserName == userName);
+            if(user != null)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public async Task<bool> DeleteUserByUserName(string userName)
         {
             UserDTO userDTO = null;
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Exception in: DeleteUserByUserName(string userName)");
+                Printer.Log(ex);
+            }
             User user = _userContext.Users.FirstOrDefault(u => u.UserName == userName);
             if (user != null)
             {
@@ -63,21 +83,29 @@ namespace api.Services.UserService
         public async Task<List<string>> GetUserTeamKeys(User user)
         {
             List<string> teamKeys = new List<string>();
+            if (user == null) { Printer.Log(user.Name);  return teamKeys; }
             try
             {
                 IQueryable<UserTeam> userTeams = _pokeTeamsContext.UserTeam.Where(ut => ut.UserId == user.Id);
-                if(userTeams != null)
+                if(userTeams != null && userTeams.Count() > 0)
                 {
                     foreach (UserTeam userTeam in userTeams)
                     {
-                        Team team = await _pokeTeamsContext.Team.FindAsync(userTeam.TeamId);
-                        teamKeys.Add(team.Id);
+                        if (userTeam != null && userTeam.TeamId != null)
+                        {
+                            Team team = await _pokeTeamsContext.Team.FindAsync(userTeam.TeamId);
+                            if(team != null)
+                            {
+                                teamKeys.Add(team.Id);
+                            }
+                        }
                     }
                     await _pokeTeamsContext.SaveChangesAsync();
                 }
             }
             catch (Exception ex)
             {
+                Printer.Log("Exception in: GetUserTeamKeys(User user)");
                 Printer.Log(ex);
             }
             return teamKeys;
@@ -105,6 +133,7 @@ namespace api.Services.UserService
             }
             catch (Exception ex)
             {
+                Printer.Log("Exception in: AddTeamToUser(string userID, string teamID)"); 
                 Printer.Log(ex);
                 return false;
             }
