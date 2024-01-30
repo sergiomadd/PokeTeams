@@ -51,6 +51,7 @@
           formControlName="username"
           [ngClass]="{invalid: isInvalid('username', 'signup')}"
           >
+          <span *ngIf="userNameAvailable" class="correct">This username is available</span>
           <span *ngIf="isInvalid('username', 'signup')" class="error">{{getError('username', 'signup')}}</span>
         </div>
         <div class="item">
@@ -59,6 +60,7 @@
           formControlName="email"
           [ngClass]="{invalid: isInvalid('email', 'signup')}"
           >
+          <span *ngIf="emailAvailable" class="correct">This email is available</span>
           <span *ngIf="isInvalid('email', 'signup')" class="error">{{getError('email', 'signup')}}</span>
         </div>
         <div class="item">

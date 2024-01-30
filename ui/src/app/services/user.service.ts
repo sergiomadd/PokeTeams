@@ -50,10 +50,42 @@ export class UserService
     }
     return teams;
   }
-  
-  async loadUser(): Promise<User>
+
+  async checkUserNameAvailable(userName: string) : Promise<IdentityResponseDTO>
   {
-    let user: User = <User>{};
+    let exists: IdentityResponseDTO = <IdentityResponseDTO>{};
+    let url = this.apiUrl + 'check/' + 'username/' + userName;
+    try
+    {
+      const exists$ = this.http.get<IdentityResponseDTO>(url);
+      exists = await lastValueFrom(exists$);
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return exists;
+  }
+
+  async checkEmailAvailable(email: string) : Promise<IdentityResponseDTO>
+  {
+    let exists: IdentityResponseDTO = <IdentityResponseDTO>{};
+    let url = this.apiUrl + 'check/' + 'email/' + email;
+    try
+    {
+      const exists$ = this.http.get<IdentityResponseDTO>(url);
+      exists = await lastValueFrom(exists$);
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return exists;
+  }
+  
+  async getLoggedUser() : Promise<User | null>
+  {
+    let user: User | null = null;
     let url = this.apiUrl + 'logged';
     try
     {
@@ -90,7 +122,7 @@ export class UserService
     {
       console.log("Error: ", getErrorMessage(error));
     }
-    console.log(await this.loadUser())
+    console.log(await this.getLoggedUser())
     return response;
   }
 
@@ -129,7 +161,7 @@ export class UserService
     {
       console.log("Error: ", getErrorMessage(error));
     }
-    console.log(await this.loadUser())
+    console.log(await this.getLoggedUser())
     return response;
   }
 }

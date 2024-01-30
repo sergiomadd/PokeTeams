@@ -20,13 +20,15 @@ export class UserFormComponent
   errors: string[] = [];
   login: boolean = true;
   signup: boolean = false;
+  userNameAvailable: boolean = false;
+  emailAvailable: boolean = false;
 
   logInFormSubmitted: boolean = false;
   logInForm = this.formBuilder.group(
   {
     userNameOrEmail: ['', [Validators.required, Validators.maxLength(256)]],
     password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256)]],
-  });
+  }, { updateOn: "blur" });
 
   signUpFormSubmitted: boolean = false;
   signUpForm = this.formBuilder.group(
@@ -35,8 +37,29 @@ export class UserFormComponent
       email: ['', [Validators.required, Validators.email, Validators.maxLength(256)]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.passwordsMatch()]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.passwordsMatch()]],
-    });
+    }, { updateOn: "blur" });
   
+  async ngOnInit()
+  {
+    this.signUpForm.controls.username.valueChanges.subscribe(async (value) => 
+    {
+      if(this.signUpForm.controls.username.valid)
+      {
+        this.userNameAvailable = value ? (await this.userService.checkUserNameAvailable(value)).success : false;
+        this.userNameAvailable ?? this.signUpForm.controls.username.setErrors({ "usernameTaken": true });
+      }
+    });
+
+    this.signUpForm.controls.email.valueChanges.subscribe(async (value) => 
+    {
+      if(this.signUpForm.controls.email.valid)
+      {
+        this.emailAvailable = value ? (await this.userService.checkEmailAvailable(value)).success : false;
+        this.emailAvailable ?? this.signUpForm.controls.email.setErrors({ "emailTaken": true });
+      }
+    });
+  }
+
   async logIn()
   {
     this.logInFormSubmitted = true;
@@ -55,7 +78,6 @@ export class UserFormComponent
       }
       if(response.success)
       {
-        console.log("success")
         window.location.reload();
       }
     }
@@ -125,6 +147,14 @@ export class UserFormComponent
     if(control?.hasError('passwordMismatch'))
     {
       return "The passwords must match";
+    }
+    if(control?.hasError('usernameTaken'))
+    {
+      return "This username is already registered";
+    }
+    if(control?.hasError('emailTaken'))
+    {
+      return "This email is already registered";
     }
     return "error";
   }
