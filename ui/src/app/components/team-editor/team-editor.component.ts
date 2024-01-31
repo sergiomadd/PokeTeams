@@ -41,17 +41,24 @@ export class TeamEditorComponent
     console.log("Editor data: ", this.editorData)
     this.getOptions();
     console.log("Editor options: ", this.editorOptions);
+    
     this.team = 
     {
       id: '',
       pokemons: this.pokemons,
       options: this.editorOptions,
-      player: ''
+      player: '',
+      tournament: '',
+      regulation: '',
+      viewCount: 0,
     }
+    
     console.log("loaded team", this.team);
     this.details.detailsForm.valueChanges.subscribe((value) => 
     {
-      this.team.player = value.uploaded;
+      this.team.player = value.player ?? undefined;
+      this.team.tournament = value.tournament ?? undefined;
+      this.team.regulation = value.regulation ?? undefined;
     });
   }
 
@@ -77,15 +84,8 @@ export class TeamEditorComponent
   {
     if(this.pokemons.length > 0 && this.pokemons.length <= 6)
     {
-      let team: Team = 
-      {
-        id: "njw8dvel6o",
-        pokemons: this.pokemons,
-        options: this.editorOptions,
-        player: this.details.detailsForm.get('uploaded')?.value!
-      }
-      console.log("Generating team: ", team);
-      let result = await this.generateTeamService.saveTeam(team);
+      console.log("Generating team: ", this.team);
+      let result = await this.generateTeamService.saveTeam(this.team);
       if(result !== "error")
       {
         const w = window.open('', '_blank')!;

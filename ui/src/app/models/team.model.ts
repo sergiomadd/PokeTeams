@@ -6,6 +6,9 @@ export interface Team
   id: string,
   pokemons: Pokemon[],
   options: EditorOptions,
-  player?: string | null,
+  player?: string,
+  tournament?: string,
+  regulation?: string,
+  viewCount: number,
   date?: string
 }

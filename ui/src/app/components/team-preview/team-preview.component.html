@@ -3,20 +3,34 @@
   <div class="top">
     <div class="team-details">
       <div class="visibility"><div class="check"></div></div>
-      <div class="detail">
-        @{{team?.player}}
+      <div class="col">
+        <div class="detail">
+          @{{team?.player}}
+        </div>
       </div>
       <div class="detail">
-        EUIC 2023
+        <img src="assets/regionals.png" alt="" class="icon">
       </div>
-      <div class="detail">
-        Regulation D
+      <div class="row">
+        <div class="detail">
+          {{team?.tournament}}
+        </div>
+        <div class="detail">
+          {{team?.regulation}}
+        </div>
       </div>
     </div>
-    <div>
-      {{team?.date}}
+    <div class="center">
+      <div>
+        <div>
+          Views: {{team?.viewCount}}
+        </div>
+        <div>
+          {{team?.date}}
+        </div>
+      </div>
     </div>
-    <div class="top-right">
+    <div class="right">
       <div class="link">
         <a href="{{team?.id}}" target=”_blank” >Open</a>
       </div>

@@ -10,8 +10,10 @@
 
   .top
   {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 45% 10% 45%;
+    align-items: center;
+    padding: 0.2vw;
 
     .team-details
     {
@@ -27,10 +29,17 @@
       }
     }
 
-    .top-right
+    .center
     {
       display: flex;
-      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .right
+    {
+      display: flex;
+      justify-content: flex-end;
 
       .button
       {
@@ -92,4 +101,9 @@
       color: var(--text-color-link);
     }
   }
+}
+
+.icon
+{
+  width: 2em;
 }

@@ -5,9 +5,9 @@ import { UserService } from 'src/app/services/user.service';
 
 interface Partial
 {
-  uploaded: string | null;
-  designed: string | null;
-  tournament: string | null;
+  player: string | null,
+  tournament: string | null,
+  regulation: string | null
 }
 
 @Component({
@@ -20,24 +20,24 @@ export class TopOptionComponent
   formBuilder = inject(FormBuilder);
   userService = inject(UserService);
 
-  user: User = <User>{};
+  user: User | null = null;
 
   logInFormSubmitted: boolean = false;
   detailsForm = this.formBuilder.group(
   {
-    uploaded: ['', [Validators.required, Validators.maxLength(256)]],
-    tournament: ['', [Validators.maxLength(256)]]
+    player: ['', [Validators.required, Validators.maxLength(256)]],
+    tournament: ['', [Validators.maxLength(256)]],
+    regulation: ['', [Validators.maxLength(256)]]
   });
-  @Output() detailsChange = new EventEmitter();
 
-  
+  @Output() detailsChange = new EventEmitter();
 
   async ngOnInit()
   {
-    this.user = await this.userService.loadUser();
+    this.user = await this.userService.getLoggedUser();
     if(this.user)
     {
-      this.detailsForm.get('uploaded')?.setValue(this.user.username);
+      this.detailsForm.get('player')?.setValue(this.user.username);
     }
 
     console.log("loaded user: ", this.user)
