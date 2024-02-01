@@ -1,0 +1,12 @@
+
+
+<div class="team">
+  <ng-container *ngFor="let pokemon of team?.pokemons">
+    <div class="wrapper">
+      <div>
+        <img src="{{getSprite(pokemon)}}" alt="" class="sprite">
+        <img src="{{pokemon.item?.iconPath}}" alt="" class="item">
+      </div>
+    </div>
+  </ng-container>
+</div>
