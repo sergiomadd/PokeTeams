@@ -29,42 +29,14 @@
     </ng-container>
   </div>
   <ng-container *ngIf="sections[0]">
-    <div class="bar">
-      <div class="sorter">
-        Sort by: DATE
-      </div>
-      <div class="search">
-        <label for="">Search: </label>
-        <input type="text" name="" id="">
-      </div>
-    </div>
-    <div class="teams">
-      <ng-container *ngIf="user?.teams; else noteams">
-        <ng-container *ngFor="let team of user?.teams">
-          <app-team-preview [team]="team" [mode]="'six'"></app-team-preview>
-        </ng-container>
-      </ng-container>
-      <ng-template #noteams>
-        NO TEAMS
-      </ng-template>
-    </div>
+    <app-user-teams [teams]="user?.teams"></app-user-teams>
   </ng-container>
   <ng-container *ngIf="sections[1]">
-    Profile Details
-    - Stats
-      - number of Teams
-      - most common pokemon or pokemon popularity ranking table 
-      - most used moves 
+    <app-user-details></app-user-details>
   </ng-container>
   <ng-container *ngIf="logged">
     <ng-container *ngIf="sections[2]">
-      Options
-      <form action="">
-        <div class="item">
-          <label for="">profile Private/Public</label>
-          <input type="checkbox" name="" id="">
-        </div>
-      </form>
+      <app-user-options></app-user-options>
     </ng-container>
   </ng-container>
 </div>

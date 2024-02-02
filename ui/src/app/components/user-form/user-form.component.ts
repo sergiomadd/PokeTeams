@@ -3,7 +3,6 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors,
 import { IdentityResponseDTO } from 'src/app/models/identityResponseDTO.model';
 import { LogInDTO } from 'src/app/models/logindto.model';
 import { SignUpDTO } from 'src/app/models/signupdto.model';
-
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -159,7 +158,7 @@ export class UserFormComponent
     return "error";
   }
 
-  passwordsMatch(): ValidatorFn 
+  passwordsMatch() : ValidatorFn 
   {
     return (control: AbstractControl): ValidationErrors | null => 
     {

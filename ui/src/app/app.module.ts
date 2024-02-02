@@ -29,6 +29,9 @@ import { UserFormComponent } from './components/user-form/user-form.component';
 import { TopOptionComponent } from './components/options/top-option/top-option.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { TeamIconsComponent } from './components/team-icons/team-icons.component';
+import { UserOptionsComponent } from './components/user-options/user-options.component';
+import { UserDetailsComponent } from './components/user-details/user-details.component';
+import { UserTeamsComponent } from './components/user-teams/user-teams.component';
 
 
 
@@ -56,7 +59,10 @@ import { TeamIconsComponent } from './components/team-icons/team-icons.component
     UserFormComponent,
     TopOptionComponent,
     FooterComponent,
-    TeamIconsComponent
+    TeamIconsComponent,
+    UserOptionsComponent,
+    UserDetailsComponent,
+    UserTeamsComponent
   ],
   exports: [NavbarComponent],
   imports: [

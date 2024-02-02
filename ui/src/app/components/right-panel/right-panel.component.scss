@@ -1,5 +1,24 @@
 
 
+.linked-btn
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: gold;
+  border: 2px goldenrod solid;
+  border-radius: 10px;
+  width: 4vw;
+  height: 3vh;
+  text-decoration: none;
+  color: black;
+
+  &:hover
+  {
+    border: 2px black solid;
+  }
+}
+
 .panel
 {
   display: flex;
@@ -16,6 +35,8 @@
     //min-height: 20vh;
     //border: 1px solid grey;
     padding: 0.4vw;
+    border: 1px solid grey;
+    border-radius: 5px;
   }
 
   .user-preview
@@ -29,24 +50,33 @@
     .row
     {
       display: flex;
-      justify-content: start;
+      justify-content: space-around;
       align-items: center;
+      gap: 0.6vw;
+    }
+
+    .column
+    {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      gap: 0.6vw;
     }
 
     .picture
     {
       width: 4vw;
       height: 4vw;
-      border: 1px solid black;
       margin-right: 1vw;
+      border-radius: 5px;
     }
-
+  
     .names
     {
       display: flex;
       flex-direction: column;
-      justify-content: start;
-
+      align-items: center;      
     }
   }
 }

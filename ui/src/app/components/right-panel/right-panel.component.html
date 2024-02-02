@@ -1,34 +1,34 @@
 <div class="panel">
   <div class="section">
-    <div class="user-preview">
-      <ng-container *ngIf="user; else anon">
+    <ng-container *ngIf="user != null; else anon">
+      <div class="user-preview">
         <div class="row">
-          <div class="picture">
-
-          </div>
           <div class="names">
-            <div class="name">
+            <div>
               {{user?.name}}
             </div>
-            <div class="username">
-              <a href=""> @{{user?.username}}</a>
+            <div>
+              @{{user?.username}}
             </div>
+            <a href="/@{{user?.username}}" class="linked-btn">Profile</a>
+          </div>
+          <div class="picture">
+            <img src="{{user?.picture}}" alt="" class="picture">
           </div>
         </div>
-        <div class="row">
-          Total teams: {{user?.teams?.length}}
-
+        <div class="column">
+          Last team/Pinned team:
+          <ng-container *ngFor="let team of user?.teams; first as isFirst">
+            <ng-container *ngIf="isFirst">
+              <app-team-icons [team]="team"></app-team-icons>
+            </ng-container>
+          </ng-container>
         </div>
-        <div class="row">
-          Last team:
-
-        </div>
-      </ng-container>
-      <ng-template #anon>
-        <app-user-form></app-user-form>
-      </ng-template>
-    </div>
-
+      </div>
+    </ng-container>
+    <ng-template #anon>
+      <app-user-form></app-user-form>
+    </ng-template>
   </div>
   <div class="section">
     POPULAR TEAMS

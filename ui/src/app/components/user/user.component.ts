@@ -10,7 +10,6 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserComponent 
 {
-  //@Input() user?: User;
   @Input() userName?: string;
 
   user?: User;
@@ -20,9 +19,8 @@ export class UserComponent
 
   async ngOnInit()
   {
-    console.log("url username", this.userName);
     this.user = this.userName ? await this.userService.getUser(this.userName) : undefined;
-    this.logged = this.user?.username == (await this.userService.loadUser()).username;
+    this.logged = await this.userService.getLoggedUser() ? this.user?.username == (await this.userService.getLoggedUser())!.username : false;
     console.log("user:", this.user)
   }
 
@@ -34,28 +32,4 @@ export class UserComponent
     }
     this.sections[index] = true;
   }
-  /*
-  sortTeams()
-  {
-    //By date
-    // Sort by date string in ascending order
-    this.user?.teams?.sort(function(a, b) 
-    {
-    // Convert the date strings to Date objects
-    if(a.date && b.date)
-    {
-      let dateA = new Date(a.date);
-      let dateB = new Date(b.date);
-  
-      // Subtract the dates to get a value that is either negative, positive, or zero
-      //return dateA - dateB;
-      console.log(dateA)
-      return 1;
-    }
-
-    // Subtract the dates to get a value that is either negative, positive, or zero
-    return 0;
-    });
-  }
-  */
 }

@@ -1,0 +1,38 @@
+<div class="teams">
+  <div class="bar">
+    <div class="sorter">
+      Sort By:
+      <app-dropdown
+        [options]="sorterOptions"
+        [selectedOption]="selectedSorter"
+        [disable]="true"
+        (selectEvent)="selectSorter($event)"
+      ></app-dropdown>
+    </div>
+    <div>
+      Public/Private
+    </div>
+    <div>
+      Tournaments
+    </div>
+    <div>
+      Regulation
+    </div>
+    <div class="search">
+      <form action="" [formGroup]="searchForm">
+        <label for="">Search pokemon: </label>
+        <input type="text" name="" id="" formControlName="input">
+      </form>
+    </div>
+  </div>
+  <div class="teams">
+    <ng-container *ngIf="sortedTeams; else noteams">
+      <ng-container *ngFor="let team of sortedTeams">
+        <app-team-preview [team]="team" [mode]="'six'"></app-team-preview>
+      </ng-container>
+    </ng-container>
+    <ng-template #noteams>
+      NO TEAMS
+    </ng-template>
+  </div>
+</div>

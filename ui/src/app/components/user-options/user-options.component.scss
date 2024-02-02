@@ -1,0 +1,19 @@
+.options
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
+  gap: 0.4vw;
+
+  .settings
+  {
+    border: 2px darkgrey solid;
+    padding: 0.4vw;
+    border-radius: 10px;
+    background-color: lightgrey;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

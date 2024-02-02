@@ -7,11 +7,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class DropdownComponent 
 {
-  @Input() options?: any[];
-  @Input() selectedOption?: any;
+  @Input() options?: DropdownOption[];
+  @Input() selectedOption?: DropdownOption;
   @Input() disable?: boolean;
   
-  @Output() selectEvent = new EventEmitter<object>();
+  @Output() selectEvent = new EventEmitter<DropdownOption>();
 
   showOptions?: boolean = false;
 
@@ -25,4 +25,10 @@ export class DropdownComponent
     this.selectEvent.emit(option);
     this.onClick();
   }
+}
+
+export interface DropdownOption
+{
+  name: string,
+  path?: string
 }

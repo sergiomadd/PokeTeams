@@ -6,10 +6,10 @@ class="dropdown"
   class="dropdown-selector"
   (click)="onClick()"
   >
-    <div *ngIf="selectedOption.path">
-      <img src="{{selectedOption.path}}" alt="" class="icon">
+    <div *ngIf="selectedOption?.path">
+      <img src="{{selectedOption?.path}}" alt="" class="icon">
     </div>
-    {{selectedOption.name}}
+    {{selectedOption?.name}}
   </div>
   <div 
   class="dropdown-options"
