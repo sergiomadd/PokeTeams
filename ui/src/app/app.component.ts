@@ -9,7 +9,6 @@ import { User } from './models/user.model';
 })
 export class AppComponent 
 {
-  themes = inject(ThemeService)
 
   title = 'ui';
 
@@ -22,22 +21,8 @@ export class AppComponent
     teams: []
   }*/
 
-  ngOnInit()
-  {
-    this.themes.changeTheme("light");
-  }
 
-  checkEvent($event)
-  {
-    if($event)
-    {
-      this.themes.changeTheme("dark")
-    }
-    else
-    {
-      this.themes.changeTheme("light")
-    }
-  }
+
 
 
 }

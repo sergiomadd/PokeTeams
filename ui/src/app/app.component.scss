@@ -2,6 +2,7 @@
 {
   display: grid;
   grid-template-columns: 15% 70% 15%;
+  min-height: 100vh;
 
   .left-panel
   {
