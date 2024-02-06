@@ -12,5 +12,6 @@ namespace api.Models.DBPoketeamModels
         public string? Picture { get; set; }
         [PersonalData]
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        public bool Visibility { get; set; }
     }
 }

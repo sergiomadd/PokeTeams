@@ -5,6 +5,8 @@
         public string Name { get; set; }
         public string Username { get; set; }
         public string? Picture { get; set; }
+        public string? Country { get; set; }
+        public bool Visibility { get; set; }
         public List<string> TeamKeys { get; set; }
     }
 }

@@ -193,7 +193,9 @@ namespace api.Controllers
                     Email = model.Email,
                     PasswordHash = model.Password,
                     EmailConfirmed = false,
-                    Picture = "blastoise"
+                    Picture = "blastoise",
+                    Country = "es",
+                    Visibility = true
                 };
                 var signUpResult = await _userManager.CreateAsync(user, model.Password);
                 if (!signUpResult.Succeeded)

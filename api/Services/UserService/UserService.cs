@@ -27,7 +27,9 @@ namespace api.Services.UserService
                     Name = user.Name,
                     Username = user.UserName,
                     TeamKeys = await GetUserTeamKeys(user),
-                    Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.jpeg"
+                    Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.jpeg",
+                    Country = user.Country,
+                    Visibility = user.Visibility ? true : false
                 };
             }
             return userDTO;
