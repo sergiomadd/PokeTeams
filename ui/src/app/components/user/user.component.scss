@@ -11,6 +11,7 @@
     justify-content: start;
     align-items: center;
     margin-top: 2vh;
+    gap: 0.4vw;
 
     .picture
     {
@@ -25,6 +26,12 @@
       display: flex;
       flex-direction: column;
       justify-content: start;
+    }
+
+    .flag
+    {
+      width: 2vw;
+      height: 2vw;
     }
   }
 
@@ -56,5 +63,16 @@
     {
       border-bottom: grey 2px solid;
     }
+  }
+
+  .private
+  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30vw;
+    height: 20vh;
+    background-color: lightgrey;
+    font-size: x-large;
   }
 }

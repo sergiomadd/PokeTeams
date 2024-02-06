@@ -16,12 +16,15 @@ export class UserComponent
   logged?: boolean = false;
   userService: UserService = inject(UserService);
   sections: boolean[] = [true, false, false]
+  country?: string;
 
   async ngOnInit()
   {
     this.user = this.userName ? await this.userService.getUser(this.userName) : undefined;
     this.logged = await this.userService.getLoggedUser() ? this.user?.username == (await this.userService.getLoggedUser())!.username : false;
     console.log("user:", this.user)
+    console.log(this.user?.country)
+    this.user?.country ? this.country = `assets/${this.user?.country}.png` : undefined;
   }
 
   changeSection(index: number)
