@@ -2,13 +2,15 @@
   <div class="section">
     <ng-container *ngIf="user != null; else anon">
       <div class="user-preview">
-        <div class="row">
-          <div class="names">
-            <div>
-              {{user?.name}}
-            </div>
-            <div>
-              @{{user?.username}}
+        <div class="row card">
+          <div class="column">
+            <div class="names">
+              <div>
+                {{user?.name}}
+              </div>
+              <div>
+                @{{user?.username}}
+              </div>
             </div>
             <a href="/@{{user?.username}}" class="linked-btn">Profile</a>
           </div>

@@ -35,7 +35,6 @@
     //min-height: 20vh;
     //border: 1px solid grey;
     padding: 0.4vw;
-    border: 1px solid grey;
     border-radius: 5px;
   }
 
@@ -47,10 +46,18 @@
     flex-direction: column;
     gap: 1vh;
 
+    .card
+    {
+      border-radius: 10px;
+      border: 1px solid black;
+      background-color: white;
+      padding: 1vh;
+    }
+
     .row
     {
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
       gap: 0.6vw;
     }
@@ -61,14 +68,12 @@
       flex-direction: column;
       justify-content: space-around;
       align-items: center;
-      gap: 0.6vw;
     }
 
     .picture
     {
       width: 4vw;
       height: 4vw;
-      margin-right: 1vw;
       border-radius: 5px;
     }
   
@@ -77,6 +82,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;      
+      padding-bottom: 0.4vw;
     }
   }
 }
