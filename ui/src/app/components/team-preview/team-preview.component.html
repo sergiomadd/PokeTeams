@@ -1,55 +1,62 @@
 
 <div class="team">
-  <div class="top">
-    <div class="team-details">
-      <div class="visibility"><div class="check"></div></div>
-      <div class="col">
-        <div class="detail">
-          @{{team?.player}}
-        </div>
-      </div>
-      <div class="detail">
-        <img src="assets/regionals.png" alt="" class="icon">
-      </div>
-      <div class="row">
-        <div class="detail">
-          {{team?.tournament}}
+  <ng-container *ngIf="getVisibility(); else private">
+    <div class="top">
+      <div class="team-details">
+        <div class="visibility"><div class="check"></div></div>
+        {{team?.visibility}}
+        <div class="col">
+          <div class="detail">
+            @{{team?.player}}
+          </div>
         </div>
         <div class="detail">
-          {{team?.regulation}}
+          <img src="assets/regionals.png" alt="" class="icon">
+        </div>
+        <div class="row">
+          <div class="detail">
+            {{team?.tournament}}
+          </div>
+          <div class="detail">
+            {{team?.regulation}}
+          </div>
         </div>
       </div>
-    </div>
-    <div class="center">
-      <div>
+      <div class="center">
         <div>
-          Views: {{team?.viewCount}}
+          <div>
+            Views: {{team?.viewCount}}
+          </div>
+          <div>
+            {{team?.date}}
+          </div>
         </div>
-        <div>
-          {{team?.date}}
+      </div>
+      <div class="right">
+        <div class="link">
+          <a href="{{team?.id}}" target=”_blank” >Open</a>
         </div>
+        <ng-container *ngIf="logged">
+          <div class="link">
+            <a href="{{team?.id}}" target=”_blank” >Edit</a>
+          </div>
+          <div class="link">
+            <a href="{{team?.id}}" target=”_blank” >Delete</a>
+          </div>
+        </ng-container>
       </div>
     </div>
-    <div class="right">
-      <div class="link">
-        <a href="{{team?.id}}" target=”_blank” >Open</a>
-      </div>
-      <div class="link">
-        <a href="{{team?.id}}" target=”_blank” >Edit</a>
-      </div>
-      <div class="link">
-        <a href="{{team?.id}}" target=”_blank” >Delete</a>
-      </div>
+    <div class="pokemons"
+    (mouseenter)="expand()"
+    (mouseleave)="expand()"
+    >
+      <ng-container *ngFor="let pokemon of team?.pokemons">
+        <app-pokemon-preview [pokemon]="pokemon"></app-pokemon-preview>
+      </ng-container>
     </div>
-
-  </div>
-  <div class="pokemons"
-  (mouseenter)="expand()"
-  (mouseleave)="expand()"
-  >
-    <ng-container *ngFor="let pokemon of team?.pokemons">
-      <app-pokemon-preview [pokemon]="pokemon"></app-pokemon-preview>
-    </ng-container>
-  </div>
+  </ng-container>
+  <ng-template #private>
+    TEAM IS PRIVATE
+  </ng-template>
 </div>
 

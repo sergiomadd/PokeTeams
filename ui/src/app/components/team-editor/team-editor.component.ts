@@ -1,17 +1,11 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { Pokemon } from 'src/app/models/pokemon.model';
-import { GetPokemonService } from 'src/app/services/get-pokemon.service';
-import { parsePaste } from 'src/app/services/parsePaste';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { EditorData } from 'src/app/models/editorData.model';
-import { FormControl } from '@angular/forms';
-import { SwitchComponent } from '../pieces/switch/switch.component';
 import { Team } from 'src/app/models/team.model';
 import { GenerateTeamService } from 'src/app/services/generate-team.service';
-import { EditorOption } from 'src/app/models/editorOption.model';
 import { TeamComponent } from '../team/team.component';
 import { TopOptionComponent } from '../options/top-option/top-option.component';
-import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-team-editor',
@@ -51,6 +45,7 @@ export class TeamEditorComponent
       tournament: '',
       regulation: '',
       viewCount: 0,
+      visibility: true
     }
     
     console.log("loaded team", this.team);

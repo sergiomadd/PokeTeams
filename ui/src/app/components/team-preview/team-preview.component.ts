@@ -11,8 +11,14 @@ export class TeamPreviewComponent
 {
   @Input() team?: Team;
   @Input() mode?: string;
+  @Input() logged?: boolean;
   
   @ViewChildren(PokemonPreviewComponent) pokemonPreviewsComponents!: QueryList<PokemonPreviewComponent>;
+
+  getVisibility()
+  {
+    return this.logged ? true : this.team?.visibility;
+  }
 
   expand()
   {

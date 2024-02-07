@@ -10,5 +10,6 @@ export interface Team
   tournament?: string,
   regulation?: string,
   viewCount: number,
-  date?: string
+  date?: string,
+  visibility: boolean
 }
