@@ -3,12 +3,6 @@ import { Team } from 'src/app/models/team.model';
 import { DropdownOption } from '../pieces/dropdown/dropdown.component';
 import { FormBuilder } from '@angular/forms';
 
-enum SorterOptions
-{
-  Date,
-  Views
-}
-
 @Component({
   selector: 'app-user-teams',
   templateUrl: './user-teams.component.html',
@@ -17,13 +11,17 @@ enum SorterOptions
 export class UserTeamsComponent 
 {
   @Input() teams?: Team[];
+  @Input() logged?: boolean;
+
   sortedTeams?: Team[] = [];
 
   formBuilder = inject(FormBuilder)
 
   searchForm = this.formBuilder.group(
   {
-    input: [''],
+    tournament: [''],
+    regulation: [''],
+    pokemon: [''],
   });
   
   selectedSorter: DropdownOption = 
@@ -44,9 +42,16 @@ export class UserTeamsComponent
   {
     this.sortedTeams = this.teams;
 
-    this.searchForm.controls.input.valueChanges.subscribe((value) => 
+    this.searchForm.valueChanges.subscribe((value) => 
     {
-      value ? this.search(value) : undefined;
+      if(value.pokemon || value.tournament || value.regulation)
+      {
+        value ? this.search(value.pokemon, value.tournament, value.regulation) : undefined;
+      }
+      else
+      {
+        this.sortedTeams = this.teams;
+      }
     })
   }
 
@@ -58,15 +63,46 @@ export class UserTeamsComponent
     }
   }
 
-
-  search(input: string)
+  switchVisibility($event)
   {
-    if(input != undefined)
+    if(!$event)
     {
-      this.sortedTeams = [];
+      this.sortedTeams = this.teams;
+    }
+    else
+    {
+      this.sortedTeams = this.teams?.filter(t => t.visibility == $event);
+    }
+  }
+
+  search(pokemon?: string | null, tournament?: string | null, regulation?: string | null)
+  {
+    this.sortedTeams = [];
+    if(pokemon)
+    {
       this.teams?.forEach(team => 
       {
-        if(team.pokemons.some(p => p.name?.toLowerCase().includes(input.toLowerCase())))
+        if(team.pokemons.some(p => p.name?.toLowerCase().includes(pokemon.toLowerCase())))
+        {
+          this.sortedTeams?.push(team);
+        }
+      });
+    }
+    if(tournament)
+    {
+      this.teams?.forEach(team => 
+      {
+        if(team.tournament?.toLowerCase().includes(tournament.toLowerCase()))
+        {
+          this.sortedTeams?.push(team);
+        }
+      });
+    }
+    if(regulation)
+    {
+      this.teams?.forEach(team => 
+      {
+        if(team.regulation?.toLowerCase().includes(regulation.toLowerCase()))
         {
           this.sortedTeams?.push(team);
         }

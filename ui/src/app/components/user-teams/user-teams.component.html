@@ -1,5 +1,7 @@
 <div class="teams">
   <div class="bar">
+    <form action="" [formGroup]="searchForm" class="form">
+
     <div class="sorter">
       Sort By:
       <app-dropdown
@@ -9,26 +11,32 @@
         (selectEvent)="selectSorter($event)"
       ></app-dropdown>
     </div>
-    <div>
-      Public/Private
+    <div class="item">
+      <label for="">Public/Private: </label>
+      <app-switch 
+      [inputState]="true"
+      [label]=""
+      (checkEvent)="switchVisibility($event)"
+      ></app-switch>
     </div>
-    <div>
-      Tournaments
+    <div class="item">
+      <label for="">Pokemon: </label>
+      <input type="text" name="" id="" formControlName="pokemon">
     </div>
-    <div>
-      Regulation
+    <div class="item">
+      <label for="">Tournament: </label>
+      <input type="text" name="" id="" formControlName="tournament">
     </div>
-    <div class="search">
-      <form action="" [formGroup]="searchForm">
-        <label for="">Search pokemon: </label>
-        <input type="text" name="" id="" formControlName="input">
-      </form>
+    <div class="item">
+      <label for="">Regulation: </label>
+      <input type="text" name="" id="" formControlName="regulation">
     </div>
+  </form>
   </div>
   <div class="teams">
     <ng-container *ngIf="sortedTeams; else noteams">
       <ng-container *ngFor="let team of sortedTeams">
-        <app-team-preview [team]="team" [mode]="'six'"></app-team-preview>
+        <app-team-preview [team]="team" [mode]="'six'" [logged]="logged"></app-team-preview>
       </ng-container>
     </ng-container>
     <ng-template #noteams>

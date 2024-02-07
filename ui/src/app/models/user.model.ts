@@ -6,5 +6,7 @@ export interface User
   username: string,
   picture?: string,
   teams: Team[],
-  teamKeys?: string[]
+  teamKeys?: string[],
+  country: string,
+  visibility: boolean
 }

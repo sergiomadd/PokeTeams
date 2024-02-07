@@ -19,11 +19,33 @@
       margin-top: 1vh;
       border-radius: 5px;
       padding: 0.2vw;
+
+      .form
+      {
+        display: flex;
+        gap: 0.4vw;
+
+        input
+        {
+          width: 6vw;
+        }
+  
+        .item
+        {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+  
+        .sorter
+        {
+          display: flex;
+          align-items: center;
+        }
+      }
+
+
     }
 
-    .sorter
-    {
-      display: flex;
-      align-items: center;
-    }
+
   }
