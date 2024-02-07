@@ -5,7 +5,7 @@ namespace api.Services.UserService
 {
     public interface IUserService
     {
-        public Task<UserDTO> BuildUserDTO(User user);
+        public Task<UserDTO> BuildUserDTO(User user, bool logged);
         public Task<User> GetUserByUserName(string userName);
         public Task<User> GetUserById(string id);
         public Task<bool> UserNameAvailable(string userName);

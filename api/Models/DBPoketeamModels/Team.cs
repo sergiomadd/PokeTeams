@@ -13,5 +13,6 @@ namespace api.Models.DBPoketeamModels
         public string? Regulation { get; set; }
         public int ViewCount { get; set; }
         public string? DateAdded { get; set; }
+        public bool Visibility { get; set; }
     }
 }

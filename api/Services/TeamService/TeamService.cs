@@ -70,7 +70,9 @@ namespace api.Services.TeamService
                     team.Tournament,
                     team.Regulation,
                     team.ViewCount,
-                    team.DateAdded);
+                    team.DateAdded,
+                    team.Visibility
+                    );
             }
             return teamDTO;
         }
@@ -103,7 +105,8 @@ namespace api.Services.TeamService
                     Tournament = inputTeam.Tournament ?? null,
                     Regulation = inputTeam.Regulation ?? null,
                     ViewCount = 0,
-                    DateAdded = DateTime.Now.ToString("dd/MM/yyyy")
+                    DateAdded = DateTime.Now.ToString("dd/MM/yyyy"),
+                    Visibility = inputTeam.Visibility
                 };
                 await _teamContext.Team.AddAsync(newTeam);
                 await _teamContext.SaveChangesAsync();

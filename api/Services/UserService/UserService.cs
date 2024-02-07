@@ -3,6 +3,7 @@ using api.Models.DBPoketeamModels;
 using api.Util;
 using api.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 namespace api.Services.UserService
 {
@@ -17,7 +18,7 @@ namespace api.Services.UserService
             _userContext = userContext;
         }
 
-        public async Task<UserDTO> BuildUserDTO(User user)
+        public async Task<UserDTO> BuildUserDTO(User user, bool logged)
         {
             UserDTO userDTO = null;
             if (user != null)
@@ -26,7 +27,7 @@ namespace api.Services.UserService
                 {
                     Name = user.Name,
                     Username = user.UserName,
-                    TeamKeys = await GetUserTeamKeys(user),
+                    TeamKeys = await GetUserTeamKeys(user, logged),
                     Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.jpeg",
                     Country = user.Country,
                     Visibility = user.Visibility ? true : false
@@ -82,7 +83,7 @@ namespace api.Services.UserService
             return false;
         }
 
-        public async Task<List<string>> GetUserTeamKeys(User user)
+        public async Task<List<string>> GetUserTeamKeys(User user, bool logged)
         {
             List<string> teamKeys = new List<string>();
             if (user == null) { Printer.Log(user.Name);  return teamKeys; }
@@ -98,7 +99,17 @@ namespace api.Services.UserService
                             Team team = await _pokeTeamsContext.Team.FindAsync(userTeam.TeamId);
                             if(team != null)
                             {
-                                teamKeys.Add(team.Id);
+                                if(!logged)
+                                {
+                                    if(team.Visibility)
+                                    {
+                                        teamKeys.Add(team.Id);
+                                    }
+                                }
+                                else
+                                {
+                                    teamKeys.Add(team.Id);
+                                }
                             }
                         }
                     }

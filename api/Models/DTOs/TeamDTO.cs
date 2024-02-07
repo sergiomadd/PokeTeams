@@ -14,6 +14,7 @@ namespace api.Models.DTOs
         public string? Regulation { get; set; }
         public int ViewCount { get; set; }
         public string? Date { get; set; }
+        public bool Visibility { get; set; }
 
 
         public TeamDTO()
@@ -29,7 +30,8 @@ namespace api.Models.DTOs
             string tournament,
             string regulation,
             int viewCount,
-            string date
+            string date,
+            bool visibility
             )
         {
             ID = id;
@@ -40,6 +42,7 @@ namespace api.Models.DTOs
             Regulation = regulation;
             ViewCount = viewCount;
             Date = date;
+            Visibility = visibility;
         }
     }
 }
