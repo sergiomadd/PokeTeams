@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -32,7 +32,11 @@ import { TeamIconsComponent } from './components/team-icons/team-icons.component
 import { UserOptionsComponent } from './components/user-options/user-options.component';
 import { UserDetailsComponent } from './components/user-details/user-details.component';
 import { UserTeamsComponent } from './components/user-teams/user-teams.component';
-
+import { StoreModule, provideState, provideStore } from '@ngrx/store';
+import { StoreDevtoolsModule, provideStoreDevtools } from '@ngrx/store-devtools';
+import { authFeatureKey, authReducer } from './state/auth/auth.reducers';
+import { provideEffects } from '@ngrx/effects';
+import * as authEffects from './state/auth/effects';
 
 
 @NgModule({
@@ -72,9 +76,23 @@ import { UserTeamsComponent } from './components/user-teams/user-teams.component
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    StoreModule.forRoot({}, {}),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
     ],
-  providers: [],
+  providers: [
+    provideStore(),
+    provideState(authFeatureKey, authReducer),
+    provideEffects(authEffects),
+    provideStoreDevtools(
+    {
+      maxAge: 25,
+      logOnly: !isDevMode(),
+      autoPause: true,
+      trace: false,
+      traceLimit: 75
+    }
+  )],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
