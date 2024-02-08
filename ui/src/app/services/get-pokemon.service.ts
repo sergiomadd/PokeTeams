@@ -1,15 +1,15 @@
 import { Injectable, inject } from '@angular/core';
-import { PokemonData } from '../models/pokemonData.model';
+import { PokemonData } from '../models/DTOs/pokemonData.dto';
 import { HttpClient } from  '@angular/common/http';
-import { Pokemon } from '../models/pokemon.model';
+import { Pokemon } from '../models/pokemon/pokemon.model';
 import { lastValueFrom, timeout } from 'rxjs';
-import { Ability } from '../models/ability.model';
-import { Item } from '../models/item.model';
-import { Move } from '../models/move.model';
-import { Nature } from '../models/nature.model';
-import { Stat } from '../models/stat.model';
+import { Ability } from '../models/pokemon/ability.model';
+import { Item } from '../models/pokemon/item.model';
+import { Move } from '../models/pokemon/move.model';
+import { Nature } from '../models/pokemon/nature.model';
+import { Stat } from '../models/pokemon/stat.model';
 import { getErrorMessage } from './util';
-import { Type } from '../models/type.model';
+import { Type } from '../models/pokemon/type.model';
 import { PokePaste } from '../models/pokePaste.model';
 import { LinkifierService } from './linkifier.service';
 

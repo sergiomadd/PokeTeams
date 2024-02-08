@@ -1,5 +1,5 @@
 import { EditorOption } from "./editorOption.model";
-import { Sprite } from "./sprite.model";
+import { Sprite } from "./pokemon/sprite.model";
 
 export interface EditorData
 {

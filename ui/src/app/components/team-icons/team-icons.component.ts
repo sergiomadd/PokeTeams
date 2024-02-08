@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Pokemon } from 'src/app/models/pokemon.model';
+import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Team } from 'src/app/models/team.model';
 
 @Component({

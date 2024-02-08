@@ -1,6 +1,6 @@
 import { Component, Input, QueryList, ViewChildren } from '@angular/core';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
-import { Pokemon } from 'src/app/models/pokemon.model';
+import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { PokemonComponent } from '../pokemon/pokemon.component';
 import { Team } from 'src/app/models/team.model';
 

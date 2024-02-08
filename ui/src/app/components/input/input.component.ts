@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Pokemon } from 'src/app/models/pokemon.model';
+import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { GetPokemonService } from 'src/app/services/get-pokemon.service';
 import { parsePaste } from 'src/app/services/parsePaste';
 

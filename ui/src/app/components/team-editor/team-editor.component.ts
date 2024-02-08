@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
-import { Pokemon } from 'src/app/models/pokemon.model';
+import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { EditorData } from 'src/app/models/editorData.model';
 import { Team } from 'src/app/models/team.model';

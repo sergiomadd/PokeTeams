@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { EditorOption } from 'src/app/models/editorOption.model';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
-import { Pokemon } from 'src/app/models/pokemon.model';
-import { Sprite } from 'src/app/models/sprite.model';
+import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
+import { Sprite } from 'src/app/models/pokemon/sprite.model';
 
 @Component({
   selector: 'app-left-option',

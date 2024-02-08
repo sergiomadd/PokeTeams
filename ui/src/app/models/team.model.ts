@@ -1,5 +1,5 @@
 import { EditorOptions } from "./editorOptions.model";
-import { Pokemon } from "./pokemon.model";
+import { Pokemon } from "./pokemon/pokemon.model";
 
 export interface Team
 {
