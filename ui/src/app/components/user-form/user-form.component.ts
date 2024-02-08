@@ -1,9 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { IdentityResponseDTO } from 'src/app/models/identityResponseDTO.model';
-import { LogInDTO } from 'src/app/models/logindto.model';
-import { SignUpDTO } from 'src/app/models/signupdto.model';
+import { Store } from '@ngrx/store';
+import { combineLatest } from 'rxjs';
+import { AuthResponseDTO } from 'src/app/models/DTOs/authResponse.dto';
+import { LogInDTO } from 'src/app/models/DTOs/login.dto';
+import { SignUpDTO } from 'src/app/models/DTOs/signup.dto';
 import { UserService } from 'src/app/services/user.service';
+import { authActions } from 'src/app/state/auth/auth.actions';
+import { selectIsSubmitting, selectLoggedUser, selectValidationErrors } from 'src/app/state/auth/auth.reducers';
 
 @Component({
   selector: 'app-user-form',
@@ -13,10 +17,18 @@ import { UserService } from 'src/app/services/user.service';
 
 export class UserFormComponent 
 {
-  userService = inject(UserService)
-  formBuilder = inject(FormBuilder)
+  userService = inject(UserService);
+  formBuilder = inject(FormBuilder);
+  store = inject(Store);
 
-  errors: string[] = [];
+  data$ = combineLatest(
+    {
+      loggedUser: this.store.select(selectLoggedUser),
+      isSubmitting: this.store.select(selectIsSubmitting),
+      backendErrors: this.store.select(selectValidationErrors)
+    }
+  )
+
   login: boolean = true;
   signup: boolean = false;
   userNameAvailable: boolean = false;
@@ -45,6 +57,7 @@ export class UserFormComponent
       if(this.signUpForm.controls.username.valid)
       {
         this.userNameAvailable = value ? (await this.userService.checkUserNameAvailable(value)).success : false;
+        this.userNameAvailable = true;
         this.userNameAvailable ?? this.signUpForm.controls.username.setErrors({ "usernameTaken": true });
       }
     });
@@ -54,9 +67,22 @@ export class UserFormComponent
       if(this.signUpForm.controls.email.valid)
       {
         this.emailAvailable = value ? (await this.userService.checkEmailAvailable(value)).success : false;
+        this.emailAvailable = true;
         this.emailAvailable ?? this.signUpForm.controls.email.setErrors({ "emailTaken": true });
       }
     });
+  }
+
+  async temp(response: AuthResponseDTO)
+  {
+    if(response)
+    {
+      return response.success;
+    }
+    else
+    {
+      return true;
+    }
   }
 
   async logIn()
@@ -70,15 +96,7 @@ export class UserFormComponent
         password: this.logInForm.get('userNameOrEmail')?.value!,
         rememberMe: true
       }
-      let response: IdentityResponseDTO = await this.userService.logIn(loginDTO);
-      if(response)
-      {
-        this.errors = response.errors ?? [];
-      }
-      if(response.success)
-      {
-        window.location.reload();
-      }
+      this.store.dispatch(authActions.logIn({request: loginDTO}))
     }
   }
 
@@ -95,16 +113,7 @@ export class UserFormComponent
         confirmPassword: this.signUpForm.get('confirmPassword')?.value!
       }
       console.log("signup dto", signupdto)
-
-      let response: IdentityResponseDTO = await this.userService.signUp(signupdto);
-      if(response)
-      {
-        this.errors = response.errors ?? [];
-      }
-      if(response.success)
-      {
-        window.location.reload();
-      }
+      this.store.dispatch(authActions.signUp({request: signupdto}))
     }
   }
 

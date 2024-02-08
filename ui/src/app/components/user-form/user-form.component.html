@@ -1,94 +1,108 @@
-<div class="wrapper">
-  <ng-container *ngIf="login">
-    <div class="nav signup" (click)="changeForm()">
-      Sign Up ->
-    </div>
-    <form
-    class="form" 
-    [formGroup]="logInForm" 
-    (ngSubmit)="logIn()"
-    >
-      <div class="inputs">
-        <div class="item">
-          <label for="">Username</label>
-          <input type="text" 
-          formControlName="userNameOrEmail"
-          [ngClass]="{invalid: isInvalid('userNameOrEmail', 'login')}"
-          >
-          <span *ngIf="isInvalid('userNameOrEmail', 'login')" class="error">{{getError('userNameOrEmail', 'login')}}</span>
-        </div>
-        <div class="item">
-          <label for="">Password</label>
-          <input type="password" 
-          formControlName="password"
-          [ngClass]="{invalid: isInvalid('password', 'login')}"
-          >
-          <span *ngIf="isInvalid('password', 'login')" class="error">{{getError('password', 'login')}}</span>
-        </div>
+<ng-container *ngIf="data$ | async as data">
+  <div class="wrapper">
+    <ng-container *ngIf="login">
+      <div class="nav signup" (click)="changeForm()">
+        Sign Up ->
       </div>
-      <ng-container *ngIf="errors">
-        <ng-container *ngFor="let error of errors">
-          <span class="error">{{error}}</span>
+      <form
+      class="form" 
+      [formGroup]="logInForm" 
+      (ngSubmit)="logIn()"
+      >
+        <div class="inputs">
+          <div class="item">
+            <label for="">Username</label>
+            <input type="text" 
+            formControlName="userNameOrEmail"
+            [ngClass]="{invalid: isInvalid('userNameOrEmail', 'login')}"
+            >
+            <span *ngIf="isInvalid('userNameOrEmail', 'login')" class="error">{{getError('userNameOrEmail', 'login')}}</span>
+          </div>
+          <div class="item">
+            <label for="">Password</label>
+            <input type="password" 
+            formControlName="password"
+            [ngClass]="{invalid: isInvalid('password', 'login')}"
+            >
+            <span *ngIf="isInvalid('password', 'login')" class="error">{{getError('password', 'login')}}</span>
+          </div>
+        </div>
+        <ng-container *ngIf="data.backendErrors">
+          <ng-container *ngFor="let error of data.backendErrors">
+            <span class="error">{{error}}</span>
+          </ng-container>
         </ng-container>
-      </ng-container>
-      <button 
-      type="submit" 
-      class="entry">Log In</button>
-    </form>
-  </ng-container>
-  <ng-container *ngIf="signup">
-    <div class="nav login" (click)="changeForm()">
-      Log In 
-    </div>
-    <form class="form"
-    [formGroup]="signUpForm" 
-    (ngSubmit)="signUp()"
-    >
-      <div class="inputs">
-        <div class="item">
-          <label>Username*</label>
-          <input type="text" 
-          formControlName="username"
-          [ngClass]="{invalid: isInvalid('username', 'signup')}"
-          >
-          <span *ngIf="userNameAvailable" class="correct">This username is available</span>
-          <span *ngIf="isInvalid('username', 'signup')" class="error">{{getError('username', 'signup')}}</span>
+        <button 
+        type="submit" 
+        class="entry"
+        [disabled]="data.isSubmitting"
+        >Log In</button>
+        <div class="progress">
+          {{data.isSubmitting}}
         </div>
-        <div class="item">
-          <label>Email*</label>
-          <input type="text" 
-          formControlName="email"
-          [ngClass]="{invalid: isInvalid('email', 'signup')}"
-          >
-          <span *ngIf="emailAvailable" class="correct">This email is available</span>
-          <span *ngIf="isInvalid('email', 'signup')" class="error">{{getError('email', 'signup')}}</span>
-        </div>
-        <div class="item">
-          <label>Password*</label>
-          <input type="password" 
-          formControlName="password"
-          [ngClass]="{invalid: isInvalid('password', 'signup')}"
-          >
-          <span *ngIf="isInvalid('password', 'signup')" class="error">{{getError('password', 'signup')}}</span>
-        </div>
-        <div class="item">
-          <label>Confirm Password*</label>
-          <input type="password" 
-          formControlName="confirmPassword"
-          [ngClass]="{invalid: isInvalid('confirmPassword', 'signup')}"
-          >
-          <span *ngIf="isInvalid('confirmPassword', 'signup')" class="error">{{getError('confirmPassword', 'signup')}}</span>
-        </div>
+      </form>
+    </ng-container>
+    <ng-container *ngIf="signup">
+      <div class="nav login" (click)="changeForm()">
+        Log In 
       </div>
-      <ng-container *ngIf="errors">
-        <ng-container *ngFor="let error of errors">
-          <span class="error">{{error}}</span>
+      <form class="form"
+      [formGroup]="signUpForm" 
+      (ngSubmit)="signUp()"
+      >
+        <div class="inputs">
+          <div class="item">
+            <label>Username*</label>
+            <input type="text" 
+            formControlName="username"
+            [ngClass]="{invalid: isInvalid('username', 'signup')}"
+            >
+            <span *ngIf="userNameAvailable" class="correct">This username is available</span>
+            <span *ngIf="isInvalid('username', 'signup')" class="error">{{getError('username', 'signup')}}</span>
+          </div>
+          <div class="item">
+            <label>Email*</label>
+            <input type="text" 
+            formControlName="email"
+            [ngClass]="{invalid: isInvalid('email', 'signup')}"
+            >
+            <span *ngIf="emailAvailable" class="correct">This email is available</span>
+            <span *ngIf="isInvalid('email', 'signup')" class="error">{{getError('email', 'signup')}}</span>
+          </div>
+          <div class="item">
+            <label>Password*</label>
+            <input type="password" 
+            formControlName="password"
+            [ngClass]="{invalid: isInvalid('password', 'signup')}"
+            >
+            <span *ngIf="isInvalid('password', 'signup')" class="error">{{getError('password', 'signup')}}</span>
+          </div>
+          <div class="item">
+            <label>Confirm Password*</label>
+            <input type="password" 
+            formControlName="confirmPassword"
+            [ngClass]="{invalid: isInvalid('confirmPassword', 'signup')}"
+            >
+            <span *ngIf="isInvalid('confirmPassword', 'signup')" class="error">{{getError('confirmPassword', 'signup')}}</span>
+          </div>
+        </div>
+        <ng-container *ngIf="data.backendErrors">
+          <ng-container *ngFor="let error of data.backendErrors">
+            <span class="error">{{error}}</span>
+          </ng-container>
         </ng-container>
-      </ng-container>
-      <button 
-      type="submit" 
-      class="entry">Sign Up</button>
-    </form>
-  </ng-container>
-</div>  
+        <div>
+          <button 
+          type="submit" 
+          class="entry"
+          [disabled]="data.isSubmitting"
+          >Sign Up</button>
+          <div class="progress">
+            {{data.isSubmitting}}
+          </div>
+        </div>
 
+      </form>
+    </ng-container>
+  </div>  
+</ng-container>
