@@ -70,6 +70,24 @@ const authFeature = createFeature(
           loggedUser: null,
           validationErrors: action.errors
         })),
+      on(authActions.logOut, (state) => (
+        {
+          ...state,
+          isSubmitting: true,
+          validationErrors: null
+        })),
+      on(authActions.logOutSuccess, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          loggedUser: null
+        })),
+      on(authActions.logOutFailure, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          validationErrors: action.errors
+        })),
     )
   }
 );

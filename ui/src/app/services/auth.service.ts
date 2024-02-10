@@ -19,6 +19,12 @@ export class AuthService
 
   constructor(private http: HttpClient) { }
 
+  getLogged() : Observable<AuthResponseDTO>
+  {
+    let url = this.apiUrl + 'logged';
+    return this.http.get<AuthResponseDTO>(url, {withCredentials: true});
+  }
+
   logIn(form: LogInDTO) : Observable<AuthResponseDTO>
   {
     let url = this.apiUrl + 'login';
@@ -31,10 +37,9 @@ export class AuthService
     return this.http.post<AuthResponseDTO>(url, data, {withCredentials: true});
   }
 
-  //TODO
-  getLogged() : Observable<AuthResponseDTO>
+  logOut() : Observable<AuthResponseDTO>
   {
-    let url = this.apiUrl + 'logged';
+    let url = this.apiUrl + 'logout';
     return this.http.get<AuthResponseDTO>(url, {withCredentials: true});
   }
 }

@@ -15,32 +15,9 @@ export class UserOptionsComponent
   {
     
   }
-
   
-  async logOut()
+  logOut()
   {
-    localStorage.removeItem(".AspNetCore.Identity.Application");
-    //this.clearCookies();
-    this.store.dispatch(authActions.getLogged());
+    this.store.dispatch(authActions.logOut());
   }
-
-  /*
-  clearCookies()
-  {
-    console.log("local storage", localStorage)
-    console.log("cookie", this.getCookie(".AspNetCore.Identity.Application"))
-    console.log("doc", document.cookie)
-    localStorage.removeItem(".AspNetCore.Identity.Application");
-    this.delete_cookie(".AspNetCore.Identity.Application");
-  }
-
-  getCookie(name) {
-    function escape(s) { return s.replace(/([.*+?\^$(){}|\[\]\/\\])/g, '\\$1'); }
-    var match = document.cookie.match(RegExp('(?:^|;\\s*)' + escape(name) + '=([^;]*)'));
-    return match ? match[1] : null;
-  }
-  delete_cookie(name) {
-    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-  }
-  */
 }

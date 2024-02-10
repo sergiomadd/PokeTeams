@@ -5,8 +5,6 @@ import { Observable, lastValueFrom } from 'rxjs';
 import { getErrorMessage } from './util';
 import { User } from '../models/user.model';
 import { GenerateTeamService } from './generate-team.service';
-import { LogInDTO } from '../models/DTOs/login.dto';
-import { SignUpDTO } from '../models/DTOs/signup.dto';
 import { Team } from '../models/team.model';
 
 @Injectable({
@@ -83,22 +81,5 @@ export class UserService
       console.log("Error: ", getErrorMessage(error));
     }
     return exists;
-  }
-
-  async logOut() : Promise<AuthResponseDTO>
-  {
-    let response: AuthResponseDTO = <AuthResponseDTO>{};
-    let url = this.apiUrl + 'logout';
-    try
-    {
-      const response$ = this.http.post<AuthResponseDTO>(url, {withCredentials: true});
-      response = await lastValueFrom(response$);
-      console.log("logout", response);
-    }
-    catch(error)
-    {
-      console.log("Error: ", getErrorMessage(error));
-    }
-    return response;
   }
 }

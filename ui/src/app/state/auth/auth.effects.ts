@@ -130,3 +130,33 @@ export const redirectAfterLogInEffect = createEffect(
     )
   },{functional: true, dispatch: false}
 )
+
+export const logOutEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService)
+  ) =>
+  {
+    return actions$.pipe(
+      ofType(authActions.logOut),
+      switchMap(() =>
+      {
+        return authService.logOut().pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.logOutSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.logOutFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  }, 
+  {functional: true}
+)
