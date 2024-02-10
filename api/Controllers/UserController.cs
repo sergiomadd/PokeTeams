@@ -40,7 +40,7 @@ namespace api.Controllers
         [HttpGet, Route("{userName}")]
         public async Task<ActionResult<UserDTO>> GetUserByUserName(string userName)
         {
-            UserDTO user = await _userService.BuildUserDTO(await _userService.GetUserByUserName(userName));
+            UserDTO user = await _userService.BuildUserDTO(await _userService.GetUserByUserName(userName), await UserLoggedIn(await _userService.GetUserByUserName(userName)));
             if (user == null)
             {
                 return NotFound("Couldn't find user");
@@ -86,7 +86,7 @@ namespace api.Controllers
 
         [AllowAnonymous]
         [HttpGet, Route("logged")]
-        public async Task<ActionResult<UserDTO>> Logged()
+        public async Task<ActionResult<IdentityResponseDTO>> Logged()
         {
             Printer.Log("Trying to get user...");
             UserDTO userDTO;
@@ -95,19 +95,23 @@ namespace api.Controllers
                 Printer.Log("User: ", User.Identity.Name);
                 if (User.Identity.Name != null)
                 {
+                    Printer.Log("user name: ", User.Identity.Name);
+                }
+                if (User.Identity.Name != null)
+                {
                     var user = await _userManager.FindByNameAsync(User.Identity.Name);
                     if (user != null)
                     {
-                        userDTO = await _userService.BuildUserDTO(await _userService.GetUserByUserName(user.UserName));
+                        userDTO = await _userService.BuildUserDTO(await _userService.GetUserByUserName(user.UserName), await UserLoggedIn(user));
                     }
                     else
                     {
-                        return Unauthorized("Logged user not found");
+                        return Unauthorized(new IdentityResponseDTO { Success = false, Errors = new string[] { "Logged user not found" } });
                     }
                 }
                 else
                 {
-                    return Ok(null);
+                    return Ok(new IdentityResponseDTO {Success = false, Errors = new string[] { "No user logged" } });
                 }
 
             }
@@ -116,7 +120,27 @@ namespace api.Controllers
                 Printer.Log(ex.Message);
                 return BadRequest("Getting user error, exception");
             }
-            return Ok(userDTO);
+            return Ok(new IdentityResponseDTO { User = userDTO, Success = true });
+        }
+
+        private async Task<bool> UserLoggedIn(User user)
+        {
+            try
+            {
+                if (User.Identity.Name != null)
+                {
+                    var loggedUser = await _userManager.FindByNameAsync(User.Identity.Name);
+                    if (loggedUser != null)
+                    {
+                        return loggedUser.Id == user.Id;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return false;
         }
 
 
@@ -173,7 +197,7 @@ namespace api.Controllers
                 return BadRequest("Log in error, exception, Model not valid");
             }
             Printer.Log("User successfully loged in.");
-            return Ok(new IdentityResponseDTO { Success = true });
+            return Ok(new IdentityResponseDTO { User = null, Success = true });
         }
 
         [AllowAnonymous]
@@ -215,35 +239,11 @@ namespace api.Controllers
             return Ok(new IdentityResponseDTO { Success = true });
         }
 
-        [AllowAnonymous]
-        [HttpPost, Route("logout")]
+        [HttpGet, Route("logout")]
         public async Task LogOut()
         {
-            Printer.Log("Loggin out");
-            Printer.Log("User: ", User.Identity.Name);
-            //CookieAuthenticationDefaults.AuthenticationScheme
-            //await _signInManager.SignOutAsync();
-            /*
-            if(User.Identity.Name != null)
-            {
-                Printer.Log("user: ", User.Identity.Name);
-            }
-            if (User.Identity.IsAuthenticated)
-            {
-                Printer.Log("user logged");
-                await _signInManager.SignOutAsync();
-                
-            }
-
-            foreach (var key in HttpContext.Request.Cookies.Keys)
-            {
-                Printer.Log("cookie set");
-                HttpContext.Response.Cookies.Append(key, "", new CookieOptions() { Expires = DateTime.Now.AddDays(-1) });
-            }
-            */
-            //HttpContext.Response.Cookies.Delete(".AspNetCore.Identity.Application", new CookieOptions { Secure = true });
-
             await _signInManager.SignOutAsync();
+            Printer.Log("User logged out.");
         }
     }
 }
