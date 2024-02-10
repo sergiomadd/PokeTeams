@@ -1,53 +1,54 @@
-
-<div class="user">
-  <ng-container *ngIf="user?.visibility; else private">
-    <div class="profile">
-      <div class="picture">
-        <img src="{{user?.picture}}" alt="" class="picture">
+<ng-container *ngIf="data$ | async as data">
+  <div class="user">
+    <ng-container *ngIf="user?.visibility; else private">
+      <div class="profile">
+        <div class="picture">
+          <img src="{{user?.picture}}" alt="" class="picture">
+        </div>
+        <div class="names">
+          <div class="name">
+            {{user?.name}}
+          </div>
+          <div class="username">
+            <a href=""> &#64;{{user?.username}}</a>
+          </div>
+        </div>
+        <ng-container *ngIf="user?.country">
+          <div class="country">
+            <img src={{country}} alt="" class="flag">
+          </div>
+        </ng-container>
       </div>
-      <div class="names">
-        <div class="name">
-          {{user?.name}}
+      <hr>
+      <div class="sections">
+        <div class="section" (click)="changeSection(0)" [ngClass]="{selected: sections[0]}">
+          TEAMS
         </div>
-        <div class="username">
-          <a href=""> @{{user?.username}}</a>
+        <div class="section" (click)="changeSection(1)" [ngClass]="{selected: sections[1]}">
+          USER DETAILS
         </div>
+        <ng-container *ngIf="data.loggedUser?.username ===user?.username">
+          <div class="section" (click)="changeSection(2)" [ngClass]="{selected: sections[2]}">
+            OPTIONS
+          </div>
+        </ng-container>
       </div>
-      <ng-container *ngIf="user?.country">
-        <div class="country">
-          <img src={{country}} alt="" class="flag">
-        </div>
+      <ng-container *ngIf="sections[0]">
+        <app-user-teams [teams]="user?.teams"></app-user-teams>
       </ng-container>
-    </div>
-    <hr>
-    <div class="sections">
-      <div class="section" (click)="changeSection(0)" [ngClass]="{selected: sections[0]}">
-        TEAMS
-      </div>
-      <div class="section" (click)="changeSection(1)" [ngClass]="{selected: sections[1]}">
-        USER DETAILS
-      </div>
-      <ng-container *ngIf="logged">
-        <div class="section" (click)="changeSection(2)" [ngClass]="{selected: sections[2]}">
-          OPTIONS
-        </div>
+      <ng-container *ngIf="sections[1]">
+        <app-user-details></app-user-details>
       </ng-container>
-    </div>
-    <ng-container *ngIf="sections[0]">
-      <app-user-teams [teams]="user?.teams" [logged]="logged"></app-user-teams>
-    </ng-container>
-    <ng-container *ngIf="sections[1]">
-      <app-user-details></app-user-details>
-    </ng-container>
-    <ng-container *ngIf="logged">
-      <ng-container *ngIf="sections[2]">
-        <app-user-options></app-user-options>
+      <ng-container *ngIf="data.loggedUser">
+        <ng-container *ngIf="sections[2]">
+          <app-user-options></app-user-options>
+        </ng-container>
       </ng-container>
     </ng-container>
-  </ng-container>
-  <ng-template #private>
-    <div class="private">
-      This profile is private
-    </div>
-  </ng-template>
-</div>
+    <ng-template #private>
+      <div class="private">
+        This profile is private
+      </div>
+    </ng-template>
+  </div>
+</ng-container>

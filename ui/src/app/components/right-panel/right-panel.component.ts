@@ -1,7 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from 'src/app/models/user.model';
-import { UserService } from 'src/app/services/user.service';
+import { Store } from '@ngrx/store';
+import { selectLoggedUser } from 'src/app/state/auth/auth.reducers';
 
 @Component({
   selector: 'app-right-panel',
@@ -10,14 +10,8 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class RightPanelComponent 
 {
-  user?: User | null = null;
-  userService: UserService = inject(UserService);
   router = inject(Router)
+  store = inject(Store);
 
-
-  async ngOnInit()
-  {
-    this.user = await this.userService.getLoggedUser();
-  }
-
+  user$ = this.store.select(selectLoggedUser);
 }

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { User } from 'src/app/models/user.model';
-import { UserService } from 'src/app/services/user.service';
+import { Store } from '@ngrx/store';
+import { authActions } from 'src/app/state/auth/auth.actions';
 
 @Component({
   selector: 'app-user-options',
@@ -9,8 +9,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserOptionsComponent 
 {
-  userService = inject(UserService);
-  user?: User | null;
+  store = inject(Store);
 
   deleteAccount()
   {
@@ -20,12 +19,12 @@ export class UserOptionsComponent
   
   async logOut()
   {
-    await this.userService.logOut()
     localStorage.removeItem(".AspNetCore.Identity.Application");
-    this.clearCookies();
-    this.user = null;
+    //this.clearCookies();
+    this.store.dispatch(authActions.getLogged());
   }
 
+  /*
   clearCookies()
   {
     console.log("local storage", localStorage)
@@ -39,8 +38,9 @@ export class UserOptionsComponent
     function escape(s) { return s.replace(/([.*+?\^$(){}|\[\]\/\\])/g, '\\$1'); }
     var match = document.cookie.match(RegExp('(?:^|;\\s*)' + escape(name) + '=([^;]*)'));
     return match ? match[1] : null;
-}
-delete_cookie(name) {
-  document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-}
+  }
+  delete_cookie(name) {
+    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  }
+  */
 }

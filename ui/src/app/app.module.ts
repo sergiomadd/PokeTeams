@@ -1,7 +1,6 @@
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TeamComponent } from './components/team/team.component';
@@ -36,8 +35,7 @@ import { StoreModule, provideState, provideStore } from '@ngrx/store';
 import { StoreDevtoolsModule, provideStoreDevtools } from '@ngrx/store-devtools';
 import { authFeatureKey, authReducer } from './state/auth/auth.reducers';
 import { provideEffects } from '@ngrx/effects';
-import * as authEffects from './state/auth/effects';
-
+import * as authEffects from './state/auth/auth.effects';
 
 @NgModule({
   declarations: [

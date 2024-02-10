@@ -1,14 +1,8 @@
 import { Component, EventEmitter, Output, SimpleChanges, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { User } from 'src/app/models/user.model';
+import { Store } from '@ngrx/store';
 import { UserService } from 'src/app/services/user.service';
-
-interface Partial
-{
-  player: string | null,
-  tournament: string | null,
-  regulation: string | null
-}
+import { selectLoggedUser } from 'src/app/state/auth/auth.reducers';
 
 @Component({
   selector: 'app-top-option',
@@ -19,8 +13,9 @@ export class TopOptionComponent
 {
   formBuilder = inject(FormBuilder);
   userService = inject(UserService);
+  store = inject(Store);
 
-  user: User | null = null;
+  user$ = this.store.select(selectLoggedUser);
 
   logInFormSubmitted: boolean = false;
   detailsForm = this.formBuilder.group(
@@ -31,15 +26,4 @@ export class TopOptionComponent
   });
 
   @Output() detailsChange = new EventEmitter();
-
-  async ngOnInit()
-  {
-    this.user = await this.userService.getLoggedUser();
-    if(this.user)
-    {
-      this.detailsForm.get('player')?.setValue(this.user.username);
-    }
-
-    console.log("loaded user: ", this.user)
-  }
 }

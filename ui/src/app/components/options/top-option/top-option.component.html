@@ -1,10 +1,8 @@
-
-
 <div class="details">
   <form class="form" [formGroup]="detailsForm" >
     <div class="item">
       <label for="">Author: </label>
-      <input type="text" formControlName="player" >
+      <input type="text" formControlName="player" value="{{(user$ | async)?.username}}" >
     </div>
     <div class="item">
       <label for="">Tournament: </label>

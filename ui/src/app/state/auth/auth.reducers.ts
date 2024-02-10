@@ -1,9 +1,9 @@
 
 import { createFeature, createReducer, on } from '@ngrx/store';
-import { AuthStateInterface } from 'src/app/models/authState.interface';
+import { AuthState } from 'src/app/state/auth/auth.state';
 import { authActions } from './auth.actions';
 
-export const initialState: AuthStateInterface = 
+export const initialState: AuthState = 
 {
   isSubmitting: false,
   loggedUser: undefined,
@@ -15,7 +15,7 @@ const authFeature = createFeature(
     name: 'auth',
     reducer: createReducer(
       initialState,
-      on(authActions.signUp, state => (
+      on(authActions.signUp, (state) => (
         {
           ...state,
           isSubmitting: true,
@@ -25,7 +25,7 @@ const authFeature = createFeature(
         {
           ...state,
           isSubmitting: false,
-          currentUser: action.response
+          loggedUser: action.response.user
         })),
       on(authActions.signUpFailure, (state, action) => (
         {
@@ -33,7 +33,7 @@ const authFeature = createFeature(
           isSubmitting: false,
           validationErrors: action.errors
         })),
-      on(authActions.logIn, state => (
+      on(authActions.logIn, (state) => (
         {
           ...state,
           isSubmitting: true,
@@ -43,12 +43,31 @@ const authFeature = createFeature(
         {
           ...state,
           isSubmitting: false,
-          currentUser: action.response
+          loggedUser: action.response.user
         })),
       on(authActions.logInFailure, (state, action) => (
         {
           ...state,
           isSubmitting: false,
+          validationErrors: action.errors
+        })),
+      on(authActions.getLogged, (state) => (
+        {
+          ...state,
+          isSubmitting: true,
+          validationErrors: null
+        })),
+      on(authActions.getLoggedSuccess, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          loggedUser: action.response.user
+        })),
+      on(authActions.getLoggedFailure, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          loggedUser: null,
           validationErrors: action.errors
         })),
     )

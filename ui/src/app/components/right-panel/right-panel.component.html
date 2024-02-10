@@ -1,6 +1,6 @@
 <div class="panel">
   <div class="section">
-    <ng-container *ngIf="user != null; else anon">
+    <ng-container *ngIf="user$ | async as user; else anon">
       <div class="user-preview">
         <div class="row card">
           <div class="column">
@@ -9,7 +9,7 @@
                 {{user?.name}}
               </div>
               <div>
-                @{{user?.username}}
+                &#64;{{user?.username}}
               </div>
             </div>
             <a href="/@{{user?.username}}" class="linked-btn">Profile</a>
@@ -40,3 +40,4 @@
     RECENT TEAMS
   </div>
 </div>
+

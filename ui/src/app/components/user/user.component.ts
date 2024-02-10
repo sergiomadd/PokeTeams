@@ -1,7 +1,10 @@
 import { Component, Input, inject } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { combineLatest } from 'rxjs';
 import { User } from 'src/app/models/user.model';
 import { GenerateTeamService } from 'src/app/services/generate-team.service';
 import { UserService } from 'src/app/services/user.service';
+import { selectLoggedUser } from 'src/app/state/auth/auth.reducers';
 
 @Component({
   selector: 'app-user',
@@ -10,20 +13,24 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class UserComponent 
 {
+  store = inject(Store);
+  userService: UserService = inject(UserService);
+
   @Input() userName?: string;
 
   user?: User;
-  logged?: boolean = false;
-  userService: UserService = inject(UserService);
   sections: boolean[] = [true, false, false]
   country?: string;
+
+  data$ = combineLatest(
+    {
+      loggedUser: this.store.select(selectLoggedUser),
+    }
+  )
 
   async ngOnInit()
   {
     this.user = this.userName ? await this.userService.getUser(this.userName) : undefined;
-    this.logged = await this.userService.getLoggedUser() ? this.user?.username == (await this.userService.getLoggedUser())!.username : false;
-    console.log("user:", this.user)
-    console.log(this.user?.country)
     this.user?.country ? this.country = `assets/${this.user?.country}.png` : undefined;
   }
 

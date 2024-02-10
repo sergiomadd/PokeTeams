@@ -14,18 +14,16 @@ import { TopOptionComponent } from '../options/top-option/top-option.component';
 })
 export class TeamEditorComponent 
 {
+  generateTeamService = inject(GenerateTeamService);
+
   @Input() pokemons!: Pokemon[];
   @Output() outputTeam = new EventEmitter<Team>();
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
   @ViewChild(TopOptionComponent) details!: TopOptionComponent;
 
-  generateTeamService = inject(GenerateTeamService);
-
   editorData?: EditorData;
   editorOptions: EditorOptions = <EditorOptions>{};
-
   team: Team = <Team>{}
-
   posts: any;
   paste: string = '';
 

@@ -9,6 +9,7 @@ import { UserService } from 'src/app/services/user.service';
 import { authActions } from 'src/app/state/auth/auth.actions';
 import { selectIsSubmitting, selectLoggedUser, selectValidationErrors } from 'src/app/state/auth/auth.reducers';
 
+
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
@@ -112,7 +113,6 @@ export class UserFormComponent
         password: this.signUpForm.get('password')?.value!,
         confirmPassword: this.signUpForm.get('confirmPassword')?.value!
       }
-      console.log("signup dto", signupdto)
       this.store.dispatch(authActions.signUp({request: signupdto}))
     }
   }

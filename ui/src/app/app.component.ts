@@ -1,6 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { ThemeService } from './services/theme.service';
 import { User } from './models/user.model';
+import { Store } from '@ngrx/store';
+import { authActions } from './state/auth/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -9,20 +11,11 @@ import { User } from './models/user.model';
 })
 export class AppComponent 
 {
-
   title = 'ui';
+  store = inject(Store);
 
-  user: User | undefined = undefined;
-  /*
+  ngOnInit()
   {
-    name: "sergio",
-    username: "sergiomadd",
-    picture: "url",
-    teams: []
-  }*/
-
-
-
-
-
+    this.store.dispatch(authActions.getLogged());
+  }
 }

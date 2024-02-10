@@ -10,6 +10,36 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { AuthService } from "src/app/services/auth.service";
 
+export const getLogged = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService)
+  ) =>
+  {
+    return actions$.pipe(
+      ofType(authActions.getLogged),
+      switchMap(() =>
+      {
+        return authService.getLogged().pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.getLoggedSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.getLoggedFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  }, 
+  {functional: true}
+)
+
 export const logInEffect = createEffect(
   (
     actions$ = inject(Actions),
@@ -71,9 +101,9 @@ export const signUpEffect = createEffect(
 )
 
 //use this for team generating
-export const redirectAfterRegisterEffect = createEffect(
+export const redirectAfterSignUpEffect = createEffect(
   (
-    actions$ = inject(Actions), router = Inject(Router)
+    actions$ = inject(Actions)
   ) => 
   {
     return actions$.pipe(
@@ -84,5 +114,19 @@ export const redirectAfterRegisterEffect = createEffect(
       })
     )
   },{functional: true, dispatch: false}
+)
 
+export const redirectAfterLogInEffect = createEffect(
+  (
+    actions$ = inject(Actions)
+  ) => 
+  {
+    return actions$.pipe(
+      ofType(authActions.logInSuccess),
+      tap(() => 
+      {
+        window.location.reload();
+      })
+    )
+  },{functional: true, dispatch: false}
 )

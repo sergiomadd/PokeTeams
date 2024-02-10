@@ -1,4 +1,4 @@
-import { createAction, createActionGroup, props } from "@ngrx/store";
+import { createAction, createActionGroup, emptyProps, props } from "@ngrx/store";
 import { AuthResponseDTO } from "src/app/models/DTOs/authResponse.dto";
 import { LogInDTO } from "src/app/models/DTOs/login.dto";
 import { SignUpDTO } from "src/app/models/DTOs/signup.dto";
@@ -13,7 +13,10 @@ export const authActions = createActionGroup(
       "signUp failure": props<{errors: string[]}>(),
       logIn: props<{request: LogInDTO}>(),
       "logIn success": props<{response: AuthResponseDTO}>(),
-      "logIn failure": props<{errors: string[]}>()
+      "logIn failure": props<{errors: string[]}>(),
+      getLogged: emptyProps(),
+      "getLogged success": props<{response: AuthResponseDTO}>(),
+      "getLogged failure": props<{errors: string[]}>()
     },
   }
 )

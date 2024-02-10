@@ -30,4 +30,11 @@ export class AuthService
     let url = this.apiUrl + 'signup';
     return this.http.post<AuthResponseDTO>(url, data, {withCredentials: true});
   }
+
+  //TODO
+  getLogged() : Observable<AuthResponseDTO>
+  {
+    let url = this.apiUrl + 'logged';
+    return this.http.get<AuthResponseDTO>(url, {withCredentials: true});
+  }
 }

@@ -50,6 +50,7 @@ export class UserService
     }
     return teams;
   }
+  
   //return bool
   async checkUserNameAvailable(userName: string) : Promise<AuthResponseDTO>
   {
@@ -66,6 +67,7 @@ export class UserService
     }
     return exists;
   }
+
   //return bool
   async checkEmailAvailable(email: string) : Promise<AuthResponseDTO>
   {
@@ -81,27 +83,6 @@ export class UserService
       console.log("Error: ", getErrorMessage(error));
     }
     return exists;
-  }
-  
-  async getLoggedUser() : Promise<User | null>
-  {
-    let user: User | null = null;
-    let url = this.apiUrl + 'logged';
-    try
-    {
-      const user$ = this.http.get<User>(url, {withCredentials: true});
-      user = await lastValueFrom(user$);
-      console.log("user in service", user);
-    }
-    catch(error)
-    {
-      console.log("Error: ", getErrorMessage(error));
-    }
-    if(user && user.teamKeys)
-    {
-      user.teams = await this.loadUserTeams(user.teamKeys);
-    }
-    return user;
   }
 
   async logOut() : Promise<AuthResponseDTO>
