@@ -11,7 +11,7 @@ using api.Data;
 
 namespace api.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(PokeTeamContext))]
     [Migration("20240104141529_Startup")]
     partial class Startup
     {

@@ -10,7 +10,7 @@ using api.Data;
 
 namespace api.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(PokeTeamContext))]
     partial class UserContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
