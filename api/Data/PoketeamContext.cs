@@ -20,6 +20,8 @@ namespace api.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             //Team
             modelBuilder.Entity<Team>().ToTable("Teams");
 
@@ -31,13 +33,30 @@ namespace api.Data
                 .WithMany(p => p.Teams)
                 .HasForeignKey(t => t.PlayerId);
 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Teams)
+                .WithOne(t => t.Player);
 
-                
+            modelBuilder.Entity<User>(
+                u =>
+                {
+                    u.HasIndex(u => u.NormalizedEmail).HasName("EmailIndex").IsUnique();
+
+                    u.Property(u => u.UserName).HasMaxLength(64);
+                    u.Property(u => u.NormalizedUserName).HasMaxLength(64);
+                    u.Property(u => u.Email).HasMaxLength(64);
+                    u.Property(u => u.NormalizedEmail).HasMaxLength(64);
+
+                    //custom
+                    u.Property(u => u.Name).HasMaxLength(64);
+                    u.Property(u => u.Country).HasMaxLength(64);
+                }
+            );
         }
 
         public DbSet<Team> Team { get; set; }
-        public DbSet<TeamPokemon> TeamPokemon { get; set; }
-        public DbSet<UserTeam> UserTeam { get; set; }
+        //public DbSet<TeamPokemon> TeamPokemon { get; set; }
+        //public DbSet<UserTeam> UserTeam { get; set; }
         public DbSet<User> User { get; set; }
     }
 }

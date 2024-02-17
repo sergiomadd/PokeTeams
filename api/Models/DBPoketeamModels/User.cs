@@ -5,13 +5,14 @@ namespace api.Models.DBPoketeamModels
 {
     public class User : IdentityUser
     {
-        [PersonalData]
+        [StringLength(64)]
         public string? Name { get; set; }
-        [PersonalData]
+        [StringLength(2)]
         public string? Country { get; set; }
         public string? Picture { get; set; }
-        [PersonalData]
-        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        [DataType(DataType.Date)]
+        public DateTime DateCreated { get; set; } = DateTime.Today;
         public bool Visibility { get; set; }
+        public virtual ICollection<Team> Teams { get; set;}
     }
 }
