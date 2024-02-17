@@ -13,7 +13,7 @@ namespace api.Controllers
         {
             _teamService = teamService;
         }
-
+        
         [HttpGet(Name = "GetEditorOptionsData")]
         public async Task<ActionResult<EditorData>> GetEditorOptionsData()
         {
@@ -24,5 +24,6 @@ namespace api.Controllers
             }
             return Ok(editorData);
         }
+        
     }
 }

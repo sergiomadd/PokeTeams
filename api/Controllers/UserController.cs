@@ -12,6 +12,7 @@ using api.Services.UserService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using api.Services.TeamService;
 
 namespace api.Controllers
 {
@@ -21,21 +22,25 @@ namespace api.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly UserContext _userContext;
+        private readonly PokeTeamContext _userContext;
         private readonly IUserService _userService;
+        private readonly ITeamService _teamService;
+
 
         public UserController(UserManager<User> userManager,
             SignInManager<User> signInManager,
-            UserContext userContext,
-            IUserService userService
+            PokeTeamContext userContext,
+            IUserService userService,
+            ITeamService teamService
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userContext = userContext;
             _userService = userService;
+            _teamService = teamService;
         }
-
+        
         [AllowAnonymous]
         [HttpGet, Route("{userName}")]
         public async Task<ActionResult<UserDTO>> GetUserByUserName(string userName)
@@ -48,18 +53,55 @@ namespace api.Controllers
             return Ok(user);
         }
 
-        [AllowAnonymous]
         [HttpPost, Route("delete")]
+        public async Task<ActionResult<UserDTO>> DeleteLoggedUser()
+        {
+            Printer.Log("Deleting user...");
+            if(User.Identity.Name == null)
+            {
+                return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "No user logged" } });
+            }
+            User user = await _userManager.FindByNameAsync(User.Identity.Name);
+            if (user != null)
+            {
+                await _teamService.DeleteUserTeams(user);
+                IdentityResult deleted = await _userManager.DeleteAsync(user);
+                if (!deleted.Succeeded)
+                {
+                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't delete user" } });
+                }
+            }
+            else
+            {
+                return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+            }
+
+            return Ok(new IdentityResponseDTO { Success = true });
+        }
+        
+        [HttpPost, Route("delete/{userName}")]
         public async Task<ActionResult<UserDTO>> DeleteUserByUserName(string userName)
         {
-            bool deleted = await _userService.DeleteUserByUserName(userName);
-            if (deleted)
+            Printer.Log("Deleting user...");
+            User user = await _userService.GetUserByUserName(userName);
+            if (user != null)
             {
-                return NotFound("Couldn't find user");
+                await _teamService.DeleteUserTeams(user);
+                //bool deleted = await _userService.DeleteUserByUserName(userName);
+                bool deleted = true;
+                if (!deleted)
+                {
+                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't delete user" } });
+                }
             }
-            return Ok(deleted);
-        }
+            else
+            {
+                return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+            }
 
+            return Ok(new IdentityResponseDTO { Success = true });
+        }
+        
         [AllowAnonymous]
         [HttpGet, Route("check/username/{userName}")]
         public async Task<ActionResult<IdentityResponseDTO>> UserNameAvailable(string userName)
@@ -88,15 +130,11 @@ namespace api.Controllers
         [HttpGet, Route("logged")]
         public async Task<ActionResult<IdentityResponseDTO>> Logged()
         {
-            Printer.Log("Trying to get user...");
+            Printer.Log("Trying to get logged user...");
             UserDTO userDTO;
             try
             {
                 Printer.Log("User: ", User.Identity.Name);
-                if (User.Identity.Name != null)
-                {
-                    Printer.Log("user name: ", User.Identity.Name);
-                }
                 if (User.Identity.Name != null)
                 {
                     var user = await _userManager.FindByNameAsync(User.Identity.Name);
@@ -245,5 +283,6 @@ namespace api.Controllers
             await _signInManager.SignOutAsync();
             Printer.Log("User logged out.");
         }
+        
     }
 }

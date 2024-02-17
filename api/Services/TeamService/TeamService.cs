@@ -1,29 +1,23 @@
 ﻿using api.Data;
-using api.Models.DBModels;
 using api.Models.DBPoketeamModels;
 using api.Models.DTOs;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
 using System.Text.Json;
-using System.Transactions;
 using api.Services.UserService;
 using api.Util;
-using Microsoft.AspNetCore.Components.Forms;
-using api.Models;
+using System.Data;
 
 namespace api.Services.TeamService
 {
     public class TeamService : ITeamService
     {
-        private readonly PoketeamContext _teamContext;
+        private readonly PokeTeamContext _teamContext;
         private readonly LocalContext _localContext;
         private readonly IUserService _userService;
 
         private static Random random = new Random();
 
         public TeamService(
-            PoketeamContext dataContext,
+            PokeTeamContext dataContext,
             LocalContext localContext,
             IUserService userService)
         {
@@ -31,9 +25,10 @@ namespace api.Services.TeamService
             _localContext = localContext;
             _userService = userService;
         }
-
+        
         public async Task<TeamDTO?> GetTeam(string id)
         {
+            Printer.Log("Getting team with id: ", id);
             TeamDTO teamDTO = null;
             Team team = await _teamContext.Team.FindAsync(id);
             if (team != null)
@@ -55,7 +50,7 @@ namespace api.Services.TeamService
                 string playerUserName = "Unkown";
                 if (team.Player != null)
                 {
-                    User player = await _userService.GetUserById(team.Player);
+                    User player = await _userService.GetUserById(team.PlayerId);
                     playerUserName = player.UserName;
                 }
                 else if (team.AnonPlayer != null)
@@ -100,7 +95,7 @@ namespace api.Services.TeamService
                 {
                     Id = teamId,
                     Options = optionsString,
-                    Player = player != null ? player.Id : null,
+                    PlayerId = player != null ? player.Id : null,
                     AnonPlayer = player == null ? inputTeam.Player : null,
                     Tournament = inputTeam.Tournament ?? null,
                     Regulation = inputTeam.Regulation ?? null,
@@ -145,6 +140,160 @@ namespace api.Services.TeamService
             }
         }
 
+        public async Task<bool> SaveUserTeam(string userID, string teamID)
+        {
+            try
+            {
+                IQueryable<UserTeam> userTeams = _teamContext.UserTeam.Where(ut => ut.UserId == userID);
+                if (userTeams != null)
+                {
+                    if (userTeams.Any(ut => ut.TeamId == teamID))
+                    {
+                        return false;
+                    }
+                    UserTeam newUserTeam = new UserTeam
+                    {
+                        UserId = userID,
+                        TeamId = teamID
+                    };
+                    _teamContext.UserTeam.Add(newUserTeam);
+                    await _teamContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Exception in: SaveUserTeam(string userID, string teamID)");
+                Printer.Log(ex);
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> DeleteUserTeams(User user)
+        {
+            Printer.Log("Deleting user teams of: ", user.UserName);
+                try
+                {
+                    
+                    List<UserTeam> userTeams = _teamContext.UserTeam.Where(ut => ut.UserId == user.Id).ToList();
+                    if (userTeams != null && userTeams.Count() > 0)
+                    {
+                        foreach (var userTeam in userTeams)
+                        {
+                            
+                            if (userTeam != null && userTeam.TeamId != null && userTeam.TeamId != "")
+                            {
+
+                                //DeleteTeam(userTeam.TeamId);
+                                Printer.Log("Deleting userteam in method: ", userTeam.TeamId);
+                                
+                                Team team = await _teamContext.Team.FindAsync(userTeam.TeamId);
+                                
+                                if (team != null)
+                                {
+                                    List<TeamPokemon> teamPokemons = _teamContext.TeamPokemon.Where(tp => tp.TeamId == userTeam.TeamId).ToList();
+                                    if (teamPokemons.Count > 0)
+                                    {
+                                        foreach (TeamPokemon teamPokemon in teamPokemons)
+                                        {
+                                            Printer.Log("Deleting pokemon in method: ", teamPokemon.Pokemon);
+
+                                            _teamContext.TeamPokemon.Remove(teamPokemon);
+                                        }
+                                    }
+                                    Printer.Log("Deleting team in method: ", team.Id);
+                                    _teamContext.Team.Remove(team);
+
+                                }
+                                _teamContext.UserTeam.Remove(userTeam);
+
+                            }
+                        }
+                    }
+                    await _teamContext.SaveChangesAsync();
+                    
+                }
+                catch (Exception ex)
+                {
+                    Printer.Log("Exception in: DeleteUserByUserName(string userName)");
+                    Printer.Log(ex);
+                }
+            
+            Printer.Log("Deleting user teams of: ", user.UserName);
+            using (var tran = _teamContext.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    List<UserTeam> userTeams = _teamContext.UserTeam.Where(ut => ut.UserId == user.Id).ToList();
+                    if (userTeams.Count() > 0)
+                    {
+                        foreach (var userTeam in userTeams)
+                        {
+                            //DeleteTeam(userTeam.TeamId);
+                            Printer.Log("Deleting team in method: ", userTeam.TeamId);
+
+                            Team team = await _teamContext.Team.FindAsync(userTeam.TeamId);
+
+                            if (team != null)
+                            {
+                                List<TeamPokemon> teamPokemons = _teamContext.TeamPokemon.Where(tp => tp.TeamId == userTeam.TeamId).ToList();
+                                if (teamPokemons.Count > 0)
+                                {
+                                    foreach (TeamPokemon teamPokemon in teamPokemons)
+                                    {
+                                        _teamContext.TeamPokemon.Remove(teamPokemon);
+                                    }
+                                }
+                                _teamContext.Team.Remove(team);
+                            }
+                            _teamContext.UserTeam.Remove(userTeam);
+                        }
+                    }
+                    _teamContext.SaveChanges();
+                    tran.Commit();
+                }
+                catch (Exception ex)
+                {
+                    Printer.Log("Exception in: DeleteUserByUserName(string userName)");
+                    Printer.Log(ex);
+                    tran.Rollback();
+                }
+            }
+            
+            return false;
+        }
+
+        public async Task<bool> DeleteTeam(string teamId)
+        {
+            Printer.Log("Deleting team: ", teamId);
+
+            try
+            {
+                Team team = await _teamContext.Team.FindAsync(teamId);
+
+                if (team != null)
+                {
+                    List<TeamPokemon> teamPokemons = _teamContext.TeamPokemon.Where(tp => tp.TeamId == teamId).ToList();
+                    if(teamPokemons.Count > 0)
+                    {
+                        foreach (TeamPokemon teamPokemon in teamPokemons)
+                        {
+                            _teamContext.TeamPokemon.Remove(teamPokemon);
+                        }
+                    }
+                    _teamContext.Team.Remove(team);
+                    _teamContext.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Exception in: DeleteUserByUserName(string userName)");
+                Printer.Log(ex);
+            }
+            return false;
+        }
+
         public string GenerateId(int length)
         {
             const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -157,6 +306,7 @@ namespace api.Services.TeamService
             
             return editorData;
         }
+        
 
     }
 }

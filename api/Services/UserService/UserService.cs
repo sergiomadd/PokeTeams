@@ -9,15 +9,19 @@ namespace api.Services.UserService
 {
     public class UserService : IUserService
     {
-        private readonly PoketeamContext _pokeTeamsContext;
-        private readonly UserContext _userContext;
+        private readonly PokeTeamContext _pokeTeamsContext;
+        private readonly PokeTeamContext _userContext;
+        private readonly UserManager<User> _userManager;
 
-        public UserService(PoketeamContext dataContext, UserContext userContext)
+        public UserService(PokeTeamContext dataContext,
+            PokeTeamContext userContext,
+            UserManager<User> userManager)
         {
             _pokeTeamsContext = dataContext;
             _userContext = userContext;
+            _userManager = userManager;
         }
-
+        
         public async Task<UserDTO> BuildUserDTO(User user, bool logged)
         {
             UserDTO userDTO = null;
@@ -60,25 +64,38 @@ namespace api.Services.UserService
 
         public async Task<bool> DeleteUserByUserName(string userName)
         {
-            UserDTO userDTO = null;
+            Printer.Log("Deleting user: ", userName);
+            //cascade delete all user teams? -> only uploaded teams?
+            //other option: let the teamx exist without an uploader,
+            //just set it to null like anonimous
             try
             {
+                User user = _userContext.Users.FirstOrDefault(u => u.UserName == userName);
+                if (user != null)
+                {
+                    //for external logins
+                    /*
+                    foreach (var login in logins.ToList())
+                    {
+                        await _userManager.RemoveLoginAsync(login.UserId, new UserLoginInfo(login.LoginProvider, login.ProviderKey));
+                    }
+                    */
+                    List<UserTeam> userTeams = _pokeTeamsContext.UserTeam.Where(ut => ut.UserId == user.Id).ToList();
+                    if (userTeams.Count() > 0)
+                    {
+                        return false;
+                    }
+
+                    await _userManager.DeleteAsync(user);
+                    await _userContext.SaveChangesAsync();
+                    return true;
+                }
 
             }
             catch (Exception ex)
             {
                 Printer.Log("Exception in: DeleteUserByUserName(string userName)");
                 Printer.Log(ex);
-            }
-            User user = _userContext.Users.FirstOrDefault(u => u.UserName == userName);
-            if (user != null)
-            {
-                //cascade delete all user teams? -> only uploaded teams?
-                //other option: let the teamx exist without an uploader,
-                //just set it to null like anonimous
-                _userContext.Users.Remove(user);
-                await _pokeTeamsContext.SaveChangesAsync();
-                return true;
             }
             return false;
         }
@@ -123,34 +140,7 @@ namespace api.Services.UserService
             }
             return teamKeys;
         }
+        
 
-        public async Task<bool> AddTeamToUser(string userID, string teamID)
-        {
-            try
-            {
-                IQueryable<UserTeam> userTeams = _pokeTeamsContext.UserTeam.Where(ut => ut.UserId == userID);
-                if(userTeams != null)
-                {
-                    if(userTeams.Any(ut => ut.TeamId == teamID))
-                    {
-                        return false;
-                    }
-                    UserTeam newUserTeam = new UserTeam
-                    {
-                        UserId = userID,
-                        TeamId = teamID
-                    };
-                    _pokeTeamsContext.UserTeam.Add(newUserTeam);
-                    await _pokeTeamsContext.SaveChangesAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                Printer.Log("Exception in: AddTeamToUser(string userID, string teamID)"); 
-                Printer.Log(ex);
-                return false;
-            }
-            return true;
-        }
     }
 }

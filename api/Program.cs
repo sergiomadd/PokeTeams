@@ -17,9 +17,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PokedexContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPokedex")));
-builder.Services.AddDbContext<PoketeamContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPoketeam")), ServiceLifetime.Scoped);
+builder.Services.AddDbContext<PokeTeamContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPoketeam")), ServiceLifetime.Scoped);
 builder.Services.AddDbContext<LocalContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPoketeam")));
-builder.Services.AddDbContext<UserContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPoketeam")));
 
 builder.Services.AddTransient<IPokemonService, PokemonService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
@@ -53,7 +52,7 @@ builder.Services.AddIdentity<User, IdentityRole>(
     .AddSignInManager<SignInManager<User>>()
     .AddUserManager<UserManager<User>>()
     .AddDefaultTokenProviders()
-    .AddEntityFrameworkStores<UserContext>();
+    .AddEntityFrameworkStores<PokeTeamContext>();
 
 builder.Services.AddSession(options =>
 {

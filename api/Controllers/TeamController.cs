@@ -20,7 +20,7 @@ namespace api.Controllers
             _teamService = teamService;
             _userService = userService;
         }
-
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<TeamDTO>> Get(string id)
         {
@@ -42,7 +42,7 @@ namespace api.Controllers
             }
             if (newTeam.Player != null)
             {
-                bool teamAdded = await _userService.AddTeamToUser(newTeam?.Player, newTeam.Id);
+                bool teamAdded = await _teamService.SaveUserTeam(newTeam?.PlayerId, newTeam.Id);
                 if (!teamAdded)
                 {
                     Printer.Log($"Failed to add team {team.ID} to user.");
@@ -55,5 +55,6 @@ namespace api.Controllers
             };
             return Ok(response);
         }
+        
     }
 }
