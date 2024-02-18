@@ -2,16 +2,9 @@
 using api.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 using api.Util;
-using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
-using System.Security.Claims;
 using api.Data;
 using api.Models.DBPoketeamModels;
-using api.Services.UserService;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using api.Services.TeamService;
 
 namespace api.Controllers
@@ -22,49 +15,52 @@ namespace api.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly PokeTeamContext _userContext;
-        private readonly IUserService _userService;
-        private readonly ITeamService _teamService;
+        private readonly IPokeTeamService _pokeTeamService;
 
 
         public UserController(UserManager<User> userManager,
             SignInManager<User> signInManager,
-            PokeTeamContext userContext,
-            IUserService userService,
-            ITeamService teamService
+            IPokeTeamService teamService
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _userContext = userContext;
-            _userService = userService;
-            _teamService = teamService;
+            _pokeTeamService = teamService;
         }
         
         [AllowAnonymous]
         [HttpGet, Route("{userName}")]
         public async Task<ActionResult<UserDTO>> GetUserByUserName(string userName)
         {
-            UserDTO user = await _userService.BuildUserDTO(await _userService.GetUserByUserName(userName), await UserLoggedIn(await _userService.GetUserByUserName(userName)));
+            User user = await _pokeTeamService.GetUserByUserName(userName);
             if (user == null)
             {
                 return NotFound("Couldn't find user");
             }
-            return Ok(user);
+            UserDTO userDTO = await _pokeTeamService.BuildUserDTO(user ,await UserLoggedIn(user));
+            return Ok(userDTO);
         }
 
+        [AllowAnonymous]
         [HttpPost, Route("delete")]
         public async Task<ActionResult<UserDTO>> DeleteLoggedUser()
         {
             Printer.Log("Deleting user...");
-            if(User.Identity.Name == null)
+            if (User.Identity.Name == null)
             {
                 return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "No user logged" } });
             }
             User user = await _userManager.FindByNameAsync(User.Identity.Name);
             if (user != null)
             {
-                await _teamService.DeleteUserTeams(user);
+                //for external logins
+                /*
+                foreach (var login in logins.ToList())
+                {
+                    await _userManager.RemoveLoginAsync(login.UserId, new UserLoginInfo(login.LoginProvider, login.ProviderKey));
+                }
+                */
+                await _pokeTeamService.DeleteUserTeams(user);
                 IdentityResult deleted = await _userManager.DeleteAsync(user);
                 if (!deleted.Succeeded)
                 {
@@ -83,13 +79,12 @@ namespace api.Controllers
         public async Task<ActionResult<UserDTO>> DeleteUserByUserName(string userName)
         {
             Printer.Log("Deleting user...");
-            User user = await _userService.GetUserByUserName(userName);
+            User user = await _pokeTeamService.GetUserByUserName(userName);
             if (user != null)
             {
-                await _teamService.DeleteUserTeams(user);
-                //bool deleted = await _userService.DeleteUserByUserName(userName);
-                bool deleted = true;
-                if (!deleted)
+                await _pokeTeamService.DeleteUserTeams(user);
+                IdentityResult deleted = await _userManager.DeleteAsync(user);
+                if (!deleted.Succeeded)
                 {
                     return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't delete user" } });
                 }
@@ -106,7 +101,7 @@ namespace api.Controllers
         [HttpGet, Route("check/username/{userName}")]
         public async Task<ActionResult<IdentityResponseDTO>> UserNameAvailable(string userName)
         {
-            bool available = await _userService.UserNameAvailable(userName);
+            bool available = await _pokeTeamService.UserNameAvailable(userName);
             if (!available)
             {
                 return Conflict(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Username already taken." } });
@@ -140,7 +135,7 @@ namespace api.Controllers
                     var user = await _userManager.FindByNameAsync(User.Identity.Name);
                     if (user != null)
                     {
-                        userDTO = await _userService.BuildUserDTO(await _userService.GetUserByUserName(user.UserName), await UserLoggedIn(user));
+                        userDTO = await _pokeTeamService.BuildUserDTO(await _pokeTeamService.GetUserByUserName(user.UserName), await UserLoggedIn(user));
                     }
                     else
                     {

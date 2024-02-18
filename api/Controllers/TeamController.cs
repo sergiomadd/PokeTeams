@@ -3,7 +3,6 @@ using api.Services.TeamService;
 using Microsoft.AspNetCore.Mvc;
 using api.Models.DBPoketeamModels;
 using Microsoft.AspNetCore.Components.Forms;
-using api.Services.UserService;
 using api.Util;
 
 namespace api.Controllers
@@ -12,13 +11,11 @@ namespace api.Controllers
     [ApiController]
     public class TeamController : ControllerBase
     {
-        private readonly ITeamService _teamService;
-        private readonly IUserService _userService;
+        private readonly IPokeTeamService _teamService;
 
-        public TeamController(ITeamService teamService, IUserService userService)
+        public TeamController(IPokeTeamService teamService)
         {
             _teamService = teamService;
-            _userService = userService;
         }
         
         [HttpGet("{id}")]
@@ -39,15 +36,6 @@ namespace api.Controllers
             if (newTeam == null)
             {
                 return BadRequest($"Failed to upload team.");
-            }
-            if (newTeam.Player != null)
-            {
-                bool teamAdded = await _teamService.SaveUserTeam(newTeam?.PlayerId, newTeam.Id);
-                if (!teamAdded)
-                {
-                    Printer.Log($"Failed to add team {team.ID} to user.");
-                    //return BadRequest($"Failed to add team {team.ID} to user.");
-                }
             }
             object response = new
             {

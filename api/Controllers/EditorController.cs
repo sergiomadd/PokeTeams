@@ -8,8 +8,8 @@ namespace api.Controllers
     [ApiController]
     public class EditorController : ControllerBase
     {
-        private readonly ITeamService _teamService;
-        public EditorController(ITeamService teamService)
+        private readonly IPokeTeamService _teamService;
+        public EditorController(IPokeTeamService teamService)
         {
             _teamService = teamService;
         }

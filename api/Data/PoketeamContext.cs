@@ -31,11 +31,13 @@ namespace api.Data
             modelBuilder.Entity<Team>()
                 .HasOne(t => t.Player)
                 .WithMany(p => p.Teams)
-                .HasForeignKey(t => t.PlayerId);
+                .HasForeignKey(t => t.PlayerId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Teams)
-                .WithOne(t => t.Player);
+                .WithOne(t => t.Player)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>(
                 u =>
@@ -55,8 +57,6 @@ namespace api.Data
         }
 
         public DbSet<Team> Team { get; set; }
-        //public DbSet<TeamPokemon> TeamPokemon { get; set; }
-        //public DbSet<UserTeam> UserTeam { get; set; }
         public DbSet<User> User { get; set; }
     }
 }
