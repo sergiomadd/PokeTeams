@@ -1,0 +1,46 @@
+
+.dialog
+{
+  background-color: lightgrey;
+  border: 1px solid black;
+  border-radius: 5px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1vh;
+
+
+  .text
+  {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4vw;
+    text-align: center;
+    margin-bottom: 1vh;
+
+    .title
+    {
+      font-weight: 600;
+      font-size: larger;
+    }
+
+    .body
+    {
+      font-size: medium;
+    }
+  }
+
+  .buttons
+  {
+    display: flex;
+    justify-content: space-around;
+
+    button
+    {
+      width: 30%;
+      background-color: grey;
+      color: white;
+    }
+  } 
+}

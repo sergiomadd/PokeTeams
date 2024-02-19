@@ -18,6 +18,15 @@
     <button (click)="logOut()">Log Out</button>
   </div>
   <div class="delete">
-    <button (click)="deleteAccount()">Delete Account</button>
+    <button (click)="tryDeleteAccout()">Delete Account</button>
   </div>
 </div>
+<app-dialog 
+[title]="'Are you sure you want to delete your account?'"
+[body]="'All your teams will be removed.'"
+[trueButtonText]="'Decline'"
+[falseButtonText]="'Accept'"
+[visible]="deleteDialog"
+(choose)="chooseEvent($event)"
+*ngIf="deleteDialog"
+></app-dialog>

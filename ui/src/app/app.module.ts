@@ -31,6 +31,7 @@ import { TeamIconsComponent } from './components/team-icons/team-icons.component
 import { UserOptionsComponent } from './components/user-options/user-options.component';
 import { UserDetailsComponent } from './components/user-details/user-details.component';
 import { UserTeamsComponent } from './components/user-teams/user-teams.component';
+import { DialogComponent } from './components/pieces/dialog/dialog.component';
 import { StoreModule, provideState, provideStore } from '@ngrx/store';
 import { StoreDevtoolsModule, provideStoreDevtools } from '@ngrx/store-devtools';
 import { authFeatureKey, authReducer } from './state/auth/auth.reducers';
@@ -64,7 +65,8 @@ import * as authEffects from './state/auth/auth.effects';
     TeamIconsComponent,
     UserOptionsComponent,
     UserDetailsComponent,
-    UserTeamsComponent
+    UserTeamsComponent,
+    DialogComponent
   ],
   exports: [NavbarComponent],
   imports: [

@@ -1,0 +1,20 @@
+<div class="dialog">
+  <div class="text">
+    <div class="title">
+      {{title}}
+    </div>
+    <div class="body">
+      {{body}}
+    </div>
+  </div>
+  <div class="buttons">
+    <button 
+    class="button-yes"
+    (click)="decline()"
+    >{{trueButtonText}}</button>
+    <button 
+    class="button-yes"
+    (click)="accept()"
+    >{{falseButtonText}}</button>
+  </div>
+</div>
