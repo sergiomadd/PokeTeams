@@ -26,4 +26,9 @@ export class TopOptionComponent
   });
 
   @Output() detailsChange = new EventEmitter();
+
+  ngOnInit()
+  {
+    this.user$.subscribe((value) => this.detailsForm.controls.player.setValue(value?.username ?? null));
+  }
 }

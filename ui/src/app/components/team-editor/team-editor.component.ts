@@ -39,7 +39,7 @@ export class TeamEditorComponent
       id: '',
       pokemons: this.pokemons,
       options: this.editorOptions,
-      player: '',
+      player: this.details.detailsForm.controls.player.value != null ? this.details.detailsForm.controls.player.value : '',
       tournament: '',
       regulation: '',
       viewCount: 0,
@@ -49,10 +49,12 @@ export class TeamEditorComponent
     console.log("loaded team", this.team);
     this.details.detailsForm.valueChanges.subscribe((value) => 
     {
+      console.log(value)
       this.team.player = value.player ?? undefined;
       this.team.tournament = value.tournament ?? undefined;
       this.team.regulation = value.regulation ?? undefined;
     });
+    console.log("loaded team", this.team);
   }
 
   ngOnChanges(changes: SimpleChanges)

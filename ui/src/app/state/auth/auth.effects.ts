@@ -5,7 +5,6 @@ import { authActions } from "./auth.actions";
 import { catchError, map, of, switchMap, tap } from "rxjs";
 import { User } from "../../models/user.model"
 import { AuthResponseDTO } from "src/app/models/DTOs/authResponse.dto";
-import { LoggedUser } from "src/app/models/loggedUser.model";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { AuthService } from "src/app/services/auth.service";
@@ -159,4 +158,50 @@ export const logOutEffect = createEffect(
     )
   }, 
   {functional: true}
+)
+
+export const deleteAccountEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService)
+  ) =>
+  {
+    return actions$.pipe(
+      ofType(authActions.deleteAccount),
+      switchMap(() =>
+      {
+        return authService.deleteAccount().pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.deleteAccountSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.deleteAccountFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  }, 
+  {functional: true}
+)
+
+export const redirectAfterDeleteAccountEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    router = inject(Router)
+  ) => 
+  {
+    return actions$.pipe(
+      ofType(authActions.deleteAccountSuccess),
+      tap(() => 
+      {
+        router.navigate(['']);
+      })
+    )
+  },{functional: true, dispatch: false}
 )

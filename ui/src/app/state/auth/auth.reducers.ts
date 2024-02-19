@@ -88,6 +88,24 @@ const authFeature = createFeature(
           isSubmitting: false,
           validationErrors: action.errors
         })),
+      on(authActions.deleteAccount, (state) => (
+        {
+          ...state,
+          isSubmitting: true,
+          validationErrors: null
+        })),
+      on(authActions.deleteAccountSuccess, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          loggedUser: null
+        })),
+      on(authActions.deleteAccountFailure, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          validationErrors: action.errors
+        })),
     )
   }
 );

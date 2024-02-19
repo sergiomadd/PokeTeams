@@ -13,7 +13,7 @@ export class UserOptionsComponent
 
   deleteAccount()
   {
-    
+    this.store.dispatch(authActions.deleteAccount());
   }
   
   logOut()

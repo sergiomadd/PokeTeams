@@ -42,4 +42,10 @@ export class AuthService
     let url = this.apiUrl + 'logout';
     return this.http.get<AuthResponseDTO>(url, {withCredentials: true});
   }
+
+  deleteAccount() : Observable<AuthResponseDTO>
+  {
+    let url = this.apiUrl + 'delete';
+    return this.http.post<AuthResponseDTO>(url, null, {withCredentials: true});
+  }
 }
