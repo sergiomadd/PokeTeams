@@ -1,5 +1,6 @@
 ﻿using api.Models.DBPoketeamModels;
 using api.Models.DTOs;
+using Microsoft.AspNetCore.Identity;
 
 namespace api.Services.TeamService
 {
@@ -15,6 +16,8 @@ namespace api.Services.TeamService
         public Task<User> GetUserByUserName(string userName);
         public Task<User> GetUserById(string id);
         public Task<bool> UserNameAvailable(string userName);
+        public Task<IdentityResponseDTO> ChangeName(User user, string newName);
+        public Task<IdentityResponseDTO> UpdatePicture(User user, string newPictureKey);
 
     }
 }

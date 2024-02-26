@@ -133,21 +133,37 @@ namespace api.Services.TeamService
             return editorData;
         }
 
-        //User
         public async Task<UserDTO> BuildUserDTO(User user, bool logged)
         {
             UserDTO userDTO = null;
             if (user != null)
             {
-                userDTO = new UserDTO
+                if (logged)
                 {
-                    Name = user.Name,
-                    Username = user.UserName,
-                    TeamKeys = await GetUserTeamKeys(user, logged),
-                    Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.jpeg",
-                    Country = user.Country,
-                    Visibility = user.Visibility ? true : false
-                };
+                    userDTO = new UserDTO
+                    {
+                        Name = user.Name,
+                        Username = user.UserName,
+                        TeamKeys = await GetUserTeamKeys(user, logged),
+                        Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.jpeg",
+                        Country = user.Country,
+                        Visibility = user.Visibility ? true : false,
+                        Email = user.Email,
+                        EmailConfirmed = user.EmailConfirmed
+                    };
+                }
+                else
+                {
+                    userDTO = new UserDTO
+                    {
+                        Name = user.Name,
+                        Username = user.UserName,
+                        TeamKeys = await GetUserTeamKeys(user, logged),
+                        Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.jpeg",
+                        Country = user.Country,
+                        Visibility = user.Visibility ? true : false
+                    };
+                }
             }
             return userDTO;
         }
@@ -202,7 +218,24 @@ namespace api.Services.TeamService
             }
             return true;
         }
-        
+
+        public async Task<IdentityResponseDTO> ChangeName(User user, string newName)
+        {
+            user.Name = newName;
+            _pokeTeamContext.User.Update(user);
+            _pokeTeamContext.SaveChanges();
+            return new IdentityResponseDTO() { Success = true };
+        }
+
+        public async Task<IdentityResponseDTO> UpdatePicture(User user, string newPictureKey)
+        {
+            user.Picture = newPictureKey;
+            _pokeTeamContext.User.Update(user);
+            _pokeTeamContext.SaveChanges();
+            return new IdentityResponseDTO() { Success = true };
+        }
+
+
         public async Task<bool> DeleteUserTeams(User user)
         {
             Printer.Log("Deleting teams of: ", user.UserName);
