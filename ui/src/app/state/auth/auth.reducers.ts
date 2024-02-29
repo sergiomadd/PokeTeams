@@ -106,6 +106,41 @@ const authFeature = createFeature(
           isSubmitting: false,
           validationErrors: action.errors
         })),
+      on(authActions.changeEmail, (state) => (
+        {
+          ...state,
+          isSubmitting: true,
+          validationErrors: null
+        })),
+      on(authActions.changeEmailSuccess, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          loggedUser: null
+        })),
+      on(authActions.changeEmailFailure, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          validationErrors: action.errors
+        })),
+      on(authActions.changePassword, (state) => (
+        {
+          ...state,
+          isSubmitting: true,
+          validationErrors: null
+        })),
+      on(authActions.changePasswordSuccess, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+        })),
+      on(authActions.changePasswordFailure, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          validationErrors: action.errors
+        })),
     )
   }
 );

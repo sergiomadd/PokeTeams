@@ -6,6 +6,7 @@ import { AuthResponseDTO } from '../models/DTOs/authResponse.dto';
 import { Observable } from 'rxjs';
 import { getErrorMessage } from './util';
 import { LogInDTO } from '../models/DTOs/login.dto';
+import { UserUpdateDTO } from '../models/DTOs/userUpdate.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -47,5 +48,19 @@ export class AuthService
   {
     let url = this.apiUrl + 'delete';
     return this.http.post<AuthResponseDTO>(url, null, {withCredentials: true});
+  }
+
+  changeEmail(updateDTO: UserUpdateDTO) : Observable<AuthResponseDTO>
+  {
+    let url = this.apiUrl + 'update/email';
+    return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
+  }
+
+  changePassword(updateDTO: UserUpdateDTO) : Observable<AuthResponseDTO>
+  {
+    let url = this.apiUrl + 'update/password';
+    console.log('sending request', url)
+    console.log('dto', updateDTO)
+    return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
   }
 }

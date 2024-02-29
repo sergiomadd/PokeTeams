@@ -1,24 +1,121 @@
 <div class="options">
   <div class="settings">
-    <form action="">
-      <div class="item">
+    <div class="section">
+      Profile details
+    </div>
+    <div class="section">
+      <form id="visibility" class="visibility">
         <label for="">Profile Visibility: </label>
-        <span>
-          <label for="">Public</label>
-          <input type="checkbox" name="" id="">
-        </span>
-        <span>
-          <label for="">Private</label>
-          <input type="checkbox" name="" id="">
-        </span>
+        Public <app-switch></app-switch> Private
+      </form>    
+    </div>
+    <div class="section">
+        <div class="title">
+          Email
+        </div>
+        <div class="row">
+          <div class="current">
+            {{loggedUser?.email}}
+          </div>
+          <form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
+            <div class="row">
+              <span *ngIf="isInvalid('newEmail', 'changeEmailForm')" class="formFeedbackError">{{getError('newEmail', 'changeEmailForm')}}</span>
+              <input 
+              type="text" 
+              placeholder="New email..." 
+              formControlName="newEmail"
+              [ngClass]="{controlInvalid: isInvalid('newEmail', 'changeEmailForm')}"
+              >
+              <button
+              type="submit"
+              >Change</button>
+            </div>
+        </form>
+        </div>
+        <div class="row">
+        </div>
+        <div class="row">
+          <ng-container *ngIf="loggedUser?.emailConfirmed; else notConfirmed">
+            <div class="formFeedbackSuccess">
+              Email is confirmed
+            </div>
+          </ng-container>
+          <ng-template #notConfirmed>
+            <div class="col">
+              <div class="formFeedbackError">
+                Email not confirmed
+              </div>
+              <button>Send confirmation code</button>
+            </div>
+            <form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
+              <div class="row">
+                <input type="text" placeholder="Code" formControlName="newEmail">
+                <button
+                type="submit"
+                >Confirm</button>
+              </div>
+            </form>
+          </ng-template>
+        </div>
+    </div>
+    <div class="section">
+      <div class="title">
+        Change password
       </div>
-    </form>
-  </div>
-  <div class="logout">
-    <button (click)="logOut()">Log Out</button>
-  </div>
-  <div class="delete">
-    <button (click)="tryDeleteAccout()">Delete Account</button>
+      <div class="row">
+        <div></div>
+        <form class="row" [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+          <div class="password">
+            <div class="col">
+              <label for="">Current password:</label>
+              <input 
+              type="password" 
+              placeholder="Current password" 
+              formControlName="currentPassword"
+              [ngClass]="{controlInvalid: isInvalid('currentPassword', 'changePasswordForm')}"
+              >
+              <div *ngIf="isInvalid('currentPassword', 'changePasswordForm')" class="formFeedbackError">{{getError('currentPassword', 'changePasswordForm')}}</div>
+            </div>
+            <div class="col">
+              <label for="">New password:</label>
+              <input 
+              type="password" 
+              placeholder="New password" 
+              formControlName="password"
+              [ngClass]="{controlInvalid: isInvalid('password', 'changePasswordForm')}"
+              >
+              <div *ngIf="isInvalid('password', 'changePasswordForm')" class="formFeedbackError">{{getError('password', 'changePasswordForm')}}</div>
+            </div>
+            <div class="col">
+              <label for="">Confirm new password:</label>
+              <input 
+              type="password" 
+              placeholder="Confirm new password" 
+              formControlName="confirmPassword"
+              [ngClass]="{controlInvalid: isInvalid('confirmPassword', 'changePasswordForm')}"
+              >
+              <div *ngIf="isInvalid('confirmPassword', 'changePasswordForm')" class="formFeedbackError">{{getError('confirmPassword', 'changePasswordForm')}}</div>
+            </div>
+          </div>
+          <button
+          type="submit"
+          >Change</button>
+        </form>
+      </div>
+    </div>
+    <ng-container *ngIf="backendErrors$ | async as backendErrors">
+      <ng-container *ngFor="let error of backendErrors">
+        <span class="formFeedbackError backendErrors">{{error}}</span>
+      </ng-container>
+    </ng-container>
+    <div class="buttons">
+      <div class="logout">
+        <button (click)="logOut()">Log Out</button>
+      </div>
+      <div class="delete">
+        <button (click)="tryDeleteAccout()">Delete Account</button>
+      </div>
+    </div>
   </div>
 </div>
 <app-dialog 

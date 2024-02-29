@@ -205,3 +205,63 @@ export const redirectAfterDeleteAccountEffect = createEffect(
     )
   },{functional: true, dispatch: false}
 )
+
+export const changeEmailEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService)
+  ) =>
+  {
+    return actions$.pipe(
+      ofType(authActions.changeEmail),
+      switchMap(({request}) =>
+      {
+        return authService.changeEmail(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.changeEmailSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.changeEmailFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  }, 
+  {functional: true}
+)
+
+export const changePasswordEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService)
+  ) =>
+  {
+    return actions$.pipe(
+      ofType(authActions.changePassword),
+      switchMap(({request}) =>
+      {
+        return authService.changePassword(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.changePasswordSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.changePasswordFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  }, 
+  {functional: true}
+)

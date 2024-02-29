@@ -19,7 +19,7 @@ export class UserComponent
   @Input() userName?: string;
 
   user?: User;
-  sections: boolean[] = [true, false, false]
+  sections: boolean[] = [false, false, true]
   country?: string;
 
   data$ = combineLatest(

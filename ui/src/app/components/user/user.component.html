@@ -41,7 +41,7 @@
       </ng-container>
       <ng-container *ngIf="data.loggedUser">
         <ng-container *ngIf="sections[2]">
-          <app-user-options></app-user-options>
+          <app-user-options [loggedUser]="data.loggedUser"></app-user-options>
         </ng-container>
       </ng-container>
     </ng-container>

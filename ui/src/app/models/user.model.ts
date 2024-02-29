@@ -8,5 +8,8 @@ export interface User
   teams: Team[],
   teamKeys?: string[],
   country: string,
-  visibility: boolean
+  visibility: boolean,
+    //logged
+  email?: string,
+  emailConfirmed?: boolean
 }
