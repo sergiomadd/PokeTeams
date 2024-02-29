@@ -6,6 +6,7 @@ import { AuthResponseDTO } from 'src/app/models/DTOs/authResponse.dto';
 import { LogInDTO } from 'src/app/models/DTOs/login.dto';
 import { SignUpDTO } from 'src/app/models/DTOs/signup.dto';
 import { UserService } from 'src/app/services/user.service';
+import { getAuthFormError, passwordsMatch } from 'src/app/services/util';
 import { authActions } from 'src/app/state/auth/auth.actions';
 import { selectIsSubmitting, selectLoggedUser, selectValidationErrors } from 'src/app/state/auth/auth.reducers';
 
@@ -47,8 +48,8 @@ export class UserFormComponent
     {
       username: ['', [Validators.required, Validators.maxLength(256)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(256)]],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.passwordsMatch()]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.passwordsMatch()]],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), passwordsMatch()]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), passwordsMatch()]],
     }, { updateOn: "blur" });
   
   async ngOnInit()
@@ -133,66 +134,9 @@ export class UserFormComponent
       ?? false;
   }
 
-  getError(key: string, form: string) : string
+  getError(key: string, formKey: string) : string
   {
-    var control = form === "signup" ? this.signUpForm.get(key) : this.logInForm.get(key);
-    if(control?.hasError('required'))
-    {
-      return "This field is required";
-    }
-    if(control?.hasError('minlength'))
-    {
-      return `The field has to be longer than ${control?.getError('minlength')['requiredLength']} characters`;
-    }
-    if(control?.hasError('maxlength'))
-    {
-      return `The field has to be shorter than ${control.getError('maxlength')['requiredLength']} characters`;
-    }
-    if(control?.hasError('email'))
-    {
-      return "This field has to be a valid email";
-    }
-    if(control?.hasError('passwordMismatch'))
-    {
-      return "The passwords must match";
-    }
-    if(control?.hasError('usernameTaken'))
-    {
-      return "This username is already registered";
-    }
-    if(control?.hasError('emailTaken'))
-    {
-      return "This email is already registered";
-    }
-    return "error";
-  }
-
-  passwordsMatch() : ValidatorFn 
-  {
-    return (control: AbstractControl): ValidationErrors | null => 
-    {
-      const passwordControl = control.parent?.get('password');
-      const confirmPasswordControl = control.parent?.get('confirmPassword');
-      if (!passwordControl || !confirmPasswordControl) 
-      {
-        return null;
-      }
-      if (passwordControl.value === "" || confirmPasswordControl.value === "")
-      {
-        return null;
-      }
-      else if (passwordControl.value !== confirmPasswordControl.value) 
-      {
-        passwordControl.setErrors({ passwordMismatch: true });
-        confirmPasswordControl.setErrors({ passwordMismatch: true });
-        return { passwordMismatch: true };
-      }
-      else 
-      {
-        passwordControl.setErrors(null);
-        confirmPasswordControl.setErrors(null);
-        return null;
-      }
-    };
+    let control: AbstractControl | null =  formKey === "signup" ? this.signUpForm.get(key) : this.logInForm.get(key);
+    return getAuthFormError(control);
   }
 }

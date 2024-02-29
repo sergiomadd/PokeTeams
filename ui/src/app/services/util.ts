@@ -1,4 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http";
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
 
 
 export function getErrorMessage(error: unknown) 
@@ -37,4 +38,71 @@ export function toCamelCase(o) {
     }
   }
   return newO
+}
+
+
+export function getAuthFormError(control: AbstractControl | null) : string
+{
+  if(control?.hasError('required'))
+  {
+    return "This field is required";
+  }
+  if(control?.hasError('minlength'))
+  {
+    return `The field has to be longer than ${control?.getError('minlength')['requiredLength']} characters`;
+  }
+  if(control?.hasError('maxlength'))
+  {
+    return `The field has to be shorter than ${control.getError('maxlength')['requiredLength']} characters`;
+  }
+  if(control?.hasError('email'))
+  {
+    return "This field has to be a valid email";
+  }
+  if(control?.hasError('passwordMismatch'))
+  {
+    return "The passwords must match";
+  }
+  if(control?.hasError('samePassword'))
+  {
+    return "The new password must be different";
+  }
+  if(control?.hasError('usernameTaken'))
+  {
+    return "This username is already registered";
+  }
+  if(control?.hasError('emailTaken'))
+  {
+    return "This email is already registered";
+  }
+  return "error";
+}
+
+export function passwordsMatch() : ValidatorFn 
+{
+  return (control: AbstractControl): ValidationErrors | null => 
+  {
+    const passwordControl = control.parent?.get('password');
+    const confirmPasswordControl = control.parent?.get('confirmPassword');
+    if (!passwordControl || !confirmPasswordControl) 
+    {
+      return null;
+    }
+    if (passwordControl.value === "" || confirmPasswordControl.value === "")
+    {
+      return null;
+    }
+    else if (passwordControl.value !== confirmPasswordControl.value) 
+    {
+      passwordControl.setErrors({ passwordMismatch: true });
+      confirmPasswordControl.setErrors({ passwordMismatch: true });
+      return { passwordMismatch: true };
+    }
+    else 
+    {
+      passwordControl.setErrors(null);
+      confirmPasswordControl.setErrors(null);
+      return null;
+    }
+  };
 }
