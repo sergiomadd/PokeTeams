@@ -36,4 +36,21 @@ input
   font-size: 1em;
 }
 
+.controlInvalid
+{
+  outline: 3px solid rgba(255, 0, 0, 0.479) !important;
+  border: none !important;
+}
+
+.formFeedbackError
+{
+  font-size: 0.8em;
+  color: red;
+}
+
+.formFeedbackSuccess
+{
+  font-size: 0.8em;
+  color: green;
+}
 
