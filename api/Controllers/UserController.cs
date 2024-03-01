@@ -46,7 +46,8 @@ namespace api.Controllers
         [HttpPost, Route("update/email")]
         public async Task<ActionResult<UserDTO>> UpdateUserEmail(UserUpdateDTO updateData)
         {
-            if(updateData != null && updateData.CurrentUserName != null && updateData.NewEmail != null)
+            Printer.Log($"Updating email of {updateData.CurrentUserName}");
+            if (updateData != null && updateData.CurrentUserName != null && updateData.NewEmail != null)
             {
                 User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
@@ -66,6 +67,7 @@ namespace api.Controllers
         [HttpPost, Route("update/password")]
         public async Task<ActionResult<UserDTO>> UpdateUserPassword(UserUpdateDTO updateData)
         {
+            Printer.Log($"Updating password of {updateData.CurrentUserName}");
             if (updateData != null && updateData.CurrentUserName != null 
                 && updateData.CurrentPassword != null && updateData.NewPassword != null)
             {
@@ -84,8 +86,28 @@ namespace api.Controllers
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
 
-        [HttpPost, Route("update/name")]
+        [HttpPost, Route("update/username")]
         public async Task<ActionResult<UserDTO>> UpdateUserName(UserUpdateDTO updateData)
+        {
+            if (updateData != null && updateData.CurrentUserName != null && updateData.NewUserName != null)
+            {
+                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
+                if (user == null)
+                {
+                    return NotFound("Couldn't find user");
+                }
+                IdentityResult result = await _userManager.SetUserNameAsync(user, updateData.NewUserName);
+                if (result.Errors.ToList().Count > 0)
+                {
+                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
+                }
+                return Ok(new IdentityResponseDTO { Success = true });
+            }
+            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
+        }
+
+        [HttpPost, Route("update/name")]
+        public async Task<ActionResult<UserDTO>> UpdateName(UserUpdateDTO updateData)
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewName != null)
             {
