@@ -49,37 +49,41 @@ export class UserService
     return teams;
   }
   
-  //return bool
-  async checkUserNameAvailable(userName: string) : Promise<AuthResponseDTO>
+  async checkUserNameAvailable(userName: string) : Promise<boolean>
   {
+    let available: boolean = false;
     let exists: AuthResponseDTO = <AuthResponseDTO>{};
     let url = this.apiUrl + 'check/' + 'username/' + userName;
     try
     {
       const exists$ = this.http.get<AuthResponseDTO>(url);
       exists = await lastValueFrom(exists$);
+      if(exists) {available = exists.success}
     }
     catch(error)
     {
+      available = false;
       console.log("Error: ", getErrorMessage(error));
     }
-    return exists;
+    return available;
   }
 
-  //return bool
-  async checkEmailAvailable(email: string) : Promise<AuthResponseDTO>
+  async checkEmailAvailable(email: string) : Promise<boolean>
   {
+    let available: boolean = false;
     let exists: AuthResponseDTO = <AuthResponseDTO>{};
     let url = this.apiUrl + 'check/' + 'email/' + email;
     try
     {
       const exists$ = this.http.get<AuthResponseDTO>(url);
       exists = await lastValueFrom(exists$);
+      if(exists) {available = exists.success}
     }
     catch(error)
     {
+      available = false;
       console.log("Error: ", getErrorMessage(error));
     }
-    return exists;
+    return available;
   }
 }

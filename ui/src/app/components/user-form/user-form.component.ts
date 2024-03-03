@@ -58,9 +58,8 @@ export class UserFormComponent
     {
       if(this.signUpForm.controls.username.valid)
       {
-        this.userNameAvailable = value ? (await this.userService.checkUserNameAvailable(value)).success : false;
-        this.userNameAvailable = true;
-        this.userNameAvailable ?? this.signUpForm.controls.username.setErrors({ "usernameTaken": true });
+        this.userNameAvailable = value ? await this.userService.checkUserNameAvailable(value) : false;
+        if(!this.userNameAvailable) { this.signUpForm.controls.username.setErrors({ "usernameTaken": true }); }
       }
     });
 
@@ -68,9 +67,8 @@ export class UserFormComponent
     {
       if(this.signUpForm.controls.email.valid)
       {
-        this.emailAvailable = value ? (await this.userService.checkEmailAvailable(value)).success : false;
-        this.emailAvailable = true;
-        this.emailAvailable ?? this.signUpForm.controls.email.setErrors({ "emailTaken": true });
+        this.emailAvailable = value ? await this.userService.checkEmailAvailable(value) : false;
+        if(!this.emailAvailable) { this.signUpForm.controls.email.setErrors({ "emailTaken": true }); }
       }
     });
   }
@@ -94,8 +92,8 @@ export class UserFormComponent
     {
       let loginDTO: LogInDTO = 
       {
-        userNameOrEmail: this.logInForm.get('userNameOrEmail')?.value!,
-        password: this.logInForm.get('userNameOrEmail')?.value!,
+        userNameOrEmail: this.logInForm.get('userNameOrEmail')?.value!, 
+        password: this.logInForm.get('password')?.value!,
         rememberMe: true
       }
       this.store.dispatch(authActions.logIn({request: loginDTO}))
@@ -128,8 +126,7 @@ export class UserFormComponent
   {
     var control = form === "signup" ? this.signUpForm.get(key) : this.logInForm.get(key);
     return (control?.errors
-      && (control?.dirty 
-        || control?.touched
+      && (control?.dirty || control?.touched
         || (form === "signup" ? this.signUpFormSubmitted : this.logInFormSubmitted))) 
       ?? false;
   }
