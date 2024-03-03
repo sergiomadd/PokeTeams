@@ -13,6 +13,7 @@ export class UserTeamsComponent
   formBuilder = inject(FormBuilder)
 
   @Input() teams?: Team[];
+  @Input() logged?: boolean;
 
   sortedTeams?: Team[] = [];
 

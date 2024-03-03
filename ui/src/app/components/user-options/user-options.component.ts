@@ -2,9 +2,11 @@ import { Component, Input, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
+import { AuthResponseDTO } from 'src/app/models/DTOs/authResponse.dto';
 import { UserUpdateDTO } from 'src/app/models/DTOs/userUpdate.dto';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 import { getAuthFormError, passwordsMatch } from 'src/app/services/util';
 import { authActions } from 'src/app/state/auth/auth.actions';
 import { selectValidationErrors } from 'src/app/state/auth/auth.reducers';
@@ -21,8 +23,16 @@ export class UserOptionsComponent
   store = inject(Store);
   formBuilder = inject(FormBuilder);
   authService = inject(AuthService);
+  userService = inject(UserService);
 
   backendErrors$ = this.store.select(selectValidationErrors);
+
+  userNameAvailable: boolean = false;
+  changeUserNameFormSubmitted: boolean = false;
+  changeUserNameForm = this.formBuilder.group(
+  {
+    newUserName: ['', [Validators.required, Validators.maxLength(256)]],
+  }, { updateOn: "blur" });
 
   changeEmailFormSubmitted: boolean = false;
   changeEmailForm = this.formBuilder.group(
@@ -39,6 +49,19 @@ export class UserOptionsComponent
 
   }, { updateOn: "blur" });
 
+  async ngOnInit()
+  {
+    this.changeUserNameForm.controls.newUserName.valueChanges.subscribe(async (value) => 
+    {
+      if(this.changeUserNameForm.controls.newUserName.valid)
+      {
+        this.userNameAvailable = value ? await this.userService.checkUserNameAvailable(value) : false;
+        if(!this.userNameAvailable) { this.changeUserNameForm.controls.newUserName.setErrors({ "usernameTaken": true }); }
+        console.log(this.changeUserNameForm.controls.newUserName)
+      }
+    });
+  }
+
   chooseEvent($event)
   {
     if($event)
@@ -49,6 +72,21 @@ export class UserOptionsComponent
     else
     {
       this.deleteDialog = !this.deleteDialog;
+    }
+  }
+
+  async changeUserName()
+  {
+    this.changeUserNameFormSubmitted = true;
+    if(this.changeUserNameForm.valid && this.changeUserNameForm.controls.newUserName.value != null)
+    {
+      let updateDTO: UserUpdateDTO = 
+      {
+        currentUserName: this.loggedUser?.username,
+        newUserName: this.changeUserNameForm.controls.newUserName.value
+      }
+      console.log(updateDTO)
+      this.store.dispatch(authActions.changeUserName({request: updateDTO}));
     }
   }
 
@@ -101,7 +139,7 @@ export class UserOptionsComponent
   isInvalid(key: string, formName: string) : boolean
   {
     var control = this.selectControl(key, formName);
-    return (control?.errors && this.selectFormSubmittedFlag(formName)) ?? false
+    return (control?.errors && (control?.dirty || control?.touched || this.selectFormSubmittedFlag(formName))) ?? false;
   }
 
   getError(key: string, formName: string) : string
@@ -120,6 +158,9 @@ export class UserOptionsComponent
       case "changePasswordForm":
         control = this.changePasswordForm.get(key);
       break;
+      case "changeUserNameForm":
+        control = this.changeUserNameForm.get(key);
+      break;
     }
     return control;
   }
@@ -134,6 +175,9 @@ export class UserOptionsComponent
       break;
       case "changePasswordForm":
         submitted = this.changePasswordFormSubmitted;
+      break;
+      case "changeUserNameForm":
+        submitted = this.changeUserNameFormSubmitted;
       break;
     }
     return submitted;

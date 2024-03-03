@@ -10,6 +10,28 @@
       </form>    
     </div>
     <div class="section">
+      <div class="title">
+        Change username:
+      </div>
+      <form [formGroup]="changeUserNameForm" (ngSubmit)="changeUserName()">
+        <div class="col">
+          <div class="row">
+            <input 
+            type="text" 
+            placeholder="New username..." 
+            formControlName="newUserName"
+            [ngClass]="{controlInvalid: isInvalid('newUserName', 'changeUserNameForm')}"
+            >
+            <span *ngIf="userNameAvailable" class="formFeedbackSuccess">This username is available</span>
+            <span *ngIf="isInvalid('newUserName', 'changeUserNameForm')" class="formFeedbackError">{{getError('newUserName', 'changeUserNameForm')}}</span>
+            <button
+            type="submit"
+            >Change</button>
+          </div>
+        </div>
+    </form>
+    </div>
+    <div class="section">
         <div class="title">
           Email
         </div>

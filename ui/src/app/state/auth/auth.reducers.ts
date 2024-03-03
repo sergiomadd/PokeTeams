@@ -2,6 +2,7 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { AuthState } from 'src/app/state/auth/auth.state';
 import { authActions } from './auth.actions';
+import { act } from '@ngrx/effects';
 
 export const initialState: AuthState = 
 {
@@ -101,6 +102,24 @@ const authFeature = createFeature(
           loggedUser: null
         })),
       on(authActions.deleteAccountFailure, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          validationErrors: action.errors
+        })),
+      on(authActions.changeUserName, (state) => (
+        {
+          ...state,
+          isSubmitting: true,
+          validationErrors: null
+        })),
+      on(authActions.changeUserNameSuccess, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          loggedUser: action.response.user
+        })),
+      on(authActions.changeUserNameFailure, (state, action) => (
         {
           ...state,
           isSubmitting: false,

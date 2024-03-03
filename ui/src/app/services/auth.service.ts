@@ -50,6 +50,12 @@ export class AuthService
     return this.http.post<AuthResponseDTO>(url, null, {withCredentials: true});
   }
 
+  changeUserName(updateDTO: UserUpdateDTO) : Observable<AuthResponseDTO>
+  {
+    let url = this.apiUrl + 'update/username';
+    return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
+  }
+
   changeEmail(updateDTO: UserUpdateDTO) : Observable<AuthResponseDTO>
   {
     let url = this.apiUrl + 'update/email';
@@ -59,8 +65,6 @@ export class AuthService
   changePassword(updateDTO: UserUpdateDTO) : Observable<AuthResponseDTO>
   {
     let url = this.apiUrl + 'update/password';
-    console.log('sending request', url)
-    console.log('dto', updateDTO)
     return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
   }
 }

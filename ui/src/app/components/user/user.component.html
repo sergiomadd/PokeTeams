@@ -34,7 +34,7 @@
         </ng-container>
       </div>
       <ng-container *ngIf="sections[0]">
-        <app-user-teams [teams]="user?.teams"></app-user-teams>
+        <app-user-teams [teams]="user?.teams" [logged]="data.loggedUser ? true : false"></app-user-teams>
       </ng-container>
       <ng-container *ngIf="sections[1]">
         <app-user-details></app-user-details>

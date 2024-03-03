@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, SimpleChanges, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
 import { User } from 'src/app/models/user.model';
@@ -28,11 +28,27 @@ export class UserComponent
     }
   )
 
-  async ngOnInit()
+  ngOnInit()
+  {
+    this.init()
+  }
+
+  ngOnChanges(changes: SimpleChanges)
+  {
+    console.log("changes", changes)
+    if(changes["userName"])
+    {
+      this.init()
+    }
+    console.log(this.userName)
+  }
+
+  async init()
   {
     this.user = this.userName ? await this.userService.getUser(this.userName) : undefined;
     this.user?.country ? this.country = `assets/${this.user?.country}.png` : undefined;
   }
+
 
   changeSection(index: number)
   {

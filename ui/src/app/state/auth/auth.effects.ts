@@ -206,6 +206,52 @@ export const redirectAfterDeleteAccountEffect = createEffect(
   },{functional: true, dispatch: false}
 )
 
+export const changeUserNameEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService)
+  ) =>
+  {
+    return actions$.pipe(
+      ofType(authActions.changeUserName),
+      switchMap(({request}) =>
+      {
+        return authService.changeUserName(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.changeUserNameSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.changeUserNameFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  }, 
+  {functional: true}
+)
+
+export const redirectAfterChangeUserNameEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    router = inject(Router)
+  ) => 
+  {
+    return actions$.pipe(
+      ofType(authActions.changeUserNameSuccess),
+      tap((response) => 
+      {
+        router.navigate(['/@' + response.response.user?.username]);
+      })
+    )
+  },{functional: true, dispatch: false}
+)
+
 export const changeEmailEffect = createEffect(
   (
     actions$ = inject(Actions),
