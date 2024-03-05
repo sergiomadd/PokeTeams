@@ -28,27 +28,18 @@ export class UserComponent
     }
   )
 
-  ngOnInit()
-  {
-    this.init()
-  }
-
-  ngOnChanges(changes: SimpleChanges)
-  {
-    console.log("changes", changes)
-    if(changes["userName"])
-    {
-      this.init()
-    }
-    console.log(this.userName)
-  }
-
-  async init()
+  async ngOnInit()
   {
     this.user = this.userName ? await this.userService.getUser(this.userName) : undefined;
+    this.data$.forEach(item => 
+      {
+        if(item.loggedUser != null && item.loggedUser?.username === this.user?.username)
+        {
+          this.user = item.loggedUser;
+        }
+      })
     this.user?.country ? this.country = `assets/${this.user?.country}.png` : undefined;
   }
-
 
   changeSection(index: number)
   {
