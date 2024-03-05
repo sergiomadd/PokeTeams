@@ -145,7 +145,7 @@ namespace api.Services.TeamService
                         Name = user.Name,
                         Username = user.UserName,
                         TeamKeys = await GetUserTeamKeys(user, logged),
-                        Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.jpeg",
+                        Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png",
                         Country = user.Country,
                         Visibility = user.Visibility ? true : false,
                         Email = user.Email,

@@ -67,55 +67,6 @@ namespace api.Controllers
             return Ok(userDTO);
         }
 
-        [HttpPost, Route("update/email")]
-        public async Task<ActionResult<IdentityResponseDTO>> UpdateUserEmail(UserUpdateDTO updateData)
-        {
-            Printer.Log($"Updating email of {updateData.CurrentUserName}");
-            if (updateData != null && updateData.CurrentUserName != null && updateData.NewEmail != null)
-            {
-                User newUser = await _userManager.FindByEmailAsync(updateData.NewEmail);
-                if (newUser != null)
-                {
-                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Email already claimed" } });
-                }
-                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
-                if (user == null)
-                {
-                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
-                }
-                IdentityResult result = await _userManager.SetEmailAsync(user, updateData.NewEmail);
-                if (result.Errors.ToList().Count > 0)
-                {
-                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
-                }
-                await _userManager.UpdateAsync(user);
-                return Ok(new IdentityResponseDTO { Success = true });
-            }
-            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } } );
-        }
-
-        [HttpPost, Route("update/password")]
-        public async Task<ActionResult<IdentityResponseDTO>> UpdateUserPassword(UserUpdateDTO updateData)
-        {
-            Printer.Log($"Updating password of {updateData.CurrentUserName}");
-            if (updateData != null && updateData.CurrentUserName != null 
-                && updateData.CurrentPassword != null && updateData.NewPassword != null)
-            {
-                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
-                if (user == null)
-                {
-                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
-                }
-                IdentityResult result = await _userManager.ChangePasswordAsync(user, updateData.CurrentPassword, updateData.NewPassword);
-                if (result.Errors.ToList().Count > 0)
-                {
-                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
-                }
-                return Ok(new IdentityResponseDTO { Success = true });
-            }
-            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
-        }
-
         [HttpPost, Route("update/username")]
         public async Task<ActionResult<IdentityResponseDTO>> UpdateUserName(UserUpdateDTO updateData)
         {
@@ -148,6 +99,55 @@ namespace api.Controllers
             await _signInManager.SignInAsync(user, true);
         }
 
+        [HttpPost, Route("update/email")]
+        public async Task<ActionResult<IdentityResponseDTO>> UpdateUserEmail(UserUpdateDTO updateData)
+        {
+            Printer.Log($"Updating email of {updateData.CurrentUserName}");
+            if (updateData != null && updateData.CurrentUserName != null && updateData.NewEmail != null)
+            {
+                User newUser = await _userManager.FindByEmailAsync(updateData.NewEmail);
+                if (newUser != null)
+                {
+                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Email already claimed" } });
+                }
+                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
+                if (user == null)
+                {
+                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+                }
+                IdentityResult result = await _userManager.SetEmailAsync(user, updateData.NewEmail);
+                if (result.Errors.ToList().Count > 0)
+                {
+                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
+                }
+                await _userManager.UpdateAsync(user);
+                return Ok(new IdentityResponseDTO { Success = true, User = await _pokeTeamService.BuildUserDTO(user, true) });
+            }
+            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } } );
+        }
+
+        [HttpPost, Route("update/password")]
+        public async Task<ActionResult<IdentityResponseDTO>> UpdateUserPassword(UserUpdateDTO updateData)
+        {
+            Printer.Log($"Updating password of {updateData.CurrentUserName}");
+            if (updateData != null && updateData.CurrentUserName != null 
+                && updateData.CurrentPassword != null && updateData.NewPassword != null)
+            {
+                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
+                if (user == null)
+                {
+                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+                }
+                IdentityResult result = await _userManager.ChangePasswordAsync(user, updateData.CurrentPassword, updateData.NewPassword);
+                if (result.Errors.ToList().Count > 0)
+                {
+                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
+                }
+                return Ok(new IdentityResponseDTO { Success = true });
+            }
+            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
+        }
+
         [HttpPost, Route("update/name")]
         public async Task<ActionResult<UserDTO>> UpdateName(UserUpdateDTO updateData)
         {
@@ -156,36 +156,35 @@ namespace api.Controllers
                 User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
-                    return NotFound("Couldn't find user");
+                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
                 }
                 IdentityResponseDTO result = await _pokeTeamService.ChangeName(user, updateData.NewName);
-                if (!result.Success)
+                if (result.Errors.ToList().Count > 0)
                 {
-                    return BadRequest(result);
+                    //return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
-                return Ok(result);
+                return Ok(new IdentityResponseDTO { Success = true, User = await _pokeTeamService.BuildUserDTO(user, true) });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
 
-
-
         [HttpPost, Route("update/picture")]
         public async Task<ActionResult<UserDTO>> UpdatePicture(UserUpdateDTO updateData)
         {
-            if (updateData != null && updateData.CurrentUserName != null && updateData.NewName != null)
+            if (updateData != null && updateData.CurrentUserName != null && updateData.NewPictureKey != null)
             {
                 User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
-                    return NotFound("Couldn't find user");
+                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
                 }
-                IdentityResponseDTO result = await _pokeTeamService.ChangeName(user, updateData.NewName);
-                if (!result.Success)
+                user.Picture = updateData.NewPictureKey;
+                IdentityResult result = await _userManager.UpdateAsync(user);
+                if (result.Errors.ToList().Count > 0)
                 {
-                    return BadRequest(result);
+                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
-                return Ok(result);
+                return Ok(new IdentityResponseDTO { Success = true, User = await _pokeTeamService.BuildUserDTO(user, true) });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
