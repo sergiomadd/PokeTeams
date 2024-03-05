@@ -64,6 +64,7 @@ namespace api.Controllers
                 {
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
+                await _userManager.UpdateAsync(user);
                 return Ok(new IdentityResponseDTO { Success = true });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } } );
@@ -111,9 +112,16 @@ namespace api.Controllers
                 {
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
+                await RefreshLoggedUser(user);
                 return Ok(new IdentityResponseDTO { Success = true, User = await _pokeTeamService.BuildUserDTO(user, true) });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
+        }
+
+        private async Task RefreshLoggedUser(User user)
+        {
+            await _signInManager.SignOutAsync();
+            await _signInManager.SignInAsync(user, true);
         }
 
         [HttpPost, Route("update/name")]
