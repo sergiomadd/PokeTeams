@@ -29,7 +29,31 @@ namespace api.Controllers
             _signInManager = signInManager;
             _pokeTeamService = teamService;
         }
-        
+
+        [HttpGet, Route("pictures")]
+        public async Task<ActionResult<List<string>>> GetPictures()
+        {
+            //full path "https://localhost:7134/images/sprites/profile-pics/blastoise.jpeg",
+            List<string> keys = new List<string> 
+            {
+                "bulbasaur",
+                "charmander",
+                "squirtle",
+                "pikachu",
+                "gengar",
+                "dragonite",
+                "snorlax",
+                "mewtwo",
+            };
+            List<string> pictures = new List<string>();
+
+            foreach(var key in keys )
+            {
+                pictures.Add($"https://localhost:7134/images/sprites/profile-pics/{key}.png");
+            }
+            return pictures;
+        }
+
         [AllowAnonymous]
         [HttpGet, Route("{userName}")]
         public async Task<ActionResult<UserDTO>> GetUserByUserName(string userName)
@@ -143,6 +167,8 @@ namespace api.Controllers
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
+
+
 
         [HttpPost, Route("update/picture")]
         public async Task<ActionResult<UserDTO>> UpdatePicture(UserUpdateDTO updateData)
