@@ -86,4 +86,20 @@ export class UserService
     }
     return available;
   }
+
+  async getAllProfilePics(): Promise<string[]>
+  {
+    let pics: string[] = [];
+    let url = this.apiUrl + "pictures";
+    try
+    {
+      const pics$ = this.http.get<string[]>(url, {withCredentials: true});
+      pics = await lastValueFrom(pics$);
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return pics;
+  }
 }

@@ -311,3 +311,33 @@ export const changePasswordEffect = createEffect(
   }, 
   {functional: true}
 )
+
+export const changePictureEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService)
+  ) =>
+  {
+    return actions$.pipe(
+      ofType(authActions.changePicture),
+      switchMap(({request}) =>
+      {
+        return authService.changePicture(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.changePictureSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.changePictureFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  }, 
+  {functional: true}
+)

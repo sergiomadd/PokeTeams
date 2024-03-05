@@ -135,7 +135,7 @@ const authFeature = createFeature(
         {
           ...state,
           isSubmitting: false,
-          loggedUser: null
+          loggedUser: action.response.user
         })),
       on(authActions.changeEmailFailure, (state, action) => (
         {
@@ -155,6 +155,24 @@ const authFeature = createFeature(
           isSubmitting: false,
         })),
       on(authActions.changePasswordFailure, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          validationErrors: action.errors
+        })),
+      on(authActions.changePicture, (state) => (
+        {
+          ...state,
+          isSubmitting: true,
+          validationErrors: null
+        })),
+      on(authActions.changePictureSuccess, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          loggedUser: action.response.user
+        })),
+      on(authActions.changePictureFailure, (state, action) => (
         {
           ...state,
           isSubmitting: false,

@@ -1,3 +1,5 @@
+$pictureSize: 4vw;
+
 .options
 {
   display: flex;
@@ -21,21 +23,6 @@
       border-bottom: 1px solid black;
       padding: 0.4vw;
       width: 80%;
-
-      .row
-      {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 0.4vw;
-      }
-
-      .col
-      {
-        display: flex;
-        flex-direction: column;
-        gap: 0.4vw;
-      }
 
       .title
       {
@@ -69,12 +56,76 @@
         }
       }
 
-      .password
+      .picture-selector
       {
         display: flex;
-        justify-content: end;
-        gap: 0.4vw;
+        flex-direction: column;
 
+
+
+        .meta-wrapper
+        {
+          position: relative; 
+          width: 0;
+          height: 0;
+          overflow: visible;
+
+
+          .catalog
+          {
+            visibility: hidden;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            transform: translate(calc(50% + $pictureSize/2), 100%);
+
+            min-width: calc($pictureSize * 3 + 1.2vw);
+            width: fit-content;
+            max-height: calc($pictureSize * 3 + 2vw);
+            padding: 0.4vw;
+
+
+            background-color: white;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(auto, auto));
+            justify-content: space-evenly;
+            align-items: center;
+
+            gap: 0.4vw;
+            z-index: 2;
+            border: 1px solid black;
+            border-radius: 10px;
+            overflow-y: scroll;
+            overflow-x: auto;
+
+            padding-left: 0.8vw;
+
+            .picture
+            {
+              border: 1px solid black;
+              cursor: pointer;
+
+              &:hover
+              {
+                background-color: lightgrey;
+                border: dashed 1px black;
+              }
+            }
+          }
+        }
+      }
+
+      .picture
+      {
+        width: $pictureSize;
+        height: $pictureSize;
+        border-radius: 5px;
+      }
+
+      .flag
+      {
+        width: 2vw;
+        height: 2vw;
       }
 
       .backendErrors
@@ -83,7 +134,21 @@
         justify-content: end;
         margin: 0.5vw;
       }
-      
+
+      .vertical-divider
+      {
+        position: relative;
+        border: 0.5px solid black;
+        width: 0.5px;
+        border-radius: 30px;
+      }
+    }
+
+    .top-form
+    {
+      display: grid;
+      grid-template-columns: 45% 10% 45%;
+      justify-items: center;
     }
 
     input[type='checkbox']
@@ -105,4 +170,9 @@
       overflow: hidden;
     }
   }
+}
+
+.visible
+{
+  visibility: visible !important;
 }

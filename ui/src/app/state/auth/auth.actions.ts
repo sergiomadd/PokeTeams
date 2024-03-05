@@ -32,7 +32,10 @@ export const authActions = createActionGroup(
       "changeEmail failure": props<{errors: string[]}>(),
       changePassword: props<{request: UserUpdateDTO}>(),
       "changePassword success": props<{response: AuthResponseDTO}>(),
-      "changePassword failure": props<{errors: string[]}>()
+      "changePassword failure": props<{errors: string[]}>(),
+      changePicture: props<{request: UserUpdateDTO}>(),
+      "changePicture success": props<{response: AuthResponseDTO}>(),
+      "changePicture failure": props<{errors: string[]}>()
     },
   }
 )

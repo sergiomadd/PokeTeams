@@ -36,6 +36,44 @@ input
   font-size: 1em;
 }
 
+.w-100
+{
+  width: 100%;
+}
+
+.row
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.4vw;
+}
+
+.row-spread
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.4vw;
+}
+
+.row-end
+{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 0.4vw;
+}
+
+.col
+{
+  display: flex;
+  flex-direction: column;
+  gap: 0.4vw;
+}
+
+
+
 .controlInvalid
 {
   outline: 3px solid rgba(255, 0, 0, 0.479) !important;
@@ -52,5 +90,33 @@ input
 {
   font-size: 0.8em;
   color: green;
+}
+
+.custom-scrollbar
+{
+  /* width */
+  &::-webkit-scrollbar 
+  {
+    width: 0.4vw;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track 
+  {
+    background: transparent;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb 
+  {
+    background: var(--bg-color-4);
+    border-radius: 5px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover 
+  {
+    background: var(--bg-color-5);
+  }
 }
 

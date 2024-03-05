@@ -20,12 +20,15 @@ export class UserOptionsComponent
 {
   @Input() loggedUser?: User;
   deleteDialog: boolean = false;
+
   store = inject(Store);
   formBuilder = inject(FormBuilder);
   authService = inject(AuthService);
   userService = inject(UserService);
 
   backendErrors$ = this.store.select(selectValidationErrors);
+  pictures: string[] = [];
+  displayPictureSelector: boolean = false;
 
   userNameAvailable: boolean = false;
   changeUserNameFormSubmitted: boolean = false;
@@ -51,6 +54,7 @@ export class UserOptionsComponent
 
   async ngOnInit()
   {
+    console.log(this.loggedUser)
     this.changeUserNameForm.controls.newUserName.valueChanges.subscribe(async (value) => 
     {
       if(this.changeUserNameForm.controls.newUserName.valid)
@@ -60,6 +64,8 @@ export class UserOptionsComponent
         console.log(this.changeUserNameForm.controls.newUserName)
       }
     });
+
+    this.pictures = await this.userService.getAllProfilePics();
   }
 
   chooseEvent($event)
@@ -75,6 +81,32 @@ export class UserOptionsComponent
     }
   }
 
+  clickPictureSelector()
+  {
+    this.displayPictureSelector = !this.displayPictureSelector;
+  }
+
+  getPictureKey(path: string | undefined) : string
+  {
+    if(path)
+    {
+      return path.split('/')[path.split('/').length-1].split('.')[0];
+    }
+    return '';
+  }
+
+  async changePicture(path: string)
+  {
+    const key: string = this.getPictureKey(path);
+    let updateDTO: UserUpdateDTO = 
+    {
+      currentUserName: this.loggedUser?.username,
+      newPictureKey: key
+    }
+    this.store.dispatch(authActions.changePicture({request: updateDTO}));
+    this.clickPictureSelector();
+  }
+
   async changeUserName()
   {
     this.changeUserNameFormSubmitted = true;
@@ -85,7 +117,6 @@ export class UserOptionsComponent
         currentUserName: this.loggedUser?.username,
         newUserName: this.changeUserNameForm.controls.newUserName.value
       }
-      console.log(updateDTO)
       this.store.dispatch(authActions.changeUserName({request: updateDTO}));
     }
   }

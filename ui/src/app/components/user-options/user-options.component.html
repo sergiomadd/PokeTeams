@@ -1,35 +1,93 @@
 <div class="options">
   <div class="settings">
-    <div class="section">
-      Profile details
+    <div class="section top-form">
+      <div class="row-spread w-100">
+        <div class="col">
+          <div class="title">
+            Profile picture
+          </div>
+          <div>
+            Selected: {{getPictureKey(loggedUser?.picture)}}
+          </div>
+        </div>
+        <div class="picture-selector">
+          <img src="{{loggedUser?.picture}}" alt="" class="picture">
+          <button (click)="clickPictureSelector()">Change</button>
+          <div class="meta-wrapper">
+            <div class="catalog custom-scrollbar" [ngClass]="{visible: displayPictureSelector}">
+              <ng-container *ngFor="let pic of pictures">
+                <img src="{{pic}}" alt="" class="picture" (click)="changePicture(pic)">
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vertical-divider"></div>
+      <div class="country">
+        <img src="assets/{{loggedUser?.country}}.png" alt="" class="flag">
+      </div>
     </div>
     <div class="section">
       <form id="visibility" class="visibility">
         <label for="">Profile Visibility: </label>
         Public <app-switch></app-switch> Private
-      </form>    
+      </form>
     </div>
-    <div class="section">
-      <div class="title">
-        Change username:
+    <div class="section row">
+      <div class="col">
+        <div class="title">
+          Name:
+        </div>
+        <div class="current">
+          <ng-container *ngIf="!loggedUser?.name">
+            <span class="formFeedbackError">No name</span>
+          </ng-container>
+          {{loggedUser?.name}}
+        </div>
       </div>
       <form [formGroup]="changeUserNameForm" (ngSubmit)="changeUserName()">
         <div class="col">
-          <div class="row">
+          <div class="row-end">
+            <span *ngIf="isInvalid('newUserName', 'changeUserNameForm')" class="formFeedbackError">{{getError('newUserName', 'changeUserNameForm')}}</span>
+            <input 
+            type="text" 
+            placeholder="New name..." 
+            formControlName="newUserName"
+            [ngClass]="{controlInvalid: isInvalid('newUserName', 'changeUserNameForm')}"
+            >
+            <button
+            type="submit"
+            >Change</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="section row">
+      <div class="col">
+        <div class="title">
+          Username:
+        </div>
+        <div class="current">
+          {{loggedUser?.username}}
+        </div>
+      </div>
+      <form [formGroup]="changeUserNameForm" (ngSubmit)="changeUserName()">
+        <div class="col">
+          <div class="row-end">
+            <span *ngIf="userNameAvailable" class="formFeedbackSuccess">This username is available</span>
+            <span *ngIf="isInvalid('newUserName', 'changeUserNameForm')" class="formFeedbackError">{{getError('newUserName', 'changeUserNameForm')}}</span>
             <input 
             type="text" 
             placeholder="New username..." 
             formControlName="newUserName"
             [ngClass]="{controlInvalid: isInvalid('newUserName', 'changeUserNameForm')}"
             >
-            <span *ngIf="userNameAvailable" class="formFeedbackSuccess">This username is available</span>
-            <span *ngIf="isInvalid('newUserName', 'changeUserNameForm')" class="formFeedbackError">{{getError('newUserName', 'changeUserNameForm')}}</span>
             <button
             type="submit"
             >Change</button>
           </div>
         </div>
-    </form>
+      </form>
     </div>
     <div class="section">
         <div class="title">
@@ -87,7 +145,7 @@
       <div class="row">
         <div></div>
         <form class="row" [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
-          <div class="password">
+          <div class="row-end">
             <div class="col">
               <label for="">Current password:</label>
               <input 
