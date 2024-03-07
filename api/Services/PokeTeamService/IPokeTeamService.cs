@@ -18,6 +18,7 @@ namespace api.Services.TeamService
         public Task<bool> UserNameAvailable(string userName);
         public Task<IdentityResponseDTO> ChangeName(User user, string newName);
         public Task<IdentityResponseDTO> UpdatePicture(User user, string newPictureKey);
+        public CountryDTO GetCountry(string code);
 
     }
 }

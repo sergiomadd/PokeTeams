@@ -9,6 +9,7 @@
         public string? CurrentPassword { get; set; }
         public string? NewPassword { get; set; }
         public string? NewPictureKey { get; set; }
+        public string? NewCountryCode { get; set; }
         public string? NewName { get; set; }
     }
 }

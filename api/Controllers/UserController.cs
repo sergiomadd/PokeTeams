@@ -8,6 +8,10 @@ using api.Models.DBPoketeamModels;
 using api.Services.TeamService;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
+
 
 namespace api.Controllers
 {
@@ -29,6 +33,7 @@ namespace api.Controllers
             _signInManager = signInManager;
             _pokeTeamService = teamService;
         }
+
 
         [HttpGet, Route("pictures")]
         public async Task<ActionResult<List<string>>> GetPictures()
@@ -52,6 +57,33 @@ namespace api.Controllers
                 pictures.Add($"https://localhost:7134/images/sprites/profile-pics/{key}.png");
             }
             return pictures;
+        }
+
+        [HttpGet, Route("countries")]
+        public ActionResult<List<CountryDTO>> GetCountries()
+        {
+            List<CountryDTO> countries = new List<CountryDTO>();
+            using (StreamReader r = new StreamReader("wwwroot/data/countries.json"))
+            {
+                string json = r.ReadToEnd();   
+                countries = JsonSerializer.Deserialize<List<CountryDTO>>(json);
+                foreach (var country in countries)
+                {
+                    country.Icon = $"https://localhost:7134/images/sprites/flags/{country.code}.svg";
+                }
+            }
+            return Ok(countries);
+        }
+
+        [HttpGet, Route("countries/{code}")]
+        public ActionResult<CountryDTO> GetCountry(string code)
+        {
+            CountryDTO country = _pokeTeamService.GetCountry(code);
+            if(country == null)
+            {
+                return BadRequest();
+            }
+            return Ok(country);
         }
 
         [AllowAnonymous]
@@ -100,7 +132,7 @@ namespace api.Controllers
         }
 
         [HttpPost, Route("update/email")]
-        public async Task<ActionResult<IdentityResponseDTO>> UpdateUserEmail(UserUpdateDTO updateData)
+        public async Task<ActionResult<IdentityResponseDTO>> UpdateEmail(UserUpdateDTO updateData)
         {
             Printer.Log($"Updating email of {updateData.CurrentUserName}");
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewEmail != null)
@@ -127,7 +159,7 @@ namespace api.Controllers
         }
 
         [HttpPost, Route("update/password")]
-        public async Task<ActionResult<IdentityResponseDTO>> UpdateUserPassword(UserUpdateDTO updateData)
+        public async Task<ActionResult<IdentityResponseDTO>> UpdatePassword(UserUpdateDTO updateData)
         {
             Printer.Log($"Updating password of {updateData.CurrentUserName}");
             if (updateData != null && updateData.CurrentUserName != null 
@@ -179,6 +211,27 @@ namespace api.Controllers
                     return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
                 }
                 user.Picture = updateData.NewPictureKey;
+                IdentityResult result = await _userManager.UpdateAsync(user);
+                if (result.Errors.ToList().Count > 0)
+                {
+                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
+                }
+                return Ok(new IdentityResponseDTO { Success = true, User = await _pokeTeamService.BuildUserDTO(user, true) });
+            }
+            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
+        }
+
+        [HttpPost, Route("update/country")]
+        public async Task<ActionResult<UserDTO>> UpdateCountry(UserUpdateDTO updateData)
+        {
+            if (updateData != null && updateData.CurrentUserName != null && updateData.NewCountryCode != null)
+            {
+                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
+                if (user == null)
+                {
+                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+                }
+                user.Country = updateData.NewCountryCode;
                 IdentityResult result = await _userManager.UpdateAsync(user);
                 if (result.Errors.ToList().Count > 0)
                 {
@@ -401,7 +454,6 @@ namespace api.Controllers
                     PasswordHash = model.Password,
                     EmailConfirmed = false,
                     Picture = "blastoise",
-                    Country = "es",
                     Visibility = true
                 };
                 var signUpResult = await _userManager.CreateAsync(user, model.Password);

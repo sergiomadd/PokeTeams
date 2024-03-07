@@ -146,7 +146,7 @@ namespace api.Services.TeamService
                         Username = user.UserName,
                         TeamKeys = await GetUserTeamKeys(user, logged),
                         Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png",
-                        Country = user.Country,
+                        Country = GetCountry(user.Country),
                         Visibility = user.Visibility ? true : false,
                         Email = user.Email,
                         EmailConfirmed = user.EmailConfirmed
@@ -159,8 +159,8 @@ namespace api.Services.TeamService
                         Name = user.Name,
                         Username = user.UserName,
                         TeamKeys = await GetUserTeamKeys(user, logged),
-                        Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.jpeg",
-                        Country = user.Country,
+                        Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png",
+                        Country = GetCountry(user.Country),
                         Visibility = user.Visibility ? true : false
                     };
                 }
@@ -195,6 +195,19 @@ namespace api.Services.TeamService
                 Printer.Log(ex);
             }
             return teamKeys;
+        }
+
+        public CountryDTO GetCountry(string code)
+        {
+            CountryDTO country = null;
+            using (StreamReader r = new StreamReader("wwwroot/data/countries.json"))
+            {
+                string json = r.ReadToEnd();
+                List<CountryDTO> countries = JsonSerializer.Deserialize<List<CountryDTO>>(json);
+                country = countries.Find(c => c.code.Equals(code));
+                country.Icon = $"https://localhost:7134/images/sprites/flags/{country.code}.svg";
+            }
+            return country;
         }
 
         public async Task<User> GetUserByUserName(string userName)
