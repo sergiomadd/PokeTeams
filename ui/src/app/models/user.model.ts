@@ -1,3 +1,4 @@
+import { Country } from "./DTOs/country.dto";
 import { Team } from "./team.model";
 
 export interface User
@@ -7,7 +8,7 @@ export interface User
   picture?: string,
   teams: Team[],
   teamKeys?: string[],
-  country: string,
+  country: Country,
   visibility: boolean,
     //logged
   email?: string,

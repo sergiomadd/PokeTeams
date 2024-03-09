@@ -178,6 +178,24 @@ const authFeature = createFeature(
           isSubmitting: false,
           validationErrors: action.errors
         })),
+      on(authActions.changeCountry, (state) => (
+        {
+          ...state,
+          isSubmitting: true,
+          validationErrors: null
+        })),
+      on(authActions.changeCountrySuccess, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          loggedUser: action.response.user
+        })),
+      on(authActions.changeCountryFailure, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          validationErrors: action.errors
+        })),
     )
   }
 );

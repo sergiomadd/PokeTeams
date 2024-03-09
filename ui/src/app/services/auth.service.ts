@@ -73,4 +73,10 @@ export class AuthService
     let url = this.apiUrl + 'update/picture';
     return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
   }
+
+  changeCountry(updateDTO: UserUpdateDTO) : Observable<AuthResponseDTO>
+  {
+    let url = this.apiUrl + 'update/country';
+    return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
+  }
 }

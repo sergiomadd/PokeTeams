@@ -38,7 +38,6 @@ export class UserComponent
           this.user = item.loggedUser;
         }
       })
-    this.user?.country ? this.country = `assets/${this.user?.country}.png` : undefined;
   }
 
   changeSection(index: number)

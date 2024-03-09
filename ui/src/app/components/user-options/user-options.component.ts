@@ -1,8 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
-import { AuthResponseDTO } from 'src/app/models/DTOs/authResponse.dto';
+import { Country } from 'src/app/models/DTOs/country.dto';
 import { UserUpdateDTO } from 'src/app/models/DTOs/userUpdate.dto';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
@@ -28,6 +27,7 @@ export class UserOptionsComponent
 
   backendErrors$ = this.store.select(selectValidationErrors);
   pictures: string[] = [];
+  countries: Country[] = [];
   displayPictureSelector: boolean = false;
 
   userNameAvailable: boolean = false;
@@ -61,12 +61,12 @@ export class UserOptionsComponent
       {
         this.userNameAvailable = value ? await this.userService.checkUserNameAvailable(value) : false;
         if(!this.userNameAvailable) { this.changeUserNameForm.controls.newUserName.setErrors({ "usernameTaken": true }); }
-        console.log(this.changeUserNameForm.controls.newUserName)
       }
     });
-
     this.pictures = await this.userService.getAllProfilePics();
+    this.countries = await this.userService.getAllCountriesData();
   }
+
 
   chooseEvent($event)
   {
@@ -105,6 +105,16 @@ export class UserOptionsComponent
     }
     this.store.dispatch(authActions.changePicture({request: updateDTO}));
     this.clickPictureSelector();
+  }
+
+  async changeCountry($event)
+  {
+    let updateDTO: UserUpdateDTO = 
+    {
+      currentUserName: this.loggedUser?.username,
+      newCountryCode: $event.code
+    }
+    this.store.dispatch(authActions.changeCountry({request: updateDTO}));
   }
 
   async changeUserName()

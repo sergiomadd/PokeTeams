@@ -6,6 +6,7 @@ import { getErrorMessage } from './util';
 import { User } from '../models/user.model';
 import { GenerateTeamService } from './generate-team.service';
 import { Team } from '../models/team.model';
+import { Country } from '../models/DTOs/country.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -101,5 +102,22 @@ export class UserService
       console.log("Error: ", getErrorMessage(error));
     }
     return pics;
+  }
+
+  
+  async getAllCountriesData(): Promise<Country[]>
+  {
+    let countries: Country[] = [];
+    let url = this.apiUrl + "countries";
+    try
+    {
+      const countries$ = this.http.get<Country[]>(url, {withCredentials: true});
+      countries = await lastValueFrom(countries$);
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return countries;
   }
 }

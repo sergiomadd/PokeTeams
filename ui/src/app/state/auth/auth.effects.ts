@@ -341,3 +341,33 @@ export const changePictureEffect = createEffect(
   }, 
   {functional: true}
 )
+
+export const changeCountryEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService)
+  ) =>
+  {
+    return actions$.pipe(
+      ofType(authActions.changeCountry),
+      switchMap(({request}) =>
+      {
+        return authService.changeCountry(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.changeCountrySuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.changeCountryFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  }, 
+  {functional: true}
+)

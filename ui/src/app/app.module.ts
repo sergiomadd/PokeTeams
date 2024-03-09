@@ -78,7 +78,7 @@ import * as authEffects from './state/auth/auth.effects';
     ReactiveFormsModule,
     CommonModule,
     StoreModule.forRoot({}, {}),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     ],
   providers: [
     provideStore(),

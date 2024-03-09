@@ -8,5 +8,6 @@ export interface UserUpdateDTO
   currentPassword?: string,
   newPassword?: string,
   newPictureKey?: string,
+  newCountryCode?: string,
   newName?: string,
-}
+}      

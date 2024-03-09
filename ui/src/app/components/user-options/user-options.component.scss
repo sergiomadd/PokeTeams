@@ -95,8 +95,6 @@ $pictureSize: 4vw;
             z-index: 2;
             border: 1px solid black;
             border-radius: 10px;
-            overflow-y: scroll;
-            overflow-x: auto;
 
             padding-left: 0.8vw;
 
@@ -122,12 +120,6 @@ $pictureSize: 4vw;
         border-radius: 5px;
       }
 
-      .flag
-      {
-        width: 2vw;
-        height: 2vw;
-      }
-
       .backendErrors
       {
         display: flex;
@@ -141,6 +133,17 @@ $pictureSize: 4vw;
         border: 0.5px solid black;
         width: 0.5px;
         border-radius: 30px;
+      }
+
+      .country
+      {
+        width: 100%;
+
+        .flag
+        {
+          width: 2vw;
+          height: 2vw;
+        }
       }
     }
 
