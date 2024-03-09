@@ -1,9 +1,6 @@
-
-
-$selectorWidth: 8vw;
-$arrowWidth: 1vw;
-$optionWidth: calc($selectorWidth + $arrowWidth);
-
+$optionWidth: 9vw;
+$optionHeight: 3vh;
+$optionsMaxHeight: 30vh;
 
 .icon
 {
@@ -20,92 +17,99 @@ $optionWidth: calc($selectorWidth + $arrowWidth);
 
 .dropdown
 {
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+  .dropdown-selector
+  {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-.dropdown-selector
-{
-  position: relative;
-  display: flex;
-  width: $selectorWidth;
-  height: 3vh;
-  border-radius: .25em;
-  overflow: hidden;
-  appearance: none;
-  border: 0;
-  box-shadow: none;
-  flex: 1;
-  padding: 0 1em;
-  background-color: var(--bg-color-4);
-  color: var(--text-color);
-  cursor: pointer;
-  font-size: small;
-  align-items: center;
-}
+    width: $optionWidth;
+    height: calc($optionHeight + 0.4vw);
+    padding: 0 0.4vw;
 
-.dropdown-selector::after
-{
-  content: '\25BC';
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 0.5em;
-  background-color: var(--bg-color-4);
-  transition: .25s all ease;
-  pointer-events: none;
-  width: $arrowWidth;
-}
+    background-color: white;
+    color: var(--text-color);
+    border: 1px solid black;
+    border-radius: 5px;
+    overflow: hidden;
+    cursor: pointer;
 
-.dropdown-selector:hover::after
-{
-  color: var(--text-color-highlight);
-}
+    input
+    {
+      color: var(--text-color);
+      background-color: white;
+      border: var(--bg-color-3) solid 1px;
+      width: 90%;
+    }
 
-.dropdown-options
-{
-  position: absolute;
-  overflow: hidden;
-  visibility: hidden;
-  width: $optionWidth;
-  border-radius: .25em;
-  overflow: hidden;
-  appearance: none;
-  outline: 10px red;
-  border: 0;
-  box-shadow: none;
-  flex: 1;
-  padding: 0.2vw;
-  color: var(--text-color);
-  background-color: var(--bg-color-4);
-  cursor: pointer;
-  font-size: small;
-  align-items: center;
-  z-index: 2;
-}
+    .dropdown-arrow
+    {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
 
-.dropdown-option
-{
-  height: 100%;
-  height: 3vh;
-  display: flex;
-  align-items: center;
-  padding: 0.2vw 1em;
-}
+      .arrow 
+      {
+        display: inline-block;
+        padding: 3px;
+        transition: all ease-in 0.5s;
+      }
 
-.dropdown-option:hover
-{
-  background-color: var(--bg-color-2);
-}
+      .up 
+      {
+        transform: rotate(-180deg);
+        -webkit-transform: rotate(-180deg);
+      }
+    }
+  }
 
-.dropdown-options-visible 
-{
+  .dropdown-options
+  {
+    position: absolute;
+    align-items: center;
 
-  visibility: visible !important;
-}
+    width: calc($optionWidth + 0.2vw);
+    max-height: 0;
+    padding: 0.2vw;
+    padding-left: 0.4vw;
 
-.dropdown:hover .dropdown-options 
-{
-  display: block;
+    background-color: white;
+    color: var(--text-color);
+    border: 1px solid black;
+    border-radius: .25em;
+    font-size: small;
+
+    visibility: hidden;
+    overflow-y: scroll;
+    overflow-x: auto;
+    z-index: 2;
+    cursor: pointer;
+
+    transition: all ease-in 0.5s;
+
+    .dropdown-option
+    {
+      display: flex;
+      align-items: center;
+
+      max-width: $optionWidth;
+      height: 100%;
+      height: $optionHeight;
+      padding: 0.2vw 1em;
+      border-radius: .25em;
+
+      &:hover
+      {
+        background-color: var(--bg-color-2);
+      }
+    }
+  }
+
+  .dropdown-options-visible 
+  {
+    max-height: calc($optionHeight * 12);
+    visibility: visible !important;
+  }
 }

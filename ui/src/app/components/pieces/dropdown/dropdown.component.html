@@ -1,29 +1,48 @@
 <div 
 class="dropdown"
-[ngClass]="{'disabled': !disable}"
+[ngClass]="{'disabled': disable}"
 >
   <div 
   class="dropdown-selector"
-  (click)="onClick()"
   >
-    <div *ngIf="selectedOption?.path">
-      <img src="{{selectedOption?.path}}" alt="" class="icon">
-    </div>
-    {{selectedOption?.name}}
-  </div>
-  <div 
-  class="dropdown-options"
-  [ngClass]="{'dropdown-options-visible': showOptions && disable}"
-  >
-    <div
-    *ngFor="let option of options"
-    class="dropdown-option"
-    (click)="onSelect(option)"
+  <form [formGroup]="form">
+    <input 
+    type="text" 
+    placeholder="Change..."
+    formControlName="value" 
+    (focus)="onFocus()"
+    (blur)="onBlur()"
     >
-      <div *ngIf="option.path">
-        <img src="{{option.path}}" alt="" class="icon">
-      </div>
-      {{option.name}}
+  </form>
+    <div 
+    class="dropdown-arrow" 
+    (click)="onClickArrow()"
+    >
+      <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width="24" 
+      height="24"
+      class="arrow" 
+      [ngClass]="{up: showOptions}"
+      >
+      <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8.009 8.009 0 0 1-8 8z"/><path d="M12 12.586 8.707 9.293l-1.414 1.414L12 15.414l4.707-4.707-1.414-1.414L12 12.586z"/></svg>
     </div>
+  </div>
+
+  <div 
+  class="dropdown-options custom-scrollbar"
+  [ngClass]="{'dropdown-options-visible': showOptions && !disable}"
+  >
+    <ng-container *ngFor="let option of filteredOptions">
+      <div
+      class="dropdown-option"
+      (click)="onSelect(option)"
+      >
+        <ng-container *ngIf="option.icon">
+          <!-- <img [attr.src]="option.icon" alt="" class="icon" fill> -->
+        </ng-container>
+        {{option.name}}
+      </div>
+    </ng-container>
   </div>
 </div>
