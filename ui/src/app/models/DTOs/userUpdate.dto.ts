@@ -1,4 +1,3 @@
-
 export interface UserUpdateDTO
 {
   currentUserName?: string,
@@ -10,4 +9,5 @@ export interface UserUpdateDTO
   newPictureKey?: string,
   newCountryCode?: string,
   newName?: string,
+  newVisibility?: boolean,
 }      

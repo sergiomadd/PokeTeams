@@ -371,3 +371,33 @@ export const changeCountryEffect = createEffect(
   }, 
   {functional: true}
 )
+
+export const changeVisibilityEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService)
+  ) =>
+  {
+    return actions$.pipe(
+      ofType(authActions.changeVisibility),
+      switchMap(({request}) =>
+      {
+        return authService.changeVisibility(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.changeVisibilitySuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.changeVisibilityFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  }, 
+  {functional: true}
+)

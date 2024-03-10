@@ -79,4 +79,10 @@ export class AuthService
     let url = this.apiUrl + 'update/country';
     return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
   }
+
+  changeVisibility(updateDTO: UserUpdateDTO) : Observable<AuthResponseDTO>
+  {
+    let url = this.apiUrl + 'update/visibility';
+    return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
+  }
 }

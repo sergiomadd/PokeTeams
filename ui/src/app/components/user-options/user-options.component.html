@@ -40,16 +40,27 @@
         ></app-dropdown>
       </div>
     </div>
-    <div class="section">
-      <form id="visibility" class="visibility">
-        <label for="">Profile Visibility: </label>
-        Public <app-switch></app-switch> Private
-      </form>
+    <div class="section row">
+      <div class="col">
+        <div class="title">
+          Profile Visibility
+        </div>
+        <div class="subtitle">
+          If private only you will be able to see your profile
+        </div>
+      </div>
+
+      <app-switch
+      [inputState]="loggedUser?.visibility"
+      [leftText]="'Public'"
+      [rightText]="'Private'"
+      (checkEvent)="changeVisibility($event)"
+      ></app-switch>
     </div>
     <div class="section row">
       <div class="col">
         <div class="title">
-          Name:
+          Name
         </div>
         <div class="current">
           <ng-container *ngIf="!loggedUser?.name">
@@ -78,7 +89,7 @@
     <div class="section row">
       <div class="col">
         <div class="title">
-          Username:
+          Username
         </div>
         <div class="current">
           {{loggedUser?.username}}

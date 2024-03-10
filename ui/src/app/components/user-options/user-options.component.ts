@@ -54,7 +54,6 @@ export class UserOptionsComponent
 
   async ngOnInit()
   {
-    console.log(this.loggedUser)
     this.changeUserNameForm.controls.newUserName.valueChanges.subscribe(async (value) => 
     {
       if(this.changeUserNameForm.controls.newUserName.valid)
@@ -115,6 +114,17 @@ export class UserOptionsComponent
       newCountryCode: $event.code
     }
     this.store.dispatch(authActions.changeCountry({request: updateDTO}));
+  }
+
+  async changeVisibility($event)
+  {
+    let updateDTO: UserUpdateDTO = 
+    {
+      currentUserName: this.loggedUser?.username,
+      newVisibility: $event
+    }
+    console.log(updateDTO)
+    this.store.dispatch(authActions.changeVisibility({request: updateDTO}));
   }
 
   async changeUserName()

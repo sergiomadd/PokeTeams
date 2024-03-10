@@ -196,6 +196,24 @@ const authFeature = createFeature(
           isSubmitting: false,
           validationErrors: action.errors
         })),
+      on(authActions.changeVisibility, (state) => (
+        {
+          ...state,
+          isSubmitting: true,
+          validationErrors: null
+        })),
+      on(authActions.changeVisibilitySuccess, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          loggedUser: action.response.user
+        })),
+      on(authActions.changeVisibilityFailure, (state, action) => (
+        {
+          ...state,
+          isSubmitting: false,
+          validationErrors: action.errors
+        })),
     )
   }
 );
