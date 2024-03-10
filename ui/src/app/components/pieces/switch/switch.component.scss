@@ -1,61 +1,69 @@
-$switchSize: 1vw;
 
-.switch {
+
+.switch
+{
   position: relative;
-  display: inline-block;
-  width: calc($switchSize*2);
-  height: $switchSize;
-}
+  display: flex;
 
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+  border: 1px solid black;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  user-select: none;
 
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-  border-radius: 34px;
-}
 
-.slider:before {
-  position: absolute;
-  content: "";
-  width: $switchSize;
-  height: $switchSize;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-  border-radius: 50%;
-}
+  .option
+  {
+    display: flex;
+    align-items: center;
 
-input:checked + .slider {
-  background-color: #2196F3;
-}
+    width: 3vw;
+    height: 2vh;
+    padding: 0.4vw;
 
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
+    background-color: transparent;
+    cursor: pointer;
 
-input:checked + .slider:before {
-  -webkit-transform: translateX($switchSize);
-  -ms-transform: translateX($switchSize);
-  transform: translateX($switchSize);
-}
+    z-index: 2;
+  }
+  
+  .selected
+  {
+    //color: white;
+  }
 
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
-}
+  .selector
+  {
+    position: absolute;
+    background-color: cyan;
+    color: white;
 
-.slider.round:before {
-  border-radius: 50%;
+    top: 0;
+    left: 0;
+
+    transition: transform 0.3s ease-in-out, border-radius 0.3s ease;
+
+  }
+
+  .selectedLeft
+  {
+    transform: translateX(100%);
+    border-radius: 0 10px 10px 0;
+
+  }
+
+  .selectedRight
+  {
+    //transform: translateX(50%);
+    border-radius: 10px 0 0 10px;
+  }
+
+  .left
+  {
+    border-radius: 10px 0 0 10px;
+  }
+
+  .right
+  {
+    border-radius: 0 10px 10px 0;
+  }
 }

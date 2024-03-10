@@ -2,26 +2,14 @@ import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 
 @Component({
   selector: 'app-switch',
-  template: `
-  <label 
-  id="switch" 
-  class="switch"
-  name="switch"
-  >
-    <input 
-    type="checkbox"
-    [checked]="state"
-    (change)="onChecked()"
-    >
-    <span class="slider"></span>
-  </label>
-  `,
+  templateUrl: './switch.component.html',
   styleUrls: ['./switch.component.scss']
 })
 export class SwitchComponent 
 {
   @Input() inputState?: boolean;
-  @Input() label?: string;
+  @Input() leftText?: string;
+  @Input() rightText?: string;
 
   @Output() checkEvent = new EventEmitter<boolean>();
 
@@ -29,12 +17,15 @@ export class SwitchComponent
 
   ngOnInit() 
   {
+    console.log(this.inputState)
     if(this.inputState) {this.state = this.inputState}
+    console.log(this.state)
   }
 
-  onChecked()
+  onClick()
   {
     this.state = !this.state;
     this.checkEvent.emit(this.state);
+    console.log("click event")
   }
 }

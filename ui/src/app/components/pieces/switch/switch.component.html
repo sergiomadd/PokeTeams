@@ -1,0 +1,10 @@
+<div class="switch">
+  <div class="selector option" 
+  [ngClass]="{selectedLeft: !state, selectedRight: state}"></div>
+  <div class="option left" [ngClass]="{selected: state}" (click)="onClick()">
+    {{leftText}}
+  </div>
+  <div class="option right" [ngClass]="{selected: !state}" (click)="onClick()">
+    {{rightText}}
+  </div>
+</div>
