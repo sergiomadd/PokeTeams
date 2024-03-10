@@ -11,5 +11,7 @@
         public string? NewPictureKey { get; set; }
         public string? NewCountryCode { get; set; }
         public string? NewName { get; set; }
+        public bool? NewVisibility { get; set; }
+
     }
 }

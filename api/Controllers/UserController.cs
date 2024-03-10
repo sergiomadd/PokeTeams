@@ -242,6 +242,28 @@ namespace api.Controllers
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
 
+        [HttpPost, Route("update/visibility")]
+        public async Task<ActionResult<UserDTO>> UpdateVisibility(UserUpdateDTO updateData)
+        {
+            Printer.Log($"Updating visibility of {updateData.CurrentUserName}");
+            if (updateData != null && updateData.CurrentUserName != null && updateData.NewVisibility != null)
+            {
+                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
+                if (user == null)
+                {
+                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+                }
+                user.Visibility = (bool)updateData.NewVisibility;
+                IdentityResult result = await _userManager.UpdateAsync(user);
+                if (result.Errors.ToList().Count > 0)
+                {
+                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
+                }
+                return Ok(new IdentityResponseDTO { Success = true, User = await _pokeTeamService.BuildUserDTO(user, true) });
+            }
+            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
+        }
+
         [AllowAnonymous]
         [HttpPost, Route("delete")]
         public async Task<ActionResult<UserDTO>> DeleteLoggedUser()
