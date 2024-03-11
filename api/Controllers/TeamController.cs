@@ -43,6 +43,17 @@ namespace api.Controllers
             };
             return Ok(response);
         }
-        
+
+        [HttpPost, Route("increment")]
+        public async Task<ActionResult<string>> IncrementViewCount(StringBody data)
+        {
+            Printer.Log($"Incrementing {data.Content} team view count");
+            bool incremented = await _teamService.IncrementTeamViewCount(data.Content);
+            if (!incremented)
+            {
+                return BadRequest($"Failed to increment team.");
+            }
+            return Ok();
+        }
     }
 }

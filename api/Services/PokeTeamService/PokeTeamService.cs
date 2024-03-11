@@ -135,7 +135,6 @@ namespace api.Services.TeamService
 
         public async Task<UserDTO> BuildUserDTO(User user, bool logged)
         {
-            UserDTO userDTO = null;
             if (user != null)
             {
                 if (logged)
@@ -162,18 +161,16 @@ namespace api.Services.TeamService
                     };
                 }
                 return new UserDTO
-                    {
-                        Name = user.Name,
-                        Username = user.UserName,
-                        TeamKeys = await GetUserTeamKeys(user, logged),
-                        Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png",
-                        Country = GetCountry(user.Country),
-                        Visibility = user.Visibility ? true : false
-                    };
-                }
-            return null;
+                {
+                    Name = user.Name,
+                    Username = user.UserName,
+                    TeamKeys = await GetUserTeamKeys(user, logged),
+                    Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png",
+                    Country = GetCountry(user.Country),
+                    Visibility = user.Visibility ? true : false
+                };
             }
-            return userDTO;
+            return null;
         }
 
         public async Task<List<string>> GetUserTeamKeys(User user, bool logged)
@@ -278,6 +275,24 @@ namespace api.Services.TeamService
                 Printer.Log(ex);
             }
             return false;
+        }
+
+        public async Task<bool> IncrementTeamViewCount(string teamKey)
+        {
+            try
+            {
+                Team team = await _pokeTeamContext.Team.FindAsync(teamKey);
+                if(team == null) { return false; }
+                team.ViewCount++;
+                _pokeTeamContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Exception in: DeleteUserByUserName(string userName)");
+                Printer.Log(ex);
+                return false;
+            }
+            return true;
         }
     }
 }
