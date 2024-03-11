@@ -140,7 +140,7 @@ namespace api.Services.TeamService
             {
                 if (logged)
                 {
-                    userDTO = new UserDTO
+                    return new UserDTO
                     {
                         Name = user.Name,
                         Username = user.UserName,
@@ -152,9 +152,16 @@ namespace api.Services.TeamService
                         EmailConfirmed = user.EmailConfirmed
                     };
                 }
-                else
+                if (!user.Visibility)
                 {
-                    userDTO = new UserDTO
+                    return new UserDTO
+                    {
+                        Username = user.UserName,
+                        Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png",
+                        Visibility = user.Visibility ? true : false
+                    };
+                }
+                return new UserDTO
                     {
                         Name = user.Name,
                         Username = user.UserName,
@@ -164,6 +171,7 @@ namespace api.Services.TeamService
                         Visibility = user.Visibility ? true : false
                     };
                 }
+            return null;
             }
             return userDTO;
         }
