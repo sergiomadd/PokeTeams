@@ -1,4 +1,4 @@
-import { NgModule, isDevMode } from '@angular/core';
+import { NgModule, effect, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
@@ -32,11 +32,15 @@ import { UserOptionsComponent } from './components/user-options/user-options.com
 import { UserDetailsComponent } from './components/user-details/user-details.component';
 import { UserTeamsComponent } from './components/user-teams/user-teams.component';
 import { DialogComponent } from './components/pieces/dialog/dialog.component';
-import { StoreModule, provideState, provideStore } from '@ngrx/store';
-import { StoreDevtoolsModule, provideStoreDevtools } from '@ngrx/store-devtools';
-import { authFeatureKey, authReducer } from './state/auth/auth.reducers';
-import { provideEffects } from '@ngrx/effects';
-import * as authEffects from './state/auth/auth.effects';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthModule } from './auth/auth.module';
+import { metaReducers } from './state/app.state';
+//import { authFeature, authReducer } from './state/auth/auth.reducers';
+//import { authReducers } from './state/auth/auth.reducers';
+
+
 
 @NgModule({
   declarations: [
@@ -77,22 +81,16 @@ import * as authEffects from './state/auth/auth.effects';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    StoreModule.forRoot({}, {}),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    AuthModule,
+    StoreModule.forRoot({}, {metaReducers}),
+    EffectsModule.forRoot(),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Retains last 25 states
+      //logOnly: environment.production, // Restrict extension to log-only mode
+      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+    }),
     ],
-  providers: [
-    provideStore(),
-    provideState(authFeatureKey, authReducer),
-    provideEffects(authEffects),
-    provideStoreDevtools(
-    {
-      maxAge: 25,
-      logOnly: !isDevMode(),
-      autoPause: true,
-      trace: false,
-      traceLimit: 75
-    }
-  )],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

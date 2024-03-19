@@ -4,6 +4,13 @@ import { LogInDTO } from "src/app/models/DTOs/login.dto";
 import { SignUpDTO } from "src/app/models/DTOs/signup.dto";
 import { UserUpdateDTO } from "src/app/models/DTOs/userUpdate.dto";
 
+export enum AuthActionTypes
+{
+  LOGIN = "[Auth] Login"
+}
+
+export const signUp = createAction(AuthActionTypes.LOGIN, props<{ request: LogInDTO }>());
+
 export const authActions = createActionGroup(
   {
     source: "Auth",

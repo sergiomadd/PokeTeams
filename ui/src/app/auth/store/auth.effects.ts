@@ -1,18 +1,339 @@
-import { Inject, inject } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { UserService } from "src/app/services/user.service";
 import { authActions } from "./auth.actions";
 import { catchError, map, of, switchMap, tap } from "rxjs";
-import { User } from "../../models/user.model"
 import { AuthResponseDTO } from "src/app/models/DTOs/authResponse.dto";
 import { HttpErrorResponse } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { AuthService } from "src/app/services/auth.service";
+import { AuthService } from "src/app/auth/services/auth.service";
 
+
+@Injectable()
+export class AuthEffects
+{
+  actions$ = inject(Actions);
+  authService = inject(AuthService);
+  userService = inject(UserService);
+  router = inject(Router);
+
+  getLogged$ = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.getLogged),
+      switchMap(() =>
+      {
+        return this.authService.getLogged().pipe(
+          switchMap(async (response: AuthResponseDTO) =>
+          {
+            response.user!.teams = response.user?.teamKeys ? await this.userService.loadUserTeams(response.user?.teamKeys) : [];
+            return authActions.getLoggedSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.getLoggedFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
+  
+  logInEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.logIn),
+      switchMap(({request}) =>
+      {
+        return this.authService.logIn(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.logInSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.logInFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  }
+  );
+  
+  signUpEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.signUp),
+      switchMap(({request}) =>
+      {
+        return this.authService.signUp(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.signUpSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.signUpFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
+  
+  //use this for team generating
+  redirectAfterSignUpEffect = createEffect(() => 
+  {
+    return this.actions$.pipe(
+      ofType(authActions.signUpSuccess),
+      tap(() => 
+      {
+        window.location.reload();
+      })
+    )
+  },{ dispatch: false });
+  
+  redirectAfterLogInEffect = createEffect(() => 
+  {
+    return this.actions$.pipe(
+      ofType(authActions.logInSuccess),
+      tap(() => 
+      {
+        window.location.reload();
+      })
+    )
+  },{dispatch: false});
+  
+  logOutEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.logOut),
+      switchMap(() =>
+      {
+        return this.authService.logOut().pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.logOutSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.logOutFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
+  
+  deleteAccountEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.deleteAccount),
+      switchMap(() =>
+      {
+        return this.authService.deleteAccount().pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.deleteAccountSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.deleteAccountFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
+  
+  redirectAfterDeleteAccountEffect = createEffect(() => 
+  {
+    return this.actions$.pipe(
+      ofType(authActions.deleteAccountSuccess),
+      tap(() => 
+      {
+        this.router.navigate(['']);
+      })
+    )
+  },{dispatch: false});
+  
+  changeUserNameEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.changeUserName),
+      switchMap(({request}) =>
+      {
+        return this.authService.changeUserName(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.changeUserNameSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.changeUserNameFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
+  
+  redirectAfterChangeUserNameEffect = createEffect(() => 
+  {
+    return this.actions$.pipe(
+      ofType(authActions.changeUserNameSuccess),
+      tap((response) => 
+      {
+        this.router.navigate(['/@' + response.response.user?.username]);
+      })
+    )
+  },{dispatch: false});
+  
+  changeEmailEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.changeEmail),
+      switchMap(({request}) =>
+      {
+        return this.authService.changeEmail(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.changeEmailSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.changeEmailFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
+  
+  changePasswordEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.changePassword),
+      switchMap(({request}) =>
+      {
+        return this.authService.changePassword(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.changePasswordSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.changePasswordFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
+  
+  changePictureEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.changePicture),
+      switchMap(({request}) =>
+      {
+        return this.authService.changePicture(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.changePictureSuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.changePictureFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
+  
+  changeCountryEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.changeCountry),
+      switchMap(({request}) =>
+      {
+        return this.authService.changeCountry(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.changeCountrySuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.changeCountryFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
+  
+  changeVisibilityEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.changeVisibility),
+      switchMap(({request}) =>
+      {
+        return this.authService.changeVisibility(request).pipe(
+          map((response: AuthResponseDTO) =>
+          {
+            return authActions.changeVisibilitySuccess({response});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.changeVisibilityFailure(
+              {
+                errors: errorResponse.error.errors
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
+}
+/*
 export const getLogged = createEffect(
   (
     actions$ = inject(Actions),
-    authService = inject(AuthService)
+    authService = inject(AuthService),
+    userService = inject(UserService)
   ) =>
   {
     return actions$.pipe(
@@ -20,8 +341,9 @@ export const getLogged = createEffect(
       switchMap(() =>
       {
         return authService.getLogged().pipe(
-          map((response: AuthResponseDTO) =>
+          switchMap(async (response: AuthResponseDTO) =>
           {
+            response.user!.teams = response.user?.teamKeys ? await userService.loadUserTeams(response.user?.teamKeys) : [];
             return authActions.getLoggedSuccess({response});
           }),
           catchError((errorResponse: HttpErrorResponse) => 
@@ -401,3 +723,4 @@ export const changeVisibilityEffect = createEffect(
   }, 
   {functional: true}
 )
+*/
