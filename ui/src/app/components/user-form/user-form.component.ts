@@ -7,8 +7,8 @@ import { LogInDTO } from 'src/app/models/DTOs/login.dto';
 import { SignUpDTO } from 'src/app/models/DTOs/signup.dto';
 import { UserService } from 'src/app/services/user.service';
 import { getAuthFormError, passwordsMatch } from 'src/app/services/util';
-import { authActions } from 'src/app/state/auth/auth.actions';
-import { selectIsSubmitting, selectLoggedUser, selectValidationErrors } from 'src/app/state/auth/auth.reducers';
+import { authActions } from 'src/app/auth/store/auth.actions';
+import { selectIsSubmitting, selectLoggedUser, selectValidationErrors } from 'src/app/auth/store/auth.selectors';
 
 
 @Component({

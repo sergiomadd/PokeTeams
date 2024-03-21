@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { Team } from 'src/app/models/team.model';
 import { GenerateTeamService } from 'src/app/services/generate-team.service';
-import { Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-team-view',

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output, SimpleChanges, inject } from '@angular
 import { FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { UserService } from 'src/app/services/user.service';
-import { selectLoggedUser } from 'src/app/state/auth/auth.reducers';
+import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
 
 @Component({
   selector: 'app-top-option',

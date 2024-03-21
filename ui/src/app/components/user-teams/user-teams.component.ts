@@ -1,7 +1,7 @@
 import { Component, Input, SimpleChanges, inject } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Team } from 'src/app/models/team.model';
 import { DropdownOption } from '../pieces/dropdown/dropdown.component';
-import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-user-teams',
@@ -10,7 +10,7 @@ import { FormBuilder } from '@angular/forms';
 })
 export class UserTeamsComponent 
 {
-  formBuilder = inject(FormBuilder)
+  formBuilder = inject(FormBuilder);
 
   @Input() teams?: Team[];
   @Input() logged?: boolean;
@@ -38,10 +38,9 @@ export class UserTeamsComponent
     }
   ];
 
-  ngOnInit()
+  async ngOnInit()
   {
     this.sortedTeams = this.teams;
-
     this.searchForm.valueChanges.subscribe((value) => 
     {
       if(value.pokemon || value.tournament || value.regulation)
@@ -111,7 +110,6 @@ export class UserTeamsComponent
   }
 
   //sorting
-
   selectSorter(option: DropdownOption)
   {
     switch(option.name)

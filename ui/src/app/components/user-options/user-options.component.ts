@@ -4,11 +4,11 @@ import { Store } from '@ngrx/store';
 import { Country } from 'src/app/models/DTOs/country.dto';
 import { UserUpdateDTO } from 'src/app/models/DTOs/userUpdate.dto';
 import { User } from 'src/app/models/user.model';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/auth/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { getAuthFormError, passwordsMatch } from 'src/app/services/util';
-import { authActions } from 'src/app/state/auth/auth.actions';
-import { selectValidationErrors } from 'src/app/state/auth/auth.reducers';
+import { authActions } from 'src/app/auth/store/auth.actions';
+import { selectValidationErrors } from 'src/app/auth/store/auth.selectors';
 
 @Component({
   selector: 'app-user-options',

@@ -1,7 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectLoggedUser } from 'src/app/state/auth/auth.reducers';
+import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
 
 @Component({
   selector: 'app-right-panel',
