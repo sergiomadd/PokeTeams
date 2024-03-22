@@ -418,35 +418,15 @@ namespace api.Controllers
                 Microsoft.AspNetCore.Identity.SignInResult logInResult = new Microsoft.AspNetCore.Identity.SignInResult();
                 if (signedUserByEmail != null)
                 {
-                    if (await _userManager.CheckPasswordAsync(signedUserByEmail, model.Password) == false)
-                    {
-                        return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "Invalid credentials" } });
-                    }
-                    logInResult = await _signInManager.PasswordSignInAsync(signedUserByEmail.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                    return await PerformLogIn(signedUserByEmail, model);
                 }
                 else if (signedUserByUserName != null)
                 {
-                    if (await _userManager.CheckPasswordAsync(signedUserByUserName, model.Password) == false)
-                    {
-                        return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "Invalid credentials" } });
-                    }
-                    logInResult = await _signInManager.PasswordSignInAsync(signedUserByUserName.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                    return await PerformLogIn(signedUserByUserName, model);
                 }
                 else
                 {
                     return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "User not found." } });
-                }
-                if (!logInResult.Succeeded)
-                {
-                    return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "Log in failed" } });
-                }
-                if (logInResult.IsNotAllowed)
-                {
-                    return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "You are not allowed" } });
-                }
-                if (logInResult.IsLockedOut)
-                {
-                    return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "You account is locked" } });
                 }
             }
             catch (Exception ex)
@@ -454,8 +434,30 @@ namespace api.Controllers
                 Printer.Log(ex.Message);
                 return BadRequest("Log in error, exception, Model not valid");
             }
+        }
+
+        private async Task<ActionResult<IdentityResponseDTO>> PerformLogIn(User user, LogInDTO model)
+        {
+            if (await _userManager.CheckPasswordAsync(user, model.Password) == false)
+            {
+                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "Invalid credentials" } });
+            }
+            Microsoft.AspNetCore.Identity.SignInResult logInResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+            if (!logInResult.Succeeded)
+            {
+                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "Log in failed" } });
+            }
+            if (logInResult.IsNotAllowed)
+            {
+                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "You are not allowed" } });
+            }
+            if (logInResult.IsLockedOut)
+            {
+                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "You account is locked" } });
+            }
+            UserDTO userDTO = await _pokeTeamService.BuildUserDTO(user, true);
             Printer.Log("User successfully loged in.");
-            return Ok(new IdentityResponseDTO { User = null, Success = true });
+            return Ok(new IdentityResponseDTO { User = userDTO, Success = true });
         }
 
         [AllowAnonymous]
