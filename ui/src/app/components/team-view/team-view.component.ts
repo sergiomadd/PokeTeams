@@ -1,10 +1,7 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Team } from 'src/app/models/team.model';
 import { GenerateTeamService } from 'src/app/services/generate-team.service';
-import { NavigationStart, Router } from '@angular/router';
-import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
-import { EditorOptions } from 'src/app/models/editorOptions.model';
-import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-team-view',
@@ -16,13 +13,16 @@ import { filter } from 'rxjs';
 export class TeamViewComponent 
 {
   teamService = inject(GenerateTeamService);
-  router = inject(Router)
+  router = inject(Router);
 
+  teamKey: string = "";
   team: Team = <Team>{};
 
   async ngOnInit() 
   {
-    this.team = await this.teamService.getTeam(this.router.url.slice(1));
+    this.teamKey = this.router.url.slice(1);
+    await this.teamService.incrementViewCount(this.teamKey);
+    this.team = await this.teamService.getTeam(this.teamKey);
   }
 
   copy()

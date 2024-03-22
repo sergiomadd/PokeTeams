@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Team } from '../models/team.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { getErrorMessage, toCamelCase } from './util';
 import { lastValueFrom } from 'rxjs';
 import { EditorData } from '../models/editorData.model';
+import { StringBody } from '../models/DTOs/string.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,11 @@ import { EditorData } from '../models/editorData.model';
 export class GenerateTeamService 
 {  
   private apiUrl = 'https://localhost:7134/api/';
+
+  private httpOptionsString = 
+  {
+    headers: new HttpHeaders({'accept': 'text/plain'})
+  }
 
   constructor(private http: HttpClient) 
   {
@@ -31,7 +37,6 @@ export class GenerateTeamService
     {
       console.log("Error: ", getErrorMessage(error));
     }
-    console.log("team gotten:", toCamelCase(team));
     return toCamelCase(team); 
   }
 
@@ -48,7 +53,6 @@ export class GenerateTeamService
     {
       console.log("Error: ", getErrorMessage(error));
     }
-    console.log("Options data gotten:", optionsData);
     return optionsData; 
   }
 
@@ -60,7 +64,6 @@ export class GenerateTeamService
     {
       const teamLink$ = this.http.post(url, team);
       teamLink = await lastValueFrom(teamLink$);
-      console.log("teamlink in service", teamLink);
     }
     catch(error)
     {
@@ -69,5 +72,20 @@ export class GenerateTeamService
     }
     
     return teamLink["content"];
+  }
+
+  async incrementViewCount(teamKey: string)
+  {
+    let url = this.apiUrl + 'team/increment';
+    try
+    {
+      const data: StringBody = {content: teamKey}
+      this.http.post(url, data, this.httpOptionsString).subscribe();
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+      return getErrorMessage(error);
+    }
   }
 }
