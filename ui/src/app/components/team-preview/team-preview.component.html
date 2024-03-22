@@ -30,11 +30,11 @@
           <div>
             {{team?.date}}
           </div>
-        </div>
+        </div>    
       </div>
       <div class="right">
         <div class="link">
-          <a href="{{team?.id}}" target=”_blank” >Open</a>
+          <a [routerLink]="['/', team?.id]" target=”_blank” >Open</a>
         </div>
         <ng-container *ngIf="logged">
           <div class="link">

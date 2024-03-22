@@ -1,12 +1,13 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
+import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Store } from "@ngrx/store";
+import { catchError, map, of, switchMap, tap } from "rxjs";
+import { AuthService } from "src/app/auth/services/auth.service";
+import { AuthResponseDTO } from "src/app/models/DTOs/authResponse.dto";
 import { UserService } from "src/app/services/user.service";
 import { authActions } from "./auth.actions";
-import { catchError, map, of, switchMap, tap } from "rxjs";
-import { AuthResponseDTO } from "src/app/models/DTOs/authResponse.dto";
-import { HttpErrorResponse } from "@angular/common/http";
-import { Router } from "@angular/router";
-import { AuthService } from "src/app/auth/services/auth.service";
 
 
 @Injectable()
@@ -16,6 +17,7 @@ export class AuthEffects
   authService = inject(AuthService);
   userService = inject(UserService);
   router = inject(Router);
+  store = inject(Store);
 
   getLogged$ = createEffect(() =>
   {
@@ -26,7 +28,6 @@ export class AuthEffects
         return this.authService.getLogged().pipe(
           switchMap(async (response: AuthResponseDTO) =>
           {
-            response.user!.teams = response.user?.teamKeys ? await this.userService.loadUserTeams(response.user?.teamKeys) : [];
             return authActions.getLoggedSuccess({response});
           }),
           catchError((errorResponse: HttpErrorResponse) => 
@@ -109,7 +110,7 @@ export class AuthEffects
       ofType(authActions.logInSuccess),
       tap(() => 
       {
-        window.location.reload();
+        //window.location.reload();
       })
     )
   },{dispatch: false});

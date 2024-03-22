@@ -1,8 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { ThemeService } from './services/theme.service';
-import { User } from './models/user.model';
 import { Store } from '@ngrx/store';
-import { authActions } from './state/auth/auth.actions';
+import { GenerateTeamService } from './services/generate-team.service';
+
 
 @Component({
   selector: 'app-root',
@@ -13,9 +12,15 @@ export class AppComponent
 {
   title = 'ui';
   store = inject(Store);
+  teamService = inject(GenerateTeamService);
+
+  constructor() 
+  {
+
+  }
 
   ngOnInit()
   {
-    this.store.dispatch(authActions.getLogged());
+
   }
 }

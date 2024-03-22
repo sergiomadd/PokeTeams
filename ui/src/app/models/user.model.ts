@@ -6,11 +6,11 @@ export interface User
   name: string,
   username: string,
   picture?: string,
-  teams: Team[],
+  teams?: Team[],
   teamKeys?: string[],
-  country: Country,
+  country?: Country,
   visibility: boolean,
-    //logged
+  //logged
   email?: string,
   emailConfirmed?: boolean
 }

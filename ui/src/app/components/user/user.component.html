@@ -1,6 +1,7 @@
 <ng-container *ngIf="data$ | async as data">
   <div class="user">
-    <ng-container *ngIf="user?.visibility; else private">
+    <ng-container *ngIf="user?.visibility 
+      || (data.loggedUser?.username === user?.username); else private">
       <div class="profile">
         <div class="picture">
           <img src="{{user?.picture}}" alt="" class="picture">
@@ -29,7 +30,7 @@
         </div>
         <ng-container *ngIf="data.loggedUser?.username ===user?.username">
           <div class="section" (click)="changeSection(2)" [ngClass]="{selected: sections[2]}">
-            OPTIONS
+            SETTINGS
           </div>
         </ng-container>
       </div>
