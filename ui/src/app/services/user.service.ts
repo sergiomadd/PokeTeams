@@ -1,12 +1,12 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { lastValueFrom } from 'rxjs';
 import { AuthResponseDTO } from '../models/DTOs/authResponse.dto';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, lastValueFrom } from 'rxjs';
-import { getErrorMessage } from './util';
+import { Country } from '../models/DTOs/country.dto';
+import { Team } from '../models/team.model';
 import { User } from '../models/user.model';
 import { GenerateTeamService } from './generate-team.service';
-import { Team } from '../models/team.model';
-import { Country } from '../models/DTOs/country.dto';
+import { getErrorMessage } from './util';
 
 @Injectable({
   providedIn: 'root'
@@ -33,21 +33,24 @@ export class UserService
     {
       console.log("Error: ", getErrorMessage(error));
     }
-    if(user && user.teamKeys)
-    {
-      user.teams = await this.loadUserTeams(user.teamKeys);
-    }
+    await this.loadUserTeams(user);
     return user;
   }
 
-  async loadUserTeams(teamKeys: string[]): Promise<Team[]>
+  async loadUserTeams(user?: User): Promise<User | undefined>
   {
-    let teams: Team[] = [];
-    for (let i=0; i<teamKeys.length; i++) 
+    //Clone obj cause user is not extensible
+    let loadedUser: User = JSON.parse(JSON.stringify(user));
+    if(user && user?.teamKeys)
     {
-      teams.push(await this.generateTeam.getTeam(teamKeys[i]));
+      let teams: Team[] = [];
+      for (let i=0; i<user.teamKeys.length; i++) 
+      {
+        teams.push(await this.generateTeam.getTeam(user.teamKeys[i]));
+      }
+      loadedUser.teams = teams;
     }
-    return teams;
+    return loadedUser;
   }
   
   async checkUserNameAvailable(userName: string) : Promise<boolean>

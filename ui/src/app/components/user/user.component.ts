@@ -1,10 +1,9 @@
-import { Component, Input, SimpleChanges, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
+import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
 import { User } from 'src/app/models/user.model';
-import { GenerateTeamService } from 'src/app/services/generate-team.service';
 import { UserService } from 'src/app/services/user.service';
-import { selectLoggedUser } from 'src/app/state/auth/auth.reducers';
 
 @Component({
   selector: 'app-user',
@@ -19,7 +18,7 @@ export class UserComponent
   @Input() userName?: string;
 
   user?: User;
-  sections: boolean[] = [false, false, true]
+  sections: boolean[] = [true, false, false]
   country?: string;
 
   data$ = combineLatest(
@@ -31,13 +30,15 @@ export class UserComponent
   async ngOnInit()
   {
     this.user = this.userName ? await this.userService.getUser(this.userName) : undefined;
-    this.data$.forEach(item => 
+    this.data$.forEach(async item => 
+    {
+      if(item.loggedUser != null && item.loggedUser?.username === this.user?.username)
       {
-        if(item.loggedUser != null && item.loggedUser?.username === this.user?.username)
-        {
-          this.user = item.loggedUser;
-        }
-      })
+        item.loggedUser = await this.userService.loadUserTeams(item.loggedUser);
+        this.user = item.loggedUser;
+      }
+    });
+    console.log("user:", this.user)
   }
 
   changeSection(index: number)
