@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Team } from '../models/team.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { getErrorMessage, toCamelCase } from './util';
+import { Injectable } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
-import { EditorData } from '../models/editorData.model';
+import { environment } from 'src/environments/environment.development';
 import { StringBody } from '../models/DTOs/string.dto';
+import { EditorData } from '../models/editorData.model';
+import { Team } from '../models/team.model';
+import { getErrorMessage, toCamelCase } from './util';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { StringBody } from '../models/DTOs/string.dto';
 
 export class GenerateTeamService 
 {  
-  private apiUrl = 'https://localhost:7134/api/';
+  private apiUrl = environment.apiURL;
 
   private httpOptionsString = 
   {

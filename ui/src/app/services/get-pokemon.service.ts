@@ -1,17 +1,18 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { PokemonData } from '../models/DTOs/pokemonData.dto';
-import { HttpClient } from  '@angular/common/http';
-import { Pokemon } from '../models/pokemon/pokemon.model';
 import { lastValueFrom, timeout } from 'rxjs';
+import { environment } from 'src/environments/environment.development';
+import { PokemonData } from '../models/DTOs/pokemonData.dto';
 import { Ability } from '../models/pokemon/ability.model';
 import { Item } from '../models/pokemon/item.model';
 import { Move } from '../models/pokemon/move.model';
 import { Nature } from '../models/pokemon/nature.model';
+import { Pokemon } from '../models/pokemon/pokemon.model';
 import { Stat } from '../models/pokemon/stat.model';
-import { getErrorMessage } from './util';
 import { Type } from '../models/pokemon/type.model';
 import { PokePaste } from '../models/pokePaste.model';
 import { LinkifierService } from './linkifier.service';
+import { getErrorMessage } from './util';
 
 
 @Injectable({
@@ -19,7 +20,7 @@ import { LinkifierService } from './linkifier.service';
 })
 export class GetPokemonService 
 {
-  private apiUrl = 'https://localhost:7134/api/';
+  private apiUrl = environment.apiURL;
 
   linkifier = inject(LinkifierService);
 
@@ -75,7 +76,7 @@ export class GetPokemonService
     {
       console.log('Generated pokemon: ', pokemon);
     }
-    //console.log("Time to generate pokemon: ", new Date().getTime() - now);
+    //console.log("Time to generate pokemon: ", new Date().getTlime() - now);
     return pokemon;
   }
 

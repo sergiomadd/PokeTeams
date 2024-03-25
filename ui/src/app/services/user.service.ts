@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
+import { environment } from 'src/environments/environment.development';
 import { AuthResponseDTO } from '../models/DTOs/authResponse.dto';
 import { Country } from '../models/DTOs/country.dto';
 import { Team } from '../models/team.model';
@@ -13,7 +14,7 @@ import { getErrorMessage } from './util';
 })
 export class UserService 
 {
-  private apiUrl = 'https://localhost:7134/api/user/';
+  private apiUrl = environment.apiURL + 'user/';
 
   generateTeam: GenerateTeamService = inject(GenerateTeamService)
 
