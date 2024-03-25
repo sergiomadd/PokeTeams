@@ -277,12 +277,12 @@ namespace api.Services.TeamService
             return false;
         }
 
-        public async Task<bool> IncrementTeamViewCount(string teamKey)
+        public async Task<string> IncrementTeamViewCount(string teamKey)
         {
             try
             {
                 Team team = await _pokeTeamContext.Team.FindAsync(teamKey);
-                if(team == null) { return false; }
+                if(team == null) { return "Team not found"; }
                 team.ViewCount++;
                 _pokeTeamContext.SaveChanges();
             }
@@ -290,9 +290,9 @@ namespace api.Services.TeamService
             {
                 Printer.Log("Exception in: DeleteUserByUserName(string userName)");
                 Printer.Log(ex);
-                return false;
+                return "Failed to increment team";
             }
-            return true;
+            return "Team incremented";
         }
     }
 }

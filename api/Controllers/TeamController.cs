@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using api.Models.DBPoketeamModels;
 using Microsoft.AspNetCore.Components.Forms;
 using api.Util;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace api.Controllers
 {
@@ -43,17 +44,17 @@ namespace api.Controllers
             };
             return Ok(response);
         }
-
+        [EnableRateLimiting("fixed")]
         [HttpPost, Route("increment")]
         public async Task<ActionResult<string>> IncrementViewCount(StringBody data)
         {
             Printer.Log($"Incrementing {data.Content} team view count");
-            bool incremented = await _teamService.IncrementTeamViewCount(data.Content);
-            if (!incremented)
+            string response = await _teamService.IncrementTeamViewCount(data.Content);
+            if (response.Equals("Team incremented"))
             {
-                return BadRequest($"Failed to increment team.");
+                return Ok(response);
             }
-            return Ok();
+            return BadRequest(response);
         }
     }
 }
