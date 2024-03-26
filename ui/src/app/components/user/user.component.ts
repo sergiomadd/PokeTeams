@@ -30,6 +30,7 @@ export class UserComponent
   async ngOnInit()
   {
     this.user = this.userName ? await this.userService.getUser(this.userName) : undefined;
+    
     this.data$.forEach(async item => 
     {
       if(item.loggedUser != null && item.loggedUser?.username === this.user?.username)
@@ -38,7 +39,8 @@ export class UserComponent
         this.user = item.loggedUser;
       }
     });
-    console.log("user:", this.user)
+    
+    console.log("user in component:", this.user)
   }
 
   changeSection(index: number)

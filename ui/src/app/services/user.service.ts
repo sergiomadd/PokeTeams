@@ -34,21 +34,24 @@ export class UserService
     {
       console.log("Error: ", getErrorMessage(error));
     }
-    await this.loadUserTeams(user);
+    if(user)
+    {
+      user = await this.loadUserTeams(user);
+    }
     return user;
   }
 
-  async loadUserTeams(user?: User): Promise<User | undefined>
+  async loadUserTeams(user: User): Promise<User>
   {
     //Clone obj cause user is not extensible
     let loadedUser: User = JSON.parse(JSON.stringify(user));
-    if(user && user?.teamKeys)
+    if(user?.teamKeys)
     {
       let teams: Team[] = [];
-      for (let i=0; i<user.teamKeys.length; i++) 
+      user.teamKeys.forEach(async (key) => 
       {
-        teams.push(await this.generateTeam.getTeam(user.teamKeys[i]));
-      }
+        teams.push(await this.generateTeam.getTeam(key));
+      });
       loadedUser.teams = teams;
     }
     return loadedUser;

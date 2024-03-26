@@ -1,4 +1,4 @@
-import { Component, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, Input, QueryList, ViewChildren } from '@angular/core';
 import { Team } from 'src/app/models/team.model';
 import { PokemonPreviewComponent } from '../pokemon-preview/pokemon-preview.component';
 
@@ -14,6 +14,11 @@ export class TeamPreviewComponent
   @Input() logged?: boolean;
   
   @ViewChildren(PokemonPreviewComponent) pokemonPreviewsComponents!: QueryList<PokemonPreviewComponent>;
+
+  ngOnInit()
+  {
+    //console.log(this.team)
+  }
 
   getVisibility()
   {
