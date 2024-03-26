@@ -1,5 +1,6 @@
-import { Component, Input, QueryList, ViewChildren } from '@angular/core';
+import { Component, inject, Input, QueryList, ViewChildren } from '@angular/core';
 import { Team } from 'src/app/models/team.model';
+import { GenerateTeamService } from 'src/app/services/generate-team.service';
 import { PokemonPreviewComponent } from '../pokemon-preview/pokemon-preview.component';
 
 @Component({
@@ -14,6 +15,8 @@ export class TeamPreviewComponent
   @Input() logged?: boolean;
   
   @ViewChildren(PokemonPreviewComponent) pokemonPreviewsComponents!: QueryList<PokemonPreviewComponent>;
+
+  teamService = inject(GenerateTeamService);
 
   ngOnInit()
   {
@@ -31,5 +34,10 @@ export class TeamPreviewComponent
     {
       pokemon.expand();
     });
+  }
+
+  delete()
+  {
+    if(this.team) {this.teamService.deleteTeam(this.team?.id);}
   }
 }

@@ -5,6 +5,7 @@ import { lastValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { authActions } from '../auth/store/auth.actions';
 import { StringBody } from '../models/DTOs/string.dto';
+import { TeamId } from '../models/DTOs/teamId.dto';
 import { EditorData } from '../models/editorData.model';
 import { Team } from '../models/team.model';
 import { getErrorMessage, toCamelCase } from './util';
@@ -93,5 +94,21 @@ export class GenerateTeamService
       console.log("Error: ", getErrorMessage(error));
       return getErrorMessage(error);
     }
+  }
+
+  async deleteTeam(teamKey: string)
+  {
+    let url = this.apiUrl + 'team/delete';
+    try
+    {
+      const data: TeamId = {id: teamKey}
+      this.http.post(url, data, this.httpOptionsString).subscribe();
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+      return getErrorMessage(error);
+    }
+    this.store.dispatch(authActions.getLogged());
   }
 }

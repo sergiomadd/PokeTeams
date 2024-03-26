@@ -37,11 +37,13 @@
           <a [routerLink]="['/', team?.id]" target=”_blank” >Open</a>
         </div>
         <ng-container *ngIf="logged">
+          <!-- 
           <div class="link">
             <a href="{{team?.id}}" target=”_blank” >Edit</a>
           </div>
+          -->
           <div class="link">
-            <a href="{{team?.id}}" target=”_blank” >Delete</a>
+            <button (click)="delete()">Delete</button>
           </div>
         </ng-container>
       </div>
