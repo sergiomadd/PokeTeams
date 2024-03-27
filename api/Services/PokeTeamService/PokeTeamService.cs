@@ -101,11 +101,9 @@ namespace api.Services.TeamService
         public async Task<bool> DeleteTeam(string teamId)
         {
             Printer.Log("Deleting team: ", teamId);
-
             try
             {
                 Team team = await _pokeTeamContext.Team.FindAsync(teamId);
-
                 if (team != null)
                 {
                     _pokeTeamContext.Team.Remove(team);
@@ -116,8 +114,9 @@ namespace api.Services.TeamService
             {
                 Printer.Log("Exception in: DeleteUserByUserName(string userName)");
                 Printer.Log(ex);
+                return false;
             }
-            return false;
+            return true;
         }
 
         public string GenerateId(int length)

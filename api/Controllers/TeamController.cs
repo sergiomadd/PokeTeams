@@ -46,10 +46,10 @@ namespace api.Controllers
         }
         [EnableRateLimiting("fixed")]
         [HttpPost, Route("increment")]
-        public async Task<ActionResult<string>> IncrementViewCount(StringBody data)
+        public async Task<ActionResult<string>> IncrementViewCount(TeamIdDTO data)
         {
-            Printer.Log($"Incrementing {data.Content} team view count");
-            string response = await _teamService.IncrementTeamViewCount(data.Content);
+            Printer.Log($"Incrementing {data.Id} team view count");
+            string response = await _teamService.IncrementTeamViewCount(data.Id);
             if (response.Equals("Team incremented"))
             {
                 return Ok(response);
