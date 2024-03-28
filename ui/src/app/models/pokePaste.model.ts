@@ -13,5 +13,6 @@ export interface PokePaste
   evs?: string[][],
   level?: number,
   shiny?: boolean,
-  gender?: string
+  gender?: string,
+  source: string
 }

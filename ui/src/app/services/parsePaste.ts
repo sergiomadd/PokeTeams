@@ -1,3 +1,5 @@
+import { Pokemon } from '../models/pokemon/pokemon.model';
+import { Stat } from '../models/pokemon/stat.model';
 import { PokePaste } from '../models/pokePaste.model';
 import { PokePasteData } from '../models/pokePasteData.model';
 
@@ -7,62 +9,157 @@ export function parsePaste(paste: string): PokePasteData
   let pokePasteData: PokePasteData = <PokePasteData>{}
   let pokemons = paste.split("\n\n");
   pokePasteData.pokemons = [];
-
   pokemons.forEach((pokemon) => 
   {
-    let pokePaste: PokePaste = <PokePaste>{}; 
-    let lines = pokemon.split(/\r?\n|\r|\n/g);
-    for(let i=0;i<lines.length;i++)
-    {
-      let line = lines[i];
-      if(line.includes("@"))
-      {
-        getName(pokePaste, line);
-        if(line.split(" @ ")[1].length > 0)
-        {
-          pokePaste.item = formatValue(line.split(" @ ")[1]);
-        }
-      }
-      if(line.includes(":"))
-      {
-        if(line.includes("Ability") || line.includes("ability"))
-        {
-          pokePaste.ability = formatValue(line.split(":").slice(1).join(" "));
-        }
-        if(line.includes("Level") || line.includes("level"))
-        {
-          pokePaste.level = Number(formatValue(line.split(":").slice(1).join(" ")));
-        }
-        if(line.includes("Shiny") || line.includes("shiny"))
-        {
-          pokePaste.shiny = stringToBool(formatValue(line.split(":")[1], {whiteSpace: true}));
-        }
-        if(line.includes("EV") || line.includes("Ev") || line.includes("ev"))
-        {
-          pokePaste.evs = getStats(line, "ev");
-        }
-        if(line.includes("IV") || line.includes("Iv") || line.includes("iv"))
-        {
-          pokePaste.ivs = getStats(line, "iv");
-        }
-        if(line.includes("Tera") || line.includes("tera") || line.includes("Teratype") || line.includes("teratype"))
-        {
-          pokePaste.teratype = formatValue(line.split(":").slice(1).join(" "), {whiteSpace: true, lowercase: true});
-        }
-      }
-      if(line.includes("Nature") || line.includes("nature"))
-      {
-        //pokePaste.nature = formatValue(lines[4].split(" ").slice(0, -1).join(" "));
-        pokePaste.nature = formatValue(line.split("Nature")[0], {whiteSpace: true});
-      }
-    }
-    pokePaste.moves = getMoves(lines.slice(lines.length-4, lines.length));
-    if(!pokePaste.ivs) { pokePaste.ivs = getStats('', "noiv"); }
-    pokePasteData.pokemons.push(pokePaste);
+    pokePasteData.pokemons.push(parsePokemon(pokemon));
   });
-
   console.log("Generated paste: ", pokePasteData);
   return pokePasteData;
+}
+
+export function parsePokemon(pokemon: string): PokePaste
+{
+  let pokePaste: PokePaste = <PokePaste>{}; 
+  let lines = pokemon.split(/\r?\n|\r|\n/g);
+  for(let i=0;i<lines.length;i++)
+  {
+    let line = lines[i];
+    if(line.includes("@"))
+    {
+      getName(pokePaste, line);
+      if(line.split(" @ ")[1].length > 0)
+      {
+        pokePaste.item = formatValue(line.split(" @ ")[1]);
+      }
+    }
+    if(line.includes(":"))
+    {
+      if(line.includes("Ability") || line.includes("ability"))
+      {
+        pokePaste.ability = formatValue(line.split(":").slice(1).join(" "));
+      }
+      if(line.includes("Level") || line.includes("level"))
+      {
+        pokePaste.level = Number(formatValue(line.split(":").slice(1).join(" ")));
+      }
+      if(line.includes("Shiny") || line.includes("shiny"))
+      {
+        pokePaste.shiny = stringToBool(formatValue(line.split(":")[1], {whiteSpace: true}));
+      }
+      if(line.includes("EV") || line.includes("Ev") || line.includes("ev"))
+      {
+        pokePaste.evs = getStats(line, "ev");
+      }
+      if(line.includes("IV") || line.includes("Iv") || line.includes("iv"))
+      {
+        pokePaste.ivs = getStats(line, "iv");
+      }
+      if(line.includes("Tera") || line.includes("tera") || line.includes("Teratype") || line.includes("teratype"))
+      {
+        pokePaste.teratype = formatValue(line.split(":").slice(1).join(" "), {whiteSpace: true, lowercase: true});
+      }
+    }
+    if(line.includes("Nature") || line.includes("nature"))
+    {
+      //pokePaste.nature = formatValue(lines[4].split(" ").slice(0, -1).join(" "));
+      pokePaste.nature = formatValue(line.split("Nature")[0], {whiteSpace: true});
+    }
+  }
+  pokePaste.moves = getMoves(lines.slice(lines.length-4, lines.length));
+  if(!pokePaste.ivs) { pokePaste.ivs = getStats('', "noiv"); }
+  pokePaste.source = pokemon;
+  return pokePaste;
+}
+
+export function reverseParsePokemon(pokemon: Pokemon): string
+{
+  //console.log("Pokemon to reverse:", pokemon)
+  let pokePaste: string = ""
+  pokePaste = pokePaste + getReverseName(pokemon);
+  if(pokemon.ability){ pokePaste = pokePaste + `Ability: ${pokemon.ability.name}\n` }
+  if(pokemon.level){pokePaste = pokePaste + `Level: ${pokemon.level}\n`}
+  if(pokemon.shiny !== undefined)
+  {
+    if(pokemon.shiny) {pokePaste = pokePaste + `Shiny: Yes\n`}
+    else {pokePaste = pokePaste + `Shiny: No\n`}
+  }
+  if(pokemon.teraType){pokePaste = pokePaste + `Tera Type: ${pokemon.teraType.name}\n`}
+  if(pokemon.evs)
+  {
+    let evLine = "EVs:";
+    let evs: string[] = []
+    pokemon.evs.forEach((ev: Stat) => 
+    {
+      evs.push(` ${ev.value} ${matchStatIdentifierWithShortName(ev.identifier)} `)
+    });
+    evLine = evLine + evs.join("/") + "\n";
+    pokePaste = pokePaste + evLine;
+  }
+  if(pokemon.nature){pokePaste = pokePaste + `${pokemon.nature.name} Nature\n`}
+  if(pokemon.ivs)
+  {
+    let ivLine = "IVs:";
+    let ivs: string[] = []
+    pokemon.ivs.forEach((iv: Stat) => 
+    {
+      ivs.push(` ${iv.value} ${matchStatIdentifierWithShortName(iv.identifier)} `)
+    });
+    ivLine = ivLine + ivs.join("/") + "\n";
+    pokePaste = pokePaste + ivLine;
+  }
+  if(pokemon.moves)
+  {
+    pokemon.moves.forEach(move => 
+    {
+      pokePaste = pokePaste + `- ${move.name}\n`;
+    });
+  }
+  console.log("reverse pokepaste:", pokePaste);
+  return pokePaste;
+}
+
+function getReverseName(pokemon: Pokemon) : string
+{
+  let line: string = "";
+  if(pokemon.nickname && pokemon.item)
+  {
+    line = `${pokemon.nickname} (${pokemon.name}) @ ${pokemon.item.name}` 
+  }
+  else if(pokemon.nickname)
+  {
+    line = `${pokemon.nickname} (${pokemon.name})` 
+  }
+  else if(pokemon.item)
+  {
+    line = `${pokemon.name} @ ${pokemon.item.name}` 
+  }
+  else
+  {
+    line = `${pokemon.name}` 
+  }
+  return line + "\n";
+}
+
+function matchStatIdentifierWithShortName(identifier: string)
+{
+  let statNames = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"];
+  //let statIdentifiers = ["hp", "attack", "defense", "special-attack", "special-defense", "speed"];
+  switch(identifier)
+  {
+    case "hp":
+      return statNames[0];
+    case "attack":
+      return statNames[1];
+    case "defense":
+      return statNames[2];
+    case "special-attack":
+      return statNames[3];
+    case "special-defense":
+      return statNames[4];
+    case "speed":
+      return statNames[5];
+  }
+  return ""
 }
 
 function getName(pokePaste: PokePaste, line: string)
@@ -102,6 +199,8 @@ function getMoves(lines: string[]) : string[]
   }
   return moves;
 }
+
+
 
 function getStats(line: string, type: string) : string[][]
 {
@@ -163,3 +262,4 @@ function stringToBool(string: string) : boolean
   }
   return false;
 }
+
