@@ -11,7 +11,10 @@ export function parsePaste(paste: string): PokePasteData
   pokePasteData.pokemons = [];
   pokemons.forEach((pokemon) => 
   {
-    pokePasteData.pokemons.push(parsePokemon(pokemon));
+    if(pokemon.trim().length > 0)
+    {
+      pokePasteData.pokemons.push(parsePokemon(pokemon));
+    }
   });
   console.log("Generated paste: ", pokePasteData);
   return pokePasteData;
@@ -69,6 +72,17 @@ export function parsePokemon(pokemon: string): PokePaste
   if(!pokePaste.ivs) { pokePaste.ivs = getStats('', "noiv"); }
   pokePaste.source = pokemon;
   return pokePaste;
+}
+
+export function reversePaste(pokemons: Pokemon[]): string
+{
+  let paste: string = "";
+  pokemons.forEach(pokemon => 
+  {
+    paste = paste + reverseParsePokemon(pokemon) + "\n"  
+  });
+  console.log(paste)
+  return paste;
 }
 
 export function reverseParsePokemon(pokemon: Pokemon): string

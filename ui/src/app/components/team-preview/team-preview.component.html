@@ -34,6 +34,12 @@
       </div>
       <div class="right">
         <div class="link">
+          <button [copy]="getLink()">Copy link</button>
+        </div>
+        <div class="link">
+          <button [copy]="getPaste()">Copy paste</button>
+        </div>
+        <div class="link">
           <a [routerLink]="['/', team?.id]" target=”_blank” >Open</a>
         </div>
         <ng-container *ngIf="logged">
