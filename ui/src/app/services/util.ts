@@ -106,3 +106,8 @@ export function passwordsMatch() : ValidatorFn
     }
   };
 }
+
+export function copyToClipboard(data: string)
+{
+  navigator.clipboard.writeText(data);
+}

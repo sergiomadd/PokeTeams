@@ -1,11 +1,10 @@
-import { Component, Input, SimpleChanges, ViewEncapsulation, inject } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
-import { Move } from 'src/app/models/pokemon/move.model';
 import { Nature } from 'src/app/models/pokemon/nature.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
-import { Sprite } from 'src/app/models/pokemon/sprite.model';
 import { Stat } from 'src/app/models/pokemon/stat.model';
-import { LinkifierService } from 'src/app/services/linkifier.service';
+import { reverseParsePokemon } from 'src/app/services/parsePaste';
+import { copyToClipboard } from 'src/app/services/util';
 import { Colors } from 'src/app/styles/pokemonColors';
 
 interface CalculatedStats
@@ -122,6 +121,11 @@ export class PokemonComponent
       }
       list[index] = true;
     }
+  }
+
+  copyPokemon()
+  {
+    copyToClipboard(reverseParsePokemon(this.pokemon));
   }
 
   formatItemProse(value: string | undefined) : string

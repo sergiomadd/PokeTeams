@@ -2,6 +2,7 @@ import { Component, inject, Input, QueryList, ViewChildren } from '@angular/core
 import { Team } from 'src/app/models/team.model';
 import { GenerateTeamService } from 'src/app/services/generate-team.service';
 import { reversePaste } from 'src/app/services/parsePaste';
+import { copyToClipboard } from 'src/app/services/util';
 import { PokemonPreviewComponent } from '../pokemon-preview/pokemon-preview.component';
 
 @Component({
@@ -37,22 +38,20 @@ export class TeamPreviewComponent
     });
   }
   
-  getPaste()
+  copyPaste()
   {
     if(this.team?.pokemons)
     {
-      return reversePaste(this.team?.pokemons);
+      copyToClipboard(reversePaste(this.team?.pokemons));
     }
-    return "";
   }
 
-  getLink()
+  copyLink()
   {
     if(this.team)
     {
-      return "http://localhost:4200/" + this.team.id;
+      copyToClipboard("http://localhost:4200/" + this.team.id);
     }
-    return "";
   }
 
   delete()

@@ -81,7 +81,6 @@ export function reversePaste(pokemons: Pokemon[]): string
   {
     paste = paste + reverseParsePokemon(pokemon) + "\n"  
   });
-  console.log(paste)
   return paste;
 }
 
@@ -128,7 +127,6 @@ export function reverseParsePokemon(pokemon: Pokemon): string
       pokePaste = pokePaste + `- ${move.name}\n`;
     });
   }
-  console.log("reverse pokepaste:", pokePaste);
   return pokePaste;
 }
 

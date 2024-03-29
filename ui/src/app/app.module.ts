@@ -35,7 +35,6 @@ import { UserOptionsComponent } from './components/user-options/user-options.com
 import { UserTeamsComponent } from './components/user-teams/user-teams.component';
 import { UserComponent } from './components/user/user.component';
 import { VgcComponent } from './components/vgc/vgc.component';
-import { CopyDirective } from './directives/copy.directive';
 import { LinkerPipe } from './pipes/linker.pipe';
 import { metaReducers } from './state/app.state';
 
@@ -68,7 +67,6 @@ import { metaReducers } from './state/app.state';
     UserDetailsComponent,
     UserTeamsComponent,
     DialogComponent,
-    CopyDirective
   ],
   exports: [NavbarComponent],
   imports: [

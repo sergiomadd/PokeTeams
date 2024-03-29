@@ -1,8 +1,9 @@
 import { Component, Input, QueryList, ViewChildren } from '@angular/core';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
-import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
-import { PokemonComponent } from '../pokemon/pokemon.component';
 import { Team } from 'src/app/models/team.model';
+import { reversePaste } from 'src/app/services/parsePaste';
+import { copyToClipboard } from 'src/app/services/util';
+import { PokemonComponent } from '../pokemon/pokemon.component';
 
 
 @Component({
@@ -44,8 +45,11 @@ export class TeamComponent
           this.showAllNotes = !this.showAllNotes;
         break;
       case 2:
-        
+        this.team?.pokemons ? copyToClipboard(reversePaste(this.team?.pokemons)):undefined;
         break;
+      default: 
+      return "";
     }
+    return "";
   }
 }

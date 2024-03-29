@@ -23,7 +23,6 @@ export class TeamViewComponent
     this.teamKey = this.router.url.slice(1);
     await this.teamService.incrementViewCount(this.teamKey);
     this.team = await this.teamService.getTeam(this.teamKey);
-    console.log(this.team)
     if(this.team.pokemons)
     {
       this.team.pokemons.forEach(pokemon => 
