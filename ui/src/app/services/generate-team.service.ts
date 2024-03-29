@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { lastValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { authActions } from '../auth/store/auth.actions';
-import { StringBody } from '../models/DTOs/string.dto';
 import { TeamId } from '../models/DTOs/teamId.dto';
 import { EditorData } from '../models/editorData.model';
 import { Team } from '../models/team.model';
@@ -83,11 +82,11 @@ export class GenerateTeamService
 
   async incrementViewCount(teamKey: string)
   {
-    let url = this.apiUrl + 'team/increment';
+    let url = this.apiUrl + 'team/increment/';
     try
     {
-      const data: StringBody = {content: teamKey}
-      this.http.post(url, data, this.httpOptionsString).subscribe();
+      const data: TeamId = {id: teamKey}
+      this.http.post(url + teamKey, data, this.httpOptionsString).subscribe();
     }
     catch(error)
     {
