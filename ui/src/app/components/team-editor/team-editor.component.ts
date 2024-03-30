@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
-import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
-import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { EditorData } from 'src/app/models/editorData.model';
+import { EditorOptions } from 'src/app/models/editorOptions.model';
+import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Team } from 'src/app/models/team.model';
-import { GenerateTeamService } from 'src/app/services/generate-team.service';
-import { TeamComponent } from '../team/team.component';
+import { TeamService } from 'src/app/services/team.service';
 import { TopOptionComponent } from '../options/top-option/top-option.component';
+import { TeamComponent } from '../team/team.component';
 
 @Component({
   selector: 'app-team-editor',
@@ -14,7 +14,7 @@ import { TopOptionComponent } from '../options/top-option/top-option.component';
 })
 export class TeamEditorComponent 
 {
-  generateTeamService = inject(GenerateTeamService);
+  generateTeamService = inject(TeamService);
 
   @Input() pokemons!: Pokemon[];
   @Output() outputTeam = new EventEmitter<Team>();

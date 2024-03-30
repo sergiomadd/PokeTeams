@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
-import { GetPokemonService } from 'src/app/services/get-pokemon.service';
-import { parsePaste } from 'src/app/services/parsePaste';
+import { ParserService } from 'src/app/services/parser.service';
+import { PokemonService } from 'src/app/services/pokemon.service';
 
 @Component({
   selector: 'app-input',
@@ -11,7 +11,8 @@ import { parsePaste } from 'src/app/services/parsePaste';
 })
 export class InputComponent 
 {
-  getPokemon = inject(GetPokemonService);
+  pokemonService = inject(PokemonService);
+  parser = inject(ParserService);
   
   @Output() outPokemon = new EventEmitter<Pokemon>();
   
@@ -108,10 +109,10 @@ export class InputComponent
   {
     //const nowAll = new Date().getTime();
     console.log("Submitting: ", formData)
-    let data = parsePaste(formData.paste);
+    let data = this.parser.parsePaste(formData.paste);
     for (const pokePaste of data.pokemons)
     {
-      this.outPokemon.emit(await this.getPokemon.buildPokemon(pokePaste));
+      this.outPokemon.emit(await this.pokemonService.buildPokemon(pokePaste));
     };
     //console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
   }

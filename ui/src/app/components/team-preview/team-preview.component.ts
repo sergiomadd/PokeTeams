@@ -1,7 +1,7 @@
 import { Component, inject, Input, QueryList, ViewChildren } from '@angular/core';
 import { Team } from 'src/app/models/team.model';
-import { GenerateTeamService } from 'src/app/services/generate-team.service';
-import { reversePaste } from 'src/app/services/parsePaste';
+import { ParserService } from 'src/app/services/parser.service';
+import { TeamService } from 'src/app/services/team.service';
 import { copyToClipboard } from 'src/app/services/util';
 import { PokemonPreviewComponent } from '../pokemon-preview/pokemon-preview.component';
 
@@ -12,13 +12,16 @@ import { PokemonPreviewComponent } from '../pokemon-preview/pokemon-preview.comp
 })
 export class TeamPreviewComponent 
 {
+  teamService = inject(TeamService);
+  parser = inject(ParserService);
+
   @Input() team?: Team;
   @Input() mode?: string;
   @Input() logged?: boolean;
   
   @ViewChildren(PokemonPreviewComponent) pokemonPreviewsComponents!: QueryList<PokemonPreviewComponent>;
 
-  teamService = inject(GenerateTeamService);
+
 
   ngOnInit()
   {
@@ -42,7 +45,7 @@ export class TeamPreviewComponent
   {
     if(this.team?.pokemons)
     {
-      copyToClipboard(reversePaste(this.team?.pokemons));
+      copyToClipboard(this.parser.reversePaste(this.team?.pokemons));
     }
   }
 

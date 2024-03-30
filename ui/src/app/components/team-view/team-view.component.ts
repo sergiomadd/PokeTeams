@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Team } from 'src/app/models/team.model';
-import { GenerateTeamService } from 'src/app/services/generate-team.service';
+import { TeamService } from 'src/app/services/team.service';
 import { haveMinutesPassed } from 'src/app/services/util';
 
 @Component({
@@ -12,7 +12,7 @@ import { haveMinutesPassed } from 'src/app/services/util';
 
 export class TeamViewComponent 
 {
-  teamService = inject(GenerateTeamService);
+  teamService = inject(TeamService);
   router = inject(Router);
 
   teamKey: string = "";

@@ -18,7 +18,7 @@ import { getErrorMessage } from './util';
 @Injectable({
   providedIn: 'root'
 })
-export class GetPokemonService 
+export class PokemonService 
 {
   private apiUrl = environment.apiURL;
 

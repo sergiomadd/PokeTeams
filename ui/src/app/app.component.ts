@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { GenerateTeamService } from './services/generate-team.service';
+import { TeamService } from './services/team.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,7 @@ export class AppComponent
 {
   title = 'ui';
   store = inject(Store);
-  teamService = inject(GenerateTeamService);
+  teamService = inject(TeamService);
 
   constructor() 
   {

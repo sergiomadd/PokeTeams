@@ -1,9 +1,9 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, inject, Input, ViewEncapsulation } from '@angular/core';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Nature } from 'src/app/models/pokemon/nature.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Stat } from 'src/app/models/pokemon/stat.model';
-import { reverseParsePokemon } from 'src/app/services/parsePaste';
+import { ParserService } from 'src/app/services/parser.service';
 import { copyToClipboard } from 'src/app/services/util';
 import { Colors } from 'src/app/styles/pokemonColors';
 
@@ -25,9 +25,10 @@ interface CalculatedStats
 
 export class PokemonComponent 
 {
+  parser = inject(ParserService);
+
   @Input() pokemon!: Pokemon;
   @Input() editorOptions?: EditorOptions;
-
 
   test: string = "test"
 
@@ -125,7 +126,7 @@ export class PokemonComponent
 
   copyPokemon()
   {
-    copyToClipboard(reverseParsePokemon(this.pokemon));
+    copyToClipboard(this.parser.reverseParsePokemon(this.pokemon));
   }
 
   formatItemProse(value: string | undefined) : string

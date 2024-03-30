@@ -1,7 +1,7 @@
-import { Component, Input, QueryList, ViewChildren } from '@angular/core';
+import { Component, inject, Input, QueryList, ViewChildren } from '@angular/core';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Team } from 'src/app/models/team.model';
-import { reversePaste } from 'src/app/services/parsePaste';
+import { ParserService } from 'src/app/services/parser.service';
 import { copyToClipboard } from 'src/app/services/util';
 import { PokemonComponent } from '../pokemon/pokemon.component';
 
@@ -13,6 +13,8 @@ import { PokemonComponent } from '../pokemon/pokemon.component';
 })
 export class TeamComponent 
 {
+  parser = inject(ParserService);
+
   @Input() team?: Team;
 
   @ViewChildren(PokemonComponent) pokemonComponents!:QueryList<PokemonComponent>;
@@ -45,7 +47,7 @@ export class TeamComponent
           this.showAllNotes = !this.showAllNotes;
         break;
       case 2:
-        this.team?.pokemons ? copyToClipboard(reversePaste(this.team?.pokemons)):undefined;
+        this.team?.pokemons ? copyToClipboard(this.parser.reversePaste(this.team?.pokemons)):undefined;
         break;
       default: 
       return "";

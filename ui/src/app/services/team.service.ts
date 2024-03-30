@@ -13,7 +13,7 @@ import { getErrorMessage, toCamelCase } from './util';
   providedIn: 'root'
 })
 
-export class GenerateTeamService 
+export class TeamService 
 {  
   private apiUrl = environment.apiURL;
 

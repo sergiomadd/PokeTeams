@@ -1,12 +1,11 @@
-import { Injectable, inject } from '@angular/core';
-import { GenerateTeamService } from '../../services/generate-team.service';
 import { HttpClient } from '@angular/common/http';
-import { SignUpDTO } from '../../models/DTOs/signup.dto';
-import { AuthResponseDTO } from '../../models/DTOs/authResponse.dto';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { getErrorMessage } from '../../services/util';
+import { AuthResponseDTO } from '../../models/DTOs/authResponse.dto';
 import { LogInDTO } from '../../models/DTOs/login.dto';
+import { SignUpDTO } from '../../models/DTOs/signup.dto';
 import { UserUpdateDTO } from '../../models/DTOs/userUpdate.dto';
+import { TeamService } from '../../services/team.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,7 @@ export class AuthService
 
   private apiUrl = 'https://localhost:7134/api/user/';
 
-  generateTeam: GenerateTeamService = inject(GenerateTeamService)
+  generateTeam: TeamService = inject(TeamService)
 
   constructor(private http: HttpClient) { }
 

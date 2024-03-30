@@ -6,7 +6,7 @@ import { AuthResponseDTO } from '../models/DTOs/authResponse.dto';
 import { Country } from '../models/DTOs/country.dto';
 import { Team } from '../models/team.model';
 import { User } from '../models/user.model';
-import { GenerateTeamService } from './generate-team.service';
+import { TeamService } from './team.service';
 import { getErrorMessage } from './util';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class UserService
 {
   private apiUrl = environment.apiURL + 'user/';
 
-  generateTeam: GenerateTeamService = inject(GenerateTeamService)
+  generateTeam: TeamService = inject(TeamService)
 
   constructor(private http: HttpClient) { }
 
