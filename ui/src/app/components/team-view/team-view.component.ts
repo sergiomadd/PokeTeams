@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Team } from 'src/app/models/team.model';
 import { GenerateTeamService } from 'src/app/services/generate-team.service';
-import { reverseParsePokemon } from 'src/app/services/parsePaste';
+import { haveMinutesPassed } from 'src/app/services/util';
 
 @Component({
   selector: 'app-team-view',
@@ -18,17 +18,28 @@ export class TeamViewComponent
   teamKey: string = "";
   team: Team = <Team>{};
 
-  async ngOnInit() 
+  viewIncrementCooldown: number = 1;
+
+  async ngOnInit()
   {
     this.teamKey = this.router.url.slice(1);
-    await this.teamService.incrementViewCount(this.teamKey);
     this.team = await this.teamService.getTeam(this.teamKey);
-    if(this.team.pokemons)
+    const item = sessionStorage.getItem(this.teamKey);
+    if(item)
     {
-      this.team.pokemons.forEach(pokemon => 
-        {
-          reverseParsePokemon(pokemon);
-      });
+      const lastTime = parseInt(item);
+      if(haveMinutesPassed(lastTime, this.viewIncrementCooldown))
+      {
+        this.teamService.incrementViewCount(this.teamKey);
+        const time = new Date().getTime();
+        sessionStorage.setItem(this.teamKey, time.toString());
+      }
+    }
+    else
+    {
+      this.teamService.incrementViewCount(this.teamKey);
+      const time = new Date().getTime();
+      sessionStorage.setItem(this.teamKey, time.toString());
     }
   }
 

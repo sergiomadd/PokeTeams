@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { GenerateTeamService } from './services/generate-team.service';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -21,6 +20,6 @@ export class AppComponent
 
   ngOnInit()
   {
-  
+
   }
 }

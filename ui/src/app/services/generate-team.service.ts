@@ -82,11 +82,11 @@ export class GenerateTeamService
 
   async incrementViewCount(teamKey: string)
   {
-    let url = this.apiUrl + 'team/increment/';
+    let url = this.apiUrl + 'team/increment';
     try
     {
       const data: TeamId = {id: teamKey}
-      this.http.post(url + teamKey, data, this.httpOptionsString).subscribe();
+      this.http.post(url, data, this.httpOptionsString).subscribe();
     }
     catch(error)
     {

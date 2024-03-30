@@ -111,3 +111,10 @@ export function copyToClipboard(data: string)
 {
   navigator.clipboard.writeText(data);
 }
+
+export function haveMinutesPassed(lastTime: number, minutesToPass: number) : boolean
+{
+  const milisecondsToPass = minutesToPass * 60000;
+  const passedTime = new Date().getTime() - lastTime;
+  return passedTime > milisecondsToPass ? true : false;
+}
