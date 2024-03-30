@@ -44,17 +44,30 @@ namespace api.Controllers
             };
             return Ok(response);
         }
-        [EnableRateLimiting("fixed")]
+
+        [HttpPost, Route("delete")]
+        public async Task<ActionResult<string>> Delete(TeamIdDTO data)
+        {
+            bool deleted = await _teamService.DeleteTeam(data.Id);
+            if (!deleted)
+            {
+                return BadRequest($"Failed to delete team.");
+            }
+            return Ok($"Team successfully deleted.");
+        }
+
         [HttpPost, Route("increment")]
         public async Task<ActionResult<string>> IncrementViewCount(TeamIdDTO data)
         {
             Printer.Log($"Incrementing {data.Id} team view count");
             string response = await _teamService.IncrementTeamViewCount(data.Id);
+            Printer.Log(response);
             if (response.Equals("Team incremented"))
             {
-                return Ok(response);
+                Printer.Log("returning ok");
+                return Ok();
             }
-            return BadRequest(response);
+            return BadRequest();
         }
     }
 }
