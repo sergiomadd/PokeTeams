@@ -75,7 +75,7 @@ builder.Services.AddCors(options =>
                             .AllowCredentials();
                       });
 });
-
+/*
 builder.Services.AddRateLimiter(options =>
 {
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -86,12 +86,12 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
     rateLimiterOptions.AddFixedWindowLimiter("fixed", options =>
     {
         options.PermitLimit = 1;
-        options.Window = TimeSpan.FromSeconds(60);
+        options.Window = TimeSpan.FromSeconds(10);
         options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
         options.QueueLimit = 0;
     });
 });
-
+*/
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -101,7 +101,7 @@ if (app.Environment.IsDevelopment())
     app.UseCors(apiCorsPolicy);
 }
 
-app.UseRateLimiter();
+//app.UseRateLimiter();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
