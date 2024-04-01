@@ -36,13 +36,20 @@ namespace api.Controllers
             Team newTeam = await _teamService.SaveTeam(team);
             if (newTeam == null)
             {
-                return BadRequest($"Failed to upload team.");
+                object response = new
+                {
+                    content = $"Failed to upload team."
+                };
+                return BadRequest(response);
             }
-            object response = new
+            else
             {
-                content = newTeam.Id
-            };
-            return Ok(response);
+                object response = new
+                {
+                    content = newTeam.Id
+                };
+                return Ok(response);
+            }
         }
 
         [HttpPost, Route("delete")]
