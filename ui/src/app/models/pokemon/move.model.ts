@@ -1,4 +1,4 @@
-import { Type } from "./type.model"
+import { defaultType, Type } from "./type.model"
 
 
 export interface Move
@@ -49,4 +49,16 @@ export interface Move
       changeChance: number
     }
   },
+}
+
+export const defaultMove: Move = 
+{
+  name: "Not Found",
+  pokeType: defaultType,
+  damageClass: 
+  {
+    name: "",
+    description: "",
+    iconPath: "assets/error.png"
+  }
 }

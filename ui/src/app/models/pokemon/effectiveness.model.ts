@@ -8,3 +8,12 @@ export interface Effectiveness
   doubleNotVeryEffective?: Type[],
   inmune?: Type[]
 }
+
+export const defaultEffectiveness: Effectiveness = 
+{
+  doubleSuperEffective: [],
+  superEffective: [],
+  notVeryEffective: [],
+  doubleNotVeryEffective: [],
+  inmune: []
+}

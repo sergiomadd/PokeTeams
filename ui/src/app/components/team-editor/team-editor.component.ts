@@ -122,14 +122,14 @@ export class TeamEditorComponent
       {
         name: "error",
         identifier: '0',
-        path: "error"
+        path: "assets/error.png"
       },
       gender: true,
       genderPath: this.editorData?.genderPaths ? this.editorData?.genderPaths[0] : 
       {
         name: "error",
         identifier: '0',
-        path: "error"
+        path: "assets/error.png"
       },
       pokemonSpritesGen: this.editorData?.pokemonSpritesPaths ? 
       {
@@ -140,7 +140,7 @@ export class TeamEditorComponent
       {
         name: "error",
         identifier: '0',
-        path: "error"
+        path: "assets/error.png"
       },
       typeIconsGen: "gen-ix",
       showIVs: true,

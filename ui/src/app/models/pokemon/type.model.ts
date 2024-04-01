@@ -1,4 +1,4 @@
-import { Effectiveness } from "./effectiveness.model";
+import { defaultEffectiveness, Effectiveness } from "./effectiveness.model";
 
 export interface Type
 {
@@ -7,4 +7,13 @@ export interface Type
   iconPath: string,
   effectivenessAttack: Effectiveness,
   effectivenessDefense: Effectiveness
+}
+
+export const defaultType: Type = 
+{
+  identifier: "error",
+  name: "Not Found",
+  iconPath: "assets/error.png",
+  effectivenessAttack: defaultEffectiveness,
+  effectivenessDefense: defaultEffectiveness
 }

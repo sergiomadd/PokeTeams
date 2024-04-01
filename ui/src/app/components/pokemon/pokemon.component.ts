@@ -82,6 +82,10 @@ export class PokemonComponent
         this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shiny : choosenVariationPath.base
       }
     }
+    else
+    {
+      this.pokemonSpritePath = "assets/error.png"
+    }
   }
 
   clickMeta(index: number, type: string)

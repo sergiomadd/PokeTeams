@@ -1,15 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { catchError, lastValueFrom, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
-import { PokemonData } from '../models/DTOs/pokemonData.dto';
-import { Ability } from '../models/pokemon/ability.model';
-import { Item } from '../models/pokemon/item.model';
-import { Move } from '../models/pokemon/move.model';
-import { Nature } from '../models/pokemon/nature.model';
+import { defaultPokemonData, PokemonData } from '../models/DTOs/pokemonData.dto';
+import { Ability, defaultAbility } from '../models/pokemon/ability.model';
+import { DefaultItem, Item } from '../models/pokemon/item.model';
+import { defaultMove, Move } from '../models/pokemon/move.model';
+import { defaultNature, Nature } from '../models/pokemon/nature.model';
 import { Pokemon } from '../models/pokemon/pokemon.model';
 import { Stat } from '../models/pokemon/stat.model';
-import { Type } from '../models/pokemon/type.model';
+import { defaultType, Type } from '../models/pokemon/type.model';
 import { PokePaste } from '../models/pokePaste.model';
 import { LinkifierService } from './linkifier.service';
 import { getErrorMessage } from './util';
@@ -23,7 +23,7 @@ export class PokemonService
   linkifier = inject(LinkifierService);
 
   private apiUrl = environment.apiURL;
-  private dataTimeout = 2000;
+  private dataTimeout = 20000;
 
   constructor(private http: HttpClient) 
   {
@@ -95,7 +95,7 @@ export class PokemonService
     let url = this.apiUrl + 'pokemon/' + name;
     try
     {
-      pokemonData = await lastValueFrom(this.http.get<PokemonData>(url).pipe(catchError(() => []), timeout(this.dataTimeout)));
+      pokemonData = await lastValueFrom(this.http.get<PokemonData>(url).pipe(catchError(() => [defaultPokemonData]), timeout(this.dataTimeout)));
     }
     catch(error)
     {
@@ -110,7 +110,7 @@ export class PokemonService
     let url = this.apiUrl + 'item/' + name;
     try
     {
-      item = await lastValueFrom(this.http.get<Item>(url).pipe(catchError(() => []), timeout(this.dataTimeout)));
+      item = await lastValueFrom(this.http.get<Item>(url).pipe(catchError(() => [DefaultItem]), timeout(this.dataTimeout)));
       item.prose = this.linkifier.linkifyProse(item.prose);
     }
     catch(error)
@@ -126,7 +126,7 @@ export class PokemonService
     let url = this.apiUrl + 'ability/' + name;
     try
     {
-      ability = await lastValueFrom(this.http.get<Ability>(url).pipe(catchError(() => []), timeout(this.dataTimeout)));
+      ability = await lastValueFrom(this.http.get<Ability>(url).pipe(catchError(() => [defaultAbility]), timeout(this.dataTimeout)));
       ability.prose = this.linkifier.linkifyProse(ability.prose);
     }
     catch(error)
@@ -142,7 +142,7 @@ export class PokemonService
     let url = this.apiUrl + 'nature/' + name;
     try
     {
-      nature = await lastValueFrom(this.http.get<Nature>(url).pipe(catchError(() => []), timeout(this.dataTimeout)));
+      nature = await lastValueFrom(this.http.get<Nature>(url).pipe(catchError(() => [defaultNature]), timeout(this.dataTimeout)));
     }
     catch(error)
     {
@@ -167,7 +167,7 @@ export class PokemonService
     let url = this.apiUrl + 'move/' + name;
     try
     {
-      move = await lastValueFrom(this.http.get<Move>(url).pipe(catchError(() => []), timeout(this.dataTimeout)));
+      move = await lastValueFrom(this.http.get<Move>(url).pipe(catchError(() => [defaultMove]), timeout(this.dataTimeout)));
       move.effect ? move.effect.short = this.linkifier.linkifyProse(move.effect?.short) : null;
       move.effect ? move.effect.long = this.linkifier.linkifyProse(move.effect?.long) : null;
     }
@@ -185,7 +185,7 @@ export class PokemonService
     this.http.get<Type>(url).subscribe
     try
     {
-      type = await lastValueFrom(this.http.get<Type>(url).pipe(catchError(() => []), timeout(this.dataTimeout)));
+      type = await lastValueFrom(this.http.get<Type>(url).pipe(catchError(() => [defaultType]), timeout(this.dataTimeout)));
     }
     catch(error)
     {
@@ -222,7 +222,7 @@ export class PokemonService
     let url = this.apiUrl + 'stat/' + identifier;
     try
     {
-      statName = await lastValueFrom(this.http.get(url, {responseType: 'text'}).pipe(catchError(() => []), timeout(this.dataTimeout)));
+      statName = await lastValueFrom(this.http.get(url, {responseType: 'text'}).pipe(catchError(() => ["Not Found"]), timeout(this.dataTimeout)));
     }
     catch(error)
     {

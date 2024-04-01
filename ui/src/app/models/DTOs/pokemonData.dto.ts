@@ -1,7 +1,7 @@
-import { Types } from "../pokemon/types.model"
-import { Stat } from "../pokemon/stat.model"
-import { Sprite } from "../pokemon/sprite.model"
 import { Pokemon } from "../pokemon/pokemon.model"
+import { Sprite } from "../pokemon/sprite.model"
+import { Stat } from "../pokemon/stat.model"
+import { defaultTypes, Types } from "../pokemon/types.model"
 
 export interface PokemonData
 {
@@ -12,4 +12,15 @@ export interface PokemonData
   types?: Types,
   stats?: Stat[],
   sprites?: Sprite[]
+}
+
+export const defaultPokemonData: PokemonData =
+{
+  name: "Not Found",
+  dexNumber: 0,
+  preEvolution: undefined,
+	evolutions: [],
+  types: defaultTypes,
+  stats: [],
+  sprites: undefined
 }

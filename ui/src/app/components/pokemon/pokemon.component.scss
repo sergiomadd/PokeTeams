@@ -60,7 +60,7 @@ $padding: 0.2vw;
         }
       }
 
-      .picture
+      .center
       {
         display: grid;
         grid-template-rows: 15% 70% 15%;
@@ -99,7 +99,7 @@ $padding: 0.2vw;
           }
         }
 
-        .picture-extra
+        .center-down
         {
           display: flex;
           justify-content: space-between;

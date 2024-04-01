@@ -8,3 +8,11 @@ export interface EditorData
   pokemonSpritesPaths: Sprite[],
   typeIconPaths: EditorOption[],
 }
+
+export const defaultEditorData: EditorData = 
+{
+  shinyPaths: [],
+  genderPaths: [],
+  pokemonSpritesPaths: [],
+  typeIconPaths: [],
+}
