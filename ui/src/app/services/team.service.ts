@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { lastValueFrom } from 'rxjs';
+import { catchError, lastValueFrom, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { authActions } from '../auth/store/auth.actions';
 import { TeamId } from '../models/DTOs/teamId.dto';
@@ -15,10 +15,10 @@ import { getErrorMessage, toCamelCase } from './util';
 
 export class TeamService 
 {  
-  private apiUrl = environment.apiURL;
-
   store = inject(Store);
 
+  private apiUrl = environment.apiURL;
+  private dataTimeout = 2000;
 
   private httpOptionsString = 
   {
@@ -36,7 +36,7 @@ export class TeamService
     let url = this.apiUrl + 'team/' + id;
     try
     {
-      const team$ = this.http.get<Team>(url);
+      const team$ = this.http.get<Team>(url).pipe(catchError(() => []), timeout(this.dataTimeout));
       team = await lastValueFrom(team$, { defaultValue: team });
     }
     catch(error)
@@ -52,8 +52,7 @@ export class TeamService
     let url = this.apiUrl + 'editor';
     try
     {
-      const optionsData$ = this.http.get<EditorData>(url);
-      optionsData = await lastValueFrom(optionsData$);
+      optionsData = await lastValueFrom(this.http.get<EditorData>(url).pipe(timeout(this.dataTimeout)));
     }
     catch(error)
     {
@@ -64,12 +63,26 @@ export class TeamService
 
   async saveTeam(team: Team): Promise<string>
   {
-    let teamLink: object = {};
+    let response: object = {};
     let url = this.apiUrl + 'team';
     try
     {
-      const teamLink$ = this.http.post(url, team);
-      teamLink = await lastValueFrom(teamLink$);
+      this.http.post(url, team)
+      .pipe(catchError(() => []), timeout(this.dataTimeout))
+      .subscribe(
+        {
+          next: (resp) => 
+          {
+            console.log("saving team response: ",resp);
+            response = resp
+          },
+          error: (error) => 
+          {
+            console.log("saving team error", error);
+            response = error
+          }
+        }
+      );
     }
     catch(error)
     {
@@ -77,7 +90,7 @@ export class TeamService
       return getErrorMessage(error);
     }
     this.store.dispatch(authActions.getLogged());
-    return teamLink["content"];
+    return response["content"];
   }
 
   async incrementViewCount(teamKey: string)
@@ -98,10 +111,17 @@ export class TeamService
   async deleteTeam(teamKey: string)
   {
     let url = this.apiUrl + 'team/delete';
+
     try
     {
       const data: TeamId = {id: teamKey}
-      this.http.post(url, data, this.httpOptionsString).subscribe();
+      this.http.post(url, data, this.httpOptionsString)
+      .pipe(timeout(this.dataTimeout)).subscribe(
+        {
+          next: (response) => console.log(response),
+          error: (error) => console.log(error)
+        }
+      );
     }
     catch(error)
     {

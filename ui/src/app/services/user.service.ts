@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { lastValueFrom } from 'rxjs';
+import { catchError, lastValueFrom, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { AuthResponseDTO } from '../models/DTOs/authResponse.dto';
 import { Country } from '../models/DTOs/country.dto';
@@ -14,9 +14,10 @@ import { getErrorMessage } from './util';
 })
 export class UserService 
 {
-  private apiUrl = environment.apiURL + 'user/';
+  generateTeam = inject(TeamService)
 
-  generateTeam: TeamService = inject(TeamService)
+  private apiUrl = environment.apiURL + 'user/';
+  private dataTimeout = 2000;
 
   constructor(private http: HttpClient) { }
 
@@ -26,7 +27,7 @@ export class UserService
     let url = this.apiUrl + userName;
     try
     {
-      const user$ = this.http.get<User>(url, {withCredentials: true});
+      const user$ = this.http.get<User>(url, {withCredentials: true}).pipe(catchError(() => []), timeout(this.dataTimeout));
       user = await lastValueFrom(user$);
       console.log("user in service", user);
     }
@@ -101,7 +102,7 @@ export class UserService
     let url = this.apiUrl + "pictures";
     try
     {
-      const pics$ = this.http.get<string[]>(url, {withCredentials: true});
+      const pics$ = this.http.get<string[]>(url, {withCredentials: true}).pipe(catchError(() => []), timeout(this.dataTimeout));
       pics = await lastValueFrom(pics$);
     }
     catch(error)
@@ -118,7 +119,7 @@ export class UserService
     let url = this.apiUrl + "countries";
     try
     {
-      const countries$ = this.http.get<Country[]>(url, {withCredentials: true});
+      const countries$ = this.http.get<Country[]>(url, {withCredentials: true}).pipe(catchError(() => []), timeout(this.dataTimeout));
       countries = await lastValueFrom(countries$);
     }
     catch(error)

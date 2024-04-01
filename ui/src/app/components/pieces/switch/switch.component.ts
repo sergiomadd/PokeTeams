@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-switch',
@@ -17,9 +17,7 @@ export class SwitchComponent
 
   ngOnInit() 
   {
-    console.log(this.inputState)
     if(this.inputState) {this.state = this.inputState}
-    console.log(this.state)
   }
 
   onClick()
