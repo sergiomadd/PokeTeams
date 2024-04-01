@@ -77,7 +77,7 @@ export class PokemonService
     {
       console.log('Generated pokemon: ', pokemon);
     }
-    //console.log("Time to generate pokemon: ", new Date().getTlime() - now);
+    //console.log("Time to generate pokemon: ", new Date().getTime() - now);
     return pokemon;
   }
 

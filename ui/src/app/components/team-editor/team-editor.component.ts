@@ -125,7 +125,7 @@ export class TeamEditorComponent
         path: "assets/error.png"
       },
       gender: true,
-      malePath: this.editorData?.malePaths ? this.editorData?.malePaths[1] : 
+      malePath: this.editorData?.malePaths ? this.editorData?.malePaths[0] : 
       {
         name: "error",
         identifier: '0',
