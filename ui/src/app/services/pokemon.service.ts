@@ -23,7 +23,7 @@ export class PokemonService
   linkifier = inject(LinkifierService);
 
   private apiUrl = environment.apiURL;
-  private dataTimeout = 20000;
+  private dataTimeout = 2000;
 
   constructor(private http: HttpClient) 
   {

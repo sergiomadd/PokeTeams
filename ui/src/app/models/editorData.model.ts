@@ -4,7 +4,8 @@ import { Sprite } from "./pokemon/sprite.model";
 export interface EditorData
 {
   shinyPaths: EditorOption[],
-  genderPaths: EditorOption[],
+  malePaths: EditorOption[],
+  femalePaths: EditorOption[],
   pokemonSpritesPaths: Sprite[],
   typeIconPaths: EditorOption[],
 }
@@ -12,7 +13,8 @@ export interface EditorData
 export const defaultEditorData: EditorData = 
 {
   shinyPaths: [],
-  genderPaths: [],
+  malePaths: [],
+  femalePaths: [],
   pokemonSpritesPaths: [],
   typeIconPaths: [],
 }

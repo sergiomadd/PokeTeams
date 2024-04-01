@@ -125,7 +125,13 @@ export class TeamEditorComponent
         path: "assets/error.png"
       },
       gender: true,
-      genderPath: this.editorData?.genderPaths ? this.editorData?.genderPaths[0] : 
+      malePath: this.editorData?.malePaths ? this.editorData?.malePaths[1] : 
+      {
+        name: "error",
+        identifier: '0',
+        path: "assets/error.png"
+      },
+      femalePath: this.editorData?.femalePaths ? this.editorData?.femalePaths[0] : 
       {
         name: "error",
         identifier: '0',
@@ -160,7 +166,8 @@ export class TeamEditorComponent
       pokemonSpritesPaths: data.pokemonSpritesPaths,
       typeIconPaths: data.typeIconPaths,
       shinyPaths: data.shinyPaths,
-      genderPaths: data.genderPaths,
+      malePaths: data.malePaths,
+      femalePaths: data.femalePaths
     }
     return editorData
   }

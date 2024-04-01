@@ -7,7 +7,8 @@ export interface EditorOptions
   typeIconsGen: string,
   shinyPath: EditorOption,
   gender: boolean,
-  genderPath: EditorOption,
+  malePath: EditorOption,
+  femalePath: EditorOption,
   //theme: string
   //right
   showIVs: boolean,
