@@ -91,18 +91,16 @@
             "path": "https://localhost:7134/images/sprites/shiny/stadium-ii.png"
         }
     ],
-    "GenderPaths":
+    "MalePaths":
     [
-        {
-            "name": "None",
-            "identifier": "none",
-            "path": "https://localhost:7134/images/sprites/null.png"
-        },
         {
             "name": "Male",
             "identifier": "male",
             "path": "https://localhost:7134/images/sprites/gender/male.png"
-        },
+        }
+    ],
+    "FemalePaths":
+    [
         {
             "name": "Female",
             "identifier": "female",
