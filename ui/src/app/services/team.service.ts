@@ -5,7 +5,7 @@ import { catchError, lastValueFrom, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { authActions } from '../auth/store/auth.actions';
 import { TeamId } from '../models/DTOs/teamId.dto';
-import { EditorData } from '../models/editorData.model';
+import { defaultEditorData, EditorData } from '../models/editorData.model';
 import { Team } from '../models/team.model';
 import { getErrorMessage, toCamelCase } from './util';
 
@@ -36,8 +36,7 @@ export class TeamService
     let url = this.apiUrl + 'team/' + id;
     try
     {
-      const team$ = this.http.get<Team>(url).pipe(catchError(() => []), timeout(this.dataTimeout));
-      team = await lastValueFrom(team$, { defaultValue: team });
+      team = await lastValueFrom(this.http.get<Team>(url).pipe(catchError(() => [team]), timeout(this.dataTimeout)));
     }
     catch(error)
     {
@@ -52,7 +51,7 @@ export class TeamService
     let url = this.apiUrl + 'editor';
     try
     {
-      optionsData = await lastValueFrom(this.http.get<EditorData>(url).pipe(timeout(this.dataTimeout)));
+      optionsData = await lastValueFrom(this.http.get<EditorData>(url).pipe(catchError(() => [defaultEditorData]), timeout(this.dataTimeout)));
     }
     catch(error)
     {
@@ -108,20 +107,15 @@ export class TeamService
     }
   }
 
-  async deleteTeam(teamKey: string)
+  async deleteTeam(teamKey: string): Promise<string | undefined>
   {
     let url = this.apiUrl + 'team/delete';
-
+    let deleted: string | undefined = undefined;
     try
     {
       const data: TeamId = {id: teamKey}
-      this.http.post(url, data, this.httpOptionsString)
-      .pipe(timeout(this.dataTimeout)).subscribe(
-        {
-          next: (response) => console.log(response),
-          error: (error) => console.log(error)
-        }
-      );
+      deleted = await lastValueFrom(this.http.post<string>(url, data, this.httpOptionsString)
+      .pipe(timeout(this.dataTimeout)));
     }
     catch(error)
     {
@@ -129,5 +123,6 @@ export class TeamService
       return getErrorMessage(error);
     }
     this.store.dispatch(authActions.getLogged());
+    return deleted;
   }
 }

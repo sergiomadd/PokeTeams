@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Output, SimpleChanges, inject } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { UserService } from 'src/app/services/user.service';
 import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
+import { UserService } from 'src/app/services/user.service';
+import { getAuthFormError } from 'src/app/services/util';
 
 @Component({
   selector: 'app-top-option',
@@ -20,7 +21,7 @@ export class TopOptionComponent
   logInFormSubmitted: boolean = false;
   detailsForm = this.formBuilder.group(
   {
-    player: ['', [Validators.required, Validators.maxLength(256)]],
+    player: ['', [Validators.maxLength(256)]],
     tournament: ['', [Validators.maxLength(256)]],
     regulation: ['', [Validators.maxLength(256)]]
   });
@@ -29,6 +30,38 @@ export class TopOptionComponent
 
   ngOnInit()
   {
-    this.user$.subscribe((value) => this.detailsForm.controls.player.setValue(value?.username ?? null));
+    this.user$.subscribe((user) => 
+    {
+      if(user)
+      {
+        console.log("logged user name exists")
+        this.detailsForm.controls.player.setValue(user?.username ?? null);
+        this.detailsForm.controls.player.valueChanges.subscribe(async (value) => 
+        {
+          if(value !== user?.username)
+          {
+            console.log("not username")
+            this.detailsForm.controls.player.setErrors({ "notLoggedUserName": true })
+          }
+        });
+      }
+    });
+    
+
+  }
+
+  isInvalid(key: string, form: string) : boolean
+  {
+    
+    var control = this.detailsForm.get(key);
+    return (control?.errors
+      && (control?.dirty || control?.touched)) 
+      ?? false;
+  }
+
+  getError(key: string, formKey: string) : string
+  {
+    let control: AbstractControl | null = this.detailsForm.get(key);
+    return getAuthFormError(control);
   }
 }

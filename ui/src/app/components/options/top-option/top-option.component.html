@@ -3,6 +3,7 @@
     <div class="item">
       <label for="">Author: </label>
       <input type="text" formControlName="player" value="{{(user$ | async)?.username}}" >
+      <span *ngIf="isInvalid('player', 'detailsForm')" class="formFeedbackError">{{getError('player', 'detailsForm')}}</span>
     </div>
     <div class="item">
       <label for="">Tournament: </label>

@@ -21,7 +21,7 @@ export class TeamPreviewComponent
   
   @ViewChildren(PokemonPreviewComponent) pokemonPreviewsComponents!: QueryList<PokemonPreviewComponent>;
 
-
+  feedback: string | undefined = undefined;
 
   ngOnInit()
   {
@@ -57,8 +57,11 @@ export class TeamPreviewComponent
     }
   }
 
-  delete()
+  async delete()
   {
-    if(this.team) {this.teamService.deleteTeam(this.team?.id);}
+    if(this.team) 
+    {
+      this.feedback = await this.teamService.deleteTeam(this.team?.id);
+    }
   }
 }

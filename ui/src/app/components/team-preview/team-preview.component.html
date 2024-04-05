@@ -54,6 +54,11 @@
         </ng-container>
       </div>
     </div>
+    <ng-container *ngIf="feedback">
+      <div class="errors">
+        {{feedback}}
+      </div>
+    </ng-container>
     <div class="pokemons"
     (mouseenter)="expand()"
     (mouseleave)="expand()"

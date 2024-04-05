@@ -75,6 +75,10 @@ export function getAuthFormError(control: AbstractControl | null) : string
   {
     return "This email is already registered";
   }
+  if(control?.hasError('notLoggedUserName'))
+  {
+    return "The team wont be added to your user";
+  }
   return "error";
 }
 

@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
+import { authActions } from 'src/app/auth/store/auth.actions';
+import { selectIsSubmitting, selectLoggedUser, selectValidationErrors } from 'src/app/auth/store/auth.selectors';
 import { AuthResponseDTO } from 'src/app/models/DTOs/authResponse.dto';
 import { LogInDTO } from 'src/app/models/DTOs/login.dto';
 import { SignUpDTO } from 'src/app/models/DTOs/signup.dto';
 import { UserService } from 'src/app/services/user.service';
 import { getAuthFormError, passwordsMatch } from 'src/app/services/util';
-import { authActions } from 'src/app/auth/store/auth.actions';
-import { selectIsSubmitting, selectLoggedUser, selectValidationErrors } from 'src/app/auth/store/auth.selectors';
 
 
 @Component({
