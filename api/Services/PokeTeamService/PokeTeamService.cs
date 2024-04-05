@@ -55,7 +55,7 @@ namespace api.Services.TeamService
             return teamDTO;
         }
 
-        public async Task<Team?> SaveTeam(TeamDTO inputTeam)
+        public async Task<Team?> SaveTeam(TeamDTO inputTeam, string loggedUserName)
         {
             Team newTeam = null;
             string teamId = GenerateId(10);
@@ -73,7 +73,12 @@ namespace api.Services.TeamService
                 string optionsString = JsonSerializer.Serialize(inputTeam.Options, options);
                 string pokemonsString = JsonSerializer.Serialize(inputTeam.Pokemons, options);
 
-                User player = await GetUserByUserName(inputTeam.Player);
+                User player = null;
+
+                if (loggedUserName == inputTeam.Player)
+                {
+                    player = await GetUserByUserName(inputTeam.Player);
+                }
 
                 newTeam = new Team
                 {
@@ -108,6 +113,10 @@ namespace api.Services.TeamService
                 {
                     _pokeTeamContext.Team.Remove(team);
                     _pokeTeamContext.SaveChanges();
+                }
+                else
+                {
+                    return false;
                 }
             }
             catch (Exception ex)

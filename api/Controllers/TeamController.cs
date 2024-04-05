@@ -5,6 +5,7 @@ using api.Models.DBPoketeamModels;
 using Microsoft.AspNetCore.Components.Forms;
 using api.Util;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Identity;
 
 namespace api.Controllers
 {
@@ -33,7 +34,7 @@ namespace api.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Post([FromBody] TeamDTO team)
         {
-            Team newTeam = await _teamService.SaveTeam(team);
+            Team newTeam = await _teamService.SaveTeam(team, User.Identity.Name);
             if (newTeam == null)
             {
                 object response = new

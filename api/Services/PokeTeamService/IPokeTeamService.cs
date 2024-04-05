@@ -8,7 +8,7 @@ namespace api.Services.TeamService
     {
         
         public Task<TeamDTO?> GetTeam(string id);
-        public Task<Team?> SaveTeam(TeamDTO team);
+        public Task<Team?> SaveTeam(TeamDTO team, string loggedUserName);
         public Task<EditorData?> GetEditorData();
         public Task<bool> DeleteTeam(string teamId);
         public Task<bool> DeleteUserTeams(User user);
