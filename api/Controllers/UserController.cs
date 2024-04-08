@@ -59,6 +59,17 @@ namespace api.Controllers
             return pictures;
         }
 
+        [HttpGet, Route("query")]
+        public async Task<ActionResult<List<UserQueryDTO>>> QueryUsers(string key)
+        {
+            List<UserQueryDTO> users = await _pokeTeamService.QueryUsers(key);
+            if (users == null)
+            {
+                return NotFound("Couldn't find user");
+            }
+            return Ok(users);
+        }
+
         [HttpGet, Route("countries")]
         public ActionResult<List<CountryDTO>> GetCountries()
         {
