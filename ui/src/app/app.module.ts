@@ -37,6 +37,7 @@ import { UserComponent } from './components/user/user.component';
 import { VgcComponent } from './components/vgc/vgc.component';
 import { LinkerPipe } from './pipes/linker.pipe';
 import { metaReducers } from './state/app.state';
+import { MultiSearchComponent } from './components/pieces/multi-search/multi-search.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { metaReducers } from './state/app.state';
     UserDetailsComponent,
     UserTeamsComponent,
     DialogComponent,
+    MultiSearchComponent,
   ],
   exports: [NavbarComponent],
   imports: [
