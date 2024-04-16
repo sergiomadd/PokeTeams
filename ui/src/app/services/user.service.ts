@@ -21,6 +21,30 @@ export class UserService
 
   constructor(private http: HttpClient) { }
 
+  async queryUser(key: string): Promise<User[]>
+  {
+    let users: User[] = [];
+    let url = this.apiUrl + "query";
+    try
+    {
+      users = await lastValueFrom(this.http.get<User[]>(url, 
+        {
+          params: 
+          {
+            key: key
+          },
+          withCredentials: true
+        })
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return users;
+  }
+
+
   async getUser(userName: string): Promise<User>
   {
     let user: User = <User>{};
