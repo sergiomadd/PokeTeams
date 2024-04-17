@@ -13,6 +13,10 @@ namespace api.Data
         {
 
         }
+        public DbSet<Team> Team { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Tag> Tag { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.EnableSensitiveDataLogging();
@@ -22,11 +26,10 @@ namespace api.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            //Team
-            modelBuilder.Entity<Team>().ToTable("Teams");
-
             modelBuilder.Entity<Team>()
-                .HasKey(t => t.Id);
+                .HasMany(t => t.Tags)
+                .WithMany(ta => ta.Teams)
+                .UsingEntity(j => j.ToTable("TeamTag"));
 
             modelBuilder.Entity<Team>()
                 .HasOne(t => t.Player)
@@ -56,7 +59,5 @@ namespace api.Data
             );
         }
 
-        public DbSet<Team> Team { get; set; }
-        public DbSet<User> User { get; set; }
     }
 }

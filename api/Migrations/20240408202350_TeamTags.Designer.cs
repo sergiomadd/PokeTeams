@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -11,9 +12,11 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(PokeTeamContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20240408202350_TeamTags")]
+    partial class TeamTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,39 +158,24 @@ namespace api.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TagTeam", b =>
-                {
-                    b.Property<string>("TagsIdentifier")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("TeamsId")
-                        .HasColumnType("nvarchar(10)");
-
-                    b.HasKey("TagsIdentifier", "TeamsId");
-
-                    b.HasIndex("TeamsId");
-
-                    b.ToTable("TeamTag", (string)null);
-                });
-
             modelBuilder.Entity("api.Models.DBPoketeamModels.Tag", b =>
                 {
                     b.Property<string>("Identifier")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TeamId")
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("UsedCount")
+                        .HasColumnType("int");
+
                     b.HasKey("Identifier");
+
+                    b.HasIndex("TeamId");
 
                     b.ToTable("Tag");
                 });
@@ -370,19 +358,11 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TagTeam", b =>
+            modelBuilder.Entity("api.Models.DBPoketeamModels.Tag", b =>
                 {
-                    b.HasOne("api.Models.DBPoketeamModels.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsIdentifier")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("api.Models.DBPoketeamModels.Team", null)
-                        .WithMany()
-                        .HasForeignKey("TeamsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Tags")
+                        .HasForeignKey("TeamId");
                 });
 
             modelBuilder.Entity("api.Models.DBPoketeamModels.Team", b =>
@@ -393,6 +373,11 @@ namespace api.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("api.Models.DBPoketeamModels.Team", b =>
+                {
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("api.Models.DBPoketeamModels.User", b =>
