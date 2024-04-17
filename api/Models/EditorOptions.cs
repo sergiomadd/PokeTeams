@@ -6,7 +6,8 @@
         public string typeIconsGen { get; set; }
         public EditorOption ShinyPath { get; set; }
         public bool Gender { get; set; }
-        public EditorOption GenderPath { get; set; }
+        public EditorOption MalePath { get; set; }
+        public EditorOption FemalePath { get; set; }
         public bool ShowIVs { get; set; }
         public bool ShowEVs { get; set; }
         public bool ShowNature { get; set; }
