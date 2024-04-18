@@ -17,10 +17,9 @@ namespace api.Controllers
             _pokemonService = pokemonService;
         }
 
-        [HttpGet("/name/{natureName}", Name = "GetNatureByName")]
+        [HttpGet("name/{natureName}", Name = "GetNatureByName")]
         public async Task<ActionResult<Nature>> GetNatureByName(string natureName)
         {
-            Printer.Log("Getting nature by name: ", natureName);
             var nature = await _pokemonService.GetNatureByName(natureName);
             if (nature == null)
             {
@@ -29,10 +28,9 @@ namespace api.Controllers
             return Ok(nature);
         }
 
-        [HttpGet("/identifier/{natureIdentifier}", Name = "GetNatureByIdentifier")]
+        [HttpGet("identifier/{natureIdentifier}", Name = "GetNatureByIdentifier")]
         public async Task<ActionResult<Nature>> GetNatureByIdentifier(string natureIdentifier)
         {
-            Printer.Log("Getting nature by identifier: ", natureIdentifier);
             var nature = await _pokemonService.GetNatureByIdentifier(natureIdentifier);
             if (nature == null)
             {
