@@ -15,14 +15,14 @@ using api.Models.DBPoketeamModels.Pokemon;
 using api.Models;
 using api.Models.DBPokedexModels;
 
-namespace api.Services.PokemonService
+namespace api.Services.PokedexService
 {
-    public class PokemonService : IPokemonService
+    public class PokedexService : IPokedexService
     {
         private readonly PokedexContext _pokedexContext;
         private readonly LocalContext _localContext;
 
-        public PokemonService(PokedexContext pokedexContext, LocalContext localContext)
+        public PokedexService(PokedexContext pokedexContext, LocalContext localContext)
         {
             _pokedexContext = pokedexContext;
             _localContext = localContext;

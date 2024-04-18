@@ -1,4 +1,5 @@
-﻿using api.Services.PokemonService;
+﻿using api.Models.DBPoketeamModels.Pokemon;
+using api.Services.PokedexService;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 
@@ -8,8 +9,8 @@ namespace api.Controllers
     [ApiController]
     public class MoveController : ControllerBase
     {
-        private readonly IPokemonService _pokemonService;
-        public MoveController(IPokemonService pokemonService)
+        private readonly IPokedexService _pokemonService;
+        public MoveController(IPokedexService pokemonService)
         {
             _pokemonService = pokemonService;
         }

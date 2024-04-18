@@ -1,5 +1,5 @@
 ﻿using api.Models.DBPoketeamModels.Pokemon;
-using api.Services.PokemonService;
+using api.Services.PokedexService;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 
@@ -10,8 +10,8 @@ namespace api.Controllers
     [ApiController]
     public class AbilityController : ControllerBase
     {
-        private readonly IPokemonService _pokemonService;
-        public AbilityController(IPokemonService pokemonService)
+        private readonly IPokedexService _pokemonService;
+        public AbilityController(IPokedexService pokemonService)
         {
             _pokemonService = pokemonService;
         }

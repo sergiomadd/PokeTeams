@@ -1,6 +1,6 @@
 ﻿using api.Data;
 using api.Models.DBModels;
-using api.Services.PokemonService;
+using api.Services.PokedexService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,8 +11,8 @@ namespace api.Controllers
     [ApiController]
     public class PokemonController : ControllerBase
     {
-        private readonly IPokemonService _pokemonService;
-        public PokemonController(IPokemonService pokemonService)
+        private readonly IPokedexService _pokemonService;
+        public PokemonController(IPokedexService pokemonService)
         {
             _pokemonService = pokemonService;
         }

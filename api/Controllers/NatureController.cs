@@ -1,6 +1,6 @@
 ﻿using api.Models.DBModels;
 using api.Models.DBPoketeamModels.Pokemon;
-using api.Services.PokemonService;
+using api.Services.PokedexService;
 using api.Util;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
@@ -11,8 +11,8 @@ namespace api.Controllers
     [ApiController]
     public class NatureController : ControllerBase
     {
-        private readonly IPokemonService _pokemonService;
-        public NatureController(IPokemonService pokemonService)
+        private readonly IPokedexService _pokemonService;
+        public NatureController(IPokedexService pokemonService)
         {
             _pokemonService = pokemonService;
         }

@@ -1,4 +1,5 @@
-﻿using api.Services.PokemonService;
+﻿using api.Models.DBPoketeamModels.Pokemon;
+using api.Services.PokedexService;
 using api.Services.TeamService;
 using Microsoft.AspNetCore.Mvc;
 

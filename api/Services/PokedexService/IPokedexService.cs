@@ -1,9 +1,9 @@
 ﻿using api.Models.DBModels;
 using api.Models.DBPoketeamModels.Pokemon;
 
-namespace api.Services.PokemonService
+namespace api.Services.PokedexService
 {
-    public interface IPokemonService
+    public interface IPokedexService
     {
         Task<PokemonData?> GetPokemonByName(string name);
         Task<PokemonData?> GetPokemonById(int id);
