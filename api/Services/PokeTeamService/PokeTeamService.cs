@@ -42,32 +42,61 @@ namespace api.Services.TeamService
 
         public async Task<TeamDTO?> GetTeam(string id)
         {
+            Printer.Log("Gettting team: ", id);
             TeamDTO teamDTO = null;
-            Team team = await _pokeTeamContext.Team.FindAsync(id);
-            if (team != null)
+            try
             {
-                List<Pokemon> pokemons = JsonSerializer.Deserialize<List<Pokemon>>(team.Pokemons, new JsonSerializerOptions { IncludeFields = false });
-                string playerUserName = "Unkown";
-                if (team.PlayerId != null)
+                Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
+                if (team != null)
                 {
-                    User player = await GetUserById(team.PlayerId);
-                    playerUserName = player.UserName;
+                    List<Pokemon> pokemons = JsonSerializer.Deserialize<List<Pokemon>>(team.Pokemons, new JsonSerializerOptions { IncludeFields = false });
+                    string playerUserName = "Unkown";
+                    if (team.PlayerId != null)
+                    {
+                        User player = await GetUserById(team.PlayerId);
+                        playerUserName = player.UserName;
+                    }
+                    else if (team.AnonPlayer != null)
+                    {
+                        playerUserName = team.AnonPlayer;
+                    }
+                    
+                    List<TagDTO> tags = new List<TagDTO>();
+                    List<TeamTag> teamTags = _pokeTeamContext.TeamTag.Where(t => t.TeamsId == id).ToList();
+                    
+                    foreach(TeamTag teamTag in teamTags)
+                    {                        
+                        Tag tag = _pokeTeamContext.Tag.FirstOrDefault(t => t.Identifier == teamTag.TagsIdentifier);
+                        if (tag != null)
+                        {
+                            TagDTO tagDTO = new TagDTO
+                            {
+                                Identifier = tag.Identifier,
+                                Name = tag.Name,
+                                Description = tag.Description,
+                                Color = tag.Color
+                            };
+                            tags.Add(tagDTO);
+                        }   
+                    }
+                    teamDTO = new TeamDTO(
+                        id,
+                        pokemons,
+                        team.Options,
+                        playerUserName,
+                        team.Tournament,
+                        team.Regulation,
+                        team.ViewCount,
+                        team.DateCreated.ToShortDateString(),
+                        team.Visibility,
+                        tags
+                        );
                 }
-                else if (team.AnonPlayer != null)
-                {
-                    playerUserName = team.AnonPlayer;
-                }
-                teamDTO = new TeamDTO(
-                    id,
-                    pokemons, 
-                    team.Options,
-                    playerUserName,
-                    team.Tournament,
-                    team.Regulation,
-                    team.ViewCount,
-                    team.DateCreated.ToShortDateString(),
-                    team.Visibility
-                    );
+            }
+            catch (Exception ex)
+            {
+                Printer.Log(ex.Message);
+                return null;
             }
             return teamDTO;
         }
@@ -80,6 +109,7 @@ namespace api.Services.TeamService
             {
                 Team team = await _pokeTeamContext.Team.FindAsync(teamId);
                 //loop maybe too ineficent? seek another way to get unused ids?
+                //is there a way for sql server to auto generate custom ids?
                 while (team != null)
                 {
                     teamId = GenerateId(10);
@@ -97,6 +127,26 @@ namespace api.Services.TeamService
                     player = await GetUserByUserName(inputTeam.Player);
                 }
 
+                List<Tag> tags = new List<Tag>();
+                foreach(TagDTO tagDTO in inputTeam.Tags)
+                {
+                    Tag tag = new Tag
+                    {
+                        Identifier = tagDTO.Identifier,
+                        Name = tagDTO.Name,
+                        Description = tagDTO.Description,
+                        Color = tagDTO.Color,
+                    };
+                    if(_pokeTeamContext.Tag.Contains(tag))
+                    {
+                        tags.Add(_pokeTeamContext.Tag.Find(tag.Identifier));
+                    }
+                    else
+                    {
+                        tags.Add(tag);
+                    }
+                }
+
                 newTeam = new Team
                 {
                     Id = teamId,
@@ -107,7 +157,8 @@ namespace api.Services.TeamService
                     Tournament = inputTeam.Tournament ?? null,
                     Regulation = inputTeam.Regulation ?? null,
                     ViewCount = 0,
-                    Visibility = inputTeam.Visibility
+                    Visibility = inputTeam.Visibility,
+                    Tags = tags,
                 };
                 await _pokeTeamContext.Team.AddAsync(newTeam);
                 await _pokeTeamContext.SaveChangesAsync();
@@ -318,6 +369,31 @@ namespace api.Services.TeamService
                 return "Failed to increment team";
             }
             return "Team incremented";
+        }
+
+        public async Task<Tag> GetTag(string identifier)
+        {
+            Tag tag = await _pokeTeamContext.Tag.FindAsync(identifier);
+            if(tag == null)
+            {
+                return tag;
+            }
+            return null;
+        }
+
+        public async Task<bool> SaveTag(Tag tag)
+        {
+            try
+            {
+                await _pokeTeamContext.Tag.AddAsync(tag);
+                await _pokeTeamContext.SaveChangesAsync();
+            }
+            catch(Exception e)
+            {
+                Printer.Log(e);
+                return false;
+            }
+            return true;
         }
     }
 }

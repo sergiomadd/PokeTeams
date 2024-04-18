@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -11,9 +12,11 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(PokeTeamContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20240417105651_TeamTags5")]
+    partial class TeamTags5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,6 +158,21 @@ namespace api.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("TagTeam", b =>
+                {
+                    b.Property<string>("TagsIdentifier")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TeamsId")
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("TagsIdentifier", "TeamsId");
+
+                    b.HasIndex("TeamsId");
+
+                    b.ToTable("TeamTag", (string)null);
+                });
+
             modelBuilder.Entity("api.Models.DBPoketeamModels.Tag", b =>
                 {
                     b.Property<string>("Identifier")
@@ -218,21 +236,6 @@ namespace api.Migrations
                     b.HasIndex("PlayerId");
 
                     b.ToTable("Team");
-                });
-
-            modelBuilder.Entity("api.Models.DBPoketeamModels.TeamTag", b =>
-                {
-                    b.Property<string>("TagsIdentifier")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("TeamsId")
-                        .HasColumnType("nvarchar(10)");
-
-                    b.HasKey("TagsIdentifier", "TeamsId");
-
-                    b.HasIndex("TeamsId");
-
-                    b.ToTable("TeamTag");
                 });
 
             modelBuilder.Entity("api.Models.DBPoketeamModels.User", b =>
@@ -370,17 +373,7 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("api.Models.DBPoketeamModels.Team", b =>
-                {
-                    b.HasOne("api.Models.DBPoketeamModels.User", "Player")
-                        .WithMany("Teams")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Player");
-                });
-
-            modelBuilder.Entity("api.Models.DBPoketeamModels.TeamTag", b =>
+            modelBuilder.Entity("TagTeam", b =>
                 {
                     b.HasOne("api.Models.DBPoketeamModels.Tag", null)
                         .WithMany()
@@ -393,6 +386,16 @@ namespace api.Migrations
                         .HasForeignKey("TeamsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("api.Models.DBPoketeamModels.Team", b =>
+                {
+                    b.HasOne("api.Models.DBPoketeamModels.User", "Player")
+                        .WithMany("Teams")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("api.Models.DBPoketeamModels.User", b =>

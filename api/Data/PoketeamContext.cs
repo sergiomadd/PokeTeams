@@ -16,6 +16,8 @@ namespace api.Data
         public DbSet<Team> Team { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Tag> Tag { get; set; }
+        public DbSet<TeamTag> TeamTag { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -29,7 +31,7 @@ namespace api.Data
             modelBuilder.Entity<Team>()
                 .HasMany(t => t.Tags)
                 .WithMany(ta => ta.Teams)
-                .UsingEntity(j => j.ToTable("TeamTag"));
+                .UsingEntity<TeamTag>();
 
             modelBuilder.Entity<Team>()
                 .HasOne(t => t.Player)

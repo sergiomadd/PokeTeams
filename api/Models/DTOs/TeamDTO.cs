@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
+﻿using api.Models.DBPoketeamModels;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Text.Json;
 
@@ -15,6 +16,7 @@ namespace api.Models.DTOs
         public int ViewCount { get; set; }
         public string? Date { get; set; }
         public bool Visibility { get; set; }
+        public List<TagDTO>? Tags { get; set; }
 
 
         public TeamDTO()
@@ -31,7 +33,8 @@ namespace api.Models.DTOs
             string regulation,
             int viewCount,
             string date,
-            bool visibility
+            bool visibility,
+            List<TagDTO> tags
             )
         {
             ID = id;
@@ -43,6 +46,7 @@ namespace api.Models.DTOs
             ViewCount = viewCount;
             Date = date;
             Visibility = visibility;
+            Tags = tags;
         }
     }
 }

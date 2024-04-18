@@ -21,6 +21,7 @@ namespace api.Services.TeamService
         public Task<IdentityResponseDTO> UpdatePicture(User user, string newPictureKey);
         public CountryDTO GetCountry(string code);
         public Task<string> IncrementTeamViewCount(string teamKey);
-
+        public Task<Tag> GetTag(string identifier);
+        public Task<bool> SaveTag(Tag tag);
     }
 }
