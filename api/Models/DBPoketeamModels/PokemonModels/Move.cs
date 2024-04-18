@@ -1,4 +1,4 @@
-﻿namespace api.Models
+﻿namespace api.Models.DBPoketeamModels.Pokemon
 {
     public class Move
     {
@@ -32,7 +32,7 @@
             public string Long { get; set; }
             public int? Chance { get; set; }
         }
-        
+
         public class Metadata
         {
             public int? MinHits { get; set; }
@@ -46,7 +46,7 @@
             public int? FlinchChance { get; set; }
             public StatChange? StatChange { get; set; }
         }
-        
+
 
         public class StatChange
         {

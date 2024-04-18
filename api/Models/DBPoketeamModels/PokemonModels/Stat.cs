@@ -1,4 +1,4 @@
-﻿namespace api.Models
+﻿namespace api.Models.DBPoketeamModels.Pokemon
 {
     public class Stat
     {
