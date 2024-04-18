@@ -12,6 +12,7 @@ using static Azure.Core.HttpHeader;
 using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using api.Models.DBPoketeamModels.Pokemon;
+using api.Models;
 
 namespace api.Services.PokemonService
 {
@@ -135,6 +136,22 @@ namespace api.Services.PokemonService
                 Item_prose? itemProse = await _pokedexContext.Item_prose.FindAsync(itemNames.item_id, 9);
                 Items? items = await _pokedexContext.Items.FindAsync(itemNames.item_id);
                 if (itemProse != null && items != null)
+                {
+                    item = new Item(items.Identifier, itemNames.name, Formatter.FormatProse(itemProse.effect));
+                }
+            }
+            return item;
+        }
+
+        public async Task<Item?> GetItemByIdentifier(string identifier)
+        {
+            Item? item = null;
+            Items? items = await _pokedexContext.Items.FirstOrDefaultAsync(i => i.Identifier == identifier);
+            if (items != null)
+            {
+                Item_names? itemNames = await _pokedexContext.Item_names.FirstOrDefaultAsync(i => i.item_id == items.Id && i.local_language_id == 9);
+                Item_prose? itemProse = await _pokedexContext.Item_prose.FindAsync(itemNames.item_id, 9);
+                if (itemNames != null && itemProse != null)
                 {
                     item = new Item(items.Identifier, itemNames.name, Formatter.FormatProse(itemProse.effect));
                 }

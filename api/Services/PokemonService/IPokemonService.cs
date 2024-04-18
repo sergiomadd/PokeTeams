@@ -8,6 +8,7 @@ namespace api.Services.PokemonService
         Task<PokemonData?> GetPokemonByName(string name);
         Task<PokemonData?> GetPokemonById(int id);
         Task<Item?> GetItemByName(string name);
+        Task<Item?> GetItemByIdentifier(string identifier);
         Task<Ability?> GetAbilityByName(string name);
         Task<Nature?> GetNatureByName(string name);
         Task<Nature?> GetNatureByIdentifier(string identifier);

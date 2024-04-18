@@ -1,5 +1,5 @@
 ﻿using api.Data;
-using api.Models;
+using api.Models.DBPoketeamModels.Pokemon;
 using api.Services.PokemonService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +17,21 @@ namespace api.Controllers
             _pokemonService = pokemonService;
         }
 
-        [HttpGet("{itemName}", Name = "GetItemByName")]
+        [HttpGet("name/{itemName}", Name = "GetItemByName")]
         public async Task<ActionResult<Item>> GetItemByName(string itemName)
         {
             var item = await _pokemonService.GetItemByName(itemName);
+            if (item == null)
+            {
+                return BadRequest("Item not found.");
+            }
+            return Ok(item);
+        }
+
+        [HttpGet("identifier/{itemIdentifier}", Name = "GetItemByIdentifier")]
+        public async Task<ActionResult<Item>> GetItemByIdentifier(string itemIdentifier)
+        {
+            var item = await _pokemonService.GetItemByIdentifier(itemIdentifier);
             if (item == null)
             {
                 return BadRequest("Item not found.");
