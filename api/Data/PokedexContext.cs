@@ -1,4 +1,5 @@
 ﻿using api.Models.DBModels;
+using api.Models.DBPokedexModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,7 @@ namespace api.Data
         public DbSet<Items> Items { get; set; }
         public DbSet<Item_names> Item_names { get; set; }
         public DbSet<Item_prose> Item_prose { get; set; }
+        public DbSet<Abilities> Abilities { get; set; }
         public DbSet<Ability_names> Ability_names { get; set; }
         public DbSet<Ability_prose> Ability_prose { get; set; }
         public DbSet<Natures> Natures { get; set; }

@@ -13,6 +13,7 @@ using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using api.Models.DBPoketeamModels.Pokemon;
 using api.Models;
+using api.Models.DBPokedexModels;
 
 namespace api.Services.PokemonService
 {
@@ -165,10 +166,27 @@ namespace api.Services.PokemonService
             Ability_names? abilityNames = await _pokedexContext.Ability_names.FindAsync(name);
             if (abilityNames != null)
             {
+                Abilities? abilities = await _pokedexContext.Abilities.FirstOrDefaultAsync(a => a.id == abilityNames.ability_id);
                 Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilityNames.ability_id, abilityNames.local_language_id); ;
-                if(abilityProse != null)
+                if(abilities != null && abilityProse != null)
                 {
-                    ability = new Ability(abilityNames.name, Formatter.FormatProse(abilityProse.effect));
+                    ability = new Ability(abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
+                }
+            }
+            return ability;
+        }
+
+        public async Task<Ability?> GetAbilityByIdentifier(string identifier)
+        {
+            Ability? ability = null;
+            Abilities? abilities = await _pokedexContext.Abilities.FirstOrDefaultAsync(a => a.identifier.Equals(identifier));
+            if (abilities != null)
+            {
+                Ability_names? abilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(a => a.ability_id == abilities.id && a.local_language_id == 9);
+                Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilities.id, 9); ;
+                if (abilityNames != null && abilityProse != null)
+                {
+                    ability = new Ability( abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
                 }
             }
             return ability;
