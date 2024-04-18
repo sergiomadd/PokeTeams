@@ -1,5 +1,4 @@
 ﻿using api.Data;
-using api.Models;
 using api.Models.DBModels;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,11 +6,12 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
-using static api.Models.Move;
+using static api.Models.DBPoketeamModels.Pokemon.Move;
 using api.Util;
 using static Azure.Core.HttpHeader;
 using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using api.Models.DBPoketeamModels.Pokemon;
 
 namespace api.Services.PokemonService
 {
@@ -173,7 +173,30 @@ namespace api.Services.PokemonService
 
                     if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
                     {
-                        nature = new Nature(natureNames.name, new Stat(increasedStatIdentifier.identifier, increasedStatName.name, 0), new Stat(decreasedStatIdentifier.identifier, decreasedStatName.name, 0));
+                        nature = new Nature(natureNames.name, natures.identifier, new Stat(increasedStatIdentifier.identifier, increasedStatName.name, 0), new Stat(decreasedStatIdentifier.identifier, decreasedStatName.name, 0));
+                    }
+                }
+            }
+            return nature;
+        }
+
+        public async Task<Nature?> GetNatureByIdentifier(string identifier)
+        {
+            Nature? nature = null;
+            Natures? natures = await _pokedexContext.Natures.FirstOrDefaultAsync(n => n.identifier.Equals(identifier));
+            if (natures != null)
+            {
+                Nature_names? natureNames = await _pokedexContext.Nature_names.FirstOrDefaultAsync(n => n.nature_id == natures.id && n.local_language_id == 9);
+                if (natureNames != null)
+                {
+                    Stats? increasedStatIdentifier = await _pokedexContext.Stats.FindAsync(natures.increased_stat_id);
+                    Stats? decreasedStatIdentifier = await _pokedexContext.Stats.FindAsync(natures.decreased_stat_id);
+                    Stat_names? increasedStatName = await _pokedexContext.Stat_names.FindAsync(natures.increased_stat_id, natureNames.local_language_id);
+                    Stat_names? decreasedStatName = await _pokedexContext.Stat_names.FindAsync(natures.decreased_stat_id, natureNames.local_language_id);
+
+                    if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
+                    {
+                        nature = new Nature(natureNames.name, natures.identifier, new Stat(increasedStatIdentifier.identifier, increasedStatName.name, 0), new Stat(decreasedStatIdentifier.identifier, decreasedStatName.name, 0));
                     }
                 }
             }

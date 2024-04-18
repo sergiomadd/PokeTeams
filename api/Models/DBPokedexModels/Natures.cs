@@ -7,6 +7,7 @@ namespace api.Models.DBModels
     {
         [Key]
         public int id { get; set; }
+        public string identifier { get; set; }
         public int decreased_stat_id { get; set; }
         public int increased_stat_id { get; set; }
     }

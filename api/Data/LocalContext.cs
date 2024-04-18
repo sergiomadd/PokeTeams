@@ -1,4 +1,5 @@
 ﻿using api.Models.DBPoketeamModels;
+using api.Models.DBPoketeamModels.Pokemon;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
