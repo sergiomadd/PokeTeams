@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Text.Json;
 
-namespace api.Models.DTOs
+namespace api.DTOs
 {
     public class TeamDTO
     {
         public string ID { get; set; }
         public List<Pokemon> Pokemons { get; set; }
-        public EditorOptions? Options { get; set; }
+        public EditorOptionsDTO? Options { get; set; }
         public string? Player { get; set; }
         public string? Tournament { get; set; }
         public string? Regulation { get; set; }
@@ -39,7 +39,7 @@ namespace api.Models.DTOs
         {
             ID = id;
             Pokemons = pokemons;
-            Options = JsonSerializer.Deserialize<EditorOptions>(options, new JsonSerializerOptions { IncludeFields = false });
+            Options = JsonSerializer.Deserialize<EditorOptionsDTO>(options, new JsonSerializerOptions { IncludeFields = false });
             Player = uploaded;
             Tournament = tournament;
             Regulation = regulation;

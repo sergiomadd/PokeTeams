@@ -1,5 +1,5 @@
-﻿using api.Models.DBModels;
-using api.Models.DTOs.PokemonDTOs;
+﻿using api.DTOs.PokemonDTOs;
+using api.Models.DBModels;
 using api.Services.PokedexService;
 using api.Util;
 using Microsoft.AspNetCore.Mvc;

@@ -1,5 +1,4 @@
-﻿using api.Models.DTOs;
-using api.Services.TeamService;
+﻿using api.Services.TeamService;
 using Microsoft.AspNetCore.Mvc;
 using api.Models.DBPoketeamModels;
 using Microsoft.AspNetCore.Components.Forms;
@@ -7,6 +6,7 @@ using api.Util;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
+using api.DTOs;
 
 namespace api.Controllers
 {

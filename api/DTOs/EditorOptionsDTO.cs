@@ -1,13 +1,13 @@
-﻿namespace api.Models
+﻿namespace api.DTOs
 {
-    public class EditorOptions
+    public class EditorOptionsDTO
     {
-        public EditorOption PokemonSpritesGen { get; set; }
+        public EditorOptionDTO PokemonSpritesGen { get; set; }
         public string typeIconsGen { get; set; }
-        public EditorOption ShinyPath { get; set; }
+        public EditorOptionDTO ShinyPath { get; set; }
         public bool Gender { get; set; }
-        public EditorOption MalePath { get; set; }
-        public EditorOption FemalePath { get; set; }
+        public EditorOptionDTO MalePath { get; set; }
+        public EditorOptionDTO FemalePath { get; set; }
         public bool ShowIVs { get; set; }
         public bool ShowEVs { get; set; }
         public bool ShowNature { get; set; }

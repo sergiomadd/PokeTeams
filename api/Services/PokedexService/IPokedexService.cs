@@ -1,12 +1,12 @@
-﻿using api.Models.DBModels;
-using api.Models.DTOs.PokemonDTOs;
+﻿using api.DTOs.PokemonDTOs;
+using api.Models.DBModels;
 
 namespace api.Services.PokedexService
 {
     public interface IPokedexService
     {
-        Task<PokemonData?> GetPokemonByName(string name);
-        Task<PokemonData?> GetPokemonById(int id);
+        Task<PokemonDataDTO?> GetPokemonByName(string name);
+        Task<PokemonDataDTO?> GetPokemonById(int id);
         Task<ItemDTO?> GetItemByName(string name);
         Task<ItemDTO?> GetItemByIdentifier(string identifier);
         Task<AbilityDTO?> GetAbilityByName(string name);

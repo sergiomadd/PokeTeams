@@ -1,6 +1,6 @@
 ﻿using api.Models.DBModels;
 
-namespace api.Models.DTOs.PokemonDTOs
+namespace api.DTOs.PokemonDTOs
 {
     public class EffectivenessDTO
     {

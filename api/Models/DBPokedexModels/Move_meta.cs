@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static api.Models.DTOs.PokemonDTOs.MoveDTO;
+using static api.DTOs.PokemonDTOs.MoveDTO;
 
 namespace api.Models.DBModels
 {

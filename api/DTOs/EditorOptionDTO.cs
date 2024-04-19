@@ -1,11 +1,11 @@
-﻿namespace api.Models
+﻿namespace api.DTOs
 {
-    public class EditorOption
+    public class EditorOptionDTO
     {
         public string Name { get; set; }
         public string Identifier { get; set; }
         public string Path { get; set; }
-        public EditorOption(string name, string identifier, string path)
+        public EditorOptionDTO(string name, string identifier, string path)
         {
             Name = name;
             Identifier = identifier;

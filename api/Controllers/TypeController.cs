@@ -1,4 +1,4 @@
-﻿using api.Models.DTOs.PokemonDTOs;
+﻿using api.DTOs.PokemonDTOs;
 using api.Services.PokedexService;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;

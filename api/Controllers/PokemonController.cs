@@ -1,4 +1,5 @@
 ﻿using api.Data;
+using api.DTOs.PokemonDTOs;
 using api.Models.DBModels;
 using api.Services.PokedexService;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +19,7 @@ namespace api.Controllers
         }
 
         [HttpGet("{pokemonName}", Name = "GetPokemonByName")]
-        public async Task<ActionResult<PokemonData>> GetPokemonByName(string pokemonName) 
+        public async Task<ActionResult<PokemonDataDTO>> GetPokemonByName(string pokemonName) 
         {
             var pokemon = await _pokemonService.GetPokemonByName(pokemonName);
             if(pokemon == null)

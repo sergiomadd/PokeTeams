@@ -1,5 +1,6 @@
-﻿using api.Models.DBPoketeamModels;
-using api.Models.DTOs;
+﻿using api.DTOs;
+using api.DTOs.PokemonDTOs;
+using api.Models.DBPoketeamModels;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -18,7 +19,7 @@ namespace api.Data
 
         }
 
-        public List<Sprite> GetSprites(int dexNumber)
+        public List<SpriteDTO> GetSprites(int dexNumber)
         {
             const string urlStart = "https://localhost:7134/images/sprites/pokemon/";
             string urlEnd = dexNumber + ".png";
@@ -27,7 +28,7 @@ namespace api.Data
             const string female = "female/";
             const string shinyFemale = "shiny/female/";
 
-            List<Sprite> sprites = new List<Sprite>();
+            List<SpriteDTO> sprites = new List<SpriteDTO>();
             List<string> spriteKeys = new List<string>
             {
                  "",
@@ -48,7 +49,7 @@ namespace api.Data
             {
                 if (animatedSpriteKeys.Contains(key))
                 {
-                    sprites.Add(new Sprite(key,
+                    sprites.Add(new SpriteDTO(key,
                         urlStart + key + urlEndGif,
                         urlStart + key + shiny + urlEndGif,
                         urlStart + key + female + urlEndGif,
@@ -56,7 +57,7 @@ namespace api.Data
                 }
                 else
                 {
-                    sprites.Add(new Sprite(key,
+                    sprites.Add(new SpriteDTO(key,
                         urlStart + key + urlEnd,
                         urlStart + key + shiny + urlEnd,
                         urlStart + key + female + urlEnd,

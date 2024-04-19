@@ -6,14 +6,13 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
-using static api.Models.DTOs.PokemonDTOs.MoveDTO;
+using static api.DTOs.PokemonDTOs.MoveDTO;
 using api.Util;
 using static Azure.Core.HttpHeader;
 using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using api.Models;
 using api.Models.DBPokedexModels;
-using api.Models.DTOs.PokemonDTOs;
+using api.DTOs.PokemonDTOs;
 
 namespace api.Services.PokedexService
 {
@@ -28,9 +27,9 @@ namespace api.Services.PokedexService
             _localContext = localContext;
         }
 
-        public async Task<PokemonData?> GetPokemonById(int id)
+        public async Task<PokemonDataDTO?> GetPokemonById(int id)
         {
-            PokemonData pokemonData = new PokemonData(
+            PokemonDataDTO pokemonData = new PokemonDataDTO(
                 GetPokemonName(id),
                 id,
                 GetPokemonTypes(id).Result,
@@ -41,7 +40,7 @@ namespace api.Services.PokedexService
             return pokemonData;
         }
 
-        public async Task<PokemonData?> GetPokemonByName(string name)
+        public async Task<PokemonDataDTO?> GetPokemonByName(string name)
         {
             /*
              * Problem: multiple pokemons with same name but different local_language_id
@@ -65,7 +64,7 @@ namespace api.Services.PokedexService
             return null;
         }
 
-        private async Task<PokeTypes> GetPokemonTypes(int id)
+        private async Task<PokeTypesDTO> GetPokemonTypes(int id)
         {
             PokeTypeDTO? type1 = null;
             Pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FindAsync(id, 1);
@@ -79,7 +78,7 @@ namespace api.Services.PokedexService
             {
                 type2 = GetTypeById(pokemonType2.type_id).Result;
             }
-            PokeTypes pokeTypes = new PokeTypes(type1, type2);
+            PokeTypesDTO pokeTypes = new PokeTypesDTO(type1, type2);
             return pokeTypes;
         }
 
@@ -99,20 +98,20 @@ namespace api.Services.PokedexService
             return pokeStats;
         }
 
-        private PokemonData? GetPokemonPreEvolution(int id)
+        private PokemonDataDTO? GetPokemonPreEvolution(int id)
         {
             Pokemon_species? pokemonSpeciesPreEvolution = _pokedexContext.Pokemon_species.FirstOrDefault(p => p.id == id);
             if (pokemonSpeciesPreEvolution != null && pokemonSpeciesPreEvolution.evolves_from_species_id != null)
             {
                 int newID = pokemonSpeciesPreEvolution.evolves_from_species_id ?? 0;
-                return new PokemonData(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), preEvolution: GetPokemonPreEvolution(newID));
+                return new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), preEvolution: GetPokemonPreEvolution(newID));
             }
             return null;
         }
 
-        private List<PokemonData?> GetPokemonEvolutions(int id)
+        private List<PokemonDataDTO?> GetPokemonEvolutions(int id)
         {
-            List<PokemonData?> evolutions = new List<PokemonData?>();
+            List<PokemonDataDTO?> evolutions = new List<PokemonDataDTO?>();
             List<Pokemon_species?> pokemonSpeciesEvolutionList = _pokedexContext.Pokemon_species.Where(p => p.evolves_from_species_id == id).ToList();
             if(pokemonSpeciesEvolutionList.Count() > 0)
             {
@@ -121,7 +120,7 @@ namespace api.Services.PokedexService
                     if (pokemonSpeciesEvolution != null)
                     {
                         int newID = pokemonSpeciesEvolution.id;
-                        evolutions.Add(new PokemonData(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), evolutions: GetPokemonEvolutions(newID)));
+                        evolutions.Add(new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), evolutions: GetPokemonEvolutions(newID)));
                     }
                 }
             }

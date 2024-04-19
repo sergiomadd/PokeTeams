@@ -1,6 +1,6 @@
-﻿namespace api.Models
+﻿namespace api.DTOs.PokemonDTOs
 {
-    public class Sprite
+    public class SpriteDTO
     {
         public string Name { get; set; }
         public string? Gen { get; set; }
@@ -9,12 +9,12 @@
         public string? Female { get; set; }
         public string? ShinyFemale { get; set; }
 
-        public Sprite()
+        public SpriteDTO()
         {
 
         }
 
-        public Sprite(string name, string _base = null, string shiny = null, string female = null, string shinyFemale = null)
+        public SpriteDTO(string name, string _base = null, string shiny = null, string female = null, string shinyFemale = null)
         {
             Name = GetName(name);
             Gen = GetGeneration(name);

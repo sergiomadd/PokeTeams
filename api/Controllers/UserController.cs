@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using api.Models.DTOs;
 using Microsoft.AspNetCore.Identity;
 using api.Util;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +10,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
-
+using api.DTOs;
 
 namespace api.Controllers
 {

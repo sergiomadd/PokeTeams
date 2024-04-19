@@ -1,4 +1,4 @@
-﻿using api.Models.DTOs;
+﻿using api.DTOs;
 using api.Services.PokedexService;
 using api.Services.TeamService;
 using Microsoft.AspNetCore.Mvc;

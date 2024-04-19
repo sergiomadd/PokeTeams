@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using api.Models.DTOs.PokemonDTOs;
 
-namespace api.Models
+namespace api.DTOs.PokemonDTOs
 {
-    public class PokeTypes
+    public class PokeTypesDTO
     {
         public EffectivenessDTO? DualEffectiveness { get; set; }
         public PokeTypeDTO? Type1 { get; set; }
         public PokeTypeDTO? Type2 { get; set; }
 
-        public PokeTypes(PokeTypeDTO type1, PokeTypeDTO type2)
+        public PokeTypesDTO(PokeTypeDTO type1, PokeTypeDTO type2)
         {
             Type1 = type1;
             Type2 = type2;
@@ -30,9 +29,9 @@ namespace api.Models
                 }
                 foreach (var item in allValues.ToList())
                 {
-                    if (summedValues.Exists(i => i.Item1.Equals(item.Item1)))       
+                    if (summedValues.Exists(i => i.Item1.Equals(item.Item1)))
                     {
-                        allValues.Remove(item); 
+                        allValues.Remove(item);
                     }
                 }
                 allValues.AddRange(summedValues);

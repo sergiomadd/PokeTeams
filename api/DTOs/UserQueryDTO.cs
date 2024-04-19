@@ -1,4 +1,4 @@
-﻿namespace api.Models.DTOs
+﻿namespace api.DTOs
 {
     public class UserQueryDTO
     {

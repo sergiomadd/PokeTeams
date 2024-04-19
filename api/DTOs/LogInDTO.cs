@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace api.Models.DTOs
+namespace api.DTOs
 {
     public class LogInDTO
     {
@@ -9,6 +9,6 @@ namespace api.Models.DTOs
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
         [Required(ErrorMessage = "Remember option is required")]
-        public bool RememberMe { get; set;}
+        public bool RememberMe { get; set; }
     }
 }

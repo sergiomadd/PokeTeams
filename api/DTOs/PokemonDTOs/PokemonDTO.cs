@@ -1,15 +1,15 @@
 ﻿using api.Models.DBPoketeamModels;
 
-namespace api.Models.DTOs.PokemonDTOs
+namespace api.DTOs.PokemonDTOs
 {
     public class PokemonDTO
     {
         public string? Name { get; set; }
         public string? Nickname { get; set; }
         public int? DexNumber { get; set; }
-        public PokemonData? PreEvolution { get; set; }
-        public List<PokemonData?>? Evolutions { get; set; }
-        public PokeTypes? Types { get; set; }
+        public PokemonDataDTO? PreEvolution { get; set; }
+        public List<PokemonDataDTO?>? Evolutions { get; set; }
+        public PokeTypesDTO? Types { get; set; }
         public PokeTypeDTO? TeraType { get; set; }
         public ItemDTO? Item { get; set; }
         public AbilityDTO? Ability { get; set; }
@@ -21,6 +21,6 @@ namespace api.Models.DTOs.PokemonDTOs
         public int? Level { get; set; }
         public bool? Shiny { get; set; }
         public string? Gender { get; set; }
-        public List<Sprite?> Sprites { get; set; }
+        public List<SpriteDTO?> Sprites { get; set; }
     }
 }
