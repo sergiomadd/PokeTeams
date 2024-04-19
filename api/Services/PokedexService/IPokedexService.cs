@@ -1,5 +1,6 @@
 ﻿using api.Models.DBModels;
 using api.Models.DBPoketeamModels.Pokemon;
+using api.Models.DTOs.PokemonDTOs;
 
 namespace api.Services.PokedexService
 {
@@ -13,7 +14,7 @@ namespace api.Services.PokedexService
         Task<Ability?> GetAbilityByIdentifier(string identifier);
         Task<Nature?> GetNatureByName(string name);
         Task<Nature?> GetNatureByIdentifier(string identifier);
-        Task<Move?> GetMoveByName(string name);
+        Task<MoveDTO?> GetMoveByName(string name);
         Task<PokeType?> GetTypeByIdentifier(string identifier);
         Task<PokeType?> GetTeraTypeByIdentifier(string identifier);
         Task<string?> GetStatNameByIdentifier(string identifier);

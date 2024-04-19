@@ -1,6 +1,8 @@
-﻿namespace api.Models.DBPoketeamModels.Pokemon
+﻿using api.Models.DBPoketeamModels.Pokemon;
+
+namespace api.Models.DTOs.PokemonDTOs
 {
-    public class Move
+    public class MoveDTO
     {
         public string? Name { get; set; }
         public PokeType? PokeType { get; set; }
@@ -50,7 +52,7 @@
 
         public class StatChange
         {
-            public Stat? Stat { get; set; }
+            public StatDTO? Stat { get; set; }
             public int? Change { get; set; }
             public int? ChangeChance { get; set; }
 

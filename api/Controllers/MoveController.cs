@@ -1,4 +1,4 @@
-﻿using api.Models.DBPoketeamModels.Pokemon;
+﻿using api.Models.DTOs.PokemonDTOs;
 using api.Services.PokedexService;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
@@ -16,7 +16,7 @@ namespace api.Controllers
         }
 
         [HttpGet("{moveName}", Name = "GetMoveByName")]
-        public async Task<ActionResult<Move>> GetMoveByName(string moveName)
+        public async Task<ActionResult<MoveDTO>> GetMoveByName(string moveName)
         {
             var move = await _pokemonService.GetMoveByName(moveName);
             if (move == null)

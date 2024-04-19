@@ -1,4 +1,7 @@
-﻿namespace api.Models
+﻿using api.Models.DBPoketeamModels.Pokemon;
+using api.Models.DTOs.PokemonDTOs;
+
+namespace api.Models
 {
     public class PokemonData
     {
@@ -7,10 +10,10 @@
         public PokemonData? PreEvolution { get; set; }
         public List<PokemonData?>? Evolutions { get; set; }
         public PokeTypes? Types { get; set; }
-        public List<Stat?> Stats { get; set; }
+        public List<StatDTO?> Stats { get; set; }
         public List<Sprite?> Sprites { get; set; }
 
-        public PokemonData(string? name, int dexNumber, PokeTypes types, List<Stat?> stats, List<Sprite?> sprites, PokemonData? preEvolution = null, List<PokemonData?>? evolutions = null)
+        public PokemonData(string? name, int dexNumber, PokeTypes types, List<StatDTO?> stats, List<Sprite?> sprites, PokemonData? preEvolution = null, List<PokemonData?>? evolutions = null)
         {
             Name = name;
             DexNumber = dexNumber;

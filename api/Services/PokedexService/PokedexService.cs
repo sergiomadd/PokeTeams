@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Xml.Linq;
-using static api.Models.DBPoketeamModels.Pokemon.Move;
+using static api.Models.DTOs.PokemonDTOs.MoveDTO;
 using api.Util;
 using static Azure.Core.HttpHeader;
 using static System.Net.WebRequestMethods;
@@ -14,6 +14,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using api.Models.DBPoketeamModels.Pokemon;
 using api.Models;
 using api.Models.DBPokedexModels;
+using api.Models.DTOs.PokemonDTOs;
 
 namespace api.Services.PokedexService
 {
@@ -83,9 +84,9 @@ namespace api.Services.PokedexService
             return pokeTypes;
         }
 
-        private async Task<List<Stat>> GetPokemonStats(int id)
+        private async Task<List<StatDTO>> GetPokemonStats(int id)
         {
-            List<Stat> pokeStats = new List<Stat>();
+            List<StatDTO> pokeStats = new List<StatDTO>();
             for (int i = 1; i < 7; i++)
             {
                 Pokemon_stats? pokemonStats = await _pokedexContext.Pokemon_stats.FindAsync(id, i);
@@ -93,7 +94,7 @@ namespace api.Services.PokedexService
                 Stats? stats = await _pokedexContext.Stats.FindAsync(i);
                 if (pokemonStats != null && statNames != null && stats != null)
                 {
-                    pokeStats.Add(new Stat(stats.identifier, statNames.name, pokemonStats.base_stat));
+                    pokeStats.Add(new StatDTO(stats.identifier, statNames.name, pokemonStats.base_stat));
                 }
             }
             return pokeStats;
@@ -208,7 +209,7 @@ namespace api.Services.PokedexService
 
                     if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
                     {
-                        nature = new Nature(natureNames.name, natures.identifier, new Stat(increasedStatIdentifier.identifier, increasedStatName.name, 0), new Stat(decreasedStatIdentifier.identifier, decreasedStatName.name, 0));
+                        nature = new Nature(natureNames.name, natures.identifier, new StatDTO(increasedStatIdentifier.identifier, increasedStatName.name, 0), new StatDTO(decreasedStatIdentifier.identifier, decreasedStatName.name, 0));
                     }
                 }
             }
@@ -231,16 +232,16 @@ namespace api.Services.PokedexService
 
                     if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
                     {
-                        nature = new Nature(natureNames.name, natures.identifier, new Stat(increasedStatIdentifier.identifier, increasedStatName.name, 0), new Stat(decreasedStatIdentifier.identifier, decreasedStatName.name, 0));
+                        nature = new Nature(natureNames.name, natures.identifier, new StatDTO(increasedStatIdentifier.identifier, increasedStatName.name, 0), new StatDTO(decreasedStatIdentifier.identifier, decreasedStatName.name, 0));
                     }
                 }
             }
             return nature;
         }
 
-        public async Task<Move?> GetMoveByName(string name)
+        public async Task<MoveDTO?> GetMoveByName(string name)
         {
-            Move? move = null;
+            MoveDTO? move = null;
             Move_names? moveNames = await _pokedexContext.Move_names.FindAsync(name);
             if (moveNames != null)
             {
@@ -261,13 +262,13 @@ namespace api.Services.PokedexService
                         Stats? metaStat = await _pokedexContext.Stats.FindAsync(metaStatChange.stat_id);
                         statChange = new StatChange
                         {
-                            Stat = new Stat(metaStat.identifier, metaStatName.name, null),
+                            Stat = new StatDTO(metaStat.identifier, metaStatName.name, null),
                             Change = metaStatChange.change,
                             ChangeChance = meta.stat_chance
                         };
                     }
 
-                    move = new Move
+                    move = new MoveDTO
                     {
                         Name = name,
                         PokeType = new PokeType(type.identifier, typeName.name, GetTypeEffectivenessAttack((int)moves.type_id).Result, GetTypeEffectivenessDefense((int)moves.type_id).Result),
