@@ -35,6 +35,7 @@ namespace api.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Post([FromBody] TeamDTO team)
         {
+            Printer.Log("User in team: ", User.Identity.Name);
             Team newTeam = await _teamService.SaveTeam(team, User.Identity.Name);
             if (newTeam == null)
             {

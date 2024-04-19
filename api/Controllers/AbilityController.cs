@@ -1,4 +1,4 @@
-﻿using api.Models.DBPoketeamModels.Pokemon;
+﻿using api.Models.DTOs.PokemonDTOs;
 using api.Services.PokedexService;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
@@ -17,7 +17,7 @@ namespace api.Controllers
         }
 
         [HttpGet("name/{abilityName}", Name = "GetAbilityByName")]
-        public async Task<ActionResult<Ability>> GetAbilityByName(string abilityName)
+        public async Task<ActionResult<AbilityDTO>> GetAbilityByName(string abilityName)
         {
             var ability = await _pokemonService.GetAbilityByName(abilityName);
             if (ability == null)
@@ -28,7 +28,7 @@ namespace api.Controllers
         }
 
         [HttpGet("identifier/{abilityIdentifier}", Name = "GetAbilityByIdentifier")]
-        public async Task<ActionResult<Ability>> GetAbilityByIdentifier(string abilityIdentifier)
+        public async Task<ActionResult<AbilityDTO>> GetAbilityByIdentifier(string abilityIdentifier)
         {
             var ability = await _pokemonService.GetAbilityByIdentifier(abilityIdentifier);
             if (ability == null)

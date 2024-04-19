@@ -1,5 +1,5 @@
 ﻿using api.Models.DBPoketeamModels;
-using api.Models.DBPoketeamModels.Pokemon;
+using api.Models.DTOs;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -66,10 +66,10 @@ namespace api.Data
             return sprites;
         }
 
-        public EditorData GetEditorData()
+        public EditorDataDTO GetEditorData()
         {
             var json = File.ReadAllText("Data/Local/IconPaths.json");
-            EditorData editorData = JsonSerializer.Deserialize<EditorData>(json, _options);
+            EditorDataDTO editorData = JsonSerializer.Deserialize<EditorDataDTO>(json, _options);
             editorData.PokemonSpritesPaths = GetSprites(25);
             return editorData;
         }

@@ -1,16 +1,16 @@
-﻿namespace api.Models.DBPoketeamModels.Pokemon
+﻿namespace api.Models.DTOs.PokemonDTOs
 {
-    public class PokeType
+    public class PokeTypeDTO
     {
         public string Identifier { get; set; }
         public string Name { get; set; }
         public string IconPath { get; set; }
-        public Effectiveness? EffectivenessAttack { get; set; }
-        public Effectiveness? EffectivenessDefense { get; set; }
+        public EffectivenessDTO? EffectivenessAttack { get; set; }
+        public EffectivenessDTO? EffectivenessDefense { get; set; }
         public bool Teratype { get; set; }
 
 
-        public PokeType(string identifier, string name, Effectiveness effectivenessAttack = null, Effectiveness effectivenessDefense = null, bool teraType = false)
+        public PokeTypeDTO(string identifier, string name, EffectivenessDTO effectivenessAttack = null, EffectivenessDTO effectivenessDefense = null, bool teraType = false)
         {
             Identifier = identifier;
             Name = name;

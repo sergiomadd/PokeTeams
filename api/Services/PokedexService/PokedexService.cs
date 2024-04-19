@@ -11,7 +11,6 @@ using api.Util;
 using static Azure.Core.HttpHeader;
 using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using api.Models.DBPoketeamModels.Pokemon;
 using api.Models;
 using api.Models.DBPokedexModels;
 using api.Models.DTOs.PokemonDTOs;
@@ -68,13 +67,13 @@ namespace api.Services.PokedexService
 
         private async Task<PokeTypes> GetPokemonTypes(int id)
         {
-            PokeType? type1 = null;
+            PokeTypeDTO? type1 = null;
             Pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FindAsync(id, 1);
             if (pokemonType1 != null)
             {
                 type1 = GetTypeById(pokemonType1.type_id).Result;
             }
-            PokeType? type2 = null;
+            PokeTypeDTO? type2 = null;
             Pokemon_types? pokemonType2 = await _pokedexContext.Pokemon_types.FindAsync(id, 2);
             if (pokemonType2 != null)
             {
@@ -129,9 +128,9 @@ namespace api.Services.PokedexService
             return evolutions;
         }
 
-        public async Task<Item?> GetItemByName(string name)
+        public async Task<ItemDTO?> GetItemByName(string name)
         {
-            Item? item = null;
+            ItemDTO? item = null;
             Item_names? itemNames = await _pokedexContext.Item_names.FindAsync(name);
             if(itemNames != null)
             {
@@ -139,15 +138,15 @@ namespace api.Services.PokedexService
                 Items? items = await _pokedexContext.Items.FindAsync(itemNames.item_id);
                 if (itemProse != null && items != null)
                 {
-                    item = new Item(items.Identifier, itemNames.name, Formatter.FormatProse(itemProse.effect));
+                    item = new ItemDTO(items.Identifier, itemNames.name, Formatter.FormatProse(itemProse.effect));
                 }
             }
             return item;
         }
 
-        public async Task<Item?> GetItemByIdentifier(string identifier)
+        public async Task<ItemDTO?> GetItemByIdentifier(string identifier)
         {
-            Item? item = null;
+            ItemDTO? item = null;
             Items? items = await _pokedexContext.Items.FirstOrDefaultAsync(i => i.Identifier == identifier);
             if (items != null)
             {
@@ -155,15 +154,15 @@ namespace api.Services.PokedexService
                 Item_prose? itemProse = await _pokedexContext.Item_prose.FindAsync(itemNames.item_id, 9);
                 if (itemNames != null && itemProse != null)
                 {
-                    item = new Item(items.Identifier, itemNames.name, Formatter.FormatProse(itemProse.effect));
+                    item = new ItemDTO(items.Identifier, itemNames.name, Formatter.FormatProse(itemProse.effect));
                 }
             }
             return item;
         }
 
-        public async Task<Ability?> GetAbilityByName(string name)
+        public async Task<AbilityDTO?> GetAbilityByName(string name)
         {
-            Ability? ability = null;
+            AbilityDTO? ability = null;
             Ability_names? abilityNames = await _pokedexContext.Ability_names.FindAsync(name);
             if (abilityNames != null)
             {
@@ -171,15 +170,15 @@ namespace api.Services.PokedexService
                 Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilityNames.ability_id, abilityNames.local_language_id); ;
                 if(abilities != null && abilityProse != null)
                 {
-                    ability = new Ability(abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
+                    ability = new AbilityDTO(abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
                 }
             }
             return ability;
         }
 
-        public async Task<Ability?> GetAbilityByIdentifier(string identifier)
+        public async Task<AbilityDTO?> GetAbilityByIdentifier(string identifier)
         {
-            Ability? ability = null;
+            AbilityDTO? ability = null;
             Abilities? abilities = await _pokedexContext.Abilities.FirstOrDefaultAsync(a => a.identifier.Equals(identifier));
             if (abilities != null)
             {
@@ -187,15 +186,15 @@ namespace api.Services.PokedexService
                 Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilities.id, 9); ;
                 if (abilityNames != null && abilityProse != null)
                 {
-                    ability = new Ability( abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
+                    ability = new AbilityDTO( abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
                 }
             }
             return ability;
         }
 
-        public async Task<Nature?> GetNatureByName(string name)
+        public async Task<NatureDTO?> GetNatureByName(string name)
         {
-            Nature? nature = null;
+            NatureDTO? nature = null;
             Nature_names? natureNames = await _pokedexContext.Nature_names.FindAsync(name);
             if (natureNames != null)
             {
@@ -209,16 +208,16 @@ namespace api.Services.PokedexService
 
                     if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
                     {
-                        nature = new Nature(natureNames.name, natures.identifier, new StatDTO(increasedStatIdentifier.identifier, increasedStatName.name, 0), new StatDTO(decreasedStatIdentifier.identifier, decreasedStatName.name, 0));
+                        nature = new NatureDTO(natureNames.name, natures.identifier, new StatDTO(increasedStatIdentifier.identifier, increasedStatName.name, 0), new StatDTO(decreasedStatIdentifier.identifier, decreasedStatName.name, 0));
                     }
                 }
             }
             return nature;
         }
 
-        public async Task<Nature?> GetNatureByIdentifier(string identifier)
+        public async Task<NatureDTO?> GetNatureByIdentifier(string identifier)
         {
-            Nature? nature = null;
+            NatureDTO? nature = null;
             Natures? natures = await _pokedexContext.Natures.FirstOrDefaultAsync(n => n.identifier.Equals(identifier));
             if (natures != null)
             {
@@ -232,7 +231,7 @@ namespace api.Services.PokedexService
 
                     if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
                     {
-                        nature = new Nature(natureNames.name, natures.identifier, new StatDTO(increasedStatIdentifier.identifier, increasedStatName.name, 0), new StatDTO(decreasedStatIdentifier.identifier, decreasedStatName.name, 0));
+                        nature = new NatureDTO(natureNames.name, natures.identifier, new StatDTO(increasedStatIdentifier.identifier, increasedStatName.name, 0), new StatDTO(decreasedStatIdentifier.identifier, decreasedStatName.name, 0));
                     }
                 }
             }
@@ -271,7 +270,7 @@ namespace api.Services.PokedexService
                     move = new MoveDTO
                     {
                         Name = name,
-                        PokeType = new PokeType(type.identifier, typeName.name, GetTypeEffectivenessAttack((int)moves.type_id).Result, GetTypeEffectivenessDefense((int)moves.type_id).Result),
+                        PokeType = new PokeTypeDTO(type.identifier, typeName.name, GetTypeEffectivenessAttack((int)moves.type_id).Result, GetTypeEffectivenessDefense((int)moves.type_id).Result),
                         DamageClass = new MoveDamageClass
                         {
                             Name = damageClass.name,
@@ -327,9 +326,9 @@ namespace api.Services.PokedexService
             return null;
         }
 
-        private async Task<PokeType?> GetTypeById(int id)
+        private async Task<PokeTypeDTO?> GetTypeById(int id)
         {
-            PokeType? pokeType = null;
+            PokeTypeDTO? pokeType = null;
             Types? targetType = await _pokedexContext.Types.FirstOrDefaultAsync(t => t.id == id);
             if (targetType != null)
             {
@@ -337,16 +336,16 @@ namespace api.Services.PokedexService
                 if (targetTypeName != null)
                 {
 
-                    pokeType = new PokeType(targetType.identifier, targetTypeName.name,
+                    pokeType = new PokeTypeDTO(targetType.identifier, targetTypeName.name,
                         GetTypeEffectivenessAttack(targetType.id).Result, GetTypeEffectivenessDefense(targetType.id).Result);
                 }
             }
             return pokeType;
         }
 
-        public async Task<PokeType?> GetTypeByIdentifier(string identifier)
+        public async Task<PokeTypeDTO?> GetTypeByIdentifier(string identifier)
         {
-            PokeType? pokeType = null;
+            PokeTypeDTO? pokeType = null;
             Types? targetType = await _pokedexContext.Types.FirstOrDefaultAsync(t => t.identifier == identifier);
 
             if (targetType != null)
@@ -354,16 +353,16 @@ namespace api.Services.PokedexService
                 Type_names? targetTypeName = await _pokedexContext.Type_names.FindAsync(targetType.id, 9);
                 if (targetTypeName != null)
                 {
-                    pokeType = new PokeType(targetType.identifier, targetTypeName.name,
+                    pokeType = new PokeTypeDTO(targetType.identifier, targetTypeName.name,
                         GetTypeEffectivenessAttack(targetType.id).Result, GetTypeEffectivenessDefense(targetType.id).Result);
                 }
             }
             return pokeType;
         }
 
-        public async Task<PokeType?> GetTeraTypeByIdentifier(string identifier)
+        public async Task<PokeTypeDTO?> GetTeraTypeByIdentifier(string identifier)
         {
-            PokeType? pokeType = null;
+            PokeTypeDTO? pokeType = null;
             Types? targetType = await _pokedexContext.Types.FirstOrDefaultAsync(t => t.identifier == identifier);
 
             if (targetType != null)
@@ -371,16 +370,16 @@ namespace api.Services.PokedexService
                 Type_names? targetTypeName = await _pokedexContext.Type_names.FindAsync(targetType.id, 9);
                 if (targetTypeName != null)
                 {
-                    pokeType = new PokeType(targetType.identifier, targetTypeName.name,
+                    pokeType = new PokeTypeDTO(targetType.identifier, targetTypeName.name,
                         GetTypeEffectivenessAttack(targetType.id).Result, GetTypeEffectivenessDefense(targetType.id).Result, true);
                 }
             }
             return pokeType;
         }
 
-        public async Task<Effectiveness?> GetTypeEffectivenessAttack(int id)
+        public async Task<EffectivenessDTO?> GetTypeEffectivenessAttack(int id)
         {
-            Effectiveness effectiveness = null;
+            EffectivenessDTO effectiveness = null;
             List<Tuple<string, double>> allValues = new List<Tuple<string, double>>();
             List<Type_efficacy> typeEfficacyList = _pokedexContext.Type_efficacy.Where(t => t.damage_type_id == id && t.damage_factor != 100).ToList();
             if (typeEfficacyList != null)
@@ -394,14 +393,14 @@ namespace api.Services.PokedexService
                         allValues.Add(new (targetType.identifier, (double)typeEfficacy.damage_factor / (double)100));
                     }
                 }
-                effectiveness = new Effectiveness(allValues);
+                effectiveness = new EffectivenessDTO(allValues);
             }
             return effectiveness;
         }
 
-        public async Task<Effectiveness?> GetTypeEffectivenessDefense(int id)
+        public async Task<EffectivenessDTO?> GetTypeEffectivenessDefense(int id)
         {
-            Effectiveness effectiveness = null;
+            EffectivenessDTO effectiveness = null;
             List<Tuple<string, double>> allValues = new List<Tuple<string, double>>(); ;
             List<Type_efficacy> typeEfficacyList = _pokedexContext.Type_efficacy.Where(t => t.target_type_id == id && t.damage_factor != 100).ToList();
             if (typeEfficacyList != null)
@@ -415,7 +414,7 @@ namespace api.Services.PokedexService
                         allValues.Add(new (targetType.identifier, (double)typeEfficacy.damage_factor / (double)100));
                     }
                 }
-                effectiveness = new Effectiveness(allValues);
+                effectiveness = new EffectivenessDTO(allValues);
             }
             return effectiveness;
         }

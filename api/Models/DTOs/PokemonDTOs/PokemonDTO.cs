@@ -1,4 +1,4 @@
-﻿using api.Models.DBPoketeamModels.Pokemon;
+﻿using api.Models.DBPoketeamModels;
 
 namespace api.Models.DTOs.PokemonDTOs
 {
@@ -10,10 +10,10 @@ namespace api.Models.DTOs.PokemonDTOs
         public PokemonData? PreEvolution { get; set; }
         public List<PokemonData?>? Evolutions { get; set; }
         public PokeTypes? Types { get; set; }
-        public PokeType? TeraType { get; set; }
-        public Item? Item { get; set; }
-        public Ability? Ability { get; set; }
-        public Nature? Nature { get; set; }
+        public PokeTypeDTO? TeraType { get; set; }
+        public ItemDTO? Item { get; set; }
+        public AbilityDTO? Ability { get; set; }
+        public NatureDTO? Nature { get; set; }
         public List<MoveDTO>? Moves { get; set; }
         public List<Stat?> Stats { get; set; }
         public List<Stat?> ivs { get; set; }

@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using api.Models.DTOs.PokemonDTOs;
 
 namespace api.Models
 {
     public class PokeTypes
     {
-        public Effectiveness? DualEffectiveness { get; set; }
-        public PokeType? Type1 { get; set; }
-        public PokeType? Type2 { get; set; }
+        public EffectivenessDTO? DualEffectiveness { get; set; }
+        public PokeTypeDTO? Type1 { get; set; }
+        public PokeTypeDTO? Type2 { get; set; }
 
-        public PokeTypes(PokeType type1, PokeType type2)
+        public PokeTypes(PokeTypeDTO type1, PokeTypeDTO type2)
         {
             Type1 = type1;
             Type2 = type2;
@@ -35,7 +36,7 @@ namespace api.Models
                     }
                 }
                 allValues.AddRange(summedValues);
-                DualEffectiveness = new Effectiveness(allValues.OrderByDescending(n => n.Item2).ToList());
+                DualEffectiveness = new EffectivenessDTO(allValues.OrderByDescending(n => n.Item2).ToList());
             }
             else
             {

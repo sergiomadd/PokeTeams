@@ -1,11 +1,9 @@
-﻿using api.Models.DBPoketeamModels.Pokemon;
-
-namespace api.Models.DTOs.PokemonDTOs
+﻿namespace api.Models.DTOs.PokemonDTOs
 {
     public class MoveDTO
     {
         public string? Name { get; set; }
-        public PokeType? PokeType { get; set; }
+        public PokeTypeDTO? PokeType { get; set; }
         public MoveDamageClass? DamageClass { get; set; }
         public int? Power { get; set; }
         public int? Pp { get; set; }

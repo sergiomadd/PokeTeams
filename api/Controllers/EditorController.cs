@@ -1,4 +1,4 @@
-﻿using api.Models.DBPoketeamModels.Pokemon;
+﻿using api.Models.DTOs;
 using api.Services.PokedexService;
 using api.Services.TeamService;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +16,7 @@ namespace api.Controllers
         }
         
         [HttpGet(Name = "GetEditorOptionsData")]
-        public async Task<ActionResult<EditorData>> GetEditorOptionsData()
+        public async Task<ActionResult<EditorDataDTO>> GetEditorOptionsData()
         {
             var editorData = await _teamService.GetEditorData();
             if (editorData == null)

@@ -1,5 +1,5 @@
 ﻿using api.Data;
-using api.Models.DBPoketeamModels.Pokemon;
+using api.Models.DTOs.PokemonDTOs;
 using api.Services.PokedexService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +18,7 @@ namespace api.Controllers
         }
 
         [HttpGet("name/{itemName}", Name = "GetItemByName")]
-        public async Task<ActionResult<Item>> GetItemByName(string itemName)
+        public async Task<ActionResult<ItemDTO>> GetItemByName(string itemName)
         {
             var item = await _pokemonService.GetItemByName(itemName);
             if (item == null)
@@ -29,7 +29,7 @@ namespace api.Controllers
         }
 
         [HttpGet("identifier/{itemIdentifier}", Name = "GetItemByIdentifier")]
-        public async Task<ActionResult<Item>> GetItemByIdentifier(string itemIdentifier)
+        public async Task<ActionResult<ItemDTO>> GetItemByIdentifier(string itemIdentifier)
         {
             var item = await _pokemonService.GetItemByIdentifier(itemIdentifier);
             if (item == null)

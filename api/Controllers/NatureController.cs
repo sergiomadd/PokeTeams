@@ -1,5 +1,5 @@
 ﻿using api.Models.DBModels;
-using api.Models.DBPoketeamModels.Pokemon;
+using api.Models.DTOs.PokemonDTOs;
 using api.Services.PokedexService;
 using api.Util;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +18,7 @@ namespace api.Controllers
         }
 
         [HttpGet("name/{natureName}", Name = "GetNatureByName")]
-        public async Task<ActionResult<Nature>> GetNatureByName(string natureName)
+        public async Task<ActionResult<NatureDTO>> GetNatureByName(string natureName)
         {
             var nature = await _pokemonService.GetNatureByName(natureName);
             if (nature == null)
@@ -29,7 +29,7 @@ namespace api.Controllers
         }
 
         [HttpGet("identifier/{natureIdentifier}", Name = "GetNatureByIdentifier")]
-        public async Task<ActionResult<Nature>> GetNatureByIdentifier(string natureIdentifier)
+        public async Task<ActionResult<NatureDTO>> GetNatureByIdentifier(string natureIdentifier)
         {
             var nature = await _pokemonService.GetNatureByIdentifier(natureIdentifier);
             if (nature == null)

@@ -1,4 +1,4 @@
-﻿using api.Models.DBPoketeamModels.Pokemon;
+﻿using api.Models.DTOs.PokemonDTOs;
 using api.Services.PokedexService;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
@@ -16,7 +16,7 @@ namespace api.Controllers
         }
 
         [HttpGet("{typeName}", Name = "GetTypeByIdentifier")]
-        public async Task<ActionResult<PokeType>> GetTypeByIdentifier(string typeName)
+        public async Task<ActionResult<PokeTypeDTO>> GetTypeByIdentifier(string typeName)
         {
             var type = await _pokemonService.GetTypeByIdentifier(typeName);
             if (type == null)
@@ -27,7 +27,7 @@ namespace api.Controllers
         }
 
         [HttpGet("teratype/{typeName}", Name = "GetTeraTypeByIdentifier")]
-        public async Task<ActionResult<PokeType>> GetTeraTypeByIdentifier(string typeName)
+        public async Task<ActionResult<PokeTypeDTO>> GetTeraTypeByIdentifier(string typeName)
         {
             var type = await _pokemonService.GetTeraTypeByIdentifier(typeName);
             if (type == null)
