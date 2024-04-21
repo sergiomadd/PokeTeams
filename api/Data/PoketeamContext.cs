@@ -17,7 +17,7 @@ namespace api.Data
         public DbSet<User> User { get; set; }
         public DbSet<Tag> Tag { get; set; }
         public DbSet<TeamTag> TeamTag { get; set; }
-
+        public DbSet<Pokemon> Pokemon { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -27,6 +27,11 @@ namespace api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Team>()
+                .HasMany(t => t.Pokemons)
+                .WithOne(p => p.Team)
+                .HasForeignKey(p => p.TeamId);
 
             modelBuilder.Entity<Team>()
                 .HasMany(t => t.Tags)

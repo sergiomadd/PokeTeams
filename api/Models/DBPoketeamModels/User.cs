@@ -1,5 +1,4 @@
-﻿using api.Models.DTOs;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace api.Models.DBPoketeamModels

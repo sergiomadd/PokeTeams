@@ -8,7 +8,7 @@ namespace api.Models.DBPoketeamModels
         [Key]
         [StringLength(10)]
         public string Id { get; set; }
-        public string Pokemons { get; set; }
+        public virtual ICollection<Pokemon> Pokemons { get; set; }
         public string? Options { get; set; }
         public virtual User? Player { get; set; }
         [StringLength(450)]
