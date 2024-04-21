@@ -2,6 +2,7 @@
 {
     public class MoveDTO
     {
+        public string Identifier { get; set; }
         public string? Name { get; set; }
         public PokeTypeDTO? PokeType { get; set; }
         public MoveDamageClass? DamageClass { get; set; }

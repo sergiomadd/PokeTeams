@@ -1,5 +1,5 @@
-﻿using api.Models.DBPoketeamModels;
-using api.Models.DTOs;
+﻿using api.DTOs;
+using api.Models.DBPoketeamModels;
 using Microsoft.AspNetCore.Identity;
 
 namespace api.Services.TeamService
@@ -9,7 +9,7 @@ namespace api.Services.TeamService
         
         public Task<TeamDTO?> GetTeam(string id);
         public Task<Team?> SaveTeam(TeamDTO team, string loggedUserName);
-        public Task<EditorData?> GetEditorData();
+        public Task<EditorDataDTO?> GetEditorData();
         public Task<bool> DeleteTeam(string teamId);
         public Task<bool> DeleteUserTeams(User user);
         public Task<UserDTO> BuildUserDTO(User user, bool logged);

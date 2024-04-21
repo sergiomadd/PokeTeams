@@ -268,6 +268,7 @@ namespace api.Services.PokedexService
 
                     move = new MoveDTO
                     {
+                        Identifier = moves.identifier,
                         Name = name,
                         PokeType = new PokeTypeDTO(type.identifier, typeName.name, GetTypeEffectivenessAttack((int)moves.type_id).Result, GetTypeEffectivenessDefense((int)moves.type_id).Result),
                         DamageClass = new MoveDamageClass

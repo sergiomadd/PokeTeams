@@ -1,4 +1,5 @@
-﻿using api.Models.DBPoketeamModels;
+﻿using api.DTOs.PokemonDTOs;
+using api.Models.DBPoketeamModels;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Text.Json;
@@ -8,7 +9,7 @@ namespace api.DTOs
     public class TeamDTO
     {
         public string ID { get; set; }
-        public List<Pokemon> Pokemons { get; set; }
+        public List<PokemonDTO> Pokemons { get; set; }
         public EditorOptionsDTO? Options { get; set; }
         public string? Player { get; set; }
         public string? Tournament { get; set; }
@@ -26,7 +27,7 @@ namespace api.DTOs
 
         public TeamDTO(
             string id,
-            List<Pokemon> pokemons,
+            List<PokemonDTO> pokemons,
             string options,
             string uploaded,
             string tournament,
