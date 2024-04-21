@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using Microsoft.AspNetCore.Components.Forms;
+using api.Services.PokedexService;
 
 namespace api.Services.TeamService
 {
@@ -16,13 +17,16 @@ namespace api.Services.TeamService
         private readonly PokeTeamContext _pokeTeamContext;
         private readonly LocalContext _localContext;
         private readonly UserManager<User> _userManager;
+        private readonly IPokedexService _pokedexService;
+
 
         private static Random random = new Random();
 
-        public PokeTeamService(PokeTeamContext dataContext, LocalContext localContext)
+        public PokeTeamService(PokeTeamContext dataContext, LocalContext localContext, IPokedexService pokedexService)
         {
             _pokeTeamContext = dataContext;
             _localContext = localContext;
+            _pokedexService = pokedexService;
         }
         
         public async Task<List<UserQueryDTO>> QueryUsers(string key)
@@ -51,15 +55,13 @@ namespace api.Services.TeamService
                 Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
                 if (team != null)
                 {
-                    //List<Pokemon> pokemons = JsonSerializer.Deserialize<List<Pokemon>>(team.Pokemons, new JsonSerializerOptions { IncludeFields = false });
                     List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(id)).ToList();
                     List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
 
                     foreach (Pokemon pokemon in pokemons)
                     {
-                        //pokemonDTOs.Add(BuildPokemonDTO(pokemon));
+                        pokemonDTOs.Add(await _pokedexService.BuildPokemonDTO(pokemon));
                     }
-
 
                     string playerUserName = "Unkown";
                     if (team.PlayerId != null)
@@ -134,7 +136,6 @@ namespace api.Services.TeamService
                 
                 JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
                 string optionsString = JsonSerializer.Serialize(inputTeam.Options, options);
-                //string pokemonsString = JsonSerializer.Serialize(inputTeam.Pokemons, options);
 
                 User player = null;
                 Printer.Log("logged username", loggedUserName);

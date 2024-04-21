@@ -13,6 +13,8 @@ using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using api.Models.DBPokedexModels;
 using api.DTOs.PokemonDTOs;
+using api.Models.DBPoketeamModels;
+using System.Text.Json;
 
 namespace api.Services.PokedexService
 {
@@ -25,6 +27,40 @@ namespace api.Services.PokedexService
         {
             _pokedexContext = pokedexContext;
             _localContext = localContext;
+        }
+
+        public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon)
+        { 
+            PokemonDataDTO pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1);
+            List<MoveDTO> moves = new List<MoveDTO>
+            {
+                await GetMoveByIdentifier(pokemon.Move1Identifier),
+                await GetMoveByIdentifier(pokemon.Move2Identifier),
+                await GetMoveByIdentifier(pokemon.Move3Identifier),
+                await GetMoveByIdentifier(pokemon.Move4Identifier)
+            };
+
+            return new PokemonDTO
+            {
+                Name = pokemonData.Name,
+                Nickname = pokemon.Nickname,
+                DexNumber = pokemonData.DexNumber,
+                PreEvolution = pokemonData.PreEvolution,
+                Evolutions = pokemonData.Evolutions,
+                Types = pokemonData.Types,
+                TeraType = await GetTeraTypeByIdentifier(pokemon.TeraTypeIdentifier),
+                Item = await GetItemByIdentifier(pokemon.ItemIdentifier),
+                Ability = await GetAbilityByIdentifier(pokemon.AbilityIdentifier),
+                Nature = await GetNatureByIdentifier(pokemon.NatureIdentifier),
+                Moves = moves,
+                Stats = pokemonData.Stats,
+                ivs = pokemon.ivs != null ? JsonSerializer.Deserialize<List<StatDTO?>>(pokemon.ivs, new JsonSerializerOptions { IncludeFields = false }) : null,
+                evs = pokemon.evs != null ? JsonSerializer.Deserialize<List<StatDTO?>>(pokemon.evs, new JsonSerializerOptions { IncludeFields = false }) : null,
+                Level = pokemon.Level,
+                Shiny = pokemon.Shiny,
+                Gender = pokemon.Gender,
+                Sprites = pokemonData.Sprites
+            };
         }
 
         public async Task<PokemonDataDTO?> GetPokemonById(int id)
@@ -235,6 +271,23 @@ namespace api.Services.PokedexService
                 }
             }
             return nature;
+        }
+
+
+
+        public async Task<MoveDTO?> GetMoveByIdentifier(string identifier)
+        {
+            Moves? moves = await _pokedexContext.Moves.FirstOrDefaultAsync(m => m.identifier.Equals(identifier));
+            if(moves != null)
+            {
+                Move_names? moveNames = await _pokedexContext.Move_names.FirstOrDefaultAsync(m => m.move_id == moves.id && m.local_language_id == 9);
+                if (moveNames != null)
+                {
+                    return await GetMoveByName(moveNames.name);
+                }
+
+            }
+            return null;
         }
 
         public async Task<MoveDTO?> GetMoveByName(string name)
