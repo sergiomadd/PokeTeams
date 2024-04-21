@@ -1,11 +1,13 @@
 ﻿using api.Data;
 using api.Models.DBPoketeamModels;
-using api.Models.DTOs;
 using System.Text.Json;
 using api.Util;
 using System.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using api.DTOs;
+using api.DTOs.PokemonDTOs;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace api.Services.TeamService
 {
@@ -49,7 +51,16 @@ namespace api.Services.TeamService
                 Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
                 if (team != null)
                 {
-                    List<Pokemon> pokemons = JsonSerializer.Deserialize<List<Pokemon>>(team.Pokemons, new JsonSerializerOptions { IncludeFields = false });
+                    //List<Pokemon> pokemons = JsonSerializer.Deserialize<List<Pokemon>>(team.Pokemons, new JsonSerializerOptions { IncludeFields = false });
+                    List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(id)).ToList();
+                    List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
+
+                    foreach (Pokemon pokemon in pokemons)
+                    {
+                        //pokemonDTOs.Add(BuildPokemonDTO(pokemon));
+                    }
+
+
                     string playerUserName = "Unkown";
                     if (team.PlayerId != null)
                     {
@@ -81,7 +92,7 @@ namespace api.Services.TeamService
                     }
                     teamDTO = new TeamDTO(
                         id,
-                        pokemons,
+                        pokemonDTOs,
                         team.Options,
                         playerUserName,
                         team.Tournament,
@@ -115,13 +126,18 @@ namespace api.Services.TeamService
                     teamId = GenerateId(10);
                     team = await _pokeTeamContext.Team.FindAsync(teamId);
                 }
-
+                List<Pokemon> pokemons = new List<Pokemon>();
+                foreach(PokemonDTO pokemonDTO in inputTeam.Pokemons)
+                {
+                    pokemons.Add(BreakPokemonDTO(pokemonDTO, teamId));
+                }
+                
                 JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
                 string optionsString = JsonSerializer.Serialize(inputTeam.Options, options);
-                string pokemonsString = JsonSerializer.Serialize(inputTeam.Pokemons, options);
+                //string pokemonsString = JsonSerializer.Serialize(inputTeam.Pokemons, options);
 
                 User player = null;
-
+                Printer.Log("logged username", loggedUserName);
                 if (loggedUserName == inputTeam.Player)
                 {
                     player = await GetUserByUserName(inputTeam.Player);
@@ -146,11 +162,11 @@ namespace api.Services.TeamService
                         tags.Add(tag);
                     }
                 }
-
+                
                 newTeam = new Team
                 {
                     Id = teamId,
-                    Pokemons = pokemonsString,
+                    Pokemons = pokemons,
                     Options = optionsString,
                     PlayerId = player != null ? player.Id : null,
                     AnonPlayer = player == null ? inputTeam.Player : null,
@@ -169,6 +185,32 @@ namespace api.Services.TeamService
                 return null;
             }
             return newTeam;
+        }
+
+        public Pokemon BreakPokemonDTO(PokemonDTO pokemonDTO, string teamId)
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
+            return new Pokemon
+            {
+                TeamId = teamId,
+                DexNumber = pokemonDTO.DexNumber,
+                Nickname = pokemonDTO.Nickname,
+                Type1Identifier = pokemonDTO.Types.Type1?.Identifier,
+                Type2Identifier = pokemonDTO.Types.Type2?.Identifier,
+                TeraTypeIdentifier = pokemonDTO.TeraType?.Identifier,
+                ItemIdentifier = pokemonDTO.Item?.Identifier,
+                AbilityIdentifier = pokemonDTO.Ability?.Identifier,
+                NatureIdentifier = pokemonDTO.Nature?.Identifier,
+                Move1Identifier = pokemonDTO.Moves[0]?.Identifier,
+                Move2Identifier = pokemonDTO.Moves[1]?.Identifier,
+                Move3Identifier = pokemonDTO.Moves[2]?.Identifier,
+                Move4Identifier = pokemonDTO.Moves[3]?.Identifier,
+                ivs = pokemonDTO.ivs != null ? JsonSerializer.Serialize(pokemonDTO.ivs, options) : null,
+                evs = pokemonDTO.evs != null ? JsonSerializer.Serialize(pokemonDTO.evs, options) : null,
+                Level = pokemonDTO.Level,
+                Shiny = pokemonDTO.Shiny,
+                Gender = pokemonDTO.Gender
+            };
         }
 
         public async Task<bool> DeleteTeam(string teamId)
@@ -202,9 +244,9 @@ namespace api.Services.TeamService
             return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public async Task<EditorData?> GetEditorData()
+        public async Task<EditorDataDTO?> GetEditorData()
         {
-            EditorData editorData = _localContext.GetEditorData();
+            EditorDataDTO editorData = _localContext.GetEditorData();
             
             return editorData;
         }
