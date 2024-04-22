@@ -21,7 +21,18 @@ namespace api.Controllers
             var type = await _pokemonService.GetTypeWithEffectivenessByIdentifier(typeName);
             if (type == null)
             {
-                return BadRequest("Yype not found.");
+                return BadRequest("Type not found.");
+            }
+            return Ok(type);
+        }
+
+        [HttpGet("teratype/{typeName}", Name = "GetTeraTypeByIdentifier")]
+        public async Task<ActionResult<PokeTypeWithEffectivenessDTO>> GetTeraTypeByIdentifier(string typeName)
+        {
+            var type = await _pokemonService.GetTypeWithEffectivenessByIdentifier(typeName, true);
+            if (type == null)
+            {
+                return BadRequest("Type not found.");
             }
             return Ok(type);
         }
