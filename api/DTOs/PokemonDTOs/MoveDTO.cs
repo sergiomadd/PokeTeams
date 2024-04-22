@@ -4,7 +4,7 @@
     {
         public string Identifier { get; set; }
         public string? Name { get; set; }
-        public PokeTypeDTO? PokeType { get; set; }
+        public PokeTypeWithEffectivenessDTO? PokeType { get; set; }
         public MoveDamageClass? DamageClass { get; set; }
         public int? Power { get; set; }
         public int? Pp { get; set; }

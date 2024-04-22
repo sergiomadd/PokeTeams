@@ -1,16 +1,21 @@
 ﻿namespace api.DTOs.PokemonDTOs
 {
-    public class PokeTypeDTO
+    public class PokeTypeWithEffectivenessDTO
     {
         public string Identifier { get; set; }
         public string Name { get; set; }
         public string IconPath { get; set; }
+        public EffectivenessDTO? EffectivenessAttack { get; set; }
+        public EffectivenessDTO? EffectivenessDefense { get; set; }
         public bool Teratype { get; set; }
 
-        public PokeTypeDTO(string identifier, string name, bool teraType = false)
+
+        public PokeTypeWithEffectivenessDTO(string identifier, string name, EffectivenessDTO effectivenessAttack = null, EffectivenessDTO effectivenessDefense = null, bool teraType = false)
         {
             Identifier = identifier;
             Name = name;
+            EffectivenessAttack = effectivenessAttack;
+            EffectivenessDefense = effectivenessDefense;
             Teratype = teraType ? teraType : false;
             var pathStart = "https://localhost:7134/images/sprites/types/generation-viii/";
             if (teraType)
@@ -22,3 +27,4 @@
         }
     }
 }
+

@@ -7,11 +7,11 @@ namespace api.DTOs.PokemonDTOs
         public int DexNumber { get; set; }
         public PokemonDataDTO? PreEvolution { get; set; }
         public List<PokemonDataDTO?>? Evolutions { get; set; }
-        public PokeTypesDTO? Types { get; set; }
+        public PokeTypesWithEffectivenessDTO? Types { get; set; }
         public List<StatDTO?> Stats { get; set; }
         public List<SpriteDTO?> Sprites { get; set; }
 
-        public PokemonDataDTO(string? name, int dexNumber, PokeTypesDTO types, List<StatDTO?> stats, List<SpriteDTO?> sprites, PokemonDataDTO? preEvolution = null, List<PokemonDataDTO?>? evolutions = null)
+        public PokemonDataDTO(string? name, int dexNumber, PokeTypesWithEffectivenessDTO types, List<StatDTO?> stats, List<SpriteDTO?> sprites, PokemonDataDTO? preEvolution = null, List<PokemonDataDTO?>? evolutions = null)
         {
             Name = name;
             DexNumber = dexNumber;

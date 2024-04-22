@@ -9,8 +9,8 @@ namespace api.DTOs.PokemonDTOs
         public int? DexNumber { get; set; }
         public PokemonDataDTO? PreEvolution { get; set; }
         public List<PokemonDataDTO?>? Evolutions { get; set; }
-        public PokeTypesDTO? Types { get; set; }
-        public PokeTypeDTO? TeraType { get; set; }
+        public PokeTypesWithEffectivenessDTO? Types { get; set; }
+        public PokeTypeWithEffectivenessDTO? TeraType { get; set; }
         public ItemDTO? Item { get; set; }
         public AbilityDTO? Ability { get; set; }
         public NatureDTO? Nature { get; set; }
