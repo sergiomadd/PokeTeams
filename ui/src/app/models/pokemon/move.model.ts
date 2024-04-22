@@ -1,10 +1,11 @@
-import { defaultType, Type } from "./type.model"
+import { defaultTypeWithEffectiveness, TypeWithEffectiveness } from "./typewitheffectiveness.model"
 
 
 export interface Move
 {
+  identifier: string,
   name: string,
-  pokeType?: Type,
+  pokeType?: TypeWithEffectiveness,
   damageClass?: 
   {
     name: string,
@@ -53,8 +54,9 @@ export interface Move
 
 export const defaultMove: Move = 
 {
+  identifier: "error",
   name: "Not Found",
-  pokeType: defaultType,
+  pokeType: defaultTypeWithEffectiveness,
   damageClass: 
   {
     name: "",

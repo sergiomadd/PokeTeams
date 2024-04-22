@@ -4,8 +4,8 @@ import { Move } from "./move.model"
 import { Nature } from "./nature.model"
 import { Sprite } from "./sprite.model"
 import { Stat } from "./stat.model"
-import { Type } from "./type.model"
-import { Types } from "./types.model"
+import { TypesWithEffectiveness } from "./typeswitheffectiveness.model"
+import { TypeWithEffectiveness } from "./typewitheffectiveness.model"
 
 
 export interface Pokemon 
@@ -15,8 +15,8 @@ export interface Pokemon
 	dexNumber?: number,
 	preEvolution?: Pokemon,
 	evolutions?: Pokemon[],
-	types?: Types,
-	teraType?: Type,
+	types?: TypesWithEffectiveness,
+	teraType?: TypeWithEffectiveness,
 	item?: Item,
 	ability?: Ability,
 	nature?: Nature,

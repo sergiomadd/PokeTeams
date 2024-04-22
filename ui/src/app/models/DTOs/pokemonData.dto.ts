@@ -1,7 +1,7 @@
 import { Pokemon } from "../pokemon/pokemon.model"
 import { Sprite } from "../pokemon/sprite.model"
 import { Stat } from "../pokemon/stat.model"
-import { defaultTypes, Types } from "../pokemon/types.model"
+import { defaultTypesWithEffectiveness, TypesWithEffectiveness } from "../pokemon/typeswitheffectiveness.model"
 
 export interface PokemonData
 {
@@ -9,7 +9,7 @@ export interface PokemonData
   dexNumber?: number,
   preEvolution?: Pokemon,
 	evolutions?: Pokemon[],
-  types?: Types,
+  types?: TypesWithEffectiveness,
   stats?: Stat[],
   sprites?: Sprite[]
 }
@@ -20,7 +20,7 @@ export const defaultPokemonData: PokemonData =
   dexNumber: 0,
   preEvolution: undefined,
 	evolutions: [],
-  types: defaultTypes,
+  types: defaultTypesWithEffectiveness,
   stats: [],
   sprites: undefined
 }
