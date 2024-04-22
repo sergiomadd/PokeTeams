@@ -16,8 +16,7 @@ namespace api.Services.PokedexService
         Task<NatureDTO?> GetNatureByName(string name);
         Task<NatureDTO?> GetNatureByIdentifier(string identifier);
         Task<MoveDTO?> GetMoveByName(string name);
-        Task<PokeTypeDTO?> GetTypeByIdentifier(string identifier);
-        Task<PokeTypeDTO?> GetTeraTypeByIdentifier(string identifier);
+        Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessByIdentifier(string identifier, bool teraType = false);
         Task<string?> GetStatNameByIdentifier(string identifier);
 
     }

@@ -48,7 +48,7 @@ namespace api.Services.PokedexService
                 PreEvolution = pokemonData.PreEvolution,
                 Evolutions = pokemonData.Evolutions,
                 Types = pokemonData.Types,
-                TeraType = await GetTeraTypeByIdentifier(pokemon.TeraTypeIdentifier),
+                TeraType = await GetTypeWithEffectivenessByIdentifier(pokemon.TeraTypeIdentifier, true),
                 Item = await GetItemByIdentifier(pokemon.ItemIdentifier),
                 Ability = await GetAbilityByIdentifier(pokemon.AbilityIdentifier),
                 Nature = await GetNatureByIdentifier(pokemon.NatureIdentifier),
@@ -68,7 +68,7 @@ namespace api.Services.PokedexService
             PokemonDataDTO pokemonData = new PokemonDataDTO(
                 GetPokemonName(id),
                 id,
-                GetPokemonTypes(id).Result,
+                GetPokemonTypesWithEffectiveness(id).Result,
                 GetPokemonStats(id).Result,
                 _localContext.GetSprites(id),
                 preEvolution: GetPokemonPreEvolution(id),
@@ -114,7 +114,29 @@ namespace api.Services.PokedexService
             {
                 type2 = GetTypeById(pokemonType2.type_id).Result;
             }
-            PokeTypesDTO pokeTypes = new PokeTypesDTO(type1, type2);
+            PokeTypesDTO pokeTypes = new PokeTypesDTO
+            {
+                Type1 = type1,
+                Type2 = type2
+            };
+            return pokeTypes;
+        }
+
+        private async Task<PokeTypesWithEffectivenessDTO> GetPokemonTypesWithEffectiveness(int id)
+        {
+            PokeTypeWithEffectivenessDTO? type1 = null;
+            Pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FindAsync(id, 1);
+            if (pokemonType1 != null)
+            {
+                type1 = GetTypeWithEffectivenessById(pokemonType1.type_id).Result;
+            }
+            PokeTypeWithEffectivenessDTO? type2 = null;
+            Pokemon_types? pokemonType2 = await _pokedexContext.Pokemon_types.FindAsync(id, 2);
+            if (pokemonType2 != null)
+            {
+                type2 = GetTypeWithEffectivenessById(pokemonType2.type_id).Result;
+            }
+            PokeTypesWithEffectivenessDTO pokeTypes = new PokeTypesWithEffectivenessDTO(type1, type2);
             return pokeTypes;
         }
 
@@ -140,7 +162,7 @@ namespace api.Services.PokedexService
             if (pokemonSpeciesPreEvolution != null && pokemonSpeciesPreEvolution.evolves_from_species_id != null)
             {
                 int newID = pokemonSpeciesPreEvolution.evolves_from_species_id ?? 0;
-                return new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), preEvolution: GetPokemonPreEvolution(newID));
+                return new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypesWithEffectiveness(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), preEvolution: GetPokemonPreEvolution(newID));
             }
             return null;
         }
@@ -156,7 +178,7 @@ namespace api.Services.PokedexService
                     if (pokemonSpeciesEvolution != null)
                     {
                         int newID = pokemonSpeciesEvolution.id;
-                        evolutions.Add(new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypes(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), evolutions: GetPokemonEvolutions(newID)));
+                        evolutions.Add(new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypesWithEffectiveness(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), evolutions: GetPokemonEvolutions(newID)));
                     }
                 }
             }
@@ -323,7 +345,7 @@ namespace api.Services.PokedexService
                     {
                         Identifier = moves.identifier,
                         Name = name,
-                        PokeType = new PokeTypeDTO(type.identifier, typeName.name, GetTypeEffectivenessAttack((int)moves.type_id).Result, GetTypeEffectivenessDefense((int)moves.type_id).Result),
+                        PokeType = new PokeTypeWithEffectivenessDTO(type.identifier, typeName.name, GetTypeEffectivenessAttack((int)moves.type_id).Result, GetTypeEffectivenessDefense((int)moves.type_id).Result),
                         DamageClass = new MoveDamageClass
                         {
                             Name = damageClass.name,
@@ -389,14 +411,30 @@ namespace api.Services.PokedexService
                 if (targetTypeName != null)
                 {
 
-                    pokeType = new PokeTypeDTO(targetType.identifier, targetTypeName.name,
+                    pokeType = new PokeTypeDTO(targetType.identifier, targetTypeName.name);
+                }
+            }
+            return pokeType;
+        }
+
+        private async Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessById(int id)
+        {
+            PokeTypeWithEffectivenessDTO? pokeType = null;
+            Types? targetType = await _pokedexContext.Types.FirstOrDefaultAsync(t => t.id == id);
+            if (targetType != null)
+            {
+                Type_names? targetTypeName = await _pokedexContext.Type_names.FindAsync(targetType.id, 9);
+                if (targetTypeName != null)
+                {
+
+                    pokeType = new PokeTypeWithEffectivenessDTO(targetType.identifier, targetTypeName.name,
                         GetTypeEffectivenessAttack(targetType.id).Result, GetTypeEffectivenessDefense(targetType.id).Result);
                 }
             }
             return pokeType;
         }
 
-        public async Task<PokeTypeDTO?> GetTypeByIdentifier(string identifier)
+        public async Task<PokeTypeDTO?> GetTypeByIdentifier(string identifier, bool teraType)
         {
             PokeTypeDTO? pokeType = null;
             Types? targetType = await _pokedexContext.Types.FirstOrDefaultAsync(t => t.identifier == identifier);
@@ -406,16 +444,15 @@ namespace api.Services.PokedexService
                 Type_names? targetTypeName = await _pokedexContext.Type_names.FindAsync(targetType.id, 9);
                 if (targetTypeName != null)
                 {
-                    pokeType = new PokeTypeDTO(targetType.identifier, targetTypeName.name,
-                        GetTypeEffectivenessAttack(targetType.id).Result, GetTypeEffectivenessDefense(targetType.id).Result);
+                    pokeType = new PokeTypeDTO(targetType.identifier, targetTypeName.name, teraType);
                 }
             }
             return pokeType;
         }
 
-        public async Task<PokeTypeDTO?> GetTeraTypeByIdentifier(string identifier)
+        public async Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessByIdentifier(string identifier, bool teraType = false)
         {
-            PokeTypeDTO? pokeType = null;
+            PokeTypeWithEffectivenessDTO? pokeType = null;
             Types? targetType = await _pokedexContext.Types.FirstOrDefaultAsync(t => t.identifier == identifier);
 
             if (targetType != null)
@@ -423,8 +460,8 @@ namespace api.Services.PokedexService
                 Type_names? targetTypeName = await _pokedexContext.Type_names.FindAsync(targetType.id, 9);
                 if (targetTypeName != null)
                 {
-                    pokeType = new PokeTypeDTO(targetType.identifier, targetTypeName.name,
-                        GetTypeEffectivenessAttack(targetType.id).Result, GetTypeEffectivenessDefense(targetType.id).Result, true);
+                    pokeType = new PokeTypeWithEffectivenessDTO(targetType.identifier, targetTypeName.name,
+                        GetTypeEffectivenessAttack(targetType.id).Result, GetTypeEffectivenessDefense(targetType.id).Result, teraType);
                 }
             }
             return pokeType;

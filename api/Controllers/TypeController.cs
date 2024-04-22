@@ -16,20 +16,9 @@ namespace api.Controllers
         }
 
         [HttpGet("{typeName}", Name = "GetTypeByIdentifier")]
-        public async Task<ActionResult<PokeTypeDTO>> GetTypeByIdentifier(string typeName)
+        public async Task<ActionResult<PokeTypeWithEffectivenessDTO>> GetTypeByIdentifier(string typeName)
         {
-            var type = await _pokemonService.GetTypeByIdentifier(typeName);
-            if (type == null)
-            {
-                return BadRequest("Yype not found.");
-            }
-            return Ok(type);
-        }
-
-        [HttpGet("teratype/{typeName}", Name = "GetTeraTypeByIdentifier")]
-        public async Task<ActionResult<PokeTypeDTO>> GetTeraTypeByIdentifier(string typeName)
-        {
-            var type = await _pokemonService.GetTeraTypeByIdentifier(typeName);
+            var type = await _pokemonService.GetTypeWithEffectivenessByIdentifier(typeName);
             if (type == null)
             {
                 return BadRequest("Yype not found.");
