@@ -31,7 +31,7 @@ namespace api.Services.PokedexService
         }
 
         public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon)
-        { 
+        {
             PokemonDataDTO pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1);
             List<MoveDTO> moves = new List<MoveDTO>
             {

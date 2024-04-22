@@ -79,5 +79,43 @@ namespace api.Controllers
             }
             return BadRequest();
         }
+
+        [HttpGet, Route("query/pokemon")]
+        public async Task<ActionResult<List<TeamPreviewDTO>>> QueryTeamsByPokemonName(string key)
+        {
+            Printer.Log($"Quering team");
+            List<TeamPreviewDTO> teams = await _teamService.QueryTeamsByPokemonName(key);
+            if (teams == null)
+            {
+                return NotFound("Couldn't find teams");
+            }
+            return Ok(teams);
+        }
+
+        [HttpGet, Route("query/move")]
+        public async Task<ActionResult<List<TeamPreviewDTO>>> QueryTeamsByMove(string key)
+        {
+            Printer.Log($"Quering team");
+            List<TeamPreviewDTO> teams = await _teamService.QueryTeamsByMoveIdentifier(key);
+
+            if (teams == null)
+            {
+                return NotFound("Couldn't find teams");
+            }
+            return Ok(teams);
+        }
+
+        [HttpGet, Route("query/tournament")]
+        public async Task<ActionResult<List<TeamPreviewDTO>>> QueryTeamsByTournament(string key)
+        {
+            Printer.Log($"Quering team");
+            //List<TeamPreviewDTO> teams = await _teamService.QueryTeamsByTournament(key);
+            List<TeamPreviewDTO> teams = null;
+            if (teams == null)
+            {
+                return NotFound("Couldn't find teams");
+            }
+            return Ok(teams);
+        }
     }
 }

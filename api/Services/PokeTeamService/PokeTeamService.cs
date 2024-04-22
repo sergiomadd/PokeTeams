@@ -9,6 +9,8 @@ using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using Microsoft.AspNetCore.Components.Forms;
 using api.Services.PokedexService;
+using api.Models.DBPokedexModels;
+using Microsoft.Extensions.Options;
 
 namespace api.Services.TeamService
 {
@@ -28,7 +30,7 @@ namespace api.Services.TeamService
             _localContext = localContext;
             _pokedexService = pokedexService;
         }
-        
+
         public async Task<List<UserQueryDTO>> QueryUsers(string key)
         {
             List<UserQueryDTO> queriedUsers = new List<UserQueryDTO>();
@@ -54,10 +56,10 @@ namespace api.Services.TeamService
 
             EditorOptionsDTO editorOptions = JsonSerializer.Deserialize<EditorOptionsDTO?>(team.Options, new JsonSerializerOptions { IncludeFields = false });
 
-                    foreach (Pokemon pokemon in pokemons)
-                    {
-                        pokemonDTOs.Add(await _pokedexService.BuildPokemonDTO(pokemon));
-                    }
+            foreach (Pokemon pokemon in pokemons)
+            {
+                pokemonPreviewDTOs.Add(await _pokedexService.BuildPokemonPreviewDTO(pokemon, editorOptions));
+            }
 
             teamPreviewDTO = new TeamPreviewDTO
             {
@@ -77,38 +79,38 @@ namespace api.Services.TeamService
 
         private async Task<string> GetTeamPlayer(Team team)
         {
-                    string playerUserName = "Unkown";
-                    if (team.PlayerId != null)
-                    {
-                        User player = await GetUserById(team.PlayerId);
-                        playerUserName = player.UserName;
-                    }
-                    else if (team.AnonPlayer != null)
-                    {
-                        playerUserName = team.AnonPlayer;
-                    }
+            string playerUserName = "Unkown";
+            if (team.PlayerId != null)
+            {
+                User player = await GetUserById(team.PlayerId);
+                playerUserName = player.UserName;
+            }
+            else if (team.AnonPlayer != null)
+            {
+                playerUserName = team.AnonPlayer;
+            }
             return playerUserName;
         }
-                    
+
         private async Task<List<TagDTO>> GetTeamTags(Team team)
         {
-                    List<TagDTO> tags = new List<TagDTO>();
-                    List<TeamTag> teamTags = _pokeTeamContext.TeamTag.Where(t => t.TeamsId == id).ToList();
-                    
-                    foreach(TeamTag teamTag in teamTags)
-                    {                        
-                        Tag tag = _pokeTeamContext.Tag.FirstOrDefault(t => t.Identifier == teamTag.TagsIdentifier);
-                        if (tag != null)
-                        {
-                            TagDTO tagDTO = new TagDTO
-                            {
-                                Identifier = tag.Identifier,
-                                Name = tag.Name,
-                                Description = tag.Description,
-                                Color = tag.Color
-                            };
-                            tags.Add(tagDTO);
-                        }   
+            List<TagDTO> tags = new List<TagDTO>();
+            List<TeamTag> teamTags = _pokeTeamContext.TeamTag.Where(t => t.TeamsId == team.Id).ToList();
+
+            foreach (TeamTag teamTag in teamTags)
+            {
+                Tag tag = _pokeTeamContext.Tag.FirstOrDefault(t => t.Identifier == teamTag.TagsIdentifier);
+                if (tag != null)
+                {
+                    TagDTO tagDTO = new TagDTO
+                    {
+                        Identifier = tag.Identifier,
+                        Name = tag.Name,
+                        Description = tag.Description,
+                        Color = tag.Color
+                    };
+                    tags.Add(tagDTO);
+                }
             }
             return tags;
         }
@@ -124,32 +126,33 @@ namespace api.Services.TeamService
                 foreach (Pokemon pokemon in pokemons)
                 {
                     pokemonDTOs.Add(await _pokedexService.BuildPokemonDTO(pokemon));
-                    }
-
-                    teamDTO = new TeamDTO(
-                    team.Id,
-                        pokemonDTOs,
-                        team.Options,
-                    await GetTeamPlayer(team),
-                        team.Tournament,
-                        team.Regulation,
-                        team.ViewCount,
-                        team.DateCreated.ToShortDateString(),
-                        team.Visibility,
-                    await GetTeamTags(team)
-                        );
                 }
-            return teamDTO;
+
+                teamDTO = new TeamDTO(
+                    team.Id,
+                    pokemonDTOs,
+                    team.Options,
+                    await GetTeamPlayer(team),
+                    team.Tournament,
+                    team.Regulation,
+                    team.ViewCount,
+                    team.DateCreated.ToShortDateString(),
+                    team.Visibility,
+                    await GetTeamTags(team)
+                    );
             }
+            return teamDTO;
+        }
 
         public async Task<TeamDTO?> GetTeam(string id)
         {
-            Printer.Log("Gettting team: ", id);
             TeamDTO teamDTO = null;
             try
             {
                 Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
-                return await BuildTeamDTO(team);
+                teamDTO = await BuildTeamDTO(team);
+                Printer.Log(teamDTO.Player);
+                Printer.Log(teamDTO.Pokemons.Count);
             }
             catch (Exception ex)
             {
@@ -309,7 +312,7 @@ namespace api.Services.TeamService
                         Username = user.UserName,
                         TeamKeys = await GetUserTeamKeys(user, logged),
                         Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png",
-                        Country = GetCountry(user.Country),
+                        Country = user.Country != null ? GetCountry(user.Country) : null,
                         Visibility = user.Visibility ? true : false,
                         Email = user.Email,
                         EmailConfirmed = user.EmailConfirmed
@@ -374,7 +377,11 @@ namespace api.Services.TeamService
                 string json = r.ReadToEnd();
                 List<CountryDTO> countries = JsonSerializer.Deserialize<List<CountryDTO>>(json);
                 country = countries.Find(c => c.code.Equals(code));
-                country.Icon = $"https://localhost:7134/images/sprites/flags/{country.code}.svg";
+                if(country != null)
+                {
+                    country.Icon = $"https://localhost:7134/images/sprites/flags/{country.code}.svg";
+                }
+                r.Close();
             }
             return country;
         }
@@ -482,6 +489,39 @@ namespace api.Services.TeamService
                 return false;
             }
             return true;
+        }
+
+        public async Task<List<TeamPreviewDTO>> QueryTeamsByPokemonName(string key)
+        {
+            List<TeamPreviewDTO> teamDTOs = new List<TeamPreviewDTO>();
+            PokemonDataDTO pokemon = await _pokedexService.GetPokemonByName(key);
+            if(pokemon == null)
+            {
+                return null;
+            }
+            List<Team> teams = _pokeTeamContext.Team.Where(t => t.Pokemons.Any(p => p.DexNumber == pokemon.DexNumber)).ToList();
+            //List<Team> teams = _pokeTeamContext.Team.Where(t => t.Pokemons.Any(p => p.DexNumber == pokemon.DexNumber)).ForEachAsync().ToList();
+            foreach(Team team in teams)
+            {
+                teamDTOs.Add(await BuildTeamPreviewDTO(team));
+            }
+            return teamDTOs;
+        }
+
+        public async Task<List<TeamPreviewDTO>> QueryTeamsByMoveIdentifier(string key)
+        {
+            List<TeamPreviewDTO> teamDTOs = new List<TeamPreviewDTO>();
+            List<Team> teams = _pokeTeamContext.Team.Where(t => t.Pokemons
+            .Any(p => p.Move1Identifier == key
+            || p.Move2Identifier == key
+            || p.Move3Identifier == key
+            || p.Move4Identifier == key)).ToList();
+            //List<Team> teams = _pokeTeamContext.Team.Where(t => t.Pokemons.Any(p => p.DexNumber == pokemon.DexNumber)).ForEachAsync().ToList();
+            foreach (Team team in teams)
+            {
+                teamDTOs.Add(await BuildTeamPreviewDTO(team));
+            }
+            return teamDTOs;
         }
     }
 }

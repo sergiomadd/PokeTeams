@@ -23,5 +23,7 @@ namespace api.Services.TeamService
         public Task<string> IncrementTeamViewCount(string teamKey);
         public Task<Tag> GetTag(string identifier);
         public Task<bool> SaveTag(Tag tag);
+        public Task<List<TeamPreviewDTO>> QueryTeamsByPokemonName(string key);
+        public Task<List<TeamPreviewDTO>> QueryTeamsByMoveIdentifier(string key);
     }
 }
