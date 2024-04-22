@@ -9,7 +9,7 @@ import { defaultMove, Move } from '../models/pokemon/move.model';
 import { defaultNature, Nature } from '../models/pokemon/nature.model';
 import { Pokemon } from '../models/pokemon/pokemon.model';
 import { Stat } from '../models/pokemon/stat.model';
-import { defaultType, Type } from '../models/pokemon/type.model';
+import { defaultTypeWithEffectiveness, TypeWithEffectiveness } from '../models/pokemon/typewitheffectiveness.model';
 import { PokePaste } from '../models/pokePaste.model';
 import { LinkifierService } from './linkifier.service';
 import { getErrorMessage } from './util';
@@ -38,10 +38,10 @@ export class PokemonService
     {
       
       const pokemonDataPromise: Promise<PokemonData> | undefined = pokePaste.name ? this.getPokemon(pokePaste.name) : undefined;
-      const teraTypePromise: Promise<Type> | undefined = pokePaste.teratype ? this.getType(pokePaste.teratype, true) : undefined;
-      const itemPromise: Promise<Item> | undefined = pokePaste.item ? this.getItem(pokePaste.item) : undefined;
-      const abilityPromise: Promise<Ability> | undefined = pokePaste.ability ? this.getAbility(pokePaste.ability) : undefined;
-      const naturePromise: Promise<Nature> | undefined = pokePaste.nature ? this.getNature(pokePaste.nature) : undefined;
+      const teraTypePromise: Promise<TypeWithEffectiveness> | undefined = pokePaste.teratype ? this.getType(pokePaste.teratype, true) : undefined;
+      const itemPromise: Promise<Item> | undefined = pokePaste.item ? this.getItemByName(pokePaste.item) : undefined;
+      const abilityPromise: Promise<Ability> | undefined = pokePaste.ability ? this.getAbilityByName(pokePaste.ability) : undefined;
+      const naturePromise: Promise<Nature> | undefined = pokePaste.nature ? this.getNatureByName(pokePaste.nature) : undefined;
       const movesPromise: Promise<Move[]> | undefined = pokePaste.moves ? this.getMoves(pokePaste.moves) : undefined;
       const ivsPromise: Promise<Stat[]> | undefined = pokePaste.ivs ? this.getStats(pokePaste.ivs) : undefined;
       const evsPromise: Promise<Stat[]> | undefined = pokePaste.evs ? this.getStats(pokePaste.evs) : undefined; 
@@ -104,10 +104,10 @@ export class PokemonService
     return pokemonData;
   }
 
-  async getItem(name: string) : Promise<Item>
+  async getItemByName(name: string) : Promise<Item>
   {
     let item: Item = <Item>{}
-    let url = this.apiUrl + 'item/' + name;
+    let url = this.apiUrl + 'item/name/' + name;
     try
     {
       item = await lastValueFrom(this.http.get<Item>(url).pipe(catchError(() => [DefaultItem]), timeout(this.dataTimeout)));
@@ -120,10 +120,10 @@ export class PokemonService
     return item;
   }
 
-  async getAbility(name: string) : Promise<Ability>
+  async getAbilityByName(name: string) : Promise<Ability>
   {
     let ability: Ability = <Ability>{}
-    let url = this.apiUrl + 'ability/' + name;
+    let url = this.apiUrl + 'ability/name/' + name;
     try
     {
       ability = await lastValueFrom(this.http.get<Ability>(url).pipe(catchError(() => [defaultAbility]), timeout(this.dataTimeout)));
@@ -136,10 +136,10 @@ export class PokemonService
     return ability; 
   }
 
-  async getNature(name: string) : Promise<Nature>
+  async getNatureByName(name: string) : Promise<Nature>
   {
     let nature: Nature = <Nature>{}
-    let url = this.apiUrl + 'nature/' + name;
+    let url = this.apiUrl + 'nature/name/' + name;
     try
     {
       nature = await lastValueFrom(this.http.get<Nature>(url).pipe(catchError(() => [defaultNature]), timeout(this.dataTimeout)));
@@ -178,14 +178,14 @@ export class PokemonService
     return move;
   }
 
-  async getType(typeName: string, teratype?: boolean) : Promise<Type>
+  async getType(typeName: string, teratype?: boolean) : Promise<TypeWithEffectiveness>
   {
-    let type: Type = <Type>{};
+    let type: TypeWithEffectiveness = <TypeWithEffectiveness>{};
     let url = this.apiUrl + 'type/' + (teratype ? 'teratype/' : '') + typeName;
-    this.http.get<Type>(url).subscribe
+    this.http.get<TypeWithEffectiveness>(url).subscribe
     try
     {
-      type = await lastValueFrom(this.http.get<Type>(url).pipe(catchError(() => [defaultType]), timeout(this.dataTimeout)));
+      type = await lastValueFrom(this.http.get<TypeWithEffectiveness>(url).pipe(catchError(() => [defaultTypeWithEffectiveness]), timeout(this.dataTimeout)));
     }
     catch(error)
     {
