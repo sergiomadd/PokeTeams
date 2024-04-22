@@ -46,23 +46,37 @@ namespace api.Services.TeamService
             return queriedUsers;
         }
 
-        public async Task<TeamDTO?> GetTeam(string id)
+        public async Task<TeamPreviewDTO?> BuildTeamPreviewDTO(Team team)
         {
-            Printer.Log("Gettting team: ", id);
-            TeamDTO teamDTO = null;
-            try
-            {
-                Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
-                if (team != null)
-                {
-                    List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(id)).ToList();
-                    List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
+            TeamPreviewDTO teamPreviewDTO = null;
+            List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
+            List<PokemonPreviewDTO> pokemonPreviewDTOs = new List<PokemonPreviewDTO>();
+
+            EditorOptionsDTO editorOptions = JsonSerializer.Deserialize<EditorOptionsDTO?>(team.Options, new JsonSerializerOptions { IncludeFields = false });
 
                     foreach (Pokemon pokemon in pokemons)
                     {
                         pokemonDTOs.Add(await _pokedexService.BuildPokemonDTO(pokemon));
                     }
 
+            teamPreviewDTO = new TeamPreviewDTO
+            {
+                ID = team.Id,
+                Pokemons = pokemonPreviewDTOs,
+                Options = JsonSerializer.Deserialize<EditorOptionsDTO>(team.Options, new JsonSerializerOptions { IncludeFields = false }),
+                Player = await GetTeamPlayer(team),
+                Tournament = team.Tournament,
+                Regulation = team.Regulation,
+                ViewCount = team.ViewCount,
+                Date = team.DateCreated.ToShortDateString(),
+                Visibility = team.Visibility,
+                Tags = await GetTeamTags(team)
+            };
+            return teamPreviewDTO;
+        }
+
+        private async Task<string> GetTeamPlayer(Team team)
+        {
                     string playerUserName = "Unkown";
                     if (team.PlayerId != null)
                     {
@@ -73,7 +87,11 @@ namespace api.Services.TeamService
                     {
                         playerUserName = team.AnonPlayer;
                     }
+            return playerUserName;
+        }
                     
+        private async Task<List<TagDTO>> GetTeamTags(Team team)
+        {
                     List<TagDTO> tags = new List<TagDTO>();
                     List<TeamTag> teamTags = _pokeTeamContext.TeamTag.Where(t => t.TeamsId == id).ToList();
                     
@@ -91,20 +109,47 @@ namespace api.Services.TeamService
                             };
                             tags.Add(tagDTO);
                         }   
+            }
+            return tags;
+        }
+
+        public async Task<TeamDTO?> BuildTeamDTO(Team team)
+        {
+            TeamDTO teamDTO = null;
+            if (team != null)
+            {
+                List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
+                List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
+
+                foreach (Pokemon pokemon in pokemons)
+                {
+                    pokemonDTOs.Add(await _pokedexService.BuildPokemonDTO(pokemon));
                     }
+
                     teamDTO = new TeamDTO(
-                        id,
+                    team.Id,
                         pokemonDTOs,
                         team.Options,
-                        playerUserName,
+                    await GetTeamPlayer(team),
                         team.Tournament,
                         team.Regulation,
                         team.ViewCount,
                         team.DateCreated.ToShortDateString(),
                         team.Visibility,
-                        tags
+                    await GetTeamTags(team)
                         );
                 }
+            return teamDTO;
+            }
+
+        public async Task<TeamDTO?> GetTeam(string id)
+        {
+            Printer.Log("Gettting team: ", id);
+            TeamDTO teamDTO = null;
+            try
+            {
+                Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
+                return await BuildTeamDTO(team);
             }
             catch (Exception ex)
             {

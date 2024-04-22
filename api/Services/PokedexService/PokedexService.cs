@@ -15,6 +15,7 @@ using api.Models.DBPokedexModels;
 using api.DTOs.PokemonDTOs;
 using api.Models.DBPoketeamModels;
 using System.Text.Json;
+using api.DTOs;
 
 namespace api.Services.PokedexService
 {
@@ -60,6 +61,20 @@ namespace api.Services.PokedexService
                 Shiny = pokemon.Shiny,
                 Gender = pokemon.Gender,
                 Sprites = pokemonData.Sprites
+            };
+        }
+
+        public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, EditorOptionsDTO editorOptions)
+        {
+            PokemonDataDTO pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1);
+
+            return new PokemonPreviewDTO
+            {
+                Name = pokemonData.Name,
+                DexNumber = pokemonData.DexNumber,
+                Types = await GetPokemonTypes(pokemonData.DexNumber),
+                TeraType = await GetTypeByIdentifier(pokemon.TeraTypeIdentifier, true),
+                Sprite = pokemonData.Sprites[int.Parse(editorOptions.PokemonSpritesGen.Identifier)]
             };
         }
 
