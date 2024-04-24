@@ -87,20 +87,22 @@ export class TeamEditorComponent
     if(this.pokemons.length > 0 && this.pokemons.length <= 6)
     {
       console.log("Generating team: ", this.team);
-      let result = await this.teamService.saveTeam(this.team);
-      //let result = undefined;
-      if(result == "error" || result == undefined)
-      {
-        console.log("Error generating team")
-      }
-      else
-      {
-        const w = window.open('', '_blank')!;
-        w.document.write("<html><head></head><body>Please wait while we redirect you</body></html>");
-        w.document.close();
-        w.location = result;
-      }
-
+      this.teamService.saveTeam(this.team).subscribe(
+        {
+          next: (response) =>
+          {
+            const w = window.open('', '_blank')!;
+            w.document.write("<html><head></head><body>Please wait while we redirect you</body></html>");
+            w.document.close();
+            w.location = response;
+          },
+          error: (error) => 
+          {
+            console.log("Error generating team")
+          }
+        }
+      )
+      
     }
     else if(this.pokemons.length <= 0)
     {

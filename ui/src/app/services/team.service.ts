@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { catchError, lastValueFrom, timeout } from 'rxjs';
+import { BehaviorSubject, catchError, lastValueFrom, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { authActions } from '../auth/store/auth.actions';
 import { TeamId } from '../models/DTOs/teamId.dto';
@@ -60,39 +60,28 @@ export class TeamService
     return optionsData; 
   }
 
-  async saveTeam(team: Team): Promise<string>
+  saveTeam(team: Team): BehaviorSubject<string>
   {
-    let response: object = {};
+    let response$ = new BehaviorSubject<string>("");
     let url = this.apiUrl + 'team';
-    console.log("team with tags", team);
-    
-    try
-    {
-      this.http.post(url, team)
-      .pipe(catchError(() => []), timeout(this.dataTimeout))
-      .subscribe(
+    this.http.post<string>(url, team)
+    .pipe(catchError(() => ["error"]), timeout(this.dataTimeout))
+    .subscribe(
+      {
+        next: (resp) => 
         {
-          next: (resp) => 
-          {
-            console.log("saving team response: ",resp);
-            response = resp
-          },
-          error: (error) => 
-          {
-            console.log("saving team error", error);
-            response = error
-          }
+          console.log("saving team response: ",resp);
+          response$.next(resp["content"]);
+          this.store.dispatch(authActions.getLogged());
+        },
+        error: (error) => 
+        {
+          console.log("saving team error", error);
+          response$.next(error);
         }
-      );
-    }
-    catch(error)
-    {
-      console.log("Error: ", getErrorMessage(error));
-      return getErrorMessage(error);
-    }
-    this.store.dispatch(authActions.getLogged());
-    
-    return response["content"];
+      }
+    );
+    return response$;
   }
 
   async incrementViewCount(teamKey: string)
