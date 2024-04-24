@@ -1,4 +1,4 @@
-export enum Colors
+export enum PokeColor
 {
     //Type colors
     normal = "#A8A77A",
@@ -19,4 +19,14 @@ export enum Colors
     dark = "#705746",
     steel = "#B7B7CE",
     fairy = "#D685AD"
+}
+
+export enum TagColor
+{
+    orange = "#FFA579",
+    lime = "#69E3AA",
+    purple = "#5E48BF",
+    pink = "#FFA8FD",
+    green = "#16CEA4",
+    yellow = "#F7D075",
 }
