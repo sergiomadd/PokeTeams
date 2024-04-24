@@ -18,7 +18,6 @@ namespace api.Services.TeamService
     {
         private readonly PokeTeamContext _pokeTeamContext;
         private readonly LocalContext _localContext;
-        private readonly UserManager<User> _userManager;
         private readonly IPokedexService _pokedexService;
 
 
@@ -189,6 +188,7 @@ namespace api.Services.TeamService
                 Printer.Log("logged username", loggedUserName);
                 if (loggedUserName == inputTeam.Player)
                 {
+                    Printer.Log("Getting logged user in service");
                     player = await GetUserByUserName(inputTeam.Player);
                 }
 
@@ -522,6 +522,50 @@ namespace api.Services.TeamService
                 teamDTOs.Add(await BuildTeamPreviewDTO(team));
             }
             return teamDTOs;
+        }
+
+        public async Task<TournamentDTO> GetTournamentByName(string name)
+        {
+            TournamentDTO tournamentDTO = null;
+            Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(name.ToLower());
+            if(tournament != null)
+            {
+                tournamentDTO = new TournamentDTO
+                {
+                    Name = tournament.Name,
+                    Official = tournament.Official,
+                    Regulation = tournament.RegulationName,
+                    Date = tournament.Date
+                };
+            }
+            return tournamentDTO;
+        }
+
+        public async Task<Tournament> SaveTournament(TournamentDTO tournamentDTO)
+        {
+            try
+            {
+                if (tournamentDTO != null)
+                {
+                    Tournament tournament = new Tournament
+                    {
+                        Name = tournamentDTO.Name,
+                        Official = tournamentDTO.Official,
+                        RegulationName = tournamentDTO.Regulation,
+                        Date = tournamentDTO.Date
+                    };
+
+                    await _pokeTeamContext.Tournament.AddAsync(tournament);
+                    await _pokeTeamContext.SaveChangesAsync();
+                    return tournament;
+                }
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Error adding tournament");
+                Printer.Log(ex.Message);
+            }
+            return null;
         }
     }
 }
