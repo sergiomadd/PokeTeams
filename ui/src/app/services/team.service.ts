@@ -22,7 +22,8 @@ export class TeamService
 
   private httpOptionsString = 
   {
-    headers: new HttpHeaders({'accept': 'text/plain'})
+    headers: new HttpHeaders({'accept': 'text/plain'}),
+    withCredentials: true
   }
 
   constructor(private http: HttpClient) 
@@ -64,7 +65,7 @@ export class TeamService
   {
     let response$ = new BehaviorSubject<string>("");
     let url = this.apiUrl + 'team';
-    this.http.post<string>(url, team)
+    this.http.post<string>(url, team, {withCredentials: true})
     .pipe(catchError(() => ["error"]), timeout(this.dataTimeout))
     .subscribe(
       {
