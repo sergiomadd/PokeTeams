@@ -5,7 +5,7 @@ import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Stat } from 'src/app/models/pokemon/stat.model';
 import { ParserService } from 'src/app/services/parser.service';
 import { copyToClipboard } from 'src/app/services/util';
-import { Colors } from 'src/app/styles/pokemonColors';
+import { PokeColor } from 'src/app/styles/pokemonColors';
 
 interface CalculatedStats
 {
@@ -147,7 +147,7 @@ export class PokemonComponent
   getMoveColor(move)
   {
     let name = move.pokeType?.name;
-    return Colors[name?.toLowerCase()];
+    return PokeColor[name?.toLowerCase()];
   }
 
   //stats

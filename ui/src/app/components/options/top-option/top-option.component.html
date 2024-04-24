@@ -14,4 +14,22 @@
       <input type="text" formControlName="regulation">
     </div>
   </form>
+  <div class="title">
+    TAGS
+  </div>
+  <form class="form" [formGroup]="tagsForm" >
+    <div class="item">
+      <label for="">Name: </label>
+      <input type="text" formControlName="name">
+    </div>
+    <div class="item">
+      <label for="">Description: </label>
+      <input type="text" formControlName="description">
+    </div>
+    <div class="item">
+      <label for="">Color: </label>
+      <input type="color" formControlName="color" value="#ff0000">
+    </div>
+    <button type="submit" (click)="addTag()">Add tag</button>
+  </form>
 </div>

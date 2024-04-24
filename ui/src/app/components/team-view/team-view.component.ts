@@ -24,6 +24,7 @@ export class TeamViewComponent
   {
     this.teamKey = this.router.url.slice(1);
     this.team = await this.teamService.getTeam(this.teamKey);
+    console.log(this.team)
     const item = sessionStorage.getItem(this.teamKey);
     if(item)
     {

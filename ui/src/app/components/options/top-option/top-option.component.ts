@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Observable, of } from 'rxjs';
 import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
+import { Tag } from 'src/app/models/tag.model';
 import { UserService } from 'src/app/services/user.service';
 import { getAuthFormError } from 'src/app/services/util';
 
@@ -18,12 +20,21 @@ export class TopOptionComponent
 
   user$ = this.store.select(selectLoggedUser);
 
-  logInFormSubmitted: boolean = false;
   detailsForm = this.formBuilder.group(
   {
     player: ['', [Validators.maxLength(256)]],
     tournament: ['', [Validators.maxLength(256)]],
     regulation: ['', [Validators.maxLength(256)]]
+  });
+
+  tags: Tag[] = [];
+  tags$: Observable<Tag[]> = of(this.tags);
+
+  tagsForm = this.formBuilder.group(
+  {
+    name: ['', [Validators.maxLength(256)]],
+    description: ['', [Validators.maxLength(256)]],
+    color: ['', [Validators.maxLength(256)]]
   });
 
   @Output() detailsChange = new EventEmitter();
@@ -46,8 +57,23 @@ export class TopOptionComponent
         });
       }
     });
-    
+  }
 
+  addTag()
+  {
+    if(this.tagsForm.valid)
+    {
+      this.tags.push(
+        {
+          identifier: this.tagsForm.controls.name.value ?? "",
+          name: this.tagsForm.controls.name.value ?? "",
+          description: this.tagsForm.controls.description.value ?? "",
+          color: this.tagsForm.controls.color.value ?? "" 
+        }
+      )
+    }
+    console.log(this.tags);
+    //this.tagsEvent.emit(this.tags);
   }
 
   isInvalid(key: string, form: string) : boolean

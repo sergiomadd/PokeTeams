@@ -1,0 +1,22 @@
+
+.tag
+{
+  border-radius: 15px;
+  padding: 0.2vw;
+  font-size: 0.8em;
+  position: relative;
+  cursor: pointer;
+  width: fit-content;
+
+  .description
+  {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    border-radius: 5px;
+    padding: 0.2vw;
+    text-align: center;
+    width: fit-content;
+  }
+}

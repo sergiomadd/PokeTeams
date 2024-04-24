@@ -64,6 +64,8 @@ export class TeamService
   {
     let response: object = {};
     let url = this.apiUrl + 'team';
+    console.log("team with tags", team);
+    
     try
     {
       this.http.post(url, team)
@@ -89,6 +91,7 @@ export class TeamService
       return getErrorMessage(error);
     }
     this.store.dispatch(authActions.getLogged());
+    
     return response["content"];
   }
 

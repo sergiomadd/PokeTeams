@@ -5,7 +5,7 @@
   .top
   {
     display: grid;
-    grid-template-columns: 90% 10%;
+    grid-template-columns: 30% 60% 10%;
     margin-bottom: 1vh;
 
     .options
@@ -29,6 +29,12 @@
       {
         background-color: var(--bg-color-3);
       }
+    }
+
+    .tags
+    {
+      display: flex;
+      gap: 0.4vw;
     }
   }
 

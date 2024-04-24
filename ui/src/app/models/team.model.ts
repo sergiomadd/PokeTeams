@@ -1,5 +1,6 @@
 import { EditorOptions } from "./editorOptions.model";
 import { Pokemon } from "./pokemon/pokemon.model";
+import { Tag } from "./tag.model";
 
 export interface Team
 {
@@ -11,5 +12,6 @@ export interface Team
   regulation?: string,
   viewCount: number,
   date?: string,
-  visibility: boolean
+  visibility: boolean,
+  tags?: Tag[]
 }

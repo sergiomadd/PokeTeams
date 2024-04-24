@@ -12,7 +12,6 @@ import { TeamService } from '../../services/team.service';
 })
 export class AuthService 
 {
-
   private apiUrl = 'https://localhost:7134/api/user/';
 
   generateTeam: TeamService = inject(TeamService)

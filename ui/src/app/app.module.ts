@@ -38,6 +38,7 @@ import { VgcComponent } from './components/vgc/vgc.component';
 import { LinkerPipe } from './pipes/linker.pipe';
 import { metaReducers } from './state/app.state';
 import { MultiSearchComponent } from './components/pieces/multi-search/multi-search.component';
+import { TagComponent } from './components/pieces/tag/tag.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { MultiSearchComponent } from './components/pieces/multi-search/multi-sea
     UserTeamsComponent,
     DialogComponent,
     MultiSearchComponent,
+    TagComponent,
   ],
   exports: [NavbarComponent],
   imports: [

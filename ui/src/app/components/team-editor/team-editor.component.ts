@@ -14,12 +14,12 @@ import { TeamComponent } from '../team/team.component';
 })
 export class TeamEditorComponent 
 {
-  generateTeamService = inject(TeamService);
+  teamService = inject(TeamService);
 
   @Input() pokemons!: Pokemon[];
   @Output() outputTeam = new EventEmitter<Team>();
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
-  @ViewChild(TopOptionComponent) details!: TopOptionComponent;
+  @ViewChild(TopOptionComponent) topOptionComponent!: TopOptionComponent;
 
   editorData?: EditorData;
   editorOptions: EditorOptions = <EditorOptions>{};
@@ -39,15 +39,16 @@ export class TeamEditorComponent
       id: '',
       pokemons: this.pokemons,
       options: this.editorOptions,
-      player: this.details.detailsForm.controls.player.value != null ? this.details.detailsForm.controls.player.value : '',
+      player: this.topOptionComponent.detailsForm.controls.player.value != null ? this.topOptionComponent.detailsForm.controls.player.value : '',
       tournament: '',
       regulation: '',
       viewCount: 0,
-      visibility: true
+      visibility: true,
+      tags: this.topOptionComponent.tags
     }
     
     console.log("loaded team", this.team);
-    this.details.detailsForm.valueChanges.subscribe((value) => 
+    this.topOptionComponent.detailsForm.valueChanges.subscribe((value) => 
     {
       console.log(value)
       this.team.player = value.player ?? undefined;
@@ -55,6 +56,11 @@ export class TeamEditorComponent
       this.team.regulation = value.regulation ?? undefined;
     });
     console.log("loaded team", this.team);
+    this.topOptionComponent.tags$.subscribe((value) => 
+    {
+      console.log("TAgs",value)
+      this.team.tags = value;
+    });
   }
 
   ngOnChanges(changes: SimpleChanges)
@@ -65,6 +71,7 @@ export class TeamEditorComponent
       this.team.pokemons = changes['pokemons'].currentValue;
       this.calculateMaxLevel();
     }
+    console.log(changes)
   }
 
   //Gets the maximun calculated stat value of all pokemons
@@ -80,17 +87,18 @@ export class TeamEditorComponent
     if(this.pokemons.length > 0 && this.pokemons.length <= 6)
     {
       console.log("Generating team: ", this.team);
-      let result = await this.generateTeamService.saveTeam(this.team);
-      if(result !== "error")
+      let result = await this.teamService.saveTeam(this.team);
+      //let result = undefined;
+      if(result == "error" || result == undefined)
+      {
+        console.log("Error generating team")
+      }
+      else
       {
         const w = window.open('', '_blank')!;
         w.document.write("<html><head></head><body>Please wait while we redirect you</body></html>");
         w.document.close();
         w.location = result;
-      }
-      else
-      {
-        console.log("response is error")
       }
 
     }
@@ -160,7 +168,7 @@ export class TeamEditorComponent
 
   async getEditorData(): Promise<EditorData>
   {
-    const data: EditorData = await this.generateTeamService.getOptionsData();
+    const data: EditorData = await this.teamService.getOptionsData();
     let editorData: EditorData = 
     {
       pokemonSpritesPaths: data.pokemonSpritesPaths,

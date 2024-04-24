@@ -11,6 +11,11 @@
         Views: {{team?.viewCount}} 
       </div>
     </div>
+    <div class="tags">
+      <ng-container *ngFor="let tag of team?.tags">
+        <app-tag [tag]="tag"></app-tag>
+      </ng-container>
+    </div>
     <div class="options">
       <div 
       class="option"

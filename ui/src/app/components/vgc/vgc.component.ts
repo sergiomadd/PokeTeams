@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
+import { TagColor } from 'src/app/styles/pokemonColors';
 
 @Component({
   selector: 'app-vgc',
@@ -10,10 +10,16 @@ import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 export class VgcComponent 
 {
   pokemons: Pokemon[] = [];
+  tagColor?: TagColor = TagColor.orange;
 
   receivePokemon($event) 
   {
     this.pokemons.push($event);
     this.pokemons = [...this.pokemons];
+  }
+
+  getTagColor(name: string)
+  {
+    return TagColor[name];
   }
 }
