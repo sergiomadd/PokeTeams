@@ -66,7 +66,8 @@ namespace api.Services.TeamService
                 Pokemons = pokemonPreviewDTOs,
                 Options = JsonSerializer.Deserialize<EditorOptionsDTO>(team.Options, new JsonSerializerOptions { IncludeFields = false }),
                 Player = await GetTeamPlayer(team),
-                Tournament = team.Tournament,
+                //Tournament = GetTournamentByName(team.TournamentName),
+                Tournament = BuildTournamentDTO(team.Tournament),
                 Regulation = team.Regulation,
                 ViewCount = team.ViewCount,
                 Date = team.DateCreated.ToShortDateString(),
@@ -132,7 +133,8 @@ namespace api.Services.TeamService
                     pokemonDTOs,
                     team.Options,
                     await GetTeamPlayer(team),
-                    team.Tournament,
+                    //GetTournamentByName(team.TournamentName),
+                    BuildTournamentDTO(team.Tournament),
                     team.Regulation,
                     team.ViewCount,
                     team.DateCreated.ToShortDateString(),
@@ -219,7 +221,8 @@ namespace api.Services.TeamService
                     Options = optionsString,
                     PlayerId = player != null ? player.Id : null,
                     AnonPlayer = player == null ? inputTeam.Player : null,
-                    Tournament = inputTeam.Tournament ?? null,
+                    //TournamentName = inputTeam.Tournament.Name,
+                    Tournament = inputTeam.Tournament != null ? BreakTournamentDTO(inputTeam.Tournament) : null,
                     Regulation = inputTeam.Regulation ?? null,
                     ViewCount = 0,
                     Visibility = inputTeam.Visibility,
@@ -524,19 +527,61 @@ namespace api.Services.TeamService
             return teamDTOs;
         }
 
-        public async Task<TournamentDTO> GetTournamentByName(string name)
+        public TournamentDTO BuildTournamentDTO(Tournament tournament)
         {
             TournamentDTO tournamentDTO = null;
-            Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(name.ToLower());
-            if(tournament != null)
+            if (tournament != null)
             {
                 tournamentDTO = new TournamentDTO
                 {
                     Name = tournament.Name,
+                    City = tournament.City,
+                    CountryCode = tournament.CountryCode,
                     Official = tournament.Official,
-                    Regulation = tournament.RegulationName,
+                    Regulation = BuildRegulationDTO(tournament.Regulation),
                     Date = tournament.Date
                 };
+            }
+            return tournamentDTO;
+        }
+
+        public Tournament BreakTournamentDTO(TournamentDTO tournamentDTO)
+        {
+            Tournament tournament = null;
+            if (tournamentDTO != null)
+            {
+                tournament = new Tournament
+                {
+                    Name = tournamentDTO.Name,
+                    NormalizedName = tournamentDTO.Name.ToLower(),
+                    City = tournamentDTO.City,
+                    CountryCode = tournamentDTO.CountryCode,
+                    Official = tournamentDTO.Official,
+                    Regulation = BreakRegulationDTO(tournamentDTO.Regulation),
+                    Date = tournamentDTO.Date
+                };
+            }
+            return tournament;
+        }
+
+        public List<TournamentDTO> GetAllTournaments()
+        {
+            List<TournamentDTO> tournamentDTOs = new List<TournamentDTO>();
+            List<Tournament> tournaments = _pokeTeamContext.Tournament.ToList();
+            foreach (Tournament tournament in tournaments)
+            {
+                tournamentDTOs.Add(BuildTournamentDTO(tournament));
+            }
+            return tournamentDTOs;
+        }
+
+        public async Task<TournamentDTO> GetTournamentByName(string name)
+        {
+            TournamentDTO tournamentDTO = null;
+            Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(name.ToLower());
+            if (tournament != null)
+            {
+                tournamentDTO = BuildTournamentDTO(tournament);
             }
             return tournamentDTO;
         }
@@ -547,14 +592,7 @@ namespace api.Services.TeamService
             {
                 if (tournamentDTO != null)
                 {
-                    Tournament tournament = new Tournament
-                    {
-                        Name = tournamentDTO.Name,
-                        Official = tournamentDTO.Official,
-                        RegulationName = tournamentDTO.Regulation,
-                        Date = tournamentDTO.Date
-                    };
-
+                    Tournament tournament = BreakTournamentDTO(tournamentDTO);
                     await _pokeTeamContext.Tournament.AddAsync(tournament);
                     await _pokeTeamContext.SaveChangesAsync();
                     return tournament;
@@ -566,6 +604,38 @@ namespace api.Services.TeamService
                 Printer.Log(ex.Message);
             }
             return null;
+        }
+
+        public RegulationDTO BuildRegulationDTO(Regulation regulation)
+        {
+            RegulationDTO regulationDTO = null;
+            if (regulation != null)
+            {
+                regulationDTO = new RegulationDTO
+                {
+                    Identifier = regulation.Identifier,
+                    Name = regulation.Name,
+                    StartDate = regulation.StartDate,
+                    EndDate = regulation.EndDate
+                };
+            }
+            return regulationDTO;
+        }
+
+        public Regulation BreakRegulationDTO(RegulationDTO regulationDTO)
+        {
+            Regulation regulation = null;
+            if (regulationDTO != null)
+            {
+                regulation = new Regulation
+                {
+                    Identifier = regulationDTO.Identifier,
+                    Name = regulationDTO.Name,
+                    StartDate = regulationDTO.StartDate,
+                    EndDate = regulationDTO.EndDate
+                };
+            }
+            return regulation;
         }
     }
 }

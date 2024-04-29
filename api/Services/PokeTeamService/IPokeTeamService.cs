@@ -25,6 +25,7 @@ namespace api.Services.TeamService
         public Task<bool> SaveTag(Tag tag);
         public Task<List<TeamPreviewDTO>> QueryTeamsByPokemonName(string key);
         public Task<List<TeamPreviewDTO>> QueryTeamsByMoveIdentifier(string key);
+        public List<TournamentDTO> GetAllTournaments();
         public Task<TournamentDTO> GetTournamentByName(string name);
         public Task<Tournament> SaveTournament(TournamentDTO tournamentDTO);
     }
