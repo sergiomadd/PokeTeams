@@ -270,7 +270,7 @@ namespace api.Migrations
                     b.Property<string>("Regulation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Tournament")
+                    b.Property<string>("TournamentName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ViewCount")

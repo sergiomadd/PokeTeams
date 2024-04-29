@@ -12,7 +12,7 @@ namespace api.DTOs
         public List<PokemonDTO> Pokemons { get; set; }
         public EditorOptionsDTO? Options { get; set; }
         public string? Player { get; set; }
-        public string? Tournament { get; set; }
+        public TournamentDTO? Tournament { get; set; }
         public string? Regulation { get; set; }
         public int ViewCount { get; set; }
         public string? Date { get; set; }
@@ -30,7 +30,7 @@ namespace api.DTOs
             List<PokemonDTO> pokemons,
             string options,
             string uploaded,
-            string tournament,
+            TournamentDTO tournament,
             string regulation,
             int viewCount,
             string date,
