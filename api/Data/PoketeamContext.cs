@@ -18,6 +18,9 @@ namespace api.Data
         public DbSet<Tag> Tag { get; set; }
         public DbSet<TeamTag> TeamTag { get; set; }
         public DbSet<Pokemon> Pokemon { get; set; }
+        public DbSet<Tournament> Tournament { get; set; }
+        public DbSet<Regulation> Regulation { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -27,6 +30,18 @@ namespace api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            
+            modelBuilder.Entity<Regulation>()
+                .HasMany(r => r.Tournaments)
+                .WithOne(t => t.Regulation)
+                .HasForeignKey("RegulationIdentifier")
+                .IsRequired(false);
+            
+            modelBuilder.Entity<Tournament>()
+                .HasMany(t => t.Teams)
+                .WithOne(t => t.Tournament)
+                .HasForeignKey("TournamentNormalizedName")
+                .IsRequired(false);
 
             modelBuilder.Entity<Team>()
                 .HasMany(t => t.Pokemons)

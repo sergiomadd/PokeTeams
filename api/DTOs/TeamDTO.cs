@@ -1,7 +1,4 @@
 ﻿using api.DTOs.PokemonDTOs;
-using api.Models.DBPoketeamModels;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Text.Json;
 
 namespace api.DTOs

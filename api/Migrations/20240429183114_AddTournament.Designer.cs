@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -11,9 +12,11 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(PokeTeamContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20240429183114_AddTournament")]
+    partial class AddTournament
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -225,26 +228,6 @@ namespace api.Migrations
                     b.ToTable("Pokemon");
                 });
 
-            modelBuilder.Entity("api.Models.DBPoketeamModels.Regulation", b =>
-                {
-                    b.Property<string>("Identifier")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Identifier");
-
-                    b.ToTable("Regulation");
-                });
-
             modelBuilder.Entity("api.Models.DBPoketeamModels.Tag", b =>
                 {
                     b.Property<string>("Identifier")
@@ -347,11 +330,10 @@ namespace api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("RegulationIdentifier")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("NormalizedName");
-
-                    b.HasIndex("RegulationIdentifier");
 
                     b.ToTable("Tournament");
                 });
@@ -531,20 +513,6 @@ namespace api.Migrations
                         .HasForeignKey("TeamsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("api.Models.DBPoketeamModels.Tournament", b =>
-                {
-                    b.HasOne("api.Models.DBPoketeamModels.Regulation", "Regulation")
-                        .WithMany("Tournaments")
-                        .HasForeignKey("RegulationIdentifier");
-
-                    b.Navigation("Regulation");
-                });
-
-            modelBuilder.Entity("api.Models.DBPoketeamModels.Regulation", b =>
-                {
-                    b.Navigation("Tournaments");
                 });
 
             modelBuilder.Entity("api.Models.DBPoketeamModels.Team", b =>

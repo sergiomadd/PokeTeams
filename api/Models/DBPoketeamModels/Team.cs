@@ -15,7 +15,7 @@ namespace api.Models.DBPoketeamModels
         public string? PlayerId { get; set; }
         [StringLength(64)]
         public string? AnonPlayer { get; set;}
-        public string? TournamentName { get; set; }
+        public Tournament? Tournament { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
         public string? Regulation { get; set; }
         public int ViewCount { get; set; }
