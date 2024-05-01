@@ -17,7 +17,19 @@ namespace api.Controllers
         {
             _teamService = teamService;
         }
-        
+
+        [HttpGet]
+        public ActionResult<List<TournamentDTO>> GetAllTournaments()
+        {
+            Printer.Log("Getting team");
+            List<TournamentDTO> tournamentDTOs = _teamService.GetAllTournaments();
+            if (tournamentDTOs == null)
+            {
+                return NotFound("Couldn't find tournament");
+            }
+            return Ok(tournamentDTOs);
+        }
+
         [HttpGet("{name}")]
         public async Task<ActionResult<TournamentDTO>> Get(string name)
         {

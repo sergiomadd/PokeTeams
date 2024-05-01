@@ -379,7 +379,7 @@ namespace api.Controllers
                 }
                 else
                 {
-                    return Ok(new IdentityResponseDTO {Success = false, Errors = new string[] { "No user logged" } });
+                    return NotFound(new IdentityResponseDTO {Success = false, Errors = new string[] { "No user logged" } });
                 }
 
             }
