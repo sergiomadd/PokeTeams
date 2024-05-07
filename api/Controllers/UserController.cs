@@ -69,6 +69,18 @@ namespace api.Controllers
             return Ok(users);
         }
 
+        [HttpGet, Route("chunkquery")]
+        public async Task<ActionResult<List<UserQueryDTO>>> ChunkQueryUsers(string key, int startIndex, int pageSize)
+        {
+            List<UserQueryDTO> users = await _pokeTeamService.ChunkQueryUsers(key, startIndex, pageSize);
+            users.Skip(startIndex).Take(pageSize);
+            if (users == null)
+            {
+                return NotFound("Couldn't find user");
+            }
+            return Ok(users);
+        }
+
         [HttpGet, Route("countries")]
         public ActionResult<List<CountryDTO>> GetCountries()
         {

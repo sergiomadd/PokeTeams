@@ -47,6 +47,24 @@ namespace api.Services.TeamService
             return queriedUsers;
         }
 
+        public async Task<List<UserQueryDTO>> ChunkQueryUsers(string key, int startIndex, int pageSize)
+        {
+            List<UserQueryDTO> queriedUsers = new List<UserQueryDTO>();
+            List<User> users = _pokeTeamContext.Users
+                .Where(u => u.UserName.Contains(key))
+                .Skip(startIndex).Take(pageSize).ToList();
+            users.ForEach(user =>
+            {
+                queriedUsers.Add(new UserQueryDTO
+                {
+                    UserName = user.UserName,
+                    Picture = user.Picture ?? null,
+                    Country = user.Country == null ? GetCountry(user.Country) : null,
+                });
+            });
+            return queriedUsers;
+        }
+
         public async Task<TeamPreviewDTO?> BuildTeamPreviewDTO(Team team)
         {
             TeamPreviewDTO teamPreviewDTO = null;
