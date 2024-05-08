@@ -1,12 +1,15 @@
 .content
 {
-  display: grid;
-  grid-template-columns: 15% 70% 15%;
-  min-height: 100vh;
+  display: flex;
+  height: 100%;
 
-  .left-panel
+  .main
   {
-    height: 100%;
+    width: 100%;
+  }
+
+  .menu
+  {
     background-color: lightgray;
   }
 }

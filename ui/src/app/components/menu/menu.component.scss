@@ -1,0 +1,144 @@
+
+
+
+.menu
+{
+  border-right: 1px solid black;
+  height: 100%;
+}
+
+.opened
+{
+  position: relative;
+  width: 10vw;
+  padding: 0.8vw;
+  padding-top: 2vh;
+}
+
+.closed
+{
+  position: relative;
+  padding: 0.8vw;
+
+  .icons
+  {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6vw;
+  }
+}
+
+.sections
+{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6vw;
+}
+
+.section
+{
+  display: flex;
+  justify-content: center;
+  padding: 0.4vw;
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:hover
+  {
+    background-color: grey;
+  }
+}
+
+.section-big
+{
+  display: flex;
+  justify-content: start;
+  gap: 0.4vw;
+  padding: 0.6vw;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 9vw;
+
+  .title
+  {
+    margin-left: 0.4vw;
+    font-size: 1.5em;
+  }
+
+  &:hover
+  {
+    background-color: grey;
+  }
+}
+
+.icon
+{
+  width: 1.2vw;
+  height: 1.2vw;
+}
+
+.profile
+{
+  margin-bottom: 1vh;
+
+  .card
+  {
+    border-radius: 10px;
+    border: 1px solid black;
+    background-color: white;
+    padding: 1vh;
+  }
+
+  .column
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .picture
+  {
+    width: 3vw;
+    height: 3vw;
+  }
+}
+
+.linked-btn
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: gold;
+  border: 2px goldenrod solid;
+  border-radius: 10px;
+  width: 4vw;
+  height: 3vh;
+  text-decoration: none;
+  color: black;
+
+  &:hover
+  {
+    border: 2px black solid;
+  }
+}
+
+.toggler
+{
+  width: 1vw;
+  height: 1vw;
+  position: absolute;
+  right: -0.5vw;
+  z-index: 3;
+  background-color: white;
+  border-radius: 20px;
+  cursor: pointer;
+
+  &:hover
+  {
+    stroke: #ce2929;
+    stroke-width: 1px;
+    stroke-dasharray: 2,2;
+    stroke-linejoin: round;
+  }
+}
