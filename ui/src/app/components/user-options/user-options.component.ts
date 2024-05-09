@@ -1,14 +1,14 @@
 import { Component, Input, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { authActions } from 'src/app/auth/store/auth.actions';
+import { selectValidationErrors } from 'src/app/auth/store/auth.selectors';
 import { Country } from 'src/app/models/DTOs/country.dto';
 import { UserUpdateDTO } from 'src/app/models/DTOs/userUpdate.dto';
 import { User } from 'src/app/models/user.model';
-import { AuthService } from 'src/app/auth/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { getAuthFormError, passwordsMatch } from 'src/app/services/util';
-import { authActions } from 'src/app/auth/store/auth.actions';
-import { selectValidationErrors } from 'src/app/auth/store/auth.selectors';
 
 @Component({
   selector: 'app-user-options',

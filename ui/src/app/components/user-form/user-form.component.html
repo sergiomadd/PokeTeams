@@ -1,8 +1,13 @@
 <ng-container *ngIf="data$ | async as data">
   <div class="wrapper">
     <ng-container *ngIf="login">
-      <div class="nav signup" (click)="changeForm()">
-        Sign Up ->
+      <div class="nav">
+        <div class="tab tab-left tab-selected" (click)="showLogInForm()">
+          Log In
+        </div>
+        <div class="tab tab-right" (click)="showSignUpForm()">
+          Sign Up
+        </div>
       </div>
       <form
       class="form" 
@@ -32,19 +37,28 @@
             <span class="formFeedbackError">{{error}}</span>
           </ng-container>
         </ng-container>
-        <button 
-        type="submit" 
-        class="entry"
-        [disabled]="data.isSubmitting"
-        >Log In</button>
-        <div class="progress">
-          {{data.isSubmitting}}
+        <div class="row-end">
+          <div class="progress">
+            <ng-container *ngIf="data.isSubmitting">
+              <div class="loader"></div>
+            </ng-container>
+          </div>
+          <button 
+          type="submit" 
+          class="entry"
+          [disabled]="data.isSubmitting"
+          >Log In</button>
         </div>
       </form>
     </ng-container>
     <ng-container *ngIf="signup">
-      <div class="nav login" (click)="changeForm()">
-        Log In 
+      <div class="nav">
+        <div class="tab tab-left" (click)="showLogInForm()">
+          Log In
+        </div>
+        <div class="tab tab-right tab-selected" (click)="showSignUpForm()">
+          Sign Up
+        </div>
       </div>
       <form class="form"
       [formGroup]="signUpForm" 
@@ -91,15 +105,17 @@
             <span class="formFeedbackError">{{error}}</span>
           </ng-container>
         </ng-container>
-        <div>
+        <div class="row-end">
+          <div class="progress">
+            <ng-container *ngIf="data.isSubmitting">
+              <div class="loader"></div>
+            </ng-container>
+          </div>
           <button 
           type="submit" 
           class="entry"
           [disabled]="data.isSubmitting"
           >Sign Up</button>
-          <div class="progress">
-            {{data.isSubmitting}}
-          </div>
         </div>
       </form>
     </ng-container>

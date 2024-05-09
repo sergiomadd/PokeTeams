@@ -30,7 +30,7 @@ export class TeamService
   {
 
   }
-
+ 
   async getTeam(id: string) : Promise<Team>
   {
     let team: Team = <Team>{}

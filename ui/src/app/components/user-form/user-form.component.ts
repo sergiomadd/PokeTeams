@@ -116,10 +116,16 @@ export class UserFormComponent
     }
   }
 
-  changeForm()
+  showLogInForm()
   {
-    this.login = !this.login;
-    this.signup = !this.signup;
+    this.login = true;
+    this.signup = false;
+  }
+
+  showSignUpForm()
+  {
+    this.signup = true;
+    this.login = false;
   }
 
   isInvalid(key: string, form: string) : boolean
