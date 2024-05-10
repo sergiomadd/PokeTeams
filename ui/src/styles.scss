@@ -91,6 +91,11 @@ input
 }
 
 
+.inside-shadow
+{
+  box-shadow: inset rgb(160, 160, 160) 0px 0px 5px; 
+}
+
 .controlInvalid
 {
   outline: 3px solid rgba(255, 0, 0, 0.479) !important;

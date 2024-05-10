@@ -128,6 +128,19 @@ export class UserFormComponent
     this.login = false;
   }
 
+  clearLogInForm()
+  {
+    this.logInForm.reset();
+    this.userNameAvailable = false;
+  }
+
+  clearSignUpForm()
+  {
+    this.signUpForm.reset();
+    this.userNameAvailable = false;
+    this.emailAvailable = false;
+  }
+
   isInvalid(key: string, form: string) : boolean
   {
     var control = form === "signup" ? this.signUpForm.get(key) : this.logInForm.get(key);

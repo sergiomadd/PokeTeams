@@ -56,6 +56,14 @@ export class AuthEffects
           }),
           catchError((errorResponse: HttpErrorResponse) => 
           {
+            if(errorResponse.status == 0)
+            {
+              return of(authActions.logInFailure(
+                {
+                  errors: ["Server error. Try again."]
+                }
+              ))
+            }
             return of(authActions.logInFailure(
               {
                 errors: errorResponse.error.errors
