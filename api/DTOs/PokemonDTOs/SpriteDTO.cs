@@ -1,4 +1,6 @@
-﻿namespace api.DTOs.PokemonDTOs
+﻿using api.Util;
+
+namespace api.DTOs.PokemonDTOs
 {
     public class SpriteDTO
     {
@@ -18,10 +20,10 @@
         {
             Name = GetName(name);
             Gen = GetGeneration(name);
-            Base = CheckIfFileExist(_base) ? _base : null;
-            Shiny = CheckIfFileExist(shiny) ? shiny : null;
-            Female = CheckIfFileExist(female) ? female : null;
-            ShinyFemale = CheckIfFileExist(shinyFemale) ? shinyFemale : null;
+            Base = Checker.CheckIfFileExist(_base) ? _base : null;
+            Shiny = Checker.CheckIfFileExist(shiny) ? shiny : null;
+            Female = Checker.CheckIfFileExist(female) ? female : null;
+            ShinyFemale = Checker.CheckIfFileExist(shinyFemale) ? shinyFemale : null;
         }
 
         public string GetName(string key)
@@ -60,21 +62,6 @@
                 return key.Split("/")[1];
             }
             return null;
-        }
-
-
-        public bool CheckIfFileExist(string path)
-        {
-            if (path != null)
-            {
-                string relativePath = "/wwwroot/images" + path.Split("images")[1];
-                string fullPath = @Directory.GetCurrentDirectory() + relativePath;
-                if (File.Exists(fullPath.Replace('/', Path.DirectorySeparatorChar)))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }
