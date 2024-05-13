@@ -20,6 +20,7 @@ namespace api.Services.PokedexService
         Task<MoveDTO?> GetMoveByName(string name);
         Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessByIdentifier(string identifier, bool teraType = false);
         Task<string?> GetStatNameByIdentifier(string identifier);
+        public List<QueryResultDTO> QueryPokemonsByName(string key);
 
     }
 }

@@ -523,5 +523,24 @@ namespace api.Services.PokedexService
             }
             return effectiveness;
         }
+
+        public List<QueryResultDTO> QueryPokemonsByName(string key)
+        {
+            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
+            List<Pokemon_species_names> pokemonNames = _pokedexContext.Pokemon_species_names
+                .Where(p => p.name.Contains(key) && p.local_language_id == 9).ToList();
+            if(pokemonNames != null && pokemonNames.Count > 0)
+            {
+                pokemonNames.ForEach(pokemonName =>
+                {
+                    queryResults.Add(new QueryResultDTO(pokemonName.name,
+                        $"https://localhost:7134/images/sprites/pokemon/{pokemonName.pokemon_species_id}.png"));
+                });
+            }
+            return queryResults;
+        }
+
+            }
+
     }
 }

@@ -1,7 +1,9 @@
 ﻿using api.Data;
+using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Models.DBModels;
 using api.Services.PokedexService;
+using api.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +29,17 @@ namespace api.Controllers
                 return BadRequest("Pokemon not found.");
             }
             return Ok(pokemon);
+        }
+
+        [HttpGet, Route("query")]
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryPokemonsByName(string key)
+        {
+            List<QueryResultDTO> pokemons = _pokemonService.QueryPokemonsByName(key);
+            if (pokemons == null)
+            {
+                return NotFound("Couldn't find pokemons");
+            }
+            return Ok(pokemons);
         }
     }
 }
