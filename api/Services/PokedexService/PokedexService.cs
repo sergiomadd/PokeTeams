@@ -540,6 +540,37 @@ namespace api.Services.PokedexService
             return queryResults;
         }
 
+
+        public List<QueryResultDTO> QueryMovesByName(string key)
+        {
+            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
+            List<Move_names> moveNames = _pokedexContext.Move_names
+                .Where(m => m.name.Contains(key) && m.local_language_id == 9).ToList();
+            if (moveNames != null && moveNames.Count > 0)
+            {
+                moveNames.ForEach(moveName =>
+                {
+                    Moves? moves = _pokedexContext.Moves.Find(moveName.move_id);
+                    if(moves != null)
+                    {
+                        Types? targetType = _pokedexContext.Types.FirstOrDefault(t => t.id == moves.type_id);
+                        if(targetType != null)
+                        {
+                            var pathStart = "https://localhost:7134/images/sprites/types/generation-viii/";
+                            queryResults.Add(new QueryResultDTO(moveName.name, $"{pathStart}{targetType.identifier}.png"));
+                        }
+                        else
+                        {
+                        queryResults.Add(new QueryResultDTO(moveName.name));
+                        }
+                    }
+                    else
+                    {
+                        queryResults.Add(new QueryResultDTO(moveName.name));
+                    }
+                });
+            }
+            return queryResults;
             }
 
     }

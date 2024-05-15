@@ -1,5 +1,7 @@
-﻿using api.DTOs.PokemonDTOs;
+﻿using api.DTOs;
+using api.DTOs.PokemonDTOs;
 using api.Services.PokedexService;
+using api.Util;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 
@@ -24,6 +26,17 @@ namespace api.Controllers
                 return BadRequest("Move not found.");
             }
             return Ok(move);
+        }
+
+        [HttpGet, Route("query")]
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryMovesByName(string key)
+        {
+            List<QueryResultDTO> moves = _pokemonService.QueryMovesByName(key);
+            if (moves == null)
+            {
+                return NotFound("Couldn't find moves");
+            }
+            return Ok(moves);
         }
     }
 }
