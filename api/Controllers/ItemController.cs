@@ -38,5 +38,16 @@ namespace api.Controllers
             }
             return Ok(item);
         }
+
+        [HttpGet, Route("query")]
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryItemsByName(string key)
+        {
+            List<QueryResultDTO> items = _pokemonService.QueryItemsByName(key);
+            if (items == null)
+            {
+                return NotFound("Couldn't find items");
+            }
+            return Ok(items);
+        }
     }
 }

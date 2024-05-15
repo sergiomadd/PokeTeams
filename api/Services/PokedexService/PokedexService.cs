@@ -571,6 +571,30 @@ namespace api.Services.PokedexService
                 });
             }
             return queryResults;
+        }
+
+        public List<QueryResultDTO> QueryItemsByName(string key)
+        {
+            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
+            List<Item_names> itemNames = _pokedexContext.Item_names
+                .Where(i => i.name.Contains(key) && i.local_language_id == 9).ToList();
+            if (itemNames != null && itemNames.Count > 0)
+            {
+                itemNames.ForEach(itemName =>
+                {
+                    Items items = _pokedexContext.Items.FirstOrDefault(i => i.Id == itemName.item_id);
+                    if (items != null)
+                    {
+                        string pathStart = "https://localhost:7134/images/sprites/items/";
+                        queryResults.Add(new QueryResultDTO(itemName.name, $"{pathStart}{items.Identifier}.png"));
+                    }
+                    else
+                    {
+                        queryResults.Add(new QueryResultDTO(itemName.name));
+                    }
+                });
+            }
+            return queryResults;
             }
 
     }
