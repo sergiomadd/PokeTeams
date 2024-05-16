@@ -36,5 +36,27 @@ namespace api.Controllers
             }
             return Ok(type);
         }
+
+        [HttpGet("all", Name = "GetAllTypes")]
+        public async Task<ActionResult<List<PokeTypeDTO>>> GetAllTypes()
+        {
+            var types = await _pokemonService.GetAllTypes();
+            if (types == null)
+            {
+                return BadRequest("Type not found.");
+            }
+            return Ok(types);
+        }
+
+        [HttpGet("teratype/all", Name = "GetAllTeraTypes")]
+        public async Task<ActionResult<List<PokeTypeDTO>>> GetAllTeraTypes()
+        {
+            var types = await _pokemonService.GetAllTeraTypes();
+            if (types == null)
+            {
+                return BadRequest("Type not found.");
+            }
+            return Ok(types);
+        }
     }
 }

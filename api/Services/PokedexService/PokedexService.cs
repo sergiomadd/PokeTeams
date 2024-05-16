@@ -416,7 +416,7 @@ namespace api.Services.PokedexService
             return null;
         }
 
-        private async Task<PokeTypeDTO?> GetTypeById(int id)
+        private async Task<PokeTypeDTO?> GetTypeById(int id, bool teraType = false)
         {
             PokeTypeDTO? pokeType = null;
             Types? targetType = await _pokedexContext.Types.FirstOrDefaultAsync(t => t.id == id);
@@ -426,7 +426,7 @@ namespace api.Services.PokedexService
                 if (targetTypeName != null)
                 {
 
-                    pokeType = new PokeTypeDTO(targetType.identifier, targetTypeName.name);
+                    pokeType = new PokeTypeDTO(targetType.identifier, targetTypeName.name, teraType);
                 }
             }
             return pokeType;
@@ -596,6 +596,28 @@ namespace api.Services.PokedexService
             }
             return queryResults;
             }
+
+        public async Task<List<PokeTypeDTO>> GetAllTypes()
+        {
+            List<PokeTypeDTO> pokeTypes = new List<PokeTypeDTO>();
+            List<Types> types = _pokedexContext.Types.ToList();
+            foreach(Types type in types)
+            {
+                pokeTypes.Add(await GetTypeById(type.id));
+            }
+            return pokeTypes;
+        }
+
+        public async Task<List<PokeTypeDTO>> GetAllTeraTypes()
+        {
+            List<PokeTypeDTO> pokeTypes = new List<PokeTypeDTO>();
+            List<Types> types = _pokedexContext.Types.ToList();
+            foreach (Types type in types)
+            {
+                pokeTypes.Add(await GetTypeById(type.id, true));
+            }
+            return pokeTypes;
+        }
 
     }
 }
