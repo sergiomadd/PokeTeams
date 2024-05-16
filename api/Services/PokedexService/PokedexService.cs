@@ -64,6 +64,25 @@ namespace api.Services.PokedexService
             };
         }
 
+        public async Task<MovePreviewDTO> BuildMovePreview(string identifier)
+        {
+            MovePreviewDTO movePreview = null;
+            if (identifier == null)
+            {
+                return null;
+            }
+            Moves moves = _pokedexContext.Moves.FirstOrDefault(m => m.identifier == identifier);
+            if (moves != null)
+            {
+                Move_names moveNames = _pokedexContext.Move_names.FirstOrDefault(m => m.move_id == moves.id && m.local_language_id == 9);
+                if (moveNames != null)
+                {
+                    movePreview = new MovePreviewDTO(moves.identifier, moveNames.name, await GetTypeById(moves.type_id ?? 0));
+                }
+            }
+            return movePreview;
+        }
+
         public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, EditorOptionsDTO editorOptions)
         {
             PokemonDataDTO pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1);
@@ -108,7 +127,7 @@ namespace api.Services.PokedexService
         private string? GetPokemonName(int id)
         {
             Pokemon_species_names? pokemonSpeciesNames = _pokedexContext.Pokemon_species_names.FirstOrDefault(p => p.pokemon_species_id == id && p.local_language_id == 9);
-            if(pokemonSpeciesNames != null)
+            if (pokemonSpeciesNames != null)
             {
                 return pokemonSpeciesNames?.name;
             }
@@ -186,9 +205,9 @@ namespace api.Services.PokedexService
         {
             List<PokemonDataDTO?> evolutions = new List<PokemonDataDTO?>();
             List<Pokemon_species?> pokemonSpeciesEvolutionList = _pokedexContext.Pokemon_species.Where(p => p.evolves_from_species_id == id).ToList();
-            if(pokemonSpeciesEvolutionList.Count() > 0)
+            if (pokemonSpeciesEvolutionList.Count() > 0)
             {
-                foreach(Pokemon_species pokemonSpeciesEvolution in pokemonSpeciesEvolutionList)
+                foreach (Pokemon_species pokemonSpeciesEvolution in pokemonSpeciesEvolutionList)
                 {
                     if (pokemonSpeciesEvolution != null)
                     {
@@ -204,7 +223,7 @@ namespace api.Services.PokedexService
         {
             ItemDTO? item = null;
             Item_names? itemNames = await _pokedexContext.Item_names.FindAsync(name);
-            if(itemNames != null)
+            if (itemNames != null)
             {
                 Item_prose? itemProse = await _pokedexContext.Item_prose.FindAsync(itemNames.item_id, 9);
                 Items? items = await _pokedexContext.Items.FindAsync(itemNames.item_id);
@@ -240,7 +259,7 @@ namespace api.Services.PokedexService
             {
                 Abilities? abilities = await _pokedexContext.Abilities.FirstOrDefaultAsync(a => a.id == abilityNames.ability_id);
                 Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilityNames.ability_id, abilityNames.local_language_id); ;
-                if(abilities != null && abilityProse != null)
+                if (abilities != null && abilityProse != null)
                 {
                     ability = new AbilityDTO(abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
                 }
@@ -258,7 +277,7 @@ namespace api.Services.PokedexService
                 Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilities.id, 9); ;
                 if (abilityNames != null && abilityProse != null)
                 {
-                    ability = new AbilityDTO( abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
+                    ability = new AbilityDTO(abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
                 }
             }
             return ability;
@@ -315,7 +334,7 @@ namespace api.Services.PokedexService
         public async Task<MoveDTO?> GetMoveByIdentifier(string identifier)
         {
             Moves? moves = await _pokedexContext.Moves.FirstOrDefaultAsync(m => m.identifier.Equals(identifier));
-            if(moves != null)
+            if (moves != null)
             {
                 Move_names? moveNames = await _pokedexContext.Move_names.FirstOrDefaultAsync(m => m.move_id == moves.id && m.local_language_id == 9);
                 if (moveNames != null)
@@ -489,13 +508,13 @@ namespace api.Services.PokedexService
             List<Type_efficacy> typeEfficacyList = _pokedexContext.Type_efficacy.Where(t => t.damage_type_id == id && t.damage_factor != 100).ToList();
             if (typeEfficacyList != null)
             {
-                foreach(var typeEfficacy in typeEfficacyList)
+                foreach (var typeEfficacy in typeEfficacyList)
                 {
                     Types? targetType = await _pokedexContext.Types.FindAsync(typeEfficacy.target_type_id);
                     Type_names? targetTypeName = await _pokedexContext.Type_names.FindAsync(targetType.id, 9);
                     if (targetType != null && targetTypeName != null)
                     {
-                        allValues.Add(new (targetType.identifier, (double)typeEfficacy.damage_factor / (double)100));
+                        allValues.Add(new(targetType.identifier, (double)typeEfficacy.damage_factor / (double)100));
                     }
                 }
                 effectiveness = new EffectivenessDTO(allValues);
@@ -516,7 +535,7 @@ namespace api.Services.PokedexService
                     Type_names? targetTypeName = await _pokedexContext.Type_names.FindAsync(typeEfficacy.damage_type_id, 9);
                     if (targetType != null && targetTypeName != null)
                     {
-                        allValues.Add(new (targetType.identifier, (double)typeEfficacy.damage_factor / (double)100));
+                        allValues.Add(new(targetType.identifier, (double)typeEfficacy.damage_factor / (double)100));
                     }
                 }
                 effectiveness = new EffectivenessDTO(allValues);
@@ -529,7 +548,7 @@ namespace api.Services.PokedexService
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
             List<Pokemon_species_names> pokemonNames = _pokedexContext.Pokemon_species_names
                 .Where(p => p.name.Contains(key) && p.local_language_id == 9).ToList();
-            if(pokemonNames != null && pokemonNames.Count > 0)
+            if (pokemonNames != null && pokemonNames.Count > 0)
             {
                 pokemonNames.ForEach(pokemonName =>
                 {
@@ -551,17 +570,17 @@ namespace api.Services.PokedexService
                 moveNames.ForEach(moveName =>
                 {
                     Moves? moves = _pokedexContext.Moves.Find(moveName.move_id);
-                    if(moves != null)
+                    if (moves != null)
                     {
                         Types? targetType = _pokedexContext.Types.FirstOrDefault(t => t.id == moves.type_id);
-                        if(targetType != null)
+                        if (targetType != null)
                         {
                             var pathStart = "https://localhost:7134/images/sprites/types/generation-viii/";
                             queryResults.Add(new QueryResultDTO(moveName.name, $"{pathStart}{targetType.identifier}.png"));
                         }
                         else
                         {
-                        queryResults.Add(new QueryResultDTO(moveName.name));
+                            queryResults.Add(new QueryResultDTO(moveName.name));
                         }
                     }
                     else
@@ -595,7 +614,7 @@ namespace api.Services.PokedexService
                 });
             }
             return queryResults;
-            }
+        }
 
         public async Task<List<PokeTypeDTO>> GetAllTypes()
         {
