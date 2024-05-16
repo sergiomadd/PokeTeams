@@ -1,4 +1,5 @@
 ﻿using api.Data;
+using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Services.PokedexService;
 using Microsoft.AspNetCore.Http;

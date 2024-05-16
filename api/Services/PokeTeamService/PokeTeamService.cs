@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Components.Forms;
 using api.Services.PokedexService;
 using api.Models.DBPokedexModels;
 using Microsoft.Extensions.Options;
+using api.Models.DBModels;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace api.Services.TeamService
 {
@@ -39,8 +41,8 @@ namespace api.Services.TeamService
             {
                 queriedUsers.Add(new UserQueryDTO
                 {
-                    UserName = user.UserName,
-                    Picture = user.Picture ?? null,
+                    Username = user.UserName,
+                    Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png" ?? null,
                     Country = user.Country == null ? GetCountry(user.Country) : null,
                 });
             });
@@ -57,7 +59,7 @@ namespace api.Services.TeamService
             {
                 queriedUsers.Add(new UserQueryDTO
                 {
-                    UserName = user.UserName,
+                    Username = user.UserName,
                     Picture = user.Picture ?? null,
                     Country = user.Country == null ? GetCountry(user.Country) : null,
                 });
@@ -181,7 +183,7 @@ namespace api.Services.TeamService
             return teamDTO;
         }
 
-        public async Task<Team?> SaveTeam(TeamDTO inputTeam, string loggedUserName)
+        public async Task<Team?> SaveTeam(TeamUploadDTO inputTeam, string loggedUserName)
         {
             Team newTeam = null;
             string teamId = GenerateId(10);
@@ -232,6 +234,17 @@ namespace api.Services.TeamService
                     }
                 }
                 
+                Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(inputTeam.Tournament.ToUpper());
+                if(tournament == null)
+                {
+                    tournament = new Tournament
+                    {
+                        Name = inputTeam.Tournament,
+                        NormalizedName = inputTeam.Tournament.ToUpper(),
+                        Official = false
+                    };
+                }
+                
                 newTeam = new Team
                 {
                     Id = teamId,
@@ -239,8 +252,7 @@ namespace api.Services.TeamService
                     Options = optionsString,
                     PlayerId = player != null ? player.Id : null,
                     AnonPlayer = player == null ? inputTeam.Player : null,
-                    //TournamentName = inputTeam.Tournament.Name,
-                    Tournament = inputTeam.Tournament != null ? BreakTournamentDTO(inputTeam.Tournament) : null,
+                    Tournament = tournament,
                     Regulation = inputTeam.Regulation ?? null,
                     ViewCount = 0,
                     Visibility = inputTeam.Visibility,
