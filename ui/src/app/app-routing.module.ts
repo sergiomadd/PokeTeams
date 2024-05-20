@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, UrlSegment, withComponentInputBinding } from '@angular/router';
-import { AppComponent } from './app.component';
-import { TeamViewComponent } from './components/team-view/team-view.component';
-import { VgcComponent } from './components/vgc/vgc.component';
+import { RouterModule, Routes, UrlSegment } from '@angular/router';
 import { MainComponent } from './components/main/main.component';
+import { SearchComponent } from './components/search/search.component';
+import { TeamViewComponent } from './components/team-view/team-view.component';
 import { UserComponent } from './components/user/user.component';
 
 
 const routes: Routes = [
   { path: '', component: MainComponent},
+  { path: 'search', component: SearchComponent},
   {
     matcher: (url) => 
     {

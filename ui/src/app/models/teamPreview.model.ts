@@ -1,11 +1,11 @@
 import { EditorOptions } from "./editorOptions.model";
-import { Pokemon } from "./pokemon/pokemon.model";
+import { PokemonPreview } from "./pokemonPreview.model";
 import { Tag } from "./tag.model";
 
 export interface TeamPreview
 {
   id: string,
-  pokemons: Pokemon[],
+  pokemons: PokemonPreview[],
   options: EditorOptions,
   player?: string,
   tournament?: string,

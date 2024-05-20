@@ -1,12 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, catchError, lastValueFrom, timeout } from 'rxjs';
+import { BehaviorSubject, catchError, lastValueFrom, Observable, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { authActions } from '../auth/store/auth.actions';
+import { SearchQueryDTO } from '../models/DTOs/searchQuery.dto';
 import { TeamId } from '../models/DTOs/teamId.dto';
 import { defaultEditorData, EditorData } from '../models/editorData.model';
 import { Team } from '../models/team.model';
+import { TeamPreview } from '../models/teamPreview.model';
 import { getErrorMessage, toCamelCase } from './util';
 
 @Injectable({
@@ -18,7 +20,7 @@ export class TeamService
   store = inject(Store);
 
   private apiUrl = environment.apiURL;
-  private dataTimeout = 2000;
+  private dataTimeout = 5000;
 
   private httpOptionsString = 
   {
@@ -100,7 +102,7 @@ export class TeamService
     }
   }
 
-  async deleteTeam(teamKey: string): Promise<string | undefined>
+  async deleteTeam(teamKey: string) : Promise<string | undefined>
   {
     let url = this.apiUrl + 'team/delete';
     let deleted: string | undefined = undefined;
@@ -117,5 +119,21 @@ export class TeamService
     }
     this.store.dispatch(authActions.getLogged());
     return deleted;
+  }
+
+  searchTeams(searchQuery: SearchQueryDTO) : Observable<TeamPreview[]>
+  {
+    let teams: TeamPreview[] = [];
+    let url = this.apiUrl + 'team/query';
+    try
+    {
+      return this.http.post<TeamPreview[]>(url, searchQuery)
+      .pipe(catchError(() => []), timeout(this.dataTimeout));
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return toCamelCase(teams); 
   }
 }

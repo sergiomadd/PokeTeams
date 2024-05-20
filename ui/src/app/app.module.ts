@@ -21,10 +21,12 @@ import { TopOptionComponent } from './components/options/top-option/top-option.c
 import { DialogComponent } from './components/pieces/dialog/dialog.component';
 import { DropdownComponent } from './components/pieces/dropdown/dropdown.component';
 import { MultiSearchComponent } from './components/pieces/multi-search/multi-search.component';
+import { ResultStorageComponent } from './components/pieces/result-storage/result-storage.component';
+import { SmartInputComponent } from './components/pieces/smart-input/smart-input.component';
 import { SwitchComponent } from './components/pieces/switch/switch.component';
-import { TagComponent } from './components/pieces/tag/tag.component';
 import { PokemonPreviewComponent } from './components/pokemon-preview/pokemon-preview.component';
 import { PokemonComponent } from './components/pokemon/pokemon.component';
+import { SearchComponent } from './components/search/search.component';
 import { TeamEditorComponent } from './components/team-editor/team-editor.component';
 import { TeamIconsComponent } from './components/team-icons/team-icons.component';
 import { TeamPreviewComponent } from './components/team-preview/team-preview.component';
@@ -38,7 +40,6 @@ import { UserComponent } from './components/user/user.component';
 import { VgcComponent } from './components/vgc/vgc.component';
 import { LinkerPipe } from './pipes/linker.pipe';
 import { metaReducers } from './state/app.state';
-import { SearchComponent } from './components/search/search.component';
 
 @NgModule({
   declarations: [
@@ -68,9 +69,10 @@ import { SearchComponent } from './components/search/search.component';
     UserTeamsComponent,
     DialogComponent,
     MultiSearchComponent,
-    TagComponent,
     MenuComponent,
     SearchComponent,
+    SmartInputComponent,
+    ResultStorageComponent,
   ],
   exports: [],
   imports: [

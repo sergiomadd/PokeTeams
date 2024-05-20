@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, lastValueFrom, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { defaultPokemonData, PokemonData } from '../models/DTOs/pokemonData.dto';
+import { QueryResultDTO } from '../models/DTOs/queryResult.dto';
 import { Ability, defaultAbility } from '../models/pokemon/ability.model';
 import { DefaultItem, Item } from '../models/pokemon/item.model';
 import { defaultMove, Move } from '../models/pokemon/move.model';
@@ -229,5 +230,56 @@ export class PokemonService
       console.log("Error: ", getErrorMessage(error));
     }
     return statName;
+  }
+
+  async queryPokemonsByName(key: string) : Promise<QueryResultDTO[]>
+  {
+    let pokemons: QueryResultDTO[] = [];
+    let url = this.apiUrl + 'pokemon/query';
+    try
+    {
+      let params = new HttpParams().set('key', key ?? "");
+      pokemons = await lastValueFrom(this.http.get<QueryResultDTO[]>(url, {params: params})
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return pokemons; 
+  }
+
+  async queryMovesByName(key: string) : Promise<QueryResultDTO[]>
+  {
+    let moves: QueryResultDTO[] = [];
+    let url = this.apiUrl + 'move/query';
+    try
+    {
+      let params = new HttpParams().set('key', key ?? "");
+      moves = await lastValueFrom(this.http.get<QueryResultDTO[]>(url, {params: params})
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return moves; 
+  }
+
+  async queryItemsByName(key: string) : Promise<QueryResultDTO[]>
+  {
+    let items: QueryResultDTO[] = [];
+    let url = this.apiUrl + 'item/query';
+    try
+    {
+      let params = new HttpParams().set('key', key ?? "");
+      items = await lastValueFrom(this.http.get<QueryResultDTO[]>(url, {params: params})
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return items; 
   }
 } 
