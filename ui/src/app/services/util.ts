@@ -122,3 +122,12 @@ export function haveMinutesPassed(lastTime: number, minutesToPass: number) : boo
   const passedTime = new Date().getTime() - lastTime;
   return passedTime > milisecondsToPass ? true : false;
 }
+
+export function customFormatDate(date: string)
+{
+  //Format from backend YYYY-MM-DD
+  const day = date.split('-')[2];
+  const month = date.split('-')[1];
+  const year = date.split('-')[0];
+  return [day, month, year].join('/');
+}

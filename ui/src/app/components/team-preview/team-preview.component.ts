@@ -1,8 +1,8 @@
 import { Component, inject, Input, QueryList, ViewChildren } from '@angular/core';
-import { Team } from 'src/app/models/team.model';
+import { TeamPreview } from 'src/app/models/teamPreview.model';
 import { ParserService } from 'src/app/services/parser.service';
 import { TeamService } from 'src/app/services/team.service';
-import { copyToClipboard } from 'src/app/services/util';
+import { copyToClipboard, customFormatDate } from 'src/app/services/util';
 import { PokemonPreviewComponent } from '../pokemon-preview/pokemon-preview.component';
 
 @Component({
@@ -15,7 +15,8 @@ export class TeamPreviewComponent
   teamService = inject(TeamService);
   parser = inject(ParserService);
 
-  @Input() team?: Team;
+  @Input() team?: TeamPreview;
+  teamID?: number;
   @Input() mode?: string;
   @Input() logged?: boolean;
   
@@ -25,7 +26,7 @@ export class TeamPreviewComponent
 
   ngOnInit()
   {
-    console.log(this.team)
+
   }
 
   getVisibility()
@@ -45,7 +46,7 @@ export class TeamPreviewComponent
   {
     if(this.team?.pokemons)
     {
-      copyToClipboard(this.parser.reversePaste(this.team?.pokemons));
+      //copyToClipboard(this.parser.reversePaste(this.team?.pokemons));
     }
   }
 
@@ -63,5 +64,10 @@ export class TeamPreviewComponent
     {
       this.feedback = await this.teamService.deleteTeam(this.team?.id);
     }
+  }
+
+  formatDate(date)
+  {
+    return customFormatDate(date);
   }
 }
