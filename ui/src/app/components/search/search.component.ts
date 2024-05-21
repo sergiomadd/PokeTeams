@@ -1,7 +1,7 @@
 import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { QueryResultDTO } from 'src/app/models/DTOs/queryResult.dto';
 import { SearchQueryDTO } from 'src/app/models/DTOs/searchQuery.dto';
+import { Tag } from 'src/app/models/tag.model';
 import { TeamPreview } from 'src/app/models/teamPreview.model';
 import { PokemonService } from 'src/app/services/pokemon.service';
 import { TeamService } from 'src/app/services/team.service';
@@ -33,7 +33,7 @@ export class SearchComponent
     pokemon: [''],
   });
 
-  customQueryResult: QueryResultDTO = 
+  customQueryResult: Tag = 
   {
     name: "Custom value",
     identifier: "custom"
@@ -41,9 +41,9 @@ export class SearchComponent
 
   //getters for childs
   @ViewChild('userInput') userInputComponent!: SmartInputComponent;
-  queryUserCallback = async (args: any): Promise<QueryResultDTO[]> => 
+  queryUserCallback = async (args: any): Promise<Tag[]> => 
   {
-    return (await this.userService.queryUser(args)).map((u): QueryResultDTO => 
+    return (await this.userService.queryUser(args)).map((u): Tag => 
       ({
         name: u.username,
         identifier: u.username,
@@ -52,7 +52,7 @@ export class SearchComponent
   }
 
   @ViewChild('tournamentInput') tournamentInputComponent!: SmartInputComponent;
-  queryTournamentCallback = async (args: any): Promise<QueryResultDTO[]> => 
+  queryTournamentCallback = async (args: any): Promise<Tag[]> => 
   {
     return (await this.userService.queryUser(args)).map(u => 
       ({
@@ -63,7 +63,7 @@ export class SearchComponent
   }
 
   @ViewChild('regulationInput') regulationInputComponent!: SmartInputComponent;
-  queryRegulationCallback = async (args: any): Promise<QueryResultDTO[]> => 
+  queryRegulationCallback = async (args: any): Promise<Tag[]> => 
   {
     return (await this.userService.queryUser(args)).map(u => 
       ({
@@ -74,7 +74,7 @@ export class SearchComponent
   }
 
   @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;
-  queryPokemonCallback = async (args: any): Promise<QueryResultDTO[]> => 
+  queryPokemonCallback = async (args: any): Promise<Tag[]> => 
   {
     console.log(args)
     if(args)
@@ -90,13 +90,13 @@ export class SearchComponent
   }
   
   @ViewChild('pokemonStorage') pokemonResultStorageComponent?: ResultStorageComponent;
-  pokemonSelectEvent($event: QueryResultDTO)
+  pokemonSelectEvent($event: Tag)
   {
-    this.pokemonResultStorageComponent?.results.push($event);
+    this.pokemonResultStorageComponent?.results?.push($event);
   }
 
   @ViewChild('moveInput') moveInputComponent!: SmartInputComponent;
-  queryMoveCallback = async (args: any): Promise<QueryResultDTO[]> => 
+  queryMoveCallback = async (args: any): Promise<Tag[]> => 
   {
     if(args)
     {
@@ -105,13 +105,13 @@ export class SearchComponent
     return [];
   }
   @ViewChild('moveStorage') moveResultStorageComponent?: ResultStorageComponent;
-  moveSelectEvent($event: QueryResultDTO)
+  moveSelectEvent($event: Tag)
   {
-    this.moveResultStorageComponent?.results.push($event);
+    this.moveResultStorageComponent?.results?.push($event);
   }
 
   @ViewChild('itemInput') itemInputComponent!: SmartInputComponent;
-  queryItemCallback = async (args: any): Promise<QueryResultDTO[]> => 
+  queryItemCallback = async (args: any): Promise<Tag[]> => 
   {
     if(args)
     {
@@ -120,9 +120,9 @@ export class SearchComponent
     return [];
   }
   @ViewChild('itemStorage') itemResultStorageComponent?: ResultStorageComponent;
-  itemSelectEvent($event: QueryResultDTO)
+  itemSelectEvent($event: Tag)
   {
-    this.itemResultStorageComponent?.results.push($event);
+    this.itemResultStorageComponent?.results?.push($event);
   }
 
   ngOnChanges(changes: SimpleChanges)
@@ -145,7 +145,7 @@ export class SearchComponent
     let searchQuery: SearchQueryDTO = 
     {
       userName: this.userInputComponent.searchForm.controls.key.value,
-      pokemons: this.pokemonResultStorageComponent?.results.map(r => r.name)
+      pokemons: this.pokemonResultStorageComponent?.results?.map(r => r.name)
     }
     
     this.teamService.searchTeams(searchQuery).subscribe(

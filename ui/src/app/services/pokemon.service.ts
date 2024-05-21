@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, lastValueFrom, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { defaultPokemonData, PokemonData } from '../models/DTOs/pokemonData.dto';
-import { QueryResultDTO } from '../models/DTOs/queryResult.dto';
 import { Ability, defaultAbility } from '../models/pokemon/ability.model';
 import { DefaultItem, Item } from '../models/pokemon/item.model';
 import { defaultMove, Move } from '../models/pokemon/move.model';
@@ -12,6 +11,7 @@ import { Pokemon } from '../models/pokemon/pokemon.model';
 import { Stat } from '../models/pokemon/stat.model';
 import { defaultTypeWithEffectiveness, TypeWithEffectiveness } from '../models/pokemon/typewitheffectiveness.model';
 import { PokePaste } from '../models/pokePaste.model';
+import { Tag } from '../models/tag.model';
 import { LinkifierService } from './linkifier.service';
 import { getErrorMessage } from './util';
 
@@ -232,14 +232,14 @@ export class PokemonService
     return statName;
   }
 
-  async queryPokemonsByName(key: string) : Promise<QueryResultDTO[]>
+  async queryPokemonsByName(key: string) : Promise<Tag[]>
   {
-    let pokemons: QueryResultDTO[] = [];
+    let pokemons: Tag[] = [];
     let url = this.apiUrl + 'pokemon/query';
     try
     {
       let params = new HttpParams().set('key', key ?? "");
-      pokemons = await lastValueFrom(this.http.get<QueryResultDTO[]>(url, {params: params})
+      pokemons = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
       .pipe(catchError(() => []), timeout(this.dataTimeout)));
     }
     catch(error)
@@ -249,14 +249,14 @@ export class PokemonService
     return pokemons; 
   }
 
-  async queryMovesByName(key: string) : Promise<QueryResultDTO[]>
+  async queryMovesByName(key: string) : Promise<Tag[]>
   {
-    let moves: QueryResultDTO[] = [];
+    let moves: Tag[] = [];
     let url = this.apiUrl + 'move/query';
     try
     {
       let params = new HttpParams().set('key', key ?? "");
-      moves = await lastValueFrom(this.http.get<QueryResultDTO[]>(url, {params: params})
+      moves = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
       .pipe(catchError(() => []), timeout(this.dataTimeout)));
     }
     catch(error)
@@ -266,14 +266,14 @@ export class PokemonService
     return moves; 
   }
 
-  async queryItemsByName(key: string) : Promise<QueryResultDTO[]>
+  async queryItemsByName(key: string) : Promise<Tag[]>
   {
-    let items: QueryResultDTO[] = [];
+    let items: Tag[] = [];
     let url = this.apiUrl + 'item/query';
     try
     {
       let params = new HttpParams().set('key', key ?? "");
-      items = await lastValueFrom(this.http.get<QueryResultDTO[]>(url, {params: params})
+      items = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
       .pipe(catchError(() => []), timeout(this.dataTimeout)));
     }
     catch(error)

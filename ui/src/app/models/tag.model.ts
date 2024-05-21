@@ -1,7 +1,8 @@
 export interface Tag
 {
+  name: string, 
   identifier: string,
-  name: string,
-  description: string,
-  color: string
+  description?: string,
+  icon?: string,
+  color?: string
 }

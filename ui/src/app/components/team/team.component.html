@@ -12,9 +12,7 @@
       </div>
     </div>
     <div class="tags">
-      <ng-container *ngFor="let tag of team?.tags">
-        <app-tag [tag]="tag"></app-tag>
-      </ng-container>
+      <app-result-storage [results]="team?.tags"></app-result-storage>
     </div>
     <div class="options">
       <div 

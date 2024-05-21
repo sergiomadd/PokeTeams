@@ -34,8 +34,10 @@ export class TopOptionComponent
   {
     name: ['', [Validators.maxLength(256)]],
     description: ['', [Validators.maxLength(256)]],
-    color: ['', [Validators.maxLength(256)]]
+    color: ['#000000', [Validators.maxLength(256)]]
   });
+
+  tagColor = "";
 
   @Output() detailsChange = new EventEmitter();
 
@@ -45,13 +47,11 @@ export class TopOptionComponent
     {
       if(user)
       {
-        console.log("logged user name exists")
         this.detailsForm.controls.player.setValue(user?.username ?? null);
         this.detailsForm.controls.player.valueChanges.subscribe(async (value) => 
         {
           if(value !== user?.username)
           {
-            console.log("not username")
             this.detailsForm.controls.player.setErrors({ "notLoggedUserName": true })
           }
         });
@@ -72,7 +72,6 @@ export class TopOptionComponent
         }
       )
     }
-    console.log(this.tags);
     //this.tagsEvent.emit(this.tags);
   }
 

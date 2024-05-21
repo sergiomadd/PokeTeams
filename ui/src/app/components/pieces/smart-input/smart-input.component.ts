@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { QueryResultDTO } from 'src/app/models/DTOs/queryResult.dto';
+import { Tag } from 'src/app/models/tag.model';
 
 
 @Component({
@@ -14,18 +14,20 @@ export class SmartInputComponent
 
   @Input() label?: string;
   //Pass function for where to get results of input
-  @Input() getter?: (args: any) => Promise<QueryResultDTO[]>
-  @Output() selectEvent = new EventEmitter<QueryResultDTO>();
+  @Input() getter?: (args: any) => Promise<Tag[]>
+  @Output() selectEvent = new EventEmitter<Tag>();
+  results?: Tag[] = [];
 
   @Input() keepSelected?: boolean;
-  keptResult?: QueryResultDTO;
-  showOptions: boolean = false;
+  keptResult?: Tag;
+
   @ViewChild('input') input!: ElementRef;
   searchForm = this.formBuilder.group(
-    {
-      key: [''],
-    });
-  results?: QueryResultDTO[] = [];
+  {
+    key: [''],
+  });
+
+  showOptions: boolean = false;
 
   ngOnInit()
   {
@@ -52,7 +54,7 @@ export class SmartInputComponent
     }
   }
 
-  selectResult(selectedResult: QueryResultDTO)
+  selectResult(selectedResult: Tag)
   {
     if(this.keepSelected && selectedResult.identifier === "custom")
     {

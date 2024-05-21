@@ -1,8 +1,9 @@
-import { Component, inject, Input, QueryList, ViewChildren } from '@angular/core';
+import { Component, inject, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Team } from 'src/app/models/team.model';
 import { ParserService } from 'src/app/services/parser.service';
 import { copyToClipboard } from 'src/app/services/util';
+import { ResultStorageComponent } from '../pieces/result-storage/result-storage.component';
 import { PokemonComponent } from '../pokemon/pokemon.component';
 
 
@@ -19,9 +20,10 @@ export class TeamComponent
 
   @ViewChildren(PokemonComponent) pokemonComponents!:QueryList<PokemonComponent>;
 
+  @ViewChild(ResultStorageComponent) tagStorage!: ResultStorageComponent;
+
   showAllStats: boolean = false;
   showAllNotes: boolean = false;
-  
   
   forceChange(options: EditorOptions)
   {

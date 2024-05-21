@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { QueryResultDTO } from 'src/app/models/DTOs/queryResult.dto';
+import { Component, Input } from '@angular/core';
+import { Tag } from 'src/app/models/tag.model';
 
 @Component({
   selector: 'app-result-storage',
@@ -8,10 +8,10 @@ import { QueryResultDTO } from 'src/app/models/DTOs/queryResult.dto';
 })
 export class ResultStorageComponent 
 {
-  results: QueryResultDTO[] = [];
+  @Input() results?: Tag[] = [];
 
   remove(index: number)
   {
-    this.results.splice(index, 1);
+    this.results?.splice(index, 1);
   }
 }
