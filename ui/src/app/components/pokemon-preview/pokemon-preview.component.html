@@ -5,26 +5,22 @@
         <div class="icon"></div>
         <img [src]="pokemonSpritePath" alt="" class="sprite">
         <div class="types">
-          <ng-container *ngIf="pokemon?.types?.dualEffectiveness ?? false; else monotype">
+          <ng-container *ngIf="pokemon?.types?.type1">
             <img src="{{pokemon?.types?.type1?.iconPath}}" title="{{pokemon?.types?.type1?.name}}" alt="{{pokemon?.types?.type1?.name}}" class="icon">
+          </ng-container>
+          <ng-container *ngIf="pokemon?.types?.type2">
             <img src="{{pokemon?.types?.type2?.iconPath}}" title="{{pokemon?.types?.type2?.name}}" alt="{{pokemon?.types?.type2?.name}}" class="icon">
           </ng-container>
-          <ng-template #monotype>
-            <img src="{{pokemon?.types?.type1?.iconPath}}" title="{{pokemon?.types?.type1?.name}}" alt="{{pokemon?.types?.type1?.name}}" class="icon">
-          </ng-template>
           <ng-container *ngIf="pokemon?.teraType">
             <img src="{{pokemon?.teraType?.iconPath}}" alt="" class="icon">
           </ng-container>
         </div>
       </div>
-      <div class="text-center section">
-        {{pokemon?.name}}
-      </div>
-    </div>    
+    </div>
     <ng-container *ngIf="expanded">
       <div class="expanded">
         <div class="ability text-center section">
-          {{pokemon?.ability?.name}}
+          {{pokemon?.abilityName}}
         </div>
         <div class="section">
           <img src="{{pokemon?.item?.iconPath}}" alt="" class="icon bottom-icon">

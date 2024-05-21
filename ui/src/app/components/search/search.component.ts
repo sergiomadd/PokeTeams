@@ -6,7 +6,6 @@ import { TeamPreview } from 'src/app/models/teamPreview.model';
 import { PokemonService } from 'src/app/services/pokemon.service';
 import { TeamService } from 'src/app/services/team.service';
 import { UserService } from 'src/app/services/user.service';
-import { DropdownOption } from '../pieces/dropdown/dropdown.component';
 import { ResultStorageComponent } from '../pieces/result-storage/result-storage.component';
 import { SmartInputComponent } from '../pieces/smart-input/smart-input.component';
 
@@ -24,7 +23,7 @@ export class SearchComponent
 
   teams: TeamPreview[] = [];
   logged?: boolean = true;
-  sortedTeams?: TeamPreview[] = [];
+  sortedTeams: TeamPreview[] = [];
   searched: boolean = false;
 
   searchForm = this.formBuilder.group(
@@ -130,7 +129,7 @@ export class SearchComponent
   {
     if(changes['teams'])
     {
-      this.sortedTeams = this.teams;
+      this.sortedTeams = [...this.teams];
       this.searched = false;
     }
   }
@@ -149,12 +148,12 @@ export class SearchComponent
       pokemons: this.pokemonResultStorageComponent?.results.map(r => r.name)
     }
     
-    console.log(searchQuery)
     this.teamService.searchTeams(searchQuery).subscribe(
       {
         next: (response) => 
         {
           this.teams = response;
+          this.sortedTeams = [...response];
         },
         error: (error) => 
         {
@@ -162,7 +161,6 @@ export class SearchComponent
         },
         complete: () => 
         {
-          console.log("complete")
           this.searched = false;
         }
       }
@@ -170,6 +168,54 @@ export class SearchComponent
   }
 
   //sorting
+  sorterSettings = [[true, false, false], [true, false, false]]
+
+  resetSorter()
+  {
+    this.sorterSettings.forEach(setting => 
+    {
+      setting[0] = true;
+      setting[1] = false;
+      setting[2] = false;
+    });
+  }
+
+  changeSorter(index)
+  {
+    if(this.sorterSettings[index][0])
+    {
+      this.resetSorter();
+      this.sorterSettings[index][0] = false;
+      this.sorterSettings[index][1] = true;
+      if(index == 0)
+      {
+        this.sortTeamsByDate(true);
+      }
+      else if(index == 1)
+      {
+        this.sortTeamsByViews(true);
+      }
+    }
+    else if(this.sorterSettings[index][1])
+    {
+      this.sorterSettings[index][1] = false;
+      this.sorterSettings[index][2] = true;
+      if(index == 0)
+      {
+        this.sortTeamsByDate(false);
+      }
+      else if(index == 1)
+      {
+        this.sortTeamsByViews(false);
+      }
+    }
+    else if(this.sorterSettings[index][2])
+    {
+      this.sorterSettings[index][2] = false;
+      this.sorterSettings[index][0] = true;
+      this.sortedTeams = [...this.teams];
+    }
+  }
 
   switchVisibility($event)
   {
@@ -183,39 +229,53 @@ export class SearchComponent
     }
   }
 
-  selectSorter(option: DropdownOption)
+  sortTeamsByViews(descending: boolean)
   {
-    switch(option.name)
+    if(descending)
     {
-      case "Date":
-        //this.sortTeamsByDate()
-        break;
-      case "Views":
-        this.sortTeamsByViews()
-        break;
-    }
-
-  }
-
-  sortTeamsByViews()
-  {
-    this.sortedTeams?.sort((a, b) => 
-    {
-      return a.viewCount - b.viewCount;
-    });
-  }
-
-  sortTeamsByDate()
-  {
-    this.sortedTeams?.sort((a, b) => 
-    {
-      if(a.date && b.date)
+      this.sortedTeams?.sort((b, a) => 
       {
-        let dateA = new Date(a.date);
-        let dateB = new Date(b.date);
-        return dateA.getDay() + dateB.getDay();
-      }
-      return 0;
-    });
+        return a.viewCount - b.viewCount;
+      });
+    }
+    else
+    {
+      this.sortedTeams?.sort((a, b) => 
+      {
+        return a.viewCount - b.viewCount;
+      });
+    }
   }
+
+  sortTeamsByDate(descending: boolean)
+  {
+    if(descending)
+    {
+      this.sortedTeams?.sort((a, b) => 
+      {
+        if(a.date && b.date)
+        {
+          let dateA = Date.parse(a.date);
+          let dateB = Date.parse(b.date);
+          return dateA - dateB;
+        }
+        return 0;
+      });
+    }
+    else
+    {
+      this.sortedTeams?.sort((b, a) => 
+      {
+        if(a.date && b.date)
+        {
+          let dateA = Date.parse(a.date);
+          let dateB = Date.parse(b.date);
+          return dateA - dateB;
+        }
+        return 0;
+      });
+    }
+  }
+
+  
 }

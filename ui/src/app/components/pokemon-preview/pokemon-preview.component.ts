@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
+import { PokemonPreview } from 'src/app/models/pokemonPreview.model';
 
 @Component({
   selector: 'app-pokemon-preview',
@@ -8,7 +8,7 @@ import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 })
 export class PokemonPreviewComponent 
 {
-  @Input() pokemon?: Pokemon;
+  @Input() pokemon?: PokemonPreview;
 
   expanded: boolean = false;
   pokemonSpritePath: string | undefined = undefined;
@@ -25,7 +25,7 @@ export class PokemonPreviewComponent
 
   getSprite()
   {
-      let choosenVariationPath = this.pokemon?.sprites ? this.pokemon?.sprites[0] : undefined;
+      let choosenVariationPath = this.pokemon?.sprite;
       if(this.pokemon?.gender === "female")
       {
         this.pokemonSpritePath = this.pokemon?.shiny ? choosenVariationPath?.shinyFemale : choosenVariationPath?.female
