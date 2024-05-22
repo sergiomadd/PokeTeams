@@ -90,7 +90,7 @@ namespace api.Services.TeamService
                 Tournament = BuildTournamentDTO(team.Tournament),
                 Regulation = team.Regulation,
                 ViewCount = team.ViewCount,
-                Date = team.DateCreated.ToShortDateString(),
+                Date = team.DateCreated.ToString("yyyy-MM-dd"),
                 Visibility = team.Visibility,
                 Tags = await GetTeamTags(team)
             };
