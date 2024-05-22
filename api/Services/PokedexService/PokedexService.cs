@@ -86,6 +86,13 @@ namespace api.Services.PokedexService
         public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, EditorOptionsDTO editorOptions)
         {
             PokemonDataDTO pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1);
+            List<MovePreviewDTO> moves = new List<MovePreviewDTO>()
+            { 
+                await BuildMovePreview(pokemon.Move1Identifier),
+                await BuildMovePreview(pokemon.Move2Identifier),
+                await BuildMovePreview(pokemon.Move3Identifier),
+                await BuildMovePreview(pokemon.Move4Identifier)
+            };
 
             return new PokemonPreviewDTO
             {
@@ -93,7 +100,12 @@ namespace api.Services.PokedexService
                 DexNumber = pokemonData.DexNumber,
                 Types = await GetPokemonTypes(pokemonData.DexNumber),
                 TeraType = await GetTypeByIdentifier(pokemon.TeraTypeIdentifier, true),
-                Sprite = pokemonData.Sprites[int.Parse(editorOptions.PokemonSpritesGen.Identifier)]
+                Sprite = pokemonData.Sprites[int.Parse(editorOptions.PokemonSpritesGen.Identifier)],
+                Shiny = pokemon.Shiny,
+                Gender = pokemon.Gender,
+                Moves = moves,
+                Item = await GetItemByIdentifier(pokemon.ItemIdentifier),
+                AbilityName = GetAbilityByIdentifier(pokemon.AbilityIdentifier).Result.Name ?? ""
             };
         }
 

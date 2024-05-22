@@ -22,9 +22,9 @@ namespace api.Services.PokedexService
         public Task<List<PokeTypeDTO>> GetAllTeraTypes();
         public Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessByIdentifier(string identifier, bool teraType = false);
         public Task<string?> GetStatNameByIdentifier(string identifier);
-        public List<QueryResultDTO> QueryPokemonsByName(string key);
-        public List<QueryResultDTO> QueryMovesByName(string key);
-        public List<QueryResultDTO> QueryItemsByName(string key);
+        public List<TagDTO> QueryPokemonsByName(string key);
+        public List<TagDTO> QueryMovesByName(string key);
+        public List<TagDTO> QueryItemsByName(string key);
 
     }
 }
