@@ -32,9 +32,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("query")]
-        public async Task<ActionResult<List<QueryResultDTO>>> QueryPokemonsByName(string key)
+        public async Task<ActionResult<List<TagDTO>>> QueryPokemonsByName(string key)
         {
-            List<QueryResultDTO> pokemons = _pokemonService.QueryPokemonsByName(key);
+            List<TagDTO> pokemons = _pokemonService.QueryPokemonsByName(key);
             if (pokemons == null)
             {
                 return NotFound("Couldn't find pokemons");

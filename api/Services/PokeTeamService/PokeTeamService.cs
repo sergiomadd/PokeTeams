@@ -122,13 +122,7 @@ namespace api.Services.TeamService
                 Tag tag = _pokeTeamContext.Tag.FirstOrDefault(t => t.Identifier == teamTag.TagsIdentifier);
                 if (tag != null)
                 {
-                    TagDTO tagDTO = new TagDTO
-                    {
-                        Identifier = tag.Identifier,
-                        Name = tag.Name,
-                        Description = tag.Description,
-                        Color = tag.Color
-                    };
+                    TagDTO tagDTO = new TagDTO(tag.Name, tag.Identifier, description: tag.Description, color: tag.Color);
                     tags.Add(tagDTO);
                 }
             }
@@ -157,7 +151,7 @@ namespace api.Services.TeamService
                     BuildTournamentDTO(team.Tournament),
                     team.Regulation,
                     team.ViewCount,
-                    team.DateCreated.ToShortDateString(),
+                    team.DateCreated.ToString("yyyy-MM-dd"),
                     team.Visibility,
                     await GetTeamTags(team)
                     );

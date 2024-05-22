@@ -41,9 +41,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("query")]
-        public async Task<ActionResult<List<QueryResultDTO>>> QueryItemsByName(string key)
+        public async Task<ActionResult<List<TagDTO>>> QueryItemsByName(string key)
         {
-            List<QueryResultDTO> items = _pokemonService.QueryItemsByName(key);
+            List<TagDTO> items = _pokemonService.QueryItemsByName(key);
             if (items == null)
             {
                 return NotFound("Couldn't find items");

@@ -543,26 +543,26 @@ namespace api.Services.PokedexService
             return effectiveness;
         }
 
-        public List<QueryResultDTO> QueryPokemonsByName(string key)
+        public List<TagDTO> QueryPokemonsByName(string key)
         {
-            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
+            List<TagDTO> queryResults = new List<TagDTO>();
             List<Pokemon_species_names> pokemonNames = _pokedexContext.Pokemon_species_names
                 .Where(p => p.name.Contains(key) && p.local_language_id == 9).ToList();
             if (pokemonNames != null && pokemonNames.Count > 0)
             {
                 pokemonNames.ForEach(pokemonName =>
                 {
-                    queryResults.Add(new QueryResultDTO(pokemonName.name,
-                        $"https://localhost:7134/images/sprites/pokemon/{pokemonName.pokemon_species_id}.png"));
+                    queryResults.Add(new TagDTO(pokemonName.name, pokemonName.pokemon_species_id.ToString(),
+                        icon: $"https://localhost:7134/images/sprites/pokemon/{pokemonName.pokemon_species_id}.png"));
                 });
             }
             return queryResults;
         }
 
 
-        public List<QueryResultDTO> QueryMovesByName(string key)
+        public List<TagDTO> QueryMovesByName(string key)
         {
-            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
+            List<TagDTO> queryResults = new List<TagDTO>();
             List<Move_names> moveNames = _pokedexContext.Move_names
                 .Where(m => m.name.Contains(key) && m.local_language_id == 9).ToList();
             if (moveNames != null && moveNames.Count > 0)
@@ -576,25 +576,25 @@ namespace api.Services.PokedexService
                         if (targetType != null)
                         {
                             var pathStart = "https://localhost:7134/images/sprites/types/generation-viii/";
-                            queryResults.Add(new QueryResultDTO(moveName.name, $"{pathStart}{targetType.identifier}.png"));
+                            queryResults.Add(new TagDTO(moveName.name, moves.identifier, icon: $"{pathStart}{targetType.identifier}.png"));
                         }
                         else
                         {
-                            queryResults.Add(new QueryResultDTO(moveName.name));
+                            queryResults.Add(new TagDTO(moveName.name, moves.identifier));
                         }
                     }
                     else
                     {
-                        queryResults.Add(new QueryResultDTO(moveName.name));
+                        queryResults.Add(new TagDTO(moveName.name, moves.identifier));
                     }
                 });
             }
             return queryResults;
         }
 
-        public List<QueryResultDTO> QueryItemsByName(string key)
+        public List<TagDTO> QueryItemsByName(string key)
         {
-            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
+            List<TagDTO> queryResults = new List<TagDTO>();
             List<Item_names> itemNames = _pokedexContext.Item_names
                 .Where(i => i.name.Contains(key) && i.local_language_id == 9).ToList();
             if (itemNames != null && itemNames.Count > 0)
@@ -605,11 +605,11 @@ namespace api.Services.PokedexService
                     if (items != null)
                     {
                         string pathStart = "https://localhost:7134/images/sprites/items/";
-                        queryResults.Add(new QueryResultDTO(itemName.name, $"{pathStart}{items.Identifier}.png"));
+                        queryResults.Add(new TagDTO(itemName.name, items.Identifier, icon: $"{pathStart}{items.Identifier}.png"));
                     }
                     else
                     {
-                        queryResults.Add(new QueryResultDTO(itemName.name));
+                        queryResults.Add(new TagDTO(itemName.name, items.Identifier));
                     }
                 });
             }
