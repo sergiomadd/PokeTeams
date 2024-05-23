@@ -28,6 +28,6 @@ namespace api.Services.TeamService
         public Task<List<TeamPreviewDTO>> QueryTeamsByMoveIdentifier(string key);
         public List<TournamentDTO> GetAllTournaments();
         public Task<TournamentDTO> GetTournamentByName(string name);
-        public Task<Tournament> SaveTournament(TournamentDTO tournamentDTO);
+        public Task<Tournament> SaveTournament(TournamentUploadDTO tournamentDTO);
     }
 }

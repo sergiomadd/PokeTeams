@@ -43,7 +43,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<object>> Post([FromBody] TournamentDTO tournamentDTO)
+        public async Task<ActionResult<object>> Post([FromBody] TournamentUploadDTO tournamentDTO)
         {
             Tournament newTournament = await _teamService.SaveTournament(tournamentDTO);
             if (newTournament == null)

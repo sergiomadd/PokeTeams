@@ -567,7 +567,7 @@ namespace api.Services.TeamService
             return tournamentDTO;
         }
 
-        public Tournament BreakTournamentDTO(TournamentDTO tournamentDTO)
+        public Tournament BreakTournamentDTO(TournamentUploadDTO tournamentDTO)
         {
             Tournament tournament = null;
             if (tournamentDTO != null)
@@ -611,7 +611,7 @@ namespace api.Services.TeamService
             return tournamentDTO;
         }
 
-        public async Task<Tournament> SaveTournament(TournamentDTO tournamentDTO)
+        public async Task<Tournament> SaveTournament(TournamentUploadDTO tournamentDTO)
         {
             try
             {
