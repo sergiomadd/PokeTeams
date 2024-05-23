@@ -10,6 +10,6 @@ namespace api.DTOs
         public string? CountryCode { get; set; }
         public bool Official { get; set; }
         public RegulationDTO? Regulation { get; set; }
-        public DateTime? Date { get; set; }
+        public DateOnly? Date { get; set; }
     }
 }
