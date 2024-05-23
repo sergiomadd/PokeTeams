@@ -11,9 +11,9 @@ namespace api.Models.DBPoketeamModels
         public string? City { get; set; }
         public string? CountryCode { get; set; }
         public bool Official { get; set; }
-        public Regulation? Regulation { get; set; }
-        [DataType(DataType.Date)]
-        public DateTime? Date { get; set; }
+        public string? RegulationIdentifier { get; set; } 
+        public virtual Regulation? Regulation { get; set; }
+        public DateOnly? Date { get; set; }
         public virtual ICollection<Team> Teams { get; set; }
     }
 }

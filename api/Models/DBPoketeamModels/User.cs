@@ -11,7 +11,7 @@ namespace api.Models.DBPoketeamModels
         public string? Country { get; set; }
         public string? Picture { get; set; }
         [DataType(DataType.Date)]
-        public DateTime DateCreated { get; set; } = DateTime.Today;
+        public DateOnly DateCreated { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public bool Visibility { get; set; }
         public virtual ICollection<Team> Teams { get; set;}
     }
