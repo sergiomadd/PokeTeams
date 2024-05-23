@@ -662,5 +662,56 @@ namespace api.Services.TeamService
             }
             return regulation;
         }
+
+        public List<RegulationDTO> GetAllRegulations()
+        {
+            List<RegulationDTO> regulationDTOs = new List<RegulationDTO>();
+            List<Regulation> regulations = _pokeTeamContext.Regulation.ToList();
+            foreach (Regulation regulation in regulations)
+            {
+                regulationDTOs.Add(BuildRegulationDTO(regulation));
+            }
+            return regulationDTOs;
+        }
+
+        public async Task<RegulationDTO> GetRegulationByIdentifier(string identifier)
+        {
+            RegulationDTO regulationDTO = null;
+            if(identifier != null)
+            {
+                Regulation regulation = await _pokeTeamContext.Regulation.FindAsync(identifier);
+                if (regulation != null)
+                {
+                    regulationDTO = BuildRegulationDTO(regulation);
+                }
+            }
+            return regulationDTO;
+        }
+
+        public async Task<Regulation> SaveRegulation(RegulationDTO regulationDTO)
+        {
+            try
+            {
+                if (regulationDTO != null)
+                {
+                    Regulation regulation = BreakRegulationDTO(regulationDTO);
+                    await _pokeTeamContext.Regulation.AddAsync(regulation);
+                    await _pokeTeamContext.SaveChangesAsync();
+            return regulation;
+        }
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Error adding regulation");
+                Printer.Log(ex.Message);
+            }
+            return null;
+        }
+
+            catch (Exception ex)
+            {
+            catch (Exception ex)
+
+        }
     }
 }
