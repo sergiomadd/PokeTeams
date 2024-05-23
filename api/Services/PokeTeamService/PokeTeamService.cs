@@ -86,9 +86,8 @@ namespace api.Services.TeamService
                 Pokemons = pokemonPreviewDTOs,
                 Options = JsonSerializer.Deserialize<EditorOptionsDTO>(team.Options, new JsonSerializerOptions { IncludeFields = false }),
                 Player = await GetTeamPlayer(team),
-                //Tournament = GetTournamentByName(team.TournamentName),
-                Tournament = BuildTournamentDTO(team.Tournament),
-                Regulation = team.Regulation,
+                Tournament = await GetTournamentByName(team.TournamentNormalizedName),
+                Regulation = await GetRegulationByIdentifier(team.Regulation),
                 ViewCount = team.ViewCount,
                 Date = team.DateCreated.ToString("yyyy-MM-dd"),
                 Visibility = team.Visibility,
@@ -147,9 +146,8 @@ namespace api.Services.TeamService
                     pokemonDTOs,
                     team.Options,
                     await GetTeamPlayer(team),
-                    //GetTournamentByName(team.TournamentName),
-                    BuildTournamentDTO(team.Tournament),
-                    team.Regulation,
+                    await GetTournamentByName(team.TournamentNormalizedName),
+                    await GetRegulationByIdentifier(team.Regulation),
                     team.ViewCount,
                     team.DateCreated.ToString("yyyy-MM-dd"),
                     team.Visibility,
@@ -246,7 +244,7 @@ namespace api.Services.TeamService
                     Options = optionsString,
                     PlayerId = player != null ? player.Id : null,
                     AnonPlayer = player == null ? inputTeam.Player : null,
-                    Tournament = tournament,
+                    TournamentNormalizedName = tournament.NormalizedName ?? inputTeam.Tournament,
                     Regulation = inputTeam.Regulation ?? null,
                     ViewCount = 0,
                     Visibility = inputTeam.Visibility,
@@ -581,7 +579,7 @@ namespace api.Services.TeamService
                     City = tournamentDTO.City,
                     CountryCode = tournamentDTO.CountryCode,
                     Official = tournamentDTO.Official,
-                    Regulation = BreakRegulationDTO(tournamentDTO.Regulation),
+                    RegulationIdentifier = tournamentDTO.RegulationIdentifier,
                     Date = tournamentDTO.Date
                 };
             }
@@ -602,10 +600,13 @@ namespace api.Services.TeamService
         public async Task<TournamentDTO> GetTournamentByName(string name)
         {
             TournamentDTO tournamentDTO = null;
+            if(name != null)
+            {
             Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(name.ToLower());
             if (tournament != null)
             {
                 tournamentDTO = BuildTournamentDTO(tournament);
+            }
             }
             return tournamentDTO;
         }

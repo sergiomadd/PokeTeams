@@ -9,7 +9,7 @@ namespace api.DTOs
         public EditorOptionsDTO? Options { get; set; }
         public string? Player { get; set; }
         public TournamentDTO? Tournament { get; set; }
-        public string? Regulation { get; set; }
+        public RegulationDTO? Regulation { get; set; }
         public int ViewCount { get; set; }
         public string? Date { get; set; }
         public bool Visibility { get; set; }

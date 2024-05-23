@@ -10,7 +10,7 @@ namespace api.DTOs
         public EditorOptionsDTO? Options { get; set; }
         public string? Player { get; set; }
         public TournamentDTO? Tournament { get; set; }
-        public string? Regulation { get; set; }
+        public RegulationDTO? Regulation { get; set; }
         public int ViewCount { get; set; }
         public string? Date { get; set; }
         public bool Visibility { get; set; }
@@ -28,7 +28,7 @@ namespace api.DTOs
             string options,
             string uploaded,
             TournamentDTO tournament,
-            string regulation,
+            RegulationDTO regulation,
             int viewCount,
             string date,
             bool visibility,
