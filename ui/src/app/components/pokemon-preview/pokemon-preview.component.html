@@ -29,8 +29,8 @@
         <div class="moves">
           <ng-container *ngFor="let move of pokemon?.moves">
             <div class="section">
-              <img src="{{move?.pokeType?.iconPath}}" title="{{move.pokeType?.name}}" alt="{{move.pokeType?.name}}" class="icon bottom-icon">
-              {{move.name}}
+              <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="icon bottom-icon">
+              {{move?.name}}
             </div>
           </ng-container>
         </div>
