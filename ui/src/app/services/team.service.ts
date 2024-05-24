@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, catchError, lastValueFrom, Observable, timeout } from 'rxjs';
@@ -7,6 +7,8 @@ import { authActions } from '../auth/store/auth.actions';
 import { SearchQueryDTO } from '../models/DTOs/searchQuery.dto';
 import { TeamId } from '../models/DTOs/teamId.dto';
 import { defaultEditorData, EditorData } from '../models/editorData.model';
+import { Regulation } from '../models/regulation.model';
+import { Tag } from '../models/tag.model';
 import { Team } from '../models/team.model';
 import { TeamPreview } from '../models/teamPreview.model';
 import { getErrorMessage, toCamelCase } from './util';
@@ -135,5 +137,38 @@ export class TeamService
       console.log("Error: ", getErrorMessage(error));
     }
     return toCamelCase(teams); 
+  }
+
+  async queryTournamentsByName(key: string) : Promise<Tag[]>
+  {
+    let tournaments: Tag[] = [];
+    let url = this.apiUrl + 'tournament/query';
+    try
+    {
+      let params = new HttpParams().set('key', key ?? "");
+      tournaments = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return tournaments;
+  }
+
+  async getAllRegulations() : Promise<Regulation[]>
+  {
+    let regulations: Regulation[] = [];
+    let url = this.apiUrl + 'regulation/all';
+    try
+    {
+      regulations = await lastValueFrom(this.http.get<Regulation[]>(url)
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return regulations; 
   }
 }

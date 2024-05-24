@@ -54,24 +54,36 @@ export class SearchComponent
   @ViewChild('tournamentInput') tournamentInputComponent!: SmartInputComponent;
   queryTournamentCallback = async (args: any): Promise<Tag[]> => 
   {
-    return (await this.userService.queryUser(args)).map(u => 
+    return (await this.teamService.queryTournamentsByName(args)).map(t => 
       ({
-        name: u.username,
-        identifier: u.username,
-        icon: u.picture
+        name: t.name,
+        identifier: t.identifier,
+        icon: t.icon
       }));
   }
 
   @ViewChild('regulationInput') regulationInputComponent!: SmartInputComponent;
   queryRegulationCallback = async (args: any): Promise<Tag[]> => 
   {
-    return (await this.userService.queryUser(args)).map(u => 
-      ({
-        name: u.username,
-        identifier: u.username,
-        icon: u.picture
+    return (await this.teamService.getAllRegulations())
+      .filter(r => 
+      {
+        return r.name.toLowerCase().includes(args.toLowerCase())
+      })
+      .map(r =>({
+        name: r.name,
+        identifier: r.identifier
       }));
   }
+  regulationAllCallback = async (): Promise<Tag[]> => 
+  {
+    return (await this.teamService.getAllRegulations()).map(r => 
+      ({
+        name: r.name,
+        identifier: r.identifier
+      }));
+  }
+
 
   @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;
   queryPokemonCallback = async (args: any): Promise<Tag[]> => 
@@ -154,6 +166,7 @@ export class SearchComponent
         {
           this.teams = response;
           this.sortedTeams = [...response];
+          console.log(this.teams);
         },
         error: (error) => 
         {
@@ -165,6 +178,7 @@ export class SearchComponent
         }
       }
     )
+
   }
 
   //sorting

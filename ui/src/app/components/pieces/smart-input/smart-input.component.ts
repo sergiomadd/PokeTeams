@@ -21,6 +21,9 @@ export class SmartInputComponent
   @Input() keepSelected?: boolean;
   keptResult?: Tag;
 
+  @Input() showAll?: boolean;
+  @Input() allGetter?: () => Promise<Tag[]>
+
   @ViewChild('input') input!: ElementRef;
   searchForm = this.formBuilder.group(
   {
@@ -29,7 +32,7 @@ export class SmartInputComponent
 
   showOptions: boolean = false;
 
-  ngOnInit()
+  async ngOnInit()
   {
     this.searchForm.controls.key.valueChanges.subscribe(async (value) => 
     {
@@ -43,6 +46,10 @@ export class SmartInputComponent
         this.showOptions = false;
       }
     });
+    if(this.showAll && this.allGetter)
+    {
+      this.results = await this.allGetter();
+    }
   }
 
   async search(key: string)
@@ -80,9 +87,13 @@ export class SmartInputComponent
     this.searchForm.controls.key.setValue("");
   }
 
-  onFocus()
+  async onFocus()
   {
     this.showOptions = true;
+    if(this.showAll && this.allGetter)
+    {
+      this.results = await this.allGetter();
+    }
   }
 
   onBlur()

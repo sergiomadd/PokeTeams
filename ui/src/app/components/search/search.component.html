@@ -21,7 +21,9 @@
         #regulationInput
         [label]="'Regulation: '"
         [keepSelected]="true"
+        [showAll]="true"
         [getter]="queryRegulationCallback"
+        [allGetter]="regulationAllCallback"
         class="item smart-input-wrapper"
         ></app-smart-input>
         <button>Reset: </button>
