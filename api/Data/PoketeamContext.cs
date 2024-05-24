@@ -34,13 +34,13 @@ namespace api.Data
             modelBuilder.Entity<Regulation>()
                 .HasMany(r => r.Tournaments)
                 .WithOne(t => t.Regulation)
-                .HasForeignKey("RegulationIdentifier")
+                .HasForeignKey(t => t.RegulationIdentifier)
                 .IsRequired(false);
             
             modelBuilder.Entity<Tournament>()
                 .HasMany(t => t.Teams)
                 .WithOne(t => t.Tournament)
-                .HasForeignKey("TournamentNormalizedName")
+                .HasForeignKey(t => t.TournamentNormalizedName)
                 .IsRequired(false);
 
             modelBuilder.Entity<Team>()
