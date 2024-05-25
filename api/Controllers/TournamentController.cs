@@ -18,10 +18,9 @@ namespace api.Controllers
             _teamService = teamService;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public ActionResult<List<TournamentDTO>> GetAllTournaments()
         {
-            Printer.Log("Getting team");
             List<TournamentDTO> tournamentDTOs = _teamService.GetAllTournaments();
             if (tournamentDTOs == null)
             {
@@ -33,7 +32,6 @@ namespace api.Controllers
         [HttpGet("{name}")]
         public async Task<ActionResult<TournamentDTO>> Get(string name)
         {
-            Printer.Log("Getting team");
             TournamentDTO tournamentDTO = await _teamService.GetTournamentByName(name);
             if (tournamentDTO == null)
             {
@@ -62,6 +60,17 @@ namespace api.Controllers
                 };
                 return Ok(response);
             }
+        }
+
+        [HttpGet, Route("query")]
+        public async Task<ActionResult<List<TagDTO>>> QueryTournamentsByName(string key)
+        {
+            List<TagDTO> tournaments = _teamService.QueryTournamentsByName(key);
+            if (tournaments == null)
+            {
+                return NotFound("Couldn't find tournaments");
+            }
+            return Ok(tournaments);
         }
     }
 }

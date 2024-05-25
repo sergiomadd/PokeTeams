@@ -631,6 +631,22 @@ namespace api.Services.TeamService
             return null;
         }
 
+        public List<TagDTO> QueryTournamentsByName(string key)
+        {
+            List<TagDTO> queryResults = new List<TagDTO>();
+            List<Tournament> tournaments = _pokeTeamContext.Tournament.Where(t => t.NormalizedName.Contains(key.ToLower())).ToList();
+            if (tournaments != null && tournaments.Count > 0)
+            {
+                tournaments.ForEach(tournament =>
+                {
+                    string path = "https://localhost:7134/images/misc/vgc.png";
+                    queryResults.Add(new TagDTO(tournament.Name, tournament.Name,
+                        icon: tournament.Official ? path : null));
+                });
+            }
+            return queryResults;
+        }
+
         public RegulationDTO BuildRegulationDTO(Regulation regulation)
         {
             RegulationDTO regulationDTO = null;

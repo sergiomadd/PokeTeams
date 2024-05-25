@@ -29,6 +29,7 @@ namespace api.Services.TeamService
         public List<TournamentDTO> GetAllTournaments();
         public Task<TournamentDTO> GetTournamentByName(string name);
         public Task<Tournament> SaveTournament(TournamentUploadDTO tournamentDTO);
+        public List<TagDTO> QueryTournamentsByName(string key);
         public List<RegulationDTO> GetAllRegulations();
         public Task<RegulationDTO> GetRegulationByIdentifier(string identifier);
         public Task<Regulation> SaveRegulation(RegulationDTO regulationDTO);
