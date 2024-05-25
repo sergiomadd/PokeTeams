@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TeamService } from './services/team.service';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ export class AppComponent
   title = 'ui';
   store = inject(Store);
   teamService = inject(TeamService);
+  themes = inject(ThemeService);
 
   constructor() 
   {
@@ -20,6 +22,6 @@ export class AppComponent
 
   ngOnInit()
   {
-
+    this.themes.changeTheme("light");
   }
 }

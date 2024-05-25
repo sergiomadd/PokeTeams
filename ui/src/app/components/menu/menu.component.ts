@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { authActions } from 'src/app/auth/store/auth.actions';
 import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-menu',
@@ -13,11 +14,20 @@ export class MenuComponent
 {
   router = inject(Router)
   store = inject(Store);
+  themes = inject(ThemeService);
 
   loggedUser$ = this.store.select(selectLoggedUser);
 
   menuVisible: boolean = true;
+  selectedThemeName?: string;
 
+  ngOnInit()
+  {
+    this.themes.selectedTheme$?.subscribe(value => 
+      {
+        this.selectedThemeName = value.name;
+      });
+  }
 
   toggleMenu()
   {
@@ -42,7 +52,7 @@ export class MenuComponent
 
   toggleTheme()
   {
-
+    this.themes.switchThemes();
   }
 
   toggleSettings()

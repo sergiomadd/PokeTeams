@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 interface Theme
 {
@@ -61,15 +62,33 @@ export class ThemeService
     }
   ]
 
+  selectedTheme$?: BehaviorSubject<Theme>;
 
-  constructor() { }
+
+  constructor() 
+  {
+    this.selectedTheme$ = new BehaviorSubject<Theme>(this.themes[0]);
+  }
 
   changeTheme(themeName: string)
   {
     let theme: Theme = this.themes.find(t => t.name === themeName)!;
+    this.selectedTheme$?.next(theme);
     this.properties.forEach(property => 
     {
       document.documentElement.style.setProperty(property, theme.colors[property]);
     })
+  }
+
+  switchThemes()
+  {
+    if(this.selectedTheme$?.getValue().name === "light")
+    {
+      this.changeTheme("dark");
+    }
+    else
+    {
+      this.changeTheme("light");
+    }
   }
 }
