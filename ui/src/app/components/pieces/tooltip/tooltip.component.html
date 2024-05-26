@@ -1,0 +1,13 @@
+<div 
+class="tooltip"
+[ngClass]="{
+  top: side === 'top', right: side === 'right', 
+  bottom: side === 'bottom', left: side === 'left'}"
+>
+<span 
+[ngClass]="{
+  arrowbottom: side === 'top', arrowleft: side === 'right', 
+  arrowtop: side === 'bottom', arrowright: side === 'left'}"
+  ></span>
+{{text}}
+</div>
