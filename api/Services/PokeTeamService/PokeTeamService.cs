@@ -13,6 +13,7 @@ using api.Models.DBPokedexModels;
 using Microsoft.Extensions.Options;
 using api.Models.DBModels;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Security.Cryptography;
 
 namespace api.Services.TeamService
 {
@@ -20,15 +21,17 @@ namespace api.Services.TeamService
     {
         private readonly PokeTeamContext _pokeTeamContext;
         private readonly LocalContext _localContext;
+        private readonly PokedexContext _pokedexContext;
         private readonly IPokedexService _pokedexService;
 
 
         private static Random random = new Random();
 
-        public PokeTeamService(PokeTeamContext dataContext, LocalContext localContext, IPokedexService pokedexService)
+        public PokeTeamService(PokeTeamContext dataContext, LocalContext localContext, PokedexContext pokedexContext, IPokedexService pokedexService)
         {
             _pokeTeamContext = dataContext;
             _localContext = localContext;
+            _pokedexContext = pokedexContext;
             _pokedexService = pokedexService;
         }
 
@@ -164,8 +167,6 @@ namespace api.Services.TeamService
             {
                 Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
                 teamDTO = await BuildTeamDTO(team);
-                Printer.Log(teamDTO.Player);
-                Printer.Log(teamDTO.Pokemons.Count);
             }
             catch (Exception ex)
             {
@@ -225,7 +226,7 @@ namespace api.Services.TeamService
                         tags.Add(tag);
                     }
                 }
-                
+
                 Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(inputTeam.Tournament.ToUpper());
                 if(tournament == null)
                 {
@@ -236,7 +237,7 @@ namespace api.Services.TeamService
                         Official = false
                     };
                 }
-                
+
                 newTeam = new Team
                 {
                     Id = teamId,
@@ -602,11 +603,11 @@ namespace api.Services.TeamService
             TournamentDTO tournamentDTO = null;
             if(name != null)
             {
-            Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(name.ToLower());
-            if (tournament != null)
-            {
-                tournamentDTO = BuildTournamentDTO(tournament);
-            }
+                Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(name.ToLower());
+                if (tournament != null)
+                {
+                    tournamentDTO = BuildTournamentDTO(tournament);
+                }
             }
             return tournamentDTO;
         }
@@ -713,8 +714,8 @@ namespace api.Services.TeamService
                     Regulation regulation = BreakRegulationDTO(regulationDTO);
                     await _pokeTeamContext.Regulation.AddAsync(regulation);
                     await _pokeTeamContext.SaveChangesAsync();
-            return regulation;
-        }
+                    return regulation;
+                }
             }
             catch (Exception ex)
             {
@@ -724,10 +725,220 @@ namespace api.Services.TeamService
             return null;
         }
 
+        public async Task<List<TeamPreviewDTO>> QueryTeams(TeamSearchQueryDTO searchQuery)
+        {
+            List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
+            List<Team> teams = new List<Team>();
+            if(searchQuery.UserName != null && searchQuery.UserName != "")
+            {
+                teams = await FilterTeamsByPlayer(teams, searchQuery.UserName);
+            }
+            if (searchQuery.TournamentName != null && searchQuery.TournamentName != "")
+            {
+                teams = FilterTeamsByTournament(teams, searchQuery.TournamentName);
+            }
+            if (searchQuery.Regulation != null && searchQuery.Regulation != "")
+            {
+                teams = FilterTeamsByRegulation(teams, searchQuery.Regulation);
+            }
+            if (searchQuery.Pokemons != null && searchQuery.Pokemons.Count > 0)
+            {
+                teams = FilterTeamsByPokemons(teams, searchQuery.Pokemons);
+            }
+            if (searchQuery.Moves != null && searchQuery.Moves.Count > 0)
+            {
+                teams = FilterTeamsByMoves(teams, searchQuery.Moves);
+            }
+            if (searchQuery.Items != null && searchQuery.Items.Count > 0)
+            {
+                teams = FilterTeamsByItems(teams, searchQuery.Items);
+            }
+
+            foreach (Team team in teams)
+            {
+                teamsPreviews.Add(await BuildTeamPreviewDTO(team));
+            }
+            return teamsPreviews;
+        }
+
+        public async Task<List<Team>> FilterTeamsByPlayer(List<Team> inteams, string playerName)
+        {
+            User player = await GetUserByUserName(playerName);
+            try
+            {
+                if (inteams.Count == 0)
+                {
+                    if (player != null)
+                    {
+                        inteams = _pokeTeamContext.Team
+                            .Include(t => t.Pokemons)
+                            .Include(t => t.Tags)
+                            .Where(t => t.PlayerId == player.Id).ToList();
+                    }
+                    else
+                    {
+                        inteams = _pokeTeamContext.Team
+                            .Include(t => t.Pokemons)
+                            .Include(t => t.Tags)
+                            .Where(t => t.AnonPlayer.Contains(playerName)).ToList();
+                    }
+                }
+                else
+                {
+                    if (player != null)
+                    {
+                        inteams = inteams.Where(t => t.PlayerId == player.Id).ToList();
+                    }
+                    else
+                    {
+                        inteams = inteams.Where(t => t.AnonPlayer.Contains(playerName)).ToList();
+                    }
+                }
+            }
             catch (Exception ex)
             {
-            catch (Exception ex)
-
+                Printer.Log(ex.ToString());
+            }
+            return inteams;
         }
+
+        public List<Team> FilterTeamsByTournament(List<Team> inteams, string tournamentName)
+        {
+            try
+            {
+                if (inteams.Count == 0)
+                {
+                    inteams = _pokeTeamContext.Team
+                        .Include(t => t.Pokemons)
+                        .Include(t => t.Tags)
+                        .Include(t => t.Tournament)
+                        .Where(t => t.Tournament.Name == tournamentName).ToList();
+                }
+                else
+                {
+                    inteams = inteams.Where(t => t.Tournament.Name == tournamentName).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Printer.Log(ex.ToString());
+            }
+            return inteams;
+        }
+
+        public List<Team> FilterTeamsByRegulation(List<Team> inteams, string regulationIdentifier)
+        {
+            try
+            {
+                if (inteams.Count == 0)
+                {
+                    inteams = _pokeTeamContext.Team
+                        .Include(t => t.Pokemons)
+                        .Include(t => t.Tags)
+                        .Include(t => t.Tournament)
+                        .Where(t => t.Regulation == regulationIdentifier).ToList();
+                }
+                else
+                {
+                    inteams = inteams.Where(t => t.Regulation == regulationIdentifier).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Printer.Log(ex.ToString());
+            }
+            return inteams;
+        }
+
+        public List<Team> FilterTeamsByPokemons(List<Team> inteams, List<string> pokemonsDexNumbers)
+        {
+            try
+            {
+                if (inteams.Count == 0)
+                {
+                    foreach (string dexNumber in pokemonsDexNumbers)
+                    {
+                        inteams = _pokeTeamContext.Team
+                            .Include(t => t.Pokemons)
+                            .Include(t => t.Tags)
+                            .Where(t => t.Pokemons.Any(p => p.DexNumber == Int32.Parse(dexNumber))).ToList();
+                    }
+                }
+                else
+                {
+                    foreach (string dexNumber in pokemonsDexNumbers)
+                    {
+                        inteams = inteams.Where(t => t.Pokemons.Any(p => p.DexNumber == Int32.Parse(dexNumber))).ToList();
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Printer.Log(ex.ToString());
+            }
+            return inteams;
+        }
+
+        public List<Team> FilterTeamsByMoves(List<Team> inteams, List<string> movesIdentifiers)
+        {
+            try
+            {
+                if (inteams.Count == 0)
+                {
+                    foreach (string moveIdentifier in movesIdentifiers)
+                    {
+                        inteams = _pokeTeamContext.Team
+                            .Include(t => t.Pokemons)
+                            .Include(t => t.Tags)
+                            .Where(t => t.Pokemons.Any(p => p.Move1Identifier == moveIdentifier
+                            || p.Move2Identifier == moveIdentifier
+                            || p.Move3Identifier == moveIdentifier
+                            || p.Move4Identifier == moveIdentifier)).ToList();
+                    }
+                }
+                else
+                {
+                    foreach (string moveIdentifier in movesIdentifiers)
+                    {
+                        inteams = inteams.Where(t => t.Pokemons.Any(p => p.ItemIdentifier == moveIdentifier)).ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Printer.Log(ex.ToString());
+            }
+            return inteams;
+        }
+
+        public List<Team> FilterTeamsByItems(List<Team> inteams, List<string> itemsIdentifiers)
+        {
+            try
+            {
+                if (inteams.Count == 0)
+                {
+                    foreach (string itemIdentifier in itemsIdentifiers)
+                    {
+                        inteams = _pokeTeamContext.Team
+                            .Include(t => t.Pokemons)
+                            .Include(t => t.Tags)
+                            .Where(t => t.Pokemons.Any(p => p.ItemIdentifier == itemIdentifier)).ToList();
+                    }
+                }
+                else
+                {
+                    foreach (string itemIdentifier in itemsIdentifiers)
+                    {
+                        inteams = inteams.Where(t => t.Pokemons.Any(p => p.ItemIdentifier == itemIdentifier)).ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Printer.Log(ex.ToString());
+            }
+            return inteams;
+        }
+        
     }
 }

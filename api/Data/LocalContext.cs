@@ -1,19 +1,18 @@
 ﻿using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Models.DBPoketeamModels;
+using api.Util;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
+using Newtonsoft.Json;
+using System;
+using System.Drawing.Imaging;
+using System.Text;
 
 namespace api.Data
 {
     public class LocalContext : DbContext
     {
-        private readonly JsonSerializerOptions _options = new()
-        {
-            PropertyNameCaseInsensitive = true
-        };
-
         public LocalContext(DbContextOptions<LocalContext> option) : base(option)
         {
 
@@ -70,7 +69,7 @@ namespace api.Data
         public EditorDataDTO GetEditorData()
         {
             var json = File.ReadAllText("Data/Local/IconPaths.json");
-            EditorDataDTO editorData = JsonSerializer.Deserialize<EditorDataDTO>(json, _options);
+            EditorDataDTO editorData = JsonConvert.DeserializeObject<EditorDataDTO>(json);
             editorData.PokemonSpritesPaths = GetSprites(25);
             return editorData;
         }

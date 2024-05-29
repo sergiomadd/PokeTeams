@@ -33,5 +33,6 @@ namespace api.Services.TeamService
         public List<RegulationDTO> GetAllRegulations();
         public Task<RegulationDTO> GetRegulationByIdentifier(string identifier);
         public Task<Regulation> SaveRegulation(RegulationDTO regulationDTO);
+        public Task<List<TeamPreviewDTO>> QueryTeams(TeamSearchQueryDTO searchQuery);
     }
 }

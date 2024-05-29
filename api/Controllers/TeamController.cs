@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using api.DTOs;
+using System.Text.Json;
 
 namespace api.Controllers
 {
@@ -33,7 +34,7 @@ namespace api.Controllers
         }
         
         [HttpPost]
-        public async Task<ActionResult<string>> Post([FromBody] TeamDTO team)
+        public async Task<ActionResult<string>> Post([FromBody] TeamUploadDTO team)
         {
             Printer.Log("User in team: ", User.Identity.Name);
             Team newTeam = await _teamService.SaveTeam(team, User.Identity.Name);
@@ -80,10 +81,20 @@ namespace api.Controllers
             return BadRequest();
         }
 
+        [HttpPost, Route("query")]
+        public async Task<ActionResult<List<TeamPreviewDTO>>> QueryTeams(TeamSearchQueryDTO key)
+        {
+            List<TeamPreviewDTO> teams = await _teamService.QueryTeams(key);
+            if (teams == null)
+            {
+                return NotFound("Couldn't find teams");
+            }
+            return Ok(teams);
+        }
+
         [HttpGet, Route("query/pokemon")]
         public async Task<ActionResult<List<TeamPreviewDTO>>> QueryTeamsByPokemonName(string key)
         {
-            Printer.Log($"Quering team");
             List<TeamPreviewDTO> teams = await _teamService.QueryTeamsByPokemonName(key);
             if (teams == null)
             {
@@ -95,7 +106,6 @@ namespace api.Controllers
         [HttpGet, Route("query/move")]
         public async Task<ActionResult<List<TeamPreviewDTO>>> QueryTeamsByMove(string key)
         {
-            Printer.Log($"Quering team");
             List<TeamPreviewDTO> teams = await _teamService.QueryTeamsByMoveIdentifier(key);
 
             if (teams == null)
@@ -108,7 +118,6 @@ namespace api.Controllers
         [HttpGet, Route("query/tournament")]
         public async Task<ActionResult<List<TeamPreviewDTO>>> QueryTeamsByTournament(string key)
         {
-            Printer.Log($"Quering team");
             //List<TeamPreviewDTO> teams = await _teamService.QueryTeamsByTournament(key);
             List<TeamPreviewDTO> teams = null;
             if (teams == null)
