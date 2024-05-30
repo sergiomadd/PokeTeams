@@ -1,8 +1,6 @@
 global using api.Models;
 
 using api.Data;
-using api.Services.PokedexService;
-using api.Services.TeamService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +9,7 @@ using api.Models.DBPoketeamModels;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
 using Newtonsoft.Json;
+using api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +23,10 @@ builder.Services.AddDbContext<LocalContext>(options => options.UseSqlServer(buil
 
 builder.Services.AddScoped<IPokedexService, PokedexService>();
 builder.Services.AddScoped<IPokeTeamService, PokeTeamService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITournamentService, TournamentService>();
+builder.Services.AddScoped<IRegulationService, RegulationService>();
+builder.Services.AddScoped<ITagService, TagService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.ConfigureApplicationCookie(options =>

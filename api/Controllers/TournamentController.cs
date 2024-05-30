@@ -1,6 +1,6 @@
 ﻿using api.DTOs;
 using api.Models.DBPoketeamModels;
-using api.Services.TeamService;
+using api.Services;
 using api.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -11,17 +11,17 @@ namespace api.Controllers
     [ApiController]
     public class TournamentController : ControllerBase
     {
-        private readonly IPokeTeamService _teamService;
+        private readonly ITournamentService _tournamentService;
 
-        public TournamentController(IPokeTeamService teamService)
+        public TournamentController(ITournamentService tournamentService)
         {
-            _teamService = teamService;
+            _tournamentService = tournamentService;
         }
 
         [HttpGet("all")]
         public ActionResult<List<TournamentDTO>> GetAllTournaments()
         {
-            List<TournamentDTO> tournamentDTOs = _teamService.GetAllTournaments();
+            List<TournamentDTO> tournamentDTOs = _tournamentService.GetAllTournaments();
             if (tournamentDTOs == null)
             {
                 return NotFound("Couldn't find tournament");
@@ -32,7 +32,7 @@ namespace api.Controllers
         [HttpGet("{name}")]
         public async Task<ActionResult<TournamentDTO>> Get(string name)
         {
-            TournamentDTO tournamentDTO = await _teamService.GetTournamentByName(name);
+            TournamentDTO tournamentDTO = await _tournamentService.GetTournamentByName(name);
             if (tournamentDTO == null)
             {
                 return NotFound("Couldn't find tournament");
@@ -43,7 +43,7 @@ namespace api.Controllers
         [HttpPost]
         public async Task<ActionResult<object>> Post([FromBody] TournamentUploadDTO tournamentDTO)
         {
-            Tournament newTournament = await _teamService.SaveTournament(tournamentDTO);
+            Tournament newTournament = await _tournamentService.SaveTournament(tournamentDTO);
             if (newTournament == null)
             {
                 object response = new
@@ -65,7 +65,7 @@ namespace api.Controllers
         [HttpGet, Route("query")]
         public async Task<ActionResult<List<TagDTO>>> QueryTournamentsByName(string key)
         {
-            List<TagDTO> tournaments = _teamService.QueryTournamentsByName(key);
+            List<TagDTO> tournaments = _tournamentService.QueryTournamentsByName(key);
             if (tournaments == null)
             {
                 return NotFound("Couldn't find tournaments");

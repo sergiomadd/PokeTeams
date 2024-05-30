@@ -1,4 +1,4 @@
-﻿using api.Services.PokedexService;
+﻿using api.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 

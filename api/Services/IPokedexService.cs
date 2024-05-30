@@ -3,7 +3,7 @@ using api.DTOs.PokemonDTOs;
 using api.Models.DBModels;
 using api.Models.DBPoketeamModels;
 
-namespace api.Services.PokedexService
+namespace api.Services
 {
     public interface IPokedexService
     {

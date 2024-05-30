@@ -1,0 +1,10 @@
+﻿using api.Models.DBPoketeamModels;
+
+namespace api.Services
+{
+    public interface ITagService
+    {
+        public Task<Tag> GetTag(string identifier);
+        public Task<bool> SaveTag(Tag tag);
+    }
+}

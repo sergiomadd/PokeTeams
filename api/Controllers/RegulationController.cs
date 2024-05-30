@@ -1,6 +1,6 @@
 ﻿using api.DTOs;
 using api.Models.DBPoketeamModels;
-using api.Services.TeamService;
+using api.Services;
 using api.Util;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,17 +10,17 @@ namespace api.Controllers
     [ApiController]
     public class RegulationController : ControllerBase
     {
-        private readonly IPokeTeamService _teamService;
+        private readonly IRegulationService _regulationService;
 
-        public RegulationController(IPokeTeamService teamService)
+        public RegulationController(IRegulationService regulationService)
         {
-            _teamService = teamService;
+            _regulationService = regulationService;
         }
 
         [HttpGet("all")]
         public ActionResult<List<RegulationDTO>> GetAllRegulations()
         {
-            List<RegulationDTO> regulationDTOs = _teamService.GetAllRegulations();
+            List<RegulationDTO> regulationDTOs = _regulationService.GetAllRegulations();
             if (regulationDTOs == null)
             {
                 return NotFound("Couldn't find regulation");
@@ -31,7 +31,7 @@ namespace api.Controllers
         [HttpGet("{identifier}")]
         public async Task<ActionResult<RegulationDTO>> Get(string identifier)
         {
-            RegulationDTO regulationDTO = await _teamService.GetRegulationByIdentifier(identifier);
+            RegulationDTO regulationDTO = await _regulationService.GetRegulationByIdentifier(identifier);
             if (regulationDTO == null)
             {
                 return NotFound("Couldn't find regulation");
@@ -42,7 +42,7 @@ namespace api.Controllers
         [HttpPost]
         public async Task<ActionResult<object>> Post([FromBody] RegulationDTO regulationDTO)
         {
-            Regulation newRegulation = await _teamService.SaveRegulation(regulationDTO);
+            Regulation newRegulation = await _regulationService.SaveRegulation(regulationDTO);
             if (newRegulation == null)
             {
                 object response = new

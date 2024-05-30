@@ -1,6 +1,5 @@
 ﻿using api.DTOs;
-using api.Services.PokedexService;
-using api.Services.TeamService;
+using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers

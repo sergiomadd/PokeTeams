@@ -4,13 +4,13 @@ using api.Util;
 using Microsoft.AspNetCore.Authorization;
 using api.Data;
 using api.Models.DBPoketeamModels;
-using api.Services.TeamService;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 using api.DTOs;
+using api.Services;
 
 namespace api.Controllers
 {
@@ -21,16 +21,19 @@ namespace api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IPokeTeamService _pokeTeamService;
+        private readonly IUserService _userService;
 
 
         public UserController(UserManager<User> userManager,
             SignInManager<User> signInManager,
-            IPokeTeamService teamService
+            IPokeTeamService teamService,
+            IUserService userService
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _pokeTeamService = teamService;
+            _userService = userService;
         }
 
 
@@ -61,7 +64,7 @@ namespace api.Controllers
         [HttpGet, Route("query")]
         public async Task<ActionResult<List<UserQueryDTO>>> QueryUsers(string key)
         {
-            List<UserQueryDTO> users = await _pokeTeamService.QueryUsers(key);
+            List<UserQueryDTO> users = await _userService.QueryUsers(key);
             if (users == null)
             {
                 return NotFound("Couldn't find user");
@@ -72,7 +75,7 @@ namespace api.Controllers
         [HttpGet, Route("chunkquery")]
         public async Task<ActionResult<List<UserQueryDTO>>> ChunkQueryUsers(string key, int startIndex, int pageSize)
         {
-            List<UserQueryDTO> users = await _pokeTeamService.ChunkQueryUsers(key, startIndex, pageSize);
+            List<UserQueryDTO> users = await _userService.ChunkQueryUsers(key, startIndex, pageSize);
             users.Skip(startIndex).Take(pageSize);
             if (users == null)
             {
@@ -100,7 +103,7 @@ namespace api.Controllers
         [HttpGet, Route("countries/{code}")]
         public ActionResult<CountryDTO> GetCountry(string code)
         {
-            CountryDTO country = _pokeTeamService.GetCountry(code);
+            CountryDTO country = _userService.GetCountry(code);
             if(country == null)
             {
                 return BadRequest();
@@ -112,12 +115,12 @@ namespace api.Controllers
         [HttpGet, Route("{userName}")]
         public async Task<ActionResult<UserDTO>> GetUserByUserName(string userName)
         {
-            User user = await _pokeTeamService.GetUserByUserName(userName);
+            User user = await _userService.GetUserByUserName(userName);
             if (user == null)
             {
                 return NotFound("Couldn't find user");
             }
-            UserDTO userDTO = await _pokeTeamService.BuildUserDTO(user ,await UserLoggedIn(user));
+            UserDTO userDTO = await _userService.BuildUserDTO(user ,await UserLoggedIn(user));
             return Ok(userDTO);
         }
 
@@ -126,12 +129,12 @@ namespace api.Controllers
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewUserName != null)
             {
-                User newUser = await _pokeTeamService.GetUserByUserName(updateData.NewUserName);
+                User newUser = await _userService.GetUserByUserName(updateData.NewUserName);
                 if (newUser != null)
                 {
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "UserName already claimed" } });
                 }
-                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
+                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
                     return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
@@ -142,7 +145,7 @@ namespace api.Controllers
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
                 await RefreshLoggedUser(user);
-                return Ok(new IdentityResponseDTO { Success = true, User = await _pokeTeamService.BuildUserDTO(user, true) });
+                return Ok(new IdentityResponseDTO { Success = true, User = await _userService.BuildUserDTO(user, true) });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
@@ -164,7 +167,7 @@ namespace api.Controllers
                 {
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Email already claimed" } });
                 }
-                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
+                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
                     return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
@@ -175,7 +178,7 @@ namespace api.Controllers
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
                 await _userManager.UpdateAsync(user);
-                return Ok(new IdentityResponseDTO { Success = true, User = await _pokeTeamService.BuildUserDTO(user, true) });
+                return Ok(new IdentityResponseDTO { Success = true, User = await _userService.BuildUserDTO(user, true) });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } } );
         }
@@ -187,7 +190,7 @@ namespace api.Controllers
             if (updateData != null && updateData.CurrentUserName != null 
                 && updateData.CurrentPassword != null && updateData.NewPassword != null)
             {
-                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
+                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
                     return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
@@ -207,17 +210,17 @@ namespace api.Controllers
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewName != null)
             {
-                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
+                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
                     return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
                 }
-                IdentityResponseDTO result = await _pokeTeamService.ChangeName(user, updateData.NewName);
+                IdentityResponseDTO result = await _userService.ChangeName(user, updateData.NewName);
                 if (result.Errors.ToList().Count > 0)
                 {
                     //return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
-                return Ok(new IdentityResponseDTO { Success = true, User = await _pokeTeamService.BuildUserDTO(user, true) });
+                return Ok(new IdentityResponseDTO { Success = true, User = await _userService.BuildUserDTO(user, true) });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
@@ -227,7 +230,7 @@ namespace api.Controllers
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewPictureKey != null)
             {
-                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
+                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
                     return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
@@ -238,7 +241,7 @@ namespace api.Controllers
                 {
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
-                return Ok(new IdentityResponseDTO { Success = true, User = await _pokeTeamService.BuildUserDTO(user, true) });
+                return Ok(new IdentityResponseDTO { Success = true, User = await _userService.BuildUserDTO(user, true) });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
@@ -248,7 +251,7 @@ namespace api.Controllers
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewCountryCode != null)
             {
-                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
+                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
                     return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
@@ -259,7 +262,7 @@ namespace api.Controllers
                 {
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
-                return Ok(new IdentityResponseDTO { Success = true, User = await _pokeTeamService.BuildUserDTO(user, true) });
+                return Ok(new IdentityResponseDTO { Success = true, User = await _userService.BuildUserDTO(user, true) });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
@@ -270,7 +273,7 @@ namespace api.Controllers
             Printer.Log($"Updating visibility of {updateData.CurrentUserName}");
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewVisibility != null)
             {
-                User user = await _pokeTeamService.GetUserByUserName(updateData.CurrentUserName);
+                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
                     return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
@@ -281,7 +284,7 @@ namespace api.Controllers
                 {
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
-                return Ok(new IdentityResponseDTO { Success = true, User = await _pokeTeamService.BuildUserDTO(user, true) });
+                return Ok(new IdentityResponseDTO { Success = true, User = await _userService.BuildUserDTO(user, true) });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
@@ -324,7 +327,7 @@ namespace api.Controllers
         public async Task<ActionResult<UserDTO>> DeleteUserByUserName(string userName)
         {
             Printer.Log("Deleting user...");
-            User user = await _pokeTeamService.GetUserByUserName(userName);
+            User user = await _userService.GetUserByUserName(userName);
             if (user != null)
             {
                 await _pokeTeamService.DeleteUserTeams(user);
@@ -347,7 +350,7 @@ namespace api.Controllers
         public async Task<ActionResult<IdentityResponseDTO>> UserNameAvailable(string userName)
         {
             Printer.Log($"Checking availability of {userName}");
-            bool available = await _pokeTeamService.UserNameAvailable(userName);
+            bool available = await _userService.UserNameAvailable(userName);
             if (!available)
             {
                 return Conflict(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Username already taken." } });
@@ -381,7 +384,7 @@ namespace api.Controllers
                     var user = await _userManager.FindByNameAsync(User.Identity.Name);
                     if (user != null)
                     {
-                        userDTO = await _pokeTeamService.BuildUserDTO(await _pokeTeamService.GetUserByUserName(user.UserName), true);
+                        userDTO = await _userService.BuildUserDTO(await _userService.GetUserByUserName(user.UserName), true);
                         Printer.Log($"Logged user email: {userDTO.Email}");
                     }
                     else
@@ -477,7 +480,7 @@ namespace api.Controllers
             {
                 return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "You account is locked" } });
             }
-            UserDTO userDTO = await _pokeTeamService.BuildUserDTO(user, true);
+            UserDTO userDTO = await _userService.BuildUserDTO(user, true);
             Printer.Log("User successfully loged in.");
             return Ok(new IdentityResponseDTO { User = userDTO, Success = true });
         }

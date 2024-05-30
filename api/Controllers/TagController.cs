@@ -1,5 +1,5 @@
 ﻿using api.Models.DBPoketeamModels;
-using api.Services.TeamService;
+using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -8,17 +8,17 @@ namespace api.Controllers
     [ApiController]
     public class TagController : ControllerBase
     {
-        private readonly IPokeTeamService _teamService;
+        private readonly ITagService _tagService;
 
-        public TagController(IPokeTeamService teamService)
+        public TagController(ITagService tagService)
         {
-            _teamService = teamService;
+            _tagService = tagService;
         }
 
         [HttpGet("{identifier}")]
         public async Task<ActionResult<Tag>> Get(string identifier)
         {
-            Tag tag = await _teamService.GetTag(identifier);
+            Tag tag = await _tagService.GetTag(identifier);
             if (tag == null)
             {
                 return BadRequest("Tag not found.");
@@ -29,7 +29,7 @@ namespace api.Controllers
         [HttpPost]
         public async Task<ActionResult<Tag>> Post(Tag tag)
         {
-            bool saved = await _teamService.SaveTag(tag);
+            bool saved = await _tagService.SaveTag(tag);
             if (!saved)
             {
                 return BadRequest("Tag not saved.");

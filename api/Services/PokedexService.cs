@@ -17,7 +17,7 @@ using api.Models.DBPoketeamModels;
 using System.Text.Json;
 using api.DTOs;
 
-namespace api.Services.PokedexService
+namespace api.Services
 {
     public class PokedexService : IPokedexService
     {
@@ -87,7 +87,7 @@ namespace api.Services.PokedexService
         {
             PokemonDataDTO pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1);
             List<MovePreviewDTO> moves = new List<MovePreviewDTO>()
-            { 
+            {
                 await BuildMovePreview(pokemon.Move1Identifier),
                 await BuildMovePreview(pokemon.Move2Identifier),
                 await BuildMovePreview(pokemon.Move3Identifier),
@@ -526,7 +526,7 @@ namespace api.Services.PokedexService
                     Type_names? targetTypeName = await _pokedexContext.Type_names.FindAsync(targetType.id, 9);
                     if (targetType != null && targetTypeName != null)
                     {
-                        allValues.Add(new(targetType.identifier, (double)typeEfficacy.damage_factor / (double)100));
+                        allValues.Add(new(targetType.identifier, typeEfficacy.damage_factor / (double)100));
                     }
                 }
                 effectiveness = new EffectivenessDTO(allValues);
@@ -547,7 +547,7 @@ namespace api.Services.PokedexService
                     Type_names? targetTypeName = await _pokedexContext.Type_names.FindAsync(typeEfficacy.damage_type_id, 9);
                     if (targetType != null && targetTypeName != null)
                     {
-                        allValues.Add(new(targetType.identifier, (double)typeEfficacy.damage_factor / (double)100));
+                        allValues.Add(new(targetType.identifier, typeEfficacy.damage_factor / (double)100));
                     }
                 }
                 effectiveness = new EffectivenessDTO(allValues);
@@ -632,7 +632,7 @@ namespace api.Services.PokedexService
         {
             List<PokeTypeDTO> pokeTypes = new List<PokeTypeDTO>();
             List<Types> types = _pokedexContext.Types.ToList();
-            foreach(Types type in types)
+            foreach (Types type in types)
             {
                 pokeTypes.Add(await GetTypeById(type.id));
             }
