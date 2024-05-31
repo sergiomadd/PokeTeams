@@ -1,6 +1,7 @@
 import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { SearchQueryDTO } from 'src/app/models/DTOs/searchQuery.dto';
+import { SearchQueryResponseDTO } from 'src/app/models/DTOs/searchQueryResponse.dto';
 import { Tag } from 'src/app/models/tag.model';
 import { TeamPreview } from 'src/app/models/teamPreview.model';
 import { PokemonService } from 'src/app/services/pokemon.service';
@@ -26,6 +27,10 @@ export class SearchComponent
   sortedTeams: TeamPreview[] = [];
   searched: boolean = false;
 
+  //pagination
+  teamsPerPage: number = 2;
+  totalTeams?: number;
+  
   searchForm = this.formBuilder.group(
   {
     tournament: [''],
@@ -84,7 +89,6 @@ export class SearchComponent
       }));
   }
 
-
   @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;
   queryPokemonCallback = async (args: any): Promise<Tag[]> => 
   {
@@ -100,7 +104,6 @@ export class SearchComponent
     }
     return [];
   }
-  
   @ViewChild('pokemonStorage') pokemonResultStorageComponent?: ResultStorageComponent;
   pokemonSelectEvent($event: Tag)
   {
@@ -151,22 +154,39 @@ export class SearchComponent
 
   }
 
-  async search()
+  buildQueryFromForm(): SearchQueryDTO
   {
-    this.searched = true;
     let searchQuery: SearchQueryDTO = 
     {
-      userName: this.userInputComponent.searchForm.controls.key.value,
-      pokemons: this.pokemonResultStorageComponent?.results?.map(r => r.name)
+      userName: this.userInputComponent.selected?.name ?? this.userInputComponent.searchForm.controls.key.value,
+      tournamentName: this.tournamentInputComponent.selected?.name ?? this.tournamentInputComponent.searchForm.controls.key.value,
+      regulation: this.regulationInputComponent.selected?.identifier,
+      pokemons: this.pokemonResultStorageComponent?.results?.map(r => r.name),
+      moves: this.moveResultStorageComponent?.results?.map(r => r.name),
+      items: this.itemResultStorageComponent?.results?.map(r => r.name),
+      teamsPerPage: this.teamsPerPage,
+      selectedPage: 1
     }
-    
-    this.teamService.searchTeams(searchQuery).subscribe(
+    return searchQuery;
+  }
+
+  defaultSearch()
+  {
+    this.search(this.buildQueryFromForm());
+  }
+
+  search(searchQuery: SearchQueryDTO)
+  {
+    console.log(searchQuery)
+    this.searched = true;
+    this.teamService.searchTeams(searchQuery)?.subscribe(
       {
-        next: (response) => 
+        next: (response: SearchQueryResponseDTO) => 
         {
-          this.teams = response;
-          this.sortedTeams = [...response];
-          console.log(this.teams);
+          this.teams = response.teams;
+          this.sortedTeams = [...response.teams];
+          this.totalTeams = response.totalTeams;
+          console.log(response);
         },
         error: (error) => 
         {
@@ -178,7 +198,6 @@ export class SearchComponent
         }
       }
     )
-
   }
 
   //sorting
@@ -290,6 +309,11 @@ export class SearchComponent
       });
     }
   }
-
   
+  pageChange($event)
+  {
+    let searchQuery: SearchQueryDTO = this.buildQueryFromForm();
+    searchQuery.selectedPage = $event;
+    this.search(searchQuery);
+  }
 }

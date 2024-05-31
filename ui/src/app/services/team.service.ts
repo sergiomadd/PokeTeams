@@ -5,12 +5,12 @@ import { BehaviorSubject, catchError, lastValueFrom, Observable, timeout } from 
 import { environment } from 'src/environments/environment.development';
 import { authActions } from '../auth/store/auth.actions';
 import { SearchQueryDTO } from '../models/DTOs/searchQuery.dto';
+import { SearchQueryResponseDTO } from '../models/DTOs/searchQueryResponse.dto';
 import { TeamId } from '../models/DTOs/teamId.dto';
 import { defaultEditorData, EditorData } from '../models/editorData.model';
 import { Regulation } from '../models/regulation.model';
 import { Tag } from '../models/tag.model';
 import { Team } from '../models/team.model';
-import { TeamPreview } from '../models/teamPreview.model';
 import { getErrorMessage, toCamelCase } from './util';
 
 @Injectable({
@@ -123,20 +123,20 @@ export class TeamService
     return deleted;
   }
 
-  searchTeams(searchQuery: SearchQueryDTO) : Observable<TeamPreview[]>
+  searchTeams(searchQuery: SearchQueryDTO) : Observable<SearchQueryResponseDTO> | undefined
   {
-    let teams: TeamPreview[] = [];
+    let response: SearchQueryResponseDTO;
     let url = this.apiUrl + 'team/query';
     try
     {
-      return this.http.post<TeamPreview[]>(url, searchQuery)
+      return this.http.post<SearchQueryResponseDTO>(url, searchQuery)
       .pipe(catchError(() => []), timeout(this.dataTimeout));
     }
     catch(error)
     {
       console.log("Error: ", getErrorMessage(error));
     }
-    return toCamelCase(teams); 
+    return undefined; 
   }
 
   async queryTournamentsByName(key: string) : Promise<Tag[]>

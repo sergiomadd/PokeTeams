@@ -1,3 +1,5 @@
+import { TeamSearchOrder } from "../enums/teamSearchOrder.enum";
+
 export interface SearchQueryDTO
 {
   userName?: string | null,
@@ -6,4 +8,7 @@ export interface SearchQueryDTO
   pokemons?: string[] | null,
   moves?: string[] | null,
   items?: string[] | null,
+  teamsPerPage?: number,
+  selectedPage?: number,
+  order?: TeamSearchOrder
 }

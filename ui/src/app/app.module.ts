@@ -18,12 +18,14 @@ import { EvolutionComponent } from './components/meta/evolution/evolution.compon
 import { LeftOptionComponent } from './components/options/left-option/left-option.component';
 import { RightOptionComponent } from './components/options/right-option/right-option.component';
 import { TopOptionComponent } from './components/options/top-option/top-option.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
 import { DialogComponent } from './components/pieces/dialog/dialog.component';
 import { DropdownComponent } from './components/pieces/dropdown/dropdown.component';
 import { MultiSearchComponent } from './components/pieces/multi-search/multi-search.component';
 import { ResultStorageComponent } from './components/pieces/result-storage/result-storage.component';
 import { SmartInputComponent } from './components/pieces/smart-input/smart-input.component';
 import { SwitchComponent } from './components/pieces/switch/switch.component';
+import { TooltipComponent } from './components/pieces/tooltip/tooltip.component';
 import { PokemonPreviewComponent } from './components/pokemon-preview/pokemon-preview.component';
 import { PokemonComponent } from './components/pokemon/pokemon.component';
 import { SearchComponent } from './components/search/search.component';
@@ -73,6 +75,8 @@ import { metaReducers } from './state/app.state';
     SearchComponent,
     SmartInputComponent,
     ResultStorageComponent,
+    TooltipComponent,
+    PaginationComponent
   ],
   exports: [],
   imports: [

@@ -53,7 +53,7 @@
         (selectEvent)="itemSelectEvent($event)"
         class="item smart-input-wrapper"
         ></app-smart-input>    
-        <button (click)="search()">Search: </button>
+        <button (click)="defaultSearch()">Search: </button>
       </div>
       <div class="items">
         <app-result-storage #pokemonStorage class="item storage"></app-result-storage>
@@ -110,7 +110,7 @@
     </div>
     <ng-container *ngIf="teams && teams.length > 0">
       <div class="table">
-        <ng-container *ngFor="let team of sortedTeams">
+        <ng-container *ngFor="let team of teams">
           <div class="record">
             <app-team-preview [team]="team" [mode]="'six'"></app-team-preview>
           </div>
@@ -122,5 +122,10 @@
         <div class="loader"></div>
       </div>
     </ng-container>
+    <app-pagination
+    [itemsPerPage]="teamsPerPage"
+    [totalItems]="totalTeams ?? 0"
+    (pageChanged)="pageChange($event)"
+    ></app-pagination>
   </div>
 </div>
