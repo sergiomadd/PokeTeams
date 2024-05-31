@@ -1,0 +1,94 @@
+
+<div class="pagination">
+  <ng-container *ngIf="totalItems > 0; else empty">
+    <button 
+    (click)="changePage(1)" 
+    [disabled]="currentPage === 1"
+    class="page"
+    > << </button>
+    <button 
+    (click)="changePage(currentPage - 1)" 
+    [disabled]="currentPage === 1"
+    class="page"
+    > < </button>
+    <div class="pages">
+      <ng-container *ngIf="currentPage <= 3">
+        <div class="page" (click)="changePage(1)" [ngClass]="{selected: currentPage == 1}">
+          1
+        </div>
+        <ng-container *ngIf="totalPages > 1">
+          <div class="page" (click)="changePage(2)" [ngClass]="{selected: currentPage == 2}">
+            2
+          </div>
+        </ng-container>
+        <ng-container *ngIf="totalPages > 2">
+          <div class="page" (click)="changePage(3)" [ngClass]="{selected: currentPage == 3}">
+            3
+          </div>
+        </ng-container>
+        <ng-container *ngIf="totalPages > 3">
+          <div class="page" (click)="changePage(4)" [ngClass]="{selected: currentPage == 4}">
+            4
+          </div>
+        </ng-container>
+        <ng-container *ngIf="totalPages > 4">
+          <div class="page" (click)="changePage(5)" [ngClass]="{selected: currentPage == 5}">
+            5
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="currentPage > 3 && (currentPage <= totalPages - 3)">
+        <div class="page" 
+        (click)="changePage(currentPage - 2)">
+          {{currentPage - 2}}
+        </div>
+        <div class="page" 
+        (click)="changePage(currentPage - 1)">
+          {{currentPage - 1}}
+        </div>
+        <div class="page selected">
+          {{currentPage}}
+        </div>
+        <div class="page" (click)="changePage(currentPage + 1)">
+          {{currentPage + 1}}
+        </div>
+        <div class="page" (click)="changePage(currentPage + 2)">
+          {{currentPage + 2}}
+        </div>
+      </ng-container>
+      <ng-container *ngIf="currentPage > 3 && currentPage > totalPages - 3">
+        <div class="page" (click)="changePage(totalPages - 4)" [ngClass]="{selected: currentPage == totalPages - 4}">
+          {{totalPages - 4}}
+        </div>
+        <div class="page" (click)="changePage(totalPages - 3)" [ngClass]="{selected: currentPage == totalPages - 3}">
+          {{totalPages - 3}}
+        </div>
+        <div class="page" (click)="changePage(totalPages - 2)" [ngClass]="{selected: currentPage == totalPages - 2}">
+          {{totalPages - 2}}
+        </div>
+        <div class="page" (click)="changePage(totalPages - 1)" [ngClass]="{selected: currentPage == totalPages - 1}">
+          {{totalPages - 1}}
+        </div>
+        <div class="page" (click)="changePage(totalPages)" [ngClass]="{selected: currentPage == totalPages}">
+          {{totalPages}}
+        </div>
+      </ng-container>
+    </div>
+    <button 
+    (click)="changePage(currentPage + 1)" 
+    [disabled]="currentPage === totalPages"
+    class="page"
+    > > </button>
+    <button 
+    (click)="changePage(totalPages)" 
+    [disabled]="currentPage === totalPages"
+    class="page"
+    > >> </button>
+  </ng-container>
+  <ng-template #empty>
+    <div class="empty">
+      No results!
+    </div>
+  </ng-template>
+</div>
+

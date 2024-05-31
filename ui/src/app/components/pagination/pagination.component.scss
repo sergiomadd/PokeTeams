@@ -1,0 +1,61 @@
+$pageWidth: 1vw;
+$pagePadding: 0.4vw;
+
+.pagination
+{
+  margin: auto;
+  width: fit-content;
+  display: flex;
+  gap: 0.4vw;
+  margin-top: 1vw;
+
+  .pages
+  {
+    display: flex;
+    justify-items: center;
+    gap: 0.4vw;
+
+    .page
+    {
+      text-align: center;
+      width: $pageWidth;
+      padding: $pagePadding;
+      border-radius: 5px;
+      background-color: var(--bg-color-2);
+      color: var(--text-color);
+      border: 1px solid black;
+      cursor: pointer;
+      user-select: none; 
+  
+      &:hover
+      {
+        opacity: 0.7;
+      }
+    }
+
+    .selected
+    {
+      border: 1px solid rgb(161, 161, 153);
+      background-color: rgb(79, 114, 102);
+    }
+  }
+
+  button:disabled 
+  {
+    background-color: light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3));
+    color: light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3));
+    border-color: light-dark(rgba(118, 118, 118, 0.3), rgba(195, 195, 195, 0.3));
+  }
+
+  .empty
+  {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    background-color: var(--bg-color-2);
+    color: var(--text-color);
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: $pagePadding;
+  }
+}
