@@ -1,5 +1,5 @@
 
-<div class="search">
+<div class="search" #search>
   <div class="inputs">
     <form [formGroup]="searchForm" class="form">
       <div class="items">
@@ -62,7 +62,10 @@
       </div>
     </form>
   </div>
-  <div class="results">
+  <div 
+  class="results"
+  [ngClass]="{searched: searched}"
+  >
     <div>
       Total teams: {{teams.length}}
     </div>
@@ -108,24 +111,24 @@
         </div>
       </div>
     </div>
-    <ng-container *ngIf="teams && teams.length > 0">
-      <div class="table">
+    <div class="table">
+      <ng-container *ngIf="searched">
+        <div class="loader-wrapper">
+          <div class="loader"></div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="teams && teams.length > 0">
         <ng-container *ngFor="let team of teams">
           <div class="record">
             <app-team-preview [team]="team" [mode]="'six'"></app-team-preview>
           </div>
         </ng-container>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="searched">
-      <div class="loader-wrapper">
-        <div class="loader"></div>
-      </div>
-    </ng-container>
+      </ng-container>
+    </div>
     <app-pagination
     [itemsPerPage]="teamsPerPage"
     [totalItems]="totalTeams ?? 0"
-    (pageChanged)="pageChange($event)"
+    (pageChanged)="pageChange($event, results)"
     ></app-pagination>
   </div>
 </div>

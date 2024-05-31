@@ -183,7 +183,6 @@ export class SearchComponent
   search(searchQuery: SearchQueryDTO)
   {
     console.log(searchQuery)
-    this.teams = [];
     this.searched = true;
     this.teamService.searchTeams(searchQuery)?.subscribe(
       {
@@ -267,8 +266,9 @@ export class SearchComponent
     this.search(searchQuery);
   }
 
-  pageChange($event)
+  pageChange($event, container)
   {
+    container.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
     let searchQuery: SearchQueryDTO = this.buildQueryFromForm();
     searchQuery.selectedPage = $event;
     this.search(searchQuery);
