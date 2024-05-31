@@ -365,8 +365,14 @@ namespace api.Services
             }
 
             int totalTeams = teams.Count;
+
+            if(searchQuery.Order != null)
+            {
+                teams = SortTeams(teams, searchQuery.Order ?? null);
+            }
             
-            if(searchQuery.TeamsPerPage != null && searchQuery.SelectedPage != null)
+            if(teams != null && teams.Count > 0 
+                && searchQuery.TeamsPerPage != null && searchQuery.SelectedPage != null)
             {
                 teams = ChunkTeams(teams, searchQuery.TeamsPerPage ?? 0, searchQuery.SelectedPage ?? 0);
             }
@@ -381,6 +387,23 @@ namespace api.Services
                 Teams = teamsPreviews,
                 TotalTeams = totalTeams
             };
+        }
+
+        public List<Team> SortTeams(List<Team> teams , TeamSearchOrder? order)
+        {
+            switch (order)
+            {
+                case TeamSearchOrder.DateAscending:
+                    return teams.OrderBy(t => t.DateCreated).ToList();
+                case TeamSearchOrder.DateDescending:
+                    return teams.OrderByDescending(t => t.DateCreated).ToList();
+                case TeamSearchOrder.ViewsAscending:
+                    return teams.OrderBy(t => t.ViewCount).ToList();
+                case TeamSearchOrder.ViewsDescending:
+                    return teams.OrderByDescending(t => t.ViewCount).ToList();
+                default:
+                    return teams;
+            }
         }
 
         public List<Team> ChunkTeams(List<Team> inteams, int teamsPerPage, int selectedPage)

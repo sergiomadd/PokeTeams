@@ -10,6 +10,7 @@
         public List<string>? Items { get; set; }
         public int? TeamsPerPage { get; set; }
         public int? SelectedPage { get; set; }
+        public TeamSearchOrder? Order { get; set; }
     }
 
     public enum TeamSearchOrder
