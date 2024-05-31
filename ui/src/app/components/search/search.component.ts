@@ -2,11 +2,13 @@ import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { SearchQueryDTO } from 'src/app/models/DTOs/searchQuery.dto';
 import { SearchQueryResponseDTO } from 'src/app/models/DTOs/searchQueryResponse.dto';
+import { TeamSearchOrder } from 'src/app/models/enums/teamSearchOrder.enum';
 import { Tag } from 'src/app/models/tag.model';
 import { TeamPreview } from 'src/app/models/teamPreview.model';
 import { PokemonService } from 'src/app/services/pokemon.service';
 import { TeamService } from 'src/app/services/team.service';
 import { UserService } from 'src/app/services/user.service';
+import { PaginationComponent } from '../pagination/pagination.component';
 import { ResultStorageComponent } from '../pieces/result-storage/result-storage.component';
 import { SmartInputComponent } from '../pieces/smart-input/smart-input.component';
 
@@ -28,9 +30,11 @@ export class SearchComponent
   searched: boolean = false;
 
   //pagination
-  teamsPerPage: number = 2;
+  teamsPerPage: number = 5;
   totalTeams?: number;
-  
+  sortOrder: TeamSearchOrder = TeamSearchOrder.ViewsDescending;
+  @ViewChild(PaginationComponent) paginationComponent!: PaginationComponent;
+
   searchForm = this.formBuilder.group(
   {
     tournament: [''],
@@ -165,7 +169,8 @@ export class SearchComponent
       moves: this.moveResultStorageComponent?.results?.map(r => r.name),
       items: this.itemResultStorageComponent?.results?.map(r => r.name),
       teamsPerPage: this.teamsPerPage,
-      selectedPage: 1
+      selectedPage: 1,
+      order: this.sortOrder
     }
     return searchQuery;
   }
@@ -178,6 +183,7 @@ export class SearchComponent
   search(searchQuery: SearchQueryDTO)
   {
     console.log(searchQuery)
+    this.teams = [];
     this.searched = true;
     this.teamService.searchTeams(searchQuery)?.subscribe(
       {
@@ -201,115 +207,66 @@ export class SearchComponent
   }
 
   //sorting
-  sorterSettings = [[true, false, false], [true, false, false]]
-
-  resetSorter()
-  {
-    this.sorterSettings.forEach(setting => 
-    {
-      setting[0] = true;
-      setting[1] = false;
-      setting[2] = false;
-    });
-  }
+  sorterSettings: (TeamSearchOrder | undefined)[] = [undefined, TeamSearchOrder.ViewsDescending];
 
   changeSorter(index)
   {
-    if(this.sorterSettings[index][0])
+    switch(index)
     {
-      this.resetSorter();
-      this.sorterSettings[index][0] = false;
-      this.sorterSettings[index][1] = true;
-      if(index == 0)
-      {
-        this.sortTeamsByDate(true);
-      }
-      else if(index == 1)
-      {
-        this.sortTeamsByViews(true);
-      }
-    }
-    else if(this.sorterSettings[index][1])
-    {
-      this.sorterSettings[index][1] = false;
-      this.sorterSettings[index][2] = true;
-      if(index == 0)
-      {
-        this.sortTeamsByDate(false);
-      }
-      else if(index == 1)
-      {
-        this.sortTeamsByViews(false);
-      }
-    }
-    else if(this.sorterSettings[index][2])
-    {
-      this.sorterSettings[index][2] = false;
-      this.sorterSettings[index][0] = true;
-      this.sortedTeams = [...this.teams];
-    }
-  }
-
-  switchVisibility($event)
-  {
-    if(!$event)
-    {
-      this.sortedTeams = this.teams;
-    }
-    else
-    {
-      this.sortedTeams = this.teams?.filter(t => t.visibility == $event);
-    }
-  }
-
-  sortTeamsByViews(descending: boolean)
-  {
-    if(descending)
-    {
-      this.sortedTeams?.sort((b, a) => 
-      {
-        return a.viewCount - b.viewCount;
-      });
-    }
-    else
-    {
-      this.sortedTeams?.sort((a, b) => 
-      {
-        return a.viewCount - b.viewCount;
-      });
-    }
-  }
-
-  sortTeamsByDate(descending: boolean)
-  {
-    if(descending)
-    {
-      this.sortedTeams?.sort((a, b) => 
-      {
-        if(a.date && b.date)
+      case 0:
+        if(this.sorterSettings[index] === undefined)
         {
-          let dateA = Date.parse(a.date);
-          let dateB = Date.parse(b.date);
-          return dateA - dateB;
+          this.resetSorter();
+          this.sorterSettings[index] = TeamSearchOrder.DateDescending;
         }
-        return 0;
-      });
-    }
-    else
-    {
-      this.sortedTeams?.sort((b, a) => 
-      {
-        if(a.date && b.date)
+        else if(this.sorterSettings[index] === TeamSearchOrder.DateDescending)
         {
-          let dateA = Date.parse(a.date);
-          let dateB = Date.parse(b.date);
-          return dateA - dateB;
+          this.sorterSettings[index] = TeamSearchOrder.DateAscending;
         }
-        return 0;
-      });
+        else if(this.sorterSettings[index] === TeamSearchOrder.DateAscending)
+        {
+          this.sorterSettings[index] = undefined;
+        }
+        break;
+      case 1:
+        if(this.sorterSettings[index] === undefined)
+        {
+          this.resetSorter();
+          this.sorterSettings[index] = TeamSearchOrder.ViewsDescending;
+        }
+        else if(this.sorterSettings[index] === TeamSearchOrder.ViewsDescending)
+        {
+          this.sorterSettings[index] = TeamSearchOrder.ViewsAscending;
+        }
+        else if(this.sorterSettings[index] === TeamSearchOrder.ViewsAscending)
+        {
+          this.sorterSettings[index] = undefined;
+        }
+        break;
+      default:
+        break;
+    }
+    this.changeOrder(this.sorterSettings[index]!);
+  }
+
+  resetSorter()
+  {
+    for (let i = 0; i < this.sorterSettings.length; i++) 
+    {
+      this.sorterSettings[i] = undefined
     }
   }
-  
+
+  changeOrder(newOrder: TeamSearchOrder)
+  {
+    let searchQuery: SearchQueryDTO = this.buildQueryFromForm();
+    searchQuery.selectedPage = 1;
+    this.paginationComponent.currentPage = 1;
+    searchQuery.order = newOrder;
+    this.sortOrder = newOrder;
+    this.search(searchQuery);
+  }
+
   pageChange($event)
   {
     let searchQuery: SearchQueryDTO = this.buildQueryFromForm();
