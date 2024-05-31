@@ -1,5 +1,5 @@
 
-<div class="search" #search>
+<div class="search">
   <div class="inputs">
     <form [formGroup]="searchForm" class="form">
       <div class="items">
@@ -63,7 +63,8 @@
     </form>
   </div>
   <div 
-  class="results"
+  class="results" 
+  #results
   [ngClass]="{searched: searched}"
   >
     <div>
