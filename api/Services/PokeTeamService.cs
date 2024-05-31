@@ -335,7 +335,7 @@ namespace api.Services
             return "Team incremented";
         }
 
-        public async Task<List<TeamPreviewDTO>> QueryTeams(TeamSearchQueryDTO searchQuery)
+        public async Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery)
         {
             List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
             List<Team> teams = new List<Team>();
@@ -364,11 +364,28 @@ namespace api.Services
                 teams = FilterTeamsByItems(teams, searchQuery.Items);
             }
 
+            int totalTeams = teams.Count;
+            
+            if(searchQuery.TeamsPerPage != null && searchQuery.SelectedPage != null)
+            {
+                teams = ChunkTeams(teams, searchQuery.TeamsPerPage ?? 0, searchQuery.SelectedPage ?? 0);
+            }
+            
             foreach (Team team in teams)
             {
                 teamsPreviews.Add(await BuildTeamPreviewDTO(team));
             }
-            return teamsPreviews;
+
+            return new TeamSearchQueryResponseDTO
+            {
+                Teams = teamsPreviews,
+                TotalTeams = totalTeams
+            };
+        }
+
+        public List<Team> ChunkTeams(List<Team> inteams, int teamsPerPage, int selectedPage)
+        {
+            return inteams.Chunk(teamsPerPage).ToArray()[selectedPage-1].ToList();
         }
 
         public async Task<List<Team>> FilterTeamsByPlayer(List<Team> inteams, string playerName)

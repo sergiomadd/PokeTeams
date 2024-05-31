@@ -82,9 +82,9 @@ namespace api.Controllers
         }
 
         [HttpPost, Route("query")]
-        public async Task<ActionResult<List<TeamPreviewDTO>>> QueryTeams(TeamSearchQueryDTO key)
+        public async Task<ActionResult<TeamSearchQueryResponseDTO>> QueryTeams(TeamSearchQueryDTO key)
         {
-            List<TeamPreviewDTO> teams = await _teamService.QueryTeams(key);
+            TeamSearchQueryResponseDTO teams = await _teamService.QueryTeams(key);
             if (teams == null)
             {
                 return NotFound("Couldn't find teams");

@@ -8,5 +8,15 @@
         public List<string>? Pokemons { get; set; }
         public List<string>? Moves { get; set; }
         public List<string>? Items { get; set; }
+        public int? TeamsPerPage { get; set; }
+        public int? SelectedPage { get; set; }
+    }
+
+    public enum TeamSearchOrder
+    {
+        DateAscending,
+        DateDescending,
+        ViewsAscending,
+        ViewsDescending
     }
 }

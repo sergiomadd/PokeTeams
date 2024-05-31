@@ -13,6 +13,6 @@ namespace api.Services
         public Task<bool> DeleteUserTeams(User user);
         public Task<string> IncrementTeamViewCount(string teamKey);
         public Task<EditorDataDTO?> GetEditorData();
-        public Task<List<TeamPreviewDTO>> QueryTeams(TeamSearchQueryDTO searchQuery);
+        public Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery);
     }
 }
