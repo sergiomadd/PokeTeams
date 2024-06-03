@@ -1,5 +1,7 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { EditorData } from 'src/app/models/editorData.model';
+import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { ParserService } from 'src/app/services/parser.service';
 import { PokemonService } from 'src/app/services/pokemon.service';
@@ -14,10 +16,14 @@ export class InputComponent
   pokemonService = inject(PokemonService);
   parser = inject(ParserService);
   
+  @Input() editorOptions!: EditorOptions;
+  @Input() editorData!: EditorData;
   @Output() outPokemon = new EventEmitter<Pokemon>();
   
   formData;
   pasteHolder: string;
+
+  sections: boolean[] = [false, true];
 
   constructor()
   {
@@ -115,5 +121,14 @@ export class InputComponent
       this.outPokemon.emit(await this.pokemonService.buildPokemon(pokePaste));
     };
     //console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
+  }
+
+  select(index)
+  {
+    for(let i=0;i<this.sections.length;i++)
+    {
+      this.sections[i] = false;
+    }
+    this.sections[index] = true;
   }
 }

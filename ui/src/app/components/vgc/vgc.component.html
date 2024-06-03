@@ -1,5 +1,5 @@
 <div class="vgc">
   <img src="assets/vgc.png">
-  <app-input (outPokemon)="receivePokemon($event)"></app-input>
-  <app-team-editor [pokemons]="pokemons"></app-team-editor>
+  <app-input (outPokemon)="receivePokemon($event)" [editorOptions]="editorOptions"></app-input>
+  <app-team-editor [pokemons]="pokemons" [editorOptions]="editorOptions" [editorData]="editorData"></app-team-editor>
 </div>

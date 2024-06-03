@@ -2,9 +2,12 @@ import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild, injec
 import { EditorData } from 'src/app/models/editorData.model';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
+import { Tag } from 'src/app/models/tag.model';
 import { Team } from 'src/app/models/team.model';
 import { TeamService } from 'src/app/services/team.service';
+import { UserService } from 'src/app/services/user.service';
 import { TopOptionComponent } from '../options/top-option/top-option.component';
+import { SmartInputComponent } from '../pieces/smart-input/smart-input.component';
 import { TeamComponent } from '../team/team.component';
 
 @Component({
@@ -15,52 +18,74 @@ import { TeamComponent } from '../team/team.component';
 export class TeamEditorComponent 
 {
   teamService = inject(TeamService);
+  userService = inject(UserService);
 
   @Input() pokemons!: Pokemon[];
+  @Input() editorOptions!: EditorOptions;
+  @Input() editorData?: EditorData;
+
   @Output() outputTeam = new EventEmitter<Team>();
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
   @ViewChild(TopOptionComponent) topOptionComponent!: TopOptionComponent;
 
-  editorData?: EditorData;
-  editorOptions: EditorOptions = <EditorOptions>{};
   team: Team = <Team>{}
   posts: any;
   paste: string = '';
 
+  customQueryResult: Tag = 
+  {
+    name: "Custom value",
+    identifier: "custom"
+  }
+
+  //getters for childs
+  @ViewChild('userInput') userInputComponent!: SmartInputComponent;
+  queryUserCallback = async (args: any): Promise<Tag[]> => 
+  {
+    return (await this.userService.queryUser(args)).map((u): Tag => 
+      ({
+        name: u.username,
+        identifier: u.username,
+        icon: u.picture
+      })).concat([this.customQueryResult]);
+  }
+
+  @ViewChild('tournamentInput') tournamentInputComponent!: SmartInputComponent;
+  queryTournamentCallback = async (args: any): Promise<Tag[]> => 
+  {
+    return (await this.teamService.queryTournamentsByName(args)).map(t => 
+      ({
+        name: t.name,
+        identifier: t.identifier,
+        icon: t.icon
+      }));
+  }
+
+  @ViewChild('regulationInput') regulationInputComponent!: SmartInputComponent;
+  queryRegulationCallback = async (args: any): Promise<Tag[]> => 
+  {
+    return (await this.teamService.getAllRegulations())
+      .filter(r => 
+      {
+        return r.name.toLowerCase().includes(args.toLowerCase())
+      })
+      .map(r =>({
+        name: r.name,
+        identifier: r.identifier
+      }));
+  }
+  regulationAllCallback = async (): Promise<Tag[]> => 
+  {
+    return (await this.teamService.getAllRegulations()).map(r => 
+      ({
+        name: r.name,
+        identifier: r.identifier
+      }));
+  }
+
   async ngOnInit() 
   {
-    this.editorData = await this.getEditorData();
-    console.log("Editor data: ", this.editorData)
-    this.getOptions();
-    console.log("Editor options: ", this.editorOptions);
-    
-    this.team = 
-    {
-      id: '',
-      pokemons: this.pokemons,
-      options: this.editorOptions,
-      player: this.topOptionComponent.detailsForm.controls.player.value != null ? this.topOptionComponent.detailsForm.controls.player.value : '',
-      tournament: '',
-      regulation: '',
-      viewCount: 0,
-      visibility: true,
-      tags: this.topOptionComponent.tags
-    }
-    
-    console.log("loaded team", this.team);
-    this.topOptionComponent.detailsForm.valueChanges.subscribe((value) => 
-    {
-      console.log(value)
-      this.team.player = value.player ?? undefined;
-      this.team.tournament = value.tournament ?? undefined;
-      this.team.regulation = value.regulation ?? undefined;
-    });
-    console.log("loaded team", this.team);
-    this.topOptionComponent.tags$.subscribe((value) => 
-    {
-      console.log("TAgs",value)
-      this.team.tags = value;
-    });
+
   }
 
   ngOnChanges(changes: SimpleChanges)
@@ -72,6 +97,40 @@ export class TeamEditorComponent
       this.calculateMaxLevel();
     }
     console.log(changes)
+  }
+
+  async ngAfterContentInit()
+  {
+    console.log(this.topOptionComponent)
+    this.team = 
+    {
+      id: '',
+      pokemons: this.pokemons,
+      options: this.editorOptions,
+      //player: this.topOptionComponent.detailsForm.controls.player.value != null ? this.topOptionComponent.detailsForm.controls.player.value : '',
+      //player: this.userInputComponent.result?.name ?? '',
+      tournament: '',
+      regulation: '',
+      viewCount: 0,
+      visibility: true,
+      tags: this.topOptionComponent?.tags
+    }
+    //this.userInputComponent.
+    
+    console.log("loaded team", this.team);
+    this.topOptionComponent?.detailsForm.valueChanges.subscribe((value) => 
+    {
+      console.log(value)
+      this.team.player = value.player ?? undefined;
+      this.team.tournament = value.tournament ?? undefined;
+      this.team.regulation = value.regulation ?? undefined;
+    });
+    console.log("loaded team", this.team);
+    this.topOptionComponent?.tags$.subscribe((value) => 
+    {
+      console.log("TAgs",value)
+      this.team.tags = value;
+    });
   }
 
   //Gets the maximun calculated stat value of all pokemons
@@ -121,64 +180,5 @@ export class TeamEditorComponent
   updateTeam(option)
   {
     this.teamComponent.forceChange(this.editorOptions)
-  }
-
-
-  getOptions()
-  {
-    this.editorOptions = 
-    {
-      shinyPath: this.editorData?.shinyPaths ? this.editorData?.shinyPaths[8] :       
-      {
-        name: "error",
-        identifier: '0',
-        path: "assets/error.png"
-      },
-      gender: true,
-      malePath: this.editorData?.malePaths ? this.editorData?.malePaths[0] : 
-      {
-        name: "error",
-        identifier: '0',
-        path: "assets/error.png"
-      },
-      femalePath: this.editorData?.femalePaths ? this.editorData?.femalePaths[0] : 
-      {
-        name: "error",
-        identifier: '0',
-        path: "assets/error.png"
-      },
-      pokemonSpritesGen: this.editorData?.pokemonSpritesPaths ? 
-      {
-        name: this.editorData?.pokemonSpritesPaths[0].name,
-        identifier: '0',
-        path: this.editorData?.pokemonSpritesPaths[0].base!
-      } :       
-      {
-        name: "error",
-        identifier: '0',
-        path: "assets/error.png"
-      },
-      typeIconsGen: "gen-ix",
-      showIVs: true,
-      showEVs: true,
-      showNature: true,
-      showDexNumber: true,
-      showNickname: true,
-      maxLevel: 0
-    }
-  }
-
-  async getEditorData(): Promise<EditorData>
-  {
-    const data: EditorData = await this.teamService.getOptionsData();
-    let editorData: EditorData = 
-    {
-      pokemonSpritesPaths: data.pokemonSpritesPaths,
-      typeIconPaths: data.typeIconPaths,
-      shinyPaths: data.shinyPaths,
-      malePaths: data.malePaths,
-      femalePaths: data.femalePaths
-    }
-    return editorData
   }
 }
