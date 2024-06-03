@@ -8,21 +8,19 @@ import { Tag } from 'src/app/models/tag.model';
   templateUrl: './smart-input.component.html',
   styleUrl: './smart-input.component.scss'
 })
+
 export class SmartInputComponent 
 {
   formBuilder = inject(FormBuilder);
 
+  //MAKE RESULT OBSERVABLE -> behavior subject
   @Input() label?: string;
-  //Pass function for where to get results of input
-  @Input() getter?: (args: any) => Promise<Tag[]>
-  @Output() selectEvent = new EventEmitter<Tag>();
-  results?: Tag[] = [];
-
   @Input() keepSelected?: boolean;
-  keptResult?: Tag;
-
   @Input() showAll?: boolean;
+  @Input() getter?: (args: any) => Promise<Tag[]>
   @Input() allGetter?: () => Promise<Tag[]>
+  @Output() selectEvent = new EventEmitter<Tag>();
+
 
   @ViewChild('input') input!: ElementRef;
   searchForm = this.formBuilder.group(
@@ -30,7 +28,10 @@ export class SmartInputComponent
     key: [''],
   });
 
+  results?: Tag[] = [];
   showOptions: boolean = false;
+
+  selected?: Tag | undefined;
 
   async ngOnInit()
   {
@@ -63,27 +64,23 @@ export class SmartInputComponent
 
   selectResult(selectedResult: Tag)
   {
-    if(this.keepSelected && selectedResult.identifier === "custom")
-    {
-      this.showOptions = false;
-    }
-    else if(this.keepSelected)
+    if(this.keepSelected)
     {
       this.searchForm.controls.key.setValue(selectedResult.name);
-      this.keptResult = selectedResult;
-      this.showOptions = false;
+      this.selected = selectedResult;
     }
     else
     {
-      this.showOptions = true;
+      this.searchForm.controls.key.setValue("");
       this.input.nativeElement.focus();
     }
+    this.showOptions = false;
     this.selectEvent.emit(selectedResult);
   }
 
   removeSelected()
   {
-    this.keptResult = undefined;
+    this.selected = undefined;
     this.searchForm.controls.key.setValue("");
   }
 
