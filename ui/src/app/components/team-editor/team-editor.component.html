@@ -1,6 +1,36 @@
 <div class="team-editor">
   <div class="top-options">
-    <app-top-option></app-top-option>
+    <app-smart-input
+    #userInput
+    [label]="'Player: '"
+    [keepSelected]="true"
+    [getter]="queryUserCallback"
+    class="item smart-input-wrapper"
+    ></app-smart-input>
+    <app-smart-input
+    #tournamentInput
+    [label]="'Tournament: '"
+    [keepSelected]="true"
+    [getter]="queryTournamentCallback"
+    class="item smart-input-wrapper"
+    ></app-smart-input>
+    <app-smart-input
+    #regulationInput
+    [label]="'Regulation: '"
+    [keepSelected]="true"
+    [showAll]="true"
+    [getter]="queryRegulationCallback"
+    [allGetter]="regulationAllCallback"
+    class="item smart-input-wrapper"
+    ></app-smart-input>
+    <app-smart-input
+    #regulationInput
+    [label]="'Tags: '"
+    [keepSelected]="false"
+    [showAll]="true"
+    [getter]="queryRegulationCallback"
+    class="item smart-input-wrapper"
+    ></app-smart-input>
   </div>
   <div class="central-row">
     <div class="left-options">
