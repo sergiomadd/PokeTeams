@@ -1,4 +1,26 @@
 
+.input
+{
+  display: flex;
+  flex-direction: column;
+  width: 70vw;
+
+  .selectors
+  {
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid black;
+    gap: 1vw;
+
+    .selector
+    {
+      background-color: lightgrey;
+      cursor: pointer;
+      padding: 0.4vw;
+      border-radius: 10px;
+    }
+  }
+}
 
 .pasteBox
 {

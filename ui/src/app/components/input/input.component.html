@@ -1,26 +1,38 @@
 <div class="input">
-  <div class="title">
-
+  <div class="selectors">
+    <div class="selector" (click)="select(0)">
+      Paste
+    </div>
+    <div class="selector" (click)="select(1)">
+      Creator
+    </div>
   </div>
-  <div>
-    <form 
-    [formGroup] = "formData"
-    (ngSubmit)="onSubmit(formData.value)" 
-    >
-      <div class="pasteBox">
-        <textarea 
-        formControlName="paste"
-        rows="20" 
-        cols="60" 
-        class="input-textArea" 
-        spellcheck="false">
-        </textarea>
-        <button 
-        type="submit"
-        class="submit"
-        >Load
-        </button>
-      </div>
-    </form>
-  </div>
+  <ng-container *ngIf="sections[0]; else creator">
+    <div class="title">
+    </div>
+    <div>
+      <form 
+      [formGroup] = "formData"
+      (ngSubmit)="onSubmit(formData.value)" 
+      >
+        <div class="pasteBox">
+          <textarea 
+          formControlName="paste"
+          rows="20" 
+          cols="60" 
+          class="input-textArea" 
+          spellcheck="false">
+          </textarea>
+          <button 
+          type="submit"
+          class="submit"
+          >Load
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-container>
+  <ng-template #creator>
+    <app-pokemon-creator [editorOptions]="editorOptions"></app-pokemon-creator>
+  </ng-template>
 </div>
