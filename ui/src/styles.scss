@@ -55,6 +55,15 @@ input
   gap: 0.4vw;
 }
 
+.row-center
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4vw;
+}
+
+
 .row-spread
 {
   display: flex;

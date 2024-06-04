@@ -31,7 +31,6 @@
   <div class="teams">
     <ng-container *ngIf="sortedTeams; else noteams">
       <ng-container *ngFor="let team of sortedTeams">
-        <app-team-preview [team]="team" [mode]="'six'" [logged]="logged"></app-team-preview>
       </ng-container>
     </ng-container>
     <ng-template #noteams>

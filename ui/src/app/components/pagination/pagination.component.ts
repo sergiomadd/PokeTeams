@@ -6,9 +6,7 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
   styleUrl: './pagination.component.scss'
 })
 export class PaginationComponent 
-{
-  //https://medium.com/@hassaanali.dev/efficient-data-pagination-in-angular-implementing-smooth-and-performant-pagination-for-large-data-637fe994bbbf
-  
+{  
   @Input() currentPage: number = 1;
   @Input() itemsPerPage!: number;
   @Input() totalItems!: number;

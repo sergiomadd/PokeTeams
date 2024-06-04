@@ -389,10 +389,10 @@
               </div>
             </div>
             <ng-container *ngIf="pokemon.gender==='F'; else male">
-              <img src={{editorOptions!.femalePath.path}} alt="" class="icon">
+              <img src={{editorOptions?.femalePath?.path}} alt="" class="icon">
             </ng-container>
             <ng-template #male>
-              <img src={{editorOptions!.malePath.path}} alt="" class="icon">
+              <img src={{editorOptions?.malePath?.path}} alt="" class="icon">
             </ng-template>          
           </div>
         </div>
@@ -545,7 +545,7 @@
                     <div class="col"  [ngStyle]="{backgroundColor: getStatColor(stat)}">
                       <div class="item">Base</div>
                       <div class="item">{{stat.value}}</div>
-                      <div class="item">{{calculatedStats.base[i].value}}</div>
+                      <div class="item">{{calculatedStats.base[i]?.value}}</div>
                     </div>
                     <div class="col ivs">
                       <div class="item">IVs</div>
