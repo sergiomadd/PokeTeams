@@ -20,7 +20,7 @@ export interface Pokemon
 	item?: Item,
 	ability?: Ability,
 	nature?: Nature,
-	moves?: Move[],
+	moves?: (Move | undefined)[],
 	stats?: Stat[],
 	ivs?: Stat[],
 	evs?: Stat[],

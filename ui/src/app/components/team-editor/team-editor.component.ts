@@ -90,18 +90,19 @@ export class TeamEditorComponent
 
   ngOnChanges(changes: SimpleChanges)
   {
-    //console.log("changes", changes)
+    if(changes['editorOptions'])
+    {
+      this.team.options = changes['editorOptions'].currentValue;
+    }
     if(changes['pokemons'])
     {
       this.team.pokemons = changes['pokemons'].currentValue;
       this.calculateMaxLevel();
     }
-    console.log(changes)
   }
 
   async ngAfterContentInit()
   {
-    console.log(this.topOptionComponent)
     this.team = 
     {
       id: '',
@@ -117,7 +118,6 @@ export class TeamEditorComponent
     }
     //this.userInputComponent.
     
-    console.log("loaded team", this.team);
     this.topOptionComponent?.detailsForm.valueChanges.subscribe((value) => 
     {
       console.log(value)
@@ -125,7 +125,6 @@ export class TeamEditorComponent
       this.team.tournament = value.tournament ?? undefined;
       this.team.regulation = value.regulation ?? undefined;
     });
-    console.log("loaded team", this.team);
     this.topOptionComponent?.tags$.subscribe((value) => 
     {
       console.log("TAgs",value)

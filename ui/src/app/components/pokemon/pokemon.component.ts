@@ -1,4 +1,4 @@
-import { Component, inject, Input, ViewEncapsulation } from '@angular/core';
+import { Component, inject, Input, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Nature } from 'src/app/models/pokemon/nature.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
@@ -68,11 +68,25 @@ export class PokemonComponent
     this.femaleIconPath = "https://localhost:7134/images/sprites/gender/female.png";
   }
 
+  ngOnChanges(changes: SimpleChanges)
+  {
+    if(changes['editorOptions'])
+    {
+      this.loadSprite();
+      this.calculateStats();
+    }
+    if(changes['pokemon'])
+    {
+      this.loadSprite();
+      this.calculateStats();
+    }
+  }
+
   loadSprite()
   {
     if(this.pokemon.sprites)
     {
-      let choosenVariationPath = this.pokemon.sprites[this.editorOptions!.pokemonSpritesGen!.identifier];
+      let choosenVariationPath = this.pokemon.sprites[this.editorOptions?.pokemonSpritesGen?.identifier ?? 0];
       if(this.pokemon.gender === "female")
       {
         this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shinyFemale : choosenVariationPath.female
@@ -146,7 +160,7 @@ export class PokemonComponent
 
   getMoveColor(move)
   {
-    let name = move.pokeType?.name;
+    let name = move?.pokeType?.name;
     return PokeColor[name?.toLowerCase()];
   }
 
@@ -296,7 +310,7 @@ export class PokemonComponent
 
   getStatSize(value: number)
   {
-    let maxValue: number = this.editorOptions?.maxLevel ?? 700; //the maximun stat value of all pokemons
+    let maxValue: number = this.editorOptions && this.editorOptions?.maxLevel > 0 ? this.editorOptions?.maxLevel : 700; //the maximun stat value of any pokemons
     let maxSize: number = 20; //the maximun size in vw
     return `${value / maxValue * maxSize}vw`;
   }
@@ -308,7 +322,7 @@ export class PokemonComponent
       "hp": "HP",
       "attack": "Atk",
       "defense": "Def",
-      "special-attack": "SpA", //cant put speacial-attack
+      "special-attack": "SpA",
       "special-defense": "SpD",
       "speed": "Spe"
     }

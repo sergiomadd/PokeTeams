@@ -132,7 +132,7 @@ export class ParserService {
     {
       pokemon.moves.forEach(move => 
       {
-        pokePaste = pokePaste + `- ${move.name}\n`;
+        pokePaste = pokePaste + `- ${move?.name}\n`;
       });
     }
     return pokePaste;
