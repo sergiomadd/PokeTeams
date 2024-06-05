@@ -1,8 +1,10 @@
 import { Component, inject, Input, ViewChild } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { PokemonData } from 'src/app/models/DTOs/pokemonData.dto';
 import { EditorData } from 'src/app/models/editorData.model';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
+import { Stat } from 'src/app/models/pokemon/stat.model';
 import { Tag } from 'src/app/models/tag.model';
 import { PokemonService } from 'src/app/services/pokemon.service';
 import { QueryService } from 'src/app/services/query.service';
@@ -19,6 +21,7 @@ export class PokemonCreatorComponent
   queryService = inject(QueryService);
   pokemonService = inject(PokemonService);
   teamService = inject(TeamService);
+  formBuilder = inject(FormBuilder);
 
   @Input() editorOptions!: EditorOptions;
 
@@ -26,21 +29,59 @@ export class PokemonCreatorComponent
   editorData?: EditorData;
 
   @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;
+  
+  pokemonForm = this.formBuilder.group(
+    {
+      shiny: [false],
+      gender: [""],
+      level: [50, [Validators.min(1), Validators.max(100)]],
+      ivs: [0],
+      evs: [0]
+    });
 
-  //input should have a selected anon obj
+  //input should have a pre-selected anon obj
   async ngOnInit()
   {
-    this.editorData = await this.getEditorData();
-    console.log("Editor data: ", this.editorData)
-    this.getOptions();
-    console.log("Editor options: ", this.editorOptions);
+    //Init empty pokemon
+    let emptyStat: Stat =
+    {
+      name: "",
+      identifier: "",
+      value: 0
+    }
 
     this.pokemon = 
     {
       name: "",
       moves: [],
-      
+      ivs: [emptyStat,emptyStat,emptyStat,emptyStat,emptyStat,emptyStat],
+      evs: [emptyStat,emptyStat,emptyStat,emptyStat,emptyStat,emptyStat],
+      level: 50
     }
+
+    this.pokemonForm.controls.shiny.valueChanges.subscribe(async (value) => 
+    {
+      this.pokemon.shiny = value ?? false;
+    });
+
+    this.pokemonForm.controls.level.valueChanges.subscribe(async (value) => 
+    {
+      if(this.pokemonForm.controls.level.valid)
+      {
+        this.pokemon.level = value ?? 50;
+      }
+    });
+
+    this.pokemonForm.controls.gender.valueChanges.subscribe(async (value) => 
+    {
+      this.pokemon.gender = value ?? undefined;
+    });
+    this.pokemonForm.controls.ivs.valueChanges.subscribe(async (value) => 
+    {
+    });
+    this.pokemonForm.controls.evs.valueChanges.subscribe(async (value) => 
+    {
+    });
   }
 
   async pokemonSelectEvent(event: Tag)
@@ -56,10 +97,37 @@ export class PokemonCreatorComponent
     this.pokemon.stats = data.stats;
     this.forceChangePokemon();
   }
+  async pokemonRemoveSelectedEvent(event: Tag)
+  {
+    this.pokemon.name = undefined;
+    this.pokemon.dexNumber = undefined;
+    this.pokemon.types = undefined;
+    this.pokemon.sprites = undefined;
+    this.pokemon.evolutions = undefined;
+    this.pokemon.preEvolution = undefined;
+    this.pokemon.stats = undefined;
+    this.forceChangePokemon();
+  }
 
   async itemSelectEvent(event: Tag)
   {
     this.pokemon.item = await this.pokemonService.getItemByName(event.name);
+    this.forceChangePokemon();
+  }
+  async itemRemoveSelectedEvent(event: Tag)
+  {
+    this.pokemon.item = undefined;
+    this.forceChangePokemon();
+  }
+
+  async abilitySelectEvent(event: Tag)
+  {
+    this.pokemon.ability = await this.pokemonService.getAbilityByName(event.name);
+    this.forceChangePokemon();
+  }
+  async abilityRemoveSelectedEvent(event: Tag)
+  {
+    this.pokemon.ability = undefined;
     this.forceChangePokemon();
   }
 
@@ -68,10 +136,20 @@ export class PokemonCreatorComponent
     this.pokemon.moves![0] = await this.pokemonService.getMove(event.name);
     this.forceChangePokemon();
   }
+  async move1RemoveSelectedEvent(event: Tag)
+  {
+    this.pokemon.moves![0] = undefined;
+    this.forceChangePokemon();
+  }
 
   async move2SelectEvent(event: Tag)
   {
     this.pokemon.moves![1] = await this.pokemonService.getMove(event.name);
+    this.forceChangePokemon();
+  }
+  async move2RemoveSelectedEvent(event: Tag)
+  {
+    this.pokemon.moves![1] = undefined;
     this.forceChangePokemon();
   }
 
@@ -80,10 +158,42 @@ export class PokemonCreatorComponent
     this.pokemon.moves![2] = await this.pokemonService.getMove(event.name);
     this.forceChangePokemon();
   }
+  async move3RemoveSelectedEvent(event: Tag)
+  {
+    this.pokemon.moves![2] = undefined;
+    this.forceChangePokemon();
+  }
 
   async move4SelectEvent(event: Tag)
   {
     this.pokemon.moves![3] = await this.pokemonService.getMove(event.name);
+    this.forceChangePokemon();
+  }
+  async move4RemoveSelectedEvent(event: Tag)
+  {
+    this.pokemon.moves![3] = undefined;
+    this.forceChangePokemon();
+  }
+
+  async natureSelectEvent(event: Tag)
+  {
+    this.pokemon.nature = await this.pokemonService.getNatureByName(event.name);
+    this.forceChangePokemon();
+  }
+  async natureRemoveSelectedEvent(event: Tag)
+  {
+    this.pokemon.nature = undefined;
+    this.forceChangePokemon();
+  }
+
+  async teraTypeSelectEvent(event: Tag)
+  {
+    this.pokemon.teraType = await this.pokemonService.getType(event.name, true);
+    this.forceChangePokemon();
+  }
+  async teraTypeRemoveSelectedEvent(event: Tag)
+  {
+    this.pokemon.teraType = undefined;
     this.forceChangePokemon();
   }
 
@@ -97,75 +207,4 @@ export class PokemonCreatorComponent
   {
 
   }
-
-  getOptions()
-  {
-    this.editorOptions = 
-    {
-      shinyPath: this.editorData?.shinyPaths ? this.editorData?.shinyPaths[8] :       
-      {
-        name: "error",
-        identifier: '0',
-        path: "assets/error.png"
-      },
-      gender: true,
-      malePath: this.editorData?.malePaths ? this.editorData?.malePaths[0] : 
-      {
-        name: "error",
-        identifier: '0',
-        path: "assets/error.png"
-      },
-      femalePath: this.editorData?.femalePaths ? this.editorData?.femalePaths[0] : 
-      {
-        name: "error",
-        identifier: '0',
-        path: "assets/error.png"
-      },
-      pokemonSpritesGen: this.editorData?.pokemonSpritesPaths ? 
-      {
-        name: this.editorData?.pokemonSpritesPaths[0].name,
-        identifier: '0',
-        path: this.editorData?.pokemonSpritesPaths[0].base!
-      } :       
-      {
-        name: "error",
-        identifier: '0',
-        path: "assets/error.png"
-      },
-      typeIconsGen: "gen-ix",
-      showIVs: true,
-      showEVs: true,
-      showNature: true,
-      showDexNumber: true,
-      showNickname: true,
-      maxLevel: 0
-    }
-  }
-
-  async getEditorData(): Promise<EditorData>
-  {
-    const data: EditorData = await this.teamService.getOptionsData();
-    let editorData: EditorData = 
-    {
-      pokemonSpritesPaths: data.pokemonSpritesPaths,
-      typeIconPaths: data.typeIconPaths,
-      shinyPaths: data.shinyPaths,
-      malePaths: data.malePaths,
-      femalePaths: data.femalePaths
-    }
-    return editorData
-  }
-
 }
-
-//pokemon x
-//item x
-//ability x
-//moves x
-//teratype
-//shiny
-//gender
-//level
-//ivs
-//evs
-//nature

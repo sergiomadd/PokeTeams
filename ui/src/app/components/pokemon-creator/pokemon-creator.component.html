@@ -1,6 +1,6 @@
 
 <div class="creator">
-  <div class="form">
+  <form class="form" [formGroup]="pokemonForm" >
     <div class="row-center">
       <div class="form-item">
         <app-smart-input
@@ -9,6 +9,7 @@
         [keepSelected]="true"
         [getter]="queryService.queryPokemonCallback"
         (selectEvent)="pokemonSelectEvent($event)"
+        (removeSelectedEvent)="pokemonRemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
@@ -19,6 +20,7 @@
         [keepSelected]="true"
         [getter]="queryService.queryItemCallback"
         (selectEvent)="itemSelectEvent($event)"
+        (removeSelectedEvent)="itemRemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
         <input type="checkbox" name="" id="">
@@ -29,7 +31,9 @@
         #userInput
         [label]="'Ability: '"
         [keepSelected]="true"
-        [getter]="queryService.queryPokemonCallback"
+        [getter]="queryService.queryAbilityCallback"
+        (selectEvent)="abilitySelectEvent($event)"
+        (removeSelectedEvent)="abilityRemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
         <input type="checkbox" name="" id="">
@@ -44,6 +48,7 @@
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
         (selectEvent)="move1SelectEvent($event)"
+        (removeSelectedEvent)="move1RemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
         <input type="checkbox" name="" id="">
@@ -56,10 +61,23 @@
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
         (selectEvent)="move2SelectEvent($event)"
+        (removeSelectedEvent)="move2RemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
         <input type="checkbox" name="" id="">
         <label>All</label>
+      </div>
+      <div class="form-item">
+        <app-smart-input
+        #userInput
+        [label]="'Nature: '"
+        [keepSelected]="true"
+        [getter]="queryService.queryNatureCallback"
+        [allGetter]="queryService.naturesAllCallback"
+        (selectEvent)="natureSelectEvent($event)"
+        (removeSelectedEvent)="natureRemoveSelectedEvent($event)"
+        class="smart-input-wrapper"
+        ></app-smart-input>
       </div>
     </div>
     <div class="row-center">
@@ -70,6 +88,7 @@
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
         (selectEvent)="move3SelectEvent($event)"
+        (removeSelectedEvent)="move3RemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
         <input type="checkbox" name="" id="">
@@ -82,67 +101,69 @@
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
         (selectEvent)="move4SelectEvent($event)"
+        (removeSelectedEvent)="move4RemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
         <input type="checkbox" name="" id="">
         <label>All</label>
       </div>
-    </div>
-    <div class="row-center">
-      <div class="form-item">
-        <app-smart-input
-        #userInput
-        [label]="'Nature: '"
-        [keepSelected]="true"
-        [getter]="queryService.queryPokemonCallback"
-        [allGetter]="queryService.naturesAllCallback"
-        class="smart-input-wrapper"
-        ></app-smart-input>
-      </div>
-      <div class="col">
-        <div class="form-item">
-          <label for="">IVs </label>
-          <input type="range" min="0" max="16" value="0" 
-          class="slider" id="myRange"  oninput="this.nextElementSibling.value = this.value">
-          <output>0</output>
-        </div>
-        <div class="form-item">
-          <label for="">EVs</label>
-          <input type="range" min="0" max="256" value="0" 
-          class="slider" id="myRange"  oninput="this.nextElementSibling.value = this.value">
-          <output>0</output>
-        </div>
-      </div>
-    </div>
-    <div class="row-center">
       <div class="form-item">
         <app-smart-input
         #userInput
         [label]="'Teratype: '"
         [keepSelected]="true"
-        [getter]="queryService.queryPokemonCallback"
+        [getter]="queryService.queryTeratypeCallback"
+        [allGetter]="queryService.teraTypesAllCallback"
+        (selectEvent)="teraTypeSelectEvent($event)"
+        (removeSelectedEvent)="teraTypeRemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
-      <div class="form-item">
-        <label for="">Shiny?</label>
-        <input type="checkbox" name="" id="">
+    </div>
+    <div class="row-center">
+      <div class="col">
+        <div class="row-center">
+          <div class="form-item">
+            <label for="">Shiny?</label>
+            <input type="checkbox" name="" id="" formControlName="shiny">
+          </div>
+          <div class="form-item">
+            <label for="">Level:</label>
+            <input type="number" min="1" max="100" formControlName="level">
+          </div>
+        </div>
+        <div class="form-item">
+          <label for="">Gender</label>
+          <fieldset id="group1" class="row">
+            <input type="radio" [value]="" formControlName="gender">Male
+            <input type="radio" [value]="'F'" formControlName="gender">Female
+          </fieldset>
+        </div>
+        <div class="form-item">
+          <label for="">Nick name</label>
+          <input type="text">
+        </div>
       </div>
-      <div class="form-item">
-        <label for="">Gender</label>
-        <fieldset id="group1" class="row">
-          <label for="">Male</label>
-          <input type="radio" value="value1" name="group1">
-          <label for="">Female</label>
-          <input type="radio" value="value2" name="group1">
-        </fieldset>
-      </div>
-      <div class="form-item">
-        <label for="">Level:</label>
-        <input type="number" min="1" max="100">
+      <div class="col">
+        <div class="form-item">
+          <label for="">IVs </label>
+          <input type="range" min="0" max="16" value="0" 
+          class="slider" id="myRange"
+          formControlName="ivs"
+          oninput="this.nextElementSibling.value = this.value">
+          <output>0</output>
+        </div>
+        <div class="form-item">
+          <label for="">EVs</label>
+          <input type="range" min="0" max="256" value="0" 
+          class="slider" id="myRange"
+          formControlName="ivs"
+          oninput="this.nextElementSibling.value = this.value">
+          <output>0</output>
+        </div>
       </div>
     </div>
-  </div>
+  </form>
   <div class="preview">
     <app-pokemon [pokemon]="pokemon" [editorOptions]="editorOptions" ></app-pokemon>
     <button>Add Pokemon</button>
