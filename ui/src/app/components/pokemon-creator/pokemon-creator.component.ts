@@ -38,7 +38,8 @@ export class PokemonCreatorComponent
     this.pokemon = 
     {
       name: "",
-
+      moves: [],
+      
     }
   }
 
@@ -53,8 +54,42 @@ export class PokemonCreatorComponent
     this.pokemon.evolutions = data.evolutions;
     this.pokemon.preEvolution = data.preEvolution;
     this.pokemon.stats = data.stats;
-    this.pokemon = structuredClone(this.pokemon);
+    this.forceChangePokemon();
+  }
 
+  async itemSelectEvent(event: Tag)
+  {
+    this.pokemon.item = await this.pokemonService.getItemByName(event.name);
+    this.forceChangePokemon();
+  }
+
+  async move1SelectEvent(event: Tag)
+  {
+    this.pokemon.moves![0] = await this.pokemonService.getMove(event.name);
+    this.forceChangePokemon();
+  }
+
+  async move2SelectEvent(event: Tag)
+  {
+    this.pokemon.moves![1] = await this.pokemonService.getMove(event.name);
+    this.forceChangePokemon();
+  }
+
+  async move3SelectEvent(event: Tag)
+  {
+    this.pokemon.moves![2] = await this.pokemonService.getMove(event.name);
+    this.forceChangePokemon();
+  }
+
+  async move4SelectEvent(event: Tag)
+  {
+    this.pokemon.moves![3] = await this.pokemonService.getMove(event.name);
+    this.forceChangePokemon();
+  }
+
+  forceChangePokemon()
+  {
+    this.pokemon = structuredClone(this.pokemon);
     console.log(this.pokemon)
   }
 

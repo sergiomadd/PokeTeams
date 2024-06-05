@@ -18,6 +18,7 @@
         [label]="'Item: '"
         [keepSelected]="true"
         [getter]="queryService.queryItemCallback"
+        (selectEvent)="itemSelectEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
         <input type="checkbox" name="" id="">
@@ -42,6 +43,7 @@
         [label]="'Move 1: '"
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
+        (selectEvent)="move1SelectEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
         <input type="checkbox" name="" id="">
@@ -53,6 +55,7 @@
         [label]="'Move 2: '"
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
+        (selectEvent)="move2SelectEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
         <input type="checkbox" name="" id="">
@@ -66,6 +69,7 @@
         [label]="'Move 3: '"
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
+        (selectEvent)="move3SelectEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
         <input type="checkbox" name="" id="">
@@ -77,6 +81,7 @@
         [label]="'Move 4: '"
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
+        (selectEvent)="move4SelectEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
         <input type="checkbox" name="" id="">
