@@ -9,6 +9,7 @@ import { defaultMove, Move } from '../models/pokemon/move.model';
 import { defaultNature, Nature } from '../models/pokemon/nature.model';
 import { Pokemon } from '../models/pokemon/pokemon.model';
 import { Stat } from '../models/pokemon/stat.model';
+import { Type } from '../models/pokemon/type.model';
 import { defaultTypeWithEffectiveness, TypeWithEffectiveness } from '../models/pokemon/typewitheffectiveness.model';
 import { PokePaste } from '../models/pokePaste.model';
 import { Tag } from '../models/tag.model';
@@ -283,6 +284,40 @@ export class PokemonService
     return items; 
   }
 
+  async queryAbilitiesByName(key: string) : Promise<Tag[]>
+  {
+    let abilities: Tag[] = [];
+    let url = this.apiUrl + 'ability/query';
+    try
+    {
+      let params = new HttpParams().set('key', key ?? "");
+      abilities = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return abilities; 
+  }
+
+
+  async queryNaturesByName(key: string) : Promise<Tag[]>
+  {
+    let natures: Tag[] = [];
+    let url = this.apiUrl + 'nature/query';
+    try
+    {
+      let params = new HttpParams().set('key', key ?? "");
+      natures = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return natures; 
+  }
   async getAllNatures() : Promise<Nature[]>
   {
     let regulations: Nature[] = [];
@@ -297,5 +332,37 @@ export class PokemonService
       console.log("Error: ", getErrorMessage(error));
     }
     return regulations; 
+  }
+
+  async queryTeraTypesByName(key: string) : Promise<Tag[]>
+  {
+    let teraTypes: Tag[] = [];
+    let url = this.apiUrl + 'type/teratype/query';
+    try
+    {
+      let params = new HttpParams().set('key', key ?? "");
+      teraTypes = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return teraTypes; 
+  }
+  async getAllTeraTypes() : Promise<Type[]>
+  {
+    let types: Type[] = [];
+    let url = this.apiUrl + 'type/teratype/all';
+    try
+    {
+      types = await lastValueFrom(this.http.get<Type[]>(url)
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return types; 
   }
 } 

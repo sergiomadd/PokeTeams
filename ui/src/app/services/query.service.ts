@@ -96,12 +96,48 @@ export class QueryService
     return [];
   }
 
+  queryAbilityCallback = async (args: any): Promise<Tag[]> => 
+  {
+    if(args)
+    {
+      return (await this.pokemonService.queryAbilitiesByName(args));
+    }
+    return [];
+  }
+
+  queryNatureCallback = async (args: any): Promise<Tag[]> => 
+  {
+    if(args)
+    {
+      return (await this.pokemonService.queryNaturesByName(args));
+    }
+    return [];
+  }
   naturesAllCallback = async (): Promise<Tag[]> => 
   {
     return (await this.pokemonService.getAllNatures()).map(n => 
       ({
         name: n.name,
         identifier: n.name
+      }));
+  }
+
+  queryTeratypeCallback = async (args: any): Promise<Tag[]> => 
+  {
+    
+    if(args)
+    {
+      return (await this.pokemonService.queryTeraTypesByName(args));
+    }
+    return [];
+  }
+  teraTypesAllCallback = async (): Promise<Tag[]> => 
+  {
+    return (await this.pokemonService.getAllTeraTypes()).map(n => 
+      ({
+        name: n.name,
+        identifier: n.name,
+        icon: n.iconPath
       }));
   }
 }
