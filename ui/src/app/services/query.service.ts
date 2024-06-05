@@ -95,4 +95,13 @@ export class QueryService
     }
     return [];
   }
+
+  naturesAllCallback = async (): Promise<Tag[]> => 
+  {
+    return (await this.pokemonService.getAllNatures()).map(n => 
+      ({
+        name: n.name,
+        identifier: n.name
+      }));
+  }
 }

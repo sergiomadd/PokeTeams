@@ -282,4 +282,20 @@ export class PokemonService
     }
     return items; 
   }
+
+  async getAllNatures() : Promise<Nature[]>
+  {
+    let regulations: Nature[] = [];
+    let url = this.apiUrl + 'nature/all';
+    try
+    {
+      regulations = await lastValueFrom(this.http.get<Nature[]>(url)
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", getErrorMessage(error));
+    }
+    return regulations; 
+  }
 } 
