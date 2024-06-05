@@ -1,4 +1,5 @@
-﻿using api.DTOs.PokemonDTOs;
+﻿using api.DTOs;
+using api.DTOs.PokemonDTOs;
 using api.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
@@ -36,6 +37,17 @@ namespace api.Controllers
                 return BadRequest("Ability not found.");
             }
             return Ok(ability);
+        }
+
+        [HttpGet, Route("query")]
+        public async Task<ActionResult<List<TagDTO>>> QueryAbilitiesByName(string key)
+        {
+            List<TagDTO> abilities = _pokemonService.QueryAbilitiesByName(key);
+            if (abilities == null)
+            {
+                return NotFound("Couldn't query abilities");
+            }
+            return Ok(abilities);
         }
     }
 }

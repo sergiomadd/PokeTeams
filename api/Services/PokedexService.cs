@@ -16,6 +16,7 @@ using api.DTOs.PokemonDTOs;
 using api.Models.DBPoketeamModels;
 using System.Text.Json;
 using api.DTOs;
+using api.Models;
 
 namespace api.Services
 {
@@ -647,6 +648,61 @@ namespace api.Services
                     else
                     {
                         queryResults.Add(new TagDTO(itemName.name, items.Identifier));
+                    }
+                });
+            }
+            return queryResults;
+        }
+
+        public List<TagDTO> QueryAbilitiesByName(string key)
+        {
+            List<TagDTO> queryResults = new List<TagDTO>();
+            List<Ability_names> abilityNames = _pokedexContext.Ability_names
+                .Where(i => i.name.Contains(key) && i.local_language_id == 9).ToList();
+            if (abilityNames != null && abilityNames.Count > 0)
+            {
+                abilityNames.ForEach(abilityName =>
+                {
+                    queryResults.Add(new TagDTO(abilityName.name, abilityName.ability_id.ToString()));
+                });
+            }
+            return queryResults;
+        }
+
+        public List<TagDTO> QueryNaturesByName(string key)
+        {
+            List<TagDTO> queryResults = new List<TagDTO>();
+            List<Nature_names> natureNames = _pokedexContext.Nature_names
+                .Where(i => i.name.Contains(key) && i.local_language_id == 9).ToList();
+            if (natureNames != null && natureNames.Count > 0)
+            {
+                natureNames.ForEach(natureName =>
+                {
+                    queryResults.Add(new TagDTO(natureName.name, natureName.nature_id.ToString()));
+                });
+            }
+            return queryResults;
+        }
+
+        public List<TagDTO> QueryTypesByName(string key, bool teraType = false)
+        {
+            List<TagDTO> queryResults = new List<TagDTO>();
+            List<Type_names> typeNames = _pokedexContext.Type_names
+                .Where(i => i.name.Contains(key) && i.local_language_id == 9).ToList();
+            if (typeNames != null && typeNames.Count > 0)
+            {
+                typeNames.ForEach(typeName =>
+                {
+                    Types types = _pokedexContext.Types.FirstOrDefault(i => i.id == typeName.type_id);
+                    if (types != null)
+                    {
+                        string pathStart = teraType ? "https://localhost:7134/images/sprites/types/generation-viii/"
+                        : "https://localhost:7134/images/sprites/teratypes/";
+                        queryResults.Add(new TagDTO(typeName.name, typeName.type_id.ToString(), icon: $"{pathStart}{types.identifier}.png"));
+                    }
+                    else
+                    {
+                        queryResults.Add(new TagDTO(typeName.name, typeName.type_id.ToString()));
                     }
                 });
             }

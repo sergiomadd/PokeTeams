@@ -18,17 +18,6 @@ namespace api.Controllers
             _pokemonService = pokemonService;
         }
 
-        [HttpGet("all", Name = "GetAllNatures")]
-        public async Task<ActionResult<List<NatureDTO>>> GetAllNatures()
-        {
-            List<NatureDTO> naures = await _pokemonService.GetAllNatures();
-            if (naures == null)
-            {
-                return BadRequest("Natures not found.");
-            }
-            return Ok(naures);
-        }
-
         [HttpGet("name/{natureName}", Name = "GetNatureByName")]
         public async Task<ActionResult<NatureDTO>> GetNatureByName(string natureName)
         {
@@ -49,6 +38,28 @@ namespace api.Controllers
                 return BadRequest("Nature not found.");
             }
             return Ok(nature);
+        }
+
+        [HttpGet("all", Name = "GetAllNatures")]
+        public async Task<ActionResult<List<NatureDTO>>> GetAllNatures()
+        {
+            List<NatureDTO> naures = await _pokemonService.GetAllNatures();
+            if (naures == null)
+            {
+                return BadRequest("Natures not found.");
+            }
+            return Ok(naures);
+        }
+
+        [HttpGet, Route("query")]
+        public async Task<ActionResult<List<TagDTO>>> QueryNaturesByName(string key)
+        {
+            List<TagDTO> natures = _pokemonService.QueryNaturesByName(key);
+            if (natures == null)
+            {
+                return NotFound("Couldn't query natures");
+            }
+            return Ok(natures);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using api.DTOs.PokemonDTOs;
+﻿using api.DTOs;
+using api.DTOs.PokemonDTOs;
 using api.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
@@ -55,6 +56,28 @@ namespace api.Controllers
             if (types == null)
             {
                 return BadRequest("Type not found.");
+            }
+            return Ok(types);
+        }
+
+        [HttpGet, Route("query")]
+        public async Task<ActionResult<List<TagDTO>>> QueryTypesByName(string key)
+        {
+            List<TagDTO> types = _pokemonService.QueryTypesByName(key);
+            if (types == null)
+            {
+                return NotFound("Couldn't query types");
+            }
+            return Ok(types);
+        }
+
+        [HttpGet, Route("teratype/query")]
+        public async Task<ActionResult<List<TagDTO>>> QueryTeraTypesByName(string key)
+        {
+            List<TagDTO> types = _pokemonService.QueryTypesByName(key, true);
+            if (types == null)
+            {
+                return NotFound("Couldn't query types");
             }
             return Ok(types);
         }

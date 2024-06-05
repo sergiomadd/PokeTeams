@@ -15,12 +15,15 @@ namespace api.Services
         public Task<ItemDTO?> GetItemByIdentifier(string identifier);
         public Task<AbilityDTO?> GetAbilityByName(string name);
         public Task<AbilityDTO?> GetAbilityByIdentifier(string identifier);
-        public Task<List<NatureDTO>> GetAllNatures();
+        public List<TagDTO> QueryAbilitiesByName(string key);
         public Task<NatureDTO?> GetNatureByName(string name);
         public Task<NatureDTO?> GetNatureByIdentifier(string identifier);
+        public Task<List<NatureDTO>> GetAllNatures();
+        public List<TagDTO> QueryNaturesByName(string key);
         public Task<MoveDTO?> GetMoveByName(string name);
         public Task<List<PokeTypeDTO>> GetAllTypes();
         public Task<List<PokeTypeDTO>> GetAllTeraTypes();
+        public List<TagDTO> QueryTypesByName(string key, bool teraType = false);
         public Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessByIdentifier(string identifier, bool teraType = false);
         public Task<string?> GetStatNameByIdentifier(string identifier);
         public List<TagDTO> QueryPokemonsByName(string key);
