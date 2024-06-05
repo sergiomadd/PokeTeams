@@ -6,6 +6,7 @@ import { TeamSearchOrder } from 'src/app/models/enums/teamSearchOrder.enum';
 import { Tag } from 'src/app/models/tag.model';
 import { TeamPreview } from 'src/app/models/teamPreview.model';
 import { PokemonService } from 'src/app/services/pokemon.service';
+import { QueryService } from 'src/app/services/query.service';
 import { TeamService } from 'src/app/services/team.service';
 import { UserService } from 'src/app/services/user.service';
 import { PaginationComponent } from '../pagination/pagination.component';
@@ -19,6 +20,7 @@ import { SmartInputComponent } from '../pieces/smart-input/smart-input.component
 })
 export class SearchComponent 
 {
+  queryService = inject(QueryService);
   formBuilder = inject(FormBuilder);
   userService = inject(UserService);
   teamService = inject(TeamService);
@@ -42,102 +44,22 @@ export class SearchComponent
     pokemon: [''],
   });
 
-  customQueryResult: Tag = 
-  {
-    name: "Custom value",
-    identifier: "custom"
-  }
-
-  //getters for childs
   @ViewChild('userInput') userInputComponent!: SmartInputComponent;
-  queryUserCallback = async (args: any): Promise<Tag[]> => 
-  {
-    return (await this.userService.queryUser(args)).map((u): Tag => 
-      ({
-        name: u.username,
-        identifier: u.username,
-        icon: u.picture
-      })).concat([this.customQueryResult]);
-  }
-
   @ViewChild('tournamentInput') tournamentInputComponent!: SmartInputComponent;
-  queryTournamentCallback = async (args: any): Promise<Tag[]> => 
-  {
-    return (await this.teamService.queryTournamentsByName(args)).map(t => 
-      ({
-        name: t.name,
-        identifier: t.identifier,
-        icon: t.icon
-      }));
-  }
-
   @ViewChild('regulationInput') regulationInputComponent!: SmartInputComponent;
-  queryRegulationCallback = async (args: any): Promise<Tag[]> => 
-  {
-    return (await this.teamService.getAllRegulations())
-      .filter(r => 
-      {
-        return r.name.toLowerCase().includes(args.toLowerCase())
-      })
-      .map(r =>({
-        name: r.name,
-        identifier: r.identifier
-      }));
-  }
-  regulationAllCallback = async (): Promise<Tag[]> => 
-  {
-    return (await this.teamService.getAllRegulations()).map(r => 
-      ({
-        name: r.name,
-        identifier: r.identifier
-      }));
-  }
-
   @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;
-  queryPokemonCallback = async (args: any): Promise<Tag[]> => 
-  {
-    console.log(args)
-    if(args)
-    {
-      return (await this.pokemonService.queryPokemonsByName(args)).map(p => 
-        ({
-          name: p.name,
-          identifier: p.identifier,
-          icon: p.icon
-        }));
-    }
-    return [];
-  }
   @ViewChild('pokemonStorage') pokemonResultStorageComponent?: ResultStorageComponent;
   pokemonSelectEvent($event: Tag)
   {
     this.pokemonResultStorageComponent?.results?.push($event);
   }
-
   @ViewChild('moveInput') moveInputComponent!: SmartInputComponent;
-  queryMoveCallback = async (args: any): Promise<Tag[]> => 
-  {
-    if(args)
-    {
-      return (await this.pokemonService.queryMovesByName(args));
-    }
-    return [];
-  }
   @ViewChild('moveStorage') moveResultStorageComponent?: ResultStorageComponent;
   moveSelectEvent($event: Tag)
   {
     this.moveResultStorageComponent?.results?.push($event);
   }
-
   @ViewChild('itemInput') itemInputComponent!: SmartInputComponent;
-  queryItemCallback = async (args: any): Promise<Tag[]> => 
-  {
-    if(args)
-    {
-      return (await this.pokemonService.queryItemsByName(args));
-    }
-    return [];
-  }
   @ViewChild('itemStorage') itemResultStorageComponent?: ResultStorageComponent;
   itemSelectEvent($event: Tag)
   {
