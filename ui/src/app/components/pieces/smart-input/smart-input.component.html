@@ -10,7 +10,7 @@
         type="text" 
         placeholder="Search..." 
         formControlName="key"
-        class="i nput section"
+        class="input"
         value="result"
         (focus)="onFocus()"
         (blur)="onBlur()"
@@ -30,7 +30,7 @@
     </div>
   </form>
   <div 
-  class="results section pad-s custom-scrollbar"
+  class="results pad-s custom-scrollbar"
   [ngClass]="{'results-visible': showOptions && (results && results.length > 0)}"
   >
   Results: {{results?.length}}

@@ -16,7 +16,7 @@ $optionsMaxHeight: 25vh;
     gap: 0.4vw;
   }
 
-  .section
+  .input
   {
     border-radius: 5px;
     background-color: white;
@@ -111,5 +111,11 @@ $optionsMaxHeight: 25vh;
       color: white;
       border-radius: 5px;
     }
+  }
+
+  .selected
+  {
+    background-color: white;
+    border-radius: 5px;
   }
 }

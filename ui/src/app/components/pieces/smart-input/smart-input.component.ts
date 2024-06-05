@@ -16,11 +16,10 @@ export class SmartInputComponent
   //MAKE RESULT OBSERVABLE -> behavior subject
   @Input() label?: string;
   @Input() keepSelected?: boolean;
-  @Input() showAll?: boolean;
   @Input() getter?: (args: any) => Promise<Tag[]>
   @Input() allGetter?: () => Promise<Tag[]>
   @Output() selectEvent = new EventEmitter<Tag>();
-
+  @Output() removeSelectedEvent = new EventEmitter<Tag>();
 
   @ViewChild('input') input!: ElementRef;
   searchForm = this.formBuilder.group(
@@ -30,7 +29,6 @@ export class SmartInputComponent
 
   results?: Tag[] = [];
   showOptions: boolean = false;
-
   selected?: Tag | undefined;
 
   async ngOnInit()
@@ -47,10 +45,6 @@ export class SmartInputComponent
         this.showOptions = false;
       }
     });
-    if(this.showAll && this.allGetter)
-    {
-      this.results = await this.allGetter();
-    }
   }
 
   async search(key: string)
@@ -82,12 +76,13 @@ export class SmartInputComponent
   {
     this.selected = undefined;
     this.searchForm.controls.key.setValue("");
+    this.removeSelectedEvent.emit(this.selected)
   }
 
   async onFocus()
   {
     this.showOptions = true;
-    if(this.showAll && this.allGetter)
+    if(this.allGetter)
     {
       this.results = await this.allGetter();
     }
