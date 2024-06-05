@@ -15,6 +15,7 @@ namespace api.Services
         public Task<ItemDTO?> GetItemByIdentifier(string identifier);
         public Task<AbilityDTO?> GetAbilityByName(string name);
         public Task<AbilityDTO?> GetAbilityByIdentifier(string identifier);
+        public Task<List<NatureDTO>> GetAllNatures();
         public Task<NatureDTO?> GetNatureByName(string name);
         public Task<NatureDTO?> GetNatureByIdentifier(string identifier);
         public Task<MoveDTO?> GetMoveByName(string name);

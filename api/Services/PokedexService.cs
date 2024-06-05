@@ -21,10 +21,10 @@ namespace api.Services
 {
     public class PokedexService : IPokedexService
     {
-        private readonly PokedexContext _pokedexContext;
+        private readonly IPokedexContext _pokedexContext;
         private readonly LocalContext _localContext;
 
-        public PokedexService(PokedexContext pokedexContext, LocalContext localContext)
+        public PokedexService(IPokedexContext pokedexContext, LocalContext localContext)
         {
             _pokedexContext = pokedexContext;
             _localContext = localContext;
@@ -293,6 +293,31 @@ namespace api.Services
                 }
             }
             return ability;
+        }
+
+        public async Task<List<NatureDTO>> GetAllNatures()
+        {
+            List<NatureDTO> natureDTOs = new List<NatureDTO>();
+            List<Natures> naturesList = _pokedexContext.Natures.ToList();
+            if (naturesList != null)
+            {
+                foreach(Natures natures in naturesList)
+                {
+                    Nature_names? natureNames = await _pokedexContext.Nature_names.FirstOrDefaultAsync(n => n.nature_id == natures.id && n.local_language_id == 9);
+                    Stats? increasedStatIdentifier = await _pokedexContext.Stats.FindAsync(natures.increased_stat_id);
+                    Stats? decreasedStatIdentifier = await _pokedexContext.Stats.FindAsync(natures.decreased_stat_id);
+                    Stat_names? increasedStatName = await _pokedexContext.Stat_names.FindAsync(natures.increased_stat_id, natureNames.local_language_id);
+                    Stat_names? decreasedStatName = await _pokedexContext.Stat_names.FindAsync(natures.decreased_stat_id, natureNames.local_language_id);
+
+                    if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
+                    {
+                        natureDTOs.Add(new NatureDTO(natureNames.name, natures.identifier, 
+                            new StatDTO(increasedStatIdentifier.identifier, increasedStatName.name, 0), 
+                            new StatDTO(decreasedStatIdentifier.identifier, decreasedStatName.name, 0)));
+                    }
+                }
+            }
+            return natureDTOs;
         }
 
         public async Task<NatureDTO?> GetNatureByName(string name)

@@ -1,4 +1,5 @@
-﻿using api.DTOs.PokemonDTOs;
+﻿using api.DTOs;
+using api.DTOs.PokemonDTOs;
 using api.Models.DBModels;
 using api.Services;
 using api.Util;
@@ -15,6 +16,17 @@ namespace api.Controllers
         public NatureController(IPokedexService pokemonService)
         {
             _pokemonService = pokemonService;
+        }
+
+        [HttpGet("all", Name = "GetAllNatures")]
+        public async Task<ActionResult<List<NatureDTO>>> GetAllNatures()
+        {
+            List<NatureDTO> naures = await _pokemonService.GetAllNatures();
+            if (naures == null)
+            {
+                return BadRequest("Natures not found.");
+            }
+            return Ok(naures);
         }
 
         [HttpGet("name/{natureName}", Name = "GetNatureByName")]
