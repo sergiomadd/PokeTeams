@@ -42,6 +42,7 @@ import { UserComponent } from './components/user/user.component';
 import { VgcComponent } from './components/vgc/vgc.component';
 import { LinkerPipe } from './pipes/linker.pipe';
 import { metaReducers } from './state/app.state';
+import { PokemonCreatorComponent } from './components/pokemon-creator/pokemon-creator.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { metaReducers } from './state/app.state';
     SmartInputComponent,
     ResultStorageComponent,
     TooltipComponent,
-    PaginationComponent
+    PaginationComponent,
+    PokemonCreatorComponent
   ],
   exports: [],
   imports: [

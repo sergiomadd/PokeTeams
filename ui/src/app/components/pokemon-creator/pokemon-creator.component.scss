@@ -1,0 +1,25 @@
+
+.creator
+{
+  display: grid;
+  grid-template-columns: 60% 35%;
+  gap: 5%;
+
+  .form
+  {
+
+  }
+
+  .preview
+  {
+    width: 100%;
+    height: auto;
+    border: 1px solid black;
+  }
+
+  .form-item
+  {
+    display: flex;
+    align-items: center;
+  }
+}
