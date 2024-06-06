@@ -11,7 +11,7 @@ import { defaultEditorData, EditorData } from '../models/editorData.model';
 import { Regulation } from '../models/regulation.model';
 import { Tag } from '../models/tag.model';
 import { Team } from '../models/team.model';
-import { getErrorMessage, toCamelCase } from './util';
+import { UtilService } from './util.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,8 @@ import { getErrorMessage, toCamelCase } from './util';
 export class TeamService 
 {  
   store = inject(Store);
+  util = inject(UtilService);
+
 
   private apiUrl = environment.apiURL;
   private dataTimeout = 5000;
@@ -45,9 +47,9 @@ export class TeamService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
-    return toCamelCase(team); 
+    return this.util.toCamelCase(team); 
   }
 
   async getOptionsData()
@@ -60,7 +62,7 @@ export class TeamService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return optionsData; 
   }
@@ -99,8 +101,8 @@ export class TeamService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
-      return getErrorMessage(error);
+      console.log("Error: ", this.util.getErrorMessage(error));
+      return this.util.getErrorMessage(error);
     }
   }
 
@@ -116,8 +118,8 @@ export class TeamService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
-      return getErrorMessage(error);
+      console.log("Error: ", this.util.getErrorMessage(error));
+      return this.util.getErrorMessage(error);
     }
     this.store.dispatch(authActions.getLogged());
     return deleted;
@@ -134,7 +136,7 @@ export class TeamService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return undefined; 
   }
@@ -151,7 +153,7 @@ export class TeamService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return tournaments;
   }
@@ -167,7 +169,7 @@ export class TeamService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return regulations; 
   }

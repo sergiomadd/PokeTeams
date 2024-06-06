@@ -2,7 +2,7 @@ import { Component, inject, Input, QueryList, ViewChildren } from '@angular/core
 import { TeamPreview } from 'src/app/models/teamPreview.model';
 import { ParserService } from 'src/app/services/parser.service';
 import { TeamService } from 'src/app/services/team.service';
-import { copyToClipboard, customFormatDate } from 'src/app/services/util';
+import { UtilService } from 'src/app/services/util.service';
 import { PokemonPreviewComponent } from '../pokemon-preview/pokemon-preview.component';
 
 @Component({
@@ -14,6 +14,7 @@ export class TeamPreviewComponent
 {
   teamService = inject(TeamService);
   parser = inject(ParserService);
+  util = inject(UtilService);
 
   @Input() team?: TeamPreview;
   teamID?: number;
@@ -54,7 +55,7 @@ export class TeamPreviewComponent
   {
     if(this.team)
     {
-      copyToClipboard("http://localhost:4200/" + this.team.id);
+      this.util.copyToClipboard("http://localhost:4200/" + this.team.id);
     }
   }
 
@@ -68,6 +69,6 @@ export class TeamPreviewComponent
 
   formatDate(date)
   {
-    return customFormatDate(date);
+    return this.util.customFormatDate(date);
   }
 }

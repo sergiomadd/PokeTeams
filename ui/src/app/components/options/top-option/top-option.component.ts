@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
 import { Tag } from 'src/app/models/tag.model';
 import { UserService } from 'src/app/services/user.service';
-import { getAuthFormError } from 'src/app/services/util';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-top-option',
@@ -17,6 +17,7 @@ export class TopOptionComponent
   formBuilder = inject(FormBuilder);
   userService = inject(UserService);
   store = inject(Store);
+  util = inject(UtilService);
 
   user$ = this.store.select(selectLoggedUser);
 
@@ -87,6 +88,6 @@ export class TopOptionComponent
   getError(key: string, formKey: string) : string
   {
     let control: AbstractControl | null = this.detailsForm.get(key);
-    return getAuthFormError(control);
+    return this.util.getAuthFormError(control);
   }
 }

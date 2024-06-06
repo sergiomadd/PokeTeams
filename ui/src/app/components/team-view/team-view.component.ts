@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Team } from 'src/app/models/team.model';
 import { TeamService } from 'src/app/services/team.service';
-import { haveMinutesPassed } from 'src/app/services/util';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-team-view',
@@ -14,6 +14,7 @@ export class TeamViewComponent
 {
   teamService = inject(TeamService);
   router = inject(Router);
+  util = inject(UtilService);
 
   teamKey: string = "";
   team: Team = <Team>{};
@@ -29,7 +30,7 @@ export class TeamViewComponent
     if(item)
     {
       const lastTime = parseInt(item);
-      if(haveMinutesPassed(lastTime, this.viewIncrementCooldown))
+      if(this.util.haveMinutesPassed(lastTime, this.viewIncrementCooldown))
       {
         this.teamService.incrementViewCount(this.teamKey);
         const time = new Date().getTime();

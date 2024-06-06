@@ -2,9 +2,9 @@ import { Component, inject, Input, QueryList, ViewChild, ViewChildren } from '@a
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Team } from 'src/app/models/team.model';
 import { ParserService } from 'src/app/services/parser.service';
-import { copyToClipboard } from 'src/app/services/util';
 import { ResultStorageComponent } from '../pieces/result-storage/result-storage.component';
 import { PokemonComponent } from '../pokemon/pokemon.component';
+import { UtilService } from 'src/app/services/util.service';
 
 
 @Component({
@@ -15,6 +15,7 @@ import { PokemonComponent } from '../pokemon/pokemon.component';
 export class TeamComponent 
 {
   parser = inject(ParserService);
+  util = inject(UtilService);
 
   @Input() team?: Team;
 
@@ -50,7 +51,7 @@ export class TeamComponent
           this.showAllNotes = !this.showAllNotes;
         break;
       case 2:
-        this.team?.pokemons ? copyToClipboard(this.parser.reversePaste(this.team?.pokemons)):undefined;
+        this.team?.pokemons ? this.util.copyToClipboard(this.parser.reversePaste(this.team?.pokemons)):undefined;
         break;
       default: 
       return "";

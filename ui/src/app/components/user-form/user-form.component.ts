@@ -8,7 +8,7 @@ import { AuthResponseDTO } from 'src/app/models/DTOs/authResponse.dto';
 import { LogInDTO } from 'src/app/models/DTOs/login.dto';
 import { SignUpDTO } from 'src/app/models/DTOs/signup.dto';
 import { UserService } from 'src/app/services/user.service';
-import { getAuthFormError, passwordsMatch } from 'src/app/services/util';
+import { UtilService } from 'src/app/services/util.service';
 
 
 @Component({
@@ -22,6 +22,7 @@ export class UserFormComponent
   userService = inject(UserService);
   formBuilder = inject(FormBuilder);
   store = inject(Store);
+  util = inject(UtilService);
 
   data$ = combineLatest(
     {
@@ -48,8 +49,8 @@ export class UserFormComponent
     {
       username: ['', [Validators.required, Validators.maxLength(256)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(256)]],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), passwordsMatch()]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), passwordsMatch()]],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
     }, { updateOn: "blur" });
   
   async ngOnInit()
@@ -153,6 +154,6 @@ export class UserFormComponent
   getError(key: string, formKey: string) : string
   {
     let control: AbstractControl | null =  formKey === "signup" ? this.signUpForm.get(key) : this.logInForm.get(key);
-    return getAuthFormError(control);
+    return this.util.getAuthFormError(control);
   }
 }

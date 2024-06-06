@@ -4,7 +4,7 @@ import { Nature } from 'src/app/models/pokemon/nature.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Stat } from 'src/app/models/pokemon/stat.model';
 import { ParserService } from 'src/app/services/parser.service';
-import { copyToClipboard } from 'src/app/services/util';
+import { UtilService } from 'src/app/services/util.service';
 import { PokeColor } from 'src/app/styles/pokemonColors';
 
 interface CalculatedStats
@@ -26,6 +26,7 @@ interface CalculatedStats
 export class PokemonComponent 
 {
   parser = inject(ParserService);
+  util = inject(UtilService);
 
   @Input() pokemon!: Pokemon;
   @Input() editorOptions?: EditorOptions;
@@ -144,7 +145,7 @@ export class PokemonComponent
 
   copyPokemon()
   {
-    copyToClipboard(this.parser.reverseParsePokemon(this.pokemon));
+    this.util.copyToClipboard(this.parser.reverseParsePokemon(this.pokemon));
   }
 
   formatItemProse(value: string | undefined) : string
@@ -279,6 +280,7 @@ export class PokemonComponent
     return Math.round((Math.floor(ev / 4) * (this.pokemon.level ? this.pokemon.level : 50)) / 100);
   }
 
+  //rename to getNatureMultiplier
   getNatureValue(baseStat?: Stat, nature?: Nature) : number
   {
     let natureValue: number;
@@ -311,7 +313,7 @@ export class PokemonComponent
   getStatSize(value: number)
   {
     let maxValue: number = this.editorOptions && this.editorOptions?.maxLevel > 0 ? this.editorOptions?.maxLevel : 700; //the maximun stat value of any pokemons
-    let maxSize: number = 20; //the maximun size in vw
+    let maxSize: number = 20; //the maximun allowed size in vw
     return `${value / maxValue * maxSize}vw`;
   }
   

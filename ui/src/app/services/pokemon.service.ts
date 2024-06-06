@@ -14,7 +14,7 @@ import { defaultTypeWithEffectiveness, TypeWithEffectiveness } from '../models/p
 import { PokePaste } from '../models/pokePaste.model';
 import { Tag } from '../models/tag.model';
 import { LinkifierService } from './linkifier.service';
-import { getErrorMessage } from './util';
+import { UtilService } from './util.service';
 
 
 @Injectable({
@@ -23,6 +23,7 @@ import { getErrorMessage } from './util';
 export class PokemonService 
 {
   linkifier = inject(LinkifierService);
+  util = inject(UtilService);
 
   private apiUrl = environment.apiURL;
   private dataTimeout = 2000;
@@ -101,7 +102,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return pokemonData;
   }
@@ -117,7 +118,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return item;
   }
@@ -133,7 +134,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return ability; 
   }
@@ -148,7 +149,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return nature;
   }
@@ -175,7 +176,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return move;
   }
@@ -191,7 +192,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return type;
   }
@@ -228,7 +229,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return statName;
   }
@@ -245,7 +246,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return pokemons; 
   }
@@ -262,7 +263,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return moves; 
   }
@@ -279,7 +280,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return items; 
   }
@@ -296,7 +297,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return abilities; 
   }
@@ -314,7 +315,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return natures; 
   }
@@ -329,7 +330,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return regulations; 
   }
@@ -346,7 +347,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return teraTypes; 
   }
@@ -361,7 +362,7 @@ export class PokemonService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return types; 
   }

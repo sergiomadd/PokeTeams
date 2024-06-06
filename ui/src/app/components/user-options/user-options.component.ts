@@ -8,7 +8,7 @@ import { Country } from 'src/app/models/DTOs/country.dto';
 import { UserUpdateDTO } from 'src/app/models/DTOs/userUpdate.dto';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
-import { getAuthFormError, passwordsMatch } from 'src/app/services/util';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-user-options',
@@ -24,6 +24,7 @@ export class UserOptionsComponent
   formBuilder = inject(FormBuilder);
   authService = inject(AuthService);
   userService = inject(UserService);
+  util = inject(UtilService);
 
   backendErrors$ = this.store.select(selectValidationErrors);
   pictures: string[] = [];
@@ -47,8 +48,8 @@ export class UserOptionsComponent
   changePasswordForm = this.formBuilder.group(
   {
     currentPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.samePassword()]],
-    password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.samePassword(), passwordsMatch()]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), passwordsMatch()]],
+    password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.samePassword(), this.util.passwordsMatch()]],
+    confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
 
   }, { updateOn: "blur" });
 
@@ -195,7 +196,7 @@ export class UserOptionsComponent
 
   getError(key: string, formName: string) : string
   {
-    return getAuthFormError(this.selectControl(key, formName));
+    return this.util.getAuthFormError(this.selectControl(key, formName));
   }
 
   selectControl(key: string, formName: string) : AbstractControl | null

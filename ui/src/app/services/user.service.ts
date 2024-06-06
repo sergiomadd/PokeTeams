@@ -7,14 +7,16 @@ import { Country } from '../models/DTOs/country.dto';
 import { Team } from '../models/team.model';
 import { User } from '../models/user.model';
 import { TeamService } from './team.service';
-import { getErrorMessage } from './util';
+import { UtilService } from './util.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService 
 {
-  generateTeam = inject(TeamService)
+  generateTeam = inject(TeamService);
+  util = inject(UtilService);
+
 
   private apiUrl = environment.apiURL + 'user/';
   private dataTimeout = 2000;
@@ -39,7 +41,7 @@ export class UserService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return users;
   }
@@ -57,7 +59,7 @@ export class UserService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     if(user)
     {
@@ -96,7 +98,7 @@ export class UserService
     catch(error)
     {
       available = false;
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return available;
   }
@@ -115,7 +117,7 @@ export class UserService
     catch(error)
     {
       available = false;
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return available;
   }
@@ -131,7 +133,7 @@ export class UserService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return pics;
   }
@@ -148,7 +150,7 @@ export class UserService
     }
     catch(error)
     {
-      console.log("Error: ", getErrorMessage(error));
+      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return countries;
   }
