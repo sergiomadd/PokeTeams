@@ -17,6 +17,8 @@ using api.Models.DBPoketeamModels;
 using System.Text.Json;
 using api.DTOs;
 using api.Models;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Hosting;
 
 namespace api.Services
 {
@@ -287,13 +289,39 @@ namespace api.Services
             if (abilities != null)
             {
                 Ability_names? abilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(a => a.ability_id == abilities.id && a.local_language_id == 9);
-                Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilities.id, 9); ;
+                Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilities.id, 9);
                 if (abilityNames != null && abilityProse != null)
                 {
                     ability = new AbilityDTO(abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
                 }
             }
             return ability;
+        }
+
+        public async Task<List<TagDTO>> GetPokemonAbilites(string id)
+        {
+            List<TagDTO> abilityDTOs = new List<TagDTO>();
+            if(Int32.TryParse(id, out _))
+            {
+                List<Pokemon_abilities> pokemonAbilitiesList = _pokedexContext.Pokemon_abilities.Where(p => p.pokemon_id == Int32.Parse(id)).ToList();
+                if (pokemonAbilitiesList != null && pokemonAbilitiesList.Count > 0)
+                {
+                    foreach (Pokemon_abilities pokemonAbilities in pokemonAbilitiesList)
+                    {
+                        Abilities? abilities = await _pokedexContext.Abilities.FindAsync(pokemonAbilities.ability_id);
+                        if (abilities != null)
+                        {
+                            Ability_names? abilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(a => a.ability_id == abilities.id && a.local_language_id == 9);
+                            if (abilityNames != null)
+                            {
+                                string pathStart = "https://localhost:7134/images/sprites/";
+                                abilityDTOs.Add(new TagDTO(abilityNames.name, abilities.identifier, icon: pokemonAbilities.is_hidden == 1 ? $"{pathStart}hidden.png" : null));
+                            }
+                        }
+                    }
+                }
+            }
+            return abilityDTOs;
         }
 
         public async Task<List<NatureDTO>> GetAllNatures()
