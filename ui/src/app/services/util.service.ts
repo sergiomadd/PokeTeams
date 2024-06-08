@@ -2,6 +2,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Stat } from '../models/pokemon/stat.model';
 
 @Injectable({
   providedIn: 'root'
@@ -141,5 +142,33 @@ export class UtilService
     const month = date.split('-')[1];
     const year = date.split('-')[0];
     return [day, month, year].join('/');
+  }
+
+  getStatName(stat: Stat)
+  {
+    const nameDict = 
+    {
+      "hp": "HP",
+      "attack": "Atk",
+      "defense": "Def",
+      "special-attack": "SpA",
+      "special-defense": "SpD",
+      "speed": "Spe"
+    }
+    return nameDict[stat.identifier];
+  }
+
+  getStatColor(stat: Stat)
+  {
+    const statColors = 
+    {
+      "hp": "#FF0000",
+      "attack": "#F08030",
+      "defense": "#F8D030",
+      "special-attack": "#6890F0",
+      "special-defense": "#78C850",
+      "speed": "#F85888"
+    };
+    return statColors[stat.identifier];
   }
 }

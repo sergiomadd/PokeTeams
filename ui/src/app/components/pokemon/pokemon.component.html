@@ -536,14 +536,14 @@
             <div class="stat section" (click)="clickMeta(i, 'stat')" [ngClass]="{'meta-selected':  metaStats[i]}">
               <div class="meta-wrapper" (click)="clickMeta(i, 'stat')">
                 <div class="meta meta-stat" [ngClass]="{'meta-visible':  metaStats[i]}">
-                  <div class="meta-name" [ngStyle]="{backgroundColor: getStatColor(stat)}">{{stat.name}}</div>
+                  <div class="meta-name" [ngStyle]="{backgroundColor: util.getStatColor(stat)}">{{stat.name}}</div>
                   <div class="content">
                     <div class="col">
                       <div class="item"></div>
                       <div class="item">Initial</div>
                       <div class="item"><span>LvL({{pokemon.level ?? 50}})</span></div>
                     </div>
-                    <div class="col"  [ngStyle]="{backgroundColor: getStatColor(stat)}">
+                    <div class="col"  [ngStyle]="{backgroundColor: util.getStatColor(stat)}">
                       <div class="item">Base</div>
                       <div class="item">{{stat.value}}</div>
                       <div class="item">{{calculatedStats.base[i]?.value}}</div>
@@ -594,7 +594,7 @@
                 </div>
               </div>
               <div class="name">
-                {{getStatName(stat)}}
+                {{util.getStatName(stat)}}
                 </div>
               <div class="values">
                 <div 
@@ -602,7 +602,7 @@
                 [ngStyle]="
                 {
                   width: getStatSize(calculatedStats.base[i].value),
-                  backgroundColor: getStatColor(stat),
+                  backgroundColor: util.getStatColor(stat),
                   borderRadius: (editorOptions?.showIVs && pokemon.ivs ? (pokemon.ivs[i].value / 4) === 0 ? false : true : false)  ||
                    (editorOptions?.showEVs && pokemon.evs ? (pokemon.evs[i].value / 4) === 0 ? false : true : false) ? ('15px 0 0 15px') : '15px'
                 }"

@@ -316,33 +316,4 @@ export class PokemonComponent
     let maxSize: number = 20; //the maximun allowed size in vw
     return `${value / maxValue * maxSize}vw`;
   }
-  
-  getStatName(stat: Stat)
-  {
-    const nameDict = 
-    {
-      "hp": "HP",
-      "attack": "Atk",
-      "defense": "Def",
-      "special-attack": "SpA",
-      "special-defense": "SpD",
-      "speed": "Spe"
-    }
-    return nameDict[stat.identifier];
-  }
-
-  getStatColor(stat: Stat)
-  {
-    const statColors = 
-    {
-      "hp": "#FF0000",
-      "attack": "#F08030",
-      "defense": "#F8D030",
-      "special-attack": "#6890F0",
-      "special-defense": "#78C850",
-      "speed": "#F85888"
-    };
-    return statColors[stat.identifier];
-  }
-  
 }
