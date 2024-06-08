@@ -13,6 +13,10 @@ namespace api.Data
 {
     public class LocalContext : DbContext
     {
+        public LocalContext() : base()
+        {
+
+        }
         public LocalContext(DbContextOptions<LocalContext> option) : base(option)
         {
 

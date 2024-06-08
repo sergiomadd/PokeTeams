@@ -1,22 +1,11 @@
 ﻿using api.Models.DBModels;
 using api.Models.DBPokedexModels;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
 {
-    public class PokedexContext : DbContext, IPokedexContext
+    public interface IPokedexContext : IDisposable
     {
-        public PokedexContext() : base()
-        {
-
-        }
-
-        public PokedexContext(DbContextOptions<PokedexContext> option) : base(option)
-        {
-
-        }
-
         public DbSet<Pokemon_species_names> Pokemon_species_names { get; set; }
         public DbSet<Pokemon_species> Pokemon_species { get; set; }
         public DbSet<Pokemon_types> Pokemon_types { get; set; }
@@ -45,6 +34,5 @@ namespace api.Data
         public DbSet<Type_efficacy> Type_efficacy { get; set; }
         public DbSet<Stats> Stats { get; set; }
         public DbSet<Stat_names> Stat_names { get; set; }
-
     }
 }
