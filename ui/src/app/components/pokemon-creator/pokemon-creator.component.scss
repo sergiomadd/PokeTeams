@@ -7,7 +7,10 @@
 
   .form
   {
-
+    display: grid;
+    grid-template-columns: 30% 30% 30%;
+    gap: 3%;
+    justify-content: end;
   }
 
   .preview
@@ -22,4 +25,35 @@
     display: flex;
     align-items: center;
   }
+
+  .stat-selector
+  {
+    display: grid;
+    grid-template-columns: 45% 45%;
+    gap: 10%;
+
+    .stat-box
+    {
+      padding: 0.2vw;
+      background-color: white;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &:hover
+      {
+        outline: 1px black dotted;
+      }
+    }
+
+    .selectedStat
+    {
+      background-color: darkcyan;
+    }
+  }
+}
+
+.disabled
+{
+  opacity: 0.7;
+  pointer-events: none;
 }

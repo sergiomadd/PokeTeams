@@ -9,7 +9,9 @@ import { Tag } from 'src/app/models/tag.model';
 import { PokemonService } from 'src/app/services/pokemon.service';
 import { QueryService } from 'src/app/services/query.service';
 import { TeamService } from 'src/app/services/team.service';
+import { UtilService } from 'src/app/services/util.service';
 import { SmartInputComponent } from '../pieces/smart-input/smart-input.component';
+import { PokemonComponent } from '../pokemon/pokemon.component';
 
 @Component({
   selector: 'app-pokemon-creator',
@@ -22,13 +24,15 @@ export class PokemonCreatorComponent
   pokemonService = inject(PokemonService);
   teamService = inject(TeamService);
   formBuilder = inject(FormBuilder);
+  util = inject(UtilService);
 
   @Input() editorOptions!: EditorOptions;
 
+  @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;
+  @ViewChild(PokemonComponent) pokemonPreviewComponent!: PokemonComponent;
+
   pokemon: Pokemon = <Pokemon>{};
   editorData?: EditorData;
-
-  @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;
   
   pokemonForm = this.formBuilder.group(
     {
@@ -38,26 +42,46 @@ export class PokemonCreatorComponent
       ivs: [0],
       evs: [0]
     });
+  
+  emptyStat: Stat =   
+  {
+    name: "",
+    identifier: "",
+    value: 0
+  };
+  selectedStat: number = 0;
+  currentIVs: number = 0;
+  currentEVs: number = 0;
+  currentMaxEVs: number = 252;
+  evsMax: number = 510;
+  usedEVs: number = 0;
+  ivs: boolean = false;
+  remainingEVs: number = 510;
 
-  //input should have a pre-selected anon obj
+  calculateAvailableEVs()
+  {
+    this.remainingEVs -= this.currentEVs;
+    if(this.remainingEVs > 252) 
+    {
+      this.currentMaxEVs = 252;
+    }
+    else
+    {
+      this.currentMaxEVs = this.remainingEVs;
+    }
+  }
+
   async ngOnInit()
   {
     //Init empty pokemon
-    let emptyStat: Stat =
-    {
-      name: "",
-      identifier: "",
-      value: 0
-    }
-
     this.pokemon = 
     {
       name: "",
       moves: [],
-      ivs: [emptyStat,emptyStat,emptyStat,emptyStat,emptyStat,emptyStat],
-      evs: [emptyStat,emptyStat,emptyStat,emptyStat,emptyStat,emptyStat],
       level: 50
     }
+
+    this.populateEmptyStats();
 
     this.pokemonForm.controls.shiny.valueChanges.subscribe(async (value) => 
     {
@@ -78,9 +102,21 @@ export class PokemonCreatorComponent
     });
     this.pokemonForm.controls.ivs.valueChanges.subscribe(async (value) => 
     {
+      if(value)
+      {
+        this.currentIVs = value;
+        this.pokemon.ivs![this.selectedStat].value = value
+        this.forceChangePokemon();
+      }
     });
     this.pokemonForm.controls.evs.valueChanges.subscribe(async (value) => 
     {
+      if(value)
+      {
+        this.currentEVs = value;
+        this.pokemon.evs![this.selectedStat].value = value
+        this.forceChangePokemon();
+      }
     });
   }
 
@@ -96,6 +132,7 @@ export class PokemonCreatorComponent
     this.pokemon.preEvolution = data.preEvolution;
     this.pokemon.stats = data.stats;
     this.forceChangePokemon();
+    this.pokemonPreviewComponent.showStats[0] = true;
   }
   async pokemonRemoveSelectedEvent(event: Tag)
   {
@@ -200,11 +237,98 @@ export class PokemonCreatorComponent
   forceChangePokemon()
   {
     this.pokemon = structuredClone(this.pokemon);
-    console.log(this.pokemon)
   }
 
   submit()
   {
 
+  }
+
+  selectStat(index: number)
+  {
+    if(this.selectedStat === index)
+    {
+      this.selectedStat = 0;
+    }
+    else
+    {
+      console.log(this.calculateAvailableEVs());
+      this.selectedStat = index;
+      this.pokemonForm.controls.ivs.setValue(this.pokemon.ivs![index].value);
+      this.currentIVs = 0;
+      this.pokemonForm.controls.evs.setValue(this.pokemon.evs![index].value);
+      this.currentEVs = 0;
+      this.pokemonPreviewComponent.showStats[0] = true;
+    }
+  }
+
+  populateEmptyStats()
+  {
+    this.pokemon.ivs = 
+    [
+      {
+        name: "HP",
+        identifier: "hp",
+        value: 0
+      },
+      {
+        name: "Atk",
+        identifier: "attack",
+        value: 0
+      },
+      {
+        name: "Def",
+        identifier: "defense",
+        value: 0
+      },
+      {
+        name: "SpA",
+        identifier: "special-attack",
+        value: 0
+      },
+      {
+        name: "SpD",
+        identifier: "special-defense",
+        value: 0
+      },
+      {
+        name: "Spe",
+        identifier: "speed",
+        value: 0
+      }
+    ];
+    this.pokemon.evs = 
+    [
+      {
+        name: "HP",
+        identifier: "hp",
+        value: 0
+      },
+      {
+        name: "Atk",
+        identifier: "attack",
+        value: 0
+      },
+      {
+        name: "Def",
+        identifier: "defense",
+        value: 0
+      },
+      {
+        name: "SpA",
+        identifier: "special-attack",
+        value: 0
+      },
+      {
+        name: "SpD",
+        identifier: "special-defense",
+        value: 0
+      },
+      {
+        name: "Spe",
+        identifier: "speed",
+        value: 0
+      }
+    ];
   }
 }

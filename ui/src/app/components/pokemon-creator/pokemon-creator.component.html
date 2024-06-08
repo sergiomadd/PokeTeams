@@ -1,7 +1,7 @@
 
 <div class="creator">
   <form class="form" [formGroup]="pokemonForm" >
-    <div class="row-center">
+    <div class="col">
       <div class="form-item">
         <app-smart-input
         #pokemonInput
@@ -16,34 +16,6 @@
       <div class="form-item">
         <app-smart-input
         #userInput
-        [label]="'Item: '"
-        [keepSelected]="true"
-        [getter]="queryService.queryItemCallback"
-        (selectEvent)="itemSelectEvent($event)"
-        (removeSelectedEvent)="itemRemoveSelectedEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
-        <input type="checkbox" name="" id="">
-        <label>All</label>
-      </div>
-      <div class="form-item">
-        <app-smart-input
-        #userInput
-        [label]="'Ability: '"
-        [keepSelected]="true"
-        [getter]="queryService.queryAbilityCallback"
-        (selectEvent)="abilitySelectEvent($event)"
-        (removeSelectedEvent)="abilityRemoveSelectedEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
-        <input type="checkbox" name="" id="">
-        <label>All</label>
-      </div>
-    </div>
-    <div class="row-center">
-      <div class="form-item">
-        <app-smart-input
-        #userInput
         [label]="'Move 1: '"
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
@@ -51,36 +23,7 @@
         (removeSelectedEvent)="move1RemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
-        <input type="checkbox" name="" id="">
-        <label>All</label>
       </div>
-      <div class="form-item">
-        <app-smart-input
-        #userInput
-        [label]="'Move 2: '"
-        [keepSelected]="true"
-        [getter]="queryService.queryMoveCallback"
-        (selectEvent)="move2SelectEvent($event)"
-        (removeSelectedEvent)="move2RemoveSelectedEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
-        <input type="checkbox" name="" id="">
-        <label>All</label>
-      </div>
-      <div class="form-item">
-        <app-smart-input
-        #userInput
-        [label]="'Nature: '"
-        [keepSelected]="true"
-        [getter]="queryService.queryNatureCallback"
-        [allGetter]="queryService.naturesAllCallback"
-        (selectEvent)="natureSelectEvent($event)"
-        (removeSelectedEvent)="natureRemoveSelectedEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
-      </div>
-    </div>
-    <div class="row-center">
       <div class="form-item">
         <app-smart-input
         #userInput
@@ -91,36 +34,7 @@
         (removeSelectedEvent)="move3RemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
-        <input type="checkbox" name="" id="">
-        <label>All</label>
       </div>
-      <div class="form-item">
-        <app-smart-input
-        #userInput
-        [label]="'Move 4: '"
-        [keepSelected]="true"
-        [getter]="queryService.queryMoveCallback"
-        (selectEvent)="move4SelectEvent($event)"
-        (removeSelectedEvent)="move4RemoveSelectedEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
-        <input type="checkbox" name="" id="">
-        <label>All</label>
-      </div>
-      <div class="form-item">
-        <app-smart-input
-        #userInput
-        [label]="'Teratype: '"
-        [keepSelected]="true"
-        [getter]="queryService.queryTeratypeCallback"
-        [allGetter]="queryService.teraTypesAllCallback"
-        (selectEvent)="teraTypeSelectEvent($event)"
-        (removeSelectedEvent)="teraTypeRemoveSelectedEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
-      </div>
-    </div>
-    <div class="row-center">
       <div class="col">
         <div class="row-center">
           <div class="form-item">
@@ -144,22 +58,103 @@
           <input type="text">
         </div>
       </div>
+    </div>
+    <div class="col">
+      <div class="form-item">
+        <app-smart-input
+        #userInput
+        [label]="'Item: '"
+        [keepSelected]="true"
+        [getter]="queryService.queryItemCallback"
+        (selectEvent)="itemSelectEvent($event)"
+        (removeSelectedEvent)="itemRemoveSelectedEvent($event)"
+        class="smart-input-wrapper"
+        ></app-smart-input>
+      </div>
+      <div class="form-item">
+        <app-smart-input
+        #userInput
+        [label]="'Move 2: '"
+        [keepSelected]="true"
+        [getter]="queryService.queryMoveCallback"
+        (selectEvent)="move2SelectEvent($event)"
+        (removeSelectedEvent)="move2RemoveSelectedEvent($event)"
+        class="smart-input-wrapper"
+        ></app-smart-input>
+      </div>
+      <div class="form-item">
+        <app-smart-input
+        #userInput
+        [label]="'Move 4: '"
+        [keepSelected]="true"
+        [getter]="queryService.queryMoveCallback"
+        (selectEvent)="move4SelectEvent($event)"
+        (removeSelectedEvent)="move4RemoveSelectedEvent($event)"
+        class="smart-input-wrapper"
+        ></app-smart-input>
+      </div>
+      <div class="col" [ngClass]="{disabled: !pokemon.name}">
+        <div class="stat-selector">
+          <ng-container *ngFor="let stat of pokemon.ivs; index as i">
+            <div class="stat-box" (click)="selectStat(i)"
+            [ngClass]="{selectedStat: selectedStat === i}"
+            >
+              {{stat.name}}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-item">
+        <app-smart-input
+        #userInput
+        [label]="'Ability: '"
+        [keepSelected]="true"
+        [getter]="queryService.queryAbilityCallback"
+        (selectEvent)="abilitySelectEvent($event)"
+        (removeSelectedEvent)="abilityRemoveSelectedEvent($event)"
+        class="smart-input-wrapper"
+        ></app-smart-input>
+      </div>
+      <div class="form-item">
+        <app-smart-input
+        #userInput
+        [label]="'Nature: '"
+        [keepSelected]="true"
+        [getter]="queryService.queryNatureCallback"
+        [allGetter]="queryService.naturesAllCallback"
+        (selectEvent)="natureSelectEvent($event)"
+        (removeSelectedEvent)="natureRemoveSelectedEvent($event)"
+        class="smart-input-wrapper"
+        ></app-smart-input>
+      </div>
+      <div class="form-item">
+        <app-smart-input
+        #userInput
+        [label]="'Teratype: '"
+        [keepSelected]="true"
+        [getter]="queryService.queryTeratypeCallback"
+        [allGetter]="queryService.teraTypesAllCallback"
+        (selectEvent)="teraTypeSelectEvent($event)"
+        (removeSelectedEvent)="teraTypeRemoveSelectedEvent($event)"
+        class="smart-input-wrapper"
+        ></app-smart-input>
+      </div>
       <div class="col">
         <div class="form-item">
           <label for="">IVs </label>
-          <input type="range" min="0" max="16" value="0" 
+          <input type="range" min="0" max="31" value="{{pokemon.ivs![selectedStat].value}}" 
           class="slider" id="myRange"
-          formControlName="ivs"
-          oninput="this.nextElementSibling.value = this.value">
-          <output>0</output>
+          formControlName="ivs">
+          <label for="">{{pokemon.ivs![selectedStat].value}}</label>
         </div>
         <div class="form-item">
-          <label for="">EVs</label>
-          <input type="range" min="0" max="256" value="0" 
+          <label for="">EVs {{remainingEVs}}</label>
+          <input type="range" min="0" max="{{currentMaxEVs}}" value="{{pokemon.evs![selectedStat].value}}" 
           class="slider" id="myRange"
-          formControlName="ivs"
-          oninput="this.nextElementSibling.value = this.value">
-          <output>0</output>
+          formControlName="evs">
+          <label for="">{{pokemon.evs![selectedStat].value}}</label>
         </div>
       </div>
     </div>
