@@ -123,6 +123,11 @@ export class InputComponent
     //console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
   }
 
+  addPokemon($event)
+  {
+    this.outPokemon.emit($event);
+  }
+
   select(index)
   {
     for(let i=0;i<this.sections.length;i++)

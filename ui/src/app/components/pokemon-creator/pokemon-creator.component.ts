@@ -1,4 +1,4 @@
-import { Component, inject, Input, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { PokemonData } from 'src/app/models/DTOs/pokemonData.dto';
 import { EditorData } from 'src/app/models/editorData.model';
@@ -27,6 +27,7 @@ export class PokemonCreatorComponent
   util = inject(UtilService);
 
   @Input() editorOptions!: EditorOptions;
+  @Output() addPokemonEvent = new EventEmitter<Pokemon>();
 
   @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;
   @ViewChild(PokemonComponent) pokemonPreviewComponent!: PokemonComponent;
@@ -73,15 +74,7 @@ export class PokemonCreatorComponent
 
   async ngOnInit()
   {
-    //Init empty pokemon
-    this.pokemon = 
-    {
-      name: "",
-      moves: [],
-      level: 50
-    }
-
-    this.populateEmptyStats();
+    this.createEmptyPokemon();
 
     this.pokemonForm.controls.shiny.valueChanges.subscribe(async (value) => 
     {
@@ -239,9 +232,10 @@ export class PokemonCreatorComponent
     this.pokemon = structuredClone(this.pokemon);
   }
 
-  submit()
+  addPokemon()
   {
-
+    this.addPokemonEvent.emit(this.pokemon);
+    this.createEmptyPokemon();
   }
 
   selectStat(index: number)
@@ -262,8 +256,31 @@ export class PokemonCreatorComponent
     }
   }
 
-  populateEmptyStats()
+  createEmptyPokemon()
   {
+    this.pokemon;
+    this.pokemon = 
+    {
+      name: "",
+      nickname: undefined,
+      dexNumber: undefined,
+      preEvolution: undefined,
+      evolutions: undefined,
+      types: undefined,
+      teraType: undefined,
+      item: undefined,
+      ability: undefined,
+      nature: undefined,
+      moves: [],
+      stats: undefined,
+      ivs: undefined,
+      evs: undefined,
+      level: 50,
+      shiny: undefined,
+      gender: undefined,
+      sprites: undefined,
+    }
+
     this.pokemon.ivs = 
     [
       {

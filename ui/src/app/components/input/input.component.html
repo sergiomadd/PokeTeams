@@ -33,6 +33,9 @@
     </div>
   </ng-container>
   <ng-template #creator>
-    <app-pokemon-creator [editorOptions]="editorOptions"></app-pokemon-creator>
+    <app-pokemon-creator 
+    [editorOptions]="editorOptions"
+    (addPokemonEvent)="addPokemon($event)"
+    ></app-pokemon-creator>
   </ng-template>
 </div>
