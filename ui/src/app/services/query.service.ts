@@ -104,6 +104,19 @@ export class QueryService
     }
     return [];
   }
+  pokemonAbilitiesCallback = async (id): Promise<Tag[]> => 
+  {
+    if(id != undefined)
+    {
+      return (await this.pokemonService.getPokemonAbilities(id)).map(n => 
+        ({
+          name: n.name,
+          identifier: n.name,
+          icon: n.icon
+        }));
+    }
+    return [];
+  }
 
   queryNatureCallback = async (args: any): Promise<Tag[]> => 
   {

@@ -366,4 +366,20 @@ export class PokemonService
     }
     return types; 
   }
+
+  async getPokemonAbilities(id: number) : Promise<Tag[]>
+  {
+    let types: Tag[] = [];
+    let url = this.apiUrl + 'ability/pokemon/' + id;
+    try
+    {
+      types = await lastValueFrom(this.http.get<Tag[]>(url)
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", this.util.getErrorMessage(error));
+    }
+    return types; 
+  }
 } 
