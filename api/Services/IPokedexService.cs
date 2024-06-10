@@ -22,6 +22,7 @@ namespace api.Services
         public Task<List<NatureDTO>> GetAllNatures();
         public List<TagDTO> QueryNaturesByName(string key);
         public Task<MoveDTO?> GetMoveByName(string name);
+        public Task<List<TagDTO>> GetPokemonMoves(string id);
         public Task<List<PokeTypeDTO>> GetAllTypes();
         public Task<List<PokeTypeDTO>> GetAllTeraTypes();
         public List<TagDTO> QueryTypesByName(string key, bool teraType = false);

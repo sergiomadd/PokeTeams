@@ -27,6 +27,7 @@ namespace api.Data
         public DbSet<Move_effect_prose> Move_effect_prose { get; set; }
         public DbSet<Move_meta> Move_meta { get; set; }
         public DbSet<Move_meta_stat_changes> Move_meta_stat_changes { get; set; }
+        public DbSet<Pokemon_moves> Pokemon_moves { get; set; }
 
         //
         public DbSet<Types> Types { get; set; }

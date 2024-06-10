@@ -487,6 +487,43 @@ namespace api.Services
             return move;
         }
 
+        public async Task<List<TagDTO>> GetPokemonMoves(string id)
+        {
+            List<TagDTO> moveDTOs = new List<TagDTO>();
+            if (Int32.TryParse(id, out _))
+            {
+                List<Pokemon_moves> pokemonMovesList = _pokedexContext.Pokemon_moves.Where(
+                    p => p.pokemon_id == Int32.Parse(id)
+                    && p.version_group_id == 20).ToList();
+                pokemonMovesList = pokemonMovesList.DistinctBy(p => p.move_id).ToList();
+                if (pokemonMovesList != null && pokemonMovesList.Count > 0)
+                {
+                    foreach (Pokemon_moves pokemonMoves in pokemonMovesList)
+                    {
+                        Moves? moves = _pokedexContext.Moves.Find(pokemonMoves.move_id);
+                        if (moves != null)
+                        {
+                            Move_names moveNames = _pokedexContext.Move_names.FirstOrDefault(m => m.move_id == moves.id && m.local_language_id == 9);
+                            if (moveNames != null)
+                            {
+                                Types? targetType = _pokedexContext.Types.FirstOrDefault(t => t.id == moves.type_id);
+                                if (targetType != null)
+                                {
+                                    var pathStart = "https://localhost:7134/images/sprites/types/generation-viii/";
+                                    moveDTOs.Add(new TagDTO(moveNames.name, moves.identifier, icon: $"{pathStart}{targetType.identifier}.png"));
+                                }
+                                else
+                                {
+                                    moveDTOs.Add(new TagDTO(moveNames.name, moves.identifier));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return moveDTOs.OrderBy(m => m.Name).ToList();
+        }
+
         public async Task<string?> GetStatNameByIdentifier(string identifier)
         {
             List<Stats> stats = _pokedexContext.Stats.Where(s => s.identifier == identifier).ToList();
