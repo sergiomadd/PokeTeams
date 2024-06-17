@@ -9,7 +9,7 @@ import { PokemonService } from 'src/app/services/pokemon.service';
 import { QueryService } from 'src/app/services/query.service';
 import { TeamService } from 'src/app/services/team.service';
 import { UserService } from 'src/app/services/user.service';
-import { PaginationComponent } from '../pagination/pagination.component';
+import { PaginationComponent } from '../pieces/pagination/pagination.component';
 import { ResultStorageComponent } from '../pieces/result-storage/result-storage.component';
 import { SmartInputComponent } from '../pieces/smart-input/smart-input.component';
 
