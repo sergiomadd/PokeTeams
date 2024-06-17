@@ -3,6 +3,7 @@ import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Nature } from 'src/app/models/pokemon/nature.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Stat } from 'src/app/models/pokemon/stat.model';
+import { LinkifierService } from 'src/app/services/linkifier.service';
 import { ParserService } from 'src/app/services/parser.service';
 import { UtilService } from 'src/app/services/util.service';
 import { PokeColor } from 'src/app/styles/pokemonColors';
@@ -27,6 +28,7 @@ export class PokemonComponent
 {
   parser = inject(ParserService);
   util = inject(UtilService);
+  linkifier = inject(LinkifierService);
 
   @Input() pokemon!: Pokemon;
   @Input() editorOptions?: EditorOptions;
@@ -62,8 +64,7 @@ export class PokemonComponent
 
   ngOnInit()
   {
-    this.loadSprite()
-    this.calculateStats()
+    this.configurePokemon();
 
     this.maleIconPath = "https://localhost:7134/images/sprites/gender/male.png";
     this.femaleIconPath = "https://localhost:7134/images/sprites/gender/female.png";
@@ -73,13 +74,50 @@ export class PokemonComponent
   {
     if(changes['editorOptions'])
     {
-      this.loadSprite();
-      this.calculateStats();
+      this.configurePokemon();
     }
     if(changes['pokemon'])
     {
-      this.loadSprite();
-      this.calculateStats();
+      this.configurePokemon();
+    }
+  }
+
+  configurePokemon()
+  {
+    this.loadSprite()
+    this.calculateStats()
+    this.linkify();
+  }  
+
+  linkify()
+  {
+    if(this.pokemon?.item)
+    {
+      this.pokemon.item.prose = this.linkifier.linkifyProse(this.pokemon.item?.prose);
+    }
+    if(this.pokemon?.ability)
+    {
+      this.pokemon.ability.prose = this.linkifier.linkifyProse(this.pokemon.ability?.prose);
+    }
+    if(this.pokemon?.moves && this.pokemon.moves[0] && this.pokemon.moves[0].effect)
+    {
+      this.pokemon.moves[0].effect.short = this.linkifier.linkifyProse(this.pokemon.moves[0].effect.short);
+      this.pokemon.moves[0].effect.long = this.linkifier.linkifyProse(this.pokemon.moves[0].effect.long);
+    }
+    if(this.pokemon?.moves && this.pokemon.moves[1] && this.pokemon.moves[1].effect)
+    {
+      this.pokemon.moves[1].effect.short = this.linkifier.linkifyProse(this.pokemon.moves[1].effect.short);
+      this.pokemon.moves[1].effect.long = this.linkifier.linkifyProse(this.pokemon.moves[1].effect.long);
+    }
+    if(this.pokemon?.moves && this.pokemon.moves[2] && this.pokemon.moves[2].effect)
+    {
+      this.pokemon.moves[2].effect.short = this.linkifier.linkifyProse(this.pokemon.moves[2].effect.short);
+      this.pokemon.moves[2].effect.long = this.linkifier.linkifyProse(this.pokemon.moves[2].effect.long);
+    }
+    if(this.pokemon?.moves && this.pokemon.moves[3] && this.pokemon.moves[3].effect)
+    {
+      this.pokemon.moves[3].effect.short = this.linkifier.linkifyProse(this.pokemon.moves[3].effect.short);
+      this.pokemon.moves[3].effect.long = this.linkifier.linkifyProse(this.pokemon.moves[3].effect.long);
     }
   }
 

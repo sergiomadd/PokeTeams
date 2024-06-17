@@ -13,7 +13,6 @@ import { Type } from '../models/pokemon/type.model';
 import { defaultTypeWithEffectiveness, TypeWithEffectiveness } from '../models/pokemon/typewitheffectiveness.model';
 import { PokePaste } from '../models/pokePaste.model';
 import { Tag } from '../models/tag.model';
-import { LinkifierService } from './linkifier.service';
 import { UtilService } from './util.service';
 
 
@@ -22,7 +21,6 @@ import { UtilService } from './util.service';
 })
 export class PokemonService 
 {
-  linkifier = inject(LinkifierService);
   util = inject(UtilService);
 
   private apiUrl = environment.apiURL;
@@ -114,7 +112,6 @@ export class PokemonService
     try
     {
       item = await lastValueFrom(this.http.get<Item>(url).pipe(catchError(() => [DefaultItem]), timeout(this.dataTimeout)));
-      item.prose = this.linkifier.linkifyProse(item.prose);
     }
     catch(error)
     {
@@ -130,7 +127,6 @@ export class PokemonService
     try
     {
       ability = await lastValueFrom(this.http.get<Ability>(url).pipe(catchError(() => [defaultAbility]), timeout(this.dataTimeout)));
-      ability.prose = this.linkifier.linkifyProse(ability.prose);
     }
     catch(error)
     {
@@ -171,8 +167,6 @@ export class PokemonService
     try
     {
       move = await lastValueFrom(this.http.get<Move>(url).pipe(catchError(() => [defaultMove]), timeout(this.dataTimeout)));
-      move.effect ? move.effect.short = this.linkifier.linkifyProse(move.effect?.short) : null;
-      move.effect ? move.effect.long = this.linkifier.linkifyProse(move.effect?.long) : null;
     }
     catch(error)
     {
