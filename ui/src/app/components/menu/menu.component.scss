@@ -28,7 +28,7 @@
   }
 }
 
-.sections
+.tabs
 {
   display: flex;
   flex-direction: column;
@@ -36,7 +36,7 @@
   gap: 0.6vw;
 }
 
-.section
+.tab
 {
   display: flex;
   justify-content: center;
@@ -50,7 +50,7 @@
   }
 }
 
-.section-big
+.tab-big
 {
   display: flex;
   justify-content: start;
@@ -59,6 +59,8 @@
   border-radius: 10px;
   cursor: pointer;
   width: 9vw;
+  text-decoration: none;
+  color: black;
 
   .title
   {
@@ -69,6 +71,21 @@
   &:hover
   {
     background-color: grey;
+    text-decoration: none;
+  }
+
+  &:link 
+  {
+    text-decoration: none;
+  }
+  
+  &:visited 
+  {
+    text-decoration: none;
+  }
+  &:active 
+  {
+    text-decoration: none;
   }
 }
 

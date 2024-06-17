@@ -43,6 +43,7 @@ export class MenuComponent
   {
     //this.loggedUser$.subscribe()
     this.router.navigate([`/@${username}`]);
+    console.log(username.which)
   }
 
   logOut()
