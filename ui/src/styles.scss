@@ -283,3 +283,23 @@ $arrowSize: 0.4vw;
   animation: l3 1s infinite linear;
 }
 @keyframes l3 {to{transform: rotate(1turn)}}
+
+
+.smart-input-wrapper
+{
+  display: flex;
+  flex-direction: column;
+
+  .smart-input-top
+  {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding: 0 0.4vw 0 0.4vw;
+
+    .smart-input-label
+    {
+  
+    }
+  }
+}

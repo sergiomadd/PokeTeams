@@ -17,7 +17,8 @@ export class SmartInputComponent
   @Input() label?: string;
   @Input() keepSelected?: boolean;
   @Input() getter?: (args: any) => Promise<Tag[]>
-  @Input() allGetter?: () => Promise<Tag[]>
+  @Input() allGetter?: (args?: any) => Promise<Tag[]>
+  @Input() allGetterIndex?: number;
   @Output() selectEvent = new EventEmitter<Tag>();
   @Output() removeSelectedEvent = new EventEmitter<Tag>();
 
@@ -84,7 +85,14 @@ export class SmartInputComponent
     this.showOptions = true;
     if(this.allGetter)
     {
-      this.results = await this.allGetter();
+      if(this.allGetterIndex)
+      {
+        this.results = await this.allGetter(this.allGetterIndex);
+      }
+      else
+      {
+        this.results = await this.allGetter();
+      }
     }
   }
 
