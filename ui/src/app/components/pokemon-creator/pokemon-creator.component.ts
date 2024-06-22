@@ -34,6 +34,13 @@ export class PokemonCreatorComponent
 
   pokemon: Pokemon = <Pokemon>{};
   editorData?: EditorData;
+  allAbilities: boolean = false;
+
+  allAbilitiesSwitch() 
+  { 
+    this.allAbilities = !this.allAbilities;
+    this.pokemon.ability = undefined;
+  }
   
   pokemonForm = this.formBuilder.group(
     {
@@ -246,7 +253,6 @@ export class PokemonCreatorComponent
     }
     else
     {
-      console.log(this.calculateAvailableEVs());
       this.selectedStat = index;
       this.pokemonForm.controls.ivs.setValue(this.pokemon.ivs![index].value);
       this.currentIVs = 0;

@@ -35,27 +35,33 @@
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
-      <div class="col">
+      <div class="col form-item">
         <div class="row-center">
-          <div class="form-item">
+          <div class="row">
             <label for="">Shiny?</label>
             <input type="checkbox" name="" id="" formControlName="shiny">
           </div>
-          <div class="form-item">
+          <div class="row">
             <label for="">Level:</label>
             <input type="number" min="1" max="100" formControlName="level">
           </div>
         </div>
-        <div class="form-item">
-          <label for="">Gender</label>
-          <fieldset id="group1" class="row">
-            <input type="radio" [value]="" formControlName="gender">Male
-            <input type="radio" [value]="'F'" formControlName="gender">Female
+        <div class="row">
+          <label for="">Gender:</label>
+          <fieldset id="group1" class="row check-group">
+            <div class="row check-box">
+              <label>Male</label>
+              <input type="radio" [value]="" formControlName="gender">
+            </div>
+            <div class="row check-box">
+              <label>Female</label>
+              <input type="radio" [value]="'F'" formControlName="gender" class="check-box">
+            </div>
           </fieldset>
         </div>
-        <div class="form-item">
-          <label for="">Nick name</label>
-          <input type="text">
+        <div class="row">
+          <label for="">Nickname:</label>
+          <input type="text" class="input">
         </div>
       </div>
     </div>
@@ -93,8 +99,8 @@
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
-      <div class="col" [ngClass]="{disabled: !pokemon.name}">
-        <div class="stat-selector">
+      <div class="form-item">
+        <div class="stat-selector"  [ngClass]="{disabled: !pokemon.name}">
           <ng-container *ngFor="let stat of pokemon.ivs; index as i">
             <div class="stat-box" (click)="selectStat(i)"
             [ngClass]="{selectedStat: selectedStat === i}"
@@ -107,15 +113,38 @@
     </div>
     <div class="col">
       <div class="form-item">
-        <app-smart-input
-        #userInput
-        [label]="'Ability: '"
-        [keepSelected]="true"
-        [getter]="queryService.queryAbilityCallback"
-        (selectEvent)="abilitySelectEvent($event)"
-        (removeSelectedEvent)="abilityRemoveSelectedEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
+        <div class="smart-input-wrapper">
+          <div class="smart-input-top">
+            <div class="smart-input-label">
+              Ability: 
+            </div>
+            <div class="row check-box">
+              <input type="checkbox" (click)="allAbilitiesSwitch()">
+              <label>All</label>
+            </div>
+          </div>
+          <ng-container *ngIf="allAbilities; else notAllAbilities">
+            <app-smart-input
+            #userInput
+            [keepSelected]="true"
+            [getter]="queryService.queryAbilityCallback"
+            (selectEvent)="abilitySelectEvent($event)"
+            (removeSelectedEvent)="abilityRemoveSelectedEvent($event)"
+            class="smart-input-wrapper"
+            ></app-smart-input>
+          </ng-container>
+          <ng-template #notAllAbilities>
+            <app-smart-input
+            #userInput
+            [keepSelected]="true"
+            [allGetter]="queryService.pokemonAbilitiesCallback"
+            [allGetterIndex]="pokemon?.dexNumber"
+            (selectEvent)="abilitySelectEvent($event)"
+            (removeSelectedEvent)="abilityRemoveSelectedEvent($event)"
+            class="smart-input-wrapper"
+            ></app-smart-input>
+          </ng-template>
+        </div>
       </div>
       <div class="form-item">
         <app-smart-input
@@ -141,15 +170,15 @@
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
-      <div class="col">
-        <div class="form-item">
+      <div class="form-item  col">
+        <div>
           <label for="">IVs </label>
           <input type="range" min="0" max="31" value="{{pokemon.ivs![selectedStat].value}}" 
           class="slider" id="myRange"
           formControlName="ivs">
           <label for="">{{pokemon.ivs![selectedStat].value}}</label>
         </div>
-        <div class="form-item">
+        <div>
           <label for="">EVs {{remainingEVs}}</label>
           <input type="range" min="0" max="{{currentMaxEVs}}" value="{{pokemon.evs![selectedStat].value}}" 
           class="slider" id="myRange"
