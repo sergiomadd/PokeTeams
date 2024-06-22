@@ -400,133 +400,134 @@
     </div>
     <div class="right">
       <div class="moves">
-        <div class="move section" 
-        *ngFor="let move of pokemon.moves; index as i" 
-        (click)="clickMeta(i, 'right')"
-        [ngClass]="{'meta-selected':  metaRight[i]}">
-        
-          <div class="move-icons">
-            <div class="type-icon">
-              <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="icon">
-            </div>
-            <div class="type-icon">
-              <img src="{{move?.damageClass?.iconPath}}" alt="" class="icon">
-            </div>
-          </div>
-          <div class="name">
-            {{move?.name}}
-          </div>
-          <div class="meta-wrapper" 
-          (click)="clickMeta(i, 'right')"
-          >
-            <div class="meta meta-right" [ngClass]="{'meta-visible':  metaRight[i]}">
-              <div class="head move-head">
-                <div class="meta-move-type">
+        <ng-container *ngFor="let move of pokemon.moves; index as i">
+          <ng-container *ngIf="move">
+            <div class="move section"
+            (click)="clickMeta(i, 'right')"
+            [ngClass]="{'meta-selected':  metaRight[i]}">
+              <div class="move-icons">
+                <div class="type-icon">
                   <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="icon">
-                  <div class="meta-wrapper">
-                    <div class="meta meta-top meta-top-move">
-                      <div class="meta-types">
-                        <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.superEffective?.length ?? false">
-                          <div class="category">
-                            <div class="text">
-                              <span class="title">x2</span>
-                            </div>
-                            <div class="icons">
-                              <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.superEffective">
-                                <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                </div>
+                <div class="type-icon">
+                  <img src="{{move?.damageClass?.iconPath}}" alt="" class="icon">
+                </div>
+              </div>
+              <div class="name">
+                {{move?.name}}
+              </div>
+              <div class="meta-wrapper" 
+              (click)="clickMeta(i, 'right')"
+              >
+                <div class="meta meta-right" [ngClass]="{'meta-visible':  metaRight[i]}">
+                  <div class="head move-head">
+                    <div class="meta-move-type">
+                      <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="icon">
+                      <div class="meta-wrapper">
+                        <div class="meta meta-top meta-top-move">
+                          <div class="meta-types">
+                            <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.superEffective?.length ?? false">
+                              <div class="category">
+                                <div class="text">
+                                  <span class="title">x2</span>
+                                </div>
+                                <div class="icons">
+                                  <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.superEffective">
+                                    <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                                  </ng-container>
+                                </div>
+                              </div>
+                              <hr class="divider">
+                            </ng-container>
+                            <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.notVeryEffective?.length ?? false">
+                              <div class="category">
+                                <div class="text">
+                                  <span class="title">x0.5</span>
+                                </div>
+                                <div class="icons">
+                                  <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.notVeryEffective">
+                                    <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                                  </ng-container>
+                                </div>
+                              </div>
+                              <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.inmune?.length ?? false">
+                                <hr class="divider">
                               </ng-container>
-                            </div>
+                            </ng-container>
+                            <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.inmune?.length ?? false">
+                              <div class="category">
+                                <div class="text">
+                                  <span class="title">x0</span> 
+                                </div>
+                                <div class="icons">
+                                  <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.inmune">
+                                    <img src="{{type.iconPath}}" alt="" class="icon">
+                                  </ng-container>
+                                </div>
+                              </div>
+                            </ng-container>
                           </div>
-                          <hr class="divider">
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      {{move?.name}}
+                    </div>
+                    <div>
+                      <img src="{{move?.damageClass?.iconPath}}" alt="" class="icon">
+                    </div>
+                  </div>
+                  <div class="body">
+                    <div class="property">
+                      <span class="title">Effect:</span> <span [innerHTML]="move?.effect?.short"></span>
+                    </div>
+                    <div class="property">
+                      <span class="title">Target:</span>{{move?.target?.description}}
+                    </div>
+                    <div class="move-bottom">
+                      <div class="primary">
+                        <div class="atribute"><span class="title">Power</span>{{move?.power}}</div>
+                        <div class="atribute"><span class="title">PP</span>{{move?.pp}}</div>
+                        <div class="atribute"><span class="title">Accuracy</span>{{move?.accuracy}}%</div>
+                        <div class="atribute"><span class="title">Priority</span>{{move?.priority}}</div>
+                      </div>
+                      <div class="secondary">
+                        <ng-container *ngIf="move?.meta?.minHits">
+                          <div class="atribute"><span class="title">minHits</span>{{move?.meta?.minHits}}</div>
                         </ng-container>
-                        <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.notVeryEffective?.length ?? false">
-                          <div class="category">
-                            <div class="text">
-                              <span class="title">x0.5</span>
-                            </div>
-                            <div class="icons">
-                              <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.notVeryEffective">
-                                <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
-                              </ng-container>
-                            </div>
-                          </div>
-                          <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.inmune?.length ?? false">
-                            <hr class="divider">
-                          </ng-container>
+                        <ng-container *ngIf="move?.meta?.maxHits">
+                          <div class="atribute"><span class="title">maxHits</span>{{move?.meta?.maxHits}}</div>
                         </ng-container>
-                        <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.inmune?.length ?? false">
-                          <div class="category">
-                            <div class="text">
-                              <span class="title">x0</span> 
-                            </div>
-                            <div class="icons">
-                              <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.inmune">
-                                <img src="{{type.iconPath}}" alt="" class="icon">
-                              </ng-container>
-                            </div>
-                          </div>
+                        <ng-container *ngIf="move?.meta?.minTurns">
+                          <div class="atribute"><span class="title">minTurns</span>{{move?.meta?.minTurns}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="move?.meta?.maxTurns">
+                          <div class="atribute"><span class="title">maxTurns</span>{{move?.meta?.maxTurns}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="move?.meta?.drain">
+                          <div class="atribute"><span class="title">drain</span>{{move?.meta?.drain}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="move?.meta?.healing">
+                          <div class="atribute"><span class="title">healing</span>{{move?.meta?.healing}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="move?.meta?.statusChance">
+                          <div class="atribute"><span class="title">statusChance</span>{{move?.meta?.statusChance}}</div>
+                        </ng-container>
+                        <ng-container *ngIf="move?.meta?.flinchChance">
+                          <div class="atribute"><span class="title">flinchChance</span>{{move?.meta?.flinchChance}}</div>
                         </ng-container>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div>
-                  {{move?.name}}
-                </div>
-                <div>
-                  <img src="{{move?.damageClass?.iconPath}}" alt="" class="icon">
-                </div>
-              </div>
-              <div class="body">
-                <div class="property">
-                  <span class="title">Effect:</span> <span [innerHTML]="move?.effect?.short"></span>
-                </div>
-                <div class="property">
-                  <span class="title">Target:</span>{{move?.target?.description}}
-                </div>
-                <div class="move-bottom">
-                  <div class="primary">
-                    <div class="atribute"><span class="title">Power</span>{{move?.power}}</div>
-                    <div class="atribute"><span class="title">PP</span>{{move?.pp}}</div>
-                    <div class="atribute"><span class="title">Accuracy</span>{{move?.accuracy}}%</div>
-                    <div class="atribute"><span class="title">Priority</span>{{move?.priority}}</div>
-                  </div>
-                  <div class="secondary">
-                    <ng-container *ngIf="move?.meta?.minHits">
-                      <div class="atribute"><span class="title">minHits</span>{{move?.meta?.minHits}}</div>
-                    </ng-container>
-                    <ng-container *ngIf="move?.meta?.maxHits">
-                      <div class="atribute"><span class="title">maxHits</span>{{move?.meta?.maxHits}}</div>
-                    </ng-container>
-                    <ng-container *ngIf="move?.meta?.minTurns">
-                      <div class="atribute"><span class="title">minTurns</span>{{move?.meta?.minTurns}}</div>
-                    </ng-container>
-                    <ng-container *ngIf="move?.meta?.maxTurns">
-                      <div class="atribute"><span class="title">maxTurns</span>{{move?.meta?.maxTurns}}</div>
-                    </ng-container>
-                    <ng-container *ngIf="move?.meta?.drain">
-                      <div class="atribute"><span class="title">drain</span>{{move?.meta?.drain}}</div>
-                    </ng-container>
-                    <ng-container *ngIf="move?.meta?.healing">
-                      <div class="atribute"><span class="title">healing</span>{{move?.meta?.healing}}</div>
-                    </ng-container>
-                    <ng-container *ngIf="move?.meta?.statusChance">
-                      <div class="atribute"><span class="title">statusChance</span>{{move?.meta?.statusChance}}</div>
-                    </ng-container>
-                    <ng-container *ngIf="move?.meta?.flinchChance">
-                      <div class="atribute"><span class="title">flinchChance</span>{{move?.meta?.flinchChance}}</div>
-                    </ng-container>
-                  </div>
-                </div>
-              </div>
+              </div>    
+              <div class="move-footer" 
+              [ngStyle]="{'background': getMoveColor(move)}"></div>
             </div>
-          </div>    
-          <div class="move-footer" 
-          [ngStyle]="{'background': getMoveColor(move)}"></div>
-        </div>
+          </ng-container>
+        </ng-container>
       </div>
     </div>
-    
   </div>
   <div *ngIf="showStats[0]; else void">
     <div class="stats-wrapper">
