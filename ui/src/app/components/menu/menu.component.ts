@@ -27,6 +27,7 @@ export class MenuComponent
       {
         this.selectedThemeName = value.name;
       });
+    //this.toggleTheme();
   }
 
   toggleMenu()

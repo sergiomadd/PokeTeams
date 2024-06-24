@@ -2,12 +2,12 @@
   <div class="wrapper">
     <ng-container *ngIf="login">
       <div class="nav">
-        <div class="tab tab-left tab-selected" (click)="showLogInForm()">
+        <button class="tab tab-left tab-selected button-primary" (click)="showLogInForm()">
           Log In
-        </div>
-        <div class="tab tab-right" (click)="showSignUpForm()">
+        </button>
+        <button class="tab tab-right" (click)="showSignUpForm()">
           Sign Up
-        </div>
+        </button>
       </div>
       <form
       class="form" 
@@ -51,7 +51,7 @@
           </div>
           <button 
           type="submit" 
-          class="entry"
+          class="button-primary"
           [disabled]="data.isSubmitting"
           >Log In</button>
         </div>
@@ -59,12 +59,12 @@
     </ng-container>
     <ng-container *ngIf="signup">
       <div class="nav">
-        <div class="tab tab-left" (click)="showLogInForm()">
+        <button class="tab tab-left" (click)="showLogInForm()">
           Log In
-        </div>
-        <div class="tab tab-right tab-selected" (click)="showSignUpForm()">
+        </button>
+        <button class="tab tab-right tab-selected" (click)="showSignUpForm()">
           Sign Up
-        </div>
+        </button>
       </div>
       <form class="form"
       [formGroup]="signUpForm" 
@@ -125,7 +125,7 @@
           </div>
           <button 
           type="submit" 
-          class="entry"
+          class="button-primary"
           [disabled]="data.isSubmitting"
           >Sign Up</button>
         </div>

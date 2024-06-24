@@ -8,7 +8,6 @@
   max-height: inherit;
   overflow: auto;
   border-radius: 5px;
-  border: 1px solid black;
 
   .result
   {
@@ -19,7 +18,7 @@
     padding: 0.2vw;
     border-radius: 5px;
     box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
-    background-color: white;
+    background-color: var(--bg-color-3);
   }
 
   .remove
@@ -34,7 +33,7 @@
 
     &:hover
     {
-      background-color: rgb(165, 165, 165);
+      background-color: var(--bg-color-2);
     }
   }
 }

@@ -9,10 +9,16 @@ interface Theme
     '--bg-color-1': string,
     '--bg-color-2': string,
     '--bg-color-3': string,
-    '--bg-color-4': string,
-    '--bg-color-5': string,
+    '--primary-light': string,
+    '--primary': string,
+    '--primary-dark': string,
+    '--secondary-light': string,
+    '--secondary': string,
+    '--secondary-dark': string,
+    '--tertiary-light': string,
+    '--tertiary': string,
+    '--tertiary-dark': string,
     '--text-color': string,
-    '--text-color-contrast': string,
     '--text-color-highlight': string,
     '--text-color-link': string
   }
@@ -25,8 +31,12 @@ interface Theme
 export class ThemeService 
 {
   properties: string[] = 
-  ['--bg-color-1', '--bg-color-2', '--bg-color-3','--bg-color-4', '--bg-color-5',
-  '--text-color', '--text-color-contrast', '--text-color-highlight', '--text-color-link']
+  [ '--bg-color-1', '--bg-color-2', '--bg-color-3',
+    '--primary', '--primary-light', '--primary-dark',
+    '--secondary', '--secondary-light', '--secondary-dark',
+    '--tertiary', '--tertiary-light', '--tertiary-dark',
+    '--text-color', '--text-color-highlight', '--text-color-link'
+  ]
 
   themes: Theme[] = 
   [
@@ -34,14 +44,20 @@ export class ThemeService
       name: 'light',
       colors: 
       {
-        '--bg-color-1': '#fafafa',
-        '--bg-color-2': '#e4e5f1',
-        '--bg-color-3': '#d2d3db',
-        '--bg-color-4': '#9394a5',
-        '--bg-color-5': '#484b6a',
+        '--bg-color-1': '#FFFFFF',
+        '--bg-color-2': '#f2f2f2',
+        '--bg-color-3': '#dbdbdb',
+        '--primary-light': 'hsl(11, 30%, 70%)',
+        '--primary': 'hsl(11, 90%, 45%)',
+        '--primary-dark': 'hsl(11, 70%, 30%)',
+        '--secondary-light': 'hsl(52, 30%, 70%)',
+        '--secondary': 'hsl(52, 100%, 50%)',
+        '--secondary-dark': 'hsl(52, 70%, 30%)',
+        '--tertiary-light': 'hsl(209, 30%, 70%)',
+        '--tertiary': 'hsl(209, 90%, 30%)',
+        '--tertiary-dark': 'hsl(209, 70%, 30%)',
         '--text-color': '#000000',
-        '--text-color-contrast': '#ffffff',
-        '--text-color-highlight': '#D5A100',
+        '--text-color-highlight': '#fdc800',
         '--text-color-link': '#0075BE'
       }
     },
@@ -49,14 +65,20 @@ export class ThemeService
       name: 'dark',
       colors: 
       {
-        '--bg-color-1': '#232B32',
-        '--bg-color-2': '#0A2647',
-        '--bg-color-3': '#144272',
-        '--bg-color-4': '#2C74B3',
-        '--bg-color-5': '#0075BE',
-        '--text-color': '#d3d3d3',
-        '--text-color-contrast': '#000000',
-        '--text-color-highlight': '#D5A100',
+        '--bg-color-1': '#222222',
+        '--bg-color-2': '#2c2c2c',
+        '--bg-color-3': '#373737',
+        '--primary-light': 'hsl(209, 63%, 45%)',
+        '--primary': 'hsl(209, 63%, 45%)',
+        '--primary-dark': 'hsl(209, 63%, 45%)',
+        '--secondary-light': '#f37052',
+        '--secondary': '#f37052',
+        '--secondary-dark': '#f37052',
+        '--tertiary-light': '#f37052',
+        '--tertiary': '#f37052',
+        '--tertiary-dark': '#f37052',
+        '--text-color': '#e1e1e1',
+        '--text-color-highlight': '#fdc800',
         '--text-color-link': '#0075BE'
       }
     }

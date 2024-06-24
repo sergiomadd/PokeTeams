@@ -1,10 +1,8 @@
-
-
-
 .menu
 {
   border-right: 1px solid black;
   height: 100%;
+  color: var(--text-color);
 }
 
 .opened
@@ -60,7 +58,7 @@
   cursor: pointer;
   width: 9vw;
   text-decoration: none;
-  color: black;
+  color: var(--text-color);
 
   .title
   {
@@ -103,7 +101,7 @@
   {
     border-radius: 10px;
     border: 1px solid black;
-    background-color: white;
+    background-color: var(--bg-color-2);
     padding: 1vh;
   }
 
@@ -147,7 +145,7 @@
   position: absolute;
   right: -0.5vw;
   z-index: 3;
-  background-color: white;
+  background-color: var(--secondary);
   border-radius: 20px;
   cursor: pointer;
 

@@ -35,16 +35,16 @@ $pagePadding: 0.4vw;
 
     .selected
     {
-      border: 1px solid rgb(161, 161, 153);
-      background-color: rgb(79, 114, 102);
+      border: 1px solid var(--bg-color-3);
+      background-color: var(--bg-color-2);
     }
   }
 
   button:disabled 
   {
-    background-color: light-dark(rgba(239, 239, 239, 0.3), rgba(19, 1, 1, 0.3)) !important;
-    color: light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3)) !important;
-    border-color: light-dark(rgba(118, 118, 118, 0.3), rgba(195, 195, 195, 0.3)) !important;
+    background-color: var(--bg-color-2) !important;
+    color: var(--text-color) !important;
+    border-color: var(--bg-color-3) !important;
     pointer-events: none;
   }
 
