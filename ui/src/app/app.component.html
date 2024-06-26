@@ -1,5 +1,7 @@
-<div class="content">
-  <app-menu></app-menu>
+<div class="content" [ngClass]="{menuClosed: !menu?.menuOpen, menuOpened: menu?.menuOpen}">
+  <div class="menu">
+    <app-menu></app-menu>
+  </div>
   <div class="main">
     <router-outlet></router-outlet>
   </div>

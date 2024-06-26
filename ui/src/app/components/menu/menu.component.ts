@@ -18,7 +18,7 @@ export class MenuComponent
 
   loggedUser$ = this.store.select(selectLoggedUser);
 
-  menuVisible: boolean = true;
+  menuOpen: boolean = false;
   selectedThemeName?: string;
 
   ngOnInit()
@@ -32,7 +32,7 @@ export class MenuComponent
 
   toggleMenu()
   {
-    this.menuVisible = !this.menuVisible;
+    this.menuOpen = !this.menuOpen;
   }
 
   navigate(pageName:string)

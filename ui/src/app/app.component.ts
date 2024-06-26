@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { MenuComponent } from './components/menu/menu.component';
 import { TeamService } from './services/team.service';
 import { ThemeService } from './services/theme.service';
 
@@ -14,6 +15,8 @@ export class AppComponent
   store = inject(Store);
   teamService = inject(TeamService);
   themes = inject(ThemeService);
+
+  @ViewChild(MenuComponent) menu?: MenuComponent;
 
   constructor() 
   {

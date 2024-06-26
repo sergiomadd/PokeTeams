@@ -25,7 +25,7 @@
         [allGetter]="queryService.regulationAllCallback"
         class="item smart-input-wrapper"
         ></app-smart-input>
-        <button>Reset: </button>
+        <button class="button-tertiary-clear">Reset: </button>
       </div>
       <div class="items">
         <app-smart-input
@@ -52,7 +52,7 @@
         (selectEvent)="itemSelectEvent($event)"
         class="item smart-input-wrapper"
         ></app-smart-input>    
-        <button (click)="defaultSearch()">Search: </button>
+        <button (click)="defaultSearch()" class="button-primary">Search: </button>
       </div>
       <div class="items">
         <app-result-storage #pokemonStorage class="item storage"></app-result-storage>

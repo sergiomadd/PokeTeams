@@ -23,7 +23,7 @@ export class InputComponent
   formData;
   pasteHolder: string;
 
-  sections: boolean[] = [false, true];
+  sections: boolean[] = [true, false];
 
   constructor()
   {

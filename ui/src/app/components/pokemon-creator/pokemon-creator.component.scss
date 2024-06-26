@@ -2,22 +2,33 @@
 .creator
 {
   display: grid;
-  grid-template-columns: 60% 35%;
-  gap: 5%;
+  grid-template-columns: 60% 40%;
+  gap: 0.8vw;
 
   .form
   {
     display: grid;
-    grid-template-columns: 30% 30% 30%;
-    gap: 3%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8vw;
     justify-content: end;
   }
 
   .preview
   {
     width: 100%;
-    height: auto;
-    border: 1px solid black;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: flex-start;
+    gap: 1vw;
+
+    .add
+    {
+      margin: auto;
+      padding: 0.4vw;
+      width: fit-content;
+    }
   }
 
   .form-item
@@ -28,6 +39,11 @@
     min-height: 8vh;
     width: inherit;
     //outline: 1px solid black;
+  }
+
+  .col
+  {
+    width: 13vw;
   }
 
   .stat-selector

@@ -34,13 +34,13 @@
       </div>
       <div class="right">
         <div class="link">
-          <button (click)="copyLink()">Copy link</button>
+          <button (click)="copyLink()" class="button-primary">Copy link</button>
         </div>
         <div class="link">
-          <button (click)="copyPaste()">Copy paste</button>
+          <button (click)="copyPaste()" class="button-primary-clear">Copy paste</button>
         </div>
         <div class="link">
-          <a [routerLink]="['/', team?.id]">Open</a>
+          <button [routerLink]="['/', team?.id]" class="button-tertiary-clear">Open</button>
         </div>
         <ng-container *ngIf="logged">
           <!-- 

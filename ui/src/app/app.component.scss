@@ -2,14 +2,24 @@
 {
   display: flex;
   min-height: 100%;
+  position: relative;
 
   .main
   {
     width: 100%;
   }
-
   .menu
   {
-    background-color: lightgray;
+    position: sticky;
   }
+}
+
+.menuClosed
+{
+  margin-right: 3vw;
+}
+
+.menuOpened
+{
+  margin-right: 10vw;
 }
