@@ -176,22 +176,25 @@ namespace api.Services
                 }
 
                 List<Tag> tags = new List<Tag>();
-                foreach (TagDTO tagDTO in inputTeam.Tags)
+                if (inputTeam.Tags != null && inputTeam.Tags.Count > 0)
                 {
-                    Tag tag = new Tag
+                    foreach (TagDTO tagDTO in inputTeam.Tags)
                     {
-                        Identifier = tagDTO.Identifier,
-                        Name = tagDTO.Name,
-                        Description = tagDTO.Description,
-                        Color = tagDTO.Color,
-                    };
-                    if (_pokeTeamContext.Tag.Contains(tag))
-                    {
-                        tags.Add(_pokeTeamContext.Tag.Find(tag.Identifier));
-                    }
-                    else
-                    {
-                        tags.Add(tag);
+                        Tag tag = new Tag
+                        {
+                            Identifier = tagDTO.Identifier,
+                            Name = tagDTO.Name,
+                            Description = tagDTO.Description,
+                            Color = tagDTO.Color,
+                        };
+                        if (_pokeTeamContext.Tag.Contains(tag))
+                        {
+                            tags.Add(_pokeTeamContext.Tag.Find(tag.Identifier));
+                        }
+                        else
+                        {
+                            tags.Add(tag);
+                        }
                     }
                 }
 
