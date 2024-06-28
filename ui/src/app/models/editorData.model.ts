@@ -3,7 +3,7 @@ import { Sprite } from "./pokemon/sprite.model";
 
 export interface EditorData
 {
-  shinyPaths: EditorOption[],
+  shinyPaths?: EditorOption[],
   malePaths: EditorOption[],
   femalePaths: EditorOption[],
   pokemonSpritesPaths: Sprite[],

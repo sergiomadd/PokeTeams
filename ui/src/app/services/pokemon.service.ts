@@ -56,7 +56,7 @@ export class PokemonService
         pokemon.evolutions = pokemonData.status == "fulfilled" ? pokemonData.value?.evolutions : undefined;
         pokemon.types = pokemonData.status == "fulfilled" ? pokemonData.value?.types : undefined;
         pokemon.stats = pokemonData.status == "fulfilled" ? pokemonData.value?.stats : [];
-        pokemon.sprites = pokemonData.status == "fulfilled" ? pokemonData.value?.sprites : [];
+        pokemon.sprite = pokemonData.status == "fulfilled" ? pokemonData.value?.sprite : undefined;
         pokemon.nickname = pokePaste.nickname;
         pokemon.level = pokePaste.level ? pokePaste.level : 50;
         pokemon.shiny = pokePaste.shiny ? pokePaste.shiny : undefined;

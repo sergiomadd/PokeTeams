@@ -127,7 +127,7 @@ export class PokemonCreatorComponent
     this.pokemon.name = event.name;
     this.pokemon.dexNumber = data.dexNumber;
     this.pokemon.types = data.types;
-    this.pokemon.sprites = data.sprites;
+    this.pokemon.sprite = data.sprite;
     this.pokemon.evolutions = data.evolutions;
     this.pokemon.preEvolution = data.preEvolution;
     this.pokemon.stats = data.stats;
@@ -139,7 +139,7 @@ export class PokemonCreatorComponent
     this.pokemon.name = undefined;
     this.pokemon.dexNumber = undefined;
     this.pokemon.types = undefined;
-    this.pokemon.sprites = undefined;
+    this.pokemon.sprite = undefined;
     this.pokemon.evolutions = undefined;
     this.pokemon.preEvolution = undefined;
     this.pokemon.stats = undefined;
@@ -284,7 +284,7 @@ export class PokemonCreatorComponent
       level: 50,
       shiny: undefined,
       gender: undefined,
-      sprites: undefined,
+      sprite: undefined,
     }
 
     this.pokemon.ivs = 

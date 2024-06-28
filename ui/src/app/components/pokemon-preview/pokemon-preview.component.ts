@@ -25,14 +25,13 @@ export class PokemonPreviewComponent
 
   getSprite()
   {
-      let choosenVariationPath = this.pokemon?.sprite;
       if(this.pokemon?.gender === "female")
       {
-        this.pokemonSpritePath = this.pokemon?.shiny ? choosenVariationPath?.shinyFemale : choosenVariationPath?.female
+        this.pokemonSpritePath = this.pokemon?.shiny ? this.pokemon?.sprite?.shinyFemale : this.pokemon?.sprite?.female
       }
       else
       {
-        this.pokemonSpritePath = this.pokemon?.shiny ? choosenVariationPath?.shiny : choosenVariationPath?.base
+        this.pokemonSpritePath = this.pokemon?.shiny ? this.pokemon?.sprite?.shiny : this.pokemon?.sprite?.base
       }
   }
 }

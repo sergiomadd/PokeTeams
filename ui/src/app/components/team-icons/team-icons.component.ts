@@ -18,7 +18,7 @@ export class TeamIconsComponent
 
   getSprite(pokemon: Pokemon) : string | undefined
   {
-      let choosenVariationPath = pokemon?.sprites ? pokemon?.sprites[0] : undefined;
+      let choosenVariationPath = pokemon?.sprite ? pokemon?.sprite[0] : undefined;
       if(pokemon?.gender === "female")
       {
         return pokemon?.shiny ? choosenVariationPath?.shinyFemale : choosenVariationPath?.female

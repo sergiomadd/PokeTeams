@@ -123,16 +123,15 @@ export class PokemonComponent
 
   loadSprite()
   {
-    if(this.pokemon.sprites)
+    if(this.pokemon.sprite)
     {
-      let choosenVariationPath = this.pokemon.sprites[this.editorOptions?.pokemonSpritesGen?.identifier ?? 0];
       if(this.pokemon.gender === "female")
       {
-        this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shinyFemale : choosenVariationPath.female
+        this.pokemonSpritePath = this.pokemon.shiny ? this.pokemon.sprite.shinyFemale : this.pokemon.sprite.female
       }
       else
       {
-        this.pokemonSpritePath = this.pokemon.shiny ? choosenVariationPath.shiny : choosenVariationPath.base
+        this.pokemonSpritePath = this.pokemon.shiny ? this.pokemon.sprite.shiny : this.pokemon.sprite.base
       }
     }
     else

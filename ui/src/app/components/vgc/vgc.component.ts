@@ -61,12 +61,7 @@ export class VgcComponent
         identifier: '0',
         path: "assets/error.png"
       },
-      pokemonSpritesGen: this.editorData?.pokemonSpritesPaths ? 
-      {
-        name: this.editorData?.pokemonSpritesPaths[0].name,
-        identifier: '0',
-        path: this.editorData?.pokemonSpritesPaths[0].base!
-      } :       
+      pokemonSpritesGen:   
       {
         name: "error",
         identifier: '0',

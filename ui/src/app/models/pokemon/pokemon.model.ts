@@ -27,6 +27,6 @@ export interface Pokemon
 	level?: number,
 	shiny?: boolean,
 	gender?: string,
-	sprites?: Sprite[]
+	sprite?: Sprite
 }
   

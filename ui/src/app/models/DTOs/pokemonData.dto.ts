@@ -11,7 +11,7 @@ export interface PokemonData
 	evolutions?: Pokemon[],
   types?: TypesWithEffectiveness,
   stats?: Stat[],
-  sprites?: Sprite[]
+  sprite?: Sprite
 }
 
 export const defaultPokemonData: PokemonData =
@@ -22,5 +22,5 @@ export const defaultPokemonData: PokemonData =
 	evolutions: [],
   types: defaultTypesWithEffectiveness,
   stats: [],
-  sprites: undefined
+  sprite: undefined
 }

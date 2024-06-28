@@ -22,12 +22,12 @@ export class EvolutionComponent
 
   ngOnInit()
   {
-    this.pokemon.sprites ? this.loadSprite() : this.oldChanges.sprites = this.pokemon.sprites;
+    this.pokemon.sprite ? this.loadSprite() : this.oldChanges.sprites = this.pokemon.sprite;
   }
 
   ngDoCheck() 
   {
-    if(this.pokemon.sprites !== this.oldChanges.sprites) 
+    if(this.pokemon.sprite !== this.oldChanges.sprites) 
     {
       this.loadSprite();
     }
@@ -35,16 +35,15 @@ export class EvolutionComponent
 
   loadSprite()
   {
-    if(this.pokemon.sprites)
+    if(this.pokemon.sprite)
     {
-      let choosenVariationPath = this.pokemon.sprites[this.editorOptions?.pokemonSpritesGen?.identifier ?? 0];
       if(this.sourcePokemon.gender === "female")
       {
-        this.pokemonSpritePath = this.sourcePokemon.shiny ? choosenVariationPath.shinyFemale : choosenVariationPath.female
+        this.pokemonSpritePath = this.sourcePokemon.shiny ? this.pokemon.sprite.shinyFemale : this.pokemon.sprite.female
       }
       else
       {
-        this.pokemonSpritePath = this.sourcePokemon.shiny ? choosenVariationPath.shiny : choosenVariationPath.base
+        this.pokemonSpritePath = this.sourcePokemon.shiny ? this.pokemon.sprite.shiny : this.pokemon.sprite.base
       }
     }
     else

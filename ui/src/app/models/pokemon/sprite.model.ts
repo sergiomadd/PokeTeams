@@ -4,6 +4,4 @@ export interface Sprite
   shiny?: string,
   female?: string,
   shinyFemale?: string
-  name: string,
-  gen?: string
 }
