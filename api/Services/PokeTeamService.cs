@@ -289,13 +289,6 @@ namespace api.Services
             const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
             return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
-
-        public async Task<EditorDataDTO?> GetEditorData()
-        {
-            EditorDataDTO editorData = _localContext.GetEditorData();
-
-            return editorData;
-        }
         
         public async Task<bool> DeleteUserTeams(User user)
         {

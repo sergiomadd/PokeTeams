@@ -22,13 +22,5 @@ namespace api.Data
         {
 
         }
-
-        public EditorDataDTO GetEditorData()
-        {
-            var json = File.ReadAllText("Data/Local/IconPaths.json");
-            EditorDataDTO editorData = JsonConvert.DeserializeObject<EditorDataDTO>(json);
-            //editorData.PokemonSpritesPaths = GetSprite(25);
-            return editorData;
-        }
     }
 }
