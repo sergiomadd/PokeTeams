@@ -23,22 +23,6 @@ namespace api.Data
 
         }
 
-        public SpriteDTO GetSprite(int dexNumber)
-        {
-            const string urlStart = "https://localhost:7134/images/sprites/pokemon/";
-            string urlEnd = dexNumber + ".png";
-            const string shiny = "shiny/";
-            const string female = "female/";
-            const string shinyFemale = "shiny/female/";
-            const string key = "";
-
-            return new SpriteDTO(key,
-            urlStart + key + urlEnd,
-            urlStart + key + shiny + urlEnd,
-            urlStart + key + female + urlEnd,
-            urlStart + key + shinyFemale + urlEnd);
-        }
-
         public EditorDataDTO GetEditorData()
         {
             var json = File.ReadAllText("Data/Local/IconPaths.json");

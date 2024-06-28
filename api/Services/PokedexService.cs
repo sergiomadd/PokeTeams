@@ -119,7 +119,7 @@ namespace api.Services
                 id,
                 GetPokemonTypesWithEffectiveness(id).Result,
                 GetPokemonStats(id).Result,
-                _localContext.GetSprite(id),
+                new SpriteDTO(id),
                 preEvolution: GetPokemonPreEvolution(id),
                 evolutions: GetPokemonEvolutions(id));
             return pokemonData;
@@ -211,7 +211,7 @@ namespace api.Services
             if (pokemonSpeciesPreEvolution != null && pokemonSpeciesPreEvolution.evolves_from_species_id != null)
             {
                 int newID = pokemonSpeciesPreEvolution.evolves_from_species_id ?? 0;
-                return new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypesWithEffectiveness(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprite(newID), preEvolution: GetPokemonPreEvolution(newID));
+                return new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypesWithEffectiveness(newID).Result, GetPokemonStats(newID).Result, new SpriteDTO(newID), preEvolution: GetPokemonPreEvolution(newID));
             }
             return null;
         }
@@ -227,7 +227,7 @@ namespace api.Services
                     if (pokemonSpeciesEvolution != null)
                     {
                         int newID = pokemonSpeciesEvolution.id;
-                        evolutions.Add(new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypesWithEffectiveness(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprite(newID), evolutions: GetPokemonEvolutions(newID)));
+                        evolutions.Add(new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypesWithEffectiveness(newID).Result, GetPokemonStats(newID).Result, new SpriteDTO(newID), evolutions: GetPokemonEvolutions(newID)));
                     }
                 }
             }
