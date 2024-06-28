@@ -15,7 +15,6 @@ import { InputComponent } from './components/input/input.component';
 import { MainComponent } from './components/main/main.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { EvolutionComponent } from './components/meta/evolution/evolution.component';
-import { LeftOptionComponent } from './components/options/left-option/left-option.component';
 import { RightOptionComponent } from './components/options/right-option/right-option.component';
 import { TopOptionComponent } from './components/options/top-option/top-option.component';
 import { DialogComponent } from './components/pieces/dialog/dialog.component';
@@ -56,7 +55,6 @@ import { metaReducers } from './state/app.state';
     VgcComponent,
     TeamViewComponent,
     MainComponent,
-    LeftOptionComponent,
     RightOptionComponent,
     EvolutionComponent,
     LinkerPipe,
