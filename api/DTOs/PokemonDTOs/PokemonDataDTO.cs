@@ -9,15 +9,15 @@ namespace api.DTOs.PokemonDTOs
         public List<PokemonDataDTO?>? Evolutions { get; set; }
         public PokeTypesWithEffectivenessDTO? Types { get; set; }
         public List<StatDTO?> Stats { get; set; }
-        public List<SpriteDTO?> Sprites { get; set; }
+        public SpriteDTO? Sprite { get; set; }
 
-        public PokemonDataDTO(string? name, int dexNumber, PokeTypesWithEffectivenessDTO types, List<StatDTO?> stats, List<SpriteDTO?> sprites, PokemonDataDTO? preEvolution = null, List<PokemonDataDTO?>? evolutions = null)
+        public PokemonDataDTO(string? name, int dexNumber, PokeTypesWithEffectivenessDTO types, List<StatDTO?> stats, SpriteDTO? sprite, PokemonDataDTO? preEvolution = null, List<PokemonDataDTO?>? evolutions = null)
         {
             Name = name;
             DexNumber = dexNumber;
             Types = types;
             Stats = stats;
-            Sprites = sprites;
+            Sprite = sprite;
             PreEvolution = preEvolution;
             Evolutions = evolutions;
         }

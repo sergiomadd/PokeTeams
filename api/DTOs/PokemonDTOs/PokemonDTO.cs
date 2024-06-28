@@ -21,6 +21,6 @@ namespace api.DTOs.PokemonDTOs
         public int? Level { get; set; }
         public bool? Shiny { get; set; }
         public string? Gender { get; set; }
-        public List<SpriteDTO?> Sprites { get; set; }
+        public SpriteDTO? Sprite { get; set; }
     }
 }

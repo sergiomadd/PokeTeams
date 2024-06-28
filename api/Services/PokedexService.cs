@@ -63,7 +63,7 @@ namespace api.Services
                 Level = pokemon.Level,
                 Shiny = pokemon.Shiny,
                 Gender = pokemon.Gender,
-                Sprites = pokemonData.Sprites
+                Sprite = pokemonData.Sprite
             };
         }
 
@@ -103,7 +103,7 @@ namespace api.Services
                 DexNumber = pokemonData.DexNumber,
                 Types = await GetPokemonTypes(pokemonData.DexNumber),
                 TeraType = await GetTypeByIdentifier(pokemon.TeraTypeIdentifier, true),
-                Sprite = pokemonData.Sprites[int.Parse(editorOptions.PokemonSpritesGen.Identifier)],
+                Sprite = pokemonData.Sprite,
                 Shiny = pokemon.Shiny,
                 Gender = pokemon.Gender,
                 Moves = moves,
@@ -119,7 +119,7 @@ namespace api.Services
                 id,
                 GetPokemonTypesWithEffectiveness(id).Result,
                 GetPokemonStats(id).Result,
-                _localContext.GetSprites(id),
+                _localContext.GetSprite(id),
                 preEvolution: GetPokemonPreEvolution(id),
                 evolutions: GetPokemonEvolutions(id));
             return pokemonData;
@@ -211,7 +211,7 @@ namespace api.Services
             if (pokemonSpeciesPreEvolution != null && pokemonSpeciesPreEvolution.evolves_from_species_id != null)
             {
                 int newID = pokemonSpeciesPreEvolution.evolves_from_species_id ?? 0;
-                return new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypesWithEffectiveness(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), preEvolution: GetPokemonPreEvolution(newID));
+                return new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypesWithEffectiveness(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprite(newID), preEvolution: GetPokemonPreEvolution(newID));
             }
             return null;
         }
@@ -227,7 +227,7 @@ namespace api.Services
                     if (pokemonSpeciesEvolution != null)
                     {
                         int newID = pokemonSpeciesEvolution.id;
-                        evolutions.Add(new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypesWithEffectiveness(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprites(newID), evolutions: GetPokemonEvolutions(newID)));
+                        evolutions.Add(new PokemonDataDTO(GetPokemonName(newID), newID, GetPokemonTypesWithEffectiveness(newID).Result, GetPokemonStats(newID).Result, _localContext.GetSprite(newID), evolutions: GetPokemonEvolutions(newID)));
                     }
                 }
             }
