@@ -7,7 +7,6 @@ import { authActions } from '../auth/store/auth.actions';
 import { SearchQueryDTO } from '../models/DTOs/searchQuery.dto';
 import { SearchQueryResponseDTO } from '../models/DTOs/searchQueryResponse.dto';
 import { TeamId } from '../models/DTOs/teamId.dto';
-import { defaultEditorData, EditorData } from '../models/editorData.model';
 import { Regulation } from '../models/regulation.model';
 import { Tag } from '../models/tag.model';
 import { Team } from '../models/team.model';
@@ -50,21 +49,6 @@ export class TeamService
       console.log("Error: ", this.util.getErrorMessage(error));
     }
     return this.util.toCamelCase(team); 
-  }
-
-  async getOptionsData()
-  {
-    let optionsData: EditorData = <EditorData>{}
-    let url = this.apiUrl + 'editor';
-    try
-    {
-      optionsData = await lastValueFrom(this.http.get<EditorData>(url).pipe(catchError(() => [defaultEditorData]), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
-    return optionsData; 
   }
 
   saveTeam(team: Team): BehaviorSubject<string>

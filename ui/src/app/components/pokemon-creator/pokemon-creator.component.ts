@@ -1,7 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { PokemonData } from 'src/app/models/DTOs/pokemonData.dto';
-import { EditorData } from 'src/app/models/editorData.model';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Stat } from 'src/app/models/pokemon/stat.model';
@@ -33,7 +32,6 @@ export class PokemonCreatorComponent
   @ViewChild(PokemonComponent) pokemonPreviewComponent!: PokemonComponent;
 
   pokemon: Pokemon = <Pokemon>{};
-  editorData?: EditorData;
   allAbilities: boolean = false;
 
   allAbilitiesSwitch() 

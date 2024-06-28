@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
-import { EditorData } from 'src/app/models/editorData.model';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Tag } from 'src/app/models/tag.model';
@@ -22,7 +21,6 @@ export class TeamEditorComponent
 
   @Input() pokemons!: Pokemon[];
   @Input() editorOptions!: EditorOptions;
-  @Input() editorData?: EditorData;
 
   @Output() outputTeam = new EventEmitter<Team>();
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;

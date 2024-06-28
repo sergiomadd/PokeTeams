@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { EditorData } from 'src/app/models/editorData.model';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { ParserService } from 'src/app/services/parser.service';
@@ -17,7 +16,6 @@ export class InputComponent
   parser = inject(ParserService);
   
   @Input() editorOptions!: EditorOptions;
-  @Input() editorData!: EditorData;
   @Output() outPokemon = new EventEmitter<Pokemon>();
   
   formData;

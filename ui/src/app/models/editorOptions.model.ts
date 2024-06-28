@@ -1,21 +1,13 @@
-import { EditorOption } from "./editorOption.model";
 
 export interface EditorOptions
 {
-  //left
-  pokemonSpritesGen: EditorOption,
-  typeIconsGen: string,
-  shinyPath: EditorOption,
-  gender: boolean,
-  malePath: EditorOption,
-  femalePath: EditorOption,
-  //theme: string
-  //right
   showIVs: boolean,
   showEVs: boolean,
   showNature: boolean,
   showDexNumber: boolean,
   showNickname: boolean,
+  showShinyIcon: boolean,
+  showGenderIcon: boolean,
   //showTeratype
   //---
   //lang?
