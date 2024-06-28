@@ -25,12 +25,10 @@ namespace api.Services
     public class PokedexService : IPokedexService
     {
         private readonly IPokedexContext _pokedexContext;
-        private readonly LocalContext _localContext;
 
-        public PokedexService(IPokedexContext pokedexContext, LocalContext localContext)
+        public PokedexService(IPokedexContext pokedexContext)
         {
             _pokedexContext = pokedexContext;
-            _localContext = localContext;
         }
 
         public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon)

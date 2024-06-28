@@ -12,7 +12,6 @@ namespace api.Services
     public class PokeTeamService : IPokeTeamService
     {
         private readonly PokeTeamContext _pokeTeamContext;
-        private readonly LocalContext _localContext;
         private readonly IPokedexService _pokedexService;
         private readonly IUserService _userService;
         private readonly ITournamentService _tournamentService;
@@ -23,7 +22,6 @@ namespace api.Services
         public PokeTeamService
             (
                 PokeTeamContext dataContext,
-                LocalContext localContext,
                 IPokedexService pokedexService,
                 IUserService userService,
                 ITournamentService tournamentService,
@@ -31,7 +29,6 @@ namespace api.Services
             )
         {
             _pokeTeamContext = dataContext;
-            _localContext = localContext;
             _pokedexService = pokedexService;
             _userService = userService;
             _tournamentService = tournamentService;

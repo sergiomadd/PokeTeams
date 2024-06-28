@@ -19,9 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PokedexContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPokedex")));
 builder.Services.AddDbContext<PokeTeamContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPoketeam")), ServiceLifetime.Scoped);
-builder.Services.AddDbContext<LocalContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPoketeam")));
 builder.Services.AddScoped<IPokedexContext, PokedexContext>();
-
 
 builder.Services.AddScoped<IPokedexService, PokedexService>();
 builder.Services.AddScoped<IPokeTeamService, PokeTeamService>();
