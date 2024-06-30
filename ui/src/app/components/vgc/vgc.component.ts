@@ -38,6 +38,18 @@ export class VgcComponent
   {
     this.editorOptions = 
     {
+      showIVs: false,
+      showEVs: false,
+      showNature: false,
+      showDexNumber: false,
+      showNickname: false,
+      showShinyIcon: true,
+      showGenderIcon: true,
+      maxLevel: 0
+    }
+    /*
+    this.editorOptions = 
+    {
       showIVs: true,
       showEVs: true,
       showNature: true,
@@ -47,5 +59,6 @@ export class VgcComponent
       showGenderIcon: true,
       maxLevel: 0
     }
+    */
   }
 }

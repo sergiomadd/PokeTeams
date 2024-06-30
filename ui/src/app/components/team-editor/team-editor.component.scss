@@ -5,56 +5,24 @@
   flex-direction: column;
   align-items: center;
 
-
-  .top-options
+  .team-holder
   {
-    display: flex;
-    justify-content: space-around;
+    border-radius: 5px;
+    margin-bottom: 2vh;
+    min-width: 75%;
+    padding: 2vh 2vh;
+    background-color: var(--bg-color-4);
   }
-
-  .central-row
-  {
-    display: grid;
-    grid-template-columns: 12.5% 75% 12.5%;
-    display: flex;
-    width: inherit;
-
-    .left-options
-    {
-      display: flex;
-      flex-direction: column;
-      align-items: end;
-      margin-top: 1vh;
-      width: 100%;
-    }
-
-    .team-holder
-    {
-      border-radius: 5px;
-      margin-bottom: 2vh;
-      min-width: 75%;
-      padding: 2vh 2vh;
-      background-color: var(--bg-color-4);
-    }
-
-    .right-options
-    {
-      display: flex;
-      flex-direction: column;
-      align-items: start;
-      margin-top: 1vh;
-      width: 100%;
-      max-width: 12.5%;
-    }
-  }
-
-
-
-  .generate
-  {
-    width: 5vw;
-    height: 2vw;
   
-    margin: auto;
+  .output
+  {
+    margin-bottom: 2vw;
+
+    .generate
+    {
+      width: 5vw;
+      height: 2vw;
+      margin: auto;
+    }
   }
 }

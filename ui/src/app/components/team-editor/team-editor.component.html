@@ -1,74 +1,72 @@
 <div class="team-editor">
-  <div class="top-options">
-    <app-smart-input
-    #userInput
-    [label]="'Player: '"
-    [keepSelected]="true"
-    [getter]="queryUserCallback"
-    class="item smart-input-wrapper"
-    ></app-smart-input>
-    <app-smart-input
-    #tournamentInput
-    [label]="'Tournament: '"
-    [keepSelected]="true"
-    [getter]="queryTournamentCallback"
-    class="item smart-input-wrapper"
-    ></app-smart-input>
-    <app-smart-input
-    #regulationInput
-    [label]="'Regulation: '"
-    [keepSelected]="true"
-    [getter]="queryRegulationCallback"
-    [allGetter]="regulationAllCallback"
-    class="item smart-input-wrapper"
-    ></app-smart-input>
-    <app-smart-input
-    #regulationInput
-    [label]="'Tags: '"
-    [keepSelected]="false"
-    [getter]="queryRegulationCallback"
-    class="item smart-input-wrapper"
-    ></app-smart-input>
-  </div>
-  <div class="central-row">
-    <div class="team-holder">
-      <app-team [team]="team"></app-team>
+  <div class="col">
+    <div class="row">
+      <app-smart-input
+      #userInput
+      [label]="'Player: '"
+      [keepSelected]="true"
+      [getter]="queryUserCallback"
+      class="item smart-input-wrapper"
+      ></app-smart-input>
+      <app-smart-input
+      #tournamentInput
+      [label]="'Tournament: '"
+      [keepSelected]="true"
+      [getter]="queryTournamentCallback"
+      class="item smart-input-wrapper"
+      ></app-smart-input>
+      <app-smart-input
+      #regulationInput
+      [label]="'Regulation: '"
+      [keepSelected]="true"
+      [getter]="queryRegulationCallback"
+      [allGetter]="regulationAllCallback"
+      class="item smart-input-wrapper"
+      ></app-smart-input>
+      <app-smart-input
+      #regulationInput
+      [label]="'Tags: '"
+      [keepSelected]="false"
+      [getter]="queryRegulationCallback"
+      class="item smart-input-wrapper"
+      ></app-smart-input>
     </div>
-    <div class="right-options">
-      <app-right-option
-      [editorOptions]="editorOptions"
-      [editorOptionsSwitchSelector]="'showIVs'"
-      [label]="'IVs'"
-      [hoverText]="'Show IVs'"
-      ></app-right-option>
-      <app-right-option
-      [editorOptions]="editorOptions"
-      [editorOptionsSwitchSelector]="'showEVs'"
+    <div class="row-center">
+      <app-checkbox
+      [obj]="editorOptions"
+      [objSelector]="'showEVs'"
       [label]="'EVs'"
       [hoverText]="'Show EVs'"
-      ></app-right-option>
-      <app-right-option
-      [editorOptions]="editorOptions"
-      [editorOptionsSwitchSelector]="'showNature'"
+      ></app-checkbox>
+      <app-checkbox
+      [obj]="editorOptions"
+      [objSelector]="'showIVs'"
+      [label]="'IVs'"
+      [hoverText]="'Show IVs'"
+      ></app-checkbox>
+      <app-checkbox
+      [obj]="editorOptions"
+      [objSelector]="'showNature'"
       [label]="'Nature'"
       [hoverText]="'Show nature'"
-      ></app-right-option>
-      <app-right-option
-      [editorOptions]="editorOptions"
-      [editorOptionsSwitchSelector]="'showDexNumber'"
-      [label]="'Dex'"
-      [hoverText]="'Show pokedex number'"
-      ></app-right-option>
-      <app-right-option
-      [editorOptions]="editorOptions"
-      [editorOptionsSwitchSelector]="'showNickname'"
-      [label]="'Nick'"
+      ></app-checkbox>
+      <app-checkbox
+      [obj]="editorOptions"
+      [objSelector]="'showDexNumber'"
+      [label]="'Dex number'"
+      [hoverText]="'Show showDexNumber'"
+      ></app-checkbox>
+      <app-checkbox
+      [obj]="editorOptions"
+      [objSelector]="'showNickname'"
+      [label]="'Nickname'"
       [hoverText]="'Show nickname'"
-      ></app-right-option>
+      ></app-checkbox>
     </div>
   </div>
-
-
+  <div class="team-holder">
+    <app-team [team]="team"></app-team>
+  </div>
   <div class="output">
     <button
     (click)="generateTeam()"

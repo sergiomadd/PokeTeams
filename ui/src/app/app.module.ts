@@ -15,8 +15,8 @@ import { InputComponent } from './components/input/input.component';
 import { MainComponent } from './components/main/main.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { EvolutionComponent } from './components/meta/evolution/evolution.component';
-import { RightOptionComponent } from './components/options/right-option/right-option.component';
 import { TopOptionComponent } from './components/options/top-option/top-option.component';
+import { CheckboxComponent } from './components/pieces/checkbox/checkbox.component';
 import { DialogComponent } from './components/pieces/dialog/dialog.component';
 import { DropdownComponent } from './components/pieces/dropdown/dropdown.component';
 import { MultiSearchComponent } from './components/pieces/multi-search/multi-search.component';
@@ -55,7 +55,6 @@ import { metaReducers } from './state/app.state';
     VgcComponent,
     TeamViewComponent,
     MainComponent,
-    RightOptionComponent,
     EvolutionComponent,
     LinkerPipe,
     UserComponent,
@@ -76,7 +75,8 @@ import { metaReducers } from './state/app.state';
     ResultStorageComponent,
     TooltipComponent,
     PaginationComponent,
-    PokemonCreatorComponent
+    PokemonCreatorComponent,
+    CheckboxComponent
   ],
   exports: [],
   imports: [

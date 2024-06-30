@@ -1,0 +1,28 @@
+$size: 1vw;
+
+.checkbox
+{
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-color-2);
+  color: var(--text-color);
+  border: 1px solid var(--bg-color-3);
+  border-radius: 5px;
+  padding: 0.2vw 0.6vw 0.2vw 0.6vw;
+  overflow: hidden;
+  cursor: pointer;
+  min-width: 1vw;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  position: relative;
+  opacity: 0.7;
+}
+
+.checked
+{
+  background-color: var(--primary);
+  color: white;
+  opacity: 1;
+
+}
