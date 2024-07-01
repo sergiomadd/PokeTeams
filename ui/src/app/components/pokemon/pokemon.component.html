@@ -213,9 +213,13 @@
                           </ng-container>
                         </div>
                       </div>
-                      <hr class="divider">
+                      <ng-container *ngIf="pokemon.types?.dualEffectiveness?.superEffective?.length
+                        || pokemon.types?.dualEffectiveness?.notVeryEffective?.length
+                        || pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
+                        || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
+                        <hr class="divider">
+                      </ng-container>
                     </ng-container>
-                    
                     <ng-container *ngIf="pokemon.types?.dualEffectiveness?.superEffective?.length ?? false">
                       <div class="category">
                         <div class="text">
@@ -227,7 +231,11 @@
                           </ng-container>
                         </div>
                       </div>
-                      <hr class="divider">
+                      <ng-container *ngIf="pokemon.types?.dualEffectiveness?.notVeryEffective?.length
+                        || pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
+                        || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
+                        <hr class="divider">
+                      </ng-container>
                     </ng-container>
                     <ng-container *ngIf="pokemon.types?.dualEffectiveness?.notVeryEffective?.length ?? false">
                       <div class="category">
@@ -240,7 +248,10 @@
                           </ng-container>
                         </div>
                       </div>
-                      <hr class="divider">
+                      <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
+                        || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
+                        <hr class="divider">
+                      </ng-container>
                     </ng-container>
                     <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length ?? false">
                       <div class="category">
@@ -531,7 +542,7 @@
       <div class="stats">
         <ng-container *ngIf="pokemon.stats; else nostats">
           <ng-container *ngFor="let stat of pokemon.stats; index as i">
-            <div class="stat section" (click)="clickMeta(i, 'stat')" [ngClass]="{'meta-selected':  metaStats[i]}">
+            <div class="stat section" (click)="clickMeta(i, 'stat')" [ngClass]="{'meta-selected':  metaStats[i], 'odd-stat': i % 2 != 0}">
               <div class="meta-wrapper" (click)="clickMeta(i, 'stat')">
                 <div class="meta meta-stat" [ngClass]="{'meta-visible':  metaStats[i]}">
                   <div class="meta-name" [ngStyle]="{backgroundColor: util.getStatColor(stat)}">{{stat.name}}</div>
