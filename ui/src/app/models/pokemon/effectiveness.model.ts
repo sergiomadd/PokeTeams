@@ -1,12 +1,12 @@
-import { TypeWithEffectiveness } from "./typewitheffectiveness.model";
+import { Type } from "./type.model";
 
 export interface Effectiveness
 {
-  doubleSuperEffective?: TypeWithEffectiveness[],
-  superEffective?: TypeWithEffectiveness[],
-  notVeryEffective?: TypeWithEffectiveness[],
-  doubleNotVeryEffective?: TypeWithEffectiveness[],
-  inmune?: TypeWithEffectiveness[]
+  doubleSuperEffective?: Type[],
+  superEffective?: Type[],
+  notVeryEffective?: Type[],
+  doubleNotVeryEffective?: Type[],
+  inmune?: Type[]
 }
 
 export const defaultEffectiveness: Effectiveness = 
