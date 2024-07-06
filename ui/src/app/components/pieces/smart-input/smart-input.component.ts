@@ -2,7 +2,6 @@ import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild }
 import { FormBuilder } from '@angular/forms';
 import { Tag } from 'src/app/models/tag.model';
 
-
 @Component({
   selector: 'app-smart-input',
   templateUrl: './smart-input.component.html',
@@ -13,14 +12,12 @@ export class SmartInputComponent
 {
   formBuilder = inject(FormBuilder);
 
-  //MAKE RESULT OBSERVABLE -> behavior subject
   @Input() label?: string;
   @Input() keepSelected?: boolean;
   @Input() getter?: (args: any) => Promise<Tag[]>
   @Input() allGetter?: (args?: any) => Promise<Tag[]>
   @Input() allGetterIndex?: number;
   @Output() selectEvent = new EventEmitter<Tag>();
-  @Output() removeSelectedEvent = new EventEmitter<Tag>();
 
   @ViewChild('input') input!: ElementRef;
   searchForm = this.formBuilder.group(
@@ -28,17 +25,27 @@ export class SmartInputComponent
     key: [''],
   });
 
-  results?: Tag[] = [];
+  results: Tag[] = [];
   showOptions: boolean = false;
+  customQueryResult: Tag = 
+  {
+    name: "",
+    identifier: ""
+  }
   selected?: Tag | undefined;
 
   async ngOnInit()
   {
+    this.results[0] = 
+    {
+      name: "",
+      identifier: ""
+    }
     this.searchForm.controls.key.valueChanges.subscribe(async (value) => 
     {
       if(value)
       {
-        this.search(value);
+        await this.search(value);
       }
       else
       {
@@ -50,10 +57,12 @@ export class SmartInputComponent
 
   async search(key: string)
   {
+    this.customQueryResult.name = "Custom: " + key;
+    this.customQueryResult.identifier = "custom";
     if(this.getter)
     {
       this.showOptions = true;
-      this.results = await this.getter(key);
+      this.results = (await this.getter(key)).concat([this.customQueryResult]);
     }
   }
 
@@ -62,13 +71,13 @@ export class SmartInputComponent
     if(this.keepSelected)
     {
       this.searchForm.controls.key.setValue(selectedResult.name);
-      this.selected = selectedResult;
     }
     else
     {
       this.searchForm.controls.key.setValue("");
       this.input.nativeElement.focus();
     }
+    this.selected = selectedResult;
     this.showOptions = false;
     this.selectEvent.emit(selectedResult);
   }
@@ -77,7 +86,7 @@ export class SmartInputComponent
   {
     this.selected = undefined;
     this.searchForm.controls.key.setValue("");
-    this.removeSelectedEvent.emit(this.selected)
+    this.selectEvent.emit(undefined);
   }
 
   async onFocus()

@@ -9,7 +9,6 @@
         [keepSelected]="true"
         [getter]="queryService.queryPokemonCallback"
         (selectEvent)="pokemonSelectEvent($event)"
-        (removeSelectedEvent)="pokemonRemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
@@ -20,7 +19,6 @@
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
         (selectEvent)="move1SelectEvent($event)"
-        (removeSelectedEvent)="move1RemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
@@ -31,7 +29,6 @@
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
         (selectEvent)="move3SelectEvent($event)"
-        (removeSelectedEvent)="move3RemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
@@ -73,7 +70,6 @@
         [keepSelected]="true"
         [getter]="queryService.queryItemCallback"
         (selectEvent)="itemSelectEvent($event)"
-        (removeSelectedEvent)="itemRemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
@@ -84,7 +80,6 @@
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
         (selectEvent)="move2SelectEvent($event)"
-        (removeSelectedEvent)="move2RemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
@@ -95,7 +90,6 @@
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
         (selectEvent)="move4SelectEvent($event)"
-        (removeSelectedEvent)="move4RemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
@@ -129,7 +123,6 @@
             [keepSelected]="true"
             [getter]="queryService.queryAbilityCallback"
             (selectEvent)="abilitySelectEvent($event)"
-            (removeSelectedEvent)="abilityRemoveSelectedEvent($event)"
             class="smart-input-wrapper"
             ></app-smart-input>
           </ng-container>
@@ -140,7 +133,6 @@
             [allGetter]="queryService.pokemonAbilitiesCallback"
             [allGetterIndex]="pokemon?.dexNumber"
             (selectEvent)="abilitySelectEvent($event)"
-            (removeSelectedEvent)="abilityRemoveSelectedEvent($event)"
             class="smart-input-wrapper"
             ></app-smart-input>
           </ng-template>
@@ -154,7 +146,6 @@
         [getter]="queryService.queryNatureCallback"
         [allGetter]="queryService.naturesAllCallback"
         (selectEvent)="natureSelectEvent($event)"
-        (removeSelectedEvent)="natureRemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
@@ -166,7 +157,6 @@
         [getter]="queryService.queryTeratypeCallback"
         [allGetter]="queryService.teraTypesAllCallback"
         (selectEvent)="teraTypeSelectEvent($event)"
-        (removeSelectedEvent)="teraTypeRemoveSelectedEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>

@@ -1,56 +1,49 @@
 $optionHeight: 3vh;
 $optionsMaxHeight: 25vh;
 
-
 .smart-input
 {
-  padding: 0.4vw;
+  //padding: 0.2vw;
   position: relative;
-  width: inherit;
-  max-width: inherit;
-  
-  .item
-  {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4vw;
-  }
-
-  .input
-  {
-    border-radius: 5px;
-    background-color: var(--bg-color-1);
-  }
+  //width: calc(100% - 0.4vw);
+  width: 100%;
 
   .search
   {
     display: flex;
     flex-direction: column;
     gap: 0.4vw;
-    align-items: center;
+    align-items: start;
+    width: 100%;
+    box-sizing:border-box;
+    padding: 0.2vw;
 
-    input
+    .input-wrapper
     {
+      border-radius: 5px;
       color: var(--text-color);
       background-color: var(--bg-color-3);
       border: none;
       height: calc($optionHeight + 0.4vw);
+      width: 100%;
+      padding: 0 0 0 0.2vw;
+      display: flex;
+      align-items: center;
     }
   }
 
+  
   .results
   {
     position: absolute;
-    align-items: center;
-    //left: 100%;
-    //top: 0;
     top: 100%;
-    width: 100%;
-    max-height: 0;
+    width: 98%;
+    max-height: 100%;
+    margin-left: 0.2vw;
     padding: 0.2vw;
-    padding-left: 0.4vw;
+    box-sizing:border-box;
 
-    background-color: var(--bg-color-3);
+    background-color: var(--bg-color-1);
     color: var(--text-color);
     border: 1px solid black;
     border-radius: .25em;
@@ -60,9 +53,8 @@ $optionsMaxHeight: 25vh;
     overflow-y: scroll;
     overflow-x: auto;
     z-index: 3;
-    cursor: pointer;
 
-    transition: all ease-in 0.5s;
+    transition: all ease-in-out 0.5s;
     transition-delay: 0.1s;
   }
 
@@ -76,45 +68,53 @@ $optionsMaxHeight: 25vh;
   {
     display: flex;
     align-items: center;
-    height: 100%;
-    height: $optionHeight;
-    padding: 0.2vw;
+    min-height: calc($optionHeight + 0.4vw);
+    padding: 0 0.2vw 0 0.2vw;
+
     border-radius: .25em;
-
-    .icon
-    {
-      width: 2em;
-      height: 2em;
-      margin-right: 0.4vw;
-    }
-
-    .remove
-    {
-      display: flex;
-      align-items: center;
-      width: 0.8em;
-      height: 0.8em;
-      border-radius: 5px;
-      cursor: pointer;
-      padding: 0.2em;
-  
-      &:hover
-      {
-        background-color: rgb(165, 165, 165);
-      }
-    }
+    cursor: pointer;
+    overflow: hidden;
 
     &:hover
     {
-      background-color: var(--bg-color-2);
+      background-color: var(--bg-color-3);
       color: var(--text-color);
       border-radius: 5px;
     }
   }
+}
 
-  .selected
+.selected
+{
+  background-color: var(--bg-color-3);
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  //padding: 0 0.2vw 0 0.2vw;
+
+  .remove
   {
-    background-color: var(--bg-color-3);
+    display: flex;
+    align-items: center;
+    width: 0.8em;
+    height: 0.8em;
     border-radius: 5px;
+    cursor: pointer;
+    padding: 0.2em;
+    justify-self: end;
+    margin-right: 0.4vw;
+
+    &:hover
+    {
+      background-color: var(--bg-color-2);
+    }
   }
 }
+
+.icon
+{
+  width: 2em;
+  height: 2em;
+  padding-right: 0.2vw;
+}
+

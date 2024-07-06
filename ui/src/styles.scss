@@ -87,11 +87,15 @@ button
 input
 {
   background-color: var(--bg-color-3);
-  border: 1px solid rgba(128, 128, 128, 0.5);
+  color: var(--text-color);
   border-radius: 5px;
   outline: none;     
   height: 1.5em;
   font-size: 1em;
+  border: none;
+  padding-block: 0;
+  padding-inline: 0;
+  width: 100%;
 }
 
 .w-100
@@ -129,6 +133,14 @@ input
   justify-content: space-between;
   align-items: center;
   gap: 0.4vw;
+}
+
+.row-start
+{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+
 }
 
 .row-end
@@ -299,6 +311,7 @@ $arrowSize: 0.4vw;
 
 .custom-scrollbar
 {
+  scrollbar-width: none;
   /* width */
   &::-webkit-scrollbar 
   {
@@ -314,15 +327,15 @@ $arrowSize: 0.4vw;
   /* Handle */
   &::-webkit-scrollbar-thumb 
   {
-    background: var(--bg-color-5);
+    background: var(--bg-color-3);
     border-radius: 5px;
   }
 
   /* Handle on hover */
   &::-webkit-scrollbar-thumb:hover 
   {
-    background: var(--bg-color-5);
-  }
+    
+  }  
 }
 
 /* HTML: <div class="loader"></div> */
@@ -348,6 +361,7 @@ $arrowSize: 0.4vw;
 {
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   .smart-input-top
   {
