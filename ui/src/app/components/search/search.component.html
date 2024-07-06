@@ -7,6 +7,7 @@
         #userInput
         [label]="'Player: '"
         [keepSelected]="true"
+        [allowCustom]="true"
         [getter]="queryService.queryUserCallback"
         class="item smart-input-wrapper"
         ></app-smart-input>
@@ -14,6 +15,7 @@
         #tournamentInput
         [label]="'Tournament: '"
         [keepSelected]="true"
+        [allowCustom]="true"
         [getter]="queryService.queryTournamentCallback"
         class="item smart-input-wrapper"
         ></app-smart-input>

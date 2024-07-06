@@ -18,6 +18,7 @@ $optionsMaxHeight: 25vh;
     box-sizing:border-box;
     padding: 0.2vw;
 
+
     .input-wrapper
     {
       border-radius: 5px;
@@ -26,19 +27,28 @@ $optionsMaxHeight: 25vh;
       border: none;
       height: calc($optionHeight + 0.4vw);
       width: 100%;
-      padding: 0 0 0 0.2vw;
+      padding: 0 0.2vw 0 0.2vw;
+      box-sizing:border-box;
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      
+      .text
+      {
+        overflow-y: hidden;
+        overflow-x: hidden;
+        white-space: nowrap;
+      }
     }
   }
-
   
   .results
   {
     position: absolute;
     top: 100%;
-    width: 98%;
-    max-height: 100%;
+    width: calc(100% - 0.4vw);
+    max-height: 0;
+    //max-height: 100%;
     margin-left: 0.2vw;
     padding: 0.2vw;
     box-sizing:border-box;
@@ -54,8 +64,7 @@ $optionsMaxHeight: 25vh;
     overflow-x: auto;
     z-index: 3;
 
-    transition: all ease-in-out 0.5s;
-    transition-delay: 0.1s;
+    transition: all ease-in-out 0.8s;
   }
 
   .results-visible 
@@ -98,6 +107,8 @@ $optionsMaxHeight: 25vh;
     align-items: center;
     width: 0.8em;
     height: 0.8em;
+    min-width: 0.8em;
+    max-width: 0.8em;
     border-radius: 5px;
     cursor: pointer;
     padding: 0.2em;
@@ -118,3 +129,16 @@ $optionsMaxHeight: 25vh;
   padding-right: 0.2vw;
 }
 
+.divider
+{
+  width: 80%;
+  margin: 0.4vw auto 0.4vw auto;
+  height: 2px;
+  background-color: var(--bg-color-3);
+  border-radius: 5px;
+}
+
+.count
+{
+  margin: 0.2vw auto 0.2vw auto;
+}
