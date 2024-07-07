@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
+import { TeamOptions } from 'src/app/models/teamOptions.model';
 import { TeamService } from 'src/app/services/team.service';
 import { TagColor } from 'src/app/styles/pokemonColors';
 
@@ -13,14 +13,14 @@ export class VgcComponent
 {
   teamService = inject(TeamService);
 
-  editorOptions: EditorOptions = <EditorOptions>{};
+  teamOptions: TeamOptions = <TeamOptions>{};
   pokemons: Pokemon[] = [];
   tagColor?: TagColor = TagColor.orange;
 
   async ngOnInit()
   {
     this.getOptions();
-    console.log("Editor options: ", this.editorOptions);
+    console.log("Editor options: ", this.teamOptions);
   }
 
   receivePokemon($event) 
@@ -36,7 +36,7 @@ export class VgcComponent
 
   getOptions()
   {
-    this.editorOptions = 
+    this.teamOptions = 
     {
       showIVs: false,
       showEVs: false,
@@ -48,7 +48,7 @@ export class VgcComponent
       maxLevel: 0
     }
     /*
-    this.editorOptions = 
+    this.teamOptions = 
     {
       showIVs: true,
       showEVs: true,

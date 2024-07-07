@@ -84,7 +84,7 @@ namespace api.Services
             return movePreview;
         }
 
-        public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, EditorOptionsDTO editorOptions)
+        public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, TeamOptionsDTO editorOptions)
         {
             PokemonDataDTO pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1);
             List<MovePreviewDTO> moves = new List<MovePreviewDTO>()

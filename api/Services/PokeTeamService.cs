@@ -70,7 +70,7 @@ namespace api.Services
             List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
             List<PokemonPreviewDTO> pokemonPreviewDTOs = new List<PokemonPreviewDTO>();
 
-            EditorOptionsDTO editorOptions = JsonSerializer.Deserialize<EditorOptionsDTO?>(team.Options, new JsonSerializerOptions { IncludeFields = false });
+            TeamOptionsDTO editorOptions = JsonSerializer.Deserialize<TeamOptionsDTO?>(team.Options, new JsonSerializerOptions { IncludeFields = false });
 
             foreach (Pokemon pokemon in pokemons)
             {
@@ -81,7 +81,7 @@ namespace api.Services
             {
                 ID = team.Id,
                 Pokemons = pokemonPreviewDTOs,
-                Options = JsonSerializer.Deserialize<EditorOptionsDTO>(team.Options, new JsonSerializerOptions { IncludeFields = false }),
+                Options = JsonSerializer.Deserialize<TeamOptionsDTO>(team.Options, new JsonSerializerOptions { IncludeFields = false }),
                 Player = await GetTeamPlayer(team),
                 Tournament = await _tournamentService.GetTournamentByName(team.TournamentNormalizedName),
                 Regulation = await _regulationService.GetRegulationByIdentifier(team.Regulation),

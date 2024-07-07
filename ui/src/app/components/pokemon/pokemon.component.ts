@@ -1,8 +1,8 @@
 import { Component, inject, Input, SimpleChanges, ViewEncapsulation } from '@angular/core';
-import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Nature } from 'src/app/models/pokemon/nature.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Stat } from 'src/app/models/pokemon/stat.model';
+import { TeamOptions } from 'src/app/models/teamOptions.model';
 import { LinkifierService } from 'src/app/services/linkifier.service';
 import { ParserService } from 'src/app/services/parser.service';
 import { UtilService } from 'src/app/services/util.service';
@@ -31,7 +31,7 @@ export class PokemonComponent
   linkifier = inject(LinkifierService);
 
   @Input() pokemon!: Pokemon;
-  @Input() editorOptions?: EditorOptions;
+  @Input() teamOptions?: TeamOptions;
 
   test: string = "test"
 
@@ -240,9 +240,9 @@ export class PokemonComponent
           value: this.calculateStat(
             stat.value, 
             this.pokemon.level ? this.pokemon.level : 50,
-            this.editorOptions?.showIVs ? this.pokemon.ivs ? this.pokemon.ivs[index].value : 0 : 0,
-            this.editorOptions?.showEVs ? this.pokemon.evs ? this.pokemon.evs[index].value : 0 : 0, 
-            this.editorOptions?.showNature ? this.pokemon.nature ? this.calculatedStats.natures[index].value : 1 : 1,
+            this.teamOptions?.showIVs ? this.pokemon.ivs ? this.pokemon.ivs[index].value : 0 : 0,
+            this.teamOptions?.showEVs ? this.pokemon.evs ? this.pokemon.evs[index].value : 0 : 0, 
+            this.teamOptions?.showNature ? this.pokemon.nature ? this.calculatedStats.natures[index].value : 1 : 1,
             stat.identifier === "hp" ? true : false)
         }
       });
@@ -277,9 +277,9 @@ export class PokemonComponent
           value: this.calculateStat(
             stat.value, 
             this.pokemon.level ? this.pokemon.level : 50,
-            this.editorOptions?.showIVs ? this.pokemon.ivs ? this.pokemon.ivs[index].value : 0 : 0,
-            this.editorOptions?.showEVs ? this.pokemon.evs ? this.pokemon.evs[index].value : 0 : 0, 
-            this.editorOptions?.showNature ? this.pokemon.nature ? this.calculatedStats.natures[index].value : 1 : 1,
+            this.teamOptions?.showIVs ? this.pokemon.ivs ? this.pokemon.ivs[index].value : 0 : 0,
+            this.teamOptions?.showEVs ? this.pokemon.evs ? this.pokemon.evs[index].value : 0 : 0, 
+            this.teamOptions?.showNature ? this.pokemon.nature ? this.calculatedStats.natures[index].value : 1 : 1,
             stat.identifier === "hp" ? true : false)
         }
       });
@@ -349,7 +349,7 @@ export class PokemonComponent
 
   getStatSize(value: number)
   {
-    let maxValue: number = this.editorOptions && this.editorOptions?.maxLevel > 0 ? this.editorOptions?.maxLevel : 700; //the maximun stat value of any pokemons
+    let maxValue: number = this.teamOptions && this.teamOptions?.maxLevel > 0 ? this.teamOptions?.maxLevel : 700; //the maximun stat value of any pokemons
     let maxSize: number = 20; //the maximun allowed size in vw
     return `${value / maxValue * maxSize}vw`;
   }

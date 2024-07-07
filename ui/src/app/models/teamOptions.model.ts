@@ -1,5 +1,5 @@
 
-export interface EditorOptions
+export interface TeamOptions
 {
   showIVs: boolean,
   showEVs: boolean,

@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
-import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Tag } from 'src/app/models/tag.model';
 import { Team } from 'src/app/models/team.model';
+import { TeamOptions } from 'src/app/models/teamOptions.model';
 import { TeamService } from 'src/app/services/team.service';
 import { UserService } from 'src/app/services/user.service';
 import { TopOptionComponent } from '../options/top-option/top-option.component';
@@ -23,7 +23,7 @@ export class TeamEditorComponent
   store = inject(Store);
 
   @Input() pokemons!: Pokemon[];
-  @Input() editorOptions!: EditorOptions;
+  @Input() teamOptions!: TeamOptions;
   @Output() outputTeam = new EventEmitter<Team>();
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
@@ -128,7 +128,7 @@ export class TeamEditorComponent
     {
       id: '',
       pokemons: this.pokemons,
-      options: this.editorOptions,
+      options: this.teamOptions,
       player: "",
       tournament: "",
       regulation: "",
@@ -148,7 +148,7 @@ export class TeamEditorComponent
   //Gets the maximun calculated stat value of all pokemons
   calculateMaxLevel()
   {
-    this.editorOptions.maxLevel = this.teamComponent?.pokemonComponents ? 
+    this.teamOptions.maxLevel = this.teamComponent?.pokemonComponents ? 
       Math.max(...this.teamComponent?.pokemonComponents.map(s => s.calculatedStats?.total ? 
       Math.max(...s.calculatedStats?.total.map(v => v.value)) : 0)) : 0;
   }
@@ -192,7 +192,7 @@ export class TeamEditorComponent
 
   updateTeam(option)
   {
-    this.teamComponent.forceChange(this.editorOptions)
+    this.teamComponent.forceChange(this.teamOptions)
   }
 
 

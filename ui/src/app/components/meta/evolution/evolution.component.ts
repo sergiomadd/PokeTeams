@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
+import { TeamOptions } from 'src/app/models/teamOptions.model';
 
 @Component({
   selector: 'app-evolution',
@@ -11,7 +11,7 @@ export class EvolutionComponent
 {
   @Input() sourcePokemon!: Pokemon;
   @Input() pokemon!: Pokemon;
-  @Input() editorOptions?: EditorOptions;
+  @Input() teamOptions?: TeamOptions;
 
   pokemonSpritePath?: string = '';
 

@@ -1,10 +1,10 @@
 import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { PokemonData } from 'src/app/models/DTOs/pokemonData.dto';
-import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Stat } from 'src/app/models/pokemon/stat.model';
 import { Tag } from 'src/app/models/tag.model';
+import { TeamOptions } from 'src/app/models/teamOptions.model';
 import { PokemonService } from 'src/app/services/pokemon.service';
 import { QueryService } from 'src/app/services/query.service';
 import { TeamService } from 'src/app/services/team.service';
@@ -25,7 +25,7 @@ export class PokemonCreatorComponent
   formBuilder = inject(FormBuilder);
   util = inject(UtilService);
 
-  @Input() editorOptions!: EditorOptions;
+  @Input() teamOptions!: TeamOptions;
   @Output() addPokemonEvent = new EventEmitter<Pokemon>();
 
   @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;

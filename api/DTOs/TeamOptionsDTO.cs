@@ -1,6 +1,6 @@
 ﻿namespace api.DTOs
 {
-    public class EditorOptionsDTO
+    public class TeamOptionsDTO
     {
         public bool ShowIVs { get; set; }
         public bool ShowEVs { get; set; }

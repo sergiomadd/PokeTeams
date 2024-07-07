@@ -7,7 +7,7 @@ namespace api.DTOs
     {
         public string ID { get; set; }
         public List<PokemonDTO> Pokemons { get; set; }
-        public EditorOptionsDTO? Options { get; set; }
+        public TeamOptionsDTO? Options { get; set; }
         public string? Player { get; set; }
         public string? Tournament { get; set; }
         public string? Regulation { get; set; }
@@ -37,7 +37,7 @@ namespace api.DTOs
         {
             ID = id;
             Pokemons = pokemons;
-            Options = JsonSerializer.Deserialize<EditorOptionsDTO>(options, new JsonSerializerOptions { IncludeFields = false });
+            Options = JsonSerializer.Deserialize<TeamOptionsDTO>(options, new JsonSerializerOptions { IncludeFields = false });
             Player = uploaded;
             Tournament = tournament;
             Regulation = regulation;

@@ -1,10 +1,10 @@
 import { Component, inject, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Team } from 'src/app/models/team.model';
+import { TeamOptions } from 'src/app/models/teamOptions.model';
 import { ParserService } from 'src/app/services/parser.service';
+import { UtilService } from 'src/app/services/util.service';
 import { ResultStorageComponent } from '../pieces/result-storage/result-storage.component';
 import { PokemonComponent } from '../pokemon/pokemon.component';
-import { UtilService } from 'src/app/services/util.service';
 
 
 @Component({
@@ -26,7 +26,7 @@ export class TeamComponent
   showAllStats: boolean = false;
   showAllNotes: boolean = false;
   
-  forceChange(options: EditorOptions)
+  forceChange(options: TeamOptions)
   {
     console.log("changing", options)
     this.team!.options = structuredClone(options);
