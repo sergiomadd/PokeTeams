@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
 import { EditorOptions } from 'src/app/models/editorOptions.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Tag } from 'src/app/models/tag.model';
@@ -18,23 +20,20 @@ export class TeamEditorComponent
 {
   teamService = inject(TeamService);
   userService = inject(UserService);
+  store = inject(Store);
 
   @Input() pokemons!: Pokemon[];
   @Input() editorOptions!: EditorOptions;
-
   @Output() outputTeam = new EventEmitter<Team>();
+
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
   @ViewChild(TopOptionComponent) topOptionComponent!: TopOptionComponent;
 
+  loggedUser$ = this.store.select(selectLoggedUser);
   team: Team = <Team>{}
   posts: any;
   paste: string = '';
-
-  customQueryResult: Tag = 
-  {
-    name: "Custom value",
-    identifier: "custom"
-  }
+  logged: boolean = true;
 
   //getters for childs
   @ViewChild('userInput') userInputComponent!: SmartInputComponent;
@@ -45,7 +44,7 @@ export class TeamEditorComponent
         name: u.username,
         identifier: u.username,
         icon: u.picture
-      })).concat([this.customQueryResult]);
+      }));
   }
 
   @ViewChild('tournamentInput') tournamentInputComponent!: SmartInputComponent;
@@ -81,9 +80,33 @@ export class TeamEditorComponent
       }));
   }
 
+  playerUpdateEvent(event: string)
+  {
+    this.team.player = event;
+  }
+
+  tournamentSelectEvent(event: Tag)
+  {
+    console.log("selectiing")
+    this.team.tournament = event ? event.name : undefined;
+  }
+
+  regulationSelectEvent(event: Tag)
+  {
+    this.team.regulation = event ? event.identifier : undefined;
+  }
+
+  tagSelectEvent(event: Tag)
+  {
+    //this.team.player = event ? event.name : undefined;
+  }
+
   async ngOnInit() 
   {
-
+    if(this.loggedUser$)
+    {
+      this.loggedUser$.subscribe();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges)
@@ -106,28 +129,20 @@ export class TeamEditorComponent
       id: '',
       pokemons: this.pokemons,
       options: this.editorOptions,
-      //player: this.topOptionComponent.detailsForm.controls.player.value != null ? this.topOptionComponent.detailsForm.controls.player.value : '',
-      //player: this.userInputComponent.result?.name ?? '',
-      tournament: '',
-      regulation: '',
+      player: "",
+      tournament: "",
+      regulation: "",
       viewCount: 0,
       visibility: true,
       tags: this.topOptionComponent?.tags
     }
-    //this.userInputComponent.
-    
-    this.topOptionComponent?.detailsForm.valueChanges.subscribe((value) => 
-    {
-      console.log(value)
-      this.team.player = value.player ?? undefined;
-      this.team.tournament = value.tournament ?? undefined;
-      this.team.regulation = value.regulation ?? undefined;
-    });
+    /*
     this.topOptionComponent?.tags$.subscribe((value) => 
     {
       console.log("TAgs",value)
       this.team.tags = value;
     });
+    */
   }
 
   //Gets the maximun calculated stat value of all pokemons
@@ -143,6 +158,7 @@ export class TeamEditorComponent
     if(this.pokemons.length > 0 && this.pokemons.length <= 6)
     {
       console.log("Generating team: ", this.team);
+      /*
       this.teamService.saveTeam(this.team).subscribe(
         {
           next: (response) =>
@@ -158,7 +174,7 @@ export class TeamEditorComponent
           }
         }
       )
-      
+      */
     }
     else if(this.pokemons.length <= 0)
     {
@@ -178,4 +194,6 @@ export class TeamEditorComponent
   {
     this.teamComponent.forceChange(this.editorOptions)
   }
+
+
 }
