@@ -2,6 +2,7 @@
   <img src="assets/vgc.png">
   <app-input (outPokemon)="receivePokemon($event)" [editorOptions]="editorOptions"></app-input>
   <ng-container *ngIf="pokemons.length > 0">
-    <app-team-editor [pokemons]="pokemons" [editorOptions]="editorOptions"></app-team-editor>
   </ng-container>
+  <app-team-editor [pokemons]="pokemons" [editorOptions]="editorOptions"></app-team-editor>
+
 </div>

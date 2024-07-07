@@ -533,7 +533,7 @@ $padding: 0.2vw;
 
 .stats-wrapper
 {
-  background-color: var(--bg-color-2);
+  background-color: var(--bg-color-3);
   width: 100%;
   border-radius: 0 0 5px 5px;
 
@@ -676,3 +676,8 @@ $padding: 0.2vw;
   font-weight: bold;
 }
 
+.odd-stat
+{
+  //background-color: var(--bg-color-2);
+  //border-radius: 5px;
+}

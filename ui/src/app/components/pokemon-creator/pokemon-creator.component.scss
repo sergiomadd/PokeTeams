@@ -34,16 +34,16 @@
   .form-item
   {
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: flex-end;
     min-height: 8vh;
-    width: inherit;
+    width: 90%;
     //outline: 1px solid black;
   }
 
   .col
   {
-    width: 13vw;
+    width: 10vw;
   }
 
   .stat-selector
