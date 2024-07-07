@@ -454,18 +454,17 @@ namespace api.Services
                         Pp = moves.pp,
                         Accuracy = moves.accuracy,
                         Priority = moves.priority,
-                        Target = new MoveTarget
+                        Target = target != null ? new MoveTarget
                         {
                             Name = target.name,
                             Description = Formatter.FormatProse(target.description)
-                        },
-                        Effect = new MoveEffect
+                        } : null,
+                        Effect = effect != null ? new MoveEffect
                         {
                             Short = Formatter.FormatProse(effect.short_effect, new string[] { moves.effect_chance.ToString() }),
                             Long = Formatter.FormatProse(effect.effect, new string[] { moves.effect_chance.ToString() }),
                             Chance = moves.effect_chance
-                        },
-
+                        } : null,
                         Meta = new Metadata
                         {
                             MinHits = meta.min_hits,
