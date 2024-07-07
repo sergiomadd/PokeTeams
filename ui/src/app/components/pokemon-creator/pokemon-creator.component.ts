@@ -120,115 +120,79 @@ export class PokemonCreatorComponent
 
   async pokemonSelectEvent(event: Tag)
   {
-    const data: PokemonData = await this.pokemonService.getPokemon(event.name);
+    console.log("select pokemon", event)
+    if(event)
+    {
+      const data: PokemonData = await this.pokemonService.getPokemon(event.name);
 
-    this.pokemon.name = event.name;
-    this.pokemon.dexNumber = data.dexNumber;
-    this.pokemon.types = data.types;
-    this.pokemon.sprite = data.sprite;
-    this.pokemon.evolutions = data.evolutions;
-    this.pokemon.preEvolution = data.preEvolution;
-    this.pokemon.stats = data.stats;
-    this.forceChangePokemon();
-    this.pokemonPreviewComponent.showStats[0] = true;
-  }
-  async pokemonRemoveSelectedEvent(event: Tag)
-  {
-    this.pokemon.name = undefined;
-    this.pokemon.dexNumber = undefined;
-    this.pokemon.types = undefined;
-    this.pokemon.sprite = undefined;
-    this.pokemon.evolutions = undefined;
-    this.pokemon.preEvolution = undefined;
-    this.pokemon.stats = undefined;
+      this.pokemon.name = event.name;
+      this.pokemon.dexNumber = data.dexNumber;
+      this.pokemon.types = data.types;
+      this.pokemon.sprite = data.sprite;
+      this.pokemon.evolutions = data.evolutions;
+      this.pokemon.preEvolution = data.preEvolution;
+      this.pokemon.stats = data.stats;
+      this.pokemonPreviewComponent.showStats[0] = true;
+    }
+    else
+    {
+      this.pokemon.name = undefined;
+      this.pokemon.dexNumber = undefined;
+      this.pokemon.types = undefined;
+      this.pokemon.sprite = undefined;
+      this.pokemon.evolutions = undefined;
+      this.pokemon.preEvolution = undefined;
+      this.pokemon.stats = undefined;
+      this.pokemonPreviewComponent.showStats[0] = false;
+    }
     this.forceChangePokemon();
   }
 
   async itemSelectEvent(event: Tag)
   {
-    this.pokemon.item = await this.pokemonService.getItemByName(event.name);
-    this.forceChangePokemon();
-  }
-  async itemRemoveSelectedEvent(event: Tag)
-  {
-    this.pokemon.item = undefined;
+    this.pokemon.item = event ? await this.pokemonService.getItemByName(event.name) : undefined;
     this.forceChangePokemon();
   }
 
   async abilitySelectEvent(event: Tag)
   {
-    this.pokemon.ability = await this.pokemonService.getAbilityByName(event.name);
-    this.forceChangePokemon();
-  }
-  async abilityRemoveSelectedEvent(event: Tag)
-  {
-    this.pokemon.ability = undefined;
+    this.pokemon.ability = event ? await this.pokemonService.getAbilityByName(event.name) : undefined;
     this.forceChangePokemon();
   }
 
   async move1SelectEvent(event: Tag)
   {
-    this.pokemon.moves![0] = await this.pokemonService.getMove(event.name);
-    this.forceChangePokemon();
-  }
-  async move1RemoveSelectedEvent(event: Tag)
-  {
-    this.pokemon.moves![0] = undefined;
+    this.pokemon.moves![0] = event ? await this.pokemonService.getMove(event.name) : undefined;
     this.forceChangePokemon();
   }
 
   async move2SelectEvent(event: Tag)
   {
-    this.pokemon.moves![1] = await this.pokemonService.getMove(event.name);
-    this.forceChangePokemon();
-  }
-  async move2RemoveSelectedEvent(event: Tag)
-  {
-    this.pokemon.moves![1] = undefined;
+    this.pokemon.moves![1] = event ? await this.pokemonService.getMove(event.name) : undefined;
     this.forceChangePokemon();
   }
 
   async move3SelectEvent(event: Tag)
   {
-    this.pokemon.moves![2] = await this.pokemonService.getMove(event.name);
-    this.forceChangePokemon();
-  }
-  async move3RemoveSelectedEvent(event: Tag)
-  {
-    this.pokemon.moves![2] = undefined;
+    this.pokemon.moves![2] = event ? await this.pokemonService.getMove(event.name) : undefined;
     this.forceChangePokemon();
   }
 
   async move4SelectEvent(event: Tag)
   {
-    this.pokemon.moves![3] = await this.pokemonService.getMove(event.name);
-    this.forceChangePokemon();
-  }
-  async move4RemoveSelectedEvent(event: Tag)
-  {
-    this.pokemon.moves![3] = undefined;
+    this.pokemon.moves![3] = event ? await this.pokemonService.getMove(event.name) : undefined;
     this.forceChangePokemon();
   }
 
   async natureSelectEvent(event: Tag)
   {
-    this.pokemon.nature = await this.pokemonService.getNatureByName(event.name);
-    this.forceChangePokemon();
-  }
-  async natureRemoveSelectedEvent(event: Tag)
-  {
-    this.pokemon.nature = undefined;
+    this.pokemon.nature = event ? await this.pokemonService.getNatureByName(event.name) : undefined;
     this.forceChangePokemon();
   }
 
   async teraTypeSelectEvent(event: Tag)
   {
-    this.pokemon.teraType = await this.pokemonService.getType(event.name, true);
-    this.forceChangePokemon();
-  }
-  async teraTypeRemoveSelectedEvent(event: Tag)
-  {
-    this.pokemon.teraType = undefined;
+    this.pokemon.teraType = event ? await this.pokemonService.getType(event.name, true) : undefined;
     this.forceChangePokemon();
   }
 
