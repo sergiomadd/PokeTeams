@@ -19,20 +19,15 @@ $optionsMaxHeight: 25vh;
     padding: 0.2vw;
 
 
-    .input-wrapper
+    .input
     {
-      border-radius: 5px;
-      color: var(--text-color);
-      background-color: var(--bg-color-3);
-      border: none;
       height: calc($optionHeight + 0.4vw);
-      width: 100%;
       padding: 0 0.2vw 0 0.2vw;
-      box-sizing:border-box;
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      
+
       .text
       {
         overflow-y: hidden;

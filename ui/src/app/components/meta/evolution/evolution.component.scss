@@ -11,4 +11,16 @@
     width: 64px;
     height: 64px;
   }
+
+  .types
+  {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .part
+  {
+    padding: 0.1vw;
+  }
 }

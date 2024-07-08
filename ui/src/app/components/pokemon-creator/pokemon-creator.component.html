@@ -5,7 +5,7 @@
       <div class="form-item">
         <app-smart-input
         #pokemonInput
-        [label]="'Pokemon: '"
+        [label]="'Pokemon '"
         [keepSelected]="true"
         [getter]="queryService.queryPokemonCallback"
         (selectEvent)="pokemonSelectEvent($event)"
@@ -15,7 +15,7 @@
       <div class="form-item">
         <app-smart-input
         #userInput
-        [label]="'Move 1: '"
+        [label]="'Move 1 '"
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
         (selectEvent)="move1SelectEvent($event)"
@@ -25,40 +25,37 @@
       <div class="form-item">
         <app-smart-input
         #userInput
-        [label]="'Move 3: '"
+        [label]="'Move 3 '"
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
         (selectEvent)="move3SelectEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
-      <div class="col form-item">
+      <div class="form-item form-item-col">
+        <div class="row">
+          <label for="">Nickname</label>
+          <input type="text" class="nickname" formControlName="nickname">
+        </div>
         <div class="row-center">
           <div class="row">
-            <label for="">Shiny?</label>
-            <input type="checkbox" name="" id="" formControlName="shiny">
+            <label for="">Level</label>
+            <input class="level" formControlName="level">
           </div>
-          <div class="row">
-            <label for="">Level:</label>
-            <input type="number" min="1" max="100" formControlName="level">
-          </div>
+          <app-checkbox
+          [obj]="pokemon"
+          [objSelector]="'shiny'"
+          [label]="'Shiny'"
+          ></app-checkbox>
         </div>
         <div class="row">
-          <label for="">Gender:</label>
-          <fieldset id="group1" class="row check-group">
-            <div class="row check-box">
-              <label>Male</label>
-              <input type="radio" [value]="" formControlName="gender">
-            </div>
-            <div class="row check-box">
-              <label>Female</label>
-              <input type="radio" [value]="'F'" formControlName="gender" class="check-box">
-            </div>
-          </fieldset>
-        </div>
-        <div class="row">
-          <label for="">Nickname:</label>
-          <input type="text" class="input">
+          <app-radio
+          [obj]="pokemon"
+          [objSelector]="'gender'"
+          [options]="['male', 'female']"
+          [optionNames]="['Male', 'Female']"
+          [selected]="0"
+          ></app-radio>
         </div>
       </div>
     </div>
@@ -66,7 +63,7 @@
       <div class="form-item">
         <app-smart-input
         #userInput
-        [label]="'Item: '"
+        [label]="'Item '"
         [keepSelected]="true"
         [getter]="queryService.queryItemCallback"
         (selectEvent)="itemSelectEvent($event)"
@@ -76,7 +73,7 @@
       <div class="form-item">
         <app-smart-input
         #userInput
-        [label]="'Move 2: '"
+        [label]="'Move 2 '"
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
         (selectEvent)="move2SelectEvent($event)"
@@ -86,23 +83,28 @@
       <div class="form-item">
         <app-smart-input
         #userInput
-        [label]="'Move 4: '"
+        [label]="'Move 4 '"
         [keepSelected]="true"
         [getter]="queryService.queryMoveCallback"
         (selectEvent)="move4SelectEvent($event)"
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
-      <div class="form-item">
-        <div class="stat-selector"  [ngClass]="{disabled: !pokemon.name}">
+      <div class="form-item form-item-col">
+        <div class="stat-selector" [ngClass]="{notAllowed: !pokemon.name}">
           <ng-container *ngFor="let stat of pokemon.ivs; index as i">
             <div class="stat-box" (click)="selectStat(i)"
-            [ngClass]="{selectedStat: selectedStat === i}"
+            [ngClass]="{selectedStat: selectedStat === i, disabled: !pokemon.name}"
             >
               {{stat.name}}
             </div>
           </ng-container>
         </div>
+        <ng-container *ngIf="!pokemon.name">
+          <div class="formFeedbackError row-center">
+            Select a pokemon first!
+          </div>
+        </ng-container>
       </div>
     </div>
     <div class="col">
@@ -110,11 +112,14 @@
         <div class="smart-input-wrapper">
           <div class="smart-input-top">
             <div class="smart-input-label">
-              Ability: 
+              Ability
             </div>
-            <div class="row check-box">
-              <input type="checkbox" (click)="allAbilitiesSwitch()">
-              <label>All</label>
+            <div class="checkbox-wrapper">
+              <app-checkbox
+              [option]="allAbilities"
+              [label]="'Show all'"
+              (checkEvent)="allAbilitiesSwitch()"
+              ></app-checkbox>
             </div>
           </div>
           <ng-container *ngIf="allAbilities; else notAllAbilities">
@@ -141,7 +146,7 @@
       <div class="form-item">
         <app-smart-input
         #userInput
-        [label]="'Nature: '"
+        [label]="'Nature '"
         [keepSelected]="true"
         [getter]="queryService.queryNatureCallback"
         [allGetter]="queryService.naturesAllCallback"
@@ -152,7 +157,7 @@
       <div class="form-item">
         <app-smart-input
         #userInput
-        [label]="'Teratype: '"
+        [label]="'Teratype '"
         [keepSelected]="true"
         [getter]="queryService.queryTeratypeCallback"
         [allGetter]="queryService.teraTypesAllCallback"

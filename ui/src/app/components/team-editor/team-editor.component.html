@@ -5,7 +5,7 @@
         <ng-container *ngIf="logged; else notLogged">
           <app-smart-input
           #userInput
-          [label]="'Player: '"
+          [label]="'Player'"
           [logged$]="loggedUser$"
           [updateOnChange]="true"
           (updateEvent)="playerUpdateEvent($event)"
@@ -15,7 +15,7 @@
         <ng-template #notLogged>
           <app-smart-input
           #userInput
-          [label]="'Player: '"
+          [label]="'Player'"
           [updateOnChange]="true"
           (updateEvent)="playerUpdateEvent($event)"
           class="item smart-input-wrapper"
@@ -25,7 +25,7 @@
       <div class="editor-input">
         <app-smart-input
         #tournamentInput
-        [label]="'Tournament: '"
+        [label]="'Tournament'"
         [keepSelected]="true"
         [allowCustom]="true"
         [getter]="queryTournamentCallback"
@@ -36,7 +36,7 @@
       <div class="editor-input">
         <app-smart-input
         #regulationInput
-        [label]="'Regulation: '"
+        [label]="'Regulation'"
         [keepSelected]="true"
         [getter]="queryRegulationCallback"
         [allGetter]="regulationAllCallback"
@@ -47,7 +47,7 @@
       <div class="editor-input">
         <app-smart-input
         #regulationInput
-        [label]="'Tags: '"
+        [label]="'Tags'"
         [keepSelected]="false"
         [getter]="queryRegulationCallback"
         (selectEvent)="tagSelectEvent($event)"

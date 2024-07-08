@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-checkbox',
@@ -12,6 +12,7 @@ export class CheckboxComponent
   @Input() objSelector?: string;
   @Input() label?: string;
   @Input() hoverText?: string;
+  @Output() checkEvent = new EventEmitter<boolean>();
   checked: boolean = false;
 
   ngOnChanges()
@@ -29,5 +30,6 @@ export class CheckboxComponent
     {
       this.obj[this.objSelector] = this.checked;
     }
+    this.checkEvent.emit(this.checked);
   }
 }

@@ -5,7 +5,7 @@
       <div class="items">
         <app-smart-input
         #userInput
-        [label]="'Player: '"
+        [label]="'Player'"
         [keepSelected]="true"
         [allowCustom]="true"
         [getter]="queryService.queryUserCallback"
@@ -13,7 +13,7 @@
         ></app-smart-input>
         <app-smart-input
         #tournamentInput
-        [label]="'Tournament: '"
+        [label]="'Tournament'"
         [keepSelected]="true"
         [allowCustom]="true"
         [getter]="queryService.queryTournamentCallback"
@@ -21,7 +21,7 @@
         ></app-smart-input>
         <app-smart-input
         #regulationInput
-        [label]="'Regulation: '"
+        [label]="'Regulation'"
         [keepSelected]="true"
         [getter]="queryService.queryRegulationCallback"
         [allGetter]="queryService.regulationAllCallback"
@@ -32,7 +32,7 @@
       <div class="items">
         <app-smart-input
         #pokemonInput
-        [label]="'Pokemon: '"
+        [label]="'Pokemon'"
         [keepSelected]="false"
         [getter]="queryService.queryPokemonCallback"
         (selectEvent)="pokemonSelectEvent($event)"
@@ -40,7 +40,7 @@
         ></app-smart-input>
         <app-smart-input
         #moveInput
-        [label]="'Move: '"
+        [label]="'Move'"
         [keepSelected]="false"
         [getter]="queryService.queryMoveCallback"
         (selectEvent)="moveSelectEvent($event)"
@@ -48,7 +48,7 @@
         ></app-smart-input>
         <app-smart-input
         #itemInput
-        [label]="'Item: '"
+        [label]="'Item '"
         [keepSelected]="false"
         [getter]="queryService.queryItemCallback"
         (selectEvent)="itemSelectEvent($event)"

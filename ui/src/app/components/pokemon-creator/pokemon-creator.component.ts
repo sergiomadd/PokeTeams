@@ -42,8 +42,9 @@ export class PokemonCreatorComponent
   
   pokemonForm = this.formBuilder.group(
     {
+      nickname: "",
       shiny: [false],
-      gender: [""],
+      gender: ["male"],
       level: [50, [Validators.min(1), Validators.max(100)]],
       ivs: [0],
       evs: [0]
@@ -80,6 +81,11 @@ export class PokemonCreatorComponent
   async ngOnInit()
   {
     this.createEmptyPokemon();
+
+    this.pokemonForm.controls.nickname.valueChanges.subscribe(async (value) => 
+    {
+      this.pokemon.nickname = value ?? undefined;
+    });
 
     this.pokemonForm.controls.shiny.valueChanges.subscribe(async (value) => 
     {
@@ -245,7 +251,7 @@ export class PokemonCreatorComponent
       evs: undefined,
       level: 50,
       shiny: undefined,
-      gender: undefined,
+      gender: "male",
       sprite: undefined,
     }
 

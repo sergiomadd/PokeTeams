@@ -4,21 +4,19 @@
       <label for="">{{label}}</label>
     </ng-container>
     <ng-container *ngIf="!selected; else keep">
-      <div class="input-wrapper">
-        <input 
-        #input
-        type="text" 
-        placeholder="Search..." 
-        formControlName="key"
-        value="result"
-        class="input"
-        (focus)="onFocus()"
-        (blur)="onBlur()"
-        >
-      </div>
+      <input 
+      #input
+      type="text" 
+      placeholder="Search..." 
+      formControlName="key"
+      value="result"
+      class="input"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      >
     </ng-container>
     <ng-template #keep>
-      <div class="input-wrapper selected">
+      <div class="input selected">
         <div class="row-start text">
           <ng-container *ngIf="selected?.icon">
             <img [attr.src]="selected?.icon" alt="" class="icon" fill>
