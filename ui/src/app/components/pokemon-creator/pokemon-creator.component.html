@@ -4,7 +4,7 @@
     <div class="col">
       <div class="form-item">
         <app-smart-input
-        #pokemonInput
+        #pokemonInput    
         [label]="'Pokemon '"
         [keepSelected]="true"
         [getter]="queryService.queryPokemonCallback"
@@ -63,6 +63,7 @@
       <div class="form-item">
         <app-smart-input
         #userInput
+        [value]="pokemons[selectedPokemonIndex].item"
         [label]="'Item '"
         [keepSelected]="true"
         [getter]="queryService.queryItemCallback"
@@ -168,23 +169,38 @@
       <div class="form-item  col">
         <div>
           <label for="">IVs </label>
-          <input type="range" min="0" max="31" value="{{pokemon.ivs![selectedStat].value}}" 
+          <input type="range" min="0" max="31" value="{{pokemon.ivs ? pokemon.ivs[selectedStat].value : ''}}" 
           class="slider" id="myRange"
           formControlName="ivs">
-          <label for="">{{pokemon.ivs![selectedStat].value}}</label>
+          <label for="">{{pokemon.ivs ? pokemon.ivs[selectedStat].value : ''}}</label>
         </div>
         <div>
           <label for="">EVs {{remainingEVs}}</label>
-          <input type="range" min="0" max="{{currentMaxEVs}}" value="{{pokemon.evs![selectedStat].value}}" 
+          <input type="range" min="0" max="{{currentMaxEVs}}" value="{{pokemon.evs ? pokemon.evs[selectedStat].value : ''}}" 
           class="slider" id="myRange"
           formControlName="evs">
-          <label for="">{{pokemon.evs![selectedStat].value}}</label>
+          <label for="">{{pokemon.evs ? pokemon.evs[selectedStat].value : ''}}</label>
         </div>
       </div>
     </div>
   </form>
   <div class="preview">
-    <app-pokemon [pokemon]="pokemon" [teamOptions]="teamOptions" ></app-pokemon>
-    <button (click)="addPokemon()" class="add button-primary">Add Pokemon</button>
+    <div class="selectors">
+      <ng-container *ngFor="let pokemon of pokemons; index as i">
+        <div 
+        class="selector"
+        [ngClass]="{selected: selectedPokemonIndex == i}"
+        (click)="selectPokemon(i)"
+        >
+          {{i + 1}}
+        </div>
+      </ng-container>
+      <ng-container *ngIf="pokemons.length < 6">
+        <div class="selector" (click)="addEmptyPokemon()">
+          +
+        </div>
+      </ng-container>
+    </div>
+    <app-pokemon [pokemon]="pokemons[selectedPokemonIndex]" [teamOptions]="teamOptions" ></app-pokemon>
   </div>
 </div>

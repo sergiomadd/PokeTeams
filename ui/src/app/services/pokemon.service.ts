@@ -53,9 +53,9 @@ export class PokemonService
         pokemon.name = pokemonData.status == "fulfilled" ? pokemonData.value?.name : '';
         pokemon.dexNumber = pokemonData.status == "fulfilled" ? pokemonData.value?.dexNumber : 0;
         pokemon.preEvolution = pokemonData.status == "fulfilled" ? pokemonData.value?.preEvolution : undefined;
-        pokemon.evolutions = pokemonData.status == "fulfilled" ? pokemonData.value?.evolutions : undefined;
+        pokemon.evolutions = pokemonData.status == "fulfilled" ? pokemonData.value?.evolutions ?? [] : [];
         pokemon.types = pokemonData.status == "fulfilled" ? pokemonData.value?.types : undefined;
-        pokemon.stats = pokemonData.status == "fulfilled" ? pokemonData.value?.stats : [];
+        pokemon.stats = pokemonData.status == "fulfilled" ? pokemonData.value?.stats ?? [] : [];
         pokemon.sprite = pokemonData.status == "fulfilled" ? pokemonData.value?.sprite : undefined;
         pokemon.nickname = pokePaste.nickname;
         pokemon.level = pokePaste.level ? pokePaste.level : 50;
@@ -65,9 +65,9 @@ export class PokemonService
         pokemon.item = itemPromise.status == "fulfilled" ? itemPromise.value : undefined; 
         pokemon.ability = abilityPromise.status == "fulfilled" ? abilityPromise.value : undefined; 
         pokemon.nature = naturePromise.status == "fulfilled" ? naturePromise.value : undefined; 
-        pokemon.moves = movesPromise.status == "fulfilled" ? movesPromise.value : undefined; 
-        pokemon.ivs = ivsPromise.status == "fulfilled" ? ivsPromise.value : undefined; 
-        pokemon.evs = evsPromise.status == "fulfilled" ? evsPromise.value : undefined; 
+        pokemon.moves = movesPromise.status == "fulfilled" ? movesPromise.value ?? [] : []; 
+        pokemon.ivs = ivsPromise.status == "fulfilled" ? ivsPromise.value ?? [] : []; 
+        pokemon.evs = evsPromise.status == "fulfilled" ? evsPromise.value ?? [] : []; 
       });
     } 
     catch (error) 

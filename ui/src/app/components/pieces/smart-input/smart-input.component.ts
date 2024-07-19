@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Tag } from 'src/app/models/tag.model';
@@ -14,6 +14,7 @@ export class SmartInputComponent
 {
   formBuilder = inject(FormBuilder);
 
+  @Input() value?: Tag;
   @Input() label?: string;
   @Input() logged$?: Observable<User | null | undefined>;
   @Input() keepSelected?: boolean;
@@ -97,13 +98,20 @@ export class SmartInputComponent
     });
   }
 
+  ngOnChanges(changes: SimpleChanges)
+  {
+    if(changes["value"])
+    {
+      this.selected = this.value;
+    }
+  }
+
   async search(key: string)
   {
     this.customQueryResult.name = key;
     this.customQueryResult.identifier = "custom";
     if(this.getter)
     {
-      console.log("Searching", key)
       this.showOptions = true;
       if(this.allowCustom)
       {
@@ -155,7 +163,6 @@ export class SmartInputComponent
       }
       this.showOptions = true;
     }
-    console.log(this.searchForm.controls.key.value)
   }
 
   onBlur()

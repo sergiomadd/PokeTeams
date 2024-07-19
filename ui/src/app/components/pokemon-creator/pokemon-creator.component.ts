@@ -26,19 +26,15 @@ export class PokemonCreatorComponent
   util = inject(UtilService);
 
   @Input() teamOptions!: TeamOptions;
+  @Input() pokemons!: Pokemon[];
   @Output() addPokemonEvent = new EventEmitter<Pokemon>();
 
   @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;
   @ViewChild(PokemonComponent) pokemonPreviewComponent!: PokemonComponent;
 
   pokemon: Pokemon = <Pokemon>{};
+  selectedPokemonIndex: number = 0;
   allAbilities: boolean = false;
-
-  allAbilitiesSwitch() 
-  { 
-    this.allAbilities = !this.allAbilities;
-    this.pokemon.ability = undefined;
-  }
   
   pokemonForm = this.formBuilder.group(
     {
@@ -65,23 +61,10 @@ export class PokemonCreatorComponent
   ivs: boolean = false;
   remainingEVs: number = 510;
 
-  calculateAvailableEVs()
-  {
-    this.remainingEVs -= this.currentEVs;
-    if(this.remainingEVs > 252) 
-    {
-      this.currentMaxEVs = 252;
-    }
-    else
-    {
-      this.currentMaxEVs = this.remainingEVs;
-    }
-  }
-
   async ngOnInit()
   {
-    this.createEmptyPokemon();
-
+    this.addEmptyPokemon();
+    this.pokemon = this.pokemons[this.selectedPokemonIndex];
     this.pokemonForm.controls.nickname.valueChanges.subscribe(async (value) => 
     {
       this.pokemon.nickname = value ?? undefined;
@@ -124,13 +107,45 @@ export class PokemonCreatorComponent
     });
   }
 
+  addEmptyPokemon()
+  {
+    this.pokemons.push(this.createEmptyPokemon());
+  }
+
+  selectPokemon(index: number)
+  {
+    this.selectedPokemonIndex = index;
+    this.pokemon = this.pokemons[index];
+    console.log("currently selected pokemon: ", this.pokemons[this.selectedPokemonIndex])
+  }
+
+  allAbilitiesSwitch() 
+  { 
+    this.allAbilities = !this.allAbilities;
+    this.pokemon.ability = undefined;
+  }
+
+  calculateAvailableEVs()
+  {
+    this.remainingEVs -= this.currentEVs;
+    if(this.remainingEVs > 252) 
+    {
+      this.currentMaxEVs = 252;
+    }
+    else
+    {
+      this.currentMaxEVs = this.remainingEVs;
+    }
+  }
+
   async pokemonSelectEvent(event: Tag)
   {
     console.log("select pokemon", event)
+    console.log("index", this.selectedPokemonIndex)
+    console.log("current pokemon in select event", this.pokemon)
     if(event)
     {
       const data: PokemonData = await this.pokemonService.getPokemon(event.name);
-
       this.pokemon.name = event.name;
       this.pokemon.dexNumber = data.dexNumber;
       this.pokemon.types = data.types;
@@ -146,12 +161,13 @@ export class PokemonCreatorComponent
       this.pokemon.dexNumber = undefined;
       this.pokemon.types = undefined;
       this.pokemon.sprite = undefined;
-      this.pokemon.evolutions = undefined;
+      this.pokemon.evolutions = [];
       this.pokemon.preEvolution = undefined;
-      this.pokemon.stats = undefined;
+      this.pokemon.stats = [];
       this.pokemonPreviewComponent.showStats[0] = false;
     }
     this.forceChangePokemon();
+    console.log("later pokemon in select event", this.pokemon)
   }
 
   async itemSelectEvent(event: Tag)
@@ -168,25 +184,26 @@ export class PokemonCreatorComponent
 
   async move1SelectEvent(event: Tag)
   {
-    this.pokemon.moves![0] = event ? await this.pokemonService.getMove(event.name) : undefined;
+    console.log(this.pokemon)
+    this.pokemon.moves[0] = event ? await this.pokemonService.getMove(event.name) : undefined;
     this.forceChangePokemon();
   }
 
   async move2SelectEvent(event: Tag)
   {
-    this.pokemon.moves![1] = event ? await this.pokemonService.getMove(event.name) : undefined;
+    this.pokemon.moves[1] = event ? await this.pokemonService.getMove(event.name) : undefined;
     this.forceChangePokemon();
   }
 
   async move3SelectEvent(event: Tag)
   {
-    this.pokemon.moves![2] = event ? await this.pokemonService.getMove(event.name) : undefined;
+    this.pokemon.moves[2] = event ? await this.pokemonService.getMove(event.name) : undefined;
     this.forceChangePokemon();
   }
 
   async move4SelectEvent(event: Tag)
   {
-    this.pokemon.moves![3] = event ? await this.pokemonService.getMove(event.name) : undefined;
+    this.pokemon.moves[3] = event ? await this.pokemonService.getMove(event.name) : undefined;
     this.forceChangePokemon();
   }
 
@@ -205,6 +222,7 @@ export class PokemonCreatorComponent
   forceChangePokemon()
   {
     this.pokemon = structuredClone(this.pokemon);
+    this.pokemons[this.selectedPokemonIndex] = this.pokemon;
   }
 
   addPokemon()
@@ -230,96 +248,93 @@ export class PokemonCreatorComponent
     }
   }
 
-  createEmptyPokemon()
+  createEmptyPokemon(): Pokemon
   {
-    this.pokemon;
-    this.pokemon = 
+    let pokemon: Pokemon = 
     {
       name: "",
       nickname: undefined,
       dexNumber: undefined,
       preEvolution: undefined,
-      evolutions: undefined,
+      evolutions: [],
       types: undefined,
       teraType: undefined,
       item: undefined,
       ability: undefined,
       nature: undefined,
-      moves: [],
-      stats: undefined,
-      ivs: undefined,
-      evs: undefined,
+      moves: [undefined, undefined, undefined, undefined],
+      stats: [],
+      ivs:     
+      [
+        {
+          name: "HP",
+          identifier: "hp",
+          value: 0
+        },
+        {
+          name: "Atk",
+          identifier: "attack",
+          value: 0
+        },
+        {
+          name: "Def",
+          identifier: "defense",
+          value: 0
+        },
+        {
+          name: "SpA",
+          identifier: "special-attack",
+          value: 0
+        },
+        {
+          name: "SpD",
+          identifier: "special-defense",
+          value: 0
+        },
+        {
+          name: "Spe",
+          identifier: "speed",
+          value: 0
+        }
+      ],
+      evs: 
+      [
+        {
+          name: "HP",
+          identifier: "hp",
+          value: 0
+        },
+        {
+          name: "Atk",
+          identifier: "attack",
+          value: 0
+        },
+        {
+          name: "Def",
+          identifier: "defense",
+          value: 0
+        },
+        {
+          name: "SpA",
+          identifier: "special-attack",
+          value: 0
+        },
+        {
+          name: "SpD",
+          identifier: "special-defense",
+          value: 0
+        },
+        {
+          name: "Spe",
+          identifier: "speed",
+          value: 0
+        }
+      ],
       level: 50,
       shiny: undefined,
       gender: "male",
       sprite: undefined,
     }
-
-    this.pokemon.ivs = 
-    [
-      {
-        name: "HP",
-        identifier: "hp",
-        value: 0
-      },
-      {
-        name: "Atk",
-        identifier: "attack",
-        value: 0
-      },
-      {
-        name: "Def",
-        identifier: "defense",
-        value: 0
-      },
-      {
-        name: "SpA",
-        identifier: "special-attack",
-        value: 0
-      },
-      {
-        name: "SpD",
-        identifier: "special-defense",
-        value: 0
-      },
-      {
-        name: "Spe",
-        identifier: "speed",
-        value: 0
-      }
-    ];
-    this.pokemon.evs = 
-    [
-      {
-        name: "HP",
-        identifier: "hp",
-        value: 0
-      },
-      {
-        name: "Atk",
-        identifier: "attack",
-        value: 0
-      },
-      {
-        name: "Def",
-        identifier: "defense",
-        value: 0
-      },
-      {
-        name: "SpA",
-        identifier: "special-attack",
-        value: 0
-      },
-      {
-        name: "SpD",
-        identifier: "special-defense",
-        value: 0
-      },
-      {
-        name: "Spe",
-        identifier: "speed",
-        value: 0
-      }
-    ];
+    return pokemon;
   }
 }

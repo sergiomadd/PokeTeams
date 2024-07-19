@@ -78,14 +78,18 @@ export class PokemonComponent
     }
     if(changes['pokemon'])
     {
+      console.log(this.pokemon)
+      console.log("pokemon changes", changes)
+      this.pokemon = changes['pokemon'].currentValue;
       this.configurePokemon();
+      console.log(this.pokemon)
     }
   }
 
   configurePokemon()
   {
-    this.loadSprite()
-    this.calculateStats()
+    this.loadSprite();
+    this.calculateStats();
     this.linkify();
   }  
 
@@ -205,6 +209,7 @@ export class PokemonComponent
   //stats
   calculateStats()
   {
+    console.log("calculating stats")
     if(this.pokemon.stats)
     {
       this.pokemon.stats.forEach((stat, index) => 

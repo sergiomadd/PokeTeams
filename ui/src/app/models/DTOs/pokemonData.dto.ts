@@ -8,9 +8,9 @@ export interface PokemonData
   name?: string,
   dexNumber?: number,
   preEvolution?: Pokemon,
-	evolutions?: Pokemon[],
+	evolutions: Pokemon[],
   types?: TypesWithEffectiveness,
-  stats?: Stat[],
+  stats: Stat[],
   sprite?: Sprite
 }
 
