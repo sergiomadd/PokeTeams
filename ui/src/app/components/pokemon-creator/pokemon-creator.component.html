@@ -166,20 +166,30 @@
         class="smart-input-wrapper"
         ></app-smart-input>
       </div>
-      <div class="form-item  col">
-        <div>
-          <label for="">IVs </label>
-          <input type="range" min="0" max="31" value="{{pokemon.ivs ? pokemon.ivs[selectedStat].value : ''}}" 
-          class="slider" id="myRange"
-          formControlName="ivs">
-          <label for="">{{pokemon.ivs ? pokemon.ivs[selectedStat].value : ''}}</label>
+      <div class="form-item col-center">
+        <div class="range">
+          <label for="">IV</label>
+          <div class="range-slider">
+            <input type="range" min="0" max="31" 
+            value="{{pokemon.ivs ? pokemon.ivs[selectedStat].value : ''}}" 
+            class="slider" id="myRange" formControlName="ivs" [ngStyle]="{background: ivSliders[this.selectedStat]}">
+          </div>
+          <input class="level" formControlName="ivs"
+          value="{{pokemon.ivs ? pokemon.ivs[selectedStat].value : ''}}">
         </div>
-        <div>
-          <label for="">EVs {{remainingEVs}}</label>
-          <input type="range" min="0" max="{{currentMaxEVs}}" value="{{pokemon.evs ? pokemon.evs[selectedStat].value : ''}}" 
-          class="slider" id="myRange"
+        <div class="range">
+          <label for="">EV</label>
+          <div class="range-slider">
+            <input type="range" min="0" max="{{currentMaxEVs}}" 
+            value="{{pokemon.evs ? pokemon.evs[selectedStat].value : ''}}" 
+            class="slider" id="myRange" formControlName="evs" [ngStyle]="{background: evSliders[this.selectedStat]}">
+          </div>
+          <input class="level" 
+          value="{{pokemon.evs ? pokemon.evs[selectedStat].value : ''}}"
           formControlName="evs">
-          <label for="">{{pokemon.evs ? pokemon.evs[selectedStat].value : ''}}</label>
+        </div>
+        <div class="row-center">
+          Remaining EVs: {{remainingEVs}}
         </div>
       </div>
     </div>

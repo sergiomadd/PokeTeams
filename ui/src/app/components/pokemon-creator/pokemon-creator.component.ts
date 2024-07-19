@@ -60,6 +60,8 @@ export class PokemonCreatorComponent
   usedEVs: number = 0;
   ivs: boolean = false;
   remainingEVs: number = 510;
+  ivSliders: string[] = [];
+  evSliders: string[] = [];
 
   async ngOnInit()
   {
@@ -93,6 +95,7 @@ export class PokemonCreatorComponent
       {
         this.currentIVs = value;
         this.pokemon.ivs![this.selectedStat].value = value
+        this.calcIVSliderBackground(value, 0, 31);
         this.forceChangePokemon();
       }
     });
@@ -102,9 +105,22 @@ export class PokemonCreatorComponent
       {
         this.currentEVs = value;
         this.pokemon.evs![this.selectedStat].value = value
+        this.calcEVSliderBackground(value, 0, this.currentMaxEVs);
         this.forceChangePokemon();
       }
     });
+  }
+
+  calcIVSliderBackground(currentValue, min, max)
+  {
+    var value = (currentValue-min)/(max-min)*100
+    this.ivSliders[this.selectedStat] = 'linear-gradient(to right, lightblue 0%, lightblue ' + value + '%, var(--bg-color-2) ' + value + '%, var(--bg-color-2) 100%)'
+  }
+
+  calcEVSliderBackground(currentValue, min, max)
+  {
+    var value = (currentValue-min)/(max-min)*100
+    this.evSliders[this.selectedStat] = 'linear-gradient(to right, gold 0%, gold ' + value + '%, var(--bg-color-2) ' + value + '%, var(--bg-color-2) 100%)'
   }
 
   addEmptyPokemon()
