@@ -43,14 +43,14 @@
             <input class="level" formControlName="level">
           </div>
           <app-checkbox
-          [obj]="pokemon"
+          [obj]="this.pokemons[this.selectedPokemonIndex]"
           [objSelector]="'shiny'"
           [label]="'Shiny'"
           ></app-checkbox>
         </div>
         <div class="row">
           <app-radio
-          [obj]="pokemon"
+          [obj]="this.pokemons[this.selectedPokemonIndex]"
           [objSelector]="'gender'"
           [options]="['male', 'female']"
           [optionNames]="['Male', 'Female']"
@@ -92,16 +92,16 @@
         ></app-smart-input>
       </div>
       <div class="form-item form-item-col">
-        <div class="stat-selector" [ngClass]="{notAllowed: !pokemon.name}">
-          <ng-container *ngFor="let stat of pokemon.ivs; index as i">
+        <div class="stat-selector" [ngClass]="{notAllowed: !this.pokemons[this.selectedPokemonIndex].name}">
+          <ng-container *ngFor="let stat of this.pokemons[this.selectedPokemonIndex].ivs; index as i">
             <div class="stat-box" (click)="selectStat(i)"
-            [ngClass]="{selectedStat: selectedStat === i, disabled: !pokemon.name}"
+            [ngClass]="{selectedStat: selectedStat === i, disabled: !this.pokemons[this.selectedPokemonIndex].name}"
             >
               {{stat.name}}
             </div>
           </ng-container>
         </div>
-        <ng-container *ngIf="!pokemon.name">
+        <ng-container *ngIf="!this.pokemons[this.selectedPokemonIndex].name">
           <div class="formFeedbackError row-center">
             Select a pokemon first!
           </div>
@@ -137,7 +137,7 @@
             #userInput
             [keepSelected]="true"
             [allGetter]="queryService.pokemonAbilitiesCallback"
-            [allGetterIndex]="pokemon?.dexNumber"
+            [allGetterIndex]="this.pokemons[this.selectedPokemonIndex]?.dexNumber"
             (selectEvent)="abilitySelectEvent($event)"
             class="smart-input-wrapper"
             ></app-smart-input>
@@ -171,21 +171,21 @@
           <label for="">IV</label>
           <div class="range-slider">
             <input type="range" min="0" max="31" 
-            value="{{pokemon.ivs ? pokemon.ivs[selectedStat].value : ''}}" 
+            value="{{this.pokemons[this.selectedPokemonIndex].ivs ? this.pokemons[this.selectedPokemonIndex].ivs[selectedStat].value : ''}}" 
             class="slider" id="myRange" formControlName="ivs" [ngStyle]="{background: ivSliders[this.selectedStat]}">
           </div>
           <input class="level" formControlName="ivs"
-          value="{{pokemon.ivs ? pokemon.ivs[selectedStat].value : ''}}">
+          value="{{this.pokemons[this.selectedPokemonIndex].ivs ? this.pokemons[this.selectedPokemonIndex].ivs[selectedStat].value : ''}}">
         </div>
         <div class="range">
           <label for="">EV</label>
           <div class="range-slider">
             <input type="range" min="0" max="{{currentMaxEVs}}" 
-            value="{{pokemon.evs ? pokemon.evs[selectedStat].value : ''}}" 
+            value="{{this.pokemons[this.selectedPokemonIndex].evs ? this.pokemons[this.selectedPokemonIndex].evs[selectedStat].value : ''}}" 
             class="slider" id="myRange" formControlName="evs" [ngStyle]="{background: evSliders[this.selectedStat]}">
           </div>
           <input class="level" 
-          value="{{pokemon.evs ? pokemon.evs[selectedStat].value : ''}}"
+          value="{{this.pokemons[this.selectedPokemonIndex].evs ? this.pokemons[this.selectedPokemonIndex].evs[selectedStat].value : ''}}"
           formControlName="evs">
         </div>
         <div class="row-center">

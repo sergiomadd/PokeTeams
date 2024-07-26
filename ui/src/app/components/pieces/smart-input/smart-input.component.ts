@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, inject, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, inject, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Tag } from 'src/app/models/tag.model';
@@ -7,7 +7,8 @@ import { User } from 'src/app/models/user.model';
 @Component({
   selector: 'app-smart-input',
   templateUrl: './smart-input.component.html',
-  styleUrl: './smart-input.component.scss'
+  styleUrl: './smart-input.component.scss',
+  changeDetection: ChangeDetectionStrategy.Default
 })
 
 export class SmartInputComponent 
@@ -79,14 +80,18 @@ export class SmartInputComponent
     }
     this.searchForm.controls.key.valueChanges.subscribe(async (value) => 
     {
+      console.log(value)
       if(value)
       {
         if(this.updateOnChange)
         {
+          console.log("updating")
           this.updateEvent.emit(value);
         }
         else
         {
+          console.log("searchin")
+
           await this.search(value);
         }
       }
@@ -102,6 +107,7 @@ export class SmartInputComponent
   {
     if(changes["value"])
     {
+      console.log("sleected changes")
       this.selected = this.value;
     }
   }
@@ -112,6 +118,7 @@ export class SmartInputComponent
     this.customQueryResult.identifier = "custom";
     if(this.getter)
     {
+      console.log("getting")
       this.showOptions = true;
       if(this.allowCustom)
       {
@@ -120,6 +127,7 @@ export class SmartInputComponent
       else
       {
         this.results = await this.getter(key);
+        console.log(this.showOptions)
       }
     }
   }
@@ -147,8 +155,10 @@ export class SmartInputComponent
 
   async onFocus()
   {
+    console.log(this.updateOnChange)
     if(!this.updateOnChange)
     {
+      console.log("entering")
       if(this.allGetter)
       {
         this.showOptions = true;
@@ -161,7 +171,8 @@ export class SmartInputComponent
           this.results = await this.allGetter();
         }
       }
-      this.showOptions = true;
+      console.log(this.results)
+      //this.showOptions = true;
     }
   }
 

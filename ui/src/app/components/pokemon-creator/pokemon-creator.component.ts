@@ -15,7 +15,8 @@ import { PokemonComponent } from '../pokemon/pokemon.component';
 @Component({
   selector: 'app-pokemon-creator',
   templateUrl: './pokemon-creator.component.html',
-  styleUrl: './pokemon-creator.component.scss'
+  styleUrl: './pokemon-creator.component.scss',
+  //this is a problem!!!
 })
 export class PokemonCreatorComponent 
 {
@@ -32,7 +33,6 @@ export class PokemonCreatorComponent
   @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;
   @ViewChild(PokemonComponent) pokemonPreviewComponent!: PokemonComponent;
 
-  pokemon: Pokemon = <Pokemon>{};
   selectedPokemonIndex: number = 0;
   allAbilities: boolean = false;
   
@@ -66,37 +66,42 @@ export class PokemonCreatorComponent
   async ngOnInit()
   {
     this.addEmptyPokemon();
-    this.pokemon = this.pokemons[this.selectedPokemonIndex];
     this.pokemonForm.controls.nickname.valueChanges.subscribe(async (value) => 
     {
-      this.pokemon.nickname = value ?? undefined;
+      this.pokemons[this.selectedPokemonIndex].nickname = value ?? undefined;
     });
 
     this.pokemonForm.controls.shiny.valueChanges.subscribe(async (value) => 
     {
-      this.pokemon.shiny = value ?? false;
+      this.pokemons[this.selectedPokemonIndex].shiny = value ?? false;
     });
 
     this.pokemonForm.controls.level.valueChanges.subscribe(async (value) => 
     {
       if(this.pokemonForm.controls.level.valid)
       {
-        this.pokemon.level = value ?? 50;
+        this.pokemons[this.selectedPokemonIndex].level = value ?? 50;
       }
     });
 
     this.pokemonForm.controls.gender.valueChanges.subscribe(async (value) => 
     {
-      this.pokemon.gender = value ?? undefined;
+      this.pokemons[this.selectedPokemonIndex].gender = value ?? undefined;
     });
     this.pokemonForm.controls.ivs.valueChanges.subscribe(async (value) => 
     {
       if(value)
       {
+        console.log("changing ivs", value)
         this.currentIVs = value;
-        this.pokemon.ivs![this.selectedStat].value = value
+        let ivs = this.pokemons[this.selectedPokemonIndex].ivs;
+        ivs[this.selectedStat].value = value;
+        this.pokemons[this.selectedPokemonIndex] = 
+        { 
+          ...this.pokemons[this.selectedPokemonIndex],
+          ivs: ivs
+        }
         this.calcIVSliderBackground(value, 0, 31);
-        this.forceChangePokemon();
       }
     });
     this.pokemonForm.controls.evs.valueChanges.subscribe(async (value) => 
@@ -104,9 +109,9 @@ export class PokemonCreatorComponent
       if(value)
       {
         this.currentEVs = value;
-        this.pokemon.evs![this.selectedStat].value = value
+        this.pokemons[this.selectedPokemonIndex].evs![this.selectedStat].value = value
         this.calcEVSliderBackground(value, 0, this.currentMaxEVs);
-        this.forceChangePokemon();
+        //this.forceChangePokemon();
       }
     });
   }
@@ -131,14 +136,14 @@ export class PokemonCreatorComponent
   selectPokemon(index: number)
   {
     this.selectedPokemonIndex = index;
-    this.pokemon = this.pokemons[index];
+    this.pokemons[this.selectedPokemonIndex] = this.pokemons[index];
     console.log("currently selected pokemon: ", this.pokemons[this.selectedPokemonIndex])
   }
 
   allAbilitiesSwitch() 
   { 
     this.allAbilities = !this.allAbilities;
-    this.pokemon.ability = undefined;
+    this.pokemons[this.selectedPokemonIndex].ability = undefined;
   }
 
   calculateAvailableEVs()
@@ -156,94 +161,84 @@ export class PokemonCreatorComponent
 
   async pokemonSelectEvent(event: Tag)
   {
-    console.log("select pokemon", event)
-    console.log("index", this.selectedPokemonIndex)
-    console.log("current pokemon in select event", this.pokemon)
     if(event)
     {
       const data: PokemonData = await this.pokemonService.getPokemon(event.name);
-      this.pokemon.name = event.name;
-      this.pokemon.dexNumber = data.dexNumber;
-      this.pokemon.types = data.types;
-      this.pokemon.sprite = data.sprite;
-      this.pokemon.evolutions = data.evolutions;
-      this.pokemon.preEvolution = data.preEvolution;
-      this.pokemon.stats = data.stats;
+      this.pokemons[this.selectedPokemonIndex] = 
+      { 
+        ...this.pokemons[this.selectedPokemonIndex],
+        name: event.name,
+        dexNumber: data.dexNumber,
+        types: data.types,
+        sprite: data.sprite,
+        evolutions: data.evolutions,
+        preEvolution: data.preEvolution,
+        stats: data.stats
+      }
       this.pokemonPreviewComponent.showStats[0] = true;
     }
     else
     {
-      this.pokemon.name = undefined;
-      this.pokemon.dexNumber = undefined;
-      this.pokemon.types = undefined;
-      this.pokemon.sprite = undefined;
-      this.pokemon.evolutions = [];
-      this.pokemon.preEvolution = undefined;
-      this.pokemon.stats = [];
+      this.pokemons[this.selectedPokemonIndex] = 
+      { 
+        ...this.pokemons[this.selectedPokemonIndex],
+        name: undefined,
+        dexNumber: undefined,
+        types: undefined,
+        sprite: undefined,
+        evolutions: [],
+        preEvolution: undefined,
+        stats: []
+      }
       this.pokemonPreviewComponent.showStats[0] = false;
     }
-    this.forceChangePokemon();
-    console.log("later pokemon in select event", this.pokemon)
+    console.log("later pokemon in select event", this.pokemons[this.selectedPokemonIndex])
   }
 
   async itemSelectEvent(event: Tag)
   {
-    this.pokemon.item = event ? await this.pokemonService.getItemByName(event.name) : undefined;
-    this.forceChangePokemon();
+    this.pokemons[this.selectedPokemonIndex].item = event ? await this.pokemonService.getItemByName(event.name) : undefined;
   }
 
   async abilitySelectEvent(event: Tag)
   {
-    this.pokemon.ability = event ? await this.pokemonService.getAbilityByName(event.name) : undefined;
-    this.forceChangePokemon();
+    this.pokemons[this.selectedPokemonIndex] = { ...this.pokemons[this.selectedPokemonIndex], ability: event ? await this.pokemonService.getAbilityByName(event.name) : undefined }
   }
 
   async move1SelectEvent(event: Tag)
   {
-    console.log(this.pokemon)
-    this.pokemon.moves[0] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    this.forceChangePokemon();
+    this.pokemons[this.selectedPokemonIndex].moves[0] = event ? await this.pokemonService.getMove(event.name) : undefined;
   }
 
   async move2SelectEvent(event: Tag)
   {
-    this.pokemon.moves[1] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    this.forceChangePokemon();
+    this.pokemons[this.selectedPokemonIndex].moves[1] = event ? await this.pokemonService.getMove(event.name) : undefined
   }
 
   async move3SelectEvent(event: Tag)
   {
-    this.pokemon.moves[2] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    this.forceChangePokemon();
+    this.pokemons[this.selectedPokemonIndex].moves[2] = event ? await this.pokemonService.getMove(event.name) : undefined
   }
 
   async move4SelectEvent(event: Tag)
   {
-    this.pokemon.moves[3] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    this.forceChangePokemon();
+    this.pokemons[this.selectedPokemonIndex].moves[3] = event ? await this.pokemonService.getMove(event.name) : undefined
   }
 
   async natureSelectEvent(event: Tag)
   {
-    this.pokemon.nature = event ? await this.pokemonService.getNatureByName(event.name) : undefined;
-    this.forceChangePokemon();
+    this.pokemons[this.selectedPokemonIndex].nature = event ? await this.pokemonService.getNatureByName(event.name) : undefined;
   }
 
   async teraTypeSelectEvent(event: Tag)
   {
-    this.pokemon.teraType = event ? await this.pokemonService.getType(event.name, true) : undefined;
-    this.forceChangePokemon();
+    this.pokemons[this.selectedPokemonIndex].teraType = event ? await this.pokemonService.getType(event.name, true) : undefined;
   }
 
-  forceChangePokemon()
-  {
-    this.pokemon = structuredClone(this.pokemon);
-    this.pokemons[this.selectedPokemonIndex] = this.pokemon;
-  }
 
   addPokemon()
   {
-    this.addPokemonEvent.emit(this.pokemon);
+    this.addPokemonEvent.emit(this.pokemons[this.selectedPokemonIndex]);
     this.createEmptyPokemon();
   }
 
@@ -256,9 +251,9 @@ export class PokemonCreatorComponent
     else
     {
       this.selectedStat = index;
-      this.pokemonForm.controls.ivs.setValue(this.pokemon.ivs![index].value);
+      this.pokemonForm.controls.ivs.setValue(this.pokemons[this.selectedPokemonIndex].ivs![index].value);
       this.currentIVs = 0;
-      this.pokemonForm.controls.evs.setValue(this.pokemon.evs![index].value);
+      this.pokemonForm.controls.evs.setValue(this.pokemons[this.selectedPokemonIndex].evs![index].value);
       this.currentEVs = 0;
       this.pokemonPreviewComponent.showStats[0] = true;
     }

@@ -36,6 +36,7 @@ export class VgcComponent
 
   getOptions()
   {
+    /*
     this.teamOptions = 
     {
       showIVs: false,
@@ -47,7 +48,8 @@ export class VgcComponent
       showGenderIcon: true,
       maxLevel: 0
     }
-    /*
+    */
+    
     this.teamOptions = 
     {
       showIVs: true,
@@ -59,6 +61,6 @@ export class VgcComponent
       showGenderIcon: true,
       maxLevel: 0
     }
-    */
+    
   }
 }

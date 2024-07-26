@@ -117,6 +117,7 @@ export class TeamEditorComponent
     }
     if(changes['pokemons'])
     {
+      console.log("pokemon changes in team editor")
       this.team.pokemons = changes['pokemons'].currentValue;
       this.calculateMaxLevel();
     }
@@ -148,6 +149,7 @@ export class TeamEditorComponent
   //Gets the maximun calculated stat value of all pokemons
   calculateMaxLevel()
   {
+    console.log("calculating max level")
     this.teamOptions.maxLevel = this.teamComponent?.pokemonComponents ? 
       Math.max(...this.teamComponent?.pokemonComponents.map(s => s.calculatedStats?.total ? 
       Math.max(...s.calculatedStats?.total.map(v => v.value)) : 0)) : 0;

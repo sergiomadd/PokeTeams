@@ -21,7 +21,7 @@ interface CalculatedStats
   selector: 'app-pokemon',
   templateUrl: './pokemon.component.html',
   styleUrls: ['./pokemon.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 
 export class PokemonComponent 
@@ -72,17 +72,15 @@ export class PokemonComponent
 
   ngOnChanges(changes: SimpleChanges)
   {
+    console.log(changes)
     if(changes['editorOptions'])
     {
       this.configurePokemon();
     }
     if(changes['pokemon'])
     {
-      console.log(this.pokemon)
-      console.log("pokemon changes", changes)
       this.pokemon = changes['pokemon'].currentValue;
       this.configurePokemon();
-      console.log(this.pokemon)
     }
   }
 
@@ -209,7 +207,6 @@ export class PokemonComponent
   //stats
   calculateStats()
   {
-    console.log("calculating stats")
     if(this.pokemon.stats)
     {
       this.pokemon.stats.forEach((stat, index) => 
@@ -354,7 +351,8 @@ export class PokemonComponent
 
   getStatSize(value: number)
   {
-    let maxValue: number = this.teamOptions && this.teamOptions?.maxLevel > 0 ? this.teamOptions?.maxLevel : 700; //the maximun stat value of any pokemons
+    //let maxValue: number = this.teamOptions && this.teamOptions?.maxLevel > 0 ? this.teamOptions?.maxLevel : 700; //the maximun stat value of any pokemons
+    let maxValue: number = 700; //the maximun stat value of any pokemons
     let maxSize: number = 20; //the maximun allowed size in vw
     return `${value / maxValue * maxSize}vw`;
   }
