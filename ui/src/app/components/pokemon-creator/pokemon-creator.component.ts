@@ -29,6 +29,8 @@ export class PokemonCreatorComponent
   @Input() teamOptions!: TeamOptions;
   @Input() pokemons!: Pokemon[];
   @Output() addPokemonEvent = new EventEmitter<Pokemon>();
+  @Output() calculateMaxLvlEvent = new EventEmitter();
+
 
   @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;
   @ViewChild(PokemonComponent) pokemonPreviewComponent!: PokemonComponent;
@@ -173,7 +175,7 @@ export class PokemonCreatorComponent
         sprite: data.sprite,
         evolutions: data.evolutions,
         preEvolution: data.preEvolution,
-        stats: data.stats
+        stats: [...data.stats]
       }
       this.pokemonPreviewComponent.showStats[0] = true;
     }
@@ -193,6 +195,8 @@ export class PokemonCreatorComponent
       this.pokemonPreviewComponent.showStats[0] = false;
     }
     console.log("later pokemon in select event", this.pokemons[this.selectedPokemonIndex])
+    //emit calculate max level event
+    this.calculateMaxLvlEvent.emit();
   }
 
   async itemSelectEvent(event: Tag)

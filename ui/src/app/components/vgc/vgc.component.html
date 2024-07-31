@@ -2,7 +2,9 @@
   <img src="assets/vgc.png">
   <app-input 
   [pokemons]="pokemons"
-  [teamOptions]="teamOptions"></app-input>
+  [teamOptions]="teamOptions"
+  (calculateMaxLvlEvent)="calculateMaxLvl()"
+  ></app-input>
   <ng-container *ngIf="pokemons.length > 0">
   </ng-container>
   <app-team-editor [pokemons]="pokemons" [teamOptions]="teamOptions"></app-team-editor>

@@ -16,12 +16,15 @@ export class InputComponent
   parser = inject(ParserService);
   
   @Input() teamOptions!: TeamOptions;
+  @Input() pokemons!: Pokemon[];
   @Output() outPokemon = new EventEmitter<Pokemon>();
+  @Output() calculateMaxLvlEvent = new EventEmitter();
+
   
   formData;
   pasteHolder: string;
 
-  sections: boolean[] = [true, false];
+  sections: boolean[] = [false, true];
 
   constructor()
   {
@@ -116,8 +119,9 @@ export class InputComponent
     let data = this.parser.parsePaste(formData.paste);
     for (const pokePaste of data.pokemons)
     {
-      this.outPokemon.emit(await this.pokemonService.buildPokemon(pokePaste));
+      this.pokemons.push(await this.pokemonService.buildPokemon(pokePaste));
     };
+    this.calculateMaxLvl();
     //console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
   }
 
@@ -133,5 +137,10 @@ export class InputComponent
       this.sections[i] = false;
     }
     this.sections[index] = true;
+  }
+
+  calculateMaxLvl()
+  {
+    this.calculateMaxLvlEvent.emit();
   }
 }

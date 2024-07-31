@@ -351,8 +351,7 @@ export class PokemonComponent
 
   getStatSize(value: number)
   {
-    //let maxValue: number = this.teamOptions && this.teamOptions?.maxLevel > 0 ? this.teamOptions?.maxLevel : 700; //the maximun stat value of any pokemons
-    let maxValue: number = 700; //the maximun stat value of any pokemons
+    let maxValue: number = this.teamOptions && this.teamOptions?.maxLevel > 0 ? this.teamOptions?.maxLevel : 700; //the maximun stat value of any pokemons
     let maxSize: number = 20; //the maximun allowed size in vw
     return `${value / maxValue * maxSize}vw`;
   }
