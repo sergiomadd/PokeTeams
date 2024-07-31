@@ -2,112 +2,120 @@
 .creator
 {
   display: flex;
+  flex-direction: column;
   gap: 0.8vw;
 
-  .form
+  .selectors
   {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.8vw;
-    justify-content: end;
-  }
-
-  .preview
-  {
-    width: fit-content;
-    height: fit-content;
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-content: flex-start;
-    gap: 1vw;
+    align-items: center;
+    gap: 0.4vw;
 
-    .selectors
+    .selector
     {
+      width: 2vw;
+      height: 2vw;
+
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 0.4vw;
 
-      .selector
-      {
-        width: 2vw;
-        height: 2vw;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        border-radius: 40px;
-        border: 1px solid var(--bg-color-2);
-        cursor: pointer;
-
-        &:hover
-        {
-          background-color: var(--bg-color-3);
-        }
-      }
-
-      .selected
-      {
-        background-color: var(--bg-color-3);
-        border: 1px solid black;
-      }
-    }
-  }
-
-  .form-item
-  {
-    display: flex;
-    justify-content: center;
-    min-height: 8vh;
-    width: 100%;
-    //outline: 1px solid black;
-  }
-
-  .form-item-col
-  {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4vw;
-  }
-
-  .col
-  {
-    width: 10vw;
-  }
-  
-
-  .stat-selector
-  {
-    width: 50%;
-    display: grid;
-    grid-template-columns: 50% 50%;
-    column-gap: 0.4vw;
-    justify-content: center;
-    gap: 0.4vw;
-    margin-bottom: 0.4vw;
-
-    .stat-box
-    {
-      padding: 0.2vw;
-      background-color: var(--bg-color-2);
-      border-radius: 5px;
+      border-radius: 40px;
+      border: 1px solid var(--bg-color-2);
       cursor: pointer;
-      text-align: center;
-      width: 1.5vw;
-      user-select: none;
 
       &:hover
       {
-        outline: 1px black dotted;
+        background-color: var(--bg-color-3);
       }
     }
 
-    .selectedStat
+    .selected
     {
-      background-color: var(--primary);
-      color: white;
+      background-color: var(--bg-color-3);
+      border: 1px solid black;
+    }
+  }
+
+  .editor
+  {
+    display: flex;
+    align-items: center;
+    gap: 0.8vw;
+    
+    .form
+    {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.8vw;
+      justify-content: end;
+    }
+  
+    .preview
+    {
+      width: fit-content;
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-content: flex-start;
+      gap: 1vw;
+    }
+  
+    .form-item
+    {
+      display: flex;
+      justify-content: center;
+      min-height: 8vh;
+      width: 100%;
+      //outline: 1px solid black;
+    }
+  
+    .form-item-col
+    {
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4vw;
+    }
+  
+    .col
+    {
+      width: 10vw;
+    }
+    
+  
+    .stat-selector
+    {
+      width: 50%;
+      display: grid;
+      grid-template-columns: 50% 50%;
+      column-gap: 0.4vw;
+      justify-content: center;
+      gap: 0.4vw;
+      margin-bottom: 0.4vw;
+  
+      .stat-box
+      {
+        padding: 0.2vw;
+        background-color: var(--bg-color-2);
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        width: 1.5vw;
+        user-select: none;
+  
+        &:hover
+        {
+          outline: 1px black dotted;
+        }
+      }
+  
+      .selectedStat
+      {
+        background-color: var(--primary);
+        color: white;
+      }
     }
   }
 }

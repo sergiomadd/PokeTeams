@@ -1,216 +1,219 @@
 
 <div class="creator">
-  <form class="form" [formGroup]="pokemonForm" >
-    <div class="col">
-      <div class="form-item">
-        <app-smart-input
-        #pokemonInput    
-        [label]="'Pokemon '"
-        [keepSelected]="true"
-        [getter]="queryService.queryPokemonCallback"
-        (selectEvent)="pokemonSelectEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
+  <div class="selectors">
+    <ng-container *ngFor="let pokemon of pokemons; index as i">
+      <div 
+      class="selector"
+      [ngClass]="{selected: selectedPokemonIndex == i}"
+      (click)="selectPokemon(i)"
+      >
+        {{i + 1}}
       </div>
-      <div class="form-item">
-        <app-smart-input
-        #userInput
-        [label]="'Move 1 '"
-        [keepSelected]="true"
-        [getter]="queryService.queryMoveCallback"
-        (selectEvent)="move1SelectEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
+    </ng-container>
+    <ng-container *ngIf="pokemons.length < 6">
+      <div class="selector" (click)="addEmptyPokemon()">
+        +
       </div>
-      <div class="form-item">
-        <app-smart-input
-        #userInput
-        [label]="'Move 3 '"
-        [keepSelected]="true"
-        [getter]="queryService.queryMoveCallback"
-        (selectEvent)="move3SelectEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
-      </div>
-      <div class="form-item form-item-col">
-        <div class="row">
-          <label for="">Nickname</label>
-          <input type="text" class="nickname" formControlName="nickname">
-        </div>
-        <div class="row-center">
-          <div class="row">
-            <label for="">Level</label>
-            <input class="level" formControlName="level">
+    </ng-container>
+  </div>
+  <ng-container *ngIf="pokemons.length > 0">
+    <div class="editor">
+      <form class="form" [formGroup]="pokemonForm" >
+        <div class="col">
+          <div class="form-item">
+            <app-smart-input
+            #pokemonInput 
+            [value]="getPokemonTag()"
+            [label]="'Pokemon '"
+            [keepSelected]="true"
+            [getter]="queryService.queryPokemonCallback"
+            (selectEvent)="pokemonSelectEvent($event)"
+            class="smart-input-wrapper"
+            ></app-smart-input>
           </div>
-          <app-checkbox
-          [obj]="this.pokemons[this.selectedPokemonIndex]"
-          [objSelector]="'shiny'"
-          [label]="'Shiny'"
-          ></app-checkbox>
-        </div>
-        <div class="row">
-          <app-radio
-          [obj]="this.pokemons[this.selectedPokemonIndex]"
-          [objSelector]="'gender'"
-          [options]="['male', 'female']"
-          [optionNames]="['Male', 'Female']"
-          [selected]="0"
-          ></app-radio>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="form-item">
-        <app-smart-input
-        #userInput
-        [value]="pokemons[selectedPokemonIndex].item"
-        [label]="'Item '"
-        [keepSelected]="true"
-        [getter]="queryService.queryItemCallback"
-        (selectEvent)="itemSelectEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
-      </div>
-      <div class="form-item">
-        <app-smart-input
-        #userInput
-        [label]="'Move 2 '"
-        [keepSelected]="true"
-        [getter]="queryService.queryMoveCallback"
-        (selectEvent)="move2SelectEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
-      </div>
-      <div class="form-item">
-        <app-smart-input
-        #userInput
-        [label]="'Move 4 '"
-        [keepSelected]="true"
-        [getter]="queryService.queryMoveCallback"
-        (selectEvent)="move4SelectEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
-      </div>
-      <div class="form-item form-item-col">
-        <div class="stat-selector" [ngClass]="{notAllowed: !this.pokemons[this.selectedPokemonIndex].name}">
-          <ng-container *ngFor="let stat of this.pokemons[this.selectedPokemonIndex].ivs; index as i">
-            <div class="stat-box" (click)="selectStat(i)"
-            [ngClass]="{selectedStat: selectedStat === i, disabled: !this.pokemons[this.selectedPokemonIndex].name}"
-            >
-              {{stat.name}}
-            </div>
-          </ng-container>
-        </div>
-        <ng-container *ngIf="!this.pokemons[this.selectedPokemonIndex].name">
-          <div class="formFeedbackError row-center">
-            Select a pokemon first!
+          <div class="form-item">
+            <app-smart-input
+            [label]="'Move 1 '"
+            [keepSelected]="true"
+            [getter]="queryService.queryMoveCallback"
+            (selectEvent)="move1SelectEvent($event)"
+            class="smart-input-wrapper"
+            ></app-smart-input>
           </div>
-        </ng-container>
-      </div>
-    </div>
-    <div class="col">
-      <div class="form-item">
-        <div class="smart-input-wrapper">
-          <div class="smart-input-top">
-            <div class="smart-input-label">
-              Ability
+          <div class="form-item">
+            <app-smart-input
+            [label]="'Move 3 '"
+            [keepSelected]="true"
+            [getter]="queryService.queryMoveCallback"
+            (selectEvent)="move3SelectEvent($event)"
+            class="smart-input-wrapper"
+            ></app-smart-input>
+          </div>
+          <div class="form-item form-item-col">
+            <div class="row">
+              <label for="">Nickname</label>
+              <input type="text" class="nickname" formControlName="nickname">
             </div>
-            <div class="checkbox-wrapper">
+            <div class="row-center">
+              <div class="row">
+                <label for="">Level</label>
+                <input class="level" formControlName="level">
+              </div>
               <app-checkbox
-              [option]="allAbilities"
-              [label]="'Show all'"
-              (checkEvent)="allAbilitiesSwitch()"
+              [obj]="pokemons[selectedPokemonIndex]"
+              [objSelector]="'shiny'"
+              [label]="'Shiny'"
               ></app-checkbox>
             </div>
+            <div class="row">
+              <app-radio
+              [obj]="pokemons[selectedPokemonIndex]"
+              [objSelector]="'gender'"
+              [options]="['male', 'female']"
+              [optionNames]="['Male', 'Female']"
+              [selected]="0"
+              ></app-radio>
+            </div>
           </div>
-          <ng-container *ngIf="allAbilities; else notAllAbilities">
+        </div>
+        <div class="col">
+          <div class="form-item">
             <app-smart-input
             #userInput
+            [value]="pokemons[selectedPokemonIndex].item"
+            [label]="'Item '"
             [keepSelected]="true"
-            [getter]="queryService.queryAbilityCallback"
-            (selectEvent)="abilitySelectEvent($event)"
+            [getter]="queryService.queryItemCallback"
+            (selectEvent)="itemSelectEvent($event)"
             class="smart-input-wrapper"
             ></app-smart-input>
-          </ng-container>
-          <ng-template #notAllAbilities>
+          </div>
+          <div class="form-item">
             <app-smart-input
             #userInput
+            [label]="'Move 2 '"
             [keepSelected]="true"
-            [allGetter]="queryService.pokemonAbilitiesCallback"
-            [allGetterIndex]="this.pokemons[this.selectedPokemonIndex]?.dexNumber"
-            (selectEvent)="abilitySelectEvent($event)"
+            [getter]="queryService.queryMoveCallback"
+            (selectEvent)="move2SelectEvent($event)"
             class="smart-input-wrapper"
             ></app-smart-input>
-          </ng-template>
-        </div>
-      </div>
-      <div class="form-item">
-        <app-smart-input
-        #userInput
-        [label]="'Nature '"
-        [keepSelected]="true"
-        [getter]="queryService.queryNatureCallback"
-        [allGetter]="queryService.naturesAllCallback"
-        (selectEvent)="natureSelectEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
-      </div>
-      <div class="form-item">
-        <app-smart-input
-        #userInput
-        [label]="'Teratype '"
-        [keepSelected]="true"
-        [getter]="queryService.queryTeratypeCallback"
-        [allGetter]="queryService.teraTypesAllCallback"
-        (selectEvent)="teraTypeSelectEvent($event)"
-        class="smart-input-wrapper"
-        ></app-smart-input>
-      </div>
-      <div class="form-item col-center">
-        <div class="range">
-          <label for="">IV</label>
-          <div class="range-slider">
-            <input type="range" min="0" max="31" 
-            value="{{this.pokemons[this.selectedPokemonIndex].ivs ? this.pokemons[this.selectedPokemonIndex].ivs[selectedStat].value : ''}}" 
-            class="slider" id="myRange" formControlName="ivs" [ngStyle]="{background: ivSliders[this.selectedStat]}">
           </div>
-          <input class="level" formControlName="ivs"
-          value="{{this.pokemons[this.selectedPokemonIndex].ivs ? this.pokemons[this.selectedPokemonIndex].ivs[selectedStat].value : ''}}">
-        </div>
-        <div class="range">
-          <label for="">EV</label>
-          <div class="range-slider">
-            <input type="range" min="0" max="{{currentMaxEVs}}" 
-            value="{{this.pokemons[this.selectedPokemonIndex].evs ? this.pokemons[this.selectedPokemonIndex].evs[selectedStat].value : ''}}" 
-            class="slider" id="myRange" formControlName="evs" [ngStyle]="{background: evSliders[this.selectedStat]}">
+          <div class="form-item">
+            <app-smart-input
+            #userInput
+            [label]="'Move 4 '"
+            [keepSelected]="true"
+            [getter]="queryService.queryMoveCallback"
+            (selectEvent)="move4SelectEvent($event)"
+            class="smart-input-wrapper"
+            ></app-smart-input>
           </div>
-          <input class="level" 
-          value="{{this.pokemons[this.selectedPokemonIndex].evs ? this.pokemons[this.selectedPokemonIndex].evs[selectedStat].value : ''}}"
-          formControlName="evs">
+          <div class="form-item form-item-col">
+            <div class="stat-selector" [ngClass]="{notAllowed: !pokemons[selectedPokemonIndex].name}">
+              <ng-container *ngFor="let stat of pokemons[selectedPokemonIndex].ivs; index as i">
+                <div class="stat-box" (click)="selectStat(i)"
+                [ngClass]="{selectedStat: selectedStat === i, disabled: !pokemons[selectedPokemonIndex].name}"
+                >
+                  {{stat.name}}
+                </div>
+              </ng-container>
+            </div>
+            <ng-container *ngIf="!pokemons[selectedPokemonIndex].name">
+              <div class="formFeedbackError row-center">
+                Select a pokemon first!
+              </div>
+            </ng-container>
+          </div>
         </div>
-        <div class="row-center">
-          Remaining EVs: {{remainingEVs}}
+        <div class="col">
+          <div class="form-item">
+            <div class="smart-input-wrapper">
+              <div class="smart-input-top">
+                <div class="smart-input-label">
+                  Ability
+                </div>
+                <div class="checkbox-wrapper">
+                  <app-checkbox
+                  [option]="allAbilities"
+                  [label]="'Show all'"
+                  (checkEvent)="allAbilitiesSwitch()"
+                  ></app-checkbox>
+                </div>
+              </div>
+              <ng-container *ngIf="allAbilities; else notAllAbilities">
+                <app-smart-input
+                #userInput
+                [keepSelected]="true"
+                [getter]="queryService.queryAbilityCallback"
+                (selectEvent)="abilitySelectEvent($event)"
+                class="smart-input-wrapper"
+                ></app-smart-input>
+              </ng-container>
+              <ng-template #notAllAbilities>
+                <app-smart-input
+                #userInput
+                [keepSelected]="true"
+                [allGetter]="queryService.pokemonAbilitiesCallback"
+                [allGetterIndex]="this.pokemons[this.selectedPokemonIndex]?.dexNumber"
+                (selectEvent)="abilitySelectEvent($event)"
+                class="smart-input-wrapper"
+                ></app-smart-input>
+              </ng-template>
+            </div>
+          </div>
+          <div class="form-item">
+            <app-smart-input
+            #userInput
+            [label]="'Nature '"
+            [keepSelected]="true"
+            [getter]="queryService.queryNatureCallback"
+            [allGetter]="queryService.naturesAllCallback"
+            (selectEvent)="natureSelectEvent($event)"
+            class="smart-input-wrapper"
+            ></app-smart-input>
+          </div>
+          <div class="form-item">
+            <app-smart-input
+            #userInput
+            [label]="'Teratype '"
+            [keepSelected]="true"
+            [getter]="queryService.queryTeratypeCallback"
+            [allGetter]="queryService.teraTypesAllCallback"
+            (selectEvent)="teraTypeSelectEvent($event)"
+            class="smart-input-wrapper"
+            ></app-smart-input>
+          </div>
+          <div class="form-item col-center">
+            <div class="range">
+              <label for="">IV</label>
+              <div class="range-slider">
+                <input type="range" min="0" max="31" 
+                value="{{this.pokemons[this.selectedPokemonIndex].ivs ? this.pokemons[this.selectedPokemonIndex].ivs[selectedStat].value : ''}}" 
+                class="slider" id="myRange" formControlName="ivs" [ngStyle]="{background: ivSliders[this.selectedStat]}">
+              </div>
+              <input class="level" formControlName="ivs"
+              value="{{this.pokemons[this.selectedPokemonIndex].ivs ? this.pokemons[this.selectedPokemonIndex].ivs[selectedStat].value : ''}}">
+            </div>
+            <div class="range">
+              <label for="">EV</label>
+              <div class="range-slider">
+                <input type="range" min="0" max="{{currentMaxEVs}}" 
+                value="{{this.pokemons[this.selectedPokemonIndex].evs ? this.pokemons[this.selectedPokemonIndex].evs[selectedStat].value : ''}}" 
+                class="slider" id="myRange" formControlName="evs" [ngStyle]="{background: evSliders[this.selectedStat]}">
+              </div>
+              <input class="level" 
+              value="{{this.pokemons[this.selectedPokemonIndex].evs ? this.pokemons[this.selectedPokemonIndex].evs[selectedStat].value : ''}}"
+              formControlName="evs">
+            </div>
+            <div class="row-center">
+              Remaining EVs: {{remainingEVs}}
+            </div>
+          </div>
         </div>
+      </form>
+      <div class="preview">
+        <app-pokemon [pokemon]="pokemons[selectedPokemonIndex]" [teamOptions]="teamOptions" ></app-pokemon>
       </div>
     </div>
-  </form>
-  <div class="preview">
-    <div class="selectors">
-      <ng-container *ngFor="let pokemon of pokemons; index as i">
-        <div 
-        class="selector"
-        [ngClass]="{selected: selectedPokemonIndex == i}"
-        (click)="selectPokemon(i)"
-        >
-          {{i + 1}}
-        </div>
-      </ng-container>
-      <ng-container *ngIf="pokemons.length < 6">
-        <div class="selector" (click)="addEmptyPokemon()">
-          +
-        </div>
-      </ng-container>
-    </div>
-    <app-pokemon [pokemon]="pokemons[selectedPokemonIndex]" [teamOptions]="teamOptions" ></app-pokemon>
-  </div>
+  </ng-container>
 </div>

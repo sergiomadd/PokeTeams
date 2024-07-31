@@ -9,15 +9,14 @@ import { PokemonService } from 'src/app/services/pokemon.service';
 import { QueryService } from 'src/app/services/query.service';
 import { TeamService } from 'src/app/services/team.service';
 import { UtilService } from 'src/app/services/util.service';
-import { SmartInputComponent } from '../pieces/smart-input/smart-input.component';
 import { PokemonComponent } from '../pokemon/pokemon.component';
 
 @Component({
   selector: 'app-pokemon-creator',
   templateUrl: './pokemon-creator.component.html',
   styleUrl: './pokemon-creator.component.scss',
-  //this is a problem!!!
 })
+
 export class PokemonCreatorComponent 
 {
   queryService = inject(QueryService);
@@ -31,8 +30,6 @@ export class PokemonCreatorComponent
   @Output() addPokemonEvent = new EventEmitter<Pokemon>();
   @Output() calculateMaxLvlEvent = new EventEmitter();
 
-
-  @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;
   @ViewChild(PokemonComponent) pokemonPreviewComponent!: PokemonComponent;
 
   selectedPokemonIndex: number = 0;
@@ -67,7 +64,6 @@ export class PokemonCreatorComponent
 
   async ngOnInit()
   {
-    this.addEmptyPokemon();
     this.pokemonForm.controls.nickname.valueChanges.subscribe(async (value) => 
     {
       this.pokemons[this.selectedPokemonIndex].nickname = value ?? undefined;
@@ -116,6 +112,7 @@ export class PokemonCreatorComponent
         //this.forceChangePokemon();
       }
     });
+    console.log("lkength", this.pokemons.length)
   }
 
   calcIVSliderBackground(currentValue, min, max)
@@ -132,6 +129,8 @@ export class PokemonCreatorComponent
 
   addEmptyPokemon()
   {
+    if(this.pokemons.length == 0) { this.selectedPokemonIndex = 0 }
+    else { this.selectedPokemonIndex++; }
     this.pokemons.push(this.createEmptyPokemon());
   }
 
@@ -139,7 +138,6 @@ export class PokemonCreatorComponent
   {
     this.selectedPokemonIndex = index;
     this.pokemons[this.selectedPokemonIndex] = this.pokemons[index];
-    console.log("currently selected pokemon: ", this.pokemons[this.selectedPokemonIndex])
   }
 
   allAbilitiesSwitch() 
@@ -194,9 +192,22 @@ export class PokemonCreatorComponent
       }
       this.pokemonPreviewComponent.showStats[0] = false;
     }
-    console.log("later pokemon in select event", this.pokemons[this.selectedPokemonIndex])
-    //emit calculate max level event
     this.calculateMaxLvlEvent.emit();
+  }
+
+  getPokemonTag()
+  {
+    if(this.pokemons[this.selectedPokemonIndex]?.name)
+    {
+      let tag: Tag = 
+      {
+        name: this.pokemons[this.selectedPokemonIndex].name ?? "",
+        identifier: this.pokemons[this.selectedPokemonIndex].name ?? "",
+        icon: this.pokemons[this.selectedPokemonIndex].sprite?.base
+      }
+      return tag;
+    }
+    return undefined;
   }
 
   async itemSelectEvent(event: Tag)

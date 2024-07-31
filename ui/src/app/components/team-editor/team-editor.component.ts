@@ -111,14 +111,12 @@ export class TeamEditorComponent
 
   ngOnChanges(changes: SimpleChanges)
   {
-    console.log("team editor changes", changes)
     if(changes['editorOptions'])
     {
       this.team.options = changes['editorOptions'].currentValue;
     }
     if(changes['pokemons'])
     {
-      console.log("pokemon changes in team editor", changes)
       this.team.pokemons = changes['pokemons'].currentValue;
       this.calculateMaxLevel();
     }

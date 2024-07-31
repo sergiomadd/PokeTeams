@@ -80,18 +80,14 @@ export class SmartInputComponent
     }
     this.searchForm.controls.key.valueChanges.subscribe(async (value) => 
     {
-      console.log(value)
       if(value)
       {
         if(this.updateOnChange)
         {
-          console.log("updating")
           this.updateEvent.emit(value);
         }
         else
         {
-          console.log("searchin")
-
           await this.search(value);
         }
       }
@@ -107,7 +103,6 @@ export class SmartInputComponent
   {
     if(changes["value"])
     {
-      console.log("sleected changes")
       this.selected = this.value;
     }
   }
@@ -118,7 +113,6 @@ export class SmartInputComponent
     this.customQueryResult.identifier = "custom";
     if(this.getter)
     {
-      console.log("getting")
       this.showOptions = true;
       if(this.allowCustom)
       {
@@ -127,7 +121,6 @@ export class SmartInputComponent
       else
       {
         this.results = await this.getter(key);
-        console.log(this.showOptions)
       }
     }
   }
@@ -155,10 +148,8 @@ export class SmartInputComponent
 
   async onFocus()
   {
-    console.log(this.updateOnChange)
     if(!this.updateOnChange)
     {
-      console.log("entering")
       if(this.allGetter)
       {
         this.showOptions = true;
@@ -171,7 +162,6 @@ export class SmartInputComponent
           this.results = await this.allGetter();
         }
       }
-      console.log(this.results)
       //this.showOptions = true;
     }
   }

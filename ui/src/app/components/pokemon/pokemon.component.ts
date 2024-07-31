@@ -72,7 +72,6 @@ export class PokemonComponent
 
   ngOnChanges(changes: SimpleChanges)
   {
-    console.log(changes)
     if(changes['editorOptions'])
     {
       this.configurePokemon();
