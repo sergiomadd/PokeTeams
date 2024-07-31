@@ -61,6 +61,21 @@
       justify-content: center;
       align-content: flex-start;
       gap: 1vw;
+      position: relative;
+
+      .delete
+      {
+        position: absolute;
+        top: 0.2vw;
+        right: 0.2vw;
+
+        button
+        {
+          width: 1vw;
+          height: 1vw;
+          background-color: var(--primary);
+        }
+      }
     }
   
     .form-item
@@ -191,3 +206,4 @@
     }
   }
 }
+

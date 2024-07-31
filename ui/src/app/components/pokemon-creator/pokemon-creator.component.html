@@ -115,7 +115,7 @@
                 <div class="stat-box" (click)="selectStat(i)"
                 [ngClass]="{selectedStat: selectedStat === i, disabled: !pokemons[selectedPokemonIndex].name}"
                 >
-                  {{stat.name}}
+                  {{util.getStatName(stat)}}
                 </div>
               </ng-container>
             </div>
@@ -213,6 +213,9 @@
         </div>
       </form>
       <div class="preview">
+        <div class="delete">
+          <button (click)="deletePokemon()">X</button>
+        </div>
         <app-pokemon [pokemon]="pokemons[selectedPokemonIndex]" [teamOptions]="teamOptions" ></app-pokemon>
       </div>
     </div>

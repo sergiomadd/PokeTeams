@@ -64,6 +64,7 @@ export class PokemonCreatorComponent
 
   async ngOnInit()
   {
+    this.addEmptyPokemon();
     this.pokemonForm.controls.nickname.valueChanges.subscribe(async (value) => 
     {
       this.pokemons[this.selectedPokemonIndex].nickname = value ?? undefined;
@@ -135,6 +136,16 @@ export class PokemonCreatorComponent
     if(this.pokemons.length == 0) { this.selectedPokemonIndex = 0 }
     else { this.selectedPokemonIndex++; }
     this.pokemons.push(this.createEmptyPokemon());
+  }
+
+  deletePokemon()
+  {
+    if(this.pokemons[this.selectedPokemonIndex])
+    {
+      this.pokemons.splice(this.selectedPokemonIndex, 1);
+    }
+    if(this.selectedPokemonIndex == 0) { this.selectedPokemonIndex = 0 }
+    else { this.selectedPokemonIndex--; }
   }
 
   selectPokemon(index: number)
