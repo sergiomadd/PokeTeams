@@ -23,7 +23,7 @@
           <div class="form-item">
             <app-smart-input
             #pokemonInput 
-            [value]="getPokemonTag()"
+            [value]="util.getPokemonTag(pokemons[selectedPokemonIndex])"
             [label]="'Pokemon '"
             [keepSelected]="true"
             [getter]="queryService.queryPokemonCallback"
@@ -33,6 +33,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
+            [value]="util.getMoveTag(pokemons[selectedPokemonIndex].moves[0])"
             [label]="'Move 1 '"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
@@ -42,6 +43,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
+            [value]="util.getMoveTag(pokemons[selectedPokemonIndex].moves[2])"
             [label]="'Move 3 '"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
@@ -79,7 +81,6 @@
         <div class="col">
           <div class="form-item">
             <app-smart-input
-            #userInput
             [value]="pokemons[selectedPokemonIndex].item"
             [label]="'Item '"
             [keepSelected]="true"
@@ -90,7 +91,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            #userInput
+            [value]="util.getMoveTag(pokemons[selectedPokemonIndex].moves[1])"
             [label]="'Move 2 '"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
@@ -100,7 +101,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            #userInput
+            [value]="util.getMoveTag(pokemons[selectedPokemonIndex].moves[3])"
             [label]="'Move 4 '"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
@@ -142,7 +143,7 @@
               </div>
               <ng-container *ngIf="allAbilities; else notAllAbilities">
                 <app-smart-input
-                #userInput
+                [value]="util.getAbilityTag(pokemons[selectedPokemonIndex].ability)"
                 [keepSelected]="true"
                 [getter]="queryService.queryAbilityCallback"
                 (selectEvent)="abilitySelectEvent($event)"
@@ -151,7 +152,7 @@
               </ng-container>
               <ng-template #notAllAbilities>
                 <app-smart-input
-                #userInput
+                [value]="util.getAbilityTag(pokemons[selectedPokemonIndex].ability)"
                 [keepSelected]="true"
                 [allGetter]="queryService.pokemonAbilitiesCallback"
                 [allGetterIndex]="this.pokemons[this.selectedPokemonIndex]?.dexNumber"
@@ -163,7 +164,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            #userInput
+            [value]="util.getNatureTag(pokemons[selectedPokemonIndex].nature)"
             [label]="'Nature '"
             [keepSelected]="true"
             [getter]="queryService.queryNatureCallback"
@@ -174,7 +175,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            #userInput
+            [value]="util.getTypeTag(pokemons[selectedPokemonIndex].teraType)"
             [label]="'Teratype '"
             [keepSelected]="true"
             [getter]="queryService.queryTeratypeCallback"

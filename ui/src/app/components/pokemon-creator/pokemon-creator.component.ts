@@ -109,10 +109,13 @@ export class PokemonCreatorComponent
         this.currentEVs = value;
         this.pokemons[this.selectedPokemonIndex].evs![this.selectedStat].value = value
         this.calcEVSliderBackground(value, 0, this.currentMaxEVs);
-        //this.forceChangePokemon();
       }
     });
-    console.log("lkength", this.pokemons.length)
+  }
+
+  ngAfterViewInit()
+  {
+    this.pokemonPreviewComponent.showStats[0] = true;
   }
 
   calcIVSliderBackground(currentValue, min, max)
@@ -193,21 +196,6 @@ export class PokemonCreatorComponent
       this.pokemonPreviewComponent.showStats[0] = false;
     }
     this.calculateMaxLvlEvent.emit();
-  }
-
-  getPokemonTag()
-  {
-    if(this.pokemons[this.selectedPokemonIndex]?.name)
-    {
-      let tag: Tag = 
-      {
-        name: this.pokemons[this.selectedPokemonIndex].name ?? "",
-        identifier: this.pokemons[this.selectedPokemonIndex].name ?? "",
-        icon: this.pokemons[this.selectedPokemonIndex].sprite?.base
-      }
-      return tag;
-    }
-    return undefined;
   }
 
   async itemSelectEvent(event: Tag)

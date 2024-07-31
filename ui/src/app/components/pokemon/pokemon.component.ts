@@ -318,7 +318,6 @@ export class PokemonComponent
     return Math.round((Math.floor(ev / 4) * (this.pokemon.level ? this.pokemon.level : 50)) / 100);
   }
 
-  //rename to getNatureMultiplier
   getNatureValue(baseStat?: Stat, nature?: Nature) : number
   {
     let natureValue: number;

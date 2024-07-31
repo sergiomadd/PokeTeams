@@ -2,7 +2,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Ability } from '../models/pokemon/ability.model';
+import { Move } from '../models/pokemon/move.model';
+import { Nature } from '../models/pokemon/nature.model';
+import { Pokemon } from '../models/pokemon/pokemon.model';
 import { Stat } from '../models/pokemon/stat.model';
+import { Type } from '../models/pokemon/type.model';
+import { Tag } from '../models/tag.model';
 
 @Injectable({
   providedIn: 'root'
@@ -170,5 +176,70 @@ export class UtilService
       "speed": "#F85888"
     };
     return statColors[stat.identifier];
+  }
+
+  getPokemonTag(pokemon: Pokemon)
+  {
+    if(pokemon.name)
+    {
+      let tag: Tag = 
+      {
+        name: pokemon.name ?? "",
+        identifier: pokemon.name ?? "",
+        icon: pokemon.sprite?.base
+      }
+      return tag;
+    }
+    return undefined;
+  }
+
+  getMoveTag(move?: Move): Tag | undefined
+  {
+    if(move)
+    {
+      return {
+        name: move.name,
+        identifier: move.name,
+        icon: move.pokeType?.iconPath
+      }
+    }
+    return undefined;
+  }
+
+  getAbilityTag(ability?: Ability): Tag | undefined
+  {
+    if(ability)
+    {
+      return {
+        name: ability.name,
+        identifier: ability.name,
+      }
+    }
+    return undefined;
+  }
+
+  getNatureTag(nature?: Nature): Tag | undefined
+  {
+    if(nature)
+    {
+      return {
+        name: nature.name,
+        identifier: nature.name,
+      }
+    }
+    return undefined;
+  }
+
+  getTypeTag(type?: Type): Tag | undefined
+  {
+    if(type)
+    {
+      return {
+        name: type.name,
+        identifier: type.name,
+        icon: type.iconPath
+      }
+    }
+    return undefined;
   }
 }

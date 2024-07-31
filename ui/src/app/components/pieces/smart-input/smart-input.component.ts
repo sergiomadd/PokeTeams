@@ -130,6 +130,7 @@ export class SmartInputComponent
     if(this.keepSelected)
     {
       this.selected = selectedResult;
+      this.searchForm.controls.key.setValue("");
     }
     else
     {

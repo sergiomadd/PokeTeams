@@ -137,7 +137,6 @@ export class QueryService
 
   queryTeratypeCallback = async (args: any): Promise<Tag[]> => 
   {
-    
     if(args)
     {
       return (await this.pokemonService.queryTeraTypesByName(args));
