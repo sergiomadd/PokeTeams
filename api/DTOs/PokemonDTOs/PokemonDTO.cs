@@ -20,7 +20,7 @@ namespace api.DTOs.PokemonDTOs
         public List<StatDTO?> evs { get; set; }
         public int? Level { get; set; }
         public bool? Shiny { get; set; }
-        public string? Gender { get; set; }
+        public bool? Gender { get; set; }
         public SpriteDTO? Sprite { get; set; }
     }
 }
