@@ -1,6 +1,5 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { MenuComponent } from './components/menu/menu.component';
 import { TeamService } from './services/team.service';
 import { ThemeService } from './services/theme.service';
 
@@ -16,7 +15,7 @@ export class AppComponent
   teamService = inject(TeamService);
   themes = inject(ThemeService);
 
-  @ViewChild(MenuComponent) menu?: MenuComponent;
+  menuOpen: boolean = false;
 
   constructor() 
   {
@@ -26,6 +25,11 @@ export class AppComponent
   ngOnInit()
   {
     this.themes.changeTheme("light");
+  }
+
+  toggleMenu()
+  {
+    this.menuOpen = !this.menuOpen;
   }
 
 

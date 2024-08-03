@@ -21,6 +21,7 @@ import { DialogComponent } from './components/pieces/dialog/dialog.component';
 import { DropdownComponent } from './components/pieces/dropdown/dropdown.component';
 import { MultiSearchComponent } from './components/pieces/multi-search/multi-search.component';
 import { PaginationComponent } from './components/pieces/pagination/pagination.component';
+import { RadioComponent } from './components/pieces/radio/radio.component';
 import { ResultStorageComponent } from './components/pieces/result-storage/result-storage.component';
 import { SmartInputComponent } from './components/pieces/smart-input/smart-input.component';
 import { SwitchComponent } from './components/pieces/switch/switch.component';
@@ -42,7 +43,6 @@ import { UserComponent } from './components/user/user.component';
 import { VgcComponent } from './components/vgc/vgc.component';
 import { LinkerPipe } from './pipes/linker.pipe';
 import { metaReducers } from './state/app.state';
-import { RadioComponent } from './components/pieces/radio/radio.component';
 
 @NgModule({
   declarations: [

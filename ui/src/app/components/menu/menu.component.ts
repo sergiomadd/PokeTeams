@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { authActions } from 'src/app/auth/store/auth.actions';
@@ -18,7 +18,9 @@ export class MenuComponent
 
   loggedUser$ = this.store.select(selectLoggedUser);
 
-  menuOpen: boolean = false;
+  @Input() menuOpen: boolean = false;
+  @Output() openEvent = new EventEmitter()
+
   selectedThemeName?: string;
 
   ngOnInit()
@@ -27,12 +29,12 @@ export class MenuComponent
       {
         this.selectedThemeName = value.name;
       });
-    //this.toggleTheme();
+    this.toggleTheme();
   }
 
   toggleMenu()
   {
-    this.menuOpen = !this.menuOpen;
+    this.openEvent.emit()
   }
 
   navigate(pageName:string)
