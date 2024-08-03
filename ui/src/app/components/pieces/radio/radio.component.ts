@@ -9,7 +9,7 @@ export class RadioComponent
 {
   @Input() obj?: any;
   @Input() objSelector?: string;
-  @Input() options: string[] = [];
+  @Input() options: boolean[] = [];
   @Input() optionNames: string[] = [];
   @Input() selected?: number;
   @Output() checkEvent = new EventEmitter<number>();

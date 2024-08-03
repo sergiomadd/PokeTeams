@@ -388,19 +388,19 @@
             (click)="clickMeta(6, 'middle')"
             >
               <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[6]}">
-                <ng-container *ngIf="pokemon.gender === 'male'; else femaleText">
-                  This pokemon is male
-                </ng-container>
-                <ng-template #femaleText>
+                <ng-container *ngIf="pokemon.gender == true; else maleText">
                   This pokemon is female
+                </ng-container>
+                <ng-template #maleText>
+                  This pokemon is male
                 </ng-template>  
               </div>
             </div>
-            <ng-container *ngIf="pokemon.gender === 'male'; else female">
-              <img src="assets/male.png" alt="" class="icon">
-            </ng-container>
-            <ng-template #female>
+            <ng-container *ngIf="pokemon.gender == true; else male">
               <img src="assets/female.png" alt="" class="icon">
+            </ng-container>
+            <ng-template #male>
+              <img src="assets/male.png" alt="" class="icon">
             </ng-template>          
           </div>
         </div>

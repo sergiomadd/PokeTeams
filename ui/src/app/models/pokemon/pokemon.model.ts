@@ -7,7 +7,6 @@ import { Stat } from "./stat.model"
 import { TypesWithEffectiveness } from "./typeswitheffectiveness.model"
 import { TypeWithEffectiveness } from "./typewitheffectiveness.model"
 
-
 export interface Pokemon 
 {
 	name?: string,
@@ -26,7 +25,7 @@ export interface Pokemon
 	evs: Stat[],
 	level?: number,
 	shiny?: boolean,
-	gender?: string,
+	gender?: boolean,
 	sprite?: Sprite
 }
   

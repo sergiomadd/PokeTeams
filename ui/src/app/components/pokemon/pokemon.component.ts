@@ -126,7 +126,7 @@ export class PokemonComponent
   {
     if(this.pokemon.sprite)
     {
-      if(this.pokemon.gender === "female")
+      if(this.pokemon.gender)
       {
         this.pokemonSpritePath = this.pokemon.shiny ? this.pokemon.sprite.shinyFemale : this.pokemon.sprite.female
       }

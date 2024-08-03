@@ -39,7 +39,7 @@ export class PokemonCreatorComponent
     {
       nickname: "",
       shiny: [false],
-      gender: ["male"],
+      gender: [false],
       level: [50, [Validators.min(1), Validators.max(100)]],
       ivs: [0],
       evs: [0]
@@ -64,7 +64,7 @@ export class PokemonCreatorComponent
 
   async ngOnInit()
   {
-    this.addEmptyPokemon();
+    //this.addEmptyPokemon();
     this.pokemonForm.controls.nickname.valueChanges.subscribe(async (value) => 
     {
       this.pokemons[this.selectedPokemonIndex].nickname = value ?? undefined;
@@ -108,6 +108,13 @@ export class PokemonCreatorComponent
       if(value)
       {
         this.currentEVs = value;
+        let ivs = this.pokemons[this.selectedPokemonIndex].ivs;
+        ivs[this.selectedStat].value = value;
+        this.pokemons[this.selectedPokemonIndex] = 
+        { 
+          ...this.pokemons[this.selectedPokemonIndex],
+          ivs: ivs
+        }
         this.pokemons[this.selectedPokemonIndex].evs![this.selectedStat].value = value
         this.calcEVSliderBackground(value, 0, this.currentMaxEVs);
       }
@@ -357,7 +364,7 @@ export class PokemonCreatorComponent
       ],
       level: 50,
       shiny: undefined,
-      gender: "male",
+      gender: false,
       sprite: undefined,
     }
     return pokemon;

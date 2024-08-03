@@ -201,7 +201,15 @@ export class ParserService {
     {
       pokePaste.nickname = this.formatValue(profile.split("(")[0]);
       pokePaste.name = this.formatValue(profile.split("(")[1], {rightParen: true, whiteSpace: true});
-      pokePaste.gender = this.formatValue(profile.split("(")[2], {rightParen: true});
+      let genderString = this.formatValue(profile.split("(")[2], {rightParen: true});
+      if(genderString === "female")
+      {
+        pokePaste.gender = true;
+      }
+      else
+      {
+        pokePaste.gender = false;
+      }
     }
     else
     {
