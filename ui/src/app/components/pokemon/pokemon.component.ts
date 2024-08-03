@@ -32,6 +32,8 @@ export class PokemonComponent
 
   @Input() pokemon!: Pokemon;
   @Input() teamOptions?: TeamOptions;
+  @Input() showStatsStart?: boolean = false;
+
 
   test: string = "test"
 
@@ -68,6 +70,11 @@ export class PokemonComponent
 
     this.maleIconPath = "https://localhost:7134/images/sprites/gender/male.png";
     this.femaleIconPath = "https://localhost:7134/images/sprites/gender/female.png";
+  
+    if(this.showStatsStart)
+    {
+      this.showStats[0] = true;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges)

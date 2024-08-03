@@ -31,7 +31,6 @@ export class PokemonCreatorComponent
   @Output() calculateMaxLvlEvent = new EventEmitter();
 
   @ViewChild(PokemonComponent) pokemonPreviewComponent!: PokemonComponent;
-
   selectedPokemonIndex: number = 0;
   allAbilities: boolean = false;
   
@@ -91,7 +90,6 @@ export class PokemonCreatorComponent
     {
       if(value)
       {
-        console.log("changing ivs", value)
         this.currentIVs = value;
         let ivs = this.pokemons[this.selectedPokemonIndex].ivs;
         ivs[this.selectedStat].value = value;
@@ -108,22 +106,17 @@ export class PokemonCreatorComponent
       if(value)
       {
         this.currentEVs = value;
-        let ivs = this.pokemons[this.selectedPokemonIndex].ivs;
-        ivs[this.selectedStat].value = value;
+        let evs = this.pokemons[this.selectedPokemonIndex].evs;
+        evs[this.selectedStat].value = value;
         this.pokemons[this.selectedPokemonIndex] = 
         { 
           ...this.pokemons[this.selectedPokemonIndex],
-          ivs: ivs
+          evs: evs
         }
         this.pokemons[this.selectedPokemonIndex].evs![this.selectedStat].value = value
         this.calcEVSliderBackground(value, 0, this.currentMaxEVs);
       }
     });
-  }
-
-  ngAfterViewInit()
-  {
-    this.pokemonPreviewComponent.showStats[0] = true;
   }
 
   calcIVSliderBackground(currentValue, min, max)

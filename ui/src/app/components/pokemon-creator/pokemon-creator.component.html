@@ -216,7 +216,11 @@
         <div class="delete">
           <button (click)="deletePokemon()">X</button>
         </div>
-        <app-pokemon [pokemon]="pokemons[selectedPokemonIndex]" [teamOptions]="teamOptions" ></app-pokemon>
+        <app-pokemon 
+        [pokemon]="pokemons[selectedPokemonIndex]" 
+        [teamOptions]="teamOptions" 
+        [showStatsStart]="true"
+        ></app-pokemon>
       </div>
     </div>
   </ng-container>
