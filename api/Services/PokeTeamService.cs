@@ -195,17 +195,22 @@ namespace api.Services
                     }
                 }
 
-                Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(inputTeam.Tournament.ToLower());
-                if (tournament == null)
+                Tournament tournament = null;
+                if (inputTeam.Tournament != null)
                 {
-                    tournament = new Tournament
+                    tournament = await _pokeTeamContext.Tournament.FindAsync(inputTeam.Tournament.ToLower());
+                    if (tournament == null)
                     {
-                        Name = inputTeam.Tournament,
-                        NormalizedName = inputTeam.Tournament.ToLower(),
-                        Official = false
-                    };
-                    await _pokeTeamContext.Tournament.AddAsync(tournament);
+                        tournament = new Tournament
+                        {
+                            Name = inputTeam.Tournament,
+                            NormalizedName = inputTeam.Tournament.ToLower(),
+                            Official = false
+                        };
+                        await _pokeTeamContext.Tournament.AddAsync(tournament);
+                    }
                 }
+
 
                 newTeam = new Team
                 {
