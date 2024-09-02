@@ -467,15 +467,15 @@ namespace api.Services
                         } : null,
                         Meta = new Metadata
                         {
-                            MinHits = meta.min_hits,
-                            MaxHits = meta.max_hits,
-                            MinTurns = meta.min_turns,
-                            MaxTurns = meta.max_turns,
-                            Drain = meta.drain,
-                            Healing = meta.healing,
-                            CritRate = meta.crit_rate,
-                            StatusChance = meta.ailment_chance,
-                            FlinchChance = meta.flinch_chance,
+                            MinHits = meta?.min_hits,
+                            MaxHits = meta?.max_hits,
+                            MinTurns = meta?.min_turns,
+                            MaxTurns = meta?.max_turns,
+                            Drain = meta?.drain,
+                            Healing = meta?.healing,
+                            CritRate = meta?.crit_rate,
+                            StatusChance = meta?.ailment_chance,
+                            FlinchChance = meta?.flinch_chance,
                             StatChange = statChange,
                         }
                     };
