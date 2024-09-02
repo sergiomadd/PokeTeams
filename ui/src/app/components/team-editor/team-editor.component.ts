@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
@@ -21,6 +22,7 @@ export class TeamEditorComponent
   teamService = inject(TeamService);
   userService = inject(UserService);
   store = inject(Store);
+  router = inject(Router);
 
   @Input() pokemons!: Pokemon[];
   @Input() teamOptions!: TeamOptions;
@@ -129,9 +131,9 @@ export class TeamEditorComponent
       id: '',
       pokemons: this.pokemons,
       options: this.teamOptions,
-      player: "",
-      tournament: "",
-      regulation: "",
+      player: undefined,
+      tournament: undefined,
+      regulation: undefined,
       viewCount: 0,
       visibility: true,
       tags: this.topOptionComponent?.tags
@@ -159,15 +161,27 @@ export class TeamEditorComponent
     if(this.pokemons.length > 0 && this.pokemons.length <= 6)
     {
       console.log("Generating team: ", this.team);
-      /*
       this.teamService.saveTeam(this.team).subscribe(
         {
           next: (response) =>
           {
+            this.router.navigate(['/', response])
+            /*
+            console.log("response: ", response)
             const w = window.open('', '_blank')!;
             w.document.write("<html><head></head><body>Please wait while we redirect you</body></html>");
+            w.location.pathname = response;
             w.document.close();
-            w.location = response;
+            if(true)
+            {
+
+            }
+            else
+            {
+              console.log("Window popup blocked")
+              this.router.navigate(['/', response])
+            }
+            */
           },
           error: (error) => 
           {
@@ -175,7 +189,6 @@ export class TeamEditorComponent
           }
         }
       )
-      */
     }
     else if(this.pokemons.length <= 0)
     {
