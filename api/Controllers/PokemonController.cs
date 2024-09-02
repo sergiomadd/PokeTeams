@@ -26,7 +26,7 @@ namespace api.Controllers
             var pokemon = await _pokemonService.GetPokemonByName(pokemonName);
             if(pokemon == null)
             {
-                return BadRequest("Pokemon not found.");
+                return NotFound("Pokemon not found.");
             }
             return Ok(pokemon);
         }
