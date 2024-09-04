@@ -10,6 +10,7 @@ import { TeamId } from '../models/DTOs/teamId.dto';
 import { Regulation } from '../models/regulation.model';
 import { Tag } from '../models/tag.model';
 import { Team } from '../models/team.model';
+import { Tournament } from '../models/tournament.model';
 import { UtilService } from './util.service';
 
 @Injectable({
@@ -156,5 +157,35 @@ export class TeamService
       console.log("Error: ", this.util.getErrorMessage(error));
     }
     return regulations; 
+  }
+
+  async getTournamentByName(name: string) : Promise<Tournament>
+  {
+    let tournament: Tournament = <Tournament>{}
+    let url = this.apiUrl + 'Tournament/' + name;
+    try
+    {
+      tournament = await lastValueFrom(this.http.get<Tournament>(url).pipe(catchError(() => [tournament]), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", this.util.getErrorMessage(error));
+    }
+    return this.util.toCamelCase(tournament); 
+  }
+
+  async getRegulationByName(name: string) : Promise<Regulation>
+  {
+    let regulation: Regulation = <Regulation>{}
+    let url = this.apiUrl + 'Tournament/' + name;
+    try
+    {
+      regulation = await lastValueFrom(this.http.get<Regulation>(url).pipe(catchError(() => [regulation]), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", this.util.getErrorMessage(error));
+    }
+    return this.util.toCamelCase(regulation); 
   }
 }

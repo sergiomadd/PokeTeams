@@ -1,6 +1,8 @@
 import { PokemonPreview } from "./pokemonPreview.model";
+import { Regulation } from "./regulation.model";
 import { Tag } from "./tag.model";
 import { TeamOptions } from "./teamOptions.model";
+import { Tournament } from "./tournament.model";
 
 export interface TeamPreview
 {
@@ -8,8 +10,8 @@ export interface TeamPreview
   pokemons: PokemonPreview[],
   options: TeamOptions,
   player?: string,
-  tournament?: string,
-  regulation?: string,
+  tournament?: Tournament,
+  regulation?: Regulation,
   viewCount: number,
   date?: string,
   visibility: boolean,

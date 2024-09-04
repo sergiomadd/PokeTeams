@@ -1,6 +1,8 @@
 import { Pokemon } from "./pokemon/pokemon.model";
+import { Regulation } from "./regulation.model";
 import { Tag } from "./tag.model";
 import { TeamOptions } from "./teamOptions.model";
+import { Tournament } from "./tournament.model";
 
 export interface Team
 {
@@ -8,8 +10,8 @@ export interface Team
   pokemons: Pokemon[],
   options: TeamOptions,
   player?: string,
-  tournament?: string,
-  regulation?: string,
+  tournament?: Tournament,
+  regulation?: Regulation,
   viewCount: number,
   date?: string,
   visibility: boolean,
