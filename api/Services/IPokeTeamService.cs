@@ -8,7 +8,7 @@ namespace api.Services
     {
 
         public Task<TeamDTO?> GetTeam(string id);
-        public Task<Team?> SaveTeam(TeamUploadDTO team, string loggedUserName);
+        public Task<Team?> SaveTeam(TeamDTO team, string loggedUserName);
         public Task<bool> DeleteTeam(string teamId);
         public Task<bool> DeleteUserTeams(User user);
         public Task<string> IncrementTeamViewCount(string teamKey);

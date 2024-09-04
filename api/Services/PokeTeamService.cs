@@ -141,7 +141,7 @@ namespace api.Services
             return teamDTO;
         }
 
-        public async Task<Team?> SaveTeam(TeamUploadDTO inputTeam, string loggedUserName)
+        public async Task<Team?> SaveTeam(TeamDTO inputTeam, string loggedUserName)
         {
             Team newTeam = null;
             string teamId = GenerateId(10);
@@ -198,13 +198,13 @@ namespace api.Services
                 Tournament tournament = null;
                 if (inputTeam.Tournament != null)
                 {
-                    tournament = await _pokeTeamContext.Tournament.FindAsync(inputTeam.Tournament.ToLower());
+                    tournament = await _pokeTeamContext.Tournament.FindAsync(inputTeam.Tournament.Name.ToLower());
                     if (tournament == null)
                     {
                         tournament = new Tournament
                         {
-                            Name = inputTeam.Tournament,
-                            NormalizedName = inputTeam.Tournament.ToLower(),
+                            Name = inputTeam.Tournament.Name,
+                            NormalizedName = inputTeam.Tournament.Name.ToLower(),
                             Official = false
                         };
                         await _pokeTeamContext.Tournament.AddAsync(tournament);
@@ -220,7 +220,7 @@ namespace api.Services
                     PlayerId = player != null ? player.Id : null,
                     AnonPlayer = player == null ? inputTeam.Player : null,
                     TournamentNormalizedName = tournament != null ? tournament.NormalizedName : null,
-                    Regulation = inputTeam.Regulation ?? null,
+                    Regulation = inputTeam.Regulation != null ? inputTeam.Regulation.Identifier : null,
                     ViewCount = 0,
                     Visibility = inputTeam.Visibility,
                     Tags = tags,
