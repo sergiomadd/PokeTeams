@@ -5,8 +5,38 @@
   .top
   {
     display: grid;
-    grid-template-columns: 30% 60% 10%;
+    grid-template-columns: 10% 80% 10%;
     margin-bottom: 1vh;
+    align-items: center;
+
+    .info
+    {
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+      align-items: center;
+      gap: 0.2vw;
+
+      .autor
+      {
+        justify-self: start;
+      }
+
+      .piece
+      {
+        display: flex;
+        padding: 0.2vw;
+        border-radius: 15px;
+        max-width: 15vw;
+        overflow: hidden;
+        max-height: 1em;
+      }
+
+      .tournament
+      {
+        background-color: var(--bg-color-3);
+      }
+    }
 
     .options
     {

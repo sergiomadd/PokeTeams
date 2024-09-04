@@ -1,21 +1,35 @@
 <div class="team">
   <div class="top">
-    <div class="info">
-      <div class="autor">
-        Author: {{team?.player}}
-      </div>
-      <div class="tournament">
-        Tournament: {{team?.tournament}}
-      </div>
-      <div class="tournament">
-        Regulation: {{team?.regulation}}
-      </div>
-      <div class="tournament">
-        Views: {{team?.viewCount}} 
-      </div>
+    <div class="autor">
+      &#64;{{team?.player}}
     </div>
-    <div class="tags">
-      <app-result-storage [results]="team?.tags"></app-result-storage>
+    <div class="info">
+      <div class="row-center">
+        <ng-container *ngIf="team?.tournament">
+          <div class="piece tournament">
+            <ng-container *ngIf="team?.tournament?.official">
+              <img src="assets/regionals.png" alt="" class="icon">
+            </ng-container>
+            {{team?.tournament?.name}}
+          </div>
+        </ng-container>
+        <ng-container *ngIf="team?.regulation">
+          <div class="piece tournament">
+            {{team?.regulation?.name}}
+          </div>
+        </ng-container>
+        <div class="piece tournament">
+          {{team?.viewCount}} visits
+        </div>
+        <ng-container *ngIf="team?.date">
+          <div class="piece tournament">
+            {{util.customFormatDate(team?.date!)}} 
+          </div>
+        </ng-container>
+      </div>
+      <div class="tags">
+        <app-result-storage [results]="team?.tags"></app-result-storage>
+      </div>
     </div>
     <div class="options">
       <div 

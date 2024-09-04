@@ -93,7 +93,8 @@
     gap: 0.2vw;
     background-color: var(--bg-color-2);
     border-radius: 5px;
-    padding: 0.2vw;
+    transition: all 1s ease;
+    height: fit-content;
   }
 
   .link
@@ -112,4 +113,9 @@
 .icon
 {
   width: 2em;
+}
+
+.unkownPlayer
+{
+  color: lightgrey;
 }

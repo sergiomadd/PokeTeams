@@ -3,10 +3,12 @@
   <ng-container *ngIf="getVisibility(); else private">
     <div class="top">
       <div class="team-details">
-        <div class="visibility"><div class="check"></div></div>
-        {{team?.visibility}}
+        <ng-container *ngIf="logged">
+          <div class="visibility"><div class="check"></div></div>
+          {{team?.visibility}}
+        </ng-container>
         <div class="col">
-          <div class="detail">
+          <div class="detail" [ngClass]="{unkownPlayer: team?.player === 'Unkown'}">
             &#64;{{team?.player}}
           </div>
         </div>
@@ -14,21 +16,25 @@
           <img src="assets/regionals.png" alt="" class="icon">
         </div>
         <div class="row">
-          <div class="detail">
-            {{team?.tournament}}
-          </div>
-          <div class="detail">
-            {{team?.regulation}}
-          </div>
+          <ng-container *ngIf="team?.tournament">
+            <div class="detail">
+              {{team?.tournament?.name}}
+            </div>
+          </ng-container>
+          <ng-container *ngIf="team?.regulation">
+            <div class="detail">
+              {{team?.regulation?.name}}
+            </div>
+          </ng-container>
         </div>
       </div>
       <div class="center">
         <div>
           <div>
-            Views: {{team?.viewCount}}
+            {{team?.viewCount}}
           </div>
           <div>
-            {{formatDate(team?.date)}}
+            {{util.customFormatDate(team?.date!)}}
           </div>
         </div>    
       </div>

@@ -66,9 +66,4 @@ export class TeamPreviewComponent
       this.feedback = await this.teamService.deleteTeam(this.team?.id);
     }
   }
-
-  formatDate(date)
-  {
-    return this.util.customFormatDate(date);
-  }
 }
