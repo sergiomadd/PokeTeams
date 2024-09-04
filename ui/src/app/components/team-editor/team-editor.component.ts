@@ -87,15 +87,23 @@ export class TeamEditorComponent
     this.team.player = event;
   }
 
-  tournamentSelectEvent(event: Tag)
+  async tournamentSelectEvent(event: Tag)
   {
-    console.log("selectiing")
-    this.team.tournament = event ? event.name : undefined;
+    this.team.tournament = event ? await this.teamService.getTournamentByName(event.name) : undefined;
+    if(!this.team.tournament)
+    {
+      this.team.tournament = 
+      {
+        name: event.name,
+        official: false
+      }
+    }
+    console.log(this.team)
   }
 
-  regulationSelectEvent(event: Tag)
+  async regulationSelectEvent(event: Tag)
   {
-    this.team.regulation = event ? event.identifier : undefined;
+    this.team.regulation = event ? await this.teamService.getRegulationByName(event.identifier) : undefined;
   }
 
   tagSelectEvent(event: Tag)
