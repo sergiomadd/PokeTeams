@@ -11,7 +11,6 @@ import { TeamService } from 'src/app/services/team.service';
 import { UserService } from 'src/app/services/user.service';
 import { PaginationComponent } from '../pieces/pagination/pagination.component';
 import { ResultStorageComponent } from '../pieces/result-storage/result-storage.component';
-import { SmartInputComponent } from '../pieces/smart-input/smart-input.component';
 
 @Component({
   selector: 'app-search',
@@ -44,26 +43,10 @@ export class SearchComponent
     pokemon: [''],
   });
 
-  @ViewChild('userInput') userInputComponent!: SmartInputComponent;
-  @ViewChild('tournamentInput') tournamentInputComponent!: SmartInputComponent;
-  @ViewChild('regulationInput') regulationInputComponent!: SmartInputComponent;
-  @ViewChild('pokemonInput') pokemonInputComponent!: SmartInputComponent;
-  @ViewChild('pokemonStorage') pokemonResultStorageComponent?: ResultStorageComponent;
-  pokemonSelectEvent($event: Tag)
+  @ViewChild('query') queryResultStorageComponent?: ResultStorageComponent;
+  querySelectEvent($event: Tag)
   {
-    this.pokemonResultStorageComponent?.results?.push($event);
-  }
-  @ViewChild('moveInput') moveInputComponent!: SmartInputComponent;
-  @ViewChild('moveStorage') moveResultStorageComponent?: ResultStorageComponent;
-  moveSelectEvent($event: Tag)
-  {
-    this.moveResultStorageComponent?.results?.push($event);
-  }
-  @ViewChild('itemInput') itemInputComponent!: SmartInputComponent;
-  @ViewChild('itemStorage') itemResultStorageComponent?: ResultStorageComponent;
-  itemSelectEvent($event: Tag)
-  {
-    this.itemResultStorageComponent?.results?.push($event);
+    this.queryResultStorageComponent?.results?.push($event);
   }
 
   ngOnChanges(changes: SimpleChanges)
@@ -84,6 +67,14 @@ export class SearchComponent
   {
     let searchQuery: SearchQueryDTO = 
     {
+      queries: this.queryResultStorageComponent?.results ?? [],
+      teamsPerPage: this.teamsPerPage,
+      selectedPage: 1,
+      order: this.sortOrder
+    }
+    /*
+    let searchQuery: SearchQueryDTO = 
+    {
       userName: this.userInputComponent.selected?.name ?? this.userInputComponent.searchForm.controls.key.value,
       tournamentName: this.tournamentInputComponent.selected?.name ?? this.tournamentInputComponent.searchForm.controls.key.value,
       regulation: this.regulationInputComponent.selected?.identifier,
@@ -94,6 +85,7 @@ export class SearchComponent
       selectedPage: 1,
       order: this.sortOrder
     }
+    */
     return searchQuery;
   }
 

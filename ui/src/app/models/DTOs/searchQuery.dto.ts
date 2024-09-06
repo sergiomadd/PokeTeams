@@ -1,13 +1,9 @@
 import { TeamSearchOrder } from "../enums/teamSearchOrder.enum";
+import { Tag } from "../tag.model";
 
 export interface SearchQueryDTO
 {
-  userName?: string | null,
-  tournamentName?: string | null,
-  regulation?: string | null,
-  pokemons?: string[] | null,
-  moves?: string[] | null,
-  items?: string[] | null,
+  queries: Tag[],
   teamsPerPage?: number,
   selectedPage?: number,
   order?: TeamSearchOrder
