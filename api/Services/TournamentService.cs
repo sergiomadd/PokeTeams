@@ -108,7 +108,7 @@ namespace api.Services
                 tournaments.ForEach(tournament =>
                 {
                     string path = "https://localhost:7134/images/misc/vgc.png";
-                    queryResults.Add(new TagDTO(tournament.Name, tournament.Name,
+                    queryResults.Add(new TagDTO(tournament.Name, tournament.Name, type: "tournament",
                         icon: tournament.Official ? path : null));
                 });
             }

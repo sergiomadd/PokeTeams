@@ -652,7 +652,7 @@ namespace api.Services
             {
                 pokemonNames.ForEach(pokemonName =>
                 {
-                    queryResults.Add(new TagDTO(pokemonName.name, pokemonName.pokemon_species_id.ToString(),
+                    queryResults.Add(new TagDTO(pokemonName.name, pokemonName.pokemon_species_id.ToString(), type: "pokemon",
                         icon: $"https://localhost:7134/images/sprites/pokemon/{pokemonName.pokemon_species_id}.png"));
                 });
             }
@@ -676,16 +676,16 @@ namespace api.Services
                         if (targetType != null)
                         {
                             var pathStart = "https://localhost:7134/images/sprites/types/generation-viii/";
-                            queryResults.Add(new TagDTO(moveName.name, moves.identifier, icon: $"{pathStart}{targetType.identifier}.png"));
+                            queryResults.Add(new TagDTO(moveName.name, moves.identifier, type: "move", icon: $"{pathStart}{targetType.identifier}.png"));
                         }
                         else
                         {
-                            queryResults.Add(new TagDTO(moveName.name, moves.identifier));
+                            queryResults.Add(new TagDTO(moveName.name, moves.identifier, type: "move"));
                         }
                     }
                     else
                     {
-                        queryResults.Add(new TagDTO(moveName.name, moves.identifier));
+                        queryResults.Add(new TagDTO(moveName.name, moves.identifier, type: "move"));
                     }
                 });
             }
@@ -705,11 +705,11 @@ namespace api.Services
                     if (items != null)
                     {
                         string pathStart = "https://localhost:7134/images/sprites/items/";
-                        queryResults.Add(new TagDTO(itemName.name, items.Identifier, icon: $"{pathStart}{items.Identifier}.png"));
+                        queryResults.Add(new TagDTO(itemName.name, items.Identifier, type: "item", icon: $"{pathStart}{items.Identifier}.png"));
                     }
                     else
                     {
-                        queryResults.Add(new TagDTO(itemName.name, items.Identifier));
+                        queryResults.Add(new TagDTO(itemName.name, items.Identifier, type: "item"));
                     }
                 });
             }
