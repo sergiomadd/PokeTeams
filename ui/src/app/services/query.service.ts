@@ -21,15 +21,14 @@ export class QueryService
     identifier: "custom"
   }
 
-  //Callbacks for search
-
   queryUserCallback = async (args: any): Promise<Tag[]> => 
   {
     return (await this.userService.queryUser(args)).map((u): Tag => 
       ({
         name: u.username,
         identifier: u.username,
-        icon: u.picture
+        icon: u.picture,
+        type: "username"
       })).concat([this.customQueryResult]);
   }
 
@@ -39,7 +38,8 @@ export class QueryService
       ({
         name: t.name,
         identifier: t.identifier,
-        icon: t.icon
+        icon: t.icon,
+        type: t.type
       }));
   }
 
@@ -52,7 +52,8 @@ export class QueryService
       })
       .map(r =>({
         name: r.name,
-        identifier: r.identifier
+        identifier: r.identifier,
+        type: "regulation"
       }));
   }
   regulationAllCallback = async (): Promise<Tag[]> => 
@@ -60,7 +61,8 @@ export class QueryService
     return (await this.teamService.getAllRegulations()).map(r => 
       ({
         name: r.name,
-        identifier: r.identifier
+        identifier: r.identifier,
+        type: "regulation"
       }));
   }
 
@@ -72,7 +74,8 @@ export class QueryService
         ({
           name: p.name,
           identifier: p.identifier,
-          icon: p.icon
+          icon: p.icon,
+          type: p.type
         }));
     }
     return [];
