@@ -6,6 +6,7 @@ using System.Data;
 using Microsoft.EntityFrameworkCore;
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
+using System.Security.Cryptography;
 
 namespace api.Services
 {
@@ -338,29 +339,29 @@ namespace api.Services
         {
             List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
             List<Team> teams = new List<Team>();
-            if (searchQuery.UserName != null && searchQuery.UserName != "")
+            foreach(TagDTO query in searchQuery.Queries)
             {
-                teams = await FilterTeamsByPlayer(teams, searchQuery.UserName);
-            }
-            if (searchQuery.TournamentName != null && searchQuery.TournamentName != "")
-            {
-                teams = FilterTeamsByTournament(teams, searchQuery.TournamentName);
-            }
-            if (searchQuery.Regulation != null && searchQuery.Regulation != "")
-            {
-                teams = FilterTeamsByRegulation(teams, searchQuery.Regulation);
-            }
-            if (searchQuery.Pokemons != null && searchQuery.Pokemons.Count > 0)
-            {
-                teams = FilterTeamsByPokemons(teams, searchQuery.Pokemons);
-            }
-            if (searchQuery.Moves != null && searchQuery.Moves.Count > 0)
-            {
-                teams = FilterTeamsByMoves(teams, searchQuery.Moves);
-            }
-            if (searchQuery.Items != null && searchQuery.Items.Count > 0)
-            {
-                teams = FilterTeamsByItems(teams, searchQuery.Items);
+                switch(query.Type)
+                {
+                    case "username":
+                        teams = await FilterTeamsByPlayer(teams, query.Name);
+                        break;
+                    case "tournament":
+                        teams = FilterTeamsByTournament(teams, query.Name);
+                        break;
+                    case "regulation":
+                        teams = FilterTeamsByRegulation(teams, query.Name);
+                        break;
+                    case "pokemon":
+                        teams = FilterTeamsByPokemons(teams, query.Identifier);
+                        break;
+                    case "move":
+                        teams = FilterTeamsByMoves(teams, query.Identifier);
+                        break;
+                    case "item":
+                        teams = FilterTeamsByItems(teams, query.Identifier);
+                        break;
+                }
             }
 
             int totalTeams = teams.Count;
@@ -499,26 +500,20 @@ namespace api.Services
             return inteams;
         }
 
-        public List<Team> FilterTeamsByPokemons(List<Team> inteams, List<string> pokemonsDexNumbers)
+        public List<Team> FilterTeamsByPokemons(List<Team> inteams, string dexNumber)
         {
             try
             {
                 if (inteams.Count == 0)
                 {
-                    foreach (string dexNumber in pokemonsDexNumbers)
-                    {
-                        inteams = _pokeTeamContext.Team
-                            .Include(t => t.Pokemons)
-                            .Include(t => t.Tags)
-                            .Where(t => t.Pokemons.Any(p => p.DexNumber == int.Parse(dexNumber))).ToList();
-                    }
+                    inteams = _pokeTeamContext.Team
+                        .Include(t => t.Pokemons)
+                        .Include(t => t.Tags)
+                        .Where(t => t.Pokemons.Any(p => p.DexNumber == int.Parse(dexNumber))).ToList();
                 }
                 else
                 {
-                    foreach (string dexNumber in pokemonsDexNumbers)
-                    {
-                        inteams = inteams.Where(t => t.Pokemons.Any(p => p.DexNumber == int.Parse(dexNumber))).ToList();
-                    }
+                    inteams = inteams.Where(t => t.Pokemons.Any(p => p.DexNumber == int.Parse(dexNumber))).ToList();
                 }
             }
             catch (Exception ex)
@@ -528,29 +523,26 @@ namespace api.Services
             return inteams;
         }
 
-        public List<Team> FilterTeamsByMoves(List<Team> inteams, List<string> movesIdentifiers)
+        public List<Team> FilterTeamsByMoves(List<Team> inteams, string moveIdentifier)
         {
             try
             {
                 if (inteams.Count == 0)
                 {
-                    foreach (string moveIdentifier in movesIdentifiers)
-                    {
-                        inteams = _pokeTeamContext.Team
-                            .Include(t => t.Pokemons)
-                            .Include(t => t.Tags)
-                            .Where(t => t.Pokemons.Any(p => p.Move1Identifier == moveIdentifier
-                            || p.Move2Identifier == moveIdentifier
-                            || p.Move3Identifier == moveIdentifier
-                            || p.Move4Identifier == moveIdentifier)).ToList();
-                    }
+                    inteams = _pokeTeamContext.Team
+                        .Include(t => t.Pokemons)
+                        .Include(t => t.Tags)
+                        .Where(t => t.Pokemons.Any(p => p.Move1Identifier == moveIdentifier
+                        || p.Move2Identifier == moveIdentifier
+                        || p.Move3Identifier == moveIdentifier
+                        || p.Move4Identifier == moveIdentifier)).ToList();
                 }
                 else
                 {
-                    foreach (string moveIdentifier in movesIdentifiers)
-                    {
-                        inteams = inteams.Where(t => t.Pokemons.Any(p => p.ItemIdentifier == moveIdentifier)).ToList();
-                    }
+                    inteams = inteams.Where(t => t.Pokemons.Any(p => p.Move1Identifier == moveIdentifier
+                        || p.Move2Identifier == moveIdentifier
+                        || p.Move3Identifier == moveIdentifier
+                        || p.Move4Identifier == moveIdentifier)).ToList();
                 }
             }
             catch (Exception ex)
@@ -560,26 +552,20 @@ namespace api.Services
             return inteams;
         }
 
-        public List<Team> FilterTeamsByItems(List<Team> inteams, List<string> itemsIdentifiers)
+        public List<Team> FilterTeamsByItems(List<Team> inteams, string itemIdentifier)
         {
             try
             {
                 if (inteams.Count == 0)
                 {
-                    foreach (string itemIdentifier in itemsIdentifiers)
-                    {
-                        inteams = _pokeTeamContext.Team
-                            .Include(t => t.Pokemons)
-                            .Include(t => t.Tags)
-                            .Where(t => t.Pokemons.Any(p => p.ItemIdentifier == itemIdentifier)).ToList();
-                    }
+                    inteams = _pokeTeamContext.Team
+                        .Include(t => t.Pokemons)
+                        .Include(t => t.Tags)
+                        .Where(t => t.Pokemons.Any(p => p.ItemIdentifier == itemIdentifier)).ToList();
                 }
                 else
                 {
-                    foreach (string itemIdentifier in itemsIdentifiers)
-                    {
-                        inteams = inteams.Where(t => t.Pokemons.Any(p => p.ItemIdentifier == itemIdentifier)).ToList();
-                    }
+                    inteams = inteams.Where(t => t.Pokemons.Any(p => p.ItemIdentifier == itemIdentifier)).ToList();
                 }
             }
             catch (Exception ex)
