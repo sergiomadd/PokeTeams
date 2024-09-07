@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using System.Security.Cryptography;
+using api.Models.DBModels;
+using System.Numerics;
 
 namespace api.Services
 {
@@ -335,48 +337,21 @@ namespace api.Services
             return "Team incremented";
         }
 
-        public async Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery)
+        private async Task<TeamSearchQueryResponseDTO> BuildTeamSearchQueryResponse(TeamSearchQueryDTO searchQuery, List<Team> teams)
         {
             List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
-            List<Team> teams = new List<Team>();
-            foreach(TagDTO query in searchQuery.Queries)
-            {
-                switch(query.Type)
-                {
-                    case "username":
-                        teams = await FilterTeamsByPlayer(teams, query.Name);
-                        break;
-                    case "tournament":
-                        teams = FilterTeamsByTournament(teams, query.Name);
-                        break;
-                    case "regulation":
-                        teams = FilterTeamsByRegulation(teams, query.Name);
-                        break;
-                    case "pokemon":
-                        teams = FilterTeamsByPokemons(teams, query.Identifier);
-                        break;
-                    case "move":
-                        teams = FilterTeamsByMoves(teams, query.Identifier);
-                        break;
-                    case "item":
-                        teams = FilterTeamsByItems(teams, query.Identifier);
-                        break;
-                }
-            }
-
             int totalTeams = teams.Count;
 
-            if(searchQuery.Order != null)
+            if (searchQuery.Order != null)
             {
                 teams = SortTeams(teams, searchQuery.Order ?? null);
             }
-            
-            if(teams != null && teams.Count > 0 
+            if (teams != null && teams.Count > 0
                 && searchQuery.TeamsPerPage != null && searchQuery.SelectedPage != null)
             {
                 teams = ChunkTeams(teams, searchQuery.TeamsPerPage ?? 0, searchQuery.SelectedPage ?? 0);
             }
-            
+
             foreach (Team team in teams)
             {
                 teamsPreviews.Add(await BuildTeamPreviewDTO(team));
@@ -387,6 +362,45 @@ namespace api.Services
                 Teams = teamsPreviews,
                 TotalTeams = totalTeams
             };
+        }
+
+        public async Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery)
+        {
+            List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
+            List<Team> teams = new List<Team>();
+            if(searchQuery.Queries != null && searchQuery.Queries.Count > 0)
+            {
+                foreach (TagDTO query in searchQuery.Queries)
+                {
+                    switch (query.Type)
+                    {
+                        case "username":
+                            teams = await FilterTeamsByPlayer(teams, query.Name);
+                            break;
+                        case "tournament":
+                            teams = FilterTeamsByTournament(teams, query.Name);
+                            break;
+                        case "regulation":
+                            teams = FilterTeamsByRegulation(teams, query.Name);
+                            break;
+                        case "pokemon":
+                            teams = FilterTeamsByPokemons(teams, query.Identifier);
+                            break;
+                        case "move":
+                            teams = FilterTeamsByMoves(teams, query.Identifier);
+                            break;
+                        case "item":
+                            teams = FilterTeamsByItems(teams, query.Identifier);
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                teams = _pokeTeamContext.Team.ToList();
+            }
+
+            return await BuildTeamSearchQueryResponse(searchQuery, teams);
         }
 
         public List<Team> SortTeams(List<Team> teams , TeamSearchOrder? order)
