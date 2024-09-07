@@ -1,6 +1,7 @@
 
 <div class="search">
-    <form [formGroup]="searchForm" class="form">
+  <div class="top">
+    <div class="form">
       <div></div>
       <div class="inputs">
         <div class="row">
@@ -63,10 +64,11 @@
         <button class="button-tertiary-clear search-button">Reset</button>
         <button (click)="defaultSearch()" class="button-primary search-button">Search</button>
       </div>
-    </form>
+    </div>
     <div class="storages">  
       <app-result-storage #query class="item storage">test</app-result-storage>   
     </div>
+  </div>
   <div 
   class="results" 
   #results

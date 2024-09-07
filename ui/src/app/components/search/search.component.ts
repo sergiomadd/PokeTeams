@@ -36,13 +36,6 @@ export class SearchComponent
   sortOrder: TeamSearchOrder = TeamSearchOrder.ViewsDescending;
   @ViewChild(PaginationComponent) paginationComponent!: PaginationComponent;
 
-  searchForm = this.formBuilder.group(
-  {
-    tournament: [''],
-    regulation: [''],
-    pokemon: [''],
-  });
-
   @ViewChild('query') queryResultStorageComponent?: ResultStorageComponent;
   querySelectEvent($event: Tag)
   {
@@ -82,7 +75,6 @@ export class SearchComponent
 
   search(searchQuery: SearchQueryDTO)
   {
-    console.log(searchQuery)
     this.searched = true;
     this.teamService.searchTeams(searchQuery)?.subscribe(
       {
@@ -91,7 +83,6 @@ export class SearchComponent
           this.teams = response.teams;
           this.sortedTeams = [...response.teams];
           this.totalTeams = response.totalTeams;
-          console.log(response);
         },
         error: (error) => 
         {
