@@ -174,10 +174,10 @@ export class TeamService
     return this.util.toCamelCase(tournament); 
   }
 
-  async getRegulationByName(name: string) : Promise<Regulation>
+  async getRegulationByIdentifier(identifier: string) : Promise<Regulation>
   {
     let regulation: Regulation = <Regulation>{}
-    let url = this.apiUrl + 'Tournament/' + name;
+    let url = this.apiUrl + 'Regulation/' + identifier;
     try
     {
       regulation = await lastValueFrom(this.http.get<Regulation>(url).pipe(catchError(() => [regulation]), timeout(this.dataTimeout)));

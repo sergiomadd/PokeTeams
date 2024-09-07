@@ -103,7 +103,7 @@ export class TeamEditorComponent
 
   async regulationSelectEvent(event: Tag)
   {
-    this.team.regulation = event ? await this.teamService.getRegulationByName(event.identifier) : undefined;
+    this.team.regulation = event ? await this.teamService.getRegulationByIdentifier(event.identifier) : undefined;
   }
 
   tagSelectEvent(event: Tag)
