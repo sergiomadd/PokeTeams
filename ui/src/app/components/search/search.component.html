@@ -1,116 +1,123 @@
 
 <div class="search">
-  <div class="inputs">
     <form [formGroup]="searchForm" class="form">
-      <div class="items">
-        <app-smart-input
-        #userInput
-        [label]="'Player'"
-        [keepSelected]="true"
-        [allowCustom]="true"
-        [getter]="queryService.queryUserCallback"
-        class="item smart-input-wrapper"
-        ></app-smart-input>
-        <app-smart-input
-        #tournamentInput
-        [label]="'Tournament'"
-        [keepSelected]="true"
-        [allowCustom]="true"
-        [getter]="queryService.queryTournamentCallback"
-        class="item smart-input-wrapper"
-        ></app-smart-input>
-        <app-smart-input
-        #regulationInput
-        [label]="'Regulation'"
-        [keepSelected]="true"
-        [getter]="queryService.queryRegulationCallback"
-        [allGetter]="queryService.regulationAllCallback"
-        class="item smart-input-wrapper"
-        ></app-smart-input>
-        <button class="button-tertiary-clear">Reset: </button>
+      <div></div>
+      <div class="inputs">
+        <div class="row">
+          <app-smart-input
+          #userInput
+          [label]="'Player'"
+          [keepSelected]="false"
+          [allowCustom]="true"
+          [getter]="queryService.queryUserCallback"
+          (selectEvent)="querySelectEvent($event)"
+          class="item smart-input-wrapper"
+          ></app-smart-input>
+          <app-smart-input
+          #tournamentInput
+          [label]="'Tournament'"
+          [keepSelected]="false"
+          [allowCustom]="true"
+          [getter]="queryService.queryTournamentCallback"
+          (selectEvent)="querySelectEvent($event)"
+          class="item smart-input-wrapper"
+          ></app-smart-input>
+          <app-smart-input
+          #regulationInput
+          [label]="'Regulation'"
+          [keepSelected]="false"
+          [getter]="queryService.queryRegulationCallback"
+          [allGetter]="queryService.regulationAllCallback"
+          (selectEvent)="querySelectEvent($event)"
+          class="item smart-input-wrapper"
+          ></app-smart-input>
+        </div>
+        <div class="row">
+          <app-smart-input
+          #pokemonInput
+          [label]="'Pokemon'"
+          [keepSelected]="false"
+          [getter]="queryService.queryPokemonCallback"
+          (selectEvent)="querySelectEvent($event)"
+          class="item smart-input-wrapper"
+          ></app-smart-input>
+          <app-smart-input
+          #moveInput
+          [label]="'Move'"
+          [keepSelected]="false"
+          [getter]="queryService.queryMoveCallback"
+          (selectEvent)="querySelectEvent($event)"
+          class="item smart-input-wrapper"
+          ></app-smart-input>
+          <app-smart-input
+          #itemInput
+          [label]="'Item '"
+          [keepSelected]="false"
+          [getter]="queryService.queryItemCallback"
+          (selectEvent)="querySelectEvent($event)"
+          class="item smart-input-wrapper"
+          ></app-smart-input>
+        </div>
       </div>
-      <div class="items">
-        <app-smart-input
-        #pokemonInput
-        [label]="'Pokemon'"
-        [keepSelected]="false"
-        [getter]="queryService.queryPokemonCallback"
-        (selectEvent)="pokemonSelectEvent($event)"
-        class="item smart-input-wrapper"
-        ></app-smart-input>
-        <app-smart-input
-        #moveInput
-        [label]="'Move'"
-        [keepSelected]="false"
-        [getter]="queryService.queryMoveCallback"
-        (selectEvent)="moveSelectEvent($event)"
-        class="item smart-input-wrapper"
-        ></app-smart-input>
-        <app-smart-input
-        #itemInput
-        [label]="'Item '"
-        [keepSelected]="false"
-        [getter]="queryService.queryItemCallback"
-        (selectEvent)="itemSelectEvent($event)"
-        class="item smart-input-wrapper"
-        ></app-smart-input>    
-        <button (click)="defaultSearch()" class="button-primary">Search: </button>
-      </div>
-      <div class="items">
-        <app-result-storage #pokemonStorage class="item storage"></app-result-storage>
-        <app-result-storage #moveStorage class="item storage"></app-result-storage>
-        <app-result-storage #itemStorage class="item storage"></app-result-storage>   
+      <div class="buttons">
+        <button class="button-tertiary-clear search-button">Reset</button>
+        <button (click)="defaultSearch()" class="button-primary search-button">Search</button>
       </div>
     </form>
-  </div>
+    <div class="storages">  
+      <app-result-storage #query class="item storage">test</app-result-storage>   
+    </div>
   <div 
   class="results" 
   #results
   [ngClass]="{searched: searched}"
   >
-    <div>
-      Total teams: {{teams.length}}
-    </div>
-    <div class="sorter">
-      <div class="category" (click)="changeSorter(0)">
-        Date
-        <div class="way">
-          <ng-container *ngIf="!sorterSettings[0] && sorterSettings[0] !== 0">
-            <div class="neutral">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8H32c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z"/></svg>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="sorterSettings[0] === 1">
-            <div class="up">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z"/></svg>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="sorterSettings[0] === 0">
-            <div class="down">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M182.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
-            </div>
-          </ng-container>
+    <div class="bar">
+      <div>Logged?</div>
+      <div class="sorter">
+        <div class="category" (click)="changeSorter(0)">
+          Date
+          <div class="way">
+            <ng-container *ngIf="!sorterSettings[0] && sorterSettings[0] !== 0">
+              <div class="neutral">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8H32c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z"/></svg>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="sorterSettings[0] === 1">
+              <div class="up">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z"/></svg>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="sorterSettings[0] === 0">
+              <div class="down">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M182.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+        <div class="category" (click)="changeSorter(1)">
+          Views
+          <div class="way">
+            <ng-container *ngIf="!sorterSettings[1]">
+              <div class="neutral">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8H32c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z"/></svg>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="sorterSettings[1] === 3">
+              <div class="up">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z"/></svg>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="sorterSettings[1] === 2">
+              <div class="down">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M182.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
+              </div>
+            </ng-container>
+          </div>
         </div>
       </div>
-      <div class="category" (click)="changeSorter(1)">
-        Views
-        <div class="way">
-          <ng-container *ngIf="!sorterSettings[1]">
-            <div class="neutral">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M137.4 41.4c12.5-12.5 32.8-12.5 45.3 0l128 128c9.2 9.2 11.9 22.9 6.9 34.9s-16.6 19.8-29.6 19.8H32c-12.9 0-24.6-7.8-29.6-19.8s-2.2-25.7 6.9-34.9l128-128zm0 429.3l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128c-12.5 12.5-32.8 12.5-45.3 0z"/></svg>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="sorterSettings[1] === 3">
-            <div class="up">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z"/></svg>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="sorterSettings[1] === 2">
-            <div class="down">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M182.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-9.2 9.2-11.9 22.9-6.9 34.9s16.6 19.8 29.6 19.8H288c12.9 0 24.6-7.8 29.6-19.8s2.2-25.7-6.9-34.9l-128-128z"/></svg>
-            </div>
-          </ng-container>
-        </div>
+      <div>
+        {{teams.length}} teams
       </div>
     </div>
     <div class="table">

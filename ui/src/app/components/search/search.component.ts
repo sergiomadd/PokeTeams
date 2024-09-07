@@ -72,20 +72,6 @@ export class SearchComponent
       selectedPage: 1,
       order: this.sortOrder
     }
-    /*
-    let searchQuery: SearchQueryDTO = 
-    {
-      userName: this.userInputComponent.selected?.name ?? this.userInputComponent.searchForm.controls.key.value,
-      tournamentName: this.tournamentInputComponent.selected?.name ?? this.tournamentInputComponent.searchForm.controls.key.value,
-      regulation: this.regulationInputComponent.selected?.identifier,
-      pokemons: this.pokemonResultStorageComponent?.results?.map(r => r.identifier),
-      moves: this.moveResultStorageComponent?.results?.map(r => r.name),
-      items: this.itemResultStorageComponent?.results?.map(r => r.name),
-      teamsPerPage: this.teamsPerPage,
-      selectedPage: 1,
-      order: this.sortOrder
-    }
-    */
     return searchQuery;
   }
 

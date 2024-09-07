@@ -7,26 +7,21 @@
   margin-right: auto;
   margin-top: 5vh;
 
-  .inputs
+  .form
   {
+    display: grid;
+    grid-template-columns: 15% 70% 15%;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4vw;
+    width: 75%;
     margin: auto;
-    width: 80%;
-    max-width: 80%;
     padding: 0.8vw;
 
-    .form
+    .inputs
     {
-      display: grid;
-      grid-template-rows: repeat(3, 10vh);
-    }
-
-    .items
-    {
-      display: grid;
-      grid-template-columns: repeat(3, 15vw) 10vw;
-      align-items: center;
-      justify-content: center;
-      column-gap: 0.4vw;
+      margin: auto;
+      width: fit-content;
     }
 
     .item
@@ -38,12 +33,28 @@
       width: 15vw;
       height: inherit;
       max-height: 10vh;
-      max-width: 15vw;
+      max-width: 12vw;
     }
 
     .storage
     {
       padding: 0.4vw 0 0.4vw 0;
+    }
+
+    .buttons
+    {
+      display: flex;
+      justify-content: end;
+      flex-direction: column;
+      gap: 3vh;
+      height: 100%;
+      margin-bottom: 1vh;
+    }
+
+    .search-button
+    {
+      height: calc(3vh + 0.4vw);
+      width: 6vw;
     }
   }
 
@@ -53,37 +64,43 @@
     margin: auto;
     margin-bottom: 5vw;
 
-    .sorter
+    .bar
     {
-      width: 100%;
-      height: 2em;
-      border-radius: 10px;
-      background-color: var(--bg-color-2);
-      padding: 0.4vw;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 0.4vw;
+      justify-content: space-between;
+      height: 2em;
+      border-radius: 5px;
+      background-color: var(--bg-color-2);
+      width: 100%;
+      padding: 0.4vw;
+      border: 1px solid black;
 
-      .category
+      .sorter
       {
         display: flex;
+        align-items: center;
+        justify-content: center;
         gap: 0.4vw;
-        border: 1px solid black;
-        background-color: var(--bg-color-3);
-        border-radius: 10px;
-        padding: 0.4vw;
-        cursor: pointer;
-        user-select: none;
-        
-        .way
+  
+        .category
         {
-          width: 0.6vw;
-          height: 0.6vw;
+          display: flex;
+          gap: 0.4vw;
+          border: 1px solid black;
+          background-color: var(--bg-color-3);
+          border-radius: 10px;
+          padding: 0.4vw;
+          cursor: pointer;
+          user-select: none;
+          
+          .way
+          {
+            width: 0.6vw;
+            height: 0.6vw;
+          }
         }
       }
-
-
     }
 
     .table
