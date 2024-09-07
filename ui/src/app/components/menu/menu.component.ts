@@ -18,8 +18,8 @@ export class MenuComponent
 
   loggedUser$ = this.store.select(selectLoggedUser);
 
-  @Input() menuOpen: boolean = false;
-  @Output() openEvent = new EventEmitter()
+  @Input() menuOpen: boolean = true;
+  @Output() toggleEvent = new EventEmitter()
 
   selectedThemeName?: string;
 
@@ -29,12 +29,13 @@ export class MenuComponent
       {
         this.selectedThemeName = value.name;
       });
-    this.toggleTheme();
+    //this.toggleTheme();
+    this.menuOpen = true;
   }
 
   toggleMenu()
   {
-    this.openEvent.emit()
+    this.toggleEvent.emit()
   }
 
   navigate(pageName:string)
@@ -46,7 +47,6 @@ export class MenuComponent
   {
     //this.loggedUser$.subscribe()
     this.router.navigate([`/@${username}`]);
-    console.log(username.which)
   }
 
   logOut()

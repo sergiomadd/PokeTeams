@@ -1,6 +1,6 @@
 <div class="content" [ngClass]="{menuClosed: !menuOpen, menuOpened: menuOpen}">
   <div class="menu">
-    <app-menu [menuOpen]="menuOpen" (toggleMenu)="toggleMenu"></app-menu>
+    <app-menu [menuOpen]="menuOpen" (toggleEvent)="toggleMenu()"></app-menu>
   </div>
   <div class="main">
     <router-outlet></router-outlet>
