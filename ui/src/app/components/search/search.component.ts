@@ -33,7 +33,7 @@ export class SearchComponent
   //pagination
   teamsPerPage: number = 5;
   totalTeams?: number;
-  sortOrder: TeamSearchOrder = TeamSearchOrder.ViewsDescending;
+  sortOrder: TeamSearchOrder = TeamSearchOrder.DateDescending;
   @ViewChild(PaginationComponent) paginationComponent!: PaginationComponent;
 
   @ViewChild('query') queryResultStorageComponent?: ResultStorageComponent;
@@ -53,10 +53,10 @@ export class SearchComponent
 
   async ngOnInit()
   {
-
+    this.search(this.buildQuery());
   }
 
-  buildQueryFromForm(): SearchQueryDTO
+  buildQuery(): SearchQueryDTO
   {
     let searchQuery: SearchQueryDTO = 
     {
@@ -68,9 +68,21 @@ export class SearchComponent
     return searchQuery;
   }
 
+  buildQueryLastest(): SearchQueryDTO
+  {
+    let searchQuery: SearchQueryDTO = 
+    {
+      queries: this.queryResultStorageComponent?.results ?? [],
+      teamsPerPage: this.teamsPerPage,
+      selectedPage: 1,
+      order: TeamSearchOrder.DateDescending
+    }
+    return searchQuery;
+  }
+
   defaultSearch()
   {
-    this.search(this.buildQueryFromForm());
+    this.search(this.buildQuery());
   }
 
   search(searchQuery: SearchQueryDTO)
@@ -97,7 +109,7 @@ export class SearchComponent
   }
 
   //sorting
-  sorterSettings: (TeamSearchOrder | undefined)[] = [undefined, TeamSearchOrder.ViewsDescending];
+  sorterSettings: (TeamSearchOrder | undefined)[] = [TeamSearchOrder.DateDescending, undefined];
 
   changeSorter(index)
   {
@@ -149,7 +161,7 @@ export class SearchComponent
 
   changeOrder(newOrder: TeamSearchOrder)
   {
-    let searchQuery: SearchQueryDTO = this.buildQueryFromForm();
+    let searchQuery: SearchQueryDTO = this.buildQuery();
     searchQuery.selectedPage = 1;
     this.paginationComponent.currentPage = 1;
     searchQuery.order = newOrder;
@@ -160,7 +172,7 @@ export class SearchComponent
   pageChange($event, container)
   {
     container.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
-    let searchQuery: SearchQueryDTO = this.buildQueryFromForm();
+    let searchQuery: SearchQueryDTO = this.buildQuery();
     searchQuery.selectedPage = $event;
     this.search(searchQuery);
   }
