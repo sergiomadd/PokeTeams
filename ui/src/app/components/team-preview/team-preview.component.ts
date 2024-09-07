@@ -27,7 +27,7 @@ export class TeamPreviewComponent
 
   ngOnInit()
   {
-
+    
   }
 
   getVisibility()

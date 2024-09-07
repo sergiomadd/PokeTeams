@@ -131,7 +131,7 @@
       <ng-container *ngIf="teams && teams.length > 0">
         <ng-container *ngFor="let team of teams">
           <div class="record">
-            <app-team-preview [team]="team" [mode]="'six'"></app-team-preview>
+            <app-team-preview [team]="team" [mode]="'six'" [logged]="logged"></app-team-preview>
           </div>
         </ng-container>
       </ng-container>

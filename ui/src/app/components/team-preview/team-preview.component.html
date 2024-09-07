@@ -38,25 +38,27 @@
           </div>
         </div>    
       </div>
-      <div class="right">
-        <div class="link">
-          <button (click)="copyLink()" class="button-primary">Copy link</button>
-        </div>
-        <div class="link">
-          <button (click)="copyPaste()" class="button-primary-clear">Copy paste</button>
-        </div>
-        <div class="link">
-          <button [routerLink]="['/', team?.id]" class="button-tertiary-clear">Open</button>
-        </div>
+      <div class="buttons">
+        <button (click)="copyPaste()" class="button">
+          <img src="assets/copy.png" alt="" class="icon">
+        </button>
+        <button (click)="copyLink()" class="button">
+          <img src="assets/link.png" alt="" class="icon">
+        </button>
+        <button class="button">
+          <a [routerLink]="['/', team?.id]" target="_blank" class="button">
+            <img src="assets/external-link.png" alt="" class="icon">
+          </a>
+        </button>
         <ng-container *ngIf="logged">
-          <!-- 
-          <div class="link">
-            <a href="{{team?.id}}" target=”_blank” >Edit</a>
-          </div>
-          -->
-          <div class="link">
-            <button (click)="delete()">Delete</button>
-          </div>
+          <button class="button">
+            <a [routerLink]="['/', team?.id]" target="_blank" class="button button-tertiary">
+              <img src="assets/edit-white.png" alt="" class="icon">
+            </a>
+          </button>
+          <button (click)="delete()" class="button button-primary">
+            <img src="assets/trash-white.png" alt="" class="icon">
+          </button>
         </ng-container>
       </div>
     </div>
