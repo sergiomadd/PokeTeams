@@ -1,7 +1,9 @@
 <div class="team">
   <div class="top">
     <div class="autor">
-      &#64;{{team?.player}}
+      <ng-container *ngIf="team?.player">
+        &#64;{{team?.player}}
+      </ng-container>
     </div>
     <div class="info">
       <div class="row-center">
@@ -18,9 +20,11 @@
             {{team?.regulation?.name}}
           </div>
         </ng-container>
-        <div class="piece tournament">
-          {{team?.viewCount}} visits
-        </div>
+        <ng-container *ngIf="team?.viewCount">
+          <div class="piece tournament">
+            {{team?.viewCount}} visits
+          </div>
+        </ng-container>
         <ng-container *ngIf="team?.date">
           <div class="piece tournament">
             {{util.customFormatDate(team?.date!)}} 
