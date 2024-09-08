@@ -1,4 +1,4 @@
-import { Component, inject, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, inject, Input, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { Team } from 'src/app/models/team.model';
 import { TeamOptions } from 'src/app/models/teamOptions.model';
 import { ParserService } from 'src/app/services/parser.service';
@@ -20,11 +20,19 @@ export class TeamComponent
   @Input() team?: Team;
 
   @ViewChildren(PokemonComponent) pokemonComponents!:QueryList<PokemonComponent>;
-
   @ViewChild(ResultStorageComponent) tagStorage!: ResultStorageComponent;
 
   showAllStats: boolean = false;
   showAllNotes: boolean = false;
+
+  ngOnChanges(changes: SimpleChanges)
+  {
+    if(changes['team'])
+    {
+      this.team = changes['team'].currentValue;
+    }
+  }
+  
   
   forceChange(options: TeamOptions)
   {

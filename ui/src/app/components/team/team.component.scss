@@ -47,12 +47,6 @@
       {
         cursor: pointer;
 
-
-        .icon
-        {
-          width: 1.5vw;
-          height: 1.5vw;
-        }
       }
 
       .active
@@ -84,4 +78,8 @@
   }
 }
 
-
+.icon
+{
+  width: 1.5vw;
+  height: 1.5vw;
+}

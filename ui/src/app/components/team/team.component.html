@@ -2,7 +2,10 @@
   <div class="top">
     <div class="autor">
       <ng-container *ngIf="team?.player">
-        &#64;{{team?.player}}
+        <div class="row">
+          <img src="{{team?.player?.picture}}" alt="" class="icon">
+          &#64;{{team?.player?.username}}
+        </div>
       </ng-container>
     </div>
     <div class="info">
