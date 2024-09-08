@@ -8,7 +8,7 @@ namespace api.DTOs
         public string ID { get; set; }
         public List<PokemonDTO> Pokemons { get; set; }
         public TeamOptionsDTO? Options { get; set; }
-        public string? Player { get; set; }
+        public UserPreviewDTO? Player { get; set; }
         public TournamentDTO? Tournament { get; set; }
         public RegulationDTO? Regulation { get; set; }
         public int ViewCount { get; set; }
@@ -26,7 +26,7 @@ namespace api.DTOs
             string id,
             List<PokemonDTO> pokemons,
             string options,
-            string uploaded,
+            UserPreviewDTO player,
             TournamentDTO tournament,
             RegulationDTO regulation,
             int viewCount,
@@ -38,7 +38,7 @@ namespace api.DTOs
             ID = id;
             Pokemons = pokemons;
             Options = JsonSerializer.Deserialize<TeamOptionsDTO>(options, new JsonSerializerOptions { IncludeFields = false });
-            Player = uploaded;
+            Player = player;
             Tournament = tournament;
             Regulation = regulation;
             ViewCount = viewCount;

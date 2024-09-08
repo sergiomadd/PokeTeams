@@ -7,7 +7,7 @@ namespace api.DTOs
         public string ID { get; set; }
         public List<PokemonPreviewDTO> Pokemons { get; set; }
         public TeamOptionsDTO? Options { get; set; }
-        public string? Player { get; set; }
+        public UserPreviewDTO? Player { get; set; }
         public TournamentDTO? Tournament { get; set; }
         public RegulationDTO? Regulation { get; set; }
         public int ViewCount { get; set; }

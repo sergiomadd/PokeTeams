@@ -9,6 +9,7 @@ using api.DTOs.PokemonDTOs;
 using System.Security.Cryptography;
 using api.Models.DBModels;
 using System.Numerics;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace api.Services
 {
@@ -96,17 +97,19 @@ namespace api.Services
             return teamPreviewDTO;
         }
 
-        private async Task<string> GetTeamPlayer(Team team)
+        private async Task<UserPreviewDTO> GetTeamPlayer(Team team)
         {
-            string playerUserName = "Unkown";
+            UserPreviewDTO playerUserName = new UserPreviewDTO();
             if (team.PlayerId != null)
             {
                 User player = await _userService.GetUserById(team.PlayerId);
-                playerUserName = player.UserName;
+                playerUserName.Username = player.UserName;
+                playerUserName.Picture = $"https://localhost:7134/images/sprites/profile-pics/{player.Picture}.png";
             }
             else if (team.AnonPlayer != null)
             {
-                playerUserName = team.AnonPlayer;
+                playerUserName.Username = team.AnonPlayer;
+                playerUserName.Picture = $"https://localhost:7134/images/sprites/profile-pics/anonymous.png";
             }
             return playerUserName;
         }
@@ -169,10 +172,10 @@ namespace api.Services
 
                 User player = null;
                 Printer.Log("logged username", loggedUserName);
-                if (loggedUserName == inputTeam.Player)
+                if (inputTeam.Player != null && loggedUserName == inputTeam.Player.Username)
                 {
                     Printer.Log("Getting logged user in service");
-                    player = await _userService.GetUserByUserName(inputTeam.Player);
+                    player = await _userService.GetUserByUserName(inputTeam.Player.Username);
                 }
 
                 List<Tag> tags = new List<Tag>();
@@ -221,7 +224,7 @@ namespace api.Services
                     Pokemons = pokemons,
                     Options = optionsString,
                     PlayerId = player != null ? player.Id : null,
-                    AnonPlayer = player == null ? inputTeam.Player : null,
+                    AnonPlayer = player == null ? inputTeam.Player != null ? inputTeam.Player.Username : "anon" : null,
                     TournamentNormalizedName = tournament != null ? tournament.NormalizedName : null,
                     Regulation = inputTeam.Regulation != null ? inputTeam.Regulation.Identifier : null,
                     ViewCount = 0,

@@ -502,7 +502,7 @@ namespace api.Controllers
                     Email = model.Email,
                     PasswordHash = model.Password,
                     EmailConfirmed = false,
-                    Picture = "blastoise",
+                    Picture = "snorlax",
                     Visibility = true
                 };
                 var signUpResult = await _userManager.CreateAsync(user, model.Password);
