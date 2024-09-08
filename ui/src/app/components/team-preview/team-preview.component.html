@@ -2,43 +2,38 @@
 <div class="team">
   <ng-container *ngIf="getVisibility(); else private">
     <div class="top">
-      <div class="team-details">
+      <div class="row b-gap">
         <ng-container *ngIf="logged">
-          <div class="visibility"><div class="check"></div></div>
-          {{team?.visibility}}
+          <ng-container *ngIf="!team?.visibility">
+            <img src="assets/lock.png" alt="" class="icon">
+          </ng-container>
         </ng-container>
-        <div class="col">
-          <div class="detail" [ngClass]="{unkownPlayer: team?.player === 'Unkown'}">
-            &#64;{{team?.player}}
+        <div class="row no-gap">
+          <div class="detail" [ngClass]="{unkownPlayer: team?.player?.username === 'Unkown'}">
+            <img src="{{team?.player?.picture}}" alt="" class="icon">
+            {{team?.player?.username}}
           </div>
+        </div>
+        <ng-container *ngIf="team?.tournament">
+          <div class="detail">
+            <img src="assets/regionals.png" alt="" class="icon">
+            {{team?.tournament?.name}}
+          </div>
+        </ng-container>
+        <ng-container *ngIf="team?.regulation">
+          <div class="detail regulation">
+            {{team?.regulation?.identifier}}
+          </div>
+        </ng-container>
+      </div>
+      <div class="row-end b-gap">
+        <div class="detail views">
+          <img src="assets/visible.png" alt="" class="icon">
+          {{team?.viewCount}}
         </div>
         <div class="detail">
-          <img src="assets/regionals.png" alt="" class="icon">
-        </div>
-        <div class="row">
-          <ng-container *ngIf="team?.tournament">
-            <div class="detail">
-              {{team?.tournament?.name}}
-            </div>
-          </ng-container>
-          <ng-container *ngIf="team?.regulation">
-            <div class="detail">
-              {{team?.regulation?.name}}
-            </div>
-          </ng-container>
-        </div>
-      </div>
-      <div class="center">
-        <div>
-          <div>
-            {{team?.viewCount}}
-          </div>
-          <div>
-            {{util.customFormatDate(team?.date!)}}
-          </div>
-        </div>    
-      </div>
-      <div class="buttons">
+          {{util.customFormatDate(team?.date!)}}
+        </div>  
         <button (click)="copyPaste()" class="button">
           <img src="assets/copy.png" alt="" class="icon">
         </button>

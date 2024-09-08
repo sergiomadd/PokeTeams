@@ -125,7 +125,6 @@ input
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.4vw;
 }
 
 .row-center
@@ -133,7 +132,6 @@ input
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.4vw;
 }
 
 
@@ -142,7 +140,6 @@ input
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.4vw;
 }
 
 .row-start
@@ -157,7 +154,21 @@ input
   display: flex;
   justify-content: end;
   align-items: center;
+}
+
+.s-gap
+{
+  gap: 0.2vw;
+}
+
+.b-gap
+{
   gap: 0.4vw;
+}
+
+.no-gap
+{
+  gap: 0;
 }
 
 .col
@@ -329,11 +340,12 @@ $arrowSize: 0.4vw;
 
 .custom-scrollbar
 {
-  scrollbar-width: none;
+  //scrollbar-width: none;
   /* width */
   &::-webkit-scrollbar 
   {
     width: 0.4vw;
+    height: 0.4vw;
   }
 
   /* Track */
