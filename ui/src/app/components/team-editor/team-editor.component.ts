@@ -84,7 +84,10 @@ export class TeamEditorComponent
 
   playerUpdateEvent(event: string)
   {
-    this.team.player = event;
+    if(this.team.player)
+    {
+      this.team.player.username = event;
+    }
   }
 
   async tournamentSelectEvent(event: Tag)
@@ -98,7 +101,6 @@ export class TeamEditorComponent
         official: false
       }
     }
-    console.log(this.team)
   }
 
   async regulationSelectEvent(event: Tag)
@@ -113,10 +115,6 @@ export class TeamEditorComponent
 
   async ngOnInit() 
   {
-    if(this.loggedUser$)
-    {
-      this.loggedUser$.subscribe();
-    }
   }
 
   ngOnChanges(changes: SimpleChanges)
@@ -145,6 +143,30 @@ export class TeamEditorComponent
       viewCount: 0,
       visibility: true,
       tags: this.topOptionComponent?.tags
+    }
+
+    if(this.loggedUser$)
+    {
+      this.loggedUser$.subscribe
+      (
+        {
+          next: (value) => 
+          {
+            if(value)
+            {
+              this.team.player = 
+              {
+                username: value.username,
+                picture: value.picture
+              }
+            }
+            else
+            {
+              this.team.player = undefined;
+            }
+          }
+        }
+      )
     }
     /*
     this.topOptionComponent?.tags$.subscribe((value) => 
