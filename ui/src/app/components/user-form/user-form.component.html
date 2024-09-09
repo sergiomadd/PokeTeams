@@ -36,11 +36,11 @@
             <span *ngIf="isInvalid('password', 'login')" class="formFeedbackError">{{getError('password', 'login')}}</span>
           </div>
         </div>
-        <div class="row-end">
+        <div class="row-end s-gap">
           <div class="progress">
             <ng-container *ngIf="data.isSubmitting">
               <div class="loader-wrapper">
-                <div class="loader"></div>
+                <div class="pokemon-spinner"></div>
               </div>
             </ng-container>
             <ng-container *ngIf="logInFormSubmitted && data.backendErrors">

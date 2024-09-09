@@ -459,3 +459,24 @@ input[type="range"]::-moz-range-thumb {
     }
   }
 }
+
+
+//Pokemon themed spinner
+.pokemon-spinner
+{
+  position: relative;
+  height: inherit;
+  width: inherit;
+  animation: spin 1s ease-in-out infinite;
+  background-image: url(assets/pokeball.svg);
+
+  /* Spin Animation */
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

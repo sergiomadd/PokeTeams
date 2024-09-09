@@ -132,7 +132,13 @@
   }
 }
 
+.progress
+{
+  white-space: nowrap;
+}
+
 .loader-wrapper
 {
   width: 1vw;
+  height: 1vw;
 }

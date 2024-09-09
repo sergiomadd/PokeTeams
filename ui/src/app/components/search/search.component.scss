@@ -144,11 +144,14 @@
 
 .loader-wrapper
 {
+  
   position: absolute;
   top: 0;
   left: calc(50% - 2.5vw);
   margin: 1vw auto 1vw auto;
   width: 5vw;
+  height: 5vw;
+  margin: auto;
 }
 
 .searched
