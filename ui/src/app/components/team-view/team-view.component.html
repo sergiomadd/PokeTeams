@@ -1,25 +1,18 @@
 
 <div class="team-view">
   <app-team [team]="team"></app-team>
-
   <div class="buttons">
     <div class="copy">
       <button 
       class="button-primary"
-      (click)="copy()"
-      >Copy</button>
-    </div>
-    <div class="image">
-      <button
-      class="button-secondary"
-      (click)="generateImage()"
-      >Generate Image</button>
+      (click)="copyPaste()"
+      >Copy paste</button>
     </div>
     <div class="share">
       <button
       class="button-tertiary"
-      (click)="share"
-      >Share</button>
+      (click)="copyLink()"
+      >Copy link</button>
     </div>
   </div> 
 </div>

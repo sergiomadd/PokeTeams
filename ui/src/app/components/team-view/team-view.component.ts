@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Team } from 'src/app/models/team.model';
+import { ParserService } from 'src/app/services/parser.service';
 import { TeamService } from 'src/app/services/team.service';
 import { UtilService } from 'src/app/services/util.service';
 
@@ -15,6 +16,7 @@ export class TeamViewComponent
   teamService = inject(TeamService);
   router = inject(Router);
   util = inject(UtilService);
+  parser = inject(ParserService);
 
   teamKey: string = "";
   team: Team = <Team>{};
@@ -25,7 +27,6 @@ export class TeamViewComponent
   {
     this.teamKey = this.router.url.slice(1);
     this.team = await this.teamService.getTeam(this.teamKey);
-    console.log(this.team)
     const item = sessionStorage.getItem(this.teamKey);
     if(item)
     {
@@ -45,18 +46,14 @@ export class TeamViewComponent
     }
   }
 
-  copy()
+  copyPaste()
   {
-
+    this.util.copyToClipboard(this.parser.reversePaste(this.team.pokemons));
   }
 
-  generateImage()
+  copyLink()
   {
-
-  }
-
-  share()
-  {
-
+    const path: string = "http://localhost:4200/"
+    this.util.copyToClipboard(path + this.teamKey);
   }
 }
