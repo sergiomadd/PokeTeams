@@ -12,8 +12,15 @@
   .buttons
   {
     display: flex;
+    justify-content: center;
     gap: 1vw;
     margin-top: 3vh;
+    width: 100%;
+
+    button
+    {
+      width: 5vw;
+    }
   }
 }
 

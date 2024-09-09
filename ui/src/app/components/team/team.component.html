@@ -1,17 +1,17 @@
 <div class="team">
   <div class="top">
-    <div class="autor">
-      <ng-container *ngIf="team?.player">
-        <div class="row">
-          <img src="{{team?.player?.picture}}" alt="" class="icon">
-          &#64;{{team?.player?.username}}
-        </div>
-      </ng-container>
-    </div>
-    <div class="info">
-      <div class="row-center">
+    <div class="row-between w-100">
+      <div class="row s-gap">
+        <ng-container *ngIf="team?.player">
+          <div class="detail">
+            <div class="row">
+              <img src="{{team?.player?.picture}}" alt="" class="icon">
+              &#64;{{team?.player?.username}}
+            </div>
+          </div>
+        </ng-container>
         <ng-container *ngIf="team?.tournament">
-          <div class="piece tournament">
+          <div class="detail tournament">
             <ng-container *ngIf="team?.tournament?.official">
               <img src="assets/regionals.png" alt="" class="icon">
             </ng-container>
@@ -19,46 +19,42 @@
           </div>
         </ng-container>
         <ng-container *ngIf="team?.regulation">
-          <div class="piece tournament">
-            {{team?.regulation?.name}}
+          <div class="detail regulation">
+            {{team?.regulation?.identifier}}
           </div>
         </ng-container>
+      </div>
+      <div class="row-end s-gap">
         <ng-container *ngIf="team?.viewCount">
-          <div class="piece tournament">
-            {{team?.viewCount}} visits
+          <div class="detail">
+            {{team?.viewCount}}
           </div>
         </ng-container>
         <ng-container *ngIf="team?.date">
-          <div class="piece tournament">
+          <div class="detail">
             {{util.customFormatDate(team?.date!)}} 
           </div>
         </ng-container>
-      </div>
-      <div class="tags">
-        <app-result-storage [results]="team?.tags"></app-result-storage>
+        <div class="options">
+          <div 
+          class="option"
+          (click)="clickOptions(0)"
+          [ngClass]="{active: showAllStats}"
+          >
+            <img src="assets/align-left.png" alt="" class="icon">
+          </div>
+          <div 
+          class="option" 
+          (click)="clickOptions(1)"
+          [ngClass]="{active: showAllNotes}"
+          >
+            <img src="assets/edit.png" alt="" class="icon">
+          </div>
+        </div>
       </div>
     </div>
-    <div class="options">
-      <div 
-      class="option"
-      (click)="clickOptions(0)"
-      [ngClass]="{active: showAllStats}"
-      >
-        <img src="assets/align-left.png" alt="" class="icon">
-      </div>
-      <div 
-      class="option" 
-      (click)="clickOptions(1)"
-      [ngClass]="{active: showAllNotes}"
-      >
-        <img src="assets/edit.png" alt="" class="icon">
-      </div>
-      <div 
-      class="option" 
-      (click)="clickOptions(2)"
-      >
-        <img src="assets/copy.png" alt="" class="icon">
-      </div>
+    <div class="tags">
+      <app-result-storage [results]="team?.tags"></app-result-storage>
     </div>
   </div>
   <div class="pokemons">

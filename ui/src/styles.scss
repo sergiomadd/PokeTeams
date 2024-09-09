@@ -11,6 +11,12 @@ body
   color: var(--text-color);
 }
 
+.icon
+{
+  width: 1em;
+  height: 1em;
+}
+
 button
 {
   border-radius: 5px;
@@ -135,7 +141,7 @@ input
 }
 
 
-.row-spread
+.row-between
 {
   display: flex;
   justify-content: space-between;
