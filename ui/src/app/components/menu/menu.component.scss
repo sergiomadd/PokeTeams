@@ -1,99 +1,88 @@
 .menu
 {
-  border-right: 1px solid black;
   height: 100%;
+  background-color: var(--bg-color-2);
   color: var(--text-color);
-  position: sticky;
+  transition: 0.5s all;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-right: 1px solid var(--bg-color-3);
 }
 
 .opened
 {
-  position: relative;
   width: 10vw;
-  padding: 0.8vw;
-  padding-top: 2vh;
+  padding: 0.2vw 0.8vw 0.2vw 0.8vw;
 }
 
 .closed
 {
-  position: relative;
-  width: 3vw;
+  width: 2.5vw;
   padding: 0.2vw;
-  .icons
-  {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.6vw;
-    margin-top: 0.4vw;
-  }
 }
 
 .tabs
 {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.6vw;
-}
-
-.tab
-{
-  display: flex;
-  justify-content: center;
+  overflow: hidden;
+  padding-top: 0.4vw;
   padding: 0.4vw;
-  border-radius: 10px;
-  cursor: pointer;
 
-  &:hover
+  .tab
   {
-    background-color: grey;
-  }
-}
-
-.tab-big
-{
-  display: flex;
-  justify-content: start;
-  gap: 0.4vw;
-  padding: 0.6vw;
-  border-radius: 10px;
-  cursor: pointer;
-  width: 9vw;
-  text-decoration: none;
-  color: var(--text-color);
-
-  .title
-  {
-    margin-left: 0.4vw;
-    font-size: 1.5em;
-  }
-
-  &:hover
-  {
-    background-color: grey;
+    gap: 0.4vw;
+    border-radius: 10px;
+    cursor: pointer;
     text-decoration: none;
+    padding: 0.4em 0.2em 0.4em 0.2em;
+    width: 100%;
+    color: var(--text-color);
+    overflow: hidden;
+    white-space: nowrap;
+
+    .title
+    {
+      text-decoration: none;
+      margin-left: 0.4vw;
+      font-size: 1.3em;
+    }
+
+    &:hover
+    {
+      background-color: grey;
+      text-decoration: none;
+    }
+
+    &:link 
+    {
+      text-decoration: none;
+    }
+    
+    &:visited 
+    {
+      text-decoration: none;
+    }
+    &:active 
+    {
+      text-decoration: none;
+    }
   }
 
-  &:link 
-  {
-    text-decoration: none;
-  }
-  
-  &:visited 
-  {
-    text-decoration: none;
-  }
-  &:active 
-  {
-    text-decoration: none;
-  }
 }
 
 .icon
 {
-  width: 1.2vw;
-  height: 1.2vw;
+  width: 1.4em;
+  height: 1.4em;
+  padding: 0.2em 0.3em 0.2em 0.3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .profile
@@ -146,11 +135,13 @@
   width: 1vw;
   height: 1vw;
   position: absolute;
-  right: -0.5vw;
+  right: -0.55em;
+  top: 1.3em;
   z-index: 3;
   background-color: var(--secondary);
   border-radius: 20px;
   cursor: pointer;
+  overflow: visible;
 
   &:hover
   {

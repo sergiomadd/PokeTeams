@@ -3,23 +3,10 @@
   display: flex;
   min-height: 100%;
   position: relative;
+  transition: 300ms;
 
   .main
   {
     width: 100%;
   }
-  .menu
-  {
-    position: sticky;
-  }
-}
-
-.menuClosed
-{
-  margin-right: 3vw;
-}
-
-.menuOpened
-{
-  margin-right: 10vw;
 }
