@@ -29,7 +29,7 @@ export class MenuComponent
       {
         this.selectedThemeName = value.name;
       });
-    //this.toggleTheme();
+    this.toggleTheme();
   }
 
   toggleMenu()

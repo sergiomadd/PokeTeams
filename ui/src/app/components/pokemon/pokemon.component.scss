@@ -4,7 +4,7 @@ $cardheight: 20vh;
 $metaWidth: calc($cardWidth/1.5);
 $moveHeight: calc($cardheight/4);
 $statsHeight: 5vh;
-$iconSize: 1vw;
+$iconSize: 1.2em;
 $spriteSize: $iconSize * 5;
 $paddingBig: 0.5vw;
 $padding: 0.2vw;
@@ -16,6 +16,7 @@ $padding: 0.2vw;
   background-color: var(--bg-color-2);
   color: var(--text-color);
   border-radius: 5px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.26);
 
   .profile
   {
@@ -528,7 +529,6 @@ $padding: 0.2vw;
     outline: dashed black 1px;
     border-radius: 5px;
   }
-
 }
 
 .stats-wrapper

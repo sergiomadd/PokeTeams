@@ -54,7 +54,7 @@
 
     &:hover
     {
-      background-color: grey;
+      color: var(--primary);
       text-decoration: none;
     }
 
@@ -137,19 +137,9 @@
   position: absolute;
   left: -0.55em;
   top: 1.5em;
-  z-index: 3;
   background-color: var(--primary-light);
   border-radius: 20px;
   cursor: pointer;
-  overflow: visible;
-
-  &:hover
-  {
-    stroke: #ce2929;
-    stroke-width: 1px;
-    stroke-dasharray: 2,2;
-    stroke-linejoin: round;
-  }
 }
 
 .last
@@ -157,8 +147,4 @@
   background-color: var(--primary);
   color: var(--text-color-reverse) !important;
 
-  &:hover
-  {
-    background-color: var(--primary-dark) !important;
-  }
 }

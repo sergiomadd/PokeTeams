@@ -52,12 +52,12 @@
             ></app-smart-input>
           </div>
           <div class="form-item form-item-col">
-            <div class="row">
+            <div class="row s-gap">
               <label for="">Nickname</label>
               <input type="text" class="nickname" formControlName="nickname">
             </div>
-            <div class="row-center">
-              <div class="row">
+            <div class="row-center s-gap">
+              <div class="row s-gap">
                 <label for="">Level</label>
                 <input class="level" formControlName="level">
               </div>
@@ -67,7 +67,7 @@
               [label]="'Shiny'"
               ></app-checkbox>
             </div>
-            <div class="row">
+            <div class="row s-gap">
               <app-radio
               [obj]="pokemons[selectedPokemonIndex]"
               [objSelector]="'gender'"

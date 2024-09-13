@@ -40,10 +40,10 @@
       class="result"
       (click)="selectResult(results[0])"
       >
-        <ng-container *ngIf="results[0].icon">
-          <img [attr.src]="results[0].icon" alt="" class="icon" fill>
+        <ng-container *ngIf="results[0]?.icon">
+          <img [attr.src]="results[0]?.icon" alt="" class="icon" fill>
         </ng-container>
-        {{results[0].name}}
+        {{results[0]?.name}}
       </div>    
       <div class="divider"></div>
       <div class="count">

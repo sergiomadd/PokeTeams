@@ -34,7 +34,6 @@ export class PokemonComponent
   @Input() teamOptions?: TeamOptions;
   @Input() showStatsStart?: boolean = false;
 
-
   test: string = "test"
 
   pokemonSpritePath?: string = '';

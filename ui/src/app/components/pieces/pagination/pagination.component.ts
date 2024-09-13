@@ -14,7 +14,6 @@ export class PaginationComponent
 
   ngOnChanges(changes: SimpleChanges)
   {
-    console.log(changes)
   }
   
   get totalPages(): number
@@ -28,7 +27,6 @@ export class PaginationComponent
     {
       this.currentPage = page;
       this.pageChanged.emit(page);
-      console.log(page)
     }
   }
 }
