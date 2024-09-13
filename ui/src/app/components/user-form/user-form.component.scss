@@ -1,5 +1,3 @@
-
-
 .wrapper
 {
   margin: auto;
@@ -7,6 +5,7 @@
   flex-direction: column;
   justify-content: center;
   padding: 0.2vw;
+  overflow: hidden;
 
   .nav
   {
@@ -31,6 +30,7 @@
       cursor: pointer;
       background-color: var(--bg-color-2);
       color: var(--text-color);
+      white-space: nowrap;
     }
 
     .tab-left

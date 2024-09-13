@@ -21,7 +21,6 @@ export class MenuComponent
   @Input() menuOpen: boolean = true;
   @Output() toggleEvent = new EventEmitter()
 
-  showUserForm: boolean = false;
   selectedThemeName?: string;
 
   ngOnInit()
@@ -47,12 +46,6 @@ export class MenuComponent
   {
     //this.loggedUser$.subscribe()
     this.router.navigate([`/@${username}`]);
-  }
-
-  toggleUserForm()
-  {
-    if(!this.menuOpen) { this.toggleMenu(); }
-    this.showUserForm = !this.showUserForm;
   }
 
   logOut()
