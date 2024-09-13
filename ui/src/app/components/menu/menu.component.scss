@@ -5,7 +5,7 @@
   color: var(--text-color);
   transition: 0.5s all;
   position: fixed;
-  left: 0;
+  right: 0;
   top: 0;
   bottom: 0;
   border-right: 1px solid var(--bg-color-3);
@@ -135,8 +135,8 @@
   width: 1vw;
   height: 1vw;
   position: absolute;
-  right: -0.55em;
-  top: 1.3em;
+  left: -0.55em;
+  top: 1.5em;
   z-index: 3;
   background-color: var(--primary-light);
   border-radius: 20px;
