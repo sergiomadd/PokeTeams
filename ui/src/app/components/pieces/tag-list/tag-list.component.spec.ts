@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ResultStorageComponent } from './result-storage.component';
+import { TagListComponent } from './tag-list.component';
 
-describe('ResultStorageComponent', () => {
-  let component: ResultStorageComponent;
-  let fixture: ComponentFixture<ResultStorageComponent>;
+describe('TagListComponent', () => {
+  let component: TagListComponent;
+  let fixture: ComponentFixture<TagListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ResultStorageComponent]
+      declarations: [TagListComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(ResultStorageComponent);
+    fixture = TestBed.createComponent(TagListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

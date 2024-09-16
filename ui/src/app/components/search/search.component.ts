@@ -10,7 +10,6 @@ import { QueryService } from 'src/app/services/query.service';
 import { TeamService } from 'src/app/services/team.service';
 import { UserService } from 'src/app/services/user.service';
 import { PaginationComponent } from '../pieces/pagination/pagination.component';
-import { ResultStorageComponent } from '../pieces/result-storage/result-storage.component';
 
 @Component({
   selector: 'app-search',
@@ -25,10 +24,12 @@ export class SearchComponent
   teamService = inject(TeamService);
   pokemonService = inject(PokemonService);
 
+
   teams: TeamPreview[] = [];
   logged?: boolean = true;
   sortedTeams: TeamPreview[] = [];
   searched: boolean = false;
+  tags: Tag[] = [];
 
   //pagination
   teamsPerPage: number = 5;
@@ -36,10 +37,9 @@ export class SearchComponent
   sortOrder: TeamSearchOrder = TeamSearchOrder.DateDescending;
   @ViewChild(PaginationComponent) paginationComponent!: PaginationComponent;
 
-  @ViewChild('query') queryResultStorageComponent?: ResultStorageComponent;
   querySelectEvent($event: Tag)
   {
-    this.queryResultStorageComponent?.results?.push($event);
+    this.tags?.push($event);
   }
 
   ngOnChanges(changes: SimpleChanges)
@@ -60,7 +60,7 @@ export class SearchComponent
   {
     let searchQuery: SearchQueryDTO = 
     {
-      queries: this.queryResultStorageComponent?.results ?? [],
+      queries: this.tags ?? [],
       teamsPerPage: this.teamsPerPage,
       selectedPage: 1,
       order: this.sortOrder
@@ -72,7 +72,7 @@ export class SearchComponent
   {
     let searchQuery: SearchQueryDTO = 
     {
-      queries: this.queryResultStorageComponent?.results ?? [],
+      queries: this.tags ?? [],
       teamsPerPage: this.teamsPerPage,
       selectedPage: 1,
       order: TeamSearchOrder.DateDescending

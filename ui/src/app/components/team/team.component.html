@@ -53,9 +53,11 @@
         </div>
       </div>
     </div>
-    <div class="tags">
-      <app-result-storage [results]="team?.tags"></app-result-storage>
-    </div>
+    <ng-container *ngIf="team?.tags">
+      <div class="tags">
+        <app-tag-list [tags]="team?.tags" [removable]="removableTags"></app-tag-list>
+      </div>
+    </ng-container>
   </div>
   <div class="pokemons">
     <div class="col">

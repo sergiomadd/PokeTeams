@@ -1,9 +1,8 @@
-import { Component, inject, Input, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { Component, inject, Input, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { Team } from 'src/app/models/team.model';
 import { TeamOptions } from 'src/app/models/teamOptions.model';
 import { ParserService } from 'src/app/services/parser.service';
 import { UtilService } from 'src/app/services/util.service';
-import { ResultStorageComponent } from '../pieces/result-storage/result-storage.component';
 import { PokemonComponent } from '../pokemon/pokemon.component';
 
 
@@ -18,9 +17,9 @@ export class TeamComponent
   util = inject(UtilService);
 
   @Input() team?: Team;
+  @Input() removableTags?: boolean = false;
 
   @ViewChildren(PokemonComponent) pokemonComponents!:QueryList<PokemonComponent>;
-  @ViewChild(ResultStorageComponent) tagStorage!: ResultStorageComponent;
 
   showAllStats: boolean = false;
   showAllNotes: boolean = false;
@@ -65,5 +64,13 @@ export class TeamComponent
       return "";
     }
     return "";
+  }
+
+  removeTag(index: number)
+  {
+    if(this.removableTags)
+    {
+      this.team?.tags?.splice(index, 1);
+    }
   }
 }
