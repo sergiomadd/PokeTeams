@@ -1,0 +1,40 @@
+.tag
+{
+  max-width: 5vw;
+  height: 2vh;
+  display: flex;
+  gap: 0.2em;
+  align-items: center;
+  padding: 0.2em;
+  border-radius: 5px;
+  box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+
+  .name
+  {
+    overflow: hidden;
+  }
+
+  .remove
+  {
+    display: flex;
+    align-items: center;
+    width: 0.8em;
+    height: 0.8em;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 0.2em;
+    align-self: flex-end;
+
+    &:hover
+    {
+      background-color: var(--bg-color-2);
+    }
+  }
+
+  .color
+  {
+    width: 0.8em;
+    height: 0.8em;
+    border: 1px solid black;
+  }
+}
