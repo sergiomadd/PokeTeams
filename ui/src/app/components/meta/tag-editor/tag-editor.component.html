@@ -1,0 +1,34 @@
+
+<div class="tag-editor">
+  <div class="title">
+    Tag Editor
+  </div>
+  <form class="form" [formGroup]="form">
+    <div class="item">
+      <label for="">Name</label>
+      <input type="text" formControlName="name">
+    </div>
+    <div class="item">
+      <label for="">Description</label>
+      <textarea 
+        class="custom-scrollbar-dark" 
+        rows="3" 
+        formControlName="desc"
+        spellcheck="false"
+        ></textarea>
+    </div>
+    <div class="item">
+      <label for="">Color</label>
+      <div class="color s-gap">
+        <input type="color" formControlName="color" class="w-100">
+        <input #colorCode type="text" formControlName="color">
+      </div>
+    </div>
+    <ng-container *ngIf="form.controls.name.value">
+      <div class="row-center">
+        <app-tag [tag]="tag"></app-tag>
+      </div>
+    </ng-container>
+    <button class="button-primary" (click)="add()">Add</button>
+  </form>
+</div>

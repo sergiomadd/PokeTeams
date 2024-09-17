@@ -1,0 +1,52 @@
+
+
+.tag-editor
+{
+  background-color: var(--bg-color-2);
+  padding: 0.5em;
+  border-radius: 5px;
+  width: 10vw;
+
+  .title
+  {
+    text-align: center;
+    font-size: 1.3em;
+    margin-bottom: 0.5em;
+  }
+
+  .form
+  {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
+    .item
+    {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2em;
+    }
+    
+    .color
+    {
+      display: grid;
+      grid-template-columns: 15% 80%;
+      align-items: center;
+      justify-items: center;
+      gap: 0.2vw;
+
+      .color-input
+      {
+        width: 1em;
+        height: 1em;
+      }
+    }
+  }
+}
+
+.icon
+{
+  width: 1em;
+  height: 1em;
+  border: 1px solid black;
+}
