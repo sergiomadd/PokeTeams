@@ -66,6 +66,20 @@ export class QueryService
       }));
   }
 
+  queryTagCallback = async (args: any): Promise<Tag[]> => 
+  {
+    return (await this.teamService.getAllTags())
+      .filter(r => 
+      {
+        return r.name.toLowerCase().includes(args.toLowerCase())
+      })
+      .map(r =>({
+        name: r.name,
+        identifier: r.identifier,
+        type: "tag"
+      }));
+  }
+
   queryPokemonCallback = async (args: any): Promise<Tag[]> => 
   {
     if(args)

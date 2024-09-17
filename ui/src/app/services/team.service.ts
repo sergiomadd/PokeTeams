@@ -188,4 +188,20 @@ export class TeamService
     }
     return this.util.toCamelCase(regulation); 
   }
+
+  async getAllTags() : Promise<Tag[]>
+  {
+    let tags: Tag[] = [];
+    let url = this.apiUrl + 'tag/all';
+    try
+    {
+      tags = await lastValueFrom(this.http.get<Tag[]>(url)
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", this.util.getErrorMessage(error));
+    }
+    return tags; 
+  }
 }
