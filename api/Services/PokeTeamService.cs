@@ -183,21 +183,18 @@ namespace api.Services
                 {
                     foreach (TagDTO tagDTO in inputTeam.Tags)
                     {
-                        Tag tag = new Tag
+                        Tag tag = await _pokeTeamContext.Tag.FindAsync(tagDTO.Identifier);
+                        if(tag == null) 
                         {
-                            Identifier = tagDTO.Identifier,
-                            Name = tagDTO.Name,
-                            Description = tagDTO.Description,
-                            Color = tagDTO.Color,
-                        };
-                        if (_pokeTeamContext.Tag.Contains(tag))
-                        {
-                            tags.Add(_pokeTeamContext.Tag.Find(tag.Identifier));
+                            tag = new Tag()
+                            {
+                                Identifier = tagDTO.Identifier,
+                                Name = tagDTO.Name,
+                                Description = tagDTO.Description,
+                                Color = tagDTO.Color,
+                            };
                         }
-                        else
-                        {
-                            tags.Add(tag);
-                        }
+                        tags.Add(tag);
                     }
                 }
 
