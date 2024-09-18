@@ -1,4 +1,5 @@
 ﻿using api.Data;
+using api.DTOs;
 using api.Models.DBPoketeamModels;
 using api.Util;
 
@@ -34,6 +35,22 @@ namespace api.Services
                 return false;
             }
             return true;
+        }
+
+        public List<TagDTO> GetAllTags()
+        {
+            List<TagDTO> tagDTOs = new List<TagDTO>();
+            List<Tag> tags = _pokeTeamContext.Tag.ToList();
+            foreach (Tag tag in tags)
+            {
+                tagDTOs.Add(new TagDTO(
+                    tag.Name, 
+                    tag.Identifier, 
+                    description: tag.Description,
+                    color: tag.Color
+                    ));
+            }
+            return tagDTOs;
         }
     }
 }

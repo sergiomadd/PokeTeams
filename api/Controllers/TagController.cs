@@ -1,4 +1,5 @@
-﻿using api.Models.DBPoketeamModels;
+﻿using api.DTOs;
+using api.Models.DBPoketeamModels;
 using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,17 @@ namespace api.Controllers
                 return BadRequest("Tag not saved.");
             }
             return Ok();
+        }
+
+        [HttpGet("all")]
+        public ActionResult<List<TagDTO>> GetAllRegulations()
+        {
+            List<TagDTO> tagDTOs = _tagService.GetAllTags();
+            if (tagDTOs == null)
+            {
+                return NotFound("Couldn't get all tags");
+            }
+            return Ok(tagDTOs);
         }
     }
 }

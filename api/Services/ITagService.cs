@@ -1,4 +1,5 @@
-﻿using api.Models.DBPoketeamModels;
+﻿using api.DTOs;
+using api.Models.DBPoketeamModels;
 
 namespace api.Services
 {
@@ -6,5 +7,6 @@ namespace api.Services
     {
         public Task<Tag> GetTag(string identifier);
         public Task<bool> SaveTag(Tag tag);
+        public List<TagDTO> GetAllTags();
     }
 }
