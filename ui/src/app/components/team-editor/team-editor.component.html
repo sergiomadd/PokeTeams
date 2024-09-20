@@ -27,8 +27,8 @@
         #tournamentInput
         [label]="'Tournament'"
         [keepSelected]="true"
-        [allowCustom]="true"
-        [getter]="queryTournamentCallback"
+        [allowNew]="true"
+        [getter]="queryService.queryTournamentCallback"
         (selectEvent)="tournamentSelectEvent($event)"
         class="item smart-input-wrapper"
         ></app-smart-input>
@@ -38,8 +38,8 @@
         #regulationInput
         [label]="'Regulation'"
         [keepSelected]="true"
-        [getter]="queryRegulationCallback"
-        [allGetter]="regulationAllCallback"
+        [getter]="queryService.queryRegulationCallback"
+        [allGetter]="queryService.regulationAllCallback"
         (selectEvent)="regulationSelectEvent($event)"
         class="item smart-input-wrapper"
         ></app-smart-input>
@@ -47,12 +47,13 @@
       <div class="editor-input">
         <app-smart-input
         #regulationInput
-        [label]="'Tags'"
+        [label]="'Tag'"
         [keepSelected]="false"
-        [allowCustom]="true"
-        [getter]="query.queryTagCallback"
-        [allGetter]="query.tagAllCallback"
+        [allowNew]="true"
+        [getter]="queryService.queryTagCallback"
+        [allGetter]="queryService.tagAllCallback"
         (selectEvent)="tagSelectEvent($event)"
+        (newEvent)="toggleTagEditor()"
         class="item smart-input-wrapper"
         ></app-smart-input>
         <div class="tag-editor-wrapper" [ngClass]="{tagEditorShow: showTagEditor}">

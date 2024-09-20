@@ -126,6 +126,21 @@ export class TeamService
     return undefined; 
   }
 
+  async getTournamentByName(name: string) : Promise<Tournament>
+  {
+    let tournament: Tournament = <Tournament>{}
+    let url = this.apiUrl + 'Tournament/' + name;
+    try
+    {
+      tournament = await lastValueFrom(this.http.get<Tournament>(url).pipe(catchError(() => [tournament]), timeout(this.dataTimeout)));
+    }
+    catch(error)
+    {
+      console.log("Error: ", this.util.getErrorMessage(error));
+    }
+    return this.util.toCamelCase(tournament); 
+  }
+
   async queryTournamentsByName(key: string) : Promise<Tag[]>
   {
     let tournaments: Tag[] = [];
@@ -157,21 +172,6 @@ export class TeamService
       console.log("Error: ", this.util.getErrorMessage(error));
     }
     return regulations; 
-  }
-
-  async getTournamentByName(name: string) : Promise<Tournament>
-  {
-    let tournament: Tournament = <Tournament>{}
-    let url = this.apiUrl + 'Tournament/' + name;
-    try
-    {
-      tournament = await lastValueFrom(this.http.get<Tournament>(url).pipe(catchError(() => [tournament]), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
-    return this.util.toCamelCase(tournament); 
   }
 
   async getRegulationByIdentifier(identifier: string) : Promise<Regulation>

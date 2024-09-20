@@ -15,11 +15,7 @@ export class QueryService
   
   constructor() { }
 
-  customQueryResult: Tag = 
-  {
-    name: "Custom value",
-    identifier: "custom"
-  }
+  //User
 
   queryUserCallback = async (args: any): Promise<Tag[]> => 
   {
@@ -29,18 +25,14 @@ export class QueryService
         identifier: u.username,
         icon: u.picture,
         type: "username"
-      })).concat([this.customQueryResult]);
+      }));
   }
 
+  //Team
+  
   queryTournamentCallback = async (args: any): Promise<Tag[]> => 
   {
-    return (await this.teamService.queryTournamentsByName(args)).map(t => 
-      ({
-        name: t.name,
-        identifier: t.identifier,
-        icon: t.icon,
-        type: t.type
-      }));
+    return await this.teamService.queryTournamentsByName(args);
   }
 
   queryRegulationCallback = async (args: any): Promise<Tag[]> => 
@@ -49,21 +41,11 @@ export class QueryService
       .filter(r => 
       {
         return r.name.toLowerCase().includes(args.toLowerCase())
-      })
-      .map(r =>({
-        name: r.name,
-        identifier: r.identifier,
-        type: "regulation"
-      }));
+      });
   }
   regulationAllCallback = async (): Promise<Tag[]> => 
   {
-    return (await this.teamService.getAllRegulations()).map(r => 
-      ({
-        name: r.name,
-        identifier: r.identifier,
-        type: "regulation"
-      }));
+    return await this.teamService.getAllRegulations();
   }
 
   queryTagCallback = async (args: any): Promise<Tag[]> => 
@@ -72,13 +54,14 @@ export class QueryService
       .filter(r => 
       {
         return r.name.toLowerCase().includes(args.toLowerCase())
-      })
-      .map(r =>({
-        name: r.name,
-        identifier: r.identifier,
-        type: "tag"
-      }));
+      });
   }
+  tagAllCallback = async (): Promise<Tag[]> => 
+  {
+    return await this.teamService.getAllTags();
+  }
+
+  //Pokemon
 
   queryPokemonCallback = async (args: any): Promise<Tag[]> => 
   {

@@ -9,7 +9,6 @@ import { TeamOptions } from 'src/app/models/teamOptions.model';
 import { QueryService } from 'src/app/services/query.service';
 import { TeamService } from 'src/app/services/team.service';
 import { UserService } from 'src/app/services/user.service';
-import { TagEditorComponent } from '../meta/tag-editor/tag-editor.component';
 import { TopOptionComponent } from '../options/top-option/top-option.component';
 import { SmartInputComponent } from '../pieces/smart-input/smart-input.component';
 import { TeamComponent } from '../team/team.component';
@@ -25,7 +24,7 @@ export class TeamEditorComponent
   userService = inject(UserService);
   store = inject(Store);
   router = inject(Router);
-  query = inject(QueryService)
+  queryService = inject(QueryService)
 
   @Input() pokemons!: Pokemon[];
   @Input() teamOptions!: TeamOptions;
@@ -112,24 +111,20 @@ export class TeamEditorComponent
     this.team.regulation = event ? await this.teamService.getRegulationByIdentifier(event.identifier) : undefined;
   }
 
-  @ViewChild(TagEditorComponent) tagEditorComponent!: TagEditorComponent;
+  toggleTagEditor()
+  {
+    this.showTagEditor = !this.showTagEditor;
+  }
+
   tagSelectEvent(tag: Tag)
   {
-    if(tag.identifier === "new")
+    if(this.team.tags)
     {
-      this.showTagEditor = true;
-      this.tagEditorComponent.setName(tag.name)
+      this.team.tags = [...this.team.tags, tag];
     }
     else
     {
-      if(this.team.tags)
-      {
-        this.team.tags = [...this.team.tags, tag];
-      }
-      else
-      {
-        this.team.tags = [tag];
-      }
+      this.team.tags = [tag];
     }
   }
 
