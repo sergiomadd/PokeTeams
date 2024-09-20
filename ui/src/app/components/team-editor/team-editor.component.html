@@ -2,7 +2,7 @@
   <div class="col">
     <div class="row">
       <div class="editor-input">
-        <ng-container *ngIf="logged; else notLogged">
+        <ng-container *ngIf="loggedUser$; else notLogged">
           <app-smart-input
           #userInput
           [label]="'Player'"
@@ -46,7 +46,7 @@
       </div>
       <div class="editor-input">
         <app-smart-input
-        #regulationInput
+        #tagInput
         [label]="'Tag'"
         [keepSelected]="false"
         [allowNew]="true"

@@ -6,10 +6,11 @@ import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Tag } from 'src/app/models/tag.model';
 import { Team } from 'src/app/models/team.model';
 import { TeamOptions } from 'src/app/models/teamOptions.model';
+import { UserPreview } from 'src/app/models/userPreview.model';
 import { QueryService } from 'src/app/services/query.service';
 import { TeamService } from 'src/app/services/team.service';
 import { UserService } from 'src/app/services/user.service';
-import { TopOptionComponent } from '../options/top-option/top-option.component';
+import { TagEditorComponent } from '../meta/tag-editor/tag-editor.component';
 import { SmartInputComponent } from '../pieces/smart-input/smart-input.component';
 import { TeamComponent } from '../team/team.component';
 
@@ -31,119 +32,10 @@ export class TeamEditorComponent
   @Output() outputTeam = new EventEmitter<Team>();
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
-  @ViewChild(TopOptionComponent) topOptionComponent!: TopOptionComponent;
 
   loggedUser$ = this.store.select(selectLoggedUser);
   team: Team = <Team>{}
-  posts: any;
-  paste: string = '';
-  logged: boolean = true;
   showTagEditor: boolean = false;
-
-  //getters for childs
-  @ViewChild('userInput') userInputComponent!: SmartInputComponent;
-  queryUserCallback = async (args: any): Promise<Tag[]> => 
-  {
-    return (await this.userService.queryUser(args)).map((u): Tag => 
-      ({
-        name: u.username,
-        identifier: u.username,
-        icon: u.picture
-      }));
-  }
-
-  @ViewChild('tournamentInput') tournamentInputComponent!: SmartInputComponent;
-  queryTournamentCallback = async (args: any): Promise<Tag[]> => 
-  {
-    return (await this.teamService.queryTournamentsByName(args)).map(t => 
-      ({
-        name: t.name,
-        identifier: t.identifier,
-        icon: t.icon
-      }));
-  }
-
-  @ViewChild('regulationInput') regulationInputComponent!: SmartInputComponent;
-  queryRegulationCallback = async (args: any): Promise<Tag[]> => 
-  {
-    return (await this.teamService.getAllRegulations())
-      .filter(r => 
-      {
-        return r.name.toLowerCase().includes(args.toLowerCase())
-      })
-      .map(r =>({
-        name: r.name,
-        identifier: r.identifier
-      }));
-  }
-  regulationAllCallback = async (): Promise<Tag[]> => 
-  {
-    return (await this.teamService.getAllRegulations()).map(r => 
-      ({
-        name: r.name,
-        identifier: r.identifier
-      }));
-  }
-
-  playerUpdateEvent(event: string)
-  {
-    if(this.team.player)
-    {
-      this.team.player.username = event;
-    }
-  }
-
-  async tournamentSelectEvent(event: Tag)
-  {
-    this.team.tournament = event ? await this.teamService.getTournamentByName(event.name) : undefined;
-    if(!this.team.tournament)
-    {
-      this.team.tournament = 
-      {
-        name: event.name,
-        official: false
-      }
-    }
-  }
-
-  async regulationSelectEvent(event: Tag)
-  {
-    this.team.regulation = event ? await this.teamService.getRegulationByIdentifier(event.identifier) : undefined;
-  }
-
-  toggleTagEditor()
-  {
-    this.showTagEditor = !this.showTagEditor;
-  }
-
-  tagSelectEvent(tag: Tag)
-  {
-    if(this.team.tags)
-    {
-      this.team.tags = [...this.team.tags, tag];
-    }
-    else
-    {
-      this.team.tags = [tag];
-    }
-  }
-
-  tagAddEvent(tag: Tag)
-  {
-    if(this.team.tags)
-    {
-      this.team.tags = [...this.team.tags, tag];
-    }
-    else
-    {
-      this.team.tags = [tag];
-    }
-  }
-
-  tagEditorCloseEvent()
-  {
-    this.showTagEditor = false;
-  }
 
   async ngOnInit() 
   {
@@ -174,7 +66,7 @@ export class TeamEditorComponent
       regulation: undefined,
       viewCount: 0,
       visibility: true,
-      tags: this.topOptionComponent?.tags
+      tags: []
     }
 
     if(this.loggedUser$)
@@ -194,7 +86,7 @@ export class TeamEditorComponent
             }
             else
             {
-              this.team.player = undefined;
+              this.team.player = this.buildAnonPlayer();
             }
           }
         }
@@ -202,13 +94,14 @@ export class TeamEditorComponent
     }
   }
 
-  //Gets the maximun calculated stat value of all pokemons
-  calculateMaxLevel()
+  buildAnonPlayer() : UserPreview
   {
-    console.log("calculating max level")
-    this.teamOptions.maxLevel = this.teamComponent?.pokemonComponents ? 
-      Math.max(...this.teamComponent?.pokemonComponents.map(s => s.calculatedStats?.total ? 
-      Math.max(...s.calculatedStats?.total.map(v => v.value)) : 0)) : 0;
+    let anonPlayer: UserPreview =     
+    {
+      username: "",
+      picture: "assets/anon.png"
+    }
+    return anonPlayer
   }
 
   async generateTeam()
@@ -259,10 +152,82 @@ export class TeamEditorComponent
     }
   }
 
+  playerUpdateEvent(event: string)
+  {
+    if(this.team.player)
+    {
+      this.team.player.username = event;
+    }
+  }
+
+  async tournamentSelectEvent(event: Tag)
+  {
+    this.team.tournament = event ? await this.teamService.getTournamentByName(event.name) : undefined;
+    if(!this.team.tournament)
+    {
+      this.team.tournament = 
+      {
+        name: event.name,
+        official: false
+      }
+    }
+  }
+
+  async regulationSelectEvent(event: Tag)
+  {
+    this.team.regulation = event ? await this.teamService.getRegulationByIdentifier(event.identifier) : undefined;
+  }
+
+  @ViewChild(TagEditorComponent) tagEditorComponent!: TagEditorComponent;
+  @ViewChild("tagInput") tagSmartInput!: SmartInputComponent;
+  toggleTagEditor()
+  {
+    this.showTagEditor = !this.showTagEditor;
+    if(this.showTagEditor)
+    {
+      this.tagEditorComponent.setName(this.tagSmartInput.input.nativeElement.value)
+    }
+  }
+
+  tagSelectEvent(tag: Tag)
+  {
+    if(this.team.tags)
+    {
+      this.team.tags = [...this.team.tags, tag];
+    }
+    else
+    {
+      this.team.tags = [tag];
+    }
+  }
+
+  tagAddEvent(tag: Tag)
+  {
+    if(this.team.tags)
+    {
+      this.team.tags = [...this.team.tags, tag];
+    }
+    else
+    {
+      this.team.tags = [tag];
+    }
+  }
+
+  tagEditorCloseEvent()
+  {
+    this.showTagEditor = false;
+  }
+
   updateTeam(option)
   {
     this.teamComponent.forceChange(this.teamOptions)
   }
 
-
+  //Gets the maximun calculated stat value of all pokemons
+  calculateMaxLevel()
+  {
+    this.teamOptions.maxLevel = this.teamComponent?.pokemonComponents ? 
+      Math.max(...this.teamComponent?.pokemonComponents.map(s => s.calculatedStats?.total ? 
+      Math.max(...s.calculatedStats?.total.map(v => v.value)) : 0)) : 0;
+  }
 }
