@@ -2,11 +2,11 @@
   <div class="top">
     <div class="row-between w-100">
       <div class="row s-gap">
-        <ng-container *ngIf="team?.player">
+        <ng-container *ngIf="team?.player?.username">
           <div class="detail">
             <div class="row">
               <img src="{{team?.player?.picture}}" alt="" class="icon">
-              &#64;{{team?.player?.username}}
+              {{team?.player?.username}}
             </div>
           </div>
         </ng-container>
