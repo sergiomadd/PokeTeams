@@ -21,10 +21,12 @@ export class SmartInputComponent
   @Input() keepSelected?: boolean;
   @Input() updateOnChange?: boolean;
   @Input() allowCustom?: boolean;
+  @Input() allowNew?: boolean;
   @Input() getter?: (args: any) => Promise<Tag[]>
   @Input() allGetter?: (args?: any) => Promise<Tag[]>
   @Input() allGetterIndex?: number;
   @Output() selectEvent = new EventEmitter<Tag>();
+  @Output() newEvent = new EventEmitter();
   @Output() updateEvent = new EventEmitter<string>();
 
   @ViewChild('input') input!: ElementRef;
@@ -75,7 +77,8 @@ export class SmartInputComponent
       this.results[0] = 
       {
         name: "",
-        identifier: ""
+        identifier: "new",
+        type: "New"
       }
     }
     this.searchForm.controls.key.valueChanges.subscribe(async (value) => 
@@ -110,7 +113,7 @@ export class SmartInputComponent
   async search(key: string)
   {
     this.customQueryResult.name = key;
-    this.customQueryResult.identifier = "custom";
+    this.customQueryResult.identifier = "new";
     if(this.getter)
     {
       this.showOptions = true;
@@ -160,7 +163,14 @@ export class SmartInputComponent
         }
         else
         {
-          this.results = await this.allGetter();
+          if(this.allowCustom)
+          {
+            this.results = [this.customQueryResult].concat(await this.allGetter());
+          }
+          else
+          {
+            this.results = await this.allGetter();
+          }
         }
       }
       //this.showOptions = true;
@@ -170,5 +180,10 @@ export class SmartInputComponent
   onBlur()
   {
     this.showOptions = false;
+  }
+
+  newClick()
+  {
+    this.newEvent.emit();
   }
 }

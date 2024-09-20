@@ -30,10 +30,13 @@
         </ng-container>
       </div>
     </ng-template>
+    <ng-container *ngIf="allowNew">
+      <button class="new button-tertiary" (click)="newClick()">+</button>
+    </ng-container>
   </form>
   <div 
   class="results custom-scrollbar"
-  [ngClass]="{'results-visible': showOptions && (results && results.length > 0)}"
+  [ngClass]="{'results-visible': showOptions && results}"
   >
     <ng-container *ngIf="allowCustom; else all">
       <div 
@@ -79,6 +82,5 @@
         </div>
       </ng-container>
     </ng-template>
-
   </div>
 </div>

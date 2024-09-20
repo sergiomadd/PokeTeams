@@ -17,7 +17,7 @@ $optionsMaxHeight: 25vh;
     width: 100%;
     box-sizing:border-box;
     padding: 0.2vw;
-
+    position: relative;
 
     .input
     {
@@ -34,6 +34,14 @@ $optionsMaxHeight: 25vh;
         overflow-x: hidden;
         white-space: nowrap;
       }
+    }
+
+    .new
+    {
+      position: absolute;
+      bottom: 0.6em;
+      right: 0.6em;
+      width: 2em;
     }
   }
   
