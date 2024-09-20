@@ -30,7 +30,7 @@
         </ng-container>
       </div>
     </ng-template>
-    <ng-container *ngIf="allowNew">
+    <ng-container *ngIf="allowNew && !selected">
       <button class="new button-tertiary" (click)="newClick()">+</button>
     </ng-container>
   </form>

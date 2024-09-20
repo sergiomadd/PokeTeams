@@ -15,6 +15,7 @@ $optionsMaxHeight: 25vh;
     gap: 0.2vw;
     align-items: start;
     width: 100%;
+    max-width: inherit;
     box-sizing:border-box;
     padding: 0.2vw;
     position: relative;
@@ -27,6 +28,7 @@ $optionsMaxHeight: 25vh;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      overflow: hidden;
 
       .text
       {
@@ -100,9 +102,11 @@ $optionsMaxHeight: 25vh;
 {
   background-color: var(--bg-color-3);
   border-radius: 5px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  //padding: 0 0.2vw 0 0.2vw;
+  box-sizing: border-box;
+  padding: 0 0.2vw 0 0.2vw;
 
   .remove
   {
