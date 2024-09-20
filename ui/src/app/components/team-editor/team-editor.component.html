@@ -49,10 +49,18 @@
         #regulationInput
         [label]="'Tags'"
         [keepSelected]="false"
-        [getter]="queryRegulationCallback"
+        [allowCustom]="true"
+        [getter]="query.queryTagCallback"
+        [allGetter]="query.tagAllCallback"
         (selectEvent)="tagSelectEvent($event)"
         class="item smart-input-wrapper"
         ></app-smart-input>
+        <div class="tag-editor-wrapper" [ngClass]="{tagEditorShow: showTagEditor}">
+          <app-tag-editor 
+          (addEvent)="tagAddEvent($event)"
+          (closeEvent)="tagEditorCloseEvent()"
+          ></app-tag-editor>
+        </div>
       </div>
     </div>
     <div class="row-center s-gap">
@@ -89,7 +97,7 @@
     </div>
   </div>
   <div class="team-holder">
-    <app-team [team]="team"></app-team>
+    <app-team [team]="team" [removableTags]="true"></app-team>
   </div>
   <div class="output">
     <button

@@ -29,5 +29,23 @@
   .editor-input
   {
     width: 11vw;
+    position: relative;
+  }
+
+  .tag-editor-wrapper
+  {
+    position: absolute;
+    left: calc(100% + 0.2em);
+    bottom: 0.2em;
+    overflow: hidden;
+    width: 13em;
+    max-height: 0;
+    transition: max-height 0.5s ease-out;
+  }
+
+  .tagEditorShow
+  {
+    max-height: 40rem;
+    transition: max-height 0.50s ease-in;
   }
 }

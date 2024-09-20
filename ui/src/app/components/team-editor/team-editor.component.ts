@@ -6,8 +6,10 @@ import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Tag } from 'src/app/models/tag.model';
 import { Team } from 'src/app/models/team.model';
 import { TeamOptions } from 'src/app/models/teamOptions.model';
+import { QueryService } from 'src/app/services/query.service';
 import { TeamService } from 'src/app/services/team.service';
 import { UserService } from 'src/app/services/user.service';
+import { TagEditorComponent } from '../meta/tag-editor/tag-editor.component';
 import { TopOptionComponent } from '../options/top-option/top-option.component';
 import { SmartInputComponent } from '../pieces/smart-input/smart-input.component';
 import { TeamComponent } from '../team/team.component';
@@ -23,6 +25,7 @@ export class TeamEditorComponent
   userService = inject(UserService);
   store = inject(Store);
   router = inject(Router);
+  query = inject(QueryService)
 
   @Input() pokemons!: Pokemon[];
   @Input() teamOptions!: TeamOptions;
@@ -36,6 +39,7 @@ export class TeamEditorComponent
   posts: any;
   paste: string = '';
   logged: boolean = true;
+  showTagEditor: boolean = false;
 
   //getters for childs
   @ViewChild('userInput') userInputComponent!: SmartInputComponent;
@@ -108,9 +112,42 @@ export class TeamEditorComponent
     this.team.regulation = event ? await this.teamService.getRegulationByIdentifier(event.identifier) : undefined;
   }
 
-  tagSelectEvent(event: Tag)
+  @ViewChild(TagEditorComponent) tagEditorComponent!: TagEditorComponent;
+  tagSelectEvent(tag: Tag)
   {
-    //this.team.player = event ? event.name : undefined;
+    if(tag.identifier === "new")
+    {
+      this.showTagEditor = true;
+      this.tagEditorComponent.setName(tag.name)
+    }
+    else
+    {
+      if(this.team.tags)
+      {
+        this.team.tags = [...this.team.tags, tag];
+      }
+      else
+      {
+        this.team.tags = [tag];
+      }
+    }
+  }
+
+  tagAddEvent(tag: Tag)
+  {
+    if(this.team.tags)
+    {
+      this.team.tags = [...this.team.tags, tag];
+    }
+    else
+    {
+      this.team.tags = [tag];
+    }
+  }
+
+  tagEditorCloseEvent()
+  {
+    this.showTagEditor = false;
   }
 
   async ngOnInit() 
@@ -168,13 +205,6 @@ export class TeamEditorComponent
         }
       )
     }
-    /*
-    this.topOptionComponent?.tags$.subscribe((value) => 
-    {
-      console.log("TAgs",value)
-      this.team.tags = value;
-    });
-    */
   }
 
   //Gets the maximun calculated stat value of all pokemons
