@@ -12,7 +12,9 @@ export class TagEditorComponent
   formBuilder = inject(FormBuilder);
 
   @Output() addEvent = new EventEmitter<Tag>();
+  @Output() closeEvent = new EventEmitter();
 
+  @ViewChild('inputName') nameInputComponent!: ElementRef;
   @ViewChild('colorCode') colorCodeInputComponent!: ElementRef;
 
   form = this.formBuilder.group(
@@ -32,7 +34,6 @@ export class TagEditorComponent
 
   ngOnInit()
   {
-
   }
 
   async ngAfterContentInit()
@@ -76,4 +77,19 @@ export class TagEditorComponent
     this.addEvent.emit(this.tag);
     this.resetEditor();
   }
+
+  setName(preName: string)
+  {
+    if(preName)
+    {
+      this.form.controls.name.setValue(preName);
+      this.nameInputComponent.nativeElement.value = preName;        
+    }
+  }
+
+  close()
+  {
+    this.closeEvent.emit();
+  }
+
 }

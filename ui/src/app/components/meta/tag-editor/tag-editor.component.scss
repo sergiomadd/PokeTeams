@@ -3,9 +3,32 @@
 .tag-editor
 {
   background-color: var(--bg-color-2);
-  padding: 0.5em;
+  padding: 5%;
   border-radius: 5px;
-  width: 10vw;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid black;
+
+  .close
+  {
+    position: absolute;
+    right: 0.2em;
+    top: 0.2em;
+
+    .icon
+    {
+      width: 1.5em;
+      height: 1.5em;
+      border: none;
+      border-radius: 20px;
+
+      &:hover
+      {
+        transition: .4s;
+        box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.26);
+      }
+    }
+  }
 
   .title
   {
