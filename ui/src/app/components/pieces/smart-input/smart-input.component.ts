@@ -96,6 +96,10 @@ export class SmartInputComponent
       }
       else
       {
+        if(this.updateOnChange)
+        {
+          this.updateEvent.emit(undefined);
+        }
         this.results = [];
         this.showOptions = false;
       }
