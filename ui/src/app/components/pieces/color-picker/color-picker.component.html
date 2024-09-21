@@ -1,0 +1,12 @@
+<div class="color-picker">
+  <div class="title">Choose color</div>
+  <div class="colors">
+    <ng-container *ngFor="let color of colors">
+      <button 
+      class="color"
+      [ngStyle]="{backgroundColor: color}"
+      (click)="choose(color)"
+      ></button>
+    </ng-container>
+  </div>
+</div>
