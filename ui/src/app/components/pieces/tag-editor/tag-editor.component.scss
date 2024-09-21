@@ -3,17 +3,19 @@
 .tag-editor
 {
   background-color: var(--bg-color-2);
-  padding: 5%;
+  padding: 0.5em;
   border-radius: 5px;
-  overflow: hidden;
-  position: relative;
   border: 1px solid black;
+  z-index: 2;
+  //overflow: visible;
+  position: relative;
+  width: 11em;
 
   .close
   {
     position: absolute;
-    right: 0.2em;
-    top: 0.2em;
+    right: 0.5em;
+    top: 0.5em;
 
     .icon
     {
@@ -52,17 +54,10 @@
     
     .color
     {
-      display: grid;
-      grid-template-columns: 15% 80%;
-      align-items: center;
-      justify-items: center;
-      gap: 0.2vw;
-
-      .color-input
-      {
-        width: 1em;
-        height: 1em;
-      }
+      height: 1.4em;
+      width: 5em;
+      border-radius: 5px;
+      border: 1px solid black;
     }
   }
 }
@@ -72,4 +67,30 @@
   width: 1em;
   height: 1em;
   border: 1px solid black;
+}
+
+.color-picker-wrapper
+{
+  position: relative;
+  bottom: 0;
+  right: 1.2em;
+  max-width: 0;
+  transition: max-width 0.5s ease-out;
+  overflow: hidden;
+  z-index: 0;
+  margin-left: 1em;
+}
+
+.showColorPicker
+{
+  max-width: 20em;
+  width: fit-content;
+  overflow: visible;
+  transition: max-width 0.5s ease-in;
+}
+
+.tag-preview
+{
+  width: 4em;
+  white-space: nowrap;
 }

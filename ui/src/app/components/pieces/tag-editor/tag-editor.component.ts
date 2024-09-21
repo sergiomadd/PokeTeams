@@ -21,7 +21,7 @@ export class TagEditorComponent
   {
     name: ['', Validators.required],
     desc: [''],
-    color: ['#000000']
+    color: ['#f44336']
   });
 
   tag: Tag = 
@@ -31,6 +31,15 @@ export class TagEditorComponent
     description: "",
     color: ""
   };
+
+  colorPickerOpen: boolean = true;
+  colors: string[] = 
+  [
+    '#f44336', '#e81e63','#9c27b0','#673ab7',
+    '#3f51b5', '#2196f3','#03a9f4','#00bcd4',
+    '#009688', '#4caf50','#8bc34a','#cddc39',
+    '#ffeb3b', '#ffc107','#ff9800','#ff5722',
+  ];
 
   ngOnInit()
   {
@@ -49,14 +58,12 @@ export class TagEditorComponent
       {
         this.tag.description = value ?? "";
       })
-
     this.form.controls.color.valueChanges.subscribe(value => 
       {
         this.colorCodeInputComponent.nativeElement.value = value;        
         this.tag = {...this.tag, color: value ?? ""}
       })
   }
-
 
   resetEditor()
   {
@@ -65,11 +72,11 @@ export class TagEditorComponent
       name: this.form.controls.name.value ?? "",
       identifier: "",
       description: this.form.controls.desc.value ?? "",
-      color: this.form.controls.color.value ?? "#000000"
+      color: this.form.controls.color.value ?? this.colors[0]
     };
     this.form.controls.name.setValue("");
     this.form.controls.desc.setValue("");
-    this.form.controls.color.setValue("#000000");
+    this.form.controls.color.setValue(this.colors[0]);
   }
 
   add()
@@ -87,9 +94,18 @@ export class TagEditorComponent
     }
   }
 
-  close()
+  async close()
   {
     this.closeEvent.emit();
   }
 
+  toggleColorPicker()
+  {
+    this.colorPickerOpen = !this.colorPickerOpen;
+  }
+
+  chooseColor($event)
+  {
+    this.tag.color = $event;
+  }
 }
