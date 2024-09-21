@@ -10,8 +10,8 @@ import { UserPreview } from 'src/app/models/userPreview.model';
 import { QueryService } from 'src/app/services/query.service';
 import { TeamService } from 'src/app/services/team.service';
 import { UserService } from 'src/app/services/user.service';
-import { TagEditorComponent } from '../meta/tag-editor/tag-editor.component';
 import { SmartInputComponent } from '../pieces/smart-input/smart-input.component';
+import { TagEditorComponent } from '../pieces/tag-editor/tag-editor.component';
 import { TeamComponent } from '../team/team.component';
 
 @Component({
@@ -35,7 +35,7 @@ export class TeamEditorComponent
 
   loggedUser$ = this.store.select(selectLoggedUser);
   team: Team = <Team>{}
-  showTagEditor: boolean = false;
+  showTagEditor: boolean = true;
 
   async ngOnInit() 
   {
@@ -182,7 +182,8 @@ export class TeamEditorComponent
   @ViewChild("tagInput") tagSmartInput!: SmartInputComponent;
   toggleTagEditor()
   {
-    this.showTagEditor = !this.showTagEditor;
+    if(this.showTagEditor) { this.tagEditorCloseEvent(); }
+    else { this.showTagEditor = true; }
     if(this.showTagEditor)
     {
       this.tagEditorComponent.setName(this.tagSmartInput.input.nativeElement.value)
@@ -215,7 +216,16 @@ export class TeamEditorComponent
 
   tagEditorCloseEvent()
   {
-    this.showTagEditor = false;
+    if(this.tagEditorComponent.colorPickerOpen)
+    {
+      this.tagEditorComponent.colorPickerOpen = false;
+      //Wait for color picker transition to finish
+      setTimeout(() => {  this.showTagEditor = false; }, 400);
+    }
+    else
+    {
+      this.showTagEditor = false;
+    }
   }
 
   updateTeam(option)
