@@ -9,18 +9,27 @@
   top: 0;
   bottom: 0;
   border-right: 1px solid var(--bg-color-3);
+  z-index: 3;
+}
+
+.nav
+{
+
 }
 
 .opened
 {
-  width: 10vw;
-  padding: 0.2vw 0.8vw 0.2vw 0.8vw;
+  width: 12em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.2em 0.8em 0.2em 0.8em;
 }
 
 .closed
 {
-  width: 2.5vw;
-  padding: 0.2vw;
+  width: 3em;
+  padding: 0.2em 0.8em 0.2em 0.8em;
 }
 
 .tabs
@@ -147,4 +156,19 @@
   background-color: var(--primary);
   color: var(--text-color-reverse) !important;
 
+}
+
+.footer
+{
+  text-align: center;
+  font-size: 0.8em;
+  margin-bottom: 2em;
+  
+
+  .info
+  {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4em;
+  }
 }

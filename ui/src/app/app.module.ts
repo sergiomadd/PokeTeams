@@ -10,22 +10,25 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
-import { FooterComponent } from './components/footer/footer.component';
 import { InputComponent } from './components/input/input.component';
 import { MainComponent } from './components/main/main.component';
 import { MenuComponent } from './components/menu/menu.component';
-import { EvolutionComponent } from './components/meta/evolution/evolution.component';
 import { TopOptionComponent } from './components/options/top-option/top-option.component';
 import { CheckboxComponent } from './components/pieces/checkbox/checkbox.component';
+import { ColorPickerComponent } from './components/pieces/color-picker/color-picker.component';
 import { DialogComponent } from './components/pieces/dialog/dialog.component';
 import { DropdownComponent } from './components/pieces/dropdown/dropdown.component';
+import { EvolutionComponent } from './components/pieces/evolution/evolution.component';
 import { MultiSearchComponent } from './components/pieces/multi-search/multi-search.component';
 import { PaginationComponent } from './components/pieces/pagination/pagination.component';
 import { RadioComponent } from './components/pieces/radio/radio.component';
-import { ResultStorageComponent } from './components/pieces/result-storage/result-storage.component';
 import { SmartInputComponent } from './components/pieces/smart-input/smart-input.component';
 import { SwitchComponent } from './components/pieces/switch/switch.component';
+import { TagEditorComponent } from './components/pieces/tag-editor/tag-editor.component';
+import { TagListComponent } from './components/pieces/tag-list/tag-list.component';
+import { TagComponent } from './components/pieces/tag/tag.component';
 import { TooltipComponent } from './components/pieces/tooltip/tooltip.component';
+import { TournamentEditorComponent } from './components/pieces/tournament-editor/tournament-editor.component';
 import { PokemonCreatorComponent } from './components/pokemon-creator/pokemon-creator.component';
 import { PokemonPreviewComponent } from './components/pokemon-preview/pokemon-preview.component';
 import { PokemonComponent } from './components/pokemon/pokemon.component';
@@ -63,7 +66,6 @@ import { metaReducers } from './state/app.state';
     PokemonPreviewComponent,
     UserFormComponent,
     TopOptionComponent,
-    FooterComponent,
     TeamIconsComponent,
     UserOptionsComponent,
     UserDetailsComponent,
@@ -73,12 +75,16 @@ import { metaReducers } from './state/app.state';
     MenuComponent,
     SearchComponent,
     SmartInputComponent,
-    ResultStorageComponent,
     TooltipComponent,
     PaginationComponent,
     PokemonCreatorComponent,
     CheckboxComponent,
-    RadioComponent
+    RadioComponent,
+    TagEditorComponent,
+    TagComponent,
+    TagListComponent,
+    ColorPickerComponent,
+    TournamentEditorComponent
   ],
   exports: [],
   imports: [
