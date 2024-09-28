@@ -1,0 +1,37 @@
+
+.carousel
+{
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  width: fit-content;
+
+  .items
+  {
+    display: flex;
+    align-items: center;
+    gap: 0.2em;
+
+    .item
+    {
+      padding: 0.2em;
+      border-radius: 5px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+    }
+  }
+}
+
+.selected
+{
+  color: white;
+  background-color: var(--primary);
+}
+
+.disabled
+{
+  opacity: 0.5;
+}
+
