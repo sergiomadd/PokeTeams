@@ -32,7 +32,7 @@ export class TagEditorComponent
     color: ""
   };
 
-  colorPickerOpen: boolean = true;
+  colorPickerOpen: boolean = false;
   colors: string[] = 
   [
     '#f44336', '#e81e63','#9c27b0','#673ab7',
@@ -94,7 +94,7 @@ export class TagEditorComponent
     }
   }
 
-  async close()
+  close()
   {
     this.closeEvent.emit();
   }
