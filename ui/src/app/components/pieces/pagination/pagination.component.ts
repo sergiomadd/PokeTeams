@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
   styleUrl: './pagination.component.scss'
 })
 export class PaginationComponent 
-{  
+{
   @Input() currentPage: number = 1;
   @Input() itemsPerPage!: number;
   @Input() totalItems!: number;

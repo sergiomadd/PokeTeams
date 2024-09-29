@@ -22,21 +22,9 @@
       border-radius: 5px;
       white-space: nowrap;
       text-align: start;
+      gap: 0.2em;
     }
-
-    .regulation
-    {
-      background-color: var(--primary);
-      color: white;
-      padding: 0.2vw;
-      border-radius: 5px;
-      width: 1vw;
-      height: 1vw;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
+    
     .options
     {
       display: flex;
