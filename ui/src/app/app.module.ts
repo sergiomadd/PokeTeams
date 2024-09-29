@@ -32,6 +32,8 @@ import { TournamentEditorComponent } from './components/pieces/tournament-editor
 import { PokemonCreatorComponent } from './components/pokemon-creator/pokemon-creator.component';
 import { PokemonPreviewComponent } from './components/pokemon-preview/pokemon-preview.component';
 import { PokemonComponent } from './components/pokemon/pokemon.component';
+import { RegulationPreviewComponent } from './components/regulation-preview/regulation-preview.component';
+import { RegulationSelectorComponent } from './components/regulation-selector/regulation-selector.component';
 import { SearchComponent } from './components/search/search.component';
 import { TeamEditorComponent } from './components/team-editor/team-editor.component';
 import { TeamIconsComponent } from './components/team-icons/team-icons.component';
@@ -84,7 +86,9 @@ import { metaReducers } from './state/app.state';
     TagComponent,
     TagListComponent,
     ColorPickerComponent,
-    TournamentEditorComponent
+    TournamentEditorComponent,
+    RegulationPreviewComponent,
+    RegulationSelectorComponent,
   ],
   exports: [],
   imports: [

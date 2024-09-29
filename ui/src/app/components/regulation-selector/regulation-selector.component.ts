@@ -17,7 +17,7 @@ export class RegulationSelectorComponent
 
   items: Tag[] = [];
   currentIndex: number = 0;
-
+  
   async ngAfterContentInit()
   {
     if(this.allGetter)
