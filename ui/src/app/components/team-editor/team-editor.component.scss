@@ -41,7 +41,7 @@
     max-height: 0;
     min-width: 13em;
     width: fit-content;
-    transition: max-height 0.5s ease-out;
+    transition: max-height 0.3s ease;
     overflow: hidden;
   }
 
@@ -50,5 +50,27 @@
     max-height: 40rem;
     overflow: hidden;
     transition: max-height 0.5s ease-in;
+  }
+
+  .tournament-editor-wrapper
+  {
+    position: absolute;
+    left: -50%;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 1;
+    max-height: 0;
+    min-width: 20vw;
+    width: fit-content;
+    transition: max-height 0.3s ease;
+    overflow: hidden;
+  }
+
+  .tournamentEditorShow
+  {
+    max-height: 40rem;
+    overflow: hidden;
+    transition: max-height 0.5s 0.1s ease-in;
   }
 }

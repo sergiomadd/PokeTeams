@@ -6,6 +6,7 @@ import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Tag } from 'src/app/models/tag.model';
 import { Team } from 'src/app/models/team.model';
 import { TeamOptions } from 'src/app/models/teamOptions.model';
+import { Tournament } from 'src/app/models/tournament.model';
 import { UserPreview } from 'src/app/models/userPreview.model';
 import { QueryService } from 'src/app/services/query.service';
 import { TeamService } from 'src/app/services/team.service';
@@ -34,8 +35,9 @@ export class TeamEditorComponent
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
   loggedUser$ = this.store.select(selectLoggedUser);
-  team: Team = <Team>{}
-  showTagEditor: boolean = true;
+  team: Team = <Team>{};
+  showTournamentEditor: boolean = false;
+  showTagEditor: boolean = false;
 
   async ngOnInit() 
   {
@@ -239,5 +241,20 @@ export class TeamEditorComponent
     this.teamOptions.maxLevel = this.teamComponent?.pokemonComponents ? 
       Math.max(...this.teamComponent?.pokemonComponents.map(s => s.calculatedStats?.total ? 
       Math.max(...s.calculatedStats?.total.map(v => v.value)) : 0)) : 0;
+  }
+  
+  toggleTournamentEditor()
+  {
+    this.showTournamentEditor = !this.showTournamentEditor;
+  }
+
+  tournamentAddEvent(tournament: Tournament)
+  {
+    this.team.tournament = tournament;
+  }
+
+  tournamentEditorCloseEvent()
+  {
+    this.showTournamentEditor = false;
   }
 }

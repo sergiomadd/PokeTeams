@@ -30,19 +30,15 @@
         [allowNew]="true"
         [getter]="queryService.queryTournamentCallback"
         (selectEvent)="tournamentSelectEvent($event)"
+        (newEvent)="toggleTournamentEditor()"
         class="item smart-input-wrapper"
         ></app-smart-input>
-      </div>
-      <div class="editor-input">
-        <app-smart-input
-        #regulationInput
-        [label]="'Regulation'"
-        [keepSelected]="true"
-        [getter]="queryService.queryRegulationCallback"
-        [allGetter]="queryService.regulationAllCallback"
-        (selectEvent)="regulationSelectEvent($event)"
-        class="item smart-input-wrapper"
-        ></app-smart-input>
+        <div class="tournament-editor-wrapper" [ngClass]="{tournamentEditorShow: showTournamentEditor}">
+          <app-tournament-editor
+          (addEvent)="tournamentAddEvent($event)"
+          (closeEvent)="tournamentEditorCloseEvent()"
+          ></app-tournament-editor>
+        </div>
       </div>
       <div class="editor-input">
         <app-smart-input
