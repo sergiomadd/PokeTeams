@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Tag } from 'src/app/models/tag.model';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-tag',
@@ -8,6 +9,8 @@ import { Tag } from 'src/app/models/tag.model';
 })
 export class TagComponent 
 {
+  themeService = inject(ThemeService);
+
   @Input() tag!: Tag;
   @Input() removable: boolean = false;
   @Output() removeEvent = new EventEmitter<Tag>()

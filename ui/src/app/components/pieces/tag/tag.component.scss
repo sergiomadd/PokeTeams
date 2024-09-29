@@ -1,6 +1,5 @@
 .tag
 {
-  max-width: 5vw;
   height: 2vh;
   display: flex;
   gap: 0.2em;
@@ -8,6 +7,7 @@
   padding: 0.2em;
   border-radius: 5px;
   box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
+  background-color: var(--bg-color-3);
 
   .name
   {
@@ -37,4 +37,10 @@
     height: 0.8em;
     border: 1px solid black;
   }
+}
+
+.icon
+{
+  width: 1.5em;
+  height: 1.5em;
 }

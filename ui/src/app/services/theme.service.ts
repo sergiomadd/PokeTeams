@@ -130,4 +130,24 @@ export class ThemeService
       this.changeTheme("light");
     }
   }
+
+  tagBackgroundColors: string[] = 
+  [
+    '#f44336', '#e81e63','#9c27b0','#673ab7',
+    '#3f51b5', '#2196f3','#03a9f4','#00bcd4',
+    '#009688', '#4caf50','#8bc34a','#cddc39',
+    '#ffeb3b', '#ffc107','#ff9800','#ff5722',
+  ];
+
+  getTagTextColor(backgroundColor: string): string
+  {
+    if(this.tagBackgroundColors.indexOf(backgroundColor) > 7)
+    {
+      return this.themes[0].colors['--text-color'];
+    }
+    else
+    {
+      return this.themes[1].colors['--text-color'];
+    }
+  }
 }

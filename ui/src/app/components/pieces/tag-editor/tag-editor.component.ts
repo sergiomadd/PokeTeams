@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, inject, Output, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Tag } from 'src/app/models/tag.model';
+import { ThemeService } from 'src/app/services/theme.service';
 
 @Component({
   selector: 'app-tag-editor',
@@ -10,6 +11,7 @@ import { Tag } from 'src/app/models/tag.model';
 export class TagEditorComponent 
 {
   formBuilder = inject(FormBuilder);
+  themeService = inject(ThemeService);
 
   @Output() addEvent = new EventEmitter<Tag>();
   @Output() closeEvent = new EventEmitter();
@@ -33,13 +35,6 @@ export class TagEditorComponent
   };
 
   colorPickerOpen: boolean = false;
-  colors: string[] = 
-  [
-    '#f44336', '#e81e63','#9c27b0','#673ab7',
-    '#3f51b5', '#2196f3','#03a9f4','#00bcd4',
-    '#009688', '#4caf50','#8bc34a','#cddc39',
-    '#ffeb3b', '#ffc107','#ff9800','#ff5722',
-  ];
 
   ngOnInit()
   {
@@ -72,11 +67,11 @@ export class TagEditorComponent
       name: this.form.controls.name.value ?? "",
       identifier: "",
       description: this.form.controls.desc.value ?? "",
-      color: this.form.controls.color.value ?? this.colors[0]
+      color: this.form.controls.color.value ?? this.themeService.tagBackgroundColors[0]
     };
     this.form.controls.name.setValue("");
     this.form.controls.desc.setValue("");
-    this.form.controls.color.setValue(this.colors[0]);
+    this.form.controls.color.setValue(this.themeService.tagBackgroundColors[0]);
   }
 
   add()

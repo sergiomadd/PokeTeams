@@ -1,10 +1,8 @@
 
-<div class="tag">
+<div class="tag" [ngStyle]="{backgroundColor: tag.color,
+   color: tag.color ? themeService.getTagTextColor(tag.color) : '#000000'}">
   <ng-container *ngIf="tag.icon">
     <img [attr.src]="tag.icon" alt="" class="icon" fill>
-  </ng-container>
-  <ng-container *ngIf="tag.color">
-    <div class="color" [ngStyle]="{backgroundColor: tag.color}"></div>
   </ng-container>
   <div class="name">
     {{tag.name}}
