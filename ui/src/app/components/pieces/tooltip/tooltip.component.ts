@@ -9,6 +9,4 @@ export class TooltipComponent
 {
   @Input() text?: string;
   @Input() side: string = "left";  
-
-
 }
