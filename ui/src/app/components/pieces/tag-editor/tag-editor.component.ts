@@ -1,7 +1,8 @@
 import { Component, ElementRef, EventEmitter, inject, Output, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Tag } from 'src/app/models/tag.model';
 import { ThemeService } from 'src/app/services/theme.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-tag-editor',
@@ -12,6 +13,7 @@ export class TagEditorComponent
 {
   formBuilder = inject(FormBuilder);
   themeService = inject(ThemeService);
+  util = inject(UtilService);
 
   @Output() addEvent = new EventEmitter<Tag>();
   @Output() closeEvent = new EventEmitter();
@@ -21,10 +23,11 @@ export class TagEditorComponent
 
   form = this.formBuilder.group(
   {
-    name: ['', Validators.required],
-    desc: [''],
+    name: ['', [Validators.required, Validators.maxLength(32)]],
+    desc: ['', [Validators.maxLength(256)]],
     color: ['#f44336']
   });
+  formSubmitted: boolean = false;
 
   tag: Tag = 
   {
@@ -55,7 +58,6 @@ export class TagEditorComponent
       })
     this.form.controls.color.valueChanges.subscribe(value => 
       {
-        this.colorCodeInputComponent.nativeElement.value = value;        
         this.tag = {...this.tag, color: value ?? ""}
       })
   }
@@ -70,14 +72,27 @@ export class TagEditorComponent
       color: this.form.controls.color.value ?? this.themeService.tagBackgroundColors[0]
     };
     this.form.controls.name.setValue("");
+    this.form.controls.name.markAsUntouched();
+    this.form.controls.name.markAsPristine();
+
     this.form.controls.desc.setValue("");
+    this.form.controls.desc.markAsUntouched();
+    this.form.controls.desc.markAsPristine();
+
     this.form.controls.color.setValue(this.themeService.tagBackgroundColors[0]);
+    this.colorPickerOpen = false;
+
+    this.formSubmitted = false;
   }
 
   add()
   {
-    this.addEvent.emit(this.tag);
-    this.resetEditor();
+    this.formSubmitted = true;
+    if(this.form.valid)
+    {
+      this.addEvent.emit(this.tag);
+      this.resetEditor();
+    }
   }
 
   setName(preName: string)
@@ -102,5 +117,20 @@ export class TagEditorComponent
   chooseColor($event)
   {
     this.tag.color = $event;
+  }
+
+  isInvalid(key: string) : boolean
+  {
+    var control = this.form.get(key);
+    return (control?.errors
+      && (control?.dirty || control?.touched
+        || (this.formSubmitted))) 
+      ?? false;
+  }
+
+  getError(key: string) : string
+  {
+    let control: AbstractControl | null = this.form.get(key);
+    return this.util.getAuthFormError(control);
   }
 }

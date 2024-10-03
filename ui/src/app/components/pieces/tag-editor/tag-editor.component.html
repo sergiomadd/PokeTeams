@@ -9,7 +9,13 @@
     <form class="form" [formGroup]="form">
       <div class="item">
         <label for="">Name</label>
-        <input #inputName type="text" formControlName="name">
+        <input 
+        #inputName 
+        type="text" 
+        formControlName="name" 
+        [ngClass]="{controlInvalid: isInvalid('name')}"
+        >
+        <span *ngIf="isInvalid('name')" class="formFeedbackError">{{getError('name')}}</span>
       </div>
       <div class="item">
         <label for="">Description</label>
@@ -18,7 +24,9 @@
           rows="3" 
           formControlName="desc"
           spellcheck="false"
+          [ngClass]="{controlInvalid: isInvalid('desc')}"
           ></textarea>
+        <span *ngIf="isInvalid('desc')" class="formFeedbackError">{{getError('desc')}}</span>
       </div>
       <div class="row-around">
         <div class="tag-preview">
