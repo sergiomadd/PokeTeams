@@ -11,7 +11,13 @@
     <div class="row b-gap">
       <div class="item">
         <label for="">Name</label>
-        <input #inputName type="text" formControlName="name">
+        <input 
+        #inputName 
+        type="text" 
+        formControlName="name"
+        [ngClass]="{controlInvalid: isInvalid('name')}"
+        >
+        <span *ngIf="isInvalid('name')" class="formFeedbackError">{{getError('name')}}</span>
       </div>
       <div class="item col-center b-gap">
         <label for="">Regulation</label>
@@ -31,7 +37,12 @@
       <div class="row b-gap">
         <div class="item">
           <label for="">City</label>
-          <input type="text" formControlName="city">
+          <input
+          type="text" 
+          formControlName="city"
+          [ngClass]="{controlInvalid: isInvalid('city')}"
+          >
+          <span *ngIf="isInvalid('city')" class="formFeedbackError">{{getError('city')}}</span>
         </div>
         <div class="item">
           <label for="">Country</label>

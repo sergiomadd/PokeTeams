@@ -1,8 +1,9 @@
 import { Component, EventEmitter, inject, Output, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Tournament } from 'src/app/models/tournament.model';
 import { QueryService } from 'src/app/services/query.service';
 import { TeamService } from 'src/app/services/team.service';
+import { UtilService } from 'src/app/services/util.service';
 import { RegulationSelectorComponent } from '../../regulation-selector/regulation-selector.component';
 
 @Component({
@@ -15,6 +16,7 @@ export class TournamentEditorComponent
   formBuilder = inject(FormBuilder);
   queryService = inject(QueryService);
   teamService = inject(TeamService);
+  util = inject(UtilService);
 
   @Output() addEvent = new EventEmitter<Tournament>();
   @Output() closeEvent = new EventEmitter();
@@ -23,12 +25,13 @@ export class TournamentEditorComponent
 
   form = this.formBuilder.group(
     {
-      name: ['', Validators.required],
-      city: [''],
+      name: ['', [Validators.required, Validators.maxLength(256)]],
+      city: ['', [Validators.maxLength(32)]],
       countryCode: [''],
       official: [false],
       date: ['']
     });
+  formSubmitted: boolean = false;
 
   tournament: Tournament = 
   {
@@ -71,8 +74,12 @@ export class TournamentEditorComponent
 
   add()
   {
-    this.addEvent.emit(this.tournament);
-    this.resetEditor();
+    this.formSubmitted = true;
+    if(this.form.valid)
+    {
+      this.addEvent.emit(this.tournament);
+      this.resetEditor();
+    }
   }
 
   close()
@@ -92,11 +99,31 @@ export class TournamentEditorComponent
       date: ""
     };
     this.form.controls.name.setValue("");
+    this.form.controls.name.markAsUntouched();
+    this.form.controls.name.markAsPristine();
+
     this.form.controls.city.setValue("");
     this.form.controls.countryCode.setValue("");
     this.form.controls.official.setValue(false);
     this.form.controls.date.setValue("");
     this.regulationSelector.currentIndex = 0;
+
+    this.formSubmitted = false;
+  }
+
+  isInvalid(key: string) : boolean
+  {
+    var control = this.form.get(key);
+    return (control?.errors
+      && (control?.dirty || control?.touched
+        || (this.formSubmitted))) 
+      ?? false;
+  }
+
+  getError(key: string) : string
+  {
+    let control: AbstractControl | null = this.form.get(key);
+    return this.util.getAuthFormError(control);
   }
 
 }
