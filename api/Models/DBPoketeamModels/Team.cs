@@ -23,7 +23,7 @@ namespace api.Models.DBPoketeamModels
         public string? Regulation { get; set; }
         public int ViewCount { get; set; }
         [DataType(DataType.Date)]
-        public DateTime DateCreated { get; set; } = DateTime.Today;
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
         [Required(ErrorMessage = "Team visibility is required")]
         public bool Visibility { get; set; }
     }
