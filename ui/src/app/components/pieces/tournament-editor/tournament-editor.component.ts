@@ -45,9 +45,13 @@ export class TournamentEditorComponent
 
   async ngAfterContentInit()
   {
-    this.form.controls.name.valueChanges.subscribe(value =>
+    this.form.controls.name.valueChanges.subscribe(async value =>
       {
         this.tournament.name = value ?? "";
+        if(value && !await this.teamService.checkTournamentAvailable(value))
+        {
+          this.form.controls.name.setErrors({ "tournamentTaken": true });
+        }
       })
     this.form.controls.city.valueChanges.subscribe(value =>
       {
@@ -78,6 +82,8 @@ export class TournamentEditorComponent
     if(this.form.valid)
     {
       this.addEvent.emit(this.tournament);
+      console.log(this.tournament)
+
       this.resetEditor();
     }
   }

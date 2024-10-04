@@ -204,4 +204,21 @@ export class TeamService
     }
     return tags; 
   }
+
+  async checkTournamentAvailable(userName: string) : Promise<boolean>
+  {
+    let available: boolean = false;
+    let url = this.apiUrl + 'tournament/' + 'check/' + userName;
+    try
+    {
+      const exists$ = this.http.get<boolean>(url);
+      available = await lastValueFrom(exists$);
+    }
+    catch(error)
+    {
+      available = false;
+      console.log("Error: ", this.util.getErrorMessage(error));
+    }
+    return available;
+  }
 }
