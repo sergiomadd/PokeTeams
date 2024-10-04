@@ -9,5 +9,6 @@ namespace api.Services
         public Task<TournamentDTO> GetTournamentByName(string name);
         public Task<Tournament> SaveTournament(TournamentDTO tournamentDTO);
         public List<TagDTO> QueryTournamentsByName(string key);
+        public bool TournamentAvailable(string tournamentName);
     }
 }

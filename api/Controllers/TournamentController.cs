@@ -2,6 +2,7 @@
 using api.Models.DBPoketeamModels;
 using api.Services;
 using api.Util;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -71,6 +72,18 @@ namespace api.Controllers
                 return NotFound("Couldn't find tournaments");
             }
             return Ok(tournaments);
+        }
+
+        [HttpGet, Route("check/{tournamentName}")]
+        public async Task<ActionResult<bool>> TournamentAvailable(string tournamentName)
+        {
+            Printer.Log($"Checking tournament availability of {tournamentName}");
+            bool available = _tournamentService.TournamentAvailable(tournamentName);
+            if (!available)
+            {
+                return Ok(false);
+            }
+            return Ok(true);
         }
     }
 }
