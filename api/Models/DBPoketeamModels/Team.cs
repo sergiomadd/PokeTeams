@@ -6,23 +6,25 @@ namespace api.Models.DBPoketeamModels
     public class Team
     {
         [Key]
-        [StringLength(10)]
+        [StringLength(10, ErrorMessage = "Team id is not the correct length")]
+        [Required(ErrorMessage = "Team id is required")]
         public string Id { get; set; }
         public virtual ICollection<Pokemon> Pokemons { get; set; }
         public string? Options { get; set; }
-
-        [StringLength(450)]
+        [StringLength(450, ErrorMessage = "Team player id is not the correct length")]
         public string? PlayerId { get; set; }
         public virtual User? Player { get; set; }
-        [StringLength(64)]
+        [StringLength(32, ErrorMessage = "Team player anon is too long")]
         public string? AnonPlayer { get; set;}
-        public virtual string? TournamentNormalizedName { get; set; }
+        [StringLength(256, ErrorMessage = "Team tournament name is too long")]
+        public string? TournamentNormalizedName { get; set; }
         public virtual Tournament? Tournament { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
         public string? Regulation { get; set; }
         public int ViewCount { get; set; }
         [DataType(DataType.Date)]
         public DateTime DateCreated { get; set; } = DateTime.Today;
+        [Required(ErrorMessage = "Team visibility is required")]
         public bool Visibility { get; set; }
     }
 }
