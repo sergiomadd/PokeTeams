@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using api.DTOs;
+using api.Util;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Models.DBPoketeamModels
@@ -30,5 +32,22 @@ namespace api.Models.DBPoketeamModels
         public DateOnly? Date { get; set; }
 
         public virtual ICollection<Team> Teams { get; set; }
+
+
+        public Tournament()
+        {
+
+        }
+
+        public Tournament(TournamentDTO tournamentDTO)
+        {
+            Name = tournamentDTO.Name;
+            NormalizedName = Formatter.NormalizeString(tournamentDTO.Name);
+            City = tournamentDTO.City;
+            CountryCode = tournamentDTO.CountryCode;
+            Official = tournamentDTO.Official;
+            RegulationIdentifier = tournamentDTO.Regulation != null ? tournamentDTO.Regulation.Identifier : null;
+            Date = tournamentDTO.Date;
+        }
     }
 }

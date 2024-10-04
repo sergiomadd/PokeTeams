@@ -35,25 +35,6 @@ namespace api.Services
             return tournamentDTO;
         }
 
-        public Tournament BreakTournamentDTO(TournamentDTO tournamentDTO)
-        {
-            Tournament tournament = null;
-            if (tournamentDTO != null)
-            {
-                tournament = new Tournament
-                {
-                    Name = tournamentDTO.Name,
-                    NormalizedName = tournamentDTO.Name.ToLower(),
-                    City = tournamentDTO.City,
-                    CountryCode = tournamentDTO.CountryCode,
-                    Official = tournamentDTO.Official,
-                    RegulationIdentifier = tournamentDTO.RegulationIdentifier,
-                    Date = tournamentDTO.Date
-                };
-            }
-            return tournament;
-        }
-
         public List<TournamentDTO> GetAllTournaments()
         {
             List<TournamentDTO> tournamentDTOs = new List<TournamentDTO>();
@@ -85,7 +66,7 @@ namespace api.Services
             {
                 if (tournamentDTO != null)
                 {
-                    Tournament tournament = BreakTournamentDTO(tournamentDTO);
+                    Tournament tournament = new Tournament(tournamentDTO);
                     await _pokeTeamContext.Tournament.AddAsync(tournament);
                     await _pokeTeamContext.SaveChangesAsync();
                     return tournament;

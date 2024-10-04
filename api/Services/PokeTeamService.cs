@@ -172,7 +172,7 @@ namespace api.Services
 
                 User player = null;
                 Printer.Log("logged username", loggedUserName);
-                if (inputTeam.Player != null && loggedUserName == inputTeam.Player.Username)
+                if (inputTeam.Player != null && inputTeam.Player.Username != null && loggedUserName == inputTeam.Player.Username)
                 {
                     Printer.Log("Getting logged user in service");
                     player = await _userService.GetUserByUserName(inputTeam.Player.Username);
@@ -199,21 +199,10 @@ namespace api.Services
                 }
 
                 Tournament tournament = null;
-                if (inputTeam.Tournament != null)
+                if (inputTeam.Tournament != null && inputTeam.Tournament.Name != null)
                 {
-                    tournament = await _pokeTeamContext.Tournament.FindAsync(inputTeam.Tournament.Name.ToLower());
-                    if (tournament == null)
-                    {
-                        tournament = new Tournament
-                        {
-                            Name = inputTeam.Tournament.Name,
-                            NormalizedName = inputTeam.Tournament.Name.ToLower(),
-                            Official = false
-                        };
-                        await _pokeTeamContext.Tournament.AddAsync(tournament);
-                    }
+                    tournament = new Tournament(inputTeam.Tournament);
                 }
-
 
                 newTeam = new Team
                 {
@@ -223,6 +212,7 @@ namespace api.Services
                     PlayerId = player != null ? player.Id : null,
                     AnonPlayer = player == null ? inputTeam.Player != null ? inputTeam.Player.Username : "anon" : null,
                     TournamentNormalizedName = tournament != null ? tournament.NormalizedName : null,
+                    Tournament = tournament,
                     Regulation = inputTeam.Regulation != null ? inputTeam.Regulation.Identifier : null,
                     ViewCount = 0,
                     Visibility = inputTeam.Visibility,
@@ -233,7 +223,7 @@ namespace api.Services
             }
             catch (Exception ex)
             {
-                Printer.Log(ex.Message);
+                Printer.Log("Exception in team upload", ex.Message);
                 return null;
             }
             return newTeam;
