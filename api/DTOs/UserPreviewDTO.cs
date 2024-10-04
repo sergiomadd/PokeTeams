@@ -2,7 +2,7 @@
 {
     public class UserPreviewDTO
     {
-        public string Username { get; set; }
-        public string Picture { get; set; }
+        public string? Username { get; set; }
+        public string? Picture { get; set; }
     }
 }
