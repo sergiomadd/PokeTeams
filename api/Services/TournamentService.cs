@@ -35,7 +35,7 @@ namespace api.Services
             return tournamentDTO;
         }
 
-        public Tournament BreakTournamentDTO(TournamentUploadDTO tournamentDTO)
+        public Tournament BreakTournamentDTO(TournamentDTO tournamentDTO)
         {
             Tournament tournament = null;
             if (tournamentDTO != null)
@@ -79,7 +79,7 @@ namespace api.Services
             return tournamentDTO;
         }
 
-        public async Task<Tournament> SaveTournament(TournamentUploadDTO tournamentDTO)
+        public async Task<Tournament> SaveTournament(TournamentDTO tournamentDTO)
         {
             try
             {
