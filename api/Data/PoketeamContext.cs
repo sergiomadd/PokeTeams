@@ -30,7 +30,7 @@ namespace api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
             modelBuilder.Entity<Regulation>()
                 .HasMany(r => r.Tournaments)
                 .WithOne(t => t.Regulation)
@@ -67,16 +67,12 @@ namespace api.Data
             modelBuilder.Entity<User>(
                 u =>
                 {
-                    u.HasIndex(u => u.NormalizedEmail).HasName("EmailIndex").IsUnique();
+                    u.HasIndex(p => p.NormalizedEmail).HasName("EmailIndex").IsUnique();
 
-                    u.Property(u => u.UserName).HasMaxLength(64);
-                    u.Property(u => u.NormalizedUserName).HasMaxLength(64);
-                    u.Property(u => u.Email).HasMaxLength(64);
-                    u.Property(u => u.NormalizedEmail).HasMaxLength(64);
-
-                    //custom
-                    u.Property(u => u.Name).HasMaxLength(64);
-                    u.Property(u => u.Country).HasMaxLength(64);
+                    u.Property(p => p.UserName).HasMaxLength(32);
+                    u.Property(p => p.NormalizedUserName).HasMaxLength(32);
+                    u.Property(p => p.Email).HasMaxLength(256);
+                    u.Property(p => p.NormalizedEmail).HasMaxLength(256);
                 }
             );
         }
