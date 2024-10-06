@@ -221,4 +221,21 @@ export class TeamService
     }
     return available;
   }
+
+  async checkTagAvailable(name: string) : Promise<boolean>
+  {
+    let available: boolean = false;
+    let url = this.apiUrl + 'tag/' + 'check/' + name;
+    try
+    {
+      const exists$ = this.http.get<boolean>(url);
+      available = await lastValueFrom(exists$);
+    }
+    catch(error)
+    {
+      available = false;
+      console.log("Error: ", this.util.getErrorMessage(error));
+    }
+    return available;
+  }
 }

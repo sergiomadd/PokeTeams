@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, inject, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Tag } from 'src/app/models/tag.model';
+import { TeamService } from 'src/app/services/team.service';
 import { ThemeService } from 'src/app/services/theme.service';
 import { UtilService } from 'src/app/services/util.service';
 
@@ -13,6 +14,7 @@ export class TagEditorComponent
 {
   formBuilder = inject(FormBuilder);
   themeService = inject(ThemeService);
+  teamService = inject(TeamService);
   util = inject(UtilService);
 
   @Output() addEvent = new EventEmitter<Tag>();
@@ -47,10 +49,14 @@ export class TagEditorComponent
   {
     this.resetEditor();
 
-    this.form.controls.name.valueChanges.subscribe(value => 
+    this.form.controls.name.valueChanges.subscribe(async value => 
       {
         this.tag.name = value ?? "";
         this.tag.identifier = value ?? "";
+        if(value && !await this.teamService.checkTagAvailable(value))
+        {
+          this.form.controls.name.setErrors({ "tagTaken": true });
+        }
       })
     this.form.controls.desc.valueChanges.subscribe(value => 
       {

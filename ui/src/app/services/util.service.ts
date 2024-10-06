@@ -97,6 +97,10 @@ export class UtilService
     {
       return "This tournament is already registered";
     }
+    if(control?.hasError('tagTaken'))
+    {
+      return "This tag is already registered";
+    }
     if(control?.hasError('notLoggedUserName'))
     {
       return "The team wont be added to your user";
