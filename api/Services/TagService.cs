@@ -52,5 +52,15 @@ namespace api.Services
             }
             return tagDTOs;
         }
+
+        public bool TagAvailable(string tagName)
+        {
+            Tag? tag = _pokeTeamContext.Tag.FirstOrDefault(t => t.Identifier == Formatter.NormalizeString(tagName));
+            if (tag != null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

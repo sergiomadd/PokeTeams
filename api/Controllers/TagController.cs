@@ -1,6 +1,7 @@
 ﻿using api.DTOs;
 using api.Models.DBPoketeamModels;
 using api.Services;
+using api.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -47,6 +48,18 @@ namespace api.Controllers
                 return NotFound("Couldn't get all tags");
             }
             return Ok(tagDTOs);
+        }
+
+        [HttpGet, Route("check/{tagName}")]
+        public async Task<ActionResult<bool>> TagAvailable(string tagName)
+        {
+            Printer.Log($"Checking tag availability of {tagName}");
+            bool available = _tagService.TagAvailable(tagName);
+            if (!available)
+            {
+                return Ok(false);
+            }
+            return Ok(true);
         }
     }
 }
