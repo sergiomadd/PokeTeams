@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -12,15 +11,13 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(PokeTeamContext))]
-    [Migration("20240408210445_TeamTags2")]
-    partial class TeamTags2
+    partial class PokeTeamContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.14")
+                .HasAnnotation("ProductVersion", "8.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -158,29 +155,118 @@ namespace api.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TagTeam", b =>
+            modelBuilder.Entity("api.Models.DBPoketeamModels.Pokemon", b =>
                 {
-                    b.Property<string>("TagsIdentifier")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("TeamsId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AbilityIdentifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DexNumber")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("Gender")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ItemIdentifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Move1Identifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Move2Identifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Move3Identifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Move4Identifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NatureIdentifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nickname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Shiny")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("TeamId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
-                    b.HasKey("TagsIdentifier", "TeamsId");
+                    b.Property<string>("TeraTypeIdentifier")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("TeamsId");
+                    b.Property<string>("Type1Identifier")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("TagTeam");
+                    b.Property<string>("Type2Identifier")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("evs")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ivs")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("Pokemon");
+                });
+
+            modelBuilder.Entity("api.Models.DBPoketeamModels.Regulation", b =>
+                {
+                    b.Property<string>("Identifier")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
+
+                    b.HasKey("Identifier");
+
+                    b.ToTable("Regulation");
                 });
 
             modelBuilder.Entity("api.Models.DBPoketeamModels.Tag", b =>
                 {
                     b.Property<string>("Identifier")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.HasKey("Identifier");
 
@@ -194,8 +280,8 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("AnonPlayer")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -207,15 +293,12 @@ namespace api.Migrations
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Pokemons")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Regulation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Tournament")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("TournamentNormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<int>("ViewCount")
                         .HasColumnType("int");
@@ -227,7 +310,59 @@ namespace api.Migrations
 
                     b.HasIndex("PlayerId");
 
-                    b.ToTable("Teams", (string)null);
+                    b.HasIndex("TournamentNormalizedName");
+
+                    b.ToTable("Team");
+                });
+
+            modelBuilder.Entity("api.Models.DBPoketeamModels.TeamTag", b =>
+                {
+                    b.Property<string>("TagsIdentifier")
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("TeamsId")
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("TagsIdentifier", "TeamsId");
+
+                    b.HasIndex("TeamsId");
+
+                    b.ToTable("TeamTag");
+                });
+
+            modelBuilder.Entity("api.Models.DBPoketeamModels.Tournament", b =>
+                {
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("City")
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("CountryCode")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<DateOnly?>("Date")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("Official")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RegulationIdentifier")
+                        .HasColumnType("nvarchar(2)");
+
+                    b.HasKey("NormalizedName");
+
+                    b.HasIndex("RegulationIdentifier");
+
+                    b.ToTable("Tournament");
                 });
 
             modelBuilder.Entity("api.Models.DBPoketeamModels.User", b =>
@@ -243,15 +378,15 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DateCreated")
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -267,12 +402,12 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -293,8 +428,8 @@ namespace api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<bool>("Visibility")
                         .HasColumnType("bit");
@@ -365,7 +500,34 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TagTeam", b =>
+            modelBuilder.Entity("api.Models.DBPoketeamModels.Pokemon", b =>
+                {
+                    b.HasOne("api.Models.DBPoketeamModels.Team", "Team")
+                        .WithMany("Pokemons")
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Team");
+                });
+
+            modelBuilder.Entity("api.Models.DBPoketeamModels.Team", b =>
+                {
+                    b.HasOne("api.Models.DBPoketeamModels.User", "Player")
+                        .WithMany("Teams")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("api.Models.DBPoketeamModels.Tournament", "Tournament")
+                        .WithMany("Teams")
+                        .HasForeignKey("TournamentNormalizedName");
+
+                    b.Navigation("Player");
+
+                    b.Navigation("Tournament");
+                });
+
+            modelBuilder.Entity("api.Models.DBPoketeamModels.TeamTag", b =>
                 {
                     b.HasOne("api.Models.DBPoketeamModels.Tag", null)
                         .WithMany()
@@ -380,14 +542,28 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("api.Models.DBPoketeamModels.Tournament", b =>
+                {
+                    b.HasOne("api.Models.DBPoketeamModels.Regulation", "Regulation")
+                        .WithMany("Tournaments")
+                        .HasForeignKey("RegulationIdentifier");
+
+                    b.Navigation("Regulation");
+                });
+
+            modelBuilder.Entity("api.Models.DBPoketeamModels.Regulation", b =>
+                {
+                    b.Navigation("Tournaments");
+                });
+
             modelBuilder.Entity("api.Models.DBPoketeamModels.Team", b =>
                 {
-                    b.HasOne("api.Models.DBPoketeamModels.User", "Player")
-                        .WithMany("Teams")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Navigation("Pokemons");
+                });
 
-                    b.Navigation("Player");
+            modelBuilder.Entity("api.Models.DBPoketeamModels.Tournament", b =>
+                {
+                    b.Navigation("Teams");
                 });
 
             modelBuilder.Entity("api.Models.DBPoketeamModels.User", b =>
