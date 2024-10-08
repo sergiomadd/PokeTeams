@@ -1,77 +1,92 @@
 <div class="team">
-  <div class="top">
-    <div class="row-between w-100">
-      <div class="row s-gap">
-        <ng-container *ngIf="team?.player?.username">
-          <div class="detail">
-            <div class="row">
-              <img src="{{team?.player?.picture}}" alt="" class="icon">
-              {{team?.player?.username}}
-            </div>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="team?.tournament">
-          <div class="detail tournament">
-            <ng-container *ngIf="team?.tournament?.official">
-              <img src="assets/regionals.png" alt="" class="icon">
-            </ng-container>
-            {{team?.tournament?.name}}
-          </div>
-        </ng-container>
-        <ng-container *ngIf="team?.regulation">
-          <div class="detail regulation">
-            {{team?.regulation?.identifier}}
-          </div>
-        </ng-container>
-      </div>
-      <div class="row-end s-gap">
-        <ng-container *ngIf="team?.viewCount">
-          <div class="detail">
-            {{team?.viewCount}}
-          </div>
-        </ng-container>
-        <ng-container *ngIf="team?.date">
-          <div class="detail">
-            {{util.customFormatDate(team?.date!)}} 
-          </div>
-        </ng-container>
-        <div class="options">
-          <div 
-          class="option"
-          (click)="clickOptions(0)"
-          [ngClass]="{active: showAllStats}"
-          >
-            <img src="assets/align-left.png" alt="" class="icon">
-          </div>
-          <div 
-          class="option" 
-          (click)="clickOptions(1)"
-          [ngClass]="{active: showAllNotes}"
-          >
-            <img src="assets/edit.png" alt="" class="icon">
+  <div class="team-row full row">
+    <div class="half row-start s-gap">
+      <ng-container *ngIf="team?.player?.username">
+        <div class="detail">
+          <div class="row">
+            <img src="{{team?.player?.picture}}" alt="" class="icon">
+            {{team?.player?.username}}
           </div>
         </div>
-      </div>
+      </ng-container>
+      <ng-container *ngIf="team?.tournament">
+        <div class="detail tournament">
+          <ng-container *ngIf="team?.tournament?.official">
+            <img src="assets/regionals.png" alt="" class="icon">
+          </ng-container>
+          {{team?.tournament?.name}}
+        </div>
+      </ng-container>
+      <ng-container *ngIf="team?.regulation">
+        <div class="detail regulation">
+          {{team?.regulation?.identifier}}
+        </div>
+      </ng-container>
     </div>
-    <ng-container *ngIf="team?.tags">
-      <div class="tags">
-        <app-tag-list [tags]="team?.tags" [removable]="removableTags"></app-tag-list>
-      </div>
-    </ng-container>
-  </div>
-  <div class="pokemons">
-    <div class="col">
-      <ng-container *ngFor="let pokemon of team?.pokemons; index as i">
-        <ng-container *ngIf="i % 2 === 0">
-          <app-pokemon [pokemon]="pokemon" [teamOptions]="team?.options"></app-pokemon>
+    <div class="half row-end s-gap">
+      <ng-container *ngIf="team?.tags && team?.tags!.length > 0">
+        <ng-container *ngFor="let tag of team?.tags">
+          <app-tag [tag]="tag"></app-tag>
         </ng-container>
       </ng-container>
     </div>
-    <div class="col">
-      <ng-container *ngFor="let pokemon of team?.pokemons; index as i">
-        <ng-container *ngIf="i % 2 !== 0">
-          <app-pokemon [pokemon]="pokemon" [teamOptions]="team?.options"></app-pokemon>
+  </div>
+  <div class="row-top">
+    <div class="options margin-y-s"></div>
+    <div class="pokemons">
+      <div class="col">
+        <ng-container *ngFor="let pokemon of team?.pokemons; index as i">
+          <ng-container *ngIf="i % 2 === 0">
+            <app-pokemon [pokemon]="pokemon" [teamOptions]="team?.options"></app-pokemon>
+          </ng-container>
         </ng-container>
+      </div>
+      <div class="col">
+        <ng-container *ngFor="let pokemon of team?.pokemons; index as i">
+          <ng-container *ngIf="i % 2 !== 0">
+            <app-pokemon [pokemon]="pokemon" [teamOptions]="team?.options"></app-pokemon>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+    <ng-container *ngIf="team?.pokemons && team?.pokemons!.length > 0">
+      <div class="options margin-y-s s-gap">
+        <div 
+        class="option-wrappe detail"
+        (click)="clickOptions(0)"
+        [ngClass]="{active: showAllStats}"
+        >
+          <img src="assets/align-left.png" alt="" class="icon">
+        </div>
+        <div 
+        class="option-wrapper detail" 
+        (click)="clickOptions(1)"
+        [ngClass]="{active: showAllNotes}"
+        >
+          <img src="assets/edit.png" alt="" class="icon">
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="team-row row full align-top">
+    <div class="half row-start s-gap">
+      <div class="detail">
+        Rental Code
+      </div>
+      <div class="detail">
+        Original Author
+      </div>
+    </div>
+    <div class="half row-end s-gap">
+      <ng-container *ngIf="team?.viewCount">
+        <div class="detail">
+          {{team?.viewCount}}
+        </div>
+      </ng-container>
+      <ng-container *ngIf="team?.date">
+        <div class="detail">
+          {{util.customFormatDate(team?.date!)}} 
+        </div>
       </ng-container>
     </div>
   </div>
