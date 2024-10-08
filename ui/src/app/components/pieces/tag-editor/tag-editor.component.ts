@@ -25,7 +25,7 @@ export class TagEditorComponent
 
   form = this.formBuilder.group(
   {
-    name: ['', [Validators.required, Validators.maxLength(32)]],
+    name: ['', [Validators.required, Validators.maxLength(16)]],
     desc: ['', [Validators.maxLength(256)]],
     color: ['#f44336']
   });

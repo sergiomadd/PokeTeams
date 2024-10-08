@@ -47,7 +47,7 @@ export class UserFormComponent
   signUpFormSubmitted: boolean = false;
   signUpForm = this.formBuilder.group(
     {
-      username: ['', [Validators.required, Validators.maxLength(256)]],
+      username: ['', [Validators.required, Validators.maxLength(32)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(256)]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
