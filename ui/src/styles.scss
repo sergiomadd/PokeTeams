@@ -256,6 +256,18 @@ textarea
   align-items: center;
 }
 
+.row-top
+{
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.align-top
+{
+  align-items: flex-start;
+}
+
 .s-gap
 {
   gap: 0.2vw;
@@ -269,6 +281,16 @@ textarea
 .no-gap
 {
   gap: 0;
+}
+
+.margin-x-s
+{
+  margin: 0.5em 0;
+}
+
+.margin-y-s
+{
+  margin: 0 0.5em;
 }
 
 .col
