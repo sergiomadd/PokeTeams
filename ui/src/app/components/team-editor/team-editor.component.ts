@@ -100,7 +100,7 @@ export class TeamEditorComponent
   {
     let anonPlayer: UserPreview =     
     {
-      username: "",
+      username: "anon",
       picture: "assets/anon.png"
     }
     return anonPlayer

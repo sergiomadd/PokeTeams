@@ -24,6 +24,7 @@ export class RegulationSelectorComponent
     {
       this.items = await this.allGetter();
     }
+    this.select();
   }
 
   prev()
