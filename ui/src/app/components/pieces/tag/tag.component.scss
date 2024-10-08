@@ -8,11 +8,9 @@
   border-radius: 5px;
   box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
   background-color: var(--bg-color-3);
-
-  .name
-  {
-    overflow: hidden;
-  }
+  width: fit-content;
+  white-space: nowrap;
+  cursor: pointer;
 
   .remove
   {

@@ -3,9 +3,9 @@
   opacity: 0;
   width: 0;
   height: 0;
-
   .text
   {
     overflow: hidden;
+    white-space: wrap;
   }
 }
