@@ -33,11 +33,10 @@
   width: 30vw;
 }
 
-.input-textArea
+.input-text-area
 {
-  resize: none;
   background-color: var(--bg-color-1);
-  color: var(--text-color);
+  outline: 1px solid black; 
 }
 
 .submit

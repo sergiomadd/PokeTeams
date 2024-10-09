@@ -2,15 +2,20 @@
 {
   height: 2vh;
   display: flex;
-  gap: 0.2em;
   align-items: center;
   padding: 0.2em;
   border-radius: 5px;
   box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
   background-color: var(--bg-color-3);
   width: fit-content;
+  min-width: 4em;
   white-space: nowrap;
   cursor: pointer;
+
+  .text
+  {
+    overflow: hidden;
+  }
 
   .remove
   {
@@ -22,10 +27,11 @@
     cursor: pointer;
     padding: 0.2em;
     align-self: flex-end;
+    margin-left: 0.2em;
 
     &:hover
     {
-      background-color: var(--bg-color-2);
+      background-color: var(--bg-color-3);
     }
   }
 
