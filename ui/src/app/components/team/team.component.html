@@ -26,7 +26,7 @@
     <div class="half row-end s-gap">
       <ng-container *ngIf="team?.tags && team?.tags!.length > 0">
         <ng-container *ngFor="let tag of team?.tags">
-          <app-tag [tag]="tag"></app-tag>
+          <app-tag [tag]="tag" [removable]="removableTags ?? false" (removeEvent)="removeTag($event)"></app-tag>
         </ng-container>
       </ng-container>
     </div>

@@ -192,11 +192,21 @@ export class TeamEditorComponent
     }
   }
 
+  tagLabel: string = `Tags (${this.team?.tags ? this.team?.tags?.length : 0}/3)`;
+
   tagSelectEvent(tag: Tag)
   {
     if(this.team.tags)
     {
-      this.team.tags = [...this.team.tags, tag];
+      if(this.team.tags.length < 3)
+      {
+        this.team.tags = [...this.team.tags, tag];
+        if(this.team.tags.length === 3)
+        {
+          this.disableTagSelector();
+        }
+        this.tagLabel = `Tags (${this.team?.tags ? this.team?.tags?.length : 0}/3)`;
+      }
     }
     else
     {
@@ -204,16 +214,23 @@ export class TeamEditorComponent
     }
   }
 
-  tagAddEvent(tag: Tag)
+  enableTagSelector()
   {
-    if(this.team.tags)
-    {
-      this.team.tags = [...this.team.tags, tag];
-    }
-    else
-    {
-      this.team.tags = [tag];
-    }
+    this.tagSmartInput.searchForm.controls.key.enable();
+    this.tagSmartInput.disabled = false;
+  }
+
+  disableTagSelector()
+  {
+    this.tagEditorCloseEvent();
+    this.tagSmartInput.searchForm.controls.key.disable();
+    this.tagSmartInput.disabled = true;
+  }
+
+  removeTag()
+  {
+    this.enableTagSelector();
+    this.tagLabel = `Tags (${this.team?.tags ? this.team?.tags?.length : 0}/3)`;
   }
 
   tagEditorCloseEvent()

@@ -1,4 +1,5 @@
-import { Component, inject, Input, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Tag } from 'src/app/models/tag.model';
 import { Team } from 'src/app/models/team.model';
 import { TeamOptions } from 'src/app/models/teamOptions.model';
 import { ParserService } from 'src/app/services/parser.service';
@@ -66,11 +67,14 @@ export class TeamComponent
     return "";
   }
 
-  removeTag(index: number)
+  @Output() removeEvent = new EventEmitter<Tag>()
+
+  removeTag(index)
   {
     if(this.removableTags)
     {
       this.team?.tags?.splice(index, 1);
+      this.removeEvent.emit();
     }
   }
 }

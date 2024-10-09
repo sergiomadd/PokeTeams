@@ -39,7 +39,8 @@
       <div class="editor-input">
         <app-smart-input
         #tagInput
-        [label]="'Tag'"
+        (disabled)="team?.tags ? team?.tags!.length > 2 : false"
+        [label]="tagLabel"
         [keepSelected]="false"
         [allowNew]="true"
         [getter]="queryService.queryTagCallback"
@@ -50,7 +51,7 @@
         ></app-smart-input>
         <div class="tag-editor-wrapper" [ngClass]="{tagEditorShow: showTagEditor}">
           <app-tag-editor 
-          (addEvent)="tagAddEvent($event)"
+          (addEvent)="tagSelectEvent($event)"
           (closeEvent)="tagEditorCloseEvent()"
           ></app-tag-editor>
         </div>
@@ -90,7 +91,7 @@
     </div>
   </div>
   <div class="team-holder">
-    <app-team [team]="team" [removableTags]="true"></app-team>
+    <app-team [team]="team" [removableTags]="true" (removeEvent)="removeTag()"></app-team>
   </div>
   <div class="output">
     <button
