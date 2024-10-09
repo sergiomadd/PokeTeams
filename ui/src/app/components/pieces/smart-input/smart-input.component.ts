@@ -25,6 +25,7 @@ export class SmartInputComponent
   @Input() getter?: (args: any) => Promise<Tag[]>
   @Input() allGetter?: (args?: any) => Promise<Tag[]>
   @Input() allGetterIndex?: number;
+  @Input() disabled?: boolean;
   @Output() selectEvent = new EventEmitter<Tag>();
   @Output() newEvent = new EventEmitter();
   @Output() updateEvent = new EventEmitter<string>();
@@ -112,6 +113,7 @@ export class SmartInputComponent
     {
       this.selected = this.value;
     }
+    console.log(changes)
   }
 
   async search(key: string)

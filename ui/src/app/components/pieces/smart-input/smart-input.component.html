@@ -13,6 +13,7 @@
       class="input"
       (focus)="onFocus()"
       (blur)="onBlur()"
+      [ngClass]="{disabled: disabled}"
       >
     </ng-container>
     <ng-template #keep>
@@ -31,7 +32,11 @@
       </div>
     </ng-template>
     <ng-container *ngIf="allowNew && !selected">
-      <button class="new button-tertiary" (click)="newClick()">+</button>
+      <button 
+      class="new button-tertiary"
+      [ngClass]="{disabled: disabled}"
+      (click)="newClick()" 
+      [disabled]="disabled">+</button>
     </ng-container>
   </form>
   <div 
