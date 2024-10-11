@@ -1,13 +1,12 @@
 
 .team
 {
-  width: 50vw;
   display: flex;
   flex-direction: column;
   background-color: var(--bg-color-3);
   padding: 0.2vw;
   border-radius: 5px;
-
+  
   .top
   {
     display: flex;
@@ -20,7 +19,7 @@
     .detail
     {
       width: fit-content;
-      max-width: 10vw;
+      max-width: 6em;
       height: 1.2em;
       overflow: hidden;
       display: flex;
@@ -84,12 +83,11 @@
   .pokemons
   {
     display: flex;
-    justify-content: space-evenly;
-    gap: 0.2vw;
+    justify-content: space-around;
+    gap: 0.5em;
     background-color: var(--bg-color-2);
     border-radius: 5px;
-    transition: all 1s ease;
-    height: fit-content;
+    width: 100%;
   }
 }
 

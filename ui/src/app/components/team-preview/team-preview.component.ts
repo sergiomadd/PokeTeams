@@ -1,4 +1,5 @@
 import { Component, inject, Input, QueryList, ViewChildren } from '@angular/core';
+import { Layout } from 'src/app/models/enums/layout.enum';
 import { TeamPreview } from 'src/app/models/teamPreview.model';
 import { ParserService } from 'src/app/services/parser.service';
 import { TeamService } from 'src/app/services/team.service';
@@ -18,7 +19,7 @@ export class TeamPreviewComponent
 
   @Input() team?: TeamPreview;
   teamID?: number;
-  @Input() mode?: string;
+  @Input() layout?: Layout;
   @Input() logged?: boolean;
   
   @ViewChildren(PokemonPreviewComponent) pokemonPreviewsComponents!: QueryList<PokemonPreviewComponent>;

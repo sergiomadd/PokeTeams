@@ -10,7 +10,9 @@
         </ng-container>
         <div class="row no-gap">
           <div class="detail" [ngClass]="{unkownPlayer: team?.player?.username === 'Unkown'}">
-            <img src="{{team?.player?.picture}}" alt="" class="icon">
+            <ng-container *ngIf="team?.player?.picture">
+              <img src="{{team?.player?.picture}}" alt="" class="icon">
+            </ng-container>
             {{team?.player?.username}}
           </div>
         </div>
@@ -34,25 +36,45 @@
         <div class="detail">
           {{util.customFormatDate(team?.date!)}}
         </div>  
-        <button (click)="copyPaste()" class="button">
+        <button (click)="copyPaste()" class="button tooltip-wrapper">
           <img src="assets/copy.png" alt="" class="icon">
+          <app-tooltip
+          [text]="'Copy paste'"
+          [side]="'top'"
+          ></app-tooltip>
         </button>
-        <button (click)="copyLink()" class="button">
+        <button (click)="copyLink()" class="button tooltip-wrapper">
           <img src="assets/link.png" alt="" class="icon">
+          <app-tooltip
+          [text]="'Copy link'"
+          [side]="'top'"
+          ></app-tooltip>
         </button>
-        <button class="button">
+        <button class="button tooltip-wrapper">
           <a [routerLink]="['/', team?.id]" target="_blank" class="button">
             <img src="assets/external-link.png" alt="" class="icon">
           </a>
+          <app-tooltip
+          [text]="'Open team'"
+          [side]="'top'"
+          ></app-tooltip>
         </button>
         <ng-container *ngIf="logged">
-          <button class="button">
+          <button class="button tooltip-wrapper">
             <a [routerLink]="['/', team?.id]" target="_blank" class="button button-tertiary">
               <img src="assets/edit-white.png" alt="" class="icon">
             </a>
+            <app-tooltip
+            [text]="'Edit team'"
+            [side]="'top'"
+            ></app-tooltip>
           </button>
-          <button (click)="delete()" class="button button-primary">
+          <button (click)="delete()" class="button button-primary tooltip-wrapper">
             <img src="assets/trash-white.png" alt="" class="icon">
+            <app-tooltip
+            [text]="'Delete team'"
+            [side]="'top'"
+            ></app-tooltip>
           </button>
         </ng-container>
       </div>
@@ -67,7 +89,7 @@
     (mouseleave)="expand()"
     >
       <ng-container *ngFor="let pokemon of team?.pokemons">
-        <app-pokemon-preview [pokemon]="pokemon"></app-pokemon-preview>
+        <app-pokemon-preview [pokemon]="pokemon" [layout]="layout"></app-pokemon-preview>
       </ng-container>
     </div>
   </ng-container>
