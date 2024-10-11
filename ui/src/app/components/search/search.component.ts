@@ -2,6 +2,7 @@ import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { SearchQueryDTO } from 'src/app/models/DTOs/searchQuery.dto';
 import { SearchQueryResponseDTO } from 'src/app/models/DTOs/searchQueryResponse.dto';
+import { Layout } from 'src/app/models/enums/layout.enum';
 import { TeamSearchOrder } from 'src/app/models/enums/teamSearchOrder.enum';
 import { Tag } from 'src/app/models/tag.model';
 import { TeamPreview } from 'src/app/models/teamPreview.model';
@@ -24,15 +25,15 @@ export class SearchComponent
   teamService = inject(TeamService);
   pokemonService = inject(PokemonService);
 
-
   teams: TeamPreview[] = [];
   logged?: boolean = true;
   sortedTeams: TeamPreview[] = [];
   searched: boolean = false;
   tags: Tag[] = [];
+  layout: Layout = Layout.single;
 
   //pagination
-  teamsPerPage: number = 5;
+  teamsPerPage: number = 10;
   totalTeams?: number;
   sortOrder: TeamSearchOrder = TeamSearchOrder.DateDescending;
   @ViewChild(PaginationComponent) paginationComponent!: PaginationComponent;
@@ -106,6 +107,12 @@ export class SearchComponent
         }
       }
     )
+  }
+
+  changeLayout()
+  {
+    if(this.layout === Layout.single) { this.layout = Layout.double }
+    else if(this.layout === Layout.double) { this.layout = Layout.single }
   }
 
   //sorting

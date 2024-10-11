@@ -119,6 +119,7 @@
         </div>
       </div>
       <div>
+        <button (click)="changeLayout()">Layout</button>
         {{totalTeams}} teams
       </div>
     </div>
@@ -129,17 +130,26 @@
         </div>
       </ng-container>
       <ng-container *ngIf="teams && teams.length > 0">
-        <ng-container *ngFor="let team of teams">
-          <div class="record">
-            <app-team-preview [team]="team" [mode]="'six'" [logged]="logged"></app-team-preview>
-          </div>
-        </ng-container>
+        <div class="records" [ngClass]="
+        {
+          single: layout === 0,
+          double: layout === 1
+        }">
+          <ng-container *ngFor="let team of teams">
+            <div class="record">
+              <app-team-preview 
+              [team]="team" 
+              [layout]="layout"
+              [logged]="logged"></app-team-preview>
+            </div>
+          </ng-container>
+        </div>
       </ng-container>
+      <app-pagination
+      [itemsPerPage]="teamsPerPage"
+      [totalItems]="totalTeams ?? 0"
+      (pageChanged)="pageChange($event, results)"
+      ></app-pagination>
     </div>
-    <app-pagination
-    [itemsPerPage]="teamsPerPage"
-    [totalItems]="totalTeams ?? 0"
-    (pageChanged)="pageChange($event, results)"
-    ></app-pagination>
   </div>
 </div>
