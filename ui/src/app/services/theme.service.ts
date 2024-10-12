@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { PokeColor, PokeTypeColors } from '../styles/pokemonColors';
 
 interface Theme
 {
@@ -149,5 +150,15 @@ export class ThemeService
     {
       return this.themes[1].colors['--text-color'];
     }
+  }
+
+  getMoveColor(name?: string)
+  {
+    return name ? PokeColor[name.toLowerCase()] : "";
+  }
+
+  getTypeColor(name?: string)
+  {
+    return name ? PokeTypeColors[name.toLowerCase()] : "";  
   }
 }
