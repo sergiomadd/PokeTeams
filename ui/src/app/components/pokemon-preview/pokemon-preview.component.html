@@ -1,44 +1,37 @@
-<div class="pokemon-preview">
-  <div class="pokemon">
-    <div class="top-wrapper">
-      <div class="top">
-        <ng-container *ngIf="expanded">
-          <div class="icon"></div>
-        </ng-container>
-        <img [src]="pokemonSpritePath" alt="" class="sprite">
-        <ng-container *ngIf="expanded">
-          <div class="types">
-            <ng-container *ngIf="pokemon?.types?.type1">
-              <img src="{{pokemon?.types?.type1?.iconPath}}" title="{{pokemon?.types?.type1?.name}}" alt="{{pokemon?.types?.type1?.name}}" class="icon">
-            </ng-container>
-            <ng-container *ngIf="pokemon?.types?.type2">
-              <img src="{{pokemon?.types?.type2?.iconPath}}" title="{{pokemon?.types?.type2?.name}}" alt="{{pokemon?.types?.type2?.name}}" class="icon">
-            </ng-container>
-            <ng-container *ngIf="pokemon?.teraType">
-              <img src="{{pokemon?.teraType?.iconPath}}" alt="" class="icon">
-            </ng-container>
+<div class="pokemon-preview" [ngClass]="
+  {
+    single: layout === 0,
+    double: layout === 1
+  }">
+  <ng-container *ngIf="layout === 0">
+    <div class="row s-gap">
+      <div class="col">
+        <div class="sprite">
+          <img [src]="pokemonSpritePath" alt="" class="sprite">
+          <div class="item tooltip-wrapper">
+            <img [src]="pokemon?.item?.iconPath" alt="">
+            <app-tooltip [text]="pokemon?.item?.name" [side]="'top'"></app-tooltip>
           </div>
-        </ng-container>
+        </div>
       </div>
-    </div>
-    <ng-container *ngIf="expanded">
-      <div class="expanded">
-        <div class="ability text-center section">
-          {{pokemon?.abilityName}}
-        </div>
-        <div class="section">
-          <img src="{{pokemon?.item?.iconPath}}" alt="" class="icon bottom-icon">
-          {{pokemon?.item?.name}}
-        </div>
+      <div class="right">
         <div class="moves">
           <ng-container *ngFor="let move of pokemon?.moves">
-            <div class="section">
-              <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="icon bottom-icon">
+            <div class="move" [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.name ?? '')}">
               {{move?.name}}
             </div>
           </ng-container>
         </div>
       </div>
-    </ng-container>
-  </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="layout === 1">
+    <div class="sprite">
+      <img [src]="pokemonSpritePath" alt="" class="sprite">
+      <div class="item tooltip-wrapper">
+        <img [src]="pokemon?.item?.iconPath" alt="">
+        <app-tooltip [text]="pokemon?.item?.name" [side]="'top'"></app-tooltip>
+      </div>
+    </div>
+  </ng-container>
 </div>

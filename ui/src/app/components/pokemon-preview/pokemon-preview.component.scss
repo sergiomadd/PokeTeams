@@ -1,64 +1,86 @@
-.pokemon
+.pokemon-preview
 {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0.2vw;
-  min-width: 6vw;
-  width: fit-content;
-  max-width: 7vw;
+  transition: all ease 0.5s;
+  //white-space: nowrap;
+  padding: 0.2em;
+  font-size: 1em;
+  width: 1fr;
+}
 
-  .top-wrapper
+.single
+{
+
+  .sprite
   {
-    .top
-    {
-      display: flex;
-
-      .types
-      {
-        display: flex;
-        flex-direction: column;
-      }
-    }
+    position: relative;
+    width: 5em;
+    height: 5em;
   }
 
-  .section
+  .right
   {
-    padding: 0.1vw;
+    height: 100%;
     display: flex;
-  }
-
-  .ability
-  {
-    border-top: 1px grey solid;
+    flex-direction: column;
+    
   }
 
   .moves
   {
+    width: 5em;
+    width: fit-content;
     display: flex;
     flex-direction: column;
+    gap: 0.1em;
+    
+    .move
+    {
+      border-radius: 10px;
+      padding: 0.2em;
+      text-align: center;
+    }
   }
+}
 
-  .text-center
-  {
-    justify-content: center;
-  }
+.double
+{
 
   .sprite
   {
-    width: 5vw;
-    height: 5vw;
+    position: relative;
+    width: 5em;
+    height: 5em;
+  }
 
+  .moves
+  {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+}
+
+.item
+{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  &:hover
+  {
+    background-color: var(--bg-color-3);
+    border-radius: 10px;
   }
 }
 
 .icon
 {
-  width: 1vw;
-  height: 1vw;
+  width: 1em;
+  height: 1em;
 }
 
-.bottom-icon
+.section
 {
-  margin-right: 0.2vw;
+  height: 1em;
+
 }
