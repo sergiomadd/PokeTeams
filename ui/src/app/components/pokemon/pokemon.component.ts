@@ -5,8 +5,8 @@ import { Stat } from 'src/app/models/pokemon/stat.model';
 import { TeamOptions } from 'src/app/models/teamOptions.model';
 import { LinkifierService } from 'src/app/services/linkifier.service';
 import { ParserService } from 'src/app/services/parser.service';
+import { ThemeService } from 'src/app/services/theme.service';
 import { UtilService } from 'src/app/services/util.service';
-import { PokeColor } from 'src/app/styles/pokemonColors';
 
 interface CalculatedStats
 {
@@ -29,6 +29,7 @@ export class PokemonComponent
   parser = inject(ParserService);
   util = inject(UtilService);
   linkifier = inject(LinkifierService);
+  theme = inject(ThemeService);
 
   @Input() pokemon!: Pokemon;
   @Input() teamOptions?: TeamOptions;
@@ -201,12 +202,6 @@ export class PokemonComponent
       return aux.join(':');
     }
     return '';
-  }
-
-  getMoveColor(move)
-  {
-    let name = move?.pokeType?.name;
-    return PokeColor[name?.toLowerCase()];
   }
 
   //stats

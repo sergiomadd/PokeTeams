@@ -5,7 +5,7 @@ $metaWidth: calc($cardWidth/1.5);
 $moveHeight: calc($cardheight/4);
 $statsHeight: 5vh;
 $iconSize: 1.2em;
-$spriteSize: $iconSize * 5;
+$spriteSize: 6em;
 $paddingBig: 0.5vw;
 $padding: 0.2vw;
 
@@ -118,36 +118,43 @@ $padding: 0.2vw;
       {
         height: 100%;
         display: grid;
-        grid-template-rows: 25% 25% 25% 25%;
+        grid-template-rows: repeat(4, 1fr);
+        gap: 0.2em;
 
         .move
         {
+          width: 100%;
           height: 100%;
-          width: calc(100% - 1vw);
           position: relative;
+          border-radius:5px;
+          display: grid;
+          grid-template-columns: 20% 80% 0%;
+          grid-template-rows: 100%;
+          justify-items: start;
+          align-content: center;
+          color: black;
 
-          .move-icons
+          .move-type
           {
             display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80%;
+            width: 100%;
+            border-radius: 5px;
+            margin-left: 0.2em;
 
-            .type-icon
+            .move-type-icon
             {
-
+              width: 1.6em;
+              height: 1.6em;
             }
           }
+
           .name
           {
-            width: 100%;
-          }
-
-          .move-footer
-          {
-            position: absolute;
-            width: 100%;
-            height: 20%;
-            bottom: 0;
-            left: 0;
-            //background-color: $fire;
+            margin-left: 0.4em;
+            text-align: start;
           }
         }
       }
@@ -165,6 +172,13 @@ $padding: 0.2vw;
   width: $iconSize;
   height: $iconSize;
 }
+
+.icon-big
+{
+  width: $iconSize * 1.5;
+  height: $iconSize * 1.5;
+}
+
 
 
 
@@ -290,7 +304,7 @@ $padding: 0.2vw;
     position: relative;
     left: 50%;
     top: 50%;
-    transform: translate(calc($paddingBig*3 + $padding), calc(-50% - $padding*2));
+    transform: translate(calc($paddingBig + 0.2em), calc(-50% - $padding*2));
     
     .move-head
     {
