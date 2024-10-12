@@ -1,83 +1,103 @@
 
 <div class="team">
   <ng-container *ngIf="getVisibility(); else private">
-    <div class="top">
-      <div class="row b-gap">
-        <ng-container *ngIf="logged">
-          <ng-container *ngIf="!team?.visibility">
-            <img src="assets/lock.png" alt="" class="icon">
-          </ng-container>
-        </ng-container>
-        <div class="row no-gap">
-          <div class="detail" [ngClass]="{unkownPlayer: team?.player?.username === 'Unkown'}">
-            <ng-container *ngIf="team?.player?.picture">
-              <img src="{{team?.player?.picture}}" alt="" class="icon">
+    <div class="top col s-gap">
+      <div class="row w-100">
+        <div class="row-start s-gap wrap">
+          <ng-container *ngIf="logged">
+            <ng-container *ngIf="!team?.visibility">
+              <img src="assets/lock.png" alt="" class="icon">
             </ng-container>
-            {{team?.player?.username}}
+          </ng-container>
+          <div class="row no-gap">
+            <div class="detail" [ngClass]="{unkownPlayer: team?.player?.username === 'Unkown'}">
+              <ng-container *ngIf="team?.player?.picture">
+                <img src="{{team?.player?.picture}}" alt="" class="icon">
+              </ng-container>
+              {{team?.player?.username}}
+            </div>
           </div>
+          <ng-container *ngIf="team?.tournament">
+            <div class="detail">
+              <img src="assets/regionals.png" alt="" class="icon">
+              {{team?.tournament?.name}}
+            </div>
+          </ng-container>
+          <ng-container *ngIf="team?.regulation">
+            <div class="detail regulation">
+              {{team?.regulation?.identifier}}
+            </div>
+          </ng-container>
+          <ng-container *ngIf="layout === 0">
+            <ng-container *ngIf="team?.tags && team?.tags!.length > 0">
+              <div class="row-start s-gap">
+                <ng-container *ngFor="let tag of team?.tags">
+                  <app-tag [tag]="tag"></app-tag>
+                </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
         </div>
-        <ng-container *ngIf="team?.tournament">
+        <div class="row-end s-gap">
+          <div class="detail views">
+            <img src="assets/visible.png" alt="" class="icon">
+            {{team?.viewCount}}
+          </div>
           <div class="detail">
-            <img src="assets/regionals.png" alt="" class="icon">
-            {{team?.tournament?.name}}
-          </div>
-        </ng-container>
-        <ng-container *ngIf="team?.regulation">
-          <div class="detail regulation">
-            {{team?.regulation?.identifier}}
-          </div>
-        </ng-container>
-      </div>
-      <div class="row-end b-gap">
-        <div class="detail views">
-          <img src="assets/visible.png" alt="" class="icon">
-          {{team?.viewCount}}
-        </div>
-        <div class="detail">
-          {{util.customFormatDate(team?.date!)}}
-        </div>  
-        <button (click)="copyPaste()" class="button tooltip-wrapper">
-          <img src="assets/copy.png" alt="" class="icon">
-          <app-tooltip
-          [text]="'Copy paste'"
-          [side]="'top'"
-          ></app-tooltip>
-        </button>
-        <button (click)="copyLink()" class="button tooltip-wrapper">
-          <img src="assets/link.png" alt="" class="icon">
-          <app-tooltip
-          [text]="'Copy link'"
-          [side]="'top'"
-          ></app-tooltip>
-        </button>
-        <button class="button tooltip-wrapper">
-          <a [routerLink]="['/', team?.id]" target="_blank" class="button">
-            <img src="assets/external-link.png" alt="" class="icon">
-          </a>
-          <app-tooltip
-          [text]="'Open team'"
-          [side]="'top'"
-          ></app-tooltip>
-        </button>
-        <ng-container *ngIf="logged">
+            {{util.customFormatDate(team?.date!)}}
+          </div>  
+          <button (click)="copyPaste()" class="button tooltip-wrapper">
+            <img src="assets/copy.png" alt="" class="icon">
+            <app-tooltip
+            [text]="'Copy paste'"
+            [side]="'top'"
+            ></app-tooltip>
+          </button>
+          <button (click)="copyLink()" class="button tooltip-wrapper">
+            <img src="assets/link.png" alt="" class="icon">
+            <app-tooltip
+            [text]="'Copy link'"
+            [side]="'top'"
+            ></app-tooltip>
+          </button>
           <button class="button tooltip-wrapper">
-            <a [routerLink]="['/', team?.id]" target="_blank" class="button button-tertiary">
-              <img src="assets/edit-white.png" alt="" class="icon">
+            <a [routerLink]="['/', team?.id]" target="_blank" class="button">
+              <img src="assets/external-link.png" alt="" class="icon">
             </a>
             <app-tooltip
-            [text]="'Edit team'"
+            [text]="'Open team'"
             [side]="'top'"
             ></app-tooltip>
           </button>
-          <button (click)="delete()" class="button button-primary tooltip-wrapper">
-            <img src="assets/trash-white.png" alt="" class="icon">
-            <app-tooltip
-            [text]="'Delete team'"
-            [side]="'top'"
-            ></app-tooltip>
-          </button>
-        </ng-container>
+          <ng-container *ngIf="logged">
+            <button class="button tooltip-wrapper">
+              <a [routerLink]="['/', team?.id]" target="_blank" class="button button-tertiary">
+                <img src="assets/edit-white.png" alt="" class="icon">
+              </a>
+              <app-tooltip
+              [text]="'Edit team'"
+              [side]="'top'"
+              ></app-tooltip>
+            </button>
+            <button (click)="delete()" class="button button-primary tooltip-wrapper">
+              <img src="assets/trash-white.png" alt="" class="icon">
+              <app-tooltip
+              [text]="'Delete team'"
+              [side]="'top'"
+              ></app-tooltip>
+            </button>
+          </ng-container>
+        </div>
       </div>
+      <ng-container *ngIf="layout === 1">
+        <ng-container *ngIf="team?.tags && team?.tags!.length > 0">
+          <div class="row-start s-gap w-100 wrap">
+            <ng-container *ngFor="let tag of team?.tags">
+              <app-tag [tag]="tag"></app-tag>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
     </div>
     <ng-container *ngIf="feedback">
       <div class="errors">
