@@ -21,27 +21,72 @@ export enum PokeColor
     fairy = "#D685AD"
 }
 
-export enum PokeTypeColors
+export enum Gen9IconColors
 {
-    normal = "#919aa2",
-    fire = "#ff9741",
-    water = "#3692dc",
-    electric = "#F7D02C",
-    grass = "#7AC74C",
-    ice = "#4cd1c0",
-    fighting = "#C22E28",
-    poison = "#A33EA1",
-    ground = "#e87236",
-    flying = "#A98FF3",
-    psychic = "#F95587",
-    bug = "#A6B91A",
-    rock = "#c8b686",
-    ghost = "#735797",
-    dragon = "#6F35FC",
-    dark = "#5b5466",
-    steel = "#B7B7CE",
-    fairy = "#D685AD"
+    normal = "hsl(120, 1%, 63%)",
+    fire = "hsl(360, 79%, 53%)",
+    water = "hsl(214, 86%, 55%)",
+    electric = "hsl(46, 100%, 49%)",
+    grass = "hsl(109, 59%, 40%)",
+    ice = "hsl(192, 100%, 62%)",
+    fighting = "hsl(30, 100%, 50%)",
+    poison = "hsl(275, 57%, 53%)",
+    ground = "hsl(26, 63%, 35%)",
+    flying = "hsl(209, 77%, 72%)",
+    psychic = "hsl(341, 84%, 60%)",
+    bug = "hsl(67, 73%, 36%)",
+    rock = "hsl(52, 22%, 60%)",
+    ghost = "hsl(300, 27%, 35%)",
+    dragon = "hsl(233, 71%, 60%)",
+    dark = "hsl(7, 12%, 28%)",
+    steel = "hsl(196, 38%, 55%)",
+    fairy = "hsl(300, 80%, 69%)"
 }
+
+export enum Gen9IconColorsLight
+{
+    normal = "hsl(120, 1%, 83%)",
+    fire = "hsl(360, 79%, 73%)",
+    water = "hsl(214, 86%, 75%)",
+    electric = "hsl(46, 100%, 69%)",
+    grass = "hsl(109, 59%, 60%)",
+    ice = "hsl(192, 100%, 82%)",
+    fighting = "hsl(30, 100%, 70%)",
+    poison = "hsl(275, 57%, 73%)",
+    ground = "hsl(26, 63%, 55%)",
+    flying = "hsl(209, 77%, 82%)",
+    psychic = "hsl(341, 84%, 80%)",
+    bug = "hsl(67, 73%, 56%)",
+    rock = "hsl(52, 22%, 80%)",
+    ghost = "hsl(300, 27%, 55%)",
+    dragon = "hsl(233, 71%, 80%)",
+    dark = "hsl(7, 12%, 48%)",
+    steel = "hsl(196, 38%, 75%)",
+    fairy = "hsl(300, 80%, 79%)"
+}
+
+export enum Gen9IconColorsDark
+{
+    normal = "hsl(120, 1%, 43%)",
+    fire = "hsl(360, 69%, 33%)",
+    water = "hsl(214, 66%, 35%)",
+    electric = "hsl(46, 80%, 29%)",
+    grass = "hsl(109, 59%, 20%)",
+    ice = "hsl(192, 80%, 42%)",
+    fighting = "hsl(30, 80%, 30%)",
+    poison = "hsl(275, 57%, 33%)",
+    ground = "hsl(26, 63%, 15%)",
+    flying = "hsl(209, 67%, 52%)",
+    psychic = "hsl(341, 64%, 40%)",
+    bug = "hsl(67, 73%, 16%)",
+    rock = "hsl(52, 22%, 40%)",
+    ghost = "hsl(300, 27%, 15%)",
+    dragon = "hsl(233, 71%, 40%)",
+    dark = "hsl(7, 12%, 18%)",
+    steel = "hsl(196, 38%, 35%)",
+    fairy = "hsl(300, 60%, 49%)"
+}
+
 
 export enum PokeColorHsl
 {

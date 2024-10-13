@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { PokeColor, PokeTypeColors } from '../styles/pokemonColors';
+import { Gen9IconColors, Gen9IconColorsDark, Gen9IconColorsLight } from '../styles/pokemonColors';
 
 interface Theme
 {
@@ -152,13 +152,23 @@ export class ThemeService
     }
   }
 
-  getMoveColor(name?: string)
-  {
-    return name ? PokeColor[name.toLowerCase()] : "";
-  }
-
   getTypeColor(name?: string)
   {
-    return name ? PokeTypeColors[name.toLowerCase()] : "";  
+    return name ? Gen9IconColors[name.toLowerCase()] : "";  
   }
+
+  getMoveColor(name?: string)
+  {
+    if(this.selectedTheme$?.getValue().name === "light")
+    {
+      return name ? Gen9IconColorsLight[name.toLowerCase()] : "";
+
+    }
+    else
+    {
+      return name ? Gen9IconColorsDark[name.toLowerCase()] : "";
+    }
+  }
+
+
 }
