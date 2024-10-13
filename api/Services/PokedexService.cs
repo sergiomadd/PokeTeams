@@ -675,7 +675,7 @@ namespace api.Services
                         Types? targetType = _pokedexContext.Types.FirstOrDefault(t => t.id == moves.type_id);
                         if (targetType != null)
                         {
-                            var pathStart = "https://localhost:7134/images/sprites/types/generation-viii/";
+                            var pathStart = "https://localhost:7134/images/sprites/types/generation-ix/";
                             queryResults.Add(new TagDTO(moveName.name, moves.identifier, type: "move", icon: $"{pathStart}{targetType.identifier}.png"));
                         }
                         else

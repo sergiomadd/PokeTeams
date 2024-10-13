@@ -53,7 +53,6 @@ namespace api.Controllers
         [HttpGet, Route("check/{tagName}")]
         public async Task<ActionResult<bool>> TagAvailable(string tagName)
         {
-            Printer.Log($"Checking tag availability of {tagName}");
             bool available = _tagService.TagAvailable(tagName);
             if (!available)
             {

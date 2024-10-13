@@ -17,7 +17,7 @@
             EffectivenessAttack = effectivenessAttack;
             EffectivenessDefense = effectivenessDefense;
             Teratype = teraType ? teraType : false;
-            var pathStart = "https://localhost:7134/images/sprites/types/generation-viii/";
+            var pathStart = "https://localhost:7134/images/sprites/types/generation-ix/";
             if (teraType)
             {
                 pathStart = "https://localhost:7134/images/sprites/teratypes/";
