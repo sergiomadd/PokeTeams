@@ -32,7 +32,6 @@ import { TournamentEditorComponent } from './components/pieces/tournament-editor
 import { PokemonCreatorComponent } from './components/pokemon-creator/pokemon-creator.component';
 import { PokemonPreviewComponent } from './components/pokemon-preview/pokemon-preview.component';
 import { PokemonComponent } from './components/pokemon/pokemon.component';
-import { RegulationPreviewComponent } from './components/regulation-preview/regulation-preview.component';
 import { RegulationSelectorComponent } from './components/regulation-selector/regulation-selector.component';
 import { SearchComponent } from './components/search/search.component';
 import { TeamEditorComponent } from './components/team-editor/team-editor.component';
@@ -43,7 +42,6 @@ import { TeamComponent } from './components/team/team.component';
 import { UserDetailsComponent } from './components/user-details/user-details.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { UserOptionsComponent } from './components/user-options/user-options.component';
-import { UserTeamsComponent } from './components/user-teams/user-teams.component';
 import { UserComponent } from './components/user/user.component';
 import { VgcComponent } from './components/vgc/vgc.component';
 import { LinkerPipe } from './pipes/linker.pipe';
@@ -71,7 +69,6 @@ import { metaReducers } from './state/app.state';
     TeamIconsComponent,
     UserOptionsComponent,
     UserDetailsComponent,
-    UserTeamsComponent,
     DialogComponent,
     MultiSearchComponent,
     MenuComponent,
@@ -87,7 +84,6 @@ import { metaReducers } from './state/app.state';
     TagListComponent,
     ColorPickerComponent,
     TournamentEditorComponent,
-    RegulationPreviewComponent,
     RegulationSelectorComponent,
   ],
   exports: [],
