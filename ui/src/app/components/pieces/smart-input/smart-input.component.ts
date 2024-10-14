@@ -113,7 +113,6 @@ export class SmartInputComponent
     {
       this.selected = this.value;
     }
-    console.log(changes)
   }
 
   async search(key: string)

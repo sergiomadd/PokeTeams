@@ -18,13 +18,11 @@ export class InputComponent
   @Input() teamOptions!: TeamOptions;
   @Input() pokemons!: Pokemon[];
   @Output() outPokemon = new EventEmitter<Pokemon>();
-  @Output() calculateMaxLvlEvent = new EventEmitter();
-
   
   formData;
   pasteHolder: string;
 
-  sections: boolean[] = [false, true];
+  sections: boolean[] = [true, false];
 
   constructor()
   {
@@ -121,7 +119,6 @@ export class InputComponent
     {
       this.pokemons.push(await this.pokemonService.buildPokemon(pokePaste));
     };
-    this.calculateMaxLvl();
     //console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
   }
 
@@ -137,10 +134,5 @@ export class InputComponent
       this.sections[i] = false;
     }
     this.sections[index] = true;
-  }
-
-  calculateMaxLvl()
-  {
-    this.calculateMaxLvlEvent.emit();
   }
 }
