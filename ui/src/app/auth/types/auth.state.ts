@@ -1,5 +1,4 @@
-import { AuthResponseDTO } from "../../models/DTOs/authResponse.dto";
-import { User } from "../../models/user.model";
+import { User } from "../../features/user/models/user.model";
 
 export interface AuthState
 {

@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { TeamService } from '../../features/team/services/team.service';
 import { AuthResponseDTO } from '../../models/DTOs/authResponse.dto';
 import { LogInDTO } from '../../models/DTOs/login.dto';
 import { SignUpDTO } from '../../models/DTOs/signup.dto';
 import { UserUpdateDTO } from '../../models/DTOs/userUpdate.dto';
-import { TeamService } from '../../services/team.service';
 
 @Injectable({
   providedIn: 'root'

@@ -5,8 +5,8 @@ import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { catchError, map, of, switchMap, tap } from "rxjs";
 import { AuthService } from "src/app/auth/services/auth.service";
+import { UserService } from "src/app/features/user/services/user.service";
 import { AuthResponseDTO } from "src/app/models/DTOs/authResponse.dto";
-import { UserService } from "src/app/services/user.service";
 import { authActions } from "./auth.actions";
 
 

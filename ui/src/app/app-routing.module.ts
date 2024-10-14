@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, UrlSegment } from '@angular/router';
-import { MainComponent } from './components/main/main.component';
-import { SearchComponent } from './components/search/search.component';
-import { TeamViewComponent } from './components/team-view/team-view.component';
-import { UserComponent } from './components/user/user.component';
+import { SearchComponent } from './features/search/pages/search/search.component';
+import { TeamEditorComponent } from './features/team-editor/pages/team-editor/team-editor.component';
+import { TeamViewComponent } from './features/team/pages/team-view/team-view.component';
+import { UserComponent } from './features/user/components/user/user.component';
 
 
 const routes: Routes = [
-  { path: '', component: MainComponent},
+  { path: '', component: TeamEditorComponent},
   { path: 'search', component: SearchComponent},
   {
     matcher: (url) => 

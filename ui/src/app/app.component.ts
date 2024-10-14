@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { TeamService } from './services/team.service';
-import { ThemeService } from './services/theme.service';
+import { ThemeService } from './core/services/theme.service';
+import { TeamService } from './features/team/services/team.service';
 
 @Component({
   selector: 'app-root',

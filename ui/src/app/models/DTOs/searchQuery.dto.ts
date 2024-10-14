@@ -1,5 +1,5 @@
-import { TeamSearchOrder } from "../enums/teamSearchOrder.enum";
-import { Tag } from "../tag.model";
+import { TeamSearchOrder } from "../../features/search/models/teamSearchOrder.enum";
+import { Tag } from "../../features/team/models/tag.model";
 
 export interface SearchQueryDTO
 {

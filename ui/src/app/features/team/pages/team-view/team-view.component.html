@@ -1,0 +1,26 @@
+@if(team)
+{
+  <div class="team-view">
+    <app-team [team]="team"></app-team>
+    <div class="buttons">
+      <div class="copy">
+        <button 
+        class="button-primary"
+        (click)="copyPaste()"
+        >Copy paste</button>
+      </div>
+      <div class="share">
+        <button
+        class="button-tertiary"
+        (click)="copyLink()"
+        >Copy link</button>
+      </div>
+    </div> 
+  </div>
+}
+@else
+{
+  <div>
+    no team
+  </div>
+}

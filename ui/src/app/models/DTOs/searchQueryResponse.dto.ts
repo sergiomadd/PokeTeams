@@ -1,4 +1,4 @@
-import { TeamPreview } from "../teamPreview.model";
+import { TeamPreview } from "../../features/team/models/teamPreview.model";
 
 export interface SearchQueryResponseDTO
 {
