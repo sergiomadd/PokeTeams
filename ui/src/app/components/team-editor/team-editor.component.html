@@ -91,7 +91,11 @@
     </div>
   </div>
   <div class="team-holder">
-    <app-team [team]="team" [removableTags]="true" (removeEvent)="removeTag()"></app-team>
+    <app-team 
+    [team]="team" 
+    [removableTags]="true" 
+    (removeEvent)="removeTag()"
+    ></app-team>
   </div>
   <div class="output">
     <button

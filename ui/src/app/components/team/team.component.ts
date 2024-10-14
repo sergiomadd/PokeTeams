@@ -24,6 +24,7 @@ export class TeamComponent
 
   showAllStats: boolean = false;
   showAllNotes: boolean = false;
+  maxStat: number = 0;
 
   ngOnChanges(changes: SimpleChanges)
   {
@@ -75,6 +76,18 @@ export class TeamComponent
     {
       this.team?.tags?.splice(index, 1);
       this.removeEvent.emit();
+    }
+  }
+
+  statsUpdated(newMax)
+  {
+    if(newMax > this.maxStat) 
+    {
+      this.maxStat = newMax;
+      if(this.team) 
+      {
+        this.team.options = {...this.team.options, maxStat: this.maxStat}
+      }
     }
   }
 }

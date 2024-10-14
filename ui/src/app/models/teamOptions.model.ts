@@ -13,5 +13,5 @@ export interface TeamOptions
   //lang?
   //display short effect or long effect?
   //misc
-  maxLevel: number
+  maxStat: number
 }

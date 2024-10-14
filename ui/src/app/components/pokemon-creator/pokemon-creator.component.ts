@@ -206,7 +206,6 @@ export class PokemonCreatorComponent
       }
       this.pokemonPreviewComponent.showStats[0] = false;
     }
-    this.calculateMaxLvlEvent.emit();
   }
 
   async itemSelectEvent(event: Tag)

@@ -52,7 +52,6 @@ export class TeamEditorComponent
     if(changes['pokemons'])
     {
       this.team.pokemons = changes['pokemons'].currentValue;
-      this.calculateMaxLevel();
     }
   }
 
@@ -250,14 +249,6 @@ export class TeamEditorComponent
   updateTeam(option)
   {
     this.teamComponent.forceChange(this.teamOptions)
-  }
-
-  //Gets the maximun calculated stat value of all pokemons
-  calculateMaxLevel()
-  {
-    this.teamOptions.maxLevel = this.teamComponent?.pokemonComponents ? 
-      Math.max(...this.teamComponent?.pokemonComponents.map(s => s.calculatedStats?.total ? 
-      Math.max(...s.calculatedStats?.total.map(v => v.value)) : 0)) : 0;
   }
   
   toggleTournamentEditor()

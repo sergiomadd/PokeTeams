@@ -1,4 +1,4 @@
-import { Component, inject, Input, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { Nature } from 'src/app/models/pokemon/nature.model';
 import { Pokemon } from 'src/app/models/pokemon/pokemon.model';
 import { Stat } from 'src/app/models/pokemon/stat.model';
@@ -21,7 +21,7 @@ interface CalculatedStats
   selector: 'app-pokemon',
   templateUrl: './pokemon.component.html',
   styleUrls: ['./pokemon.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class PokemonComponent 
@@ -34,6 +34,7 @@ export class PokemonComponent
   @Input() pokemon!: Pokemon;
   @Input() teamOptions?: TeamOptions;
   @Input() showStatsStart?: boolean = false;
+  @Output() updateStats = new EventEmitter();
 
   test: string = "test"
 
@@ -48,8 +49,9 @@ export class PokemonComponent
     ivs: [],
     evs: [],
     natures: [],
-    total: [],
+    total: []
   };
+  maxStat: number = 0;
 
   metaLeft: boolean[] = [false, false];
   metaMiddle: boolean[] = [false, false, false, false, false, false, false];
@@ -59,9 +61,26 @@ export class PokemonComponent
   showNotes: boolean[] = [false]
   metaStats: boolean[] = [false, false, false, false, false, false]
 
-  constructor() 
+  constructor(private cdref: ChangeDetectorRef) 
   {
 
+  }
+
+  ngOnChanges(changes: SimpleChanges)
+  {
+    if(changes['teamOptions'])
+    {
+      console.log("Team options changed", changes['teamOptions']);
+      this.teamOptions = changes['teamOptions'].currentValue;
+      this.calculateStats();
+      this.calculateMaxStat();
+    }
+    if(changes['pokemon'])
+    {
+      this.pokemon = changes['pokemon'].currentValue;
+      this.configurePokemon();
+      this.calculateMaxStat();
+    }
   }
 
   ngOnInit()
@@ -77,25 +96,25 @@ export class PokemonComponent
     }
   }
 
-  ngOnChanges(changes: SimpleChanges)
-  {
-    if(changes['editorOptions'])
-    {
-      this.configurePokemon();
-    }
-    if(changes['pokemon'])
-    {
-      this.pokemon = changes['pokemon'].currentValue;
-      this.configurePokemon();
-    }
-  }
-
   configurePokemon()
   {
     this.loadSprite();
     this.calculateStats();
     this.linkify();
   }  
+
+  calculateMaxStat()
+  {
+    this.maxStat = Math.max(...this.calculatedStats?.total.map(v => v.value));
+    this.updateStats.emit(this.maxStat);
+  }
+
+  getStatSize(value: number)
+  {
+    let maxValue: number = this.teamOptions && this.teamOptions?.maxStat > 0 ? this.teamOptions?.maxStat : 700; //the maximun stat value of any pokemons
+    let maxSize: number = 20; //the maximun allowed size in vw
+    return `${value / maxValue * maxSize}vw`;
+  }
 
   linkify()
   {
@@ -346,12 +365,5 @@ export class PokemonComponent
       natureValue = 1;
     }
     return natureValue;
-  }
-
-  getStatSize(value: number)
-  {
-    let maxValue: number = this.teamOptions && this.teamOptions?.maxLevel > 0 ? this.teamOptions?.maxLevel : 700; //the maximun stat value of any pokemons
-    let maxSize: number = 20; //the maximun allowed size in vw
-    return `${value / maxValue * maxSize}vw`;
   }
 }

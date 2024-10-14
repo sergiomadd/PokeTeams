@@ -24,7 +24,6 @@ export class VgcComponent
   async ngOnInit()
   {
     this.getOptions();
-    console.log("Editor options: ", this.teamOptions);
   }
 
   receivePokemon($event) 
@@ -36,14 +35,6 @@ export class VgcComponent
   getTagColor(name: string)
   {
     return TagColor[name];
-  }
-
-  calculateMaxLvl()
-  {
-    console.log("calculating in vgc")
-    console.log(this.teamOptions.maxLevel)
-    this.teamEditorComponent.calculateMaxLevel();
-    console.log(this.teamOptions.maxLevel)
   }
 
   getOptions()
@@ -71,7 +62,7 @@ export class VgcComponent
       showNickname: true,
       showShinyIcon: true,
       showGenderIcon: true,
-      maxLevel: 0
+      maxStat: 0
     }
     
   }

@@ -132,7 +132,8 @@ $padding: 0.2vw;
           grid-template-rows: 100%;
           justify-items: start;
           align-content: center;
-
+          overflow: hidden;
+          
           .move-type
           {
             display: flex;

@@ -37,14 +37,14 @@
       <div class="col">
         <ng-container *ngFor="let pokemon of team?.pokemons; index as i">
           <ng-container *ngIf="i % 2 === 0">
-            <app-pokemon [pokemon]="pokemon" [teamOptions]="team?.options"></app-pokemon>
+            <app-pokemon [pokemon]="pokemon" [teamOptions]="team?.options" (updateStats)="statsUpdated($event)"></app-pokemon>
           </ng-container>
         </ng-container>
       </div>
       <div class="col">
         <ng-container *ngFor="let pokemon of team?.pokemons; index as i">
           <ng-container *ngIf="i % 2 !== 0">
-            <app-pokemon [pokemon]="pokemon" [teamOptions]="team?.options"></app-pokemon>
+            <app-pokemon [pokemon]="pokemon" [teamOptions]="team?.options" (updateStats)="statsUpdated($event)"></app-pokemon>
           </ng-container>
         </ng-container>
       </div>
