@@ -243,4 +243,29 @@ export class TeamEditorComponent
   {
     this.showTournamentEditor = false;
   }
+
+  showEVsCheckEvent($event: boolean)
+  {
+    this.team.options.showEVs = $event;
+  }
+
+  showIVsCheckEvent($event: boolean)
+  {
+    this.team.options.showIVs = $event;
+  }
+
+  showNatureCheckEvent($event: boolean)
+  {
+    this.team.options.showNature = $event;
+  }
+
+  showDexNumberCheckEvent($event: boolean)
+  {
+    this.team.options.showDexNumber = $event;
+  }
+
+  showNicknameCheckEvent($event: boolean)
+  {
+    this.team.options.showNickname = $event;
+  }
 }

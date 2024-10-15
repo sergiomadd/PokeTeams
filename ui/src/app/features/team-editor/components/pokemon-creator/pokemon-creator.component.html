@@ -62,9 +62,9 @@
                 <input class="level" formControlName="level">
               </div>
               <app-checkbox
-              [obj]="pokemons[selectedPokemonIndex]"
-              [objSelector]="'shiny'"
+              [checked]="pokemons[selectedPokemonIndex].shiny ?? false"
               [label]="'Shiny'"
+              (checkEvent)="shinySelectEvent($event)"
               ></app-checkbox>
             </div>
             <div class="row s-gap">
@@ -135,7 +135,7 @@
                 </div>
                 <div class="checkbox-wrapper">
                   <app-checkbox
-                  [option]="allAbilities"
+                  [checked]="allAbilities"
                   [label]="'Show all'"
                   (checkEvent)="allAbilitiesSwitch()"
                   ></app-checkbox>

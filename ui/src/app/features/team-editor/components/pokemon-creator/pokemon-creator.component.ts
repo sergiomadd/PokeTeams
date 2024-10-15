@@ -10,6 +10,7 @@ import { TeamService } from 'src/app/features/team/services/team.service';
 import { PokemonData } from 'src/app/models/DTOs/pokemonData.dto';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { PokemonComponent } from '../../../pokemon/components/pokemon/pokemon.component';
+import { TeamEditorService } from '../../services/team-editor.service';
 
 @Component({
   selector: 'app-pokemon-creator',
@@ -24,6 +25,7 @@ export class PokemonCreatorComponent
   teamService = inject(TeamService);
   formBuilder = inject(FormBuilder);
   util = inject(UtilService);
+  teamEditorService = inject(TeamEditorService)
 
   @Input() teamOptions!: TeamOptions;
   @Input() pokemons!: Pokemon[];
@@ -63,15 +65,9 @@ export class PokemonCreatorComponent
 
   async ngOnInit()
   {
-    //this.addEmptyPokemon();
     this.pokemonForm.controls.nickname.valueChanges.subscribe(async (value) => 
     {
       this.pokemons[this.selectedPokemonIndex].nickname = value ?? undefined;
-    });
-
-    this.pokemonForm.controls.shiny.valueChanges.subscribe(async (value) => 
-    {
-      this.pokemons[this.selectedPokemonIndex].shiny = value ?? false;
     });
 
     this.pokemonForm.controls.level.valueChanges.subscribe(async (value) => 
@@ -248,6 +244,14 @@ export class PokemonCreatorComponent
     this.pokemons[this.selectedPokemonIndex].teraType = event ? await this.pokemonService.getType(event.name, true) : undefined;
   }
 
+  shinySelectEvent(event: boolean)
+  {
+    this.pokemons[this.selectedPokemonIndex] = 
+    { 
+      ...this.pokemons[this.selectedPokemonIndex],
+      shiny: event
+    }
+  }
 
   addPokemon()
   {

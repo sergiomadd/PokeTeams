@@ -63,34 +63,34 @@
     </div>
     <div class="row-center s-gap">
       <app-checkbox
-      [obj]="team.options"
-      [objSelector]="'showEVs'"
+      [checked]="team.options.showEVs"
       [label]="'EVs'"
       [hoverText]="'Show EVs'"
+      (checkEvent)="showEVsCheckEvent($event)"
       ></app-checkbox>
       <app-checkbox
-      [obj]="team.options"
-      [objSelector]="'showIVs'"
+      [checked]="team.options.showIVs"
       [label]="'IVs'"
       [hoverText]="'Show IVs'"
+      (checkEvent)="showIVsCheckEvent($event)"
       ></app-checkbox>
       <app-checkbox
-      [obj]="team.options"
-      [objSelector]="'showNature'"
+      [checked]="team.options.showNature"
       [label]="'Nature'"
       [hoverText]="'Show nature'"
+      (checkEvent)="showNatureCheckEvent($event)"
       ></app-checkbox>
       <app-checkbox
-      [obj]="team.options"
-      [objSelector]="'showDexNumber'"
+      [checked]="team.options.showDexNumber"
       [label]="'Dex number'"
       [hoverText]="'Show showDexNumber'"
+      (checkEvent)="showDexNumberCheckEvent($event)"
       ></app-checkbox>
       <app-checkbox
-      [obj]="team.options"
-      [objSelector]="'showNickname'"
+      [checked]="team.options.showNickname"
       [label]="'Nickname'"
       [hoverText]="'Show nickname'"
+      (checkEvent)="showNicknameCheckEvent($event)"
       ></app-checkbox>
     </div>
   </div>
