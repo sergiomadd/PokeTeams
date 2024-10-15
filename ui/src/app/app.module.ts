@@ -11,7 +11,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
 import { MenuComponent } from './core/layout/menu/menu.component';
-import { VgcComponent } from './core/layout/vgc/vgc.component';
 import { EvolutionComponent } from './features/pokemon/components/evolution/evolution.component';
 import { PokemonPreviewComponent } from './features/pokemon/components/pokemon-preview/pokemon-preview.component';
 import { PokemonComponent } from './features/pokemon/components/pokemon/pokemon.component';
@@ -53,7 +52,6 @@ import { metaReducers } from './state/app.state';
     SwitchComponent,
     DropdownComponent,
     InputComponent,
-    VgcComponent,
     TeamViewComponent,
     EvolutionComponent,
     LinkerPipe,
