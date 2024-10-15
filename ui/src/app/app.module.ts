@@ -13,7 +13,6 @@ import { AuthModule } from './auth/auth.module';
 import { MenuComponent } from './core/layout/menu/menu.component';
 import { EvolutionComponent } from './features/pokemon/components/evolution/evolution.component';
 import { PokemonPreviewComponent } from './features/pokemon/components/pokemon-preview/pokemon-preview.component';
-import { PokemonComponent } from './features/pokemon/components/pokemon/pokemon.component';
 import { SearchComponent } from './features/search/pages/search/search.component';
 import { InputComponent } from './features/team-editor/components/input/input.component';
 import { PokemonCreatorComponent } from './features/team-editor/components/pokemon-creator/pokemon-creator.component';
@@ -42,12 +41,12 @@ import { SwitchComponent } from './shared/components/switch/switch.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
 import { LinkerPipe } from './shared/pipes/linker.pipe';
 import { metaReducers } from './state/app.state';
+import { PokemonComponent } from './features/pokemon/components/pokemon/pokemon.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TeamComponent,
-    PokemonComponent,
     TeamEditorComponent,
     SwitchComponent,
     DropdownComponent,
@@ -77,6 +76,7 @@ import { metaReducers } from './state/app.state';
     ColorPickerComponent,
     TournamentEditorComponent,
     RegulationSelectorComponent,
+    PokemonComponent,
   ],
   exports: [],
   imports: [

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { ThemeService } from 'src/app/core/services/theme.service';
 import { Nature } from 'src/app/features/pokemon/models/nature.model';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
@@ -20,8 +20,7 @@ interface CalculatedStats
 @Component({
   selector: 'app-pokemon',
   templateUrl: './pokemon.component.html',
-  styleUrls: ['./pokemon.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  styleUrls: ["./pokemon.component.scss"],
 })
 
 export class PokemonComponent 
@@ -70,9 +69,8 @@ export class PokemonComponent
   {
     if(changes['teamOptions'])
     {
-      console.log("Team options changed", changes['teamOptions']);
       this.teamOptions = changes['teamOptions'].currentValue;
-      this.calculateStats();
+      this.configurePokemon();
       this.calculateMaxStat();
     }
     if(changes['pokemon'])

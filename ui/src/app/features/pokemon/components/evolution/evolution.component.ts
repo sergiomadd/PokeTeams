@@ -1,11 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { TeamOptions } from 'src/app/features/team/models/teamOptions.model';
 
 @Component({
   selector: 'app-evolution',
   templateUrl: './evolution.component.html',
-  styleUrls: ['./evolution.component.scss', '../../pokemon/pokemon.component.scss']
+  styleUrls: ['./evolution.component.scss', '../pokemon/pokemon.component.scss']
 })
 export class EvolutionComponent 
 {
@@ -15,22 +15,25 @@ export class EvolutionComponent
 
   pokemonSpritePath?: string = '';
 
-  oldChanges = 
-  {
-    sprites: undefined
-  }
-
   ngOnInit()
   {
-    this.pokemon.sprite ? this.loadSprite() : this.oldChanges.sprites = this.pokemon.sprite;
+    this.loadSprite();
   }
 
-  ngDoCheck() 
+  ngOnChanges(changes: SimpleChanges)
   {
-    if(this.pokemon.sprite !== this.oldChanges.sprites) 
+    if(changes['sourcePokemon'])
     {
+      this.sourcePokemon = changes['sourcePokemon'].currentValue;
       this.loadSprite();
     }
+
+    if(changes['pokemon'])
+    {
+      this.pokemon = changes['pokemon'].currentValue;
+      this.loadSprite();
+    }
+    
   }
 
   loadSprite()

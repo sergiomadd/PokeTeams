@@ -6,10 +6,12 @@ describe('PokemonComponent', () => {
   let component: PokemonComponent;
   let fixture: ComponentFixture<PokemonComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [PokemonComponent]
-    });
+    })
+    .compileComponents();
+    
     fixture = TestBed.createComponent(PokemonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
