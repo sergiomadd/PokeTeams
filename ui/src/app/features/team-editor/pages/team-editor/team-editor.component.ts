@@ -1,12 +1,10 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
-import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { QueryService } from 'src/app/features/search/services/query.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
-import { TeamOptions } from 'src/app/features/team/models/teamOptions.model';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
 import { UserPreview } from 'src/app/features/user/models/userPreview.model';
@@ -14,6 +12,7 @@ import { UserService } from 'src/app/features/user/services/user.service';
 import { SmartInputComponent } from '../../../../shared/components/smart-input/smart-input.component';
 import { TagEditorComponent } from '../../../team/components/tag-editor/tag-editor.component';
 import { TeamComponent } from '../../../team/components/team/team.component';
+import { TeamEditorService } from '../../services/team-editor.service';
 
 @Component({
   selector: 'app-team-editor',
@@ -28,8 +27,8 @@ export class TeamEditorComponent
   router = inject(Router);
   queryService = inject(QueryService)
 
-  @Input() pokemons!: Pokemon[];
-  @Input() teamOptions!: TeamOptions;
+  teamEditorService = inject(TeamEditorService);
+
   @Output() outputTeam = new EventEmitter<Team>();
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
@@ -41,35 +40,14 @@ export class TeamEditorComponent
 
   async ngOnInit() 
   {
-  }
-
-  ngOnChanges(changes: SimpleChanges)
-  {
-    if(changes['editorOptions'])
+    this.teamEditorService.selectedTeam$.subscribe((value) => 
     {
-      this.team.options = changes['editorOptions'].currentValue;
-    }
-    if(changes['pokemons'])
-    {
-      this.team.pokemons = changes['pokemons'].currentValue;
-    }
+      this.team = value;
+    })
   }
 
   async ngAfterContentInit()
   {
-    this.team = 
-    {
-      id: '',
-      pokemons: this.pokemons,
-      options: this.teamOptions,
-      player: undefined,
-      tournament: undefined,
-      regulation: undefined,
-      viewCount: 0,
-      visibility: true,
-      tags: []
-    }
-
     if(this.loggedUser$)
     {
       this.loggedUser$.subscribe
@@ -107,7 +85,7 @@ export class TeamEditorComponent
 
   async generateTeam()
   {
-    if(this.pokemons.length > 0 && this.pokemons.length <= 6)
+    if(this.team.pokemons.length > 0 && this.team.pokemons.length <= 6)
     {
       console.log("Generating team: ", this.team);
       this.teamService.saveTeam(this.team).subscribe(
@@ -139,11 +117,11 @@ export class TeamEditorComponent
         }
       )
     }
-    else if(this.pokemons.length <= 0)
+    else if(this.team.pokemons.length <= 0)
     {
       console.log("Error: no pokemons loaded")
     }
-    else if(this.pokemons.length > 6)
+    else if(this.team.pokemons.length > 6)
     {
       console.log("Error: too many pokemons, limit is 6")
     }
@@ -248,7 +226,7 @@ export class TeamEditorComponent
 
   updateTeam(option)
   {
-    this.teamComponent.forceChange(this.teamOptions)
+    this.teamComponent.forceChange(this.team.options)
   }
   
   toggleTournamentEditor()

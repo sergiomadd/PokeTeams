@@ -34,8 +34,8 @@
   </ng-container>
   <ng-template #creator>
     <app-pokemon-creator 
-    [pokemons]="pokemons"
-    [teamOptions]="teamOptions"
+    [pokemons]="team.pokemons"
+    [teamOptions]="team.options"
     (addPokemonEvent)="addPokemon($event)"
     ></app-pokemon-creator>
   </ng-template>

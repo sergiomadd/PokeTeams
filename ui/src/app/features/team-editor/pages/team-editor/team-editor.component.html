@@ -2,11 +2,8 @@
   <div class="row-center">
     <img src="assets/vgc.png">
   </div>
-  <app-input 
-  [pokemons]="pokemons"
-  [teamOptions]="teamOptions"
-  ></app-input>
-  <div class="col-center">
+  <app-input></app-input>
+  <div class="col-center s-gap">
     <div class="row">
       <div class="editor-input">
         <div class="anon-warning tooltip-wrapper">
@@ -66,31 +63,31 @@
     </div>
     <div class="row-center s-gap">
       <app-checkbox
-      [obj]="teamOptions"
+      [obj]="team.options"
       [objSelector]="'showEVs'"
       [label]="'EVs'"
       [hoverText]="'Show EVs'"
       ></app-checkbox>
       <app-checkbox
-      [obj]="teamOptions"
+      [obj]="team.options"
       [objSelector]="'showIVs'"
       [label]="'IVs'"
       [hoverText]="'Show IVs'"
       ></app-checkbox>
       <app-checkbox
-      [obj]="teamOptions"
+      [obj]="team.options"
       [objSelector]="'showNature'"
       [label]="'Nature'"
       [hoverText]="'Show nature'"
       ></app-checkbox>
       <app-checkbox
-      [obj]="teamOptions"
+      [obj]="team.options"
       [objSelector]="'showDexNumber'"
       [label]="'Dex number'"
       [hoverText]="'Show showDexNumber'"
       ></app-checkbox>
       <app-checkbox
-      [obj]="teamOptions"
+      [obj]="team.options"
       [objSelector]="'showNickname'"
       [label]="'Nickname'"
       [hoverText]="'Show nickname'"

@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
-import { TeamOptions } from 'src/app/features/team/models/teamOptions.model';
+import { Team } from 'src/app/features/team/models/team.model';
 import { ParserService } from 'src/app/shared/services/parser.service';
+import { TeamEditorService } from '../../services/team-editor.service';
 
 @Component({
   selector: 'app-input',
@@ -14,13 +14,11 @@ export class InputComponent
 {
   pokemonService = inject(PokemonService);
   parser = inject(ParserService);
-  
-  @Input() teamOptions!: TeamOptions;
-  @Input() pokemons!: Pokemon[];
-  @Output() outPokemon = new EventEmitter<Pokemon>();
-  
+  teamEditorService = inject(TeamEditorService);
+
   formData;
   pasteHolder: string;
+  team: Team = <Team>{};
 
   sections: boolean[] = [true, false];
 
@@ -108,6 +106,10 @@ export class InputComponent
     this.formData = new FormGroup({
        paste: new FormControl(this.pasteHolder)
     });
+    this.teamEditorService.selectedTeam$.subscribe((value) => 
+    {
+      this.team = value;
+    })
   }
 
   async onSubmit(formData)
@@ -117,14 +119,14 @@ export class InputComponent
     let data = this.parser.parsePaste(formData.paste);
     for (const pokePaste of data.pokemons)
     {
-      this.pokemons.push(await this.pokemonService.buildPokemon(pokePaste));
+      this.teamEditorService.addPokemon(await this.pokemonService.buildPokemon(pokePaste));
     };
     //console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
   }
 
   addPokemon($event)
   {
-    this.outPokemon.emit($event);
+    this.teamEditorService.addPokemon($event);
   }
 
   select(index)
