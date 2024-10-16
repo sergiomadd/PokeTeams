@@ -39,14 +39,14 @@
               #{{pokemon.dexNumber}} 
             </div>
           </div>
-          <div class="no-overflow">
+          <div class="no-overflow row">
             <div class="section-name">
-              {{pokemon.name}}
-              <div *ngIf="teamOptions?.showNickname; else void">
-                <div class="nickname no-overflow">
-                  {{pokemon.nickname}}
-                </div>
-              </div>
+              <ng-container *ngIf="pokemon.nickname && teamOptions?.showNickname; else speciesName">
+                {{pokemon.nickname}}
+              </ng-container>
+              <ng-template #speciesName>
+                {{pokemon.name}}
+              </ng-template>
             </div>
           </div>
         </div>
@@ -341,14 +341,7 @@
         </div>
         <div 
         class="section sprite-background"
-        (click)="clickMeta(3, 'middle')"
-        [ngClass]="{'meta-selected':  metaMiddle[3]}"
         >
-          <div class="meta-wrapper">
-            <div class="meta meta-sprite">
-              <img src={{pokemonSpritePath}} alt="" class="spriteBig">
-            </div>
-          </div>
           <img src={{pokemonSpritePath}} alt="" class="sprite">
         </div>
         <div class="center-down">

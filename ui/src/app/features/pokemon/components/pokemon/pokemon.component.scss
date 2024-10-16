@@ -41,15 +41,17 @@ $padding: 0.2vw;
         {
           display: flex;
           align-items: center;
+          position: relative;
 
           .dex-number
           {
-            color: rgb(255, 85, 85);
+            color: var(--primary);
             margin-right: 0.5vh;
-          }
-          .nickname
-          {
-            color: rgba(255, 255, 255, 0.7);
+
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-size: 0.6em;
           }
         }
 
