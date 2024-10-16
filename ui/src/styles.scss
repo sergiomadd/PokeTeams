@@ -661,3 +661,9 @@ input[type="range"]::-moz-range-thumb {
   opacity: 0.7;
   cursor: default;
 }
+
+.no-overflow
+{
+  overflow: hidden;
+  width: 100%;
+}

@@ -39,11 +39,13 @@
               #{{pokemon.dexNumber}} 
             </div>
           </div>
-          <div class="name">
-            {{pokemon.name}}
-            <div *ngIf="teamOptions?.showNickname; else void">
-              <div class="nickname">
-                {{pokemon.nickname}}
+          <div class="no-overflow">
+            <div class="section-name">
+              {{pokemon.name}}
+              <div *ngIf="teamOptions?.showNickname; else void">
+                <div class="nickname no-overflow">
+                  {{pokemon.nickname}}
+                </div>
               </div>
             </div>
           </div>
@@ -62,8 +64,10 @@
               </div>
             </div>
           </div>
-          <div>
-            {{pokemon.item?.name}}
+          <div class="no-overflow">
+            <div class="section-name">
+              {{pokemon.item?.name}}
+            </div>
           </div>
           <div>
             <img src="{{pokemon.item?.iconPath}}" alt="" class="icon-big">
@@ -418,8 +422,10 @@
               <div class="move-type" [ngStyle]="{'background': theme.getTypeColor(move?.pokeType?.name ?? '')}">
                 <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="move-type-icon">
               </div>
-              <div class="name">
-                {{move?.name}}
+              <div class="no-overflow">
+                <div class="name">
+                  {{move?.name}}
+                </div>
               </div>
               <div class="meta-wrapper" 
               (click)="clickMeta(i, 'right')"
