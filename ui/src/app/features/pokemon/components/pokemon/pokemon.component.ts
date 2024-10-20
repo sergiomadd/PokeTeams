@@ -52,10 +52,11 @@ export class PokemonComponent
   };
   maxStat: number = 0;
 
+  metaEvol: boolean[] = [false];
+  metaTypes: boolean[] = [false, false];
   metaLeft: boolean[] = [false, false];
-  metaMiddle: boolean[] = [false, false, false, false, false, false, false];
+  metaMiddle: boolean[] = [false, false, false];
   metaRight: boolean[] = [false, false, false, false];
-  metaDown: boolean[] = [false, false, false]
   showStats: boolean[] = [false]
   showNotes: boolean[] = [false]
   metaStats: boolean[] = [false, false, false, false, false, false]
@@ -170,6 +171,12 @@ export class PokemonComponent
     let list: boolean[] = [];
     switch(type)
     {
+      case "evol":
+        list = this.metaEvol;
+      break;
+      case "types":
+        list = this.metaTypes;
+      break;
       case "left":
         list = this.metaLeft;
       break;
@@ -178,9 +185,6 @@ export class PokemonComponent
         break;
       case "right":
         list = this.metaRight;
-        break;
-      case "down":
-        list = this.metaDown;
         break;
       case "showStats":
         list = this.showStats;
@@ -192,10 +196,13 @@ export class PokemonComponent
         list = this.metaStats;
         break;
     }
+    //If meta visible -> hide it
     if(list[index])
     {
       list[index] = false;
     }
+    //else -> hide all other metas in group
+    //     -> show selected meta
     else
     {
       for(var i = 0; i < list.length; i++) {

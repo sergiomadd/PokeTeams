@@ -325,6 +325,9 @@ $padding: 0.2vw;
   }
 }
 
+//-----------------------------------------------------------
+//Meta 
+
 .meta-selected
 {
   outline: 1px solid black !important;
@@ -458,10 +461,10 @@ $padding: 0.2vw;
     }
   }
 
-  .evol
+  .meta-evol
   {
-    transform: translate(calc(-50% - $padding*2 ), calc(-120% - $padding*2));
-    transform: translate(round(calc(-50% - $padding*2 ), 1px), round(calc(-120% - $padding*2), 1px));
+    transform: translate(-25%, calc(-120% - $padding*2));
+    transform: translate(round(-25%, 1px), round(calc(-120% - $padding*2), 1px));
 
     &::before
     {

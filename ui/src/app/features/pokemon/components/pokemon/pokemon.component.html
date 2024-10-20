@@ -3,12 +3,12 @@
     <div class="left">
       <div 
       class="section"
-      (click)="clickMeta(0, 'middle')"
-      [ngClass]="{'meta-selected':  metaMiddle[0]}"
+      (click)="clickMeta(0, 'evol')"
+      [ngClass]="{'meta-selected':  metaEvol[0]}"
       >
         <div class="section-content species">
           <div class="meta-wrapper" (click)="$event.stopPropagation()">
-            <div class="meta meta-top evol" [ngClass]="{'meta-visible':  metaMiddle[0]}">
+            <div class="meta meta-top meta-evol" [ngClass]="{'meta-visible':  metaEvol[0]}">
               <div class="family">
                 <ng-container *ngIf="pokemon.preEvolution">
                   <ng-container *ngIf="pokemon.preEvolution.preEvolution">
@@ -147,14 +147,14 @@
         <ng-container *ngIf="pokemon.teraType; else empty">
           <div 
           class="section"
-          (click)="clickMeta(1, 'middle')"
-          [ngClass]="{'meta-selected':  metaMiddle[1]}"
+          (click)="clickMeta(0, 'types')"
+          [ngClass]="{'meta-selected':  metaTypes[0]}"
           >
             <div class="type section-content">
               <div class="meta-wrapper" (click)="$event.stopPropagation()">
                 <div 
                 class="meta meta-top single-type" 
-                [ngClass]="{'meta-visible':  metaMiddle[1]}"
+                [ngClass]="{'meta-visible':  metaTypes[0]}"
                 >
                   <div class="meta-types">
                     <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.superEffective?.length ?? false">
@@ -207,14 +207,14 @@
         </ng-container>
         <div
         class="section"
-        (click)="clickMeta(2, 'middle')"
-        [ngClass]="{'meta-selected':  metaMiddle[2]}"
+        (click)="clickMeta(1, 'types')"
+        [ngClass]="{'meta-selected':  metaTypes[1]}"
         >
           <div class="section-content type">
             <div class="meta-wrapper" (click)="$event.stopPropagation()">
               <div class="meta meta-top" [ngClass]="
               {
-                'meta-visible':  metaMiddle[2], 
+                'meta-visible':  metaTypes[1], 
                 'single-type': !pokemon.types?.dualEffectiveness,
                 'dual-type': pokemon.types?.dualEffectiveness,
               }"
@@ -362,12 +362,12 @@
         <ng-container *ngIf="pokemon.shiny && teamOptions?.showShinyIcon; else empty">
           <div 
           class="section"
-          (click)="clickMeta(4, 'middle')"
-          [ngClass]="{'meta-selected':  metaMiddle[4]}"
+          (click)="clickMeta(0, 'middle')"
+          [ngClass]="{'meta-selected':  metaMiddle[0]}"
           >
             <div class="section-content">
               <div class="meta-wrapper" (click)="$event.stopPropagation()">
-                <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[5]}">
+                <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[0]}">
                   <div class="text">
                     This pokemon is shiny
                   </div>
@@ -379,12 +379,12 @@
         </ng-container>
         <div 
         class="section"
-        (click)="clickMeta(5, 'middle')"
-        [ngClass]="{'meta-selected':  metaMiddle[5]}"
+        (click)="clickMeta(1, 'middle')"
+        [ngClass]="{'meta-selected':  metaMiddle[1]}"
         >
           <div class="section-content">
             <div class="meta-wrapper" (click)="$event.stopPropagation()">
-              <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[5]}">
+              <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[1]}">
                 <div class="text">
                   The Pokemon's level
                 </div>
@@ -395,12 +395,12 @@
         </div>
         <div 
         class="section"
-        (click)="clickMeta(6, 'middle')"
-        [ngClass]="{'meta-selected':  metaMiddle[6]}"
+        (click)="clickMeta(2, 'middle')"
+        [ngClass]="{'meta-selected':  metaMiddle[2]}"
         >
           <div class="section-content">
             <div class="meta-wrapper" (click)="$event.stopPropagation()">
-              <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[6]}">
+              <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[2]}">
                 <ng-container *ngIf="pokemon.gender == true; else maleText">
                   <div class="text">
                     This pokemon is female
