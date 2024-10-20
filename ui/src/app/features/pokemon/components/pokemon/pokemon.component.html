@@ -1,12 +1,12 @@
 <div class="pokemon">
   <div class="profile">
     <div class="left">
-      <div class="extra">
-        <div 
-        class="species section"
-        (click)="clickMeta(0, 'middle')"
-        [ngClass]="{'meta-selected':  metaMiddle[0]}"
-        >
+      <div 
+      class="section"
+      (click)="clickMeta(0, 'middle')"
+      [ngClass]="{'meta-selected':  metaMiddle[0]}"
+      >
+        <div class="section-content species">
           <div class="meta-wrapper">
             <div class="meta meta-top evol" (click)="clickMeta(0, 'middle')" [ngClass]="{'meta-visible':  metaMiddle[0]}">
               <div class="family">
@@ -34,11 +34,11 @@
               </div>
             </div>
           </div>
-          <div *ngIf="teamOptions?.showDexNumber; else void">
+          <ng-container *ngIf="teamOptions?.showDexNumber; else void">
             <div class="dex-number">
               #{{pokemon.dexNumber}} 
             </div>
-          </div>
+          </ng-container>
           <div class="no-overflow row">
             <div class="section-name">
               <ng-container *ngIf="pokemon.nickname && teamOptions?.showNickname; else speciesName">
@@ -50,49 +50,55 @@
             </div>
           </div>
         </div>
-        <div 
-        class="item section"
-        (click)="clickMeta(0, 'left')"
-        [ngClass]="{'meta-selected':  metaLeft[0]}"
-        >
+      </div>
+      <div 
+      class="section"
+      (click)="clickMeta(0, 'left')"
+      [ngClass]="{'meta-selected':  metaLeft[0]}"
+      >
+        <div class="section-content row-start">
           <div class="meta-wrapper" (click)="clickMeta(0, 'left')">
             <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[0]}">
               <div class="head">
-                {{pokemon.item?.name}}
+                <span class="head-text">{{pokemon.item?.name}}</span>
               </div>
               <div class="body" [innerHTML]="formatItemProse(pokemon.item?.prose)">
               </div>
             </div>
           </div>
-          <div class="no-overflow row-start">
-            <div class="section-name">
-              {{pokemon.item?.name}}
-            </div>
-            <img src="{{pokemon.item?.iconPath}}" alt="" class="icon-big">
+          <div class="section-name">
+            {{pokemon.item?.name}}
           </div>
+          <img src="{{pokemon.item?.iconPath}}" alt="" class="icon-big">
         </div>
-        <div 
-        class="section"
-        (click)="clickMeta(1, 'left')"
-        [ngClass]="{'meta-selected':  metaLeft[1]}"
-        >
+      </div>
+      <div 
+      class="section"
+      (click)="clickMeta(1, 'left')"
+      [ngClass]="{'meta-selected':  metaLeft[1]}"
+      >
+        <div class="section-content">
           <div class="meta-wrapper" (click)="clickMeta(1, 'left')">
             <div class="meta meta-left" [ngClass]="{'meta-visible':  metaLeft[1]}">
               <div class="head">
-                {{pokemon.ability?.name}}
+                <span class="head-text">{{pokemon.ability?.name}}</span>
               </div>
               <div class="body" [innerHTML]="pokemon.ability?.prose">
               </div>
             </div>
           </div>
-          {{pokemon.ability?.name}} 
+          <div class="section-name">
+            {{pokemon.ability?.name}} 
+          </div>
         </div>
-        <div class="item options">
-          <div 
-          class="option section"
-          (click)="clickMeta(0, 'showStats')"
-          [ngClass]="{active: showStats[0]}"
-          >
+      </div>
+      <div class="item options">
+        <div 
+        class="section"
+        (click)="clickMeta(0, 'showStats')"
+        [ngClass]="{active: showStats[0]}"
+        >
+          <div class="section-content option">
             <div class="meta-wrapper">
               <div class="meta meta-middle meta-option">
                 <div class="text">
@@ -102,13 +108,15 @@
             </div>
             <img src="assets/align-left.png" alt="" class="icon">
           </div>
-          <div 
-          class="option section" 
-          (click)="clickMeta(0, 'showNotes')"
-          [ngClass]="{active: showNotes[0]}"
-          >
+        </div>
+        <div 
+        class="section" 
+        (click)="clickMeta(0, 'showNotes')"
+        [ngClass]="{active: showNotes[0]}"
+        >
+          <div class="section-content option">
             <div class="meta-wrapper">
-              <div class="meta meta-middle">
+              <div class="meta meta-middle meta-option">
                 <div class="text">
                   Show notes
                 </div>
@@ -116,12 +124,14 @@
             </div>
             <img src="assets/edit.png" alt="" class="icon">
           </div>
-          <div 
-          class="option section" 
-          (click)="copyPokemon()"
-          >
+        </div>
+        <div 
+        class="section" 
+        (click)="copyPokemon()"
+        >
+          <div class="section-content option">
             <div class="meta-wrapper">
-              <div class="meta meta-middle">
+              <div class="meta meta-middle meta-option">
                 <div class="text">
                   Copy pokemon
                 </div>
@@ -131,14 +141,16 @@
           </div>
         </div>
       </div>
-      <div class="center">
-        <div class="types">
-          <ng-container *ngIf="pokemon.teraType; else empty">
-            <div 
-            class="type section"
-            (click)="clickMeta(1, 'middle')"
-            [ngClass]="{'meta-selected':  metaMiddle[1]}"
-            >
+    </div>
+    <div class="center">
+      <div class="types">
+        <ng-container *ngIf="pokemon.teraType; else empty">
+          <div 
+          class="section"
+          (click)="clickMeta(1, 'middle')"
+          [ngClass]="{'meta-selected':  metaMiddle[1]}"
+          >
+            <div class="type section-content">
               <div class="meta-wrapper" (click)="clickMeta(1, 'middle')">
                 <div 
                 class="meta meta-top single-type" 
@@ -148,7 +160,7 @@
                     <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.superEffective?.length ?? false">
                       <div class="category">
                         <div class="text">
-                          <span class="title">x2</span>
+                          <span class="bold">x2</span>
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.superEffective">
@@ -161,7 +173,7 @@
                     <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.notVeryEffective?.length ?? false">
                       <div class="category">
                         <div class="text">
-                          <span class="title">x0.5</span>
+                          <span class="bold">x0.5</span>
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.notVeryEffective">
@@ -176,7 +188,7 @@
                     <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false">
                       <div class="category">
                         <div class="text">
-                          <span class="title">x0</span> 
+                          <span class="bold">x0</span> 
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.inmune">
@@ -190,13 +202,15 @@
               </div>
               <img src="{{pokemon.teraType.iconPath}}" alt="" class="icon">
             </div>
-            <div class="vertical-divider"></div>
-          </ng-container>
-          <div
-          class="type section"
-          (click)="clickMeta(2, 'middle')"
-          [ngClass]="{'meta-selected':  metaMiddle[2]}"
-          >
+          </div>
+          <div class="vertical-divider"></div>
+        </ng-container>
+        <div
+        class="section"
+        (click)="clickMeta(2, 'middle')"
+        [ngClass]="{'meta-selected':  metaMiddle[2]}"
+        >
+          <div class="section-content type">
             <div class="meta-wrapper" (click)="clickMeta(2, 'middle')">
               <div class="meta meta-top" [ngClass]="
               {
@@ -210,7 +224,7 @@
                     <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleSuperEffective?.length ?? false">
                       <div class="category">
                         <div class="text">
-                          <span class="title">x4</span>
+                          <span class="bold">x4</span>
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleSuperEffective">
@@ -228,7 +242,7 @@
                     <ng-container *ngIf="pokemon.types?.dualEffectiveness?.superEffective?.length ?? false">
                       <div class="category">
                         <div class="text">
-                          <span class="title">x2</span>
+                          <span class="bold">x2</span>
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.superEffective">
@@ -245,7 +259,7 @@
                     <ng-container *ngIf="pokemon.types?.dualEffectiveness?.notVeryEffective?.length ?? false">
                       <div class="category">
                         <div class="text">
-                          <span class="title">x0.5</span>
+                          <span class="bold">x0.5</span>
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.notVeryEffective">
@@ -261,7 +275,7 @@
                     <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length ?? false">
                       <div class="category">
                         <div class="text">
-                          <span class="title">x0.25</span>
+                          <span class="bold">x0.25</span>
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleNotVeryEffective">
@@ -276,7 +290,7 @@
                     <ng-container *ngIf="pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
                       <div class="category">
                         <div class="text">
-                          <span class="title">x0</span>
+                          <span class="bold">x0</span>
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.inmune">
@@ -290,7 +304,7 @@
                     <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.superEffective?.length ?? false">
                       <div class="category">
                         <div class="text">
-                          <span class="title">x2</span>
+                          <span class="bold">x2</span>
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.superEffective">
@@ -303,7 +317,7 @@
                     <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.notVeryEffective?.length ?? false">
                       <div class="category">
                         <div class="text">
-                          <span class="title">x0.5</span>
+                          <span class="bold">x0.5</span>
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.notVeryEffective">
@@ -318,7 +332,7 @@
                     <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.inmune?.length ?? false">
                       <div class="category">
                         <div class="text">
-                          <span class="title">x0</span> 
+                          <span class="bold">x0</span> 
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.inmune">
@@ -340,17 +354,18 @@
             </ng-template>
           </div>
         </div>
-        <div 
-        class="sprite-background">
-          <img src={{pokemonSpritePath}} alt="" class="sprite">
-        </div>
-        <div class="center-down">
-          <ng-container *ngIf="pokemon.shiny && teamOptions?.showShinyIcon; else empty">
-            <div 
-            class="shiny section"
-            (click)="clickMeta(4, 'middle')"
-            [ngClass]="{'meta-selected':  metaMiddle[4]}"
-            >
+      </div>
+      <div class="sprite-background">
+        <img src={{pokemonSpritePath}} alt="" class="sprite">
+      </div>
+      <div class="center-down">
+        <ng-container *ngIf="pokemon.shiny && teamOptions?.showShinyIcon; else empty">
+          <div 
+          class="section"
+          (click)="clickMeta(4, 'middle')"
+          [ngClass]="{'meta-selected':  metaMiddle[4]}"
+          >
+            <div class="section-content">
               <div class="meta-wrapper" 
               (click)="clickMeta(5, 'middle')"
               >
@@ -362,12 +377,14 @@
               </div>
               <img src="assets/shiny.png" alt="" class="icon">
             </div>
-          </ng-container>
-          <div 
-          class="level section"
-          (click)="clickMeta(5, 'middle')"
-          [ngClass]="{'meta-selected':  metaMiddle[5]}"
-          >
+          </div>
+        </ng-container>
+        <div 
+        class="section"
+        (click)="clickMeta(5, 'middle')"
+        [ngClass]="{'meta-selected':  metaMiddle[5]}"
+        >
+          <div class="section-content">
             <div class="meta-wrapper" 
             (click)="clickMeta(5, 'middle')"
             >
@@ -379,11 +396,13 @@
             </div>
             {{pokemon.level}}
           </div>
-          <div 
-          class="gender section"
-          (click)="clickMeta(6, 'middle')"
-          [ngClass]="{'meta-selected':  metaMiddle[6]}"
-          >
+        </div>
+        <div 
+        class="section"
+        (click)="clickMeta(6, 'middle')"
+        [ngClass]="{'meta-selected':  metaMiddle[6]}"
+        >
+          <div class="section-content">
             <div class="meta-wrapper" 
             (click)="clickMeta(6, 'middle')"
             >
@@ -405,7 +424,7 @@
             </ng-container>
             <ng-template #male>
               <img src="assets/male.png" alt="" class="icon">
-            </ng-template>          
+            </ng-template>   
           </div>
         </div>
       </div>
@@ -414,124 +433,126 @@
       <div class="moves">
         <ng-container *ngFor="let move of pokemon.moves; index as i">
           <ng-container *ngIf="move">
-            <div class="move section"
+            <div class="section"
             (click)="clickMeta(i, 'right')"
             [ngClass]="{'meta-selected':  metaRight[i]}"
             [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.name ?? '')}"
             >
-              <div class="move-type" [ngStyle]="{'background': theme.getTypeColor(move?.pokeType?.name ?? '')}">
-                <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="move-type-icon">
-              </div>
-              <div class="no-overflow">
-                <div class="name">
-                  {{move?.name}}
+              <div class="move section-content">
+                <div class="move-type" [ngStyle]="{'background': theme.getTypeColor(move?.pokeType?.name ?? '')}">
+                  <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="move-type-icon">
                 </div>
-              </div>
-              <div class="meta-wrapper" 
-              (click)="clickMeta(i, 'right')"
-              >
-                <div class="meta meta-right" [ngClass]="{'meta-visible':  metaRight[i]}">
-                  <div class="head move-head">
-                    <div class="meta-move-type">
-                      <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="icon">
-                      <div class="meta-wrapper">
-                        <div class="meta meta-top meta-top-move" [ngClass]="{'meta-move-type-visible':  metaRight[i]}">
-                          <div class="meta-types">
-                            <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.superEffective?.length ?? false">
-                              <div class="category">
-                                <div class="text">
-                                  <span class="title">x2</span>
+                <div class="no-overflow">
+                  <div class="name">
+                    {{move?.name}}
+                  </div>
+                </div>
+                <div class="meta-wrapper" 
+                (click)="clickMeta(i, 'right')"
+                >
+                  <div class="meta meta-right meta-move" [ngClass]="{'meta-visible':  metaRight[i]}">
+                    <div class="head move-head">
+                      <div class="meta-move-type">
+                        <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="icon">
+                        <div class="meta-wrapper">
+                          <div class="meta meta-top meta-top-move" [ngClass]="{'meta-move-type-visible':  metaRight[i]}">
+                            <div class="meta-types">
+                              <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.superEffective?.length ?? false">
+                                <div class="category">
+                                  <div class="text">
+                                    <span class="bold">x2</span>
+                                  </div>
+                                  <div class="icons">
+                                    <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.superEffective">
+                                      <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                                    </ng-container>
+                                  </div>
                                 </div>
-                                <div class="icons">
-                                  <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.superEffective">
-                                    <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
-                                  </ng-container>
-                                </div>
-                              </div>
-                              <hr class="divider">
-                            </ng-container>
-                            <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.notVeryEffective?.length ?? false">
-                              <div class="category">
-                                <div class="text">
-                                  <span class="title">x0.5</span>
-                                </div>
-                                <div class="icons">
-                                  <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.notVeryEffective">
-                                    <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
-                                  </ng-container>
-                                </div>
-                              </div>
-                              <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.inmune?.length ?? false">
                                 <hr class="divider">
                               </ng-container>
-                            </ng-container>
-                            <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.inmune?.length ?? false">
-                              <div class="category">
-                                <div class="text">
-                                  <span class="title">x0</span> 
+                              <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.notVeryEffective?.length ?? false">
+                                <div class="category">
+                                  <div class="text">
+                                    <span class="bold">x0.5</span>
+                                  </div>
+                                  <div class="icons">
+                                    <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.notVeryEffective">
+                                      <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                                    </ng-container>
+                                  </div>
                                 </div>
-                                <div class="icons">
-                                  <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.inmune">
-                                    <img src="{{type.iconPath}}" alt="" class="icon">
-                                  </ng-container>
+                                <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.inmune?.length ?? false">
+                                  <hr class="divider">
+                                </ng-container>
+                              </ng-container>
+                              <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.inmune?.length ?? false">
+                                <div class="category">
+                                  <div class="text">
+                                    <span class="bold">x0</span> 
+                                  </div>
+                                  <div class="icons">
+                                    <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.inmune">
+                                      <img src="{{type.iconPath}}" alt="" class="icon">
+                                    </ng-container>
+                                  </div>
                                 </div>
-                              </div>
-                            </ng-container>
+                              </ng-container>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="head-text">
-                      {{move?.name}}
-                    </div>
-                    <div>
-                      <img src="{{move?.damageClass?.iconPath}}" alt="" class="icon">
-                    </div>
-                  </div>
-                  <div class="body">
-                    <div class="property">
-                      <span class="title">Effect:</span> <span [innerHTML]="move?.effect?.short"></span>
-                    </div>
-                    <div class="property">
-                      <span class="title">Target:</span>{{move?.target?.description}}
-                    </div>
-                    <div class="move-bottom">
-                      <div class="primary">
-                        <div class="atribute"><span class="title">Power</span>{{move?.power}}</div>
-                        <div class="atribute"><span class="title">PP</span>{{move?.pp}}</div>
-                        <div class="atribute"><span class="title">Accuracy</span>{{move?.accuracy}}%</div>
-                        <div class="atribute"><span class="title">Priority</span>{{move?.priority}}</div>
+                      <div class="head-text">
+                        {{move?.name}}
                       </div>
-                      <div class="secondary">
-                        <ng-container *ngIf="move?.meta?.minHits">
-                          <div class="atribute"><span class="title">minHits</span>{{move?.meta?.minHits}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.maxHits">
-                          <div class="atribute"><span class="title">maxHits</span>{{move?.meta?.maxHits}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.minTurns">
-                          <div class="atribute"><span class="title">minTurns</span>{{move?.meta?.minTurns}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.maxTurns">
-                          <div class="atribute"><span class="title">maxTurns</span>{{move?.meta?.maxTurns}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.drain">
-                          <div class="atribute"><span class="title">drain</span>{{move?.meta?.drain}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.healing">
-                          <div class="atribute"><span class="title">healing</span>{{move?.meta?.healing}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.statusChance">
-                          <div class="atribute"><span class="title">statusChance</span>{{move?.meta?.statusChance}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.flinchChance">
-                          <div class="atribute"><span class="title">flinchChance</span>{{move?.meta?.flinchChance}}</div>
-                        </ng-container>
+                      <div>
+                        <img src="{{move?.damageClass?.iconPath}}" alt="" class="icon">
                       </div>
                     </div>
+                    <div class="body">
+                      <div class="property">
+                        <span class="property-title">Effect:</span> <span [innerHTML]="move?.effect?.short"></span>
+                      </div>
+                      <div class="property">
+                        <span class="property-title">Target:</span>{{move?.target?.description}}
+                      </div>
+                      <div class="move-bottom">
+                        <div class="primary">
+                          <div class="atribute"><span class="property-title">Power</span>{{move?.power}}</div>
+                          <div class="atribute"><span class="property-title">PP</span>{{move?.pp}}</div>
+                          <div class="atribute"><span class="property-title">Accuracy</span>{{move?.accuracy}}%</div>
+                          <div class="atribute"><span class="property-title">Priority</span>{{move?.priority}}</div>
+                        </div>
+                        <div class="secondary">
+                          <ng-container *ngIf="move?.meta?.minHits">
+                            <div class="atribute"><span class="property-title">minHits</span>{{move?.meta?.minHits}}</div>
+                          </ng-container>
+                          <ng-container *ngIf="move?.meta?.maxHits">
+                            <div class="atribute"><span class="property-title">maxHits</span>{{move?.meta?.maxHits}}</div>
+                          </ng-container>
+                          <ng-container *ngIf="move?.meta?.minTurns">
+                            <div class="atribute"><span class="property-title">minTurns</span>{{move?.meta?.minTurns}}</div>
+                          </ng-container>
+                          <ng-container *ngIf="move?.meta?.maxTurns">
+                            <div class="atribute"><span class="property-title">maxTurns</span>{{move?.meta?.maxTurns}}</div>
+                          </ng-container>
+                          <ng-container *ngIf="move?.meta?.drain">
+                            <div class="atribute"><span class="property-title">drain</span>{{move?.meta?.drain}}</div>
+                          </ng-container>
+                          <ng-container *ngIf="move?.meta?.healing">
+                            <div class="atribute"><span class="property-title">healing</span>{{move?.meta?.healing}}</div>
+                          </ng-container>
+                          <ng-container *ngIf="move?.meta?.statusChance">
+                            <div class="atribute"><span class="property-title">statusChance</span>{{move?.meta?.statusChance}}</div>
+                          </ng-container>
+                          <ng-container *ngIf="move?.meta?.flinchChance">
+                            <div class="atribute"><span class="property-title">flinchChance</span>{{move?.meta?.flinchChance}}</div>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>    
+                </div>   
+              </div>
             </div>
           </ng-container>
         </ng-container>

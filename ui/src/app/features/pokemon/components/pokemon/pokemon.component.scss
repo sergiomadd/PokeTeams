@@ -9,6 +9,53 @@ $spriteSize: 6em;
 $paddingBig: 0.5vw;
 $padding: 0.2vw;
 
+.icon
+{
+  width: $iconSize;
+  height: $iconSize;
+}
+
+.icon-big
+{
+  width: $iconSize * 1.5;
+  height: $iconSize * 1.5;
+}
+
+.section
+{
+  height: 100%;
+  cursor: pointer;
+  border-radius: 5px;
+
+
+  .section-content
+  {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+
+    .section-name
+    {
+      text-align: start;
+      white-space: nowrap;
+      padding: 0 0.2em 0 0.2em;
+
+    }
+  }
+
+  &:hover .meta
+  {
+    visibility: visible;
+  }
+
+  &:hover
+  {
+    outline: dashed black 1px;
+  }
+}
+
 .pokemon
 {
   width: $cardWidth;
@@ -21,93 +68,111 @@ $padding: 0.2vw;
   .profile
   {
     display: grid;
-    grid-template-columns: 60% 40%;
+    grid-template-columns: 35% 25% 40%;
     height: $cardheight;
+
     .left
     {
       text-align: left;
-      display: grid;
-      justify-content: left;
-      grid-template-columns: 60% 40%;
       padding: $paddingBig;
 
-      .extra
+      display: grid;
+      grid-template-rows: 25% 25% 25% 25%;
+      align-items: center;
+
+      .species
       {
-        display: grid;
-        grid-template-rows: 25% 25% 25% 25%;
+        display: flex;
         align-items: center;
+        position: relative;
 
-        .species
+        .dex-number
         {
-          display: flex;
-          align-items: center;
-          position: relative;
+          color: var(--primary);
+          margin-right: 0.5vh;
 
-          .dex-number
-          {
-            color: var(--primary);
-            margin-right: 0.5vh;
-
-            position: absolute;
-            top: 0;
-            left: 0;
-            font-size: 0.6em;
-          }
-        }
-
-        .item
-        {
-          display: flex;
-          align-items: center;
+          position: absolute;
+          top: 0;
+          left: 0.4em;
+          font-size: 0.6em;
         }
       }
 
-      .center
+      .options
       {
-        display: grid;
-        grid-template-rows: 15% 70% 15%;
+        display: flex;
+        justify-content: space-around;
+        width: 80%;
 
-        .types
+        .option
         {
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-
-          .vertical-divider
-          {
-            border: 0.5px solid grey;
-            height: $iconSize;
-            margin: 0 4px;
-          }
-
-          .type
-          {
-            display: flex;
-            align-items: center;
-            flex-direction: row-reverse;     
-          }
-        }
-
-        .sprite-background
-        {
+          width: 1.5vw;
+          height: 1.5vw;
+          cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
+          border-radius: 5px;
 
-          .sprite
+          .icon
           {
-            width: $spriteSize;
-            height: $spriteSize;
+            width: 1vw;
+            height: 1vw;
           }
         }
+        
+        .active
+        {
+          outline: 1px solid black;
+        }
+      }
+    }
 
-        .center-down
+    .center
+    {
+      display: grid;
+      grid-template-rows: 15% 70% 15%;
+      padding: $paddingBig;
+
+      .types
+      {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        .vertical-divider
+        {
+          border: 0.5px solid grey;
+          height: $iconSize;
+          margin: 0 4px;
+        }
+
+        .type
         {
           display: flex;
-          justify-content: space-between;
           align-items: center;
-          
+          flex-direction: row-reverse;     
         }
+      }
+
+      .sprite-background
+      {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .sprite
+        {
+          width: $spriteSize;
+          height: $spriteSize;
+        }
+      }
+
+      .center-down
+      {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
     }
 
@@ -163,24 +228,108 @@ $padding: 0.2vw;
     }
   }
 
-  .stats
+  .stats-wrapper
   {
+    background-color: var(--bg-color-3);
+    width: 100%;
+    border-radius: 0 0 5px 5px;
 
+    .stats
+    {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      gap: $padding/2;
+      padding: $padding;
+
+      .stat
+      {
+        height: inherit;
+        display: flex;
+        align-items: center;
+
+        .name
+        {
+          display: flex;
+          justify-content: center;
+          width: 2vw;
+        }
+
+        .values
+        {
+          height: 1.5vh;
+          display: flex;
+
+          .bar
+          {
+            cursor: pointer;
+            color: white;
+            transition: visibility 1s ease;
+          }
+
+          .base
+          {
+
+          }
+
+          .ivs
+          {
+            background-color: lightblue;
+          }
+
+          .evs
+          {
+            background-color: gold;
+            border-radius: 0 15px 15px 0;
+            border-radius: none;
+          }
+
+          .total
+          {
+            margin-left: $padding;
+          }
+          
+          .maxed
+          {
+            border: 0.4vh solid black;
+          }
+          
+          .nature
+          {
+            margin-left: $padding;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius:50px;
+            width: 0.8vw;
+            height: 0.8vw;
+
+            .icon
+            {
+              width: 0.5vw;
+              height: 0.5vw;
+            }
+
+            .neutral
+            {
+              height: 30%;
+              width: 80%;
+              border-radius: 30px;
+              background-color: grey;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .notes
+  {
+    background-color: var(--bg-color-2);
+    height: $cardheight;
   }
 }
-
-.icon
-{
-  width: $iconSize;
-  height: $iconSize;
-}
-
-.icon-big
-{
-  width: $iconSize * 1.5;
-  height: $iconSize * 1.5;
-}
-
 
 .meta-selected
 {
@@ -195,7 +344,11 @@ $padding: 0.2vw;
   position: relative; 
   width: 0;
   height: 0;
-  overflow: visible;
+
+  .meta-visible
+  {
+    visibility: visible !important;
+  }
 
   .meta
   {
@@ -219,12 +372,10 @@ $padding: 0.2vw;
       transform: rotate(45deg);
       z-index: -1;
     }
-    
 
     .head
     {
       background-color: var(--bg-color-3);
-
       display: flex;
       align-items: center;
       justify-content: center;
@@ -242,58 +393,6 @@ $padding: 0.2vw;
       padding: $padding;
       background-color: var(--bg-color-2);
       border-radius: 0 0 5px 5px;
-
-
-      .property
-      {
-        display: flex;
-        margin-bottom: $padding;
-
-        .title
-        {
-          font-weight: bold;
-          margin-right: $padding;
-        }
-
-        .content
-        {
-
-        }
-      }
-
-      .move-bottom
-      {
-        display: grid;
-
-  
-        .primary
-        {
-          display: grid;
-          justify-content: center;
-          text-align: center;
-          grid-template-columns: 25% 15% 30% 25%;
-          margin-bottom: $padding;
-          column-gap: $padding;
-          margin: $padding;
-        }
-
-        .secondary
-        {
-          display: flex;
-          justify-content: center;
-        }
-
-        .atribute
-        {
-          padding: 0 $padding 0 $padding;
-          display: flex;
-          flex-direction: column;
-          border: 1px solid black;
-          border-radius: 5%;
-          background-color: var(--bg-color-3);
-          cursor: pointer;
-        }
-      }
     }
 
     .link
@@ -306,116 +405,6 @@ $padding: 0.2vw;
       {
         text-decoration: underline ;
       }
-    }
-  }
-
-  .meta-left
-  {
-    min-width: $metaWidth;
-    height: fit-content;
-    position: absolute;
-    //backup transform if round() not available
-    transform: translate(calc(-100% - $paddingBig - $padding),calc(-50% - $padding*2));
-    //Need round func for smooth borders
-    transform: translate(round(calc(-100% - $paddingBig - $padding), 1px), round(calc(-50% - $padding*2), 1px));
-    text-align: center;
-
-    &::before
-    {
-      //Arrow right
-      right: -0.4em;
-      top: 50%;
-    }
-  }
-
-  .meta-right
-  {
-    min-width: $metaWidth;
-    height: fit-content;
-    position: relative;
-    left: 50%;
-    top: 50%;
-    transform: translate(calc($paddingBig + 0.2em), calc(-50% - $padding*2));
-
-    &::before
-    {
-      //Arrow left
-      left: -0.4em;
-      top: 50%;
-    }
-    
-    .move-head
-    {
-      display: flex;
-      overflow: hidden;
-      justify-content: space-between;
-      align-items: center;
-      overflow: visible;
-
-      .meta-move-type
-      {
-        cursor: pointer;
-        &:hover .meta-top-move
-        {
-          visibility: visible;
-        }
-      }
-
-      .meta-move-type-visible
-      {
-        visibility: visible;
-      }
-    }
-  }
-
-  .meta-top-move
-  {
-    transform: translate(-(calc($iconSize/2)), calc(-100% - $iconSize - 1vw)) !important;
-    visibility: hidden;
-  }
-
-  .single-type
-  {
-    position: relative;
-    left: 50%;
-    top: 100%;
-    transform: translate(calc(-50% - $iconSize/2), calc(-100% - $iconSize - $padding*2));
-
-    &::before
-    {
-      //Arrow bottom
-      left: calc(50% - 0.4em);
-      bottom: -0.3em;
-    }
-  }
-
-  .dual-type
-  {
-    position: relative;
-    left: 50%;
-    top: 100%;
-    transform: translate(calc(-50% - $iconSize), calc(-100% - $iconSize - $padding*2));
-
-    &::before
-    {
-      //Arrow bottom
-      left: calc(50% - 0.4em);
-      bottom: -0.3em;
-    }
-  }
-
-  .evol
-  {
-    position: relative;
-    left: 50%;
-    top: 130%;
-    transform: translate(calc(-50% + $cardWidth/6), calc(-130%));
-
-    &::before
-    {
-      //Arrow bottom
-      left: 50%;
-      bottom: -0.4em;
     }
   }
 
@@ -475,33 +464,70 @@ $padding: 0.2vw;
     }
   }
 
-  .meta-sprite
+  .evol
   {
-    min-width: $cardWidth/3;
-    z-index: 5;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
+    transform: translate(calc(-50% - $padding*2 ), calc(-120% - $padding*2));
+    transform: translate(round(calc(-50% - $padding*2 ), 1px), round(calc(-120% - $padding*2), 1px));
 
-    position: relative;
-    left: 50%;
-    top: 140%;
-    transform: translate(calc(-30%), calc(-140%));
-
-    .name
+    &::before
     {
-      padding: $padding;
-      background-color: var(--bg-color-3);
-      border-radius: 5px 5px 0 0;
-    }
-  
-    .spriteBig
-    {
-      width: $spriteSize*2;
-      height: $spriteSize*2;
+      //Arrow bottom
+      left: 50%;
+      bottom: -0.35em;
     }
   }
-  
+
+  .single-type
+  {
+    position: relative;
+    left: 50%;
+    top: 100%;
+    transform: translate(calc(-50% - $iconSize/2), calc(-100% - $iconSize - $padding*2));
+    transform: translate(round(calc(-50% - $iconSize/2), 1px), round(calc(-100% - $iconSize - $padding*2), 1px));
+
+    &::before
+    {
+      //Arrow bottom
+      left: calc(50% - 0.4em);
+      bottom: -0.35em;
+    }
+  }
+
+  .dual-type
+  {
+    position: relative;
+    left: 50%;
+    top: 100%;
+    transform: translate(calc(-50% - $iconSize), calc(-100% - $iconSize - $padding*2));
+    transform: translate(round(calc(-50% - $iconSize), 1px), round(calc(-100% - $iconSize - $padding*2), 1px));
+
+    &::before
+    {
+      //Arrow bottom
+      left: calc(50% - 0.4em);
+      bottom: -0.35em;
+    }
+  }
+
+  .meta-left
+  {
+    min-width: $metaWidth;
+    height: fit-content;
+    position: absolute;
+    //backup transform if round() not available
+    transform: translate(calc(-100% - $paddingBig - $padding),calc(-50% - $padding*2));
+    //Need round func for smooth borders
+    transform: translate(round(calc(-100% - $paddingBig - $padding), 1px), round(calc(-50% - $padding*2), 1px));
+    text-align: center;
+
+    &::before
+    {
+      //Arrow right
+      right: -0.4em;
+      top: 50%;
+    }
+  }
+
   .meta-middle
   {
     width: fit-content;
@@ -512,6 +538,7 @@ $padding: 0.2vw;
     left: 50%;
     top: 100%;
     transform: translate(calc(-50% + $iconSize/2), calc(-100% - $iconSize));
+    transform: translate(round(calc(-50% + $iconSize/2), 1px), round(calc(-100% - $iconSize), 1px));
 
     &::before
     {
@@ -527,6 +554,115 @@ $padding: 0.2vw;
       border-radius: 5px;
       white-space: nowrap;
       overflow: hidden;
+    }
+  }
+
+  .meta-option
+  {
+
+    left: 50%;
+    top: 100%;
+    transform: translate(calc(-50% + $iconSize/2), calc(-100% - $iconSize - $padding));
+    transform: translate(round(calc(-50% + $iconSize/2), 1px), round(calc(-100% - $iconSize - $padding), 1px));
+    &::before
+    {
+      //Arrow bottom
+      left: calc(50% - 0.3em);
+      bottom: -0.35em;
+    }
+  }
+
+  .meta-right
+  {
+    min-width: $metaWidth;
+    height: fit-content;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(calc($paddingBig + 0.2em), calc(-50% - $padding*2));
+    transform: translate(round(calc($paddingBig + 0.2em), 1px), round(calc(-50% - $padding*2), 1px));
+
+    &::before
+    {
+      //Arrow left
+      left: -0.4em;
+      top: 50%;
+    }
+  }
+
+  .meta-move
+  {
+
+    .move-head
+    {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .meta-move-type
+      {
+        cursor: pointer;
+        &:hover .meta-top-move
+        {
+          visibility: visible;
+        }
+      }
+
+      .meta-move-type-visible
+      {
+        visibility: visible;
+      }
+    }
+
+    .property
+    {
+      display: flex;
+      margin-bottom: $padding;
+
+      .property-title
+      {
+        font-weight: bold;
+        margin-right: $padding;
+      }
+    }
+
+    .move-bottom
+    {
+      display: grid;
+
+      .primary
+      {
+        display: grid;
+        justify-content: center;
+        text-align: center;
+        grid-template-columns: 25% 15% 30% 25%;
+        margin-bottom: $padding;
+        column-gap: $padding;
+        margin: $padding;
+      }
+
+      .secondary
+      {
+        display: flex;
+        justify-content: center;
+      }
+
+      .atribute
+      {
+        padding: 0 $padding 0 $padding;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid black;
+        border-radius: 5%;
+        background-color: var(--bg-color-3);
+        cursor: pointer;
+      }
+    }
+
+    .meta-top-move
+    {
+      transform: translate(-(calc($iconSize/2)), calc(-100% - $iconSize - 1vw)) !important;
+      visibility: hidden;
     }
   }
 
@@ -590,177 +726,7 @@ $padding: 0.2vw;
         outline: 0.3vh solid black;
       }
     }
-
-
   }
-
-  .meta-visible
-  {
-    visibility: visible !important;
-  }
-
-  .title
-  {
-    font-weight: bold;
-    margin-right: $padding;
-  }
-}
-
-.section
-{
-  height: 100%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-
-  .section-name
-  {
-    text-align: start;
-    white-space: nowrap;
-  }
-
-  &:hover .meta
-  {
-    visibility: visible;
-  }
-
-  &:hover
-  {
-    outline: dashed black 1px;
-    border-radius: 5px;
-  }
-}
-
-.stats-wrapper
-{
-  background-color: var(--bg-color-3);
-  width: 100%;
-  border-radius: 0 0 5px 5px;
-
-  .stats
-  {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    gap: $padding/2;
-    padding: $padding;
-
-    .stat
-    {
-      height: inherit;
-      display: flex;
-      align-items: center;
-
-      .name
-      {
-        display: flex;
-        justify-content: center;
-        width: 2vw;
-      }
-
-      .values
-      {
-        height: 1.5vh;
-        display: flex;
-
-        .bar
-        {
-          cursor: pointer;
-          color: white;
-          transition: visibility 1s ease;
-        }
-
-        .base
-        {
-
-        }
-
-        .ivs
-        {
-          background-color: lightblue;
-        }
-
-        .evs
-        {
-          background-color: gold;
-          border-radius: 0 15px 15px 0;
-          border-radius: none;
-        }
-
-        .total
-        {
-          margin-left: $padding;
-        }
-        
-        .maxed
-        {
-          border: 0.4vh solid black;
-        }
-        
-        .nature
-        {
-          margin-left: $padding;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          border-radius:50px;
-          width: 0.8vw;
-          height: 0.8vw;
-
-          .icon
-          {
-            width: 0.5vw;
-            height: 0.5vw;
-          }
-
-          .neutral
-          {
-            height: 30%;
-            width: 80%;
-            border-radius: 30px;
-            background-color: grey;
-          }
-        }
-      }
-    }
-  }
-}
-
-.options
-{
-  display: flex;
-  justify-content: space-around;
-  width: 80%;
-
-  .option
-  {
-    width: 1.5vw;
-    height: 1.5vw;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px;
-
-    .icon
-    {
-      width: 1vw;
-      height: 1vw;
-    }
-  }
-  
-  .active
-  {
-    //background-color: var(--bg-color-3);
-    outline: 1px solid black;
-  }
-}
-
-.notes
-{
-  background-color: var(--bg-color-2);
-  height: $cardheight;
 }
 
 .empty
@@ -779,60 +745,4 @@ $padding: 0.2vw;
 {
   //background-color: var(--bg-color-2);
   //border-radius: 5px;
-}
-
-.pokemon-arrowtop
-{
-  width: 10px; 
-  height: 10px; 
-  border: 1px solid black;
-  background-color: var(--bg-color-2);
-
-  position: absolute;
-  left: 50%;
-  top: -0.4em;
-  transform: rotate(45deg);
-  z-index: 1;
-}
-
-.pokemon-arrowright
-{
-  width: 10px; 
-  height: 10px; 
-  border: 1px solid black;
-  background-color: var(--bg-color-2);
-
-  position: absolute;
-  right: 0%;
-  top: 50%;
-  transform: rotate(45deg);
-  z-index: 1;
-}
-
-.pokemon-arrowbottom
-{
-  width: 10px; 
-  height: 10px; 
-  border: 1px solid black;
-  background-color: var(--bg-color-2);
-
-  position: absolute;
-  left: 50%;
-  bottom: -0.4em;
-  transform: rotate(45deg);
-  z-index: 1;
-}
-
-.pokemon-arrowleft
-{
-  width: 10px; 
-  height: 10px; 
-  border: 1px solid black;
-  background-color: var(--bg-color-2);
-
-  position: absolute;
-  left: 0%;
-  top: 50%;
-  transform: rotate(45deg);
-  z-index: 1;
 }
