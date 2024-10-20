@@ -87,18 +87,17 @@
           </div>
           {{pokemon.ability?.name}} 
         </div>
-        <div 
-        class="item options"
-        [ngClass]=""
-        >
+        <div class="item options">
           <div 
           class="option section"
           (click)="clickMeta(0, 'showStats')"
           [ngClass]="{active: showStats[0]}"
           >
             <div class="meta-wrapper">
-              <div class="meta meta-middle">
-                Show stats
+              <div class="meta meta-middle meta-option">
+                <div class="text">
+                  Show stats
+                </div>
               </div>
             </div>
             <img src="assets/align-left.png" alt="" class="icon">
@@ -108,11 +107,13 @@
           (click)="clickMeta(0, 'showNotes')"
           [ngClass]="{active: showNotes[0]}"
           >
-          <div class="meta-wrapper">
-            <div class="meta meta-middle">
-              Show notes
+            <div class="meta-wrapper">
+              <div class="meta meta-middle">
+                <div class="text">
+                  Show notes
+                </div>
+              </div>
             </div>
-          </div>
             <img src="assets/edit.png" alt="" class="icon">
           </div>
           <div 
@@ -121,7 +122,9 @@
           >
             <div class="meta-wrapper">
               <div class="meta meta-middle">
-                Copy pokemon
+                <div class="text">
+                  Copy pokemon
+                </div>
               </div>
             </div>
             <img src="assets/copy.png" alt="" class="icon">
@@ -348,15 +351,16 @@
             (click)="clickMeta(4, 'middle')"
             [ngClass]="{'meta-selected':  metaMiddle[4]}"
             >
-                <div class="meta-wrapper" 
-                (click)="clickMeta(5, 'middle')"
-                >
-                  <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[5]}">
+              <div class="meta-wrapper" 
+              (click)="clickMeta(5, 'middle')"
+              >
+                <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[5]}">
+                  <div class="text">
                     This pokemon is shiny
                   </div>
                 </div>
-                <img src="assets/shiny.png" alt="" class="icon">
-              
+              </div>
+              <img src="assets/shiny.png" alt="" class="icon">
             </div>
           </ng-container>
           <div 
@@ -368,7 +372,9 @@
             (click)="clickMeta(5, 'middle')"
             >
               <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[5]}">
-                The Pokemon's level
+                <div class="text">
+                  The Pokemon's level
+                </div>
               </div>
             </div>
             {{pokemon.level}}
@@ -383,10 +389,14 @@
             >
               <div class="meta meta-middle" [ngClass]="{'meta-visible':  metaMiddle[6]}">
                 <ng-container *ngIf="pokemon.gender == true; else maleText">
-                  This pokemon is female
+                  <div class="text">
+                    This pokemon is female
+                  </div>
                 </ng-container>
                 <ng-template #maleText>
-                  This pokemon is male
+                  <div class="text">
+                    This pokemon is male
+                  </div>
                 </ng-template>  
               </div>
             </div>
@@ -425,7 +435,7 @@
                     <div class="meta-move-type">
                       <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="icon">
                       <div class="meta-wrapper">
-                        <div class="meta meta-top meta-top-move">
+                        <div class="meta meta-top meta-top-move" [ngClass]="{'meta-move-type-visible':  metaRight[i]}">
                           <div class="meta-types">
                             <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.superEffective?.length ?? false">
                               <div class="category">
@@ -471,7 +481,7 @@
                         </div>
                       </div>
                     </div>
-                    <div>
+                    <div class="head-text">
                       {{move?.name}}
                     </div>
                     <div>
@@ -658,7 +668,7 @@
   </div>
   <div *ngIf="showNotes[0]; else void">
     <div class="notes">
-      NOTES
+
     </div>
   </div>
 </div>

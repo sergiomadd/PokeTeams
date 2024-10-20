@@ -8,5 +8,5 @@ import { Component, Input } from '@angular/core';
 export class TooltipComponent 
 {
   @Input() text?: string;
-  @Input() side: string = "left";  
+  @Input() side: string = "left";
 }

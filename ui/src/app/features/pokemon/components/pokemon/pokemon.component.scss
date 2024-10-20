@@ -182,8 +182,6 @@ $padding: 0.2vw;
 }
 
 
-
-
 .meta-selected
 {
   outline: 1px solid black;
@@ -205,23 +203,46 @@ $padding: 0.2vw;
     border: 1px solid black;
     border-radius: 5px;
     background-color: var(--bg-color-2);
-    z-index: 3;
+    z-index: 5;
     cursor: auto;
+    position: absolute;
+
+    &::before
+    {
+      //Arrow
+      content: "";
+      width: 10px; 
+      height: 10px; 
+      border: 1px solid black;
+      background-color: var(--bg-color-2);
+      position: absolute;
+      transform: rotate(45deg);
+      z-index: -1;
+    }
+    
 
     .head
     {
       background-color: var(--bg-color-3);
-      font-size: larger;
+
       display: flex;
       align-items: center;
       justify-content: center;
       padding: $paddingBig;
       border-radius: 5px 5px 0 0;
+
+      .head-text
+      {
+        font-size: larger;
+      }
     }
 
     .body
     {
       padding: $padding;
+      background-color: var(--bg-color-2);
+      border-radius: 0 0 5px 5px;
+
 
       .property
       {
@@ -292,11 +313,19 @@ $padding: 0.2vw;
   {
     min-width: $metaWidth;
     height: fit-content;
-    position: relative;
-    left: 50%;
-    top: 50%;
-    transform: translate(calc(-100% - $paddingBig - $padding), calc(-50% - $padding*2));
+    position: absolute;
+    //backup transform if round() not available
+    transform: translate(calc(-100% - $paddingBig - $padding),calc(-50% - $padding*2));
+    //Need round func for smooth borders
+    transform: translate(round(calc(-100% - $paddingBig - $padding), 1px), round(calc(-50% - $padding*2), 1px));
     text-align: center;
+
+    &::before
+    {
+      //Arrow right
+      right: -0.4em;
+      top: 50%;
+    }
   }
 
   .meta-right
@@ -307,6 +336,13 @@ $padding: 0.2vw;
     left: 50%;
     top: 50%;
     transform: translate(calc($paddingBig + 0.2em), calc(-50% - $padding*2));
+
+    &::before
+    {
+      //Arrow left
+      left: -0.4em;
+      top: 50%;
+    }
     
     .move-head
     {
@@ -324,6 +360,11 @@ $padding: 0.2vw;
           visibility: visible;
         }
       }
+
+      .meta-move-type-visible
+      {
+        visibility: visible;
+      }
     }
   }
 
@@ -339,6 +380,13 @@ $padding: 0.2vw;
     left: 50%;
     top: 100%;
     transform: translate(calc(-50% - $iconSize/2), calc(-100% - $iconSize - $padding*2));
+
+    &::before
+    {
+      //Arrow bottom
+      left: calc(50% - 0.4em);
+      bottom: -0.3em;
+    }
   }
 
   .dual-type
@@ -347,6 +395,13 @@ $padding: 0.2vw;
     left: 50%;
     top: 100%;
     transform: translate(calc(-50% - $iconSize), calc(-100% - $iconSize - $padding*2));
+
+    &::before
+    {
+      //Arrow bottom
+      left: calc(50% - 0.4em);
+      bottom: -0.3em;
+    }
   }
 
   .evol
@@ -355,22 +410,28 @@ $padding: 0.2vw;
     left: 50%;
     top: 130%;
     transform: translate(calc(-50% + $cardWidth/6), calc(-130%));
+
+    &::before
+    {
+      //Arrow bottom
+      left: 50%;
+      bottom: -0.4em;
+    }
   }
 
   .meta-top
   {
     width: fit-content;
     height: fit-content;
-    padding: $padding;
     display: flex;
     justify-content: center;
-    z-index: 5;
 
     .meta-types
     {
       display: flex;
       justify-content: center;
-
+      background-color: var(--bg-color-2);
+      border-radius: 5px;
 
       .category
       { 
@@ -403,6 +464,8 @@ $padding: 0.2vw;
     {
       display: flex;
       align-items: center;
+      background-color: var(--bg-color-2);
+      border-radius: 5px;
 
       .sprite-small
       {
@@ -438,18 +501,33 @@ $padding: 0.2vw;
       height: $spriteSize*2;
     }
   }
-
+  
   .meta-middle
   {
-    width: $cardWidth/3;
-    z-index: 5;
-    padding: $padding;
+    width: fit-content;
     text-align: center;
+    background-color: var(--bg-color-2);
 
     position: relative;
     left: 50%;
     top: 100%;
     transform: translate(calc(-50% + $iconSize/2), calc(-100% - $iconSize));
+
+    &::before
+    {
+      //Arrow bottom
+      left: calc(50% - 0.3em);
+      bottom: -0.35em;
+    }
+
+    .text
+    {
+      background-color: var(--bg-color-2);
+      padding: $padding;
+      border-radius: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
   }
 
   .meta-stat
@@ -674,7 +752,8 @@ $padding: 0.2vw;
   
   .active
   {
-    background-color: var(--bg-color-4);
+    //background-color: var(--bg-color-3);
+    outline: 1px solid black;
   }
 }
 
@@ -700,4 +779,60 @@ $padding: 0.2vw;
 {
   //background-color: var(--bg-color-2);
   //border-radius: 5px;
+}
+
+.pokemon-arrowtop
+{
+  width: 10px; 
+  height: 10px; 
+  border: 1px solid black;
+  background-color: var(--bg-color-2);
+
+  position: absolute;
+  left: 50%;
+  top: -0.4em;
+  transform: rotate(45deg);
+  z-index: 1;
+}
+
+.pokemon-arrowright
+{
+  width: 10px; 
+  height: 10px; 
+  border: 1px solid black;
+  background-color: var(--bg-color-2);
+
+  position: absolute;
+  right: 0%;
+  top: 50%;
+  transform: rotate(45deg);
+  z-index: 1;
+}
+
+.pokemon-arrowbottom
+{
+  width: 10px; 
+  height: 10px; 
+  border: 1px solid black;
+  background-color: var(--bg-color-2);
+
+  position: absolute;
+  left: 50%;
+  bottom: -0.4em;
+  transform: rotate(45deg);
+  z-index: 1;
+}
+
+.pokemon-arrowleft
+{
+  width: 10px; 
+  height: 10px; 
+  border: 1px solid black;
+  background-color: var(--bg-color-2);
+
+  position: absolute;
+  left: 0%;
+  top: 50%;
+  transform: rotate(45deg);
+  z-index: 1;
 }
