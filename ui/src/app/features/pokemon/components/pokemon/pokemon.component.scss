@@ -670,11 +670,14 @@ $padding: 0.2vw;
     display: flex;
     flex-direction: column;
     z-index: 5;
+    transform: translate(round(calc(-50% + $cardWidth/2), 1px), round(calc(-115%), 1px));
 
-    position: relative;
-    left: 50%;
-    top: 130%;
-    transform: translate(calc(-50% + $cardWidth/2), calc(-130%));
+    &::before
+    {
+      //Arrow bottom
+      left: 50%;
+      bottom: -0.35em;
+    }
 
     .col
     {
