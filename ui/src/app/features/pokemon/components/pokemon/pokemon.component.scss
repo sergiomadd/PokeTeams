@@ -41,7 +41,6 @@ $padding: 0.2vw;
       text-align: start;
       white-space: nowrap;
       padding: 0 0.2em 0 0.2em;
-
     }
   }
 
@@ -228,96 +227,91 @@ $padding: 0.2vw;
     }
   }
 
-  .stats-wrapper
+  .stats
   {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: $padding/2;
+    padding: $padding;
     background-color: var(--bg-color-3);
-    width: 100%;
     border-radius: 0 0 5px 5px;
 
-    .stats
+    .stat
     {
+      height: inherit;
       display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      gap: $padding/2;
-      padding: $padding;
+      align-items: center;
 
-      .stat
+      .name
       {
-        height: inherit;
         display: flex;
-        align-items: center;
+        justify-content: center;
+        width: 2vw;
+      }
 
-        .name
+      .values
+      {
+        height: 1.5vh;
+        display: flex;
+
+        .bar
         {
-          display: flex;
-          justify-content: center;
-          width: 2vw;
+          cursor: pointer;
+          color: white;
+          transition: visibility 1s ease;
         }
 
-        .values
+        .base
         {
-          height: 1.5vh;
+
+        }
+
+        .ivs
+        {
+          background-color: lightblue;
+        }
+
+        .evs
+        {
+          background-color: gold;
+          border-radius: 0 15px 15px 0;
+          border-radius: none;
+        }
+
+        .total
+        {
+          margin-left: $padding;
+        }
+        
+        .maxed
+        {
+          border: 0.4vh solid black;
+        }
+        
+        .nature
+        {
+          margin-left: $padding;
           display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          border-radius:50px;
+          width: 0.8vw;
+          height: 0.8vw;
 
-          .bar
+          .icon
           {
-            cursor: pointer;
-            color: white;
-            transition: visibility 1s ease;
+            width: 0.5vw;
+            height: 0.5vw;
           }
 
-          .base
+          .neutral
           {
-
-          }
-
-          .ivs
-          {
-            background-color: lightblue;
-          }
-
-          .evs
-          {
-            background-color: gold;
-            border-radius: 0 15px 15px 0;
-            border-radius: none;
-          }
-
-          .total
-          {
-            margin-left: $padding;
-          }
-          
-          .maxed
-          {
-            border: 0.4vh solid black;
-          }
-          
-          .nature
-          {
-            margin-left: $padding;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border-radius:50px;
-            width: 0.8vw;
-            height: 0.8vw;
-
-            .icon
-            {
-              width: 0.5vw;
-              height: 0.5vw;
-            }
-
-            .neutral
-            {
-              height: 30%;
-              width: 80%;
-              border-radius: 30px;
-              background-color: grey;
-            }
+            height: 30%;
+            width: 80%;
+            border-radius: 30px;
+            background-color: grey;
           }
         }
       }
@@ -333,7 +327,7 @@ $padding: 0.2vw;
 
 .meta-selected
 {
-  outline: 1px solid black;
+  outline: 1px solid black !important;
   outline-offset: 0.1vw;
   border-radius: 5px;
   background-color: var(--bg-color-2);
@@ -678,53 +672,39 @@ $padding: 0.2vw;
     left: 50%;
     top: 130%;
     transform: translate(calc(-50% + $cardWidth/2), calc(-130%));
-    
-    .meta-name
-    {
-      text-align: center;
-      border-radius: 5px 5px 0 0 ;
-      padding: $padding 0 ;
-    }
 
-    .content
+    .col
     {
       display: flex;
+      flex-direction: column;
+      border-radius: 5px;
       padding: $padding;
-      gap: $padding;
 
-      .col
+      .item
       {
+        width: 100%;
+        min-width: 2vw;
+        min-height: 1em;
+        width: fit-content;
         display: flex;
-        flex-direction: column;
-        border-radius: 5px;
-        padding: $padding;
-
-        .item
-        {
-          width: 100%;
-          min-width: 2vw;
-          min-height: 1em;
-          width: fit-content;
-          display: flex;
-          justify-content: center;
-          overflow: hidden;
-        }
+        justify-content: center;
+        overflow: hidden;
       }
+    }
 
-      .ivs
-      {
-        background-color: lightblue;
-      }
+    .ivs
+    {
+      background-color: lightblue;
+    }
 
-      .evs
-      {
-        background-color: gold;
-      }
+    .evs
+    {
+      background-color: gold;
+    }
 
-      .maxed
-      {
-        outline: 0.3vh solid black;
-      }
+    .maxed
+    {
+      outline: 0.3vh solid black;
     }
   }
 }
