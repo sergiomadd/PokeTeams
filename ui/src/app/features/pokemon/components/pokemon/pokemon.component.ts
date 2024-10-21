@@ -215,7 +215,13 @@ export class PokemonComponent
     //     -> show selected tooltip
     else
     {
-      for(var i = 0; i < list.length; i++) {
+      for(var i = 0; i < list.length; i++) 
+      {
+        //Close nested tooltip if open
+        if(list[i] && this.tooltipRightType[i])
+        {
+          this.tooltipRightType[i] = false;
+        }
         list[i] = false;
       }
       list[index] = true;

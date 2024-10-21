@@ -44,7 +44,7 @@ $padding: 0.2vw;
     }
   }
 
-  &:hover .poke-tooltip
+  &:hover > .section-content > .poke-tooltip
   {
     visibility: visible;
   }

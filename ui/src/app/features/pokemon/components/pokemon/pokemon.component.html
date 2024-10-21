@@ -73,14 +73,12 @@
       (click)="clickSection(1, 'left')"
       [ngClass]="{'poke-tooltip-selected':  tooltipLeft[1]}"
       >
-        <div class="section-content">
-          <div class="poke-tooltip-wrapper" (click)="$event.stopPropagation()">
-            <div class="poke-tooltip poke-tooltip-left" [ngClass]="{'poke-tooltip-visible':  tooltipLeft[1]}">
-              <div class="head">
-                <span class="head-text">{{pokemon.ability?.name}}</span>
-              </div>
-              <div class="body" [innerHTML]="pokemon.ability?.prose">
-              </div>
+        <div class="section-content poke-tooltip-wrapper">
+          <div class="poke-tooltip poke-tooltip-left" [ngClass]="{'poke-tooltip-visible':  tooltipLeft[1]}">
+            <div class="head">
+              <span class="head-text">{{pokemon.ability?.name}}</span>
+            </div>
+            <div class="body" [innerHTML]="pokemon.ability?.prose">
             </div>
           </div>
           <div class="section-name">
