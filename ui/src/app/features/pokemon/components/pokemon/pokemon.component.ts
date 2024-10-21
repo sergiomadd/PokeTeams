@@ -52,14 +52,15 @@ export class PokemonComponent
   };
   maxStat: number = 0;
 
-  metaEvol: boolean[] = [false];
-  metaTypes: boolean[] = [false, false];
-  metaLeft: boolean[] = [false, false];
-  metaMiddle: boolean[] = [false, false, false];
-  metaRight: boolean[] = [false, false, false, false];
+  tooltipEvol: boolean[] = [false];
+  tooltipTypes: boolean[] = [false, false];
+  tooltipLeft: boolean[] = [false, false];
+  tooltipMiddle: boolean[] = [false, false, false];
+  tooltipRight: boolean[] = [false, false, false, false];
+  tooltipRightType: boolean[] = [false, false, false, false];
   showStats: boolean[] = [false]
   showNotes: boolean[] = [false]
-  metaStats: boolean[] = [false, false, false, false, false, false]
+  tooltipStats: boolean[] = [false, false, false, false, false, false]
 
   constructor(private cdref: ChangeDetectorRef) 
   {
@@ -166,25 +167,28 @@ export class PokemonComponent
     }
   }
 
-  clickMeta(index: number, type: string)
+  clickSection(index: number, type: string)
   {
     let list: boolean[] = [];
     switch(type)
     {
       case "evol":
-        list = this.metaEvol;
+        list = this.tooltipEvol;
       break;
       case "types":
-        list = this.metaTypes;
+        list = this.tooltipTypes;
       break;
       case "left":
-        list = this.metaLeft;
+        list = this.tooltipLeft;
       break;
       case "middle":
-        list = this.metaMiddle;
+        list = this.tooltipMiddle;
         break;
       case "right":
-        list = this.metaRight;
+        list = this.tooltipRight;
+        break;
+      case "rightType":
+        list = this.tooltipRightType;
         break;
       case "showStats":
         list = this.showStats;
@@ -193,16 +197,22 @@ export class PokemonComponent
         list = this.showNotes;
         break;
       case "stat":
-        list = this.metaStats;
+        list = this.tooltipStats;
         break;
     }
-    //If meta visible -> hide it
+
+    //If tooltip visible -> hide it
     if(list[index])
     {
+      //Close nested tooltip if open
+      if(type === "right" && this.tooltipRightType[index])
+      {
+        this.tooltipRightType[index] = false;
+      }
       list[index] = false;
     }
-    //else -> hide all other metas in group
-    //     -> show selected meta
+    //else -> hide all other tooltips in group
+    //     -> show selected tooltip
     else
     {
       for(var i = 0; i < list.length; i++) {
