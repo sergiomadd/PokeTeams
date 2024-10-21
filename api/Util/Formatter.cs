@@ -52,7 +52,7 @@ namespace api.Util
             List<string> damage = new List<string>() { "regular-damage", "super-effective", "not-very-effective" };
 
             string wikiStart = "https://bulbapedia.bulbagarden.net/wiki/";
-            string typeStart = "https://localhost:7134/images/sprites/types/generation-viii/";
+            string typeStart = "https://localhost:7134/images/sprites/types/generation-ix/";
             //string pokemonStart = "https://localhost:7134/images/sprites/pokemon/";
             string category = originalValue.Split(':')[0].Split('{')[1];
             string originalName = originalValue.Split(':')[1].Split('}')[0];
@@ -139,6 +139,12 @@ namespace api.Util
                 return text;
             }
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+        }
+
+        public static string NormalizeString(string text)
+        {
+            //return text.Replace(" ", "").ToLower();
+            return text.ToLower();
         }
     }
 }
