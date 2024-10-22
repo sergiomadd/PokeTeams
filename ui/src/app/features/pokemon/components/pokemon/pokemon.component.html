@@ -90,7 +90,7 @@
         <div 
         class="section"
         (click)="clickSection(0, 'showStats')"
-        [ngClass]="{active: showStats[0]}"
+        [ngClass]="{'poke-tooltip-selected': showStats[0]}"
         >
           <div class="section-content option poke-tooltip-wrapper">
             <div class="poke-tooltip poke-tooltip-top">
@@ -104,7 +104,7 @@
         <div 
         class="section" 
         (click)="clickSection(0, 'showNotes')"
-        [ngClass]="{active: showNotes[0]}"
+        [ngClass]="{'poke-tooltip-selected': showNotes[0]}"
         >
           <div class="section-content option poke-tooltip-wrapper">
             <div class="poke-tooltip poke-tooltip-top">
@@ -406,9 +406,10 @@
             <div class="section"
             (click)="clickSection(i, 'right')"
             [ngClass]="{'poke-tooltip-selected':  tooltipRight[i]}"
-            [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.name ?? '')}"
             >
-              <div class="move section-content poke-tooltip-wrapper">
+              <div class="move section-content poke-tooltip-wrapper"
+              [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.name ?? '')}"
+              >
                 <div class="move-type" [ngStyle]="{'background': theme.getTypeColor(move?.pokeType?.name ?? '')}">
                   <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="move-type-icon">
                 </div>
@@ -425,7 +426,7 @@
                     (click)="clickSection(i, 'rightType'); $event.stopPropagation()"
                     [ngClass]="{'poke-tooltip-selected':  tooltipRightType[i]}"
                     >
-                      <div class="type section-content poke-tooltip-wrapper poke-tooltop-move-type">
+                      <div class="type section-content poke-tooltip-wrapper poke-tooltop-move-type ">
                         <div class="poke-tooltip poke-tooltip-top" [ngClass]="{'poke-tooltip-visible':  tooltipRightType[i]}">
                           <div class="poke-tooltip-types">
                             <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.superEffective?.length ?? false">
@@ -537,8 +538,8 @@
     <div class="stats">
       <ng-container *ngIf="pokemon.stats; else nostats">
         <ng-container *ngFor="let stat of pokemon.stats; index as i">
-          <div class="section" (click)="clickSection(i, 'stat')" [ngClass]="{'poke-tooltip-selected':  tooltipStats[i]}">
-            <div class="section-content stat poke-tooltip-wrapper">
+          <div class="no-pad section" (click)="clickSection(i, 'stat')" [ngClass]="{'poke-tooltip-selected':  tooltipStats[i]}">
+            <div class="section-content stat poke-tooltip-wrapper ">
               <div class="poke-tooltip poke-tooltip-stat poke-tooltip-top" [ngClass]="{'poke-tooltip-visible':  tooltipStats[i]}">
                 <div class="head" [ngStyle]="{backgroundColor: util.getStatColor(stat)}">{{stat.name}}</div>
                 <div class="body row s-gap">
