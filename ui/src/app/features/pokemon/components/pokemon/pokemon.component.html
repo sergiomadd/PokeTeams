@@ -418,7 +418,9 @@
                   </div>
                 </div>
                 <div class="poke-tooltip poke-tooltip-move" [ngClass]="{'poke-tooltip-visible':  tooltipRight[i]}">
-                  <div class="head move-head">
+                  <div class="head move-head" 
+                  [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.name ?? '')}"
+                  >
                     <div class="section"
                     (click)="clickSection(i, 'rightType'); $event.stopPropagation()"
                     [ngClass]="{'poke-tooltip-selected':  tooltipRightType[i]}"
@@ -461,21 +463,24 @@
                                 </div>
                                 <div class="icons">
                                   <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.inmune">
-                                    <img src="{{type.iconPath}}" alt="" class="icon">
+                                    <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
                                   </ng-container>
                                 </div>
                               </div>
                             </ng-container>
                           </div>
                         </div>
-                        <img src="{{util.getTypeNameImagePath(move?.pokeType?.iconPath ?? '')}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="icon-name">
+                        <img src="{{util.getTypeNameImagePath(move?.pokeType?.iconPath ?? '')}}" 
+                        title="{{move?.pokeType?.name}}" 
+                        alt="{{move?.pokeType?.name}}" 
+                        class="icon-name">
                       </div>
                     </div>
                     <div class="head-text">
                       {{move?.name}}
                     </div>
                     <div class="head-class">
-                      <img src="{{move?.damageClass?.iconPath}}" alt="" class="icon-name">
+                      <img src="{{move?.damageClass?.iconPath}}" alt="" class="class-icon">
                     </div>
                   </div>
                   <div class="body">

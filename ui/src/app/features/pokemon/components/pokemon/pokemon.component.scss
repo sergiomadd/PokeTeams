@@ -25,6 +25,7 @@ $padding: 0.2vw;
 {
   width: auto;
   height: $iconSize;
+  border-radius: 10px;
 }
 
 .section
@@ -331,7 +332,7 @@ $padding: 0.2vw;
   }
 }
 
-//-----------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
 //poke-tooltip 
 
 .poke-tooltip-selected
@@ -339,7 +340,6 @@ $padding: 0.2vw;
   outline: 1px solid var(--text-color) !important;
   outline-offset: 0.1vw;
   border-radius: 5px;
-  background-color: var(--bg-color-2);
 }
 
 .poke-tooltip-wrapper
@@ -382,12 +382,13 @@ $padding: 0.2vw;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: $paddingBig;
+      padding: $paddingBig $paddingBig $paddingBig $padding;
       border-radius: 5px 5px 0 0;
 
       .head-text
       {
         font-size: larger;
+        text-align: center;
       }
     }
 
@@ -535,13 +536,8 @@ $padding: 0.2vw;
 
     .move-head
     {
-      /*
       display: grid;
-      grid-template-columns: 35% 55% 10%;
-      justify-content: center;
-      */
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      grid-template-columns: auto 1fr 90px;
       gap: 0.4em;
 
       .poke-tooltop-move-type
@@ -555,6 +551,12 @@ $padding: 0.2vw;
       {
         display: flex;
         justify-content: end;
+
+        .class-icon
+        {
+          width: auto;
+          max-height: $iconSize*1.2;
+        }
       }
     }
 
