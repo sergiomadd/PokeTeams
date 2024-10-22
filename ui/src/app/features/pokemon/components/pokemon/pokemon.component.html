@@ -468,14 +468,14 @@
                             </ng-container>
                           </div>
                         </div>
-                        <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="icon">
+                        <img src="{{util.getTypeNameImagePath(move?.pokeType?.iconPath ?? '')}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="icon-name">
                       </div>
                     </div>
                     <div class="head-text">
                       {{move?.name}}
                     </div>
-                    <div>
-                      <img src="{{move?.damageClass?.iconPath}}" alt="" class="icon">
+                    <div class="head-class">
+                      <img src="{{move?.damageClass?.iconPath}}" alt="" class="icon-name">
                     </div>
                   </div>
                   <div class="body">

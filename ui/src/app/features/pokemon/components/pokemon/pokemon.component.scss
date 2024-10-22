@@ -21,6 +21,12 @@ $padding: 0.2vw;
   height: $iconSize * 1.5;
 }
 
+.icon-name
+{
+  width: auto;
+  height: $iconSize;
+}
+
 .section
 {
   height: 100%;
@@ -529,15 +535,26 @@ $padding: 0.2vw;
 
     .move-head
     {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      /*
+      display: grid;
+      grid-template-columns: 35% 55% 10%;
+      justify-content: center;
+      */
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0.4em;
 
       .poke-tooltop-move-type
       {
         display: flex;
-        justify-content: center;
+        justify-content: start;
         align-items: center;
+      }
+
+      .head-class
+      {
+        display: flex;
+        justify-content: end;
       }
     }
 

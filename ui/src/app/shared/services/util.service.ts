@@ -290,4 +290,10 @@ export class UtilService
     }
     return undefined;
   }
+
+  getTypeNameImagePath(typeIconPath: string)
+  {
+    //https://localhost:7134/images/sprites/types/generation-ix/fire.png
+    return typeIconPath ? typeIconPath.replace("ix", "ix_names") : typeIconPath;
+  }
 }
