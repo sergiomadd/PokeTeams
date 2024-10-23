@@ -106,7 +106,7 @@ namespace api.Services
                 Gender = pokemon.Gender,
                 Moves = moves,
                 Item = await GetItemByIdentifier(pokemon.ItemIdentifier),
-                AbilityName = GetAbilityByIdentifier(pokemon.AbilityIdentifier).Result.Name ?? ""
+                AbilityName = GetAbilityByIdentifier(pokemon.AbilityIdentifier)?.Result?.Name ?? ""
             };
         }
 
@@ -275,6 +275,7 @@ namespace api.Services
                 if (abilities != null && abilityProse != null)
                 {
                     ability = new AbilityDTO(abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
+                    //ability = new AbilityDTO(abilities.identifier, abilityNames.name, abilityProse.effect);
                 }
             }
             return ability;
@@ -291,6 +292,7 @@ namespace api.Services
                 if (abilityNames != null && abilityProse != null)
                 {
                     ability = new AbilityDTO(abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
+                    //ability = new AbilityDTO(abilities.identifier, abilityNames.name, abilityProse.effect);
                 }
             }
             return ability;

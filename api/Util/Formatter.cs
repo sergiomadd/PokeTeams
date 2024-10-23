@@ -9,9 +9,8 @@ namespace api.Util
     {
         public static string FormatProse(string value, string[]? args = null)
         {
-            //"https://bulbapedia.bulbagarden.net/wiki/Water_Absorb_(Ability)"
             string formated = value;
-            //Regex example: [freeze]{mechanic:freeze}
+            //Regex example: [paralyzed]{mechanic:paralysis}
             string linkRegex = new Regex(@"(\[.+?})").ToString();
             if (Regex.IsMatch(value, linkRegex))
             {
@@ -45,6 +44,7 @@ namespace api.Util
         {
             //cases where the data category comes as "mechanic"
             //but the bulbapedia url doesnt use (status_condition)
+
             List<string> weather = new List<string>() { "weather", "fog", "harsh-sunlight", "strong-sunlight", "rain", "shadowy-aura", "snow", "strong-winds" };
             List<string> misc = new List<string>() { "power", "pp", "accuracy", "priority", "critical-hit" };
             List<string> weatherConditions = new List<string>() { "hail", "sandstorm" };
@@ -54,14 +54,27 @@ namespace api.Util
             string wikiStart = "https://bulbapedia.bulbagarden.net/wiki/";
             string typeStart = "https://localhost:7134/images/sprites/types/generation-ix/";
             //string pokemonStart = "https://localhost:7134/images/sprites/pokemon/";
-            string category = originalValue.Split(':')[0].Split('{')[1];
-            string originalName = originalValue.Split(':')[1].Split('}')[0];
-            string formatedName = FormatNameForLink(originalName);
+
+            //Original value: [paralyzed]{mechanic:paralysis} -> [originalName]{categoryType:categoryName}
+            //Output: [originalName](path){categoryType:categoryName}
+
+            string originalName = originalValue.Split('[')[1].Split(']')[0];
+            string categoryType = originalValue.Split(':')[0].Split('{')[1];
+            string categoryName = originalValue.Split(':')[1].Split('}')[0];
+            string formatedName = FormatNameForLink(categoryName);
             string formatedCategory = "";
             string end = "";
             string link = "";
+            string result = "";
 
-            switch (category)
+            if (originalName.Equals(""))
+            {
+                originalName = categoryName;
+            }
+
+            //Swith to make link for bulbapedia
+            //Format: "https://bulbapedia.bulbagarden.net/wiki/Water_Absorb_(Ability)"
+            switch (categoryType)
             {
                 case "pokemon":
                     formatedCategory = "_(Pokémon)"; //maybe change this for pokemon icon?
@@ -70,7 +83,8 @@ namespace api.Util
                 case "type":
                     end = originalName + ".png";
                     link = typeStart + end;
-                    return originalValue[1] == ']' ? originalValue.Insert(1, link) : ReplaceFirst(originalValue, originalName, link);
+                    result = "[" + originalName + "]" + "(" + link + ")" + "{" + categoryType + "}";
+                    return result;
                 case "move":
                     formatedCategory = "_(move)";
                     end = formatedName + formatedCategory;
@@ -81,26 +95,28 @@ namespace api.Util
                     break;
                 case "mechanic":
                     formatedCategory = "_(status_condition)";
-                    if (weatherConditions.Contains(originalName)) { formatedCategory = "_(weather_condition)"; }
+                    if (weatherConditions.Contains(categoryName)) { formatedCategory = "_(weather_condition)"; }
 
                     end = formatedName + formatedCategory;
 
-                    if (weather.Contains(originalName) || misc.Contains(originalName)) { end = formatedName; }
-                    if (stats.Contains(originalName))
+                    if (weather.Contains(categoryName) || misc.Contains(categoryName)) { end = formatedName; }
+                    if (stats.Contains(categoryName))
                     {
                         formatedCategory = "Stat#";
                         end = formatedCategory + formatedName;
                         link = wikiStart + end;
-                        return originalValue[1] == ']' ? originalValue.Insert(1, link) : ReplaceFirst(originalValue, formatedName, link);
+                        result = "[" + originalName + "]" + "(" + link + ")" + "{" + categoryType + "}";
+                        return result;
                     }
-                    if (damage.Contains(originalName)) { end = "Type#Type_effectiveness"; }
-                    if (originalName.Equals("stat-modifier") || originalName.Equals("stage")) { end = "Stat_modifier#In-battle_modification"; }
-                    if (originalName.Equals("stat-modifier")) { end = "Stat_modifier#In-battle_modification"; }
+                    if (damage.Contains(categoryName)) { end = "Type#Type_effectiveness"; }
+                    if (categoryName.Equals("stat-modifier") || categoryName.Equals("stage")) { end = "Stat_modifier#In-battle_modification"; }
+                    if (categoryName.Equals("stat-modifier")) { end = "Stat_modifier#In-battle_modification"; }
                     break;
             }
 
             link = wikiStart + end;
-            return originalValue[1] == ']' ? originalValue.Insert(1, link) : ReplaceFirst(originalValue, originalName, link);
+            result = "[" + originalName + "]" + "(" + link + ")" + "{" + categoryType + "}";
+            return result;
         }
 
         public static string FormatNameForLink(string name)
