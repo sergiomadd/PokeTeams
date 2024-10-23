@@ -4,6 +4,7 @@ import { Nature } from 'src/app/features/pokemon/models/nature.model';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { Stat } from 'src/app/features/pokemon/models/stat.model';
 import { TeamOptions } from 'src/app/features/team/models/teamOptions.model';
+import { ProcessedString } from 'src/app/shared/models/processedString.model';
 import { LinkifierService } from 'src/app/shared/services/linkifier.service';
 import { ParserService } from 'src/app/shared/services/parser.service';
 import { UtilService } from 'src/app/shared/services/util.service';
@@ -52,11 +53,11 @@ export class PokemonComponent
   };
   maxStat: number = 0;
 
-  abilityProse: any[] = [];
-  itemProse: any[] = [];
-  moveEffectsShort: any[] = [];
-  moveEffectsLong: any[] = [];
-  moveTargets: any[] = [];
+  abilityProse: ProcessedString[] = [];
+  itemProse: ProcessedString[] = [];
+  moveEffectsShort: ProcessedString[][] = [];
+  moveEffectsLong: ProcessedString[][] = [];
+  moveTargets: ProcessedString[][] = [];
 
   tooltipEvol: boolean[] = [false];
   tooltipTypes: boolean[] = [false, false];
@@ -73,28 +74,27 @@ export class PokemonComponent
 
   }
 
-  ngOnChanges(changes: SimpleChanges)
+  async ngOnChanges(changes: SimpleChanges)
   {
     if(changes['teamOptions'])
     {
       this.teamOptions = changes['teamOptions'].currentValue;
-      this.configurePokemon();
+      this.loadSprite();
+      this.calculateStats();
       this.calculateMaxStat();
     }
     if(changes['pokemon'])
     {
       this.pokemon = changes['pokemon'].currentValue;
-      this.configurePokemon();
+      this.loadSprite();
+      this.calculateStats();
+      await this.linkify();
       this.calculateMaxStat();
-      console.log(this.pokemon)
     }
   }
 
-  ngOnInit()
+  async ngOnInit()
   {
-    console.log(this.pokemon)
-    this.configurePokemon();
-
     this.maleIconPath = "https://localhost:7134/images/sprites/gender/male.png";
     this.femaleIconPath = "https://localhost:7134/images/sprites/gender/female.png";
   
@@ -103,13 +103,6 @@ export class PokemonComponent
       this.showStats[0] = true;
     }
   }
-
-  configurePokemon()
-  {
-    this.loadSprite();
-    this.calculateStats();
-    this.linkify();
-  }  
 
   calculateMaxStat()
   {
@@ -128,11 +121,11 @@ export class PokemonComponent
   {
     if(this.pokemon?.item)
     {
-      this.abilityProse = this.linkifier.linkifyProse(this.pokemon.item?.prose);
+      this.abilityProse = this.linkifier.linkifyProse(this.pokemon.ability?.prose);
     }
     if(this.pokemon?.ability)
     {
-      this.itemProse = this.linkifier.linkifyProse(this.pokemon.ability?.prose);
+      this.itemProse = this.linkifier.linkifyProse(this.pokemon.item?.prose);
     }
     if(this.pokemon?.moves && this.pokemon.moves[0] && this.pokemon.moves[0].effect)
     {
