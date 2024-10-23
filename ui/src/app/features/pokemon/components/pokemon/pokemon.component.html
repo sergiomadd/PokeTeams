@@ -59,7 +59,14 @@
             <div class="head">
               <span class="head-text">{{pokemon.item?.name}}</span>
             </div>
-            <div class="body" [innerHTML]="formatItemProse(pokemon.item?.prose)">
+            <div class="body">
+              <ng-container *ngFor="let chunk of itemProse">
+                <ng-container [ngSwitch]="chunk.type">
+                  <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
+                  <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
+                  <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
+                </ng-container>
+              </ng-container>
             </div>
           </div>
           <div class="section-name">
@@ -78,7 +85,14 @@
             <div class="head">
               <span class="head-text">{{pokemon.ability?.name}}</span>
             </div>
-            <div class="body" [innerHTML]="pokemon.ability?.prose">
+            <div class="body">
+              <ng-container *ngFor="let chunk of abilityProse">
+                <ng-container [ngSwitch]="chunk.type">
+                  <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
+                  <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
+                  <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
+                </ng-container>
+              </ng-container>
             </div>
           </div>
           <div class="section-name">
@@ -486,10 +500,26 @@
                   </div>
                   <div class="body">
                     <div class="property">
-                      <span class="property-title">Effect:</span> <span [innerHTML]="move?.effect?.short"></span>
+                      <span class="property-title">Effect:</span> 
+                      <span>
+                        <ng-container *ngFor="let chunk of moveEffectsShort[i]">
+                          <ng-container [ngSwitch]="chunk.type">
+                            <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
+                            <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
+                            <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
+                          </ng-container>
+                        </ng-container>
+                      </span>
                     </div>
                     <div class="property">
-                      <span class="property-title">Target:</span>{{move?.target?.description}}
+                      <span class="property-title">Target:</span>
+                      <ng-container *ngFor="let chunk of moveTargets[i]">
+                        <ng-container [ngSwitch]="chunk.type">
+                          <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
+                          <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
+                          <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
+                        </ng-container>
+                      </ng-container>
                     </div>
                     <div class="move-bottom">
                       <div class="primary">
