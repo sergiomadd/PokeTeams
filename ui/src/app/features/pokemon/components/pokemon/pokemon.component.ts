@@ -172,6 +172,7 @@ export class PokemonComponent
     }
   }
 
+  //For tooltip
   clickSection(index: number, type: string)
   {
     let list: boolean[] = [];
@@ -194,12 +195,6 @@ export class PokemonComponent
         break;
       case "rightType":
         list = this.tooltipRightType;
-        break;
-      case "showStats":
-        list = this.showStats;
-        break;
-      case "showNotes":
-        list = this.showNotes;
         break;
       case "stat":
         list = this.tooltipStats;
@@ -231,6 +226,17 @@ export class PokemonComponent
       }
       list[index] = true;
     }
+  }
+
+  triggerStats()
+  {
+    if(this.showStats[0]) { this.tooltipStats = this.tooltipStats.fill(false); }
+    this.showStats[0] = !this.showStats[0];
+  }
+
+  triggerNotes()
+  {
+    this.showNotes[0] = !this.showNotes[0];
   }
 
   closeAllTooltips()

@@ -103,7 +103,7 @@
       <div class="item options">
         <div 
         class="section"
-        (click)="clickSection(0, 'showStats')"
+        (click)="triggerStats()"
         [ngClass]="{'poke-tooltip-selected': showStats[0]}"
         >
           <div class="section-content option poke-tooltip-wrapper">
@@ -117,7 +117,7 @@
         </div>
         <div 
         class="section" 
-        (click)="clickSection(0, 'showNotes')"
+        (click)="triggerNotes()"
         [ngClass]="{'poke-tooltip-selected': showNotes[0]}"
         >
           <div class="section-content option poke-tooltip-wrapper">

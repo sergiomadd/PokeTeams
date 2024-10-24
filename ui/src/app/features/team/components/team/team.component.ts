@@ -48,14 +48,14 @@ export class TeamComponent
       case 0:
         this.pokemonComponents.forEach(pokemon => 
         {
-          pokemon.showStats[0] = !this.showAllStats;
+          pokemon.triggerStats();
         });
         this.showAllStats = !this.showAllStats;
       break;
       case 1:
         this.pokemonComponents.forEach(pokemon => 
           {
-            pokemon.showNotes[0] = !this.showAllNotes;
+            pokemon.triggerNotes();
           });
           this.showAllNotes = !this.showAllNotes;
         break;
