@@ -105,6 +105,18 @@ export class UtilService
     {
       return "The team wont be added to your user";
     }
+    if(control?.hasError('min'))
+    {
+      return `The value has to be higher than ${control.getError('min')['min']}`;
+    }
+    if(control?.hasError('max'))
+    {
+      return `The value has to be lower than ${control.getError('max')['max']}`;
+    }
+    if(control?.hasError('nan'))
+    {
+      return `The value has to be a number`;
+    }
     return "error";
   }
 

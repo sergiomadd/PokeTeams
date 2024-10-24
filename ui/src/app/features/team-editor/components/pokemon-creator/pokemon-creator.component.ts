@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { Stat } from 'src/app/features/pokemon/models/stat.model';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
@@ -35,10 +35,11 @@ export class PokemonCreatorComponent
   @ViewChild(PokemonComponent) pokemonPreviewComponent!: PokemonComponent;
   selectedPokemonIndex: number = 0;
   allAbilities: boolean = false;
-  
+
+  pokemonFormSubmitted: boolean = false;
   pokemonForm = this.formBuilder.group(
     {
-      nickname: "",
+      nickname: ["", [Validators.minLength(1), Validators.maxLength(16)]],
       shiny: [false],
       gender: [false],
       level: [50, [Validators.min(1), Validators.max(100)]],
@@ -72,9 +73,17 @@ export class PokemonCreatorComponent
 
     this.pokemonForm.controls.level.valueChanges.subscribe(async (value) => 
     {
-      if(this.pokemonForm.controls.level.valid)
+      if(value)
       {
-        this.pokemons[this.selectedPokemonIndex].level = value ?? 50;
+        if(typeof +value === "number" && !isNaN(+value))
+        { 
+          this.pokemonForm.controls.level.setErrors({ "nan": true }); 
+        }
+        if(this.pokemonForm.controls.level.valid)
+        {
+          console.log("valid")
+          this.pokemons[this.selectedPokemonIndex].level = value ?? 50;
+        }
       }
     });
 
@@ -364,5 +373,20 @@ export class PokemonCreatorComponent
       sprite: undefined,
     }
     return pokemon;
+  }
+
+  isInvalid(key: string) : boolean
+  {
+    var control = this.pokemonForm.get(key);
+    return (control?.errors
+      && (control?.dirty || control?.touched
+        || this.pokemonFormSubmitted)) 
+      ?? false;
+  }
+
+  getError(key: string) : string
+  {
+    let control: AbstractControl | null =  this.pokemonForm.get(key);
+    return this.util.getAuthFormError(control);
   }
 }

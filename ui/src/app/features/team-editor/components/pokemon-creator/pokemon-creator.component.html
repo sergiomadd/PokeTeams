@@ -52,20 +52,26 @@
             ></app-smart-input>
           </div>
           <div class="form-item form-item-col">
-            <div class="row s-gap">
-              <label for="">Nickname</label>
-              <input type="text" class="nickname" formControlName="nickname">
+            <div class="col">
+              <div class="row-center s-gap">
+                <label for="">Nickname</label>
+                <input type="text" class="nickname" formControlName="nickname">
+              </div>
+              <span *ngIf="isInvalid('nickname')" class="formFeedbackError text-center">{{getError('nickname')}}</span>
             </div>
             <div class="row-center s-gap">
-              <div class="row s-gap">
-                <label for="">Level</label>
-                <input class="level" formControlName="level">
+              <div class="col">
+                <div class="row-center s-gap">
+                  <label for="">Level</label>
+                  <input type="text" class="level" formControlName="level" placeholder="50">
+                  <app-checkbox
+                  [checked]="pokemons[selectedPokemonIndex].shiny ?? false"
+                  [label]="'Shiny'"
+                  (checkEvent)="shinySelectEvent($event)"
+                  ></app-checkbox>
+                </div>
+                <span *ngIf="isInvalid('level')" class="formFeedbackError text-center">{{getError('level')}}</span>
               </div>
-              <app-checkbox
-              [checked]="pokemons[selectedPokemonIndex].shiny ?? false"
-              [label]="'Shiny'"
-              (checkEvent)="shinySelectEvent($event)"
-              ></app-checkbox>
             </div>
             <div class="row s-gap">
               <app-radio
@@ -220,6 +226,7 @@
         [pokemon]="pokemons[selectedPokemonIndex]" 
         [teamOptions]="teamOptions" 
         [showStatsStart]="true"
+        [editorPreview] = "true"
         ></app-pokemon>
       </div>
     </div>
