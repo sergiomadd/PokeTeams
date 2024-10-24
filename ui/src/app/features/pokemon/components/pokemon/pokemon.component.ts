@@ -34,6 +34,7 @@ export class PokemonComponent
   @Input() pokemon!: Pokemon;
   @Input() teamOptions?: TeamOptions;
   @Input() showStatsStart?: boolean = false;
+  @Input() editorPreview?: boolean = false;
   @Output() updateStats = new EventEmitter();
 
   test: string = "test"
@@ -102,6 +103,15 @@ export class PokemonComponent
     {
       this.showStats[0] = true;
     }
+    
+    this.pokemon.notes = `
+    Lorem ipsum odor amet, consectetuer adipiscing elit. Est taciti etiam cursus rutrum cras tincidunt nostra curae. Consectetur bibendum parturient accumsan imperdiet augue fermentum dolor scelerisque. Faucibus rhoncus varius non convallis egestas ridiculus ornare consectetur curae. Ut fringilla inceptos taciti; consectetur egestas blandit. Euismod fames ridiculus iaculis amet mus himenaeos dignissim.
+
+Nulla morbi auctor platea tincidunt ut semper nam. Nisl donec auctor nulla fames tristique, nibh integer. Cubilia quisque tellus quam erat quam dolor nullam justo. Vestibulum tincidunt varius etiam faucibus varius dui dictum ullamcorper vulputate. Mauris aliquet conubia aliquet amet laoreet interdum habitant. Gravida amet suspendisse amet platea, egestas vulputate sapien. Vitae facilisis platea platea, nunc nostra laoreet. Tempus convallis condimentum fringilla; porta aptent commodo dictum.
+
+Nisi pharetra venenatis congue elit, dui nisi bibendum enim parturient. Praesent condimentum finibus sit; vulputate mus vulputate convallis vehicula. Id natoque vitae himenaeos montes torquent vitae. Ac purus laoreet facilisi lacus ultrices penatibus feugiat condimentum. Mi dignissim ultricies dapibus; nec nec habitant. Orci iaculis euismod tortor cras consequat penatibus. Ridiculus leo dictumst facilisis ipsum diam tristique porta diam per. Fermentum vivamus ultrices; eros magnis potenti tempus. Pharetra fusce elementum dignissim at auctor nec accumsan malesuada.
+    `
+    
   }
 
   calculateMaxStat()

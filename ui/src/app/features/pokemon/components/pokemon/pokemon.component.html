@@ -118,12 +118,21 @@
         <div 
         class="section" 
         (click)="triggerNotes()"
-        [ngClass]="{'poke-tooltip-selected': showNotes[0]}"
+        [ngClass]="{'poke-tooltip-selected': showNotes[0], 'option-disabled': !pokemon.notes}"
         >
-          <div class="section-content option poke-tooltip-wrapper">
+          <div 
+          class="section-content option poke-tooltip-wrapper"
+          >
             <div class="poke-tooltip poke-tooltip-top">
               <div class="one-piece">
-                <span class="one-line">Show notes</span>
+                <span class="one-line">
+                  <ng-container *ngIf="pokemon.notes; else nonotes">
+                    Show notes
+                  </ng-container>
+                  <ng-template #nonotes>
+                    No notes
+                  </ng-template>
+                </span>
               </div>
             </div>
             <img src="assets/edit.png" alt="" class="icon">
@@ -690,11 +699,23 @@
       </ng-container>
     </div>
   </div>
-  <div *ngIf="showNotes[0]; else void">
-    <div class="notes">
-
-    </div>
-  </div>
+  <ng-container *ngIf="showNotes[0]; else void">
+    <ng-container *ngIf="editorPreview; else editableNotes">
+      <div class="notes-editor">
+        <textarea
+        class=" custom-scrollbar-dark" 
+        rows="5" 
+        formControlName="notes"
+        spellcheck="false"
+        ></textarea>
+      </div>
+    </ng-container>
+    <ng-template #editableNotes>
+      <div class="notes custom-scrollbar-dark">
+        {{pokemon.notes}}
+      </div>
+    </ng-template>
+  </ng-container>
 </div>
 <ng-template #nostats class="center error">NO STATS FOUND</ng-template>
 <ng-template #empty><div class="empty"></div></ng-template>
