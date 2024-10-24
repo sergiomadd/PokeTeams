@@ -14,7 +14,9 @@
           <ng-container *ngIf="team?.tournament?.official">
             <img src="assets/regionals.png" alt="" class="icon">
           </ng-container>
-          {{team?.tournament?.name}}
+          <div class="detail-text">
+            {{team?.tournament?.name}}
+          </div>
         </div>
       </ng-container>
       <ng-container *ngIf="team?.regulation">
@@ -52,18 +54,36 @@
     <ng-container *ngIf="team?.pokemons && team?.pokemons!.length > 0">
       <div class="options margin-y-s s-gap">
         <div 
-        class="option-wrappe detail"
+        class="detail option tooltip-wrapper"
         (click)="clickOptions(0)"
         [ngClass]="{active: showAllStats}"
         >
-          <img src="assets/align-left.png" alt="" class="icon">
+          <app-tooltip
+          [text]="'Show all stats'"
+          [side]="'right'"
+          ></app-tooltip>
+          <img src="assets/align-left.png" alt="" class="option-icon">
         </div>
         <div 
-        class="option-wrapper detail" 
+        class="detail option tooltip-wrapper" 
         (click)="clickOptions(1)"
         [ngClass]="{active: showAllNotes}"
         >
-          <img src="assets/edit.png" alt="" class="icon">
+          <app-tooltip
+          [text]="'Show all notes'"
+          [side]="'right'"
+          ></app-tooltip>
+          <img src="assets/edit.png" alt="" class="option-icon">
+        </div>
+        <div 
+        class="detail option tooltip-wrapper" 
+        (click)="clickOptions(2)"
+        >
+          <app-tooltip
+          [text]="'Close all tooltips'"
+          [side]="'right'"
+          ></app-tooltip>
+          <img src="assets/tooltip-close.svg" alt="" class="option-icon">
         </div>
       </div>
     </ng-container>

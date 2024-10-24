@@ -233,6 +233,19 @@ export class PokemonComponent
     }
   }
 
+  closeAllTooltips()
+  {
+    this.tooltipEvol = this.tooltipEvol.fill(false);
+    this.tooltipTypes = this.tooltipTypes.fill(false);
+    this.tooltipLeft = this.tooltipLeft.fill(false);
+    this.tooltipMiddle = this.tooltipMiddle.fill(false);
+    this.tooltipRight = this.tooltipRight.fill(false);
+    this.tooltipRightType = this.tooltipRightType.fill(false);
+    this.showStats = this.showStats.fill(false);
+    this.showNotes = this.showNotes.fill(false);
+    this.tooltipStats = this.tooltipStats.fill(false);
+  }
+
   copyPokemon()
   {
     this.util.copyToClipboard(this.parser.reverseParsePokemon(this.pokemon));

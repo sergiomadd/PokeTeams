@@ -60,12 +60,18 @@ export class TeamComponent
           this.showAllNotes = !this.showAllNotes;
         break;
       case 2:
-        this.team?.pokemons ? this.util.copyToClipboard(this.parser.reversePaste(this.team?.pokemons)):undefined;
-        break;
-      default: 
-      return "";
+        this.closeAllTooltips();
+        break; 
     }
-    return "";
+  }
+
+  closeAllTooltips()
+  {
+    this.pokemonComponents.forEach(pokemonComponent => 
+      {
+        pokemonComponent.closeAllTooltips();
+      }
+    );
   }
 
   @Output() removeEvent = new EventEmitter<Tag>()
