@@ -61,7 +61,8 @@ namespace api.Services
                 Level = pokemon.Level,
                 Shiny = pokemon.Shiny,
                 Gender = pokemon.Gender,
-                Sprite = pokemonData.Sprite
+                Sprite = pokemonData.Sprite,
+                Notes = pokemon.Notes
             };
         }
 

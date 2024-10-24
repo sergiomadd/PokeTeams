@@ -27,5 +27,6 @@ namespace api.Models.DBPoketeamModels
         public int? Level { get; set; }
         public bool? Shiny { get; set; }
         public bool? Gender { get; set; }
+        public string? Notes { get; set; }
     }
 }
