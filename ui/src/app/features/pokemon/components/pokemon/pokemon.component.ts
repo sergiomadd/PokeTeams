@@ -167,7 +167,7 @@ Nisi pharetra venenatis congue elit, dui nisi bibendum enim parturient. Praesent
   {
     if(this.pokemon.sprite)
     {
-      if(this.pokemon.gender)
+      if(this.pokemon.gender && this.pokemon.sprite.female)
       {
         this.pokemonSpritePath = this.pokemon.shiny ? this.pokemon.sprite.shinyFemale : this.pokemon.sprite.female
       }
