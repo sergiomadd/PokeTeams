@@ -114,26 +114,13 @@ Nisi pharetra venenatis congue elit, dui nisi bibendum enim parturient. Praesent
     
   }
 
-  calculateMaxStat()
-  {
-    this.maxStat = Math.max(...this.calculatedStats?.total.map(v => v.value));
-    this.updateStats.emit(this.maxStat);
-  }
-
-  getStatSize(value: number)
-  {
-    let maxValue: number = this.teamOptions && this.teamOptions?.maxStat > 0 ? this.teamOptions?.maxStat : 700; //the maximun stat value of any pokemons
-    let maxSize: number = 20; //the maximun allowed size in vw
-    return `${value / maxValue * maxSize}vw`;
-  }
-
   async linkify()
   {
-    if(this.pokemon?.item)
+    if(this.pokemon?.ability)
     {
       this.abilityProse = this.linkifier.linkifyProse(this.pokemon.ability?.prose);
     }
-    if(this.pokemon?.ability)
+    if(this.pokemon?.item)
     {
       this.itemProse = this.linkifier.linkifyProse(this.pokemon.item?.prose);
     }
@@ -279,6 +266,20 @@ Nisi pharetra venenatis congue elit, dui nisi bibendum enim parturient. Praesent
   }
 
   //stats
+
+  calculateMaxStat()
+  {
+    this.maxStat = Math.max(...this.calculatedStats?.total.map(v => v.value));
+    this.updateStats.emit(this.maxStat);
+  }
+
+  getStatSize(value: number)
+  {
+    let maxValue: number = this.teamOptions && this.teamOptions?.maxStat > 0 ? this.teamOptions?.maxStat : 700; //the maximun stat value of any pokemons
+    let maxSize: number = 24; //the maximun allowed size in em
+    return `${value / maxValue * maxSize}em`;
+  }
+
   calculateStats()
   {
     if(this.pokemon.stats)
@@ -323,6 +324,7 @@ Nisi pharetra venenatis congue elit, dui nisi bibendum enim parturient. Praesent
         }
       });
     }
+
     /* TODO: handle no stats (wrong poke name) case
     else
     {
