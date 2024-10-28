@@ -7,20 +7,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class RadioComponent 
 {
-  @Input() obj?: any;
-  @Input() objSelector?: string;
-  @Input() options: boolean[] = [];
+  @Input() options: any[] = [];
   @Input() optionNames: string[] = [];
-  @Input() selected?: number;
-  @Output() checkEvent = new EventEmitter<number>();
+  @Input() selectedIndex?: number;
+  @Output() selectEvent = new EventEmitter<number>();
 
-  clickEvent($event: number)
+  select($event: number)
   {
-    this.selected = $event;
-    if(this.objSelector && this.options)
-    {
-      this.obj[this.objSelector] = this.options[this.selected];
-    }
-    this.checkEvent.emit(this.selected);
+    this.selectedIndex = $event;
+    this.selectEvent.emit(this.options[this.selectedIndex]);
   }
 }

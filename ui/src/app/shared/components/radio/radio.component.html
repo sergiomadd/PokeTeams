@@ -1,7 +1,7 @@
 
 <div class="radio">
   <ng-container *ngFor="let option of options; index as i">
-    <div class="option" (click)="clickEvent(i)" [ngClass]="{selected: selected == i}">
+    <div class="option" (click)="select(i)" [ngClass]="{selected: selectedIndex == i}">
       {{optionNames[i]}}
     </div>
   </ng-container>

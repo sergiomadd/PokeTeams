@@ -13,9 +13,10 @@ import { AuthModule } from './auth/auth.module';
 import { MenuComponent } from './core/layout/menu/menu.component';
 import { EvolutionComponent } from './features/pokemon/components/evolution/evolution.component';
 import { PokemonPreviewComponent } from './features/pokemon/components/pokemon-preview/pokemon-preview.component';
+import { PokemonComponent } from './features/pokemon/components/pokemon/pokemon.component';
 import { SearchComponent } from './features/search/pages/search/search.component';
 import { InputComponent } from './features/team-editor/components/input/input.component';
-import { PokemonCreatorComponent } from './features/team-editor/components/pokemon-creator/pokemon-creator.component';
+import { PokemonEditorComponent } from './features/team-editor/components/pokemon-editor/pokemon-editor.component';
 import { TeamEditorComponent } from './features/team-editor/pages/team-editor/team-editor.component';
 import { ColorPickerComponent } from './features/team/components/color-picker/color-picker.component';
 import { RegulationSelectorComponent } from './features/team/components/regulation-selector/regulation-selector.component';
@@ -41,7 +42,6 @@ import { SwitchComponent } from './shared/components/switch/switch.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
 import { LinkerPipe } from './shared/pipes/linker.pipe';
 import { metaReducers } from './state/app.state';
-import { PokemonComponent } from './features/pokemon/components/pokemon/pokemon.component';
 
 @NgModule({
   declarations: [
@@ -67,7 +67,6 @@ import { PokemonComponent } from './features/pokemon/components/pokemon/pokemon.
     SmartInputComponent,
     TooltipComponent,
     PaginationComponent,
-    PokemonCreatorComponent,
     CheckboxComponent,
     RadioComponent,
     TagEditorComponent,
@@ -77,6 +76,7 @@ import { PokemonComponent } from './features/pokemon/components/pokemon/pokemon.
     TournamentEditorComponent,
     RegulationSelectorComponent,
     PokemonComponent,
+    PokemonEditorComponent,
   ],
   exports: [],
   imports: [
