@@ -1,13 +1,13 @@
 <div class="input">
-  <div class="selectors">
-    <div class="selector" (click)="select(0)">
+  <div class="tabs">
+    <div class="tab" (click)="selectTab(0)">
       Paste
     </div>
-    <div class="selector" (click)="select(1)">
+    <div class="tab" (click)="selectTab(1)">
       Creator
     </div>
   </div>
-  <ng-container *ngIf="sections[0]; else creator">
+  <ng-container *ngIf="tabs[0]; else editor">
     <div class="title">
     </div>
     <div>
@@ -32,11 +32,31 @@
       </form>
     </div>
   </ng-container>
-  <ng-template #creator>
-    <app-pokemon-creator 
-    [pokemons]="team.pokemons"
-    [teamOptions]="team.options"
-    (addPokemonEvent)="addPokemon($event)"
-    ></app-pokemon-creator>
+  <ng-template #editor>
+    <div class="editor">
+      <div class="selectors">
+        <ng-container *ngFor="let pokemon of team.pokemons; index as i">
+          <div 
+          class="selector"
+          [ngClass]="{selected: selectedPokemonIndex == i}"
+          (click)="selectPokemon(i)"
+          >
+            {{i + 1}}
+          </div>
+        </ng-container>
+        <ng-container *ngIf="team.pokemons.length < 6">
+          <div class="selector" (click)="addEmptyPokemon()">
+            +
+          </div>
+        </ng-container>
+      </div>
+      <div class="editors">
+        <app-pokemon-editor
+        [pokemon]="team.pokemons[selectedPokemonIndex]"
+        [teamOptions]="team.options"
+        (deleteEvent)="deletePokemon($event)"
+        ></app-pokemon-editor>
+      </div>
+    </div>
   </ng-template>
 </div>

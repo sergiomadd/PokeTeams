@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
 import { Team } from 'src/app/features/team/models/team.model';
 import { ParserService } from 'src/app/shared/services/parser.service';
@@ -19,8 +20,8 @@ export class InputComponent
   formData;
   pasteHolder: string;
   team: Team = <Team>{};
-
-  sections: boolean[] = [true, false];
+  selectedPokemonIndex: number = 0;
+  tabs: boolean[] = [true, false];
 
   constructor()
   {
@@ -119,22 +120,38 @@ export class InputComponent
     let data = this.parser.parsePaste(formData.paste);
     for (const pokePaste of data.pokemons)
     {
-      this.teamEditorService.addPokemon(await this.pokemonService.buildPokemon(pokePaste));
+      const pokemon: Pokemon = await this.pokemonService.buildPokemon(pokePaste);
+      this.teamEditorService.addPokemon(pokemon);
     };
     //console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
   }
 
-  addPokemon($event)
+  addEmptyPokemon()
   {
-    this.teamEditorService.addPokemon($event);
+    this.teamEditorService.addEmptyPokemon();
   }
 
-  select(index)
+  deletePokemon($event)
   {
-    for(let i=0;i<this.sections.length;i++)
-    {
-      this.sections[i] = false;
-    }
-    this.sections[index] = true;
+    this.teamEditorService.deletePokemon($event);
   }
+
+  selectTab(index)
+  {
+    for(let i=0;i<this.tabs.length;i++)
+    {
+      this.tabs[i] = false;
+    }
+    this.tabs[index] = true;
+  }
+
+  selectPokemon(index: number)
+  {
+    if(index != this.selectedPokemonIndex)
+    {
+      this.selectedPokemonIndex = index;
+    }
+  }
+
+
 }
