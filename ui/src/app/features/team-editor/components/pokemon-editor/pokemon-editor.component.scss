@@ -4,39 +4,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.8vw;
-
-  .selectors
-  {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.4vw;
-
-    .selector
-    {
-      width: 2vw;
-      height: 2vw;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      border-radius: 40px;
-      border: 1px solid var(--bg-color-2);
-      cursor: pointer;
-
-      &:hover
-      {
-        background-color: var(--bg-color-3);
-      }
-    }
-
-    .selected
-    {
-      background-color: var(--bg-color-3);
-      border: 1px solid black;
-    }
-  }
+  position: relative;
 
   .editor
   {
@@ -207,3 +175,7 @@
   }
 }
 
+.error
+{
+  border: 1px solid red !important;
+}

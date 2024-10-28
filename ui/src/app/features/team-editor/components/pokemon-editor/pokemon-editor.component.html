@@ -1,29 +1,13 @@
 
 <div class="creator">
-  <div class="selectors">
-    <ng-container *ngFor="let pokemon of pokemons; index as i">
-      <div 
-      class="selector"
-      [ngClass]="{selected: selectedPokemonIndex == i}"
-      (click)="selectPokemon(i)"
-      >
-        {{i + 1}}
-      </div>
-    </ng-container>
-    <ng-container *ngIf="pokemons.length < 6">
-      <div class="selector" (click)="addEmptyPokemon()">
-        +
-      </div>
-    </ng-container>
-  </div>
-  <ng-container *ngIf="pokemons.length > 0">
+  <ng-container *ngIf="pokemon">
     <div class="editor">
       <form class="form" [formGroup]="pokemonForm" >
         <div class="col">
           <div class="form-item">
             <app-smart-input
             #pokemonInput 
-            [value]="util.getPokemonTag(pokemons[selectedPokemonIndex])"
+            [value]="util.getPokemonTag(pokemon)"
             [label]="'Pokemon '"
             [keepSelected]="true"
             [getter]="queryService.queryPokemonCallback"
@@ -33,7 +17,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            [value]="util.getMoveTag(pokemons[selectedPokemonIndex].moves[0])"
+            [value]="util.getMoveTag(pokemon.moves[0])"
             [label]="'Move 1 '"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
@@ -43,7 +27,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            [value]="util.getMoveTag(pokemons[selectedPokemonIndex].moves[2])"
+            [value]="util.getMoveTag(pokemon.moves[2])"
             [label]="'Move 3 '"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
@@ -55,7 +39,10 @@
             <div class="col">
               <div class="row-center s-gap">
                 <label for="">Nickname</label>
-                <input type="text" class="nickname" formControlName="nickname">
+                <input type="text" class="nickname" formControlName="nickname"
+                [ngClass]="{controlInvalid: isInvalid('nickname')}"
+                value="pokemon.nickname ?? 'error'"
+                >
               </div>
               <span *ngIf="isInvalid('nickname')" class="formFeedbackError text-center">{{getError('nickname')}}</span>
             </div>
@@ -63,9 +50,15 @@
               <div class="col">
                 <div class="row-center s-gap">
                   <label for="">Level</label>
-                  <input type="text" class="level" formControlName="level" placeholder="50">
+                  <input 
+                  type="text" 
+                  class="level" 
+                  formControlName="level" 
+                  value="pokemon.level ?? 0"
+                  [ngClass]="{controlInvalid: isInvalid('level')}"
+                  >
                   <app-checkbox
-                  [checked]="pokemons[selectedPokemonIndex].shiny ?? false"
+                  [checked]="pokemon.shiny ?? false"
                   [label]="'Shiny'"
                   (checkEvent)="shinySelectEvent($event)"
                   ></app-checkbox>
@@ -75,11 +68,10 @@
             </div>
             <div class="row s-gap">
               <app-radio
-              [obj]="pokemons[selectedPokemonIndex]"
-              [objSelector]="'gender'"
               [options]="[false, true]"
               [optionNames]="['Male', 'Female']"
-              [selected]="0"
+              [selectedIndex]="0"
+              (selectEvent)="genderSelectEvent($event)"
               ></app-radio>
             </div>
           </div>
@@ -87,7 +79,7 @@
         <div class="col">
           <div class="form-item">
             <app-smart-input
-            [value]="pokemons[selectedPokemonIndex].item"
+            [value]="pokemon.item"
             [label]="'Item '"
             [keepSelected]="true"
             [getter]="queryService.queryItemCallback"
@@ -97,7 +89,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            [value]="util.getMoveTag(pokemons[selectedPokemonIndex].moves[1])"
+            [value]="util.getMoveTag(pokemon.moves[1])"
             [label]="'Move 2 '"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
@@ -107,7 +99,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            [value]="util.getMoveTag(pokemons[selectedPokemonIndex].moves[3])"
+            [value]="util.getMoveTag(pokemon.moves[3])"
             [label]="'Move 4 '"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
@@ -116,16 +108,16 @@
             ></app-smart-input>
           </div>
           <div class="form-item form-item-col">
-            <div class="stat-selector" [ngClass]="{notAllowed: !pokemons[selectedPokemonIndex].name}">
-              <ng-container *ngFor="let stat of pokemons[selectedPokemonIndex].ivs; index as i">
+            <div class="stat-selector" [ngClass]="{notAllowed: !pokemon.name}">
+              <ng-container *ngFor="let stat of pokemon.ivs; index as i">
                 <div class="stat-box" (click)="selectStat(i)"
-                [ngClass]="{selectedStat: selectedStat === i, disabled: !pokemons[selectedPokemonIndex].name}"
+                [ngClass]="{selectedStat: selectedStat === i, disabled: !pokemon.name}"
                 >
                   {{util.getStatName(stat)}}
                 </div>
               </ng-container>
             </div>
-            <ng-container *ngIf="!pokemons[selectedPokemonIndex].name">
+            <ng-container *ngIf="!pokemon.name">
               <div class="formFeedbackError row-center">
                 Select a pokemon first!
               </div>
@@ -149,7 +141,7 @@
               </div>
               <ng-container *ngIf="allAbilities; else notAllAbilities">
                 <app-smart-input
-                [value]="util.getAbilityTag(pokemons[selectedPokemonIndex].ability)"
+                [value]="util.getAbilityTag(pokemon.ability)"
                 [keepSelected]="true"
                 [getter]="queryService.queryAbilityCallback"
                 (selectEvent)="abilitySelectEvent($event)"
@@ -158,10 +150,10 @@
               </ng-container>
               <ng-template #notAllAbilities>
                 <app-smart-input
-                [value]="util.getAbilityTag(pokemons[selectedPokemonIndex].ability)"
+                [value]="util.getAbilityTag(pokemon.ability)"
                 [keepSelected]="true"
                 [allGetter]="queryService.pokemonAbilitiesCallback"
-                [allGetterIndex]="this.pokemons[this.selectedPokemonIndex]?.dexNumber"
+                [allGetterIndex]="this.pokemon?.dexNumber"
                 (selectEvent)="abilitySelectEvent($event)"
                 class="smart-input-wrapper"
                 ></app-smart-input>
@@ -170,7 +162,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            [value]="util.getNatureTag(pokemons[selectedPokemonIndex].nature)"
+            [value]="util.getNatureTag(pokemon.nature)"
             [label]="'Nature '"
             [keepSelected]="true"
             [getter]="queryService.queryNatureCallback"
@@ -181,7 +173,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            [value]="util.getTypeTag(pokemons[selectedPokemonIndex].teraType)"
+            [value]="util.getTypeTag(pokemon.teraType)"
             [label]="'Teratype '"
             [keepSelected]="true"
             [getter]="queryService.queryTeratypeCallback"
@@ -195,21 +187,21 @@
               <label for="">IV</label>
               <div class="range-slider">
                 <input type="range" min="0" max="31" 
-                value="{{this.pokemons[this.selectedPokemonIndex].ivs ? this.pokemons[this.selectedPokemonIndex].ivs[selectedStat].value : ''}}" 
+                value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat].value : ''}}" 
                 class="slider" id="myRange" formControlName="ivs" [ngStyle]="{background: ivSliders[this.selectedStat]}">
               </div>
               <input class="level" formControlName="ivs"
-              value="{{this.pokemons[this.selectedPokemonIndex].ivs ? this.pokemons[this.selectedPokemonIndex].ivs[selectedStat].value : ''}}">
+              value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat].value : ''}}">
             </div>
             <div class="range">
               <label for="">EV</label>
               <div class="range-slider">
                 <input type="range" min="0" max="{{currentMaxEVs}}" 
-                value="{{this.pokemons[this.selectedPokemonIndex].evs ? this.pokemons[this.selectedPokemonIndex].evs[selectedStat].value : ''}}" 
+                value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat].value : ''}}" 
                 class="slider" id="myRange" formControlName="evs" [ngStyle]="{background: evSliders[this.selectedStat]}">
               </div>
               <input class="level" 
-              value="{{this.pokemons[this.selectedPokemonIndex].evs ? this.pokemons[this.selectedPokemonIndex].evs[selectedStat].value : ''}}"
+              value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat].value : ''}}"
               formControlName="evs">
             </div>
             <div class="row-center">
@@ -223,7 +215,7 @@
           <button (click)="deletePokemon()">X</button>
         </div>
         <app-pokemon 
-        [pokemon]="pokemons[selectedPokemonIndex]" 
+        [pokemon]="pokemon" 
         [teamOptions]="teamOptions" 
         [showStatsStart]="true"
         [editorPreview] = "true"
