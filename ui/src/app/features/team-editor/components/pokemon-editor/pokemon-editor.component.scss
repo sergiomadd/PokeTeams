@@ -16,7 +16,8 @@
     {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.8vw;
+      grid-template-rows: repeat(3, 1fr);
+      column-gap: 0.8vw;
       justify-content: end;
     }
   
@@ -66,17 +67,19 @@
     {
       width: 10vw;
     }
+
+    .stat-col
+    {
+      grid-column: 2 / 4;
+      gap: 0.2em;
+    }
     
   
     .stat-selector
     {
-      width: 50%;
-      display: grid;
-      grid-template-columns: 50% 50%;
-      column-gap: 0.4vw;
+      display: flex;
       justify-content: center;
       gap: 0.4vw;
-      margin-bottom: 0.4vw;
   
       .stat-box
       {
@@ -155,11 +158,10 @@
 
 .range
 {
-  padding: 0.2vw 0 0.2vw 0;
   display: grid;
   align-items: center;
-  justify-content: start;
-  grid-template-columns: 12% 63% 25%;
+  justify-content: center;
+  grid-template-columns: 10% 70% 10%;
   column-gap: 1%;
   width: 90%;
   gap: 0.2vw;
