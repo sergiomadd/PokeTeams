@@ -52,6 +52,7 @@
       </div>
       <div class="editors">
         <app-pokemon-editor
+        [index]="selectedPokemonIndex"
         [pokemon]="team.pokemons[selectedPokemonIndex]"
         [teamOptions]="team.options"
         (deleteEvent)="deletePokemon($event)"
