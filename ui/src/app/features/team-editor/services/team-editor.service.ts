@@ -22,6 +22,11 @@ export class TeamEditorService
     this.team$.next(newTeam);
   }
 
+  getPokemonIndex(pokemon: Pokemon): number
+  {
+    return this.team$.getValue().pokemons.findIndex(p => p.dexNumber === pokemon.dexNumber);
+  }
+
   addPokemon(pokemon: Pokemon)
   {
     this.team$.next(
@@ -32,25 +37,43 @@ export class TeamEditorService
     );
   }
 
-  updatePokemon(updated: Pokemon)
+  addEmptyPokemon()
   {
-    /*
-    console.log("Updating pokemon")
-    console.log(this.team$.getValue().pokemons[0].nickname)
-    
-    const updatedPokemons: Pokemon[] = this.team$.getValue().pokemons;
-    const index: number = this.team$.getValue().pokemons.indexOf(updated);
-    updatedPokemons[index] = updated;
-    this.team$.next(this.team$.getValue());
-    
-    //new
+    this.addPokemon(this.createEmptyPokemon());
+  }
 
-    this.team$.next({...this.team$.value, pokemons: this.team$.value.pokemons
-      .map(pokemon => 
+  deletePokemon(pokemon: Pokemon): boolean
+  {
+    const indexToUpdate: number = this.getPokemonIndex(pokemon);
+    if(indexToUpdate != -1)
+    {
+      this.updatePokemons(this.team$.getValue().pokemons.slice(indexToUpdate, 1));
+      return true;
+    }
+    else { return false }
+  }
+
+  updatePokemons(updatedPokemons: Pokemon[])
+  {
+    this.team$.next(
       {
-        return pokemon.dexNumber === updated.dexNumber ? updated : pokemon
-      })})
-      */
+        ...this.team$.getValue(),
+        pokemons: [...updatedPokemons]
+      }
+    );
+  }
+
+  updatePokemon(pokemon: Pokemon)
+  {
+    const indexToUpdate: number =  this.getPokemonIndex(pokemon);;
+    if(indexToUpdate != -1)
+    {
+      const pokemonsToUpdate: Pokemon[] = this.team$.getValue().pokemons;
+      pokemonsToUpdate[indexToUpdate] = pokemon;
+      this.updatePokemons(pokemonsToUpdate);
+      return true;
+    }
+    else { return false }
   }
 
   setEmptyTeam()
@@ -98,5 +121,95 @@ export class TeamEditorService
     
     return options;
 
+  }
+
+  createEmptyPokemon(): Pokemon
+  {
+    let pokemon: Pokemon = 
+    {
+      name: "",
+      nickname: undefined,
+      dexNumber: undefined,
+      preEvolution: undefined,
+      evolutions: [],
+      types: undefined,
+      teraType: undefined,
+      item: undefined,
+      ability: undefined,
+      nature: undefined,
+      moves: [undefined, undefined, undefined, undefined],
+      stats: [],
+      ivs:     
+      [
+        {
+          name: "HP",
+          identifier: "hp",
+          value: 0
+        },
+        {
+          name: "Atk",
+          identifier: "attack",
+          value: 0
+        },
+        {
+          name: "Def",
+          identifier: "defense",
+          value: 0
+        },
+        {
+          name: "SpA",
+          identifier: "special-attack",
+          value: 0
+        },
+        {
+          name: "SpD",
+          identifier: "special-defense",
+          value: 0
+        },
+        {
+          name: "Spe",
+          identifier: "speed",
+          value: 0
+        }
+      ],
+      evs: 
+      [
+        {
+          name: "HP",
+          identifier: "hp",
+          value: 0
+        },
+        {
+          name: "Atk",
+          identifier: "attack",
+          value: 0
+        },
+        {
+          name: "Def",
+          identifier: "defense",
+          value: 0
+        },
+        {
+          name: "SpA",
+          identifier: "special-attack",
+          value: 0
+        },
+        {
+          name: "SpD",
+          identifier: "special-defense",
+          value: 0
+        },
+        {
+          name: "Spe",
+          identifier: "speed",
+          value: 0
+        }
+      ],
+      level: 50,
+      shiny: undefined,
+      gender: false,
+      sprite: undefined,
+    }
+    return pokemon;
   }
 }
