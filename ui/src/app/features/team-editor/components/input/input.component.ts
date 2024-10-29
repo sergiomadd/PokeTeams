@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
 import { Team } from 'src/app/features/team/models/team.model';
 import { ParserService } from 'src/app/shared/services/parser.service';
+import { UtilService } from 'src/app/shared/services/util.service';
 import { TeamEditorService } from '../../services/team-editor.service';
 
 @Component({
@@ -16,8 +17,14 @@ export class InputComponent
   pokemonService = inject(PokemonService);
   parser = inject(ParserService);
   teamEditorService = inject(TeamEditorService);
+  formBuilder = inject(FormBuilder);
+  util = inject(UtilService);
 
-  formData;
+  pasteBoxFormSubmitted: boolean = false;
+  pasteBoxForm = this.formBuilder.group(
+    {
+      paste: ["", [Validators.required]]
+    });
   pasteHolder: string;
   team: Team = <Team>{};
   selectedPokemonIndex: number = 0;
@@ -104,25 +111,33 @@ export class InputComponent
 
   ngOnInit() 
   {
-    this.formData = new FormGroup({
-       paste: new FormControl(this.pasteHolder)
-    });
     this.teamEditorService.selectedTeam$.subscribe((value) => 
     {
       this.team = value;
     })
   }
 
-  async onSubmit(formData)
+  async load()
   {
     //const nowAll = new Date().getTime();
-    console.log("Submitting: ", formData)
-    let data = this.parser.parsePaste(formData.paste);
-    for (const pokePaste of data.pokemons)
+    this.pasteBoxFormSubmitted = true;
+    console.log(this.isInvalid('paste'))
+    if(this.pasteBoxForm.valid)
     {
-      const pokemon: Pokemon = await this.pokemonService.buildPokemon(pokePaste);
-      this.teamEditorService.addPokemon(pokemon);
-    };
+      let formData = this.pasteBoxForm.controls.paste.value ?? "";
+      console.log("Submitting: ", formData)
+      let data = this.parser.parsePaste(formData);
+      console.log("Parsed data: ", data)
+      if(data.pokemons && data.pokemons.length > 0)
+      {
+        this.teamEditorService.updatePokemons([]);
+        for (const pokePaste of data.pokemons)
+        {
+          const pokemon: Pokemon = await this.pokemonService.buildPokemon(pokePaste);
+          this.teamEditorService.addPokemon(pokemon);
+        };
+      }
+    }
     //console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
   }
 
@@ -153,5 +168,19 @@ export class InputComponent
     }
   }
 
+  isInvalid(key: string) : boolean
+  {
+    var control = this.pasteBoxForm.get(key);
+    let invalid = (control?.errors
+      && (control?.dirty || control?.touched
+        || this.pasteBoxFormSubmitted))
+      ?? false;
+    return invalid;
+  }
 
+  getError(key: string) : string
+  {
+    let control: AbstractControl | null =  this.pasteBoxForm.get(key);
+    return this.util.getAuthFormError(control);
+  }
 }

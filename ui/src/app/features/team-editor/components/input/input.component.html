@@ -11,23 +11,19 @@
     <div class="title">
     </div>
     <div>
-      <form 
-      [formGroup] = "formData"
-      (ngSubmit)="onSubmit(formData.value)" 
-      >
+      <form [formGroup]="pasteBoxForm">
         <div class="pasteBox">
           <textarea 
           formControlName="paste"
           rows="20" 
           cols="60" 
           class="custom-scrollbar input-text-area" 
-          spellcheck="false">
+          spellcheck="false"
+          [ngClass]="{controlInvalid: isInvalid('paste')}"
+          >
           </textarea>
-          <button 
-          type="submit"
-          class="submit button-primary"
-          >Load
-          </button>
+          <span *ngIf="isInvalid('paste')" class="formFeedbackError text-center">{{getError('paste')}}</span>
+          <button (click)="load()" class="submit button-primary">Load</button>
         </div>
       </form>
     </div>
