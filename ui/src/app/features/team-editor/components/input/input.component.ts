@@ -148,9 +148,9 @@ export class InputComponent
     this.selectedPokemonIndex = this.team.pokemons.length - 1;
   }
 
-  deletePokemon($event)
+  deletePokemon(index: number)
   {
-    this.teamEditorService.deletePokemon($event);
+    this.teamEditorService.deletePokemon(index);
   }
 
   selectTab(index)

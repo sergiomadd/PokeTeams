@@ -43,7 +43,8 @@ export class TeamEditorService
   {
     if(this.team$.getValue().pokemons[index])
     {
-      this.updatePokemons(this.team$.getValue().pokemons.slice(index, 1));
+      this.team$.getValue().pokemons.splice(index, 1)
+      this.updatePokemons(this.team$.getValue().pokemons);
       return true;
     }
     else { return false }

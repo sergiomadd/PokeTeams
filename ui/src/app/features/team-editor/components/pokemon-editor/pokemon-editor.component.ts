@@ -65,7 +65,6 @@ export class PokemonEditorComponent
 
   ngOnChanges(changes: SimpleChanges)
   {
-    
     if(changes["pokemon"] && this.pokemon)
     {
       this.pokemonForm.controls.nickname.setValue(this.pokemon.nickname ?? "");
@@ -182,7 +181,7 @@ export class PokemonEditorComponent
 
   deletePokemon()
   {
-    this.deleteEvent.emit(this.pokemon);
+    this.deleteEvent.emit(this.index);
   }
 
   allAbilitiesSwitch() 
