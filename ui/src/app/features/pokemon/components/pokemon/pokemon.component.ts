@@ -104,6 +104,7 @@ export class PokemonComponent
       this.showStats[0] = true;
     }
     
+    
     this.pokemon.notes = `
     Lorem ipsum odor amet, consectetuer adipiscing elit. Est taciti etiam cursus rutrum cras tincidunt nostra curae. Consectetur bibendum parturient accumsan imperdiet augue fermentum dolor scelerisque. Faucibus rhoncus varius non convallis egestas ridiculus ornare consectetur curae. Ut fringilla inceptos taciti; consectetur egestas blandit. Euismod fames ridiculus iaculis amet mus himenaeos dignissim.
 

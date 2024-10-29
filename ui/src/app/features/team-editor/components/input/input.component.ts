@@ -111,6 +111,7 @@ export class InputComponent
 
   ngOnInit() 
   {
+    this.pasteBoxForm.controls.paste.setValue(this.pasteHolder);
     this.teamEditorService.selectedTeam$.subscribe((value) => 
     {
       this.team = value;
@@ -144,6 +145,7 @@ export class InputComponent
   addEmptyPokemon()
   {
     this.teamEditorService.addEmptyPokemon();
+    this.selectedPokemonIndex = this.team.pokemons.length - 1;
   }
 
   deletePokemon($event)

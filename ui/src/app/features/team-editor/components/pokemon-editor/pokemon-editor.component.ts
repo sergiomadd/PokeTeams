@@ -66,7 +66,7 @@ export class PokemonEditorComponent
   ngOnChanges(changes: SimpleChanges)
   {
     
-    if(changes["pokemon"])
+    if(changes["pokemon"] && this.pokemon)
     {
       this.pokemonForm.controls.nickname.setValue(this.pokemon.nickname ?? "");
       this.pokemonForm.controls.level.setValue(this.pokemon.level ?? 0);
@@ -209,7 +209,7 @@ export class PokemonEditorComponent
     if(event)
     {
       const data: PokemonData = await this.pokemonService.getPokemon(event.name);
-      let pokemontest = 
+      this.pokemon = 
       { 
         ...this.pokemon,
         name: event.name,
@@ -219,8 +219,7 @@ export class PokemonEditorComponent
         evolutions: data.evolutions,
         preEvolution: data.preEvolution,
         stats: [...data.stats]
-      }
-      this.pokemon = pokemontest;
+      };
       this.pokemonPreviewComponent.showStats[0] = true;
       this.teamEditorService.updatePokemon(this.pokemon, this.index);
     }

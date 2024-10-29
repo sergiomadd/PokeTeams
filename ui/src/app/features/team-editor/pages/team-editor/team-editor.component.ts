@@ -19,14 +19,14 @@ import { TeamEditorService } from '../../services/team-editor.service';
   templateUrl: './team-editor.component.html',
   styleUrls: ['./team-editor.component.scss']
 })
+
 export class TeamEditorComponent 
 {
   teamService = inject(TeamService);
   userService = inject(UserService);
   store = inject(Store);
   router = inject(Router);
-  queryService = inject(QueryService)
-
+  queryService = inject(QueryService);
   teamEditorService = inject(TeamEditorService);
 
   @Output() outputTeam = new EventEmitter<Team>();
@@ -88,6 +88,7 @@ export class TeamEditorComponent
     if(this.team.pokemons.length > 0 && this.team.pokemons.length <= 6)
     {
       console.log("Generating team: ", this.team);
+      /*
       this.teamService.saveTeam(this.team).subscribe(
         {
           next: (response) =>
@@ -108,7 +109,7 @@ export class TeamEditorComponent
               console.log("Window popup blocked")
               this.router.navigate(['/', response])
             }
-            */
+            
           },
           error: (error) => 
           {
@@ -116,6 +117,7 @@ export class TeamEditorComponent
           }
         }
       )
+      */
     }
     else if(this.team.pokemons.length <= 0)
     {
