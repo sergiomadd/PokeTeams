@@ -85,7 +85,10 @@ export class TeamEditorComponent
 
   async generateTeam()
   {
-    if(this.team.pokemons.length > 0 && this.team.pokemons.length <= 6)
+    if(this.team.pokemons.length > 0 
+      && this.team.pokemons.length <= 6 
+      //If dexNumber is undefined -> empty pokemon
+      && this.team.pokemons.some(p => p.dexNumber))
     {
       console.log("Generating team: ", this.team);
       /*
@@ -126,6 +129,10 @@ export class TeamEditorComponent
     else if(this.team.pokemons.length > 6)
     {
       console.log("Error: too many pokemons, limit is 6")
+    }
+    else if(this.team.pokemons.some(p => !p.dexNumber))
+    {
+      console.log("Error: there are empty pokemons")
     }
     else
     {

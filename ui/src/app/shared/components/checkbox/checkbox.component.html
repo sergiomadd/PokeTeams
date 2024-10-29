@@ -1,7 +1,13 @@
 <div 
 class="checkbox"
 (click)="clickEvent()"
-[ngClass]="{checked: checked}"
+[ngClass]="{'checked-border': icon && checked,
+checked: !icon && checked}"
 >
-  {{label}}
+  <ng-container *ngIf="icon">
+    <img src="{{icon}}" alt="{{label}}" class="icon">
+  </ng-container>
+  <ng-container *ngIf="!icon">
+    {{label}}
+  </ng-container>
 </div>

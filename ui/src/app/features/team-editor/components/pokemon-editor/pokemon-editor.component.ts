@@ -220,7 +220,6 @@ export class PokemonEditorComponent
         stats: [...data.stats]
       };
       this.pokemonPreviewComponent.showStats[0] = true;
-      this.teamEditorService.updatePokemon(this.pokemon, this.index);
     }
     else
     {
@@ -237,6 +236,7 @@ export class PokemonEditorComponent
       }
       this.pokemonPreviewComponent.showStats[0] = false;
     }
+    this.teamEditorService.updatePokemon(this.pokemon, this.index);
   }
 
   async itemSelectEvent(event: Tag)

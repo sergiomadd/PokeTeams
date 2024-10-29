@@ -39,5 +39,10 @@
     color: white;
     opacity: 1;
   }
+
+  .checked-border
+  {
+    border: 1px solid var(--text-color);
+  }
 }
 

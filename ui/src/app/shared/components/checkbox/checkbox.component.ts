@@ -8,7 +8,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class CheckboxComponent 
 {
   @Input() checked: boolean = false;
-  @Input() label?: string;
+  @Input() label?: string = "";
+  @Input() icon?: string;
   @Input() hoverText?: string;
   @Output() checkEvent = new EventEmitter<boolean>();
   

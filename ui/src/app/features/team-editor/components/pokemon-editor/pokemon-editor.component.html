@@ -143,11 +143,6 @@
                   value="pokemon.level ?? 0"
                   [ngClass]="{controlInvalid: isInvalid('level')}"
                   >
-                  <app-checkbox
-                  [checked]="pokemon.shiny ?? false"
-                  [label]="'Shiny'"
-                  (checkEvent)="shinySelectEvent($event)"
-                  ></app-checkbox>
                 </div>
                 <span *ngIf="isInvalid('level')" class="formFeedbackError text-center">{{getError('level')}}</span>
               </div>
@@ -156,9 +151,16 @@
               <app-radio
               [options]="[false, true]"
               [optionNames]="['Male', 'Female']"
+              [optionIcons]="['assets/male.png', 'assets/female.png']"
               [selectedIndex]="0"
               (selectEvent)="genderSelectEvent($event)"
               ></app-radio>
+              <app-checkbox
+              [checked]="pokemon.shiny ?? false"
+              [label]="'shiny'"
+              [icon]="'assets/shiny.png'"
+              (checkEvent)="shinySelectEvent($event)"
+              ></app-checkbox>
             </div>
           </div>
           <div class="form-item form-item-col stat-col">
