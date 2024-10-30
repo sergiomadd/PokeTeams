@@ -1,72 +1,73 @@
-
 <div class="search">
-  <div class="top">
-    <div class="form">
-      <div></div>
-      <div class="inputs">
-        <div class="row">
-          <app-smart-input
-          #userInput
-          [label]="'Player'"
-          [keepSelected]="false"
-          [allowCustom]="true"
-          [getter]="queryService.queryUserCallback"
-          (selectEvent)="querySelectEvent($event)"
-          class="item smart-input-wrapper"
-          ></app-smart-input>
-          <app-smart-input
-          #tournamentInput
-          [label]="'Tournament'"
-          [keepSelected]="false"
-          [allowCustom]="true"
-          [getter]="queryService.queryTournamentCallback"
-          (selectEvent)="querySelectEvent($event)"
-          class="item smart-input-wrapper"
-          ></app-smart-input>
-          <app-smart-input
-          #regulationInput
-          [label]="'Regulation'"
-          [keepSelected]="false"
-          [getter]="queryService.queryRegulationCallback"
-          [allGetter]="queryService.regulationAllCallback"
-          (selectEvent)="querySelectEvent($event)"
-          class="item smart-input-wrapper"
-          ></app-smart-input>
+  <div class="top-background">
+    <div class="top">
+      <div class="form">
+        <div></div>
+        <div class="inputs">
+          <div class="row">
+            <app-smart-input
+            #userInput
+            [label]="'Player'"
+            [keepSelected]="false"
+            [allowCustom]="true"
+            [getter]="queryService.queryUserCallback"
+            (selectEvent)="querySelectEvent($event)"
+            class="item smart-input-wrapper"
+            ></app-smart-input>
+            <app-smart-input
+            #tournamentInput
+            [label]="'Tournament'"
+            [keepSelected]="false"
+            [allowCustom]="true"
+            [getter]="queryService.queryTournamentCallback"
+            (selectEvent)="querySelectEvent($event)"
+            class="item smart-input-wrapper"
+            ></app-smart-input>
+            <app-smart-input
+            #regulationInput
+            [label]="'Regulation'"
+            [keepSelected]="false"
+            [getter]="queryService.queryRegulationCallback"
+            [allGetter]="queryService.regulationAllCallback"
+            (selectEvent)="querySelectEvent($event)"
+            class="item smart-input-wrapper"
+            ></app-smart-input>
+          </div>
+          <div class="row">
+            <app-smart-input
+            #pokemonInput
+            [label]="'Pokemon'"
+            [keepSelected]="false"
+            [getter]="queryService.queryPokemonCallback"
+            (selectEvent)="querySelectEvent($event)"
+            class="item smart-input-wrapper"
+            ></app-smart-input>
+            <app-smart-input
+            #moveInput
+            [label]="'Move'"
+            [keepSelected]="false"
+            [getter]="queryService.queryMoveCallback"
+            (selectEvent)="querySelectEvent($event)"
+            class="item smart-input-wrapper"
+            ></app-smart-input>
+            <app-smart-input
+            #itemInput
+            [label]="'Item '"
+            [keepSelected]="false"
+            [getter]="queryService.queryItemCallback"
+            (selectEvent)="querySelectEvent($event)"
+            class="item smart-input-wrapper"
+            ></app-smart-input>
+          </div>
         </div>
-        <div class="row">
-          <app-smart-input
-          #pokemonInput
-          [label]="'Pokemon'"
-          [keepSelected]="false"
-          [getter]="queryService.queryPokemonCallback"
-          (selectEvent)="querySelectEvent($event)"
-          class="item smart-input-wrapper"
-          ></app-smart-input>
-          <app-smart-input
-          #moveInput
-          [label]="'Move'"
-          [keepSelected]="false"
-          [getter]="queryService.queryMoveCallback"
-          (selectEvent)="querySelectEvent($event)"
-          class="item smart-input-wrapper"
-          ></app-smart-input>
-          <app-smart-input
-          #itemInput
-          [label]="'Item '"
-          [keepSelected]="false"
-          [getter]="queryService.queryItemCallback"
-          (selectEvent)="querySelectEvent($event)"
-          class="item smart-input-wrapper"
-          ></app-smart-input>
+        <div class="buttons">
+          <button class="button-tertiary-clear search-button">Reset</button>
+          <button (click)="defaultSearch()" class="button-primary search-button">Search</button>
         </div>
       </div>
-      <div class="buttons">
-        <button class="button-tertiary-clear search-button">Reset</button>
-        <button (click)="defaultSearch()" class="button-primary search-button">Search</button>
+      <div class="storages">  
+        <app-tag-list [tags]="tags" [removable]="true"></app-tag-list>
       </div>
-    </div>
-    <div class="storages">  
-      <app-tag-list [tags]="tags" [removable]="true"></app-tag-list>
     </div>
   </div>
   <div 
@@ -75,8 +76,10 @@
   [ngClass]="{searched: searched}"
   >
     <div class="bar">
-      <div>Logged?</div>
-      <div class="sorter">
+      <div class="row b-gap">
+        <div class="category">
+          Logged?
+        </div>
         <div class="category" (click)="changeSorter(0)">
           Date
           <div class="way">
@@ -118,9 +121,13 @@
           </div>
         </div>
       </div>
-      <div>
-        <button (click)="changeLayout()">Layout</button>
-        {{totalTeams}} teams
+      <div class="row b-gap">
+        <div class="category">
+          {{totalTeams}} teams
+        </div>
+        <div class="category" (click)="changeLayout()">
+          Layout
+        </div>
       </div>
     </div>
     <div class="table">

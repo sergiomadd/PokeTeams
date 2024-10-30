@@ -2,76 +2,74 @@
 
 .search
 {
-  width: 70vw;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 5vh;
   display: flex;
   flex-direction: column;
   gap: 1vh;
   height: fit-content;
 
-
-  .top
+  .top-background
   {
-    width: 75%;
-    margin: auto;
-    padding: 0.8vw;
-    display: flex;
-    flex-direction: column;
-    gap: 1vh;
-    border: 1px solid black;
-    background-color: var(--bg-color-2);
-    border-radius: 5px;
+    //background-color: var(--bg-color-3);
 
-    .form
+    .top
     {
-      display: grid;
-      grid-template-columns: 15% 70% 15%;
-      justify-content: center;
-      align-items: center;
-      gap: 0.4vw;
+      width: 75%;
+      margin: 5vh auto auto auto;
+      padding: 0.8vw;
+      display: flex;
+      flex-direction: column;
+      gap: 1vh;
+      border-radius: 5px;
   
-      .inputs
+      .form
       {
-        margin: auto;
-        width: fit-content;
-      }
-  
-      .item
-      {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 15% 70% 15%;
         justify-content: center;
         align-items: center;
-        width: 15vw;
-        height: inherit;
-        max-height: 10vh;
-        max-width: 12vw;
+        gap: 0.4vw;
+    
+        .inputs
+        {
+          margin: auto;
+          width: fit-content;
+        }
+    
+        .item
+        {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          width: 15vw;
+          height: inherit;
+          max-height: 10vh;
+          max-width: 12vw;
+        }
+    
+        .buttons
+        {
+          display: flex;
+          justify-content: end;
+          flex-direction: column;
+          gap: 3vh;
+          height: 100%;
+          margin-bottom: 1vh;
+        }
+    
+        .search-button
+        {
+          height: calc(3vh + 0.4vw);
+          width: 6vw;
+        }
       }
   
-      .buttons
+      .storages
       {
-        display: flex;
-        justify-content: end;
-        flex-direction: column;
-        gap: 3vh;
-        height: 100%;
-        margin-bottom: 1vh;
+        width: 70%;
+        margin: auto;
       }
-  
-      .search-button
-      {
-        height: calc(3vh + 0.4vw);
-        width: 6vw;
-      }
-    }
-
-    .storages
-    {
-      width: 70%;
-      margin: auto;
-    }
+    }  
   }
 
   .results
@@ -80,44 +78,33 @@
     flex-direction: column;
     align-items: center;
     margin-bottom: 5vw;
+    width: 70vw;
+    margin-left: auto;
+    margin-right: auto;
 
     .bar
     {
-      display: grid;
-      grid-template-columns: 10% 80% 10%;
+      display: flex;
       align-items: center;
-      justify-items: center;
+      justify-content: space-between;
       height: 2em;
-      border-radius: 5px;
-      background-color: var(--bg-color-2);
-      color: var(--text-color);
       width: 100%;
       padding: 0.4vw;
-      border: 1px solid black;
 
-      .sorter
+      .category
       {
         display: flex;
-        align-items: center;
-        justify-content: center;
         gap: 0.4vw;
-  
-        .category
+        border: 1px solid var(--text-color);
+        border-radius: 10px;
+        padding: 0.4vw;
+        cursor: pointer;
+        user-select: none;
+        
+        .way
         {
-          display: flex;
-          gap: 0.4vw;
-          border: 1px solid black;
-          background-color: var(--bg-color-3);
-          border-radius: 10px;
-          padding: 0.4vw;
-          cursor: pointer;
-          user-select: none;
-          
-          .way
-          {
-            width: 0.6vw;
-            height: 0.6vw;
-          }
+          width: 0.6vw;
+          height: 0.6vw;
         }
       }
     }
@@ -130,7 +117,6 @@
       align-items: center;
       gap: 0.4vw;
       margin: auto;
-      margin-top: 1vw;
       transition: all ease 0.5s;
       width: 100%;
 
