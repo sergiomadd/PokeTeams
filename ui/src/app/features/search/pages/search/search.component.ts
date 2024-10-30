@@ -1,5 +1,5 @@
 import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
@@ -13,6 +13,7 @@ import { User } from 'src/app/features/user/models/user.model';
 import { UserService } from 'src/app/features/user/services/user.service';
 import { SearchQueryDTO } from 'src/app/models/DTOs/searchQuery.dto';
 import { SearchQueryResponseDTO } from 'src/app/models/DTOs/searchQueryResponse.dto';
+import { UtilService } from 'src/app/shared/services/util.service';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 
 @Component({
@@ -28,6 +29,7 @@ export class SearchComponent
   teamService = inject(TeamService);
   pokemonService = inject(PokemonService);
   store = inject(Store);
+  util = inject(UtilService);
 
   teams: TeamPreview[] = [];
   loggedUser$ = this.store.select(selectLoggedUser);
@@ -39,10 +41,53 @@ export class SearchComponent
   layout: Layout = Layout.single;
 
   //pagination
-  teamsPerPage: number = 10;
+  paginationForm = this.formBuilder.group(
+    {
+      teamsPerPage: [10, [Validators.min(1), Validators.max(100)]]
+    }, { updateOn: "blur" });
   totalTeams?: number;
   sortOrder: TeamSearchOrder = TeamSearchOrder.DateDescending;
   @ViewChild(PaginationComponent) paginationComponent!: PaginationComponent;
+
+  ngOnChanges(changes: SimpleChanges)
+  {
+    if(changes['teams'])
+    {
+      this.sortedTeams = [...this.teams];
+      this.searched = false;
+    }
+  }
+
+  async ngOnInit()
+  {
+    this.paginationForm.controls.teamsPerPage.valueChanges.subscribe(value =>
+      {
+        if(value)
+        {
+          if(typeof +value !== "number" || isNaN(+value))
+          {
+            this.paginationForm.controls.teamsPerPage.setErrors({ "nan": true });
+          }
+          if(this.paginationForm.controls.teamsPerPage.valid)
+          {
+            this.defaultSearch();
+          }
+        }
+      })
+    this.search(this.buildQuery());
+    this.loggedUser$.subscribe(
+      {
+        next: (value) =>
+        {
+          this.user = value ?? undefined;
+        }
+      }
+    )
+  }
+
+  async ngAfterContentInit()
+  {
+  }
 
   querySelectEvent($event: Tag)
   {
@@ -59,43 +104,12 @@ export class SearchComponent
     }
   }
 
-  isTeamOwnerLogged(team: TeamPreview)
-  {
-    return team.player?.username === this.user?.username;
-  }
-
-  ngOnChanges(changes: SimpleChanges)
-  {
-    if(changes['teams'])
-    {
-      this.sortedTeams = [...this.teams];
-      this.searched = false;
-    }
-  }
-
-  async ngOnInit()
-  {
-    this.search(this.buildQuery());
-    this.loggedUser$.subscribe(
-      {
-        next: (value) =>
-        {
-          this.user = value ?? undefined;
-        }
-      }
-    )
-  }
-
-  async ngAfterContentInit()
-  {
-  }
-
   buildQuery(): SearchQueryDTO
   {
     let searchQuery: SearchQueryDTO = 
     {
       queries: this.tags ?? [],
-      teamsPerPage: this.teamsPerPage,
+      teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
       selectedPage: 1,
       order: this.sortOrder
     }
@@ -107,7 +121,7 @@ export class SearchComponent
     let searchQuery: SearchQueryDTO = 
     {
       queries: this.tags ?? [],
-      teamsPerPage: this.teamsPerPage,
+      teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
       selectedPage: 1,
       order: TeamSearchOrder.DateDescending
     }
@@ -166,6 +180,11 @@ export class SearchComponent
         this.defaultSearch();
       }
     }
+  }
+
+  isTeamOwnerLogged(team: TeamPreview)
+  {
+    return team.player?.username === this.user?.username;
   }
 
   changeLayout(columNumber: number)
@@ -248,5 +267,20 @@ export class SearchComponent
     let searchQuery: SearchQueryDTO = this.buildQuery();
     searchQuery.selectedPage = $event;
     this.search(searchQuery);
+  }
+
+  isInvalid(key: string) : boolean
+  {
+    var control = this.paginationForm.get(key);
+    let invalid = (control?.errors
+      && (control?.dirty || control?.touched))
+      ?? false;
+    return invalid;
+  }
+
+  getError(key: string) : string
+  {
+    let control: AbstractControl | null =  this.paginationForm.get(key);
+    return this.util.getAuthFormError(control);
   }
 }

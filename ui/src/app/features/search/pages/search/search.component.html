@@ -137,9 +137,7 @@
         </div>
       </div>
       <div class="row b-gap">
-        <div class="category">
-          {{totalTeams}} teams
-        </div>
+        <div class="category">{{totalTeams ?? '?'}} teams</div>
         <div 
         class="column-icon category"
         [ngClass]="{'selected': layout === 0}"
@@ -191,11 +189,26 @@
           </ng-container>
         </div>
       </ng-container>
-      <app-pagination
-      [itemsPerPage]="teamsPerPage"
-      [totalItems]="totalTeams ?? 0"
-      (pageChanged)="pageChange($event, results)"
-      ></app-pagination>
+      <div class="pagination">
+        <div></div>
+        <app-pagination
+        [itemsPerPage]="paginationForm.controls.teamsPerPage.valid ? paginationForm.controls.teamsPerPage.value ?? 20 : 20"
+        [totalItems]="totalTeams ?? 0"
+        (pageChanged)="pageChange($event, results)"
+        ></app-pagination>
+        <form class="col s-gap" [formGroup]="paginationForm">
+          <div class="row-center s-gap">
+            <label for="">Teams per page: </label>
+            <input 
+            type="text" 
+            class="teams-per-page"
+            formControlName="teamsPerPage"
+            [ngClass]="{controlInvalid: isInvalid('teamsPerPage')}"
+            >
+          </div>
+          <span *ngIf="isInvalid('teamsPerPage')" class="formFeedbackError text-center">{{getError('teamsPerPage')}}</span>
+        </form>
+      </div>
     </div>
   </div>
 </div>

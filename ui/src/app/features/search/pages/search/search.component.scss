@@ -115,7 +115,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.4em;
+      gap: 1em;
       margin: auto;
       transition: all ease 0.5s;
       width: 100%;
@@ -126,7 +126,7 @@
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
         gap: 1em;
         transition: all ease 0.5s;
       }
@@ -146,7 +146,7 @@
 
         .record
         {
-          width: 48%;
+          width: 49%;
           transition: all ease 0.5s;
         }
       }
@@ -213,4 +213,18 @@
       border-color: var(--bg-color-1);
     }
   }
+}
+
+.teams-per-page
+{
+  width: 2em !important;
+}
+
+.pagination
+{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 15% 1fr 15%;
+  justify-content: space-between;
+  align-items: center;
 }
