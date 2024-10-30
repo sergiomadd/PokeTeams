@@ -109,10 +109,18 @@ export class SearchComponent
     )
   }
 
-  changeLayout()
+  changeLayout(columNumber: number)
   {
-    if(this.layout === Layout.single) { this.layout = Layout.double }
-    else if(this.layout === Layout.double) { this.layout = Layout.single }
+    console.log(this.layout)
+    switch(columNumber)
+    {
+      case 0:
+        this.layout = Layout.single
+        break;
+      case 1:
+        this.layout = Layout.double
+        break;
+    }
   }
 
   //sorting

@@ -125,8 +125,32 @@
         <div class="category">
           {{totalTeams}} teams
         </div>
-        <div class="category" (click)="changeLayout()">
-          Layout
+        <div 
+        class="column-icon category"
+        [ngClass]="{'selected-layout': layout === 0}"
+        (click)="changeLayout(0)"
+        >
+          <div class="column-drawing">
+            <span class="row-drawing"></span>
+            <span class="row-drawing"></span>
+            <span class="row-drawing"></span>
+          </div>
+        </div>
+        <div 
+        class="column-icon category"
+        [ngClass]="{'selected-layout': layout === 1}"
+        (click)="changeLayout(1)"
+        >
+          <div class="column-drawing">
+            <span class="row-drawing"></span>
+            <span class="row-drawing"></span>
+            <span class="row-drawing"></span>
+          </div>
+          <div class="column-drawing">
+            <span class="row-drawing"></span>
+            <span class="row-drawing"></span>
+            <span class="row-drawing"></span>
+          </div>
         </div>
       </div>
     </div>

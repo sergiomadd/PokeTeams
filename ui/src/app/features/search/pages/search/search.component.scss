@@ -89,7 +89,7 @@
       justify-content: space-between;
       height: 2em;
       width: 100%;
-      padding: 0.4vw;
+      padding: 0.4em;
 
       .category
       {
@@ -115,7 +115,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.4vw;
+      gap: 0.4em;
       margin: auto;
       transition: all ease 0.5s;
       width: 100%;
@@ -170,4 +170,46 @@
 {
   opacity: 0.6;
   pointer-events: none;
+}
+
+.column-icon
+{
+  display: flex;
+  justify-content: center;
+}
+
+.column-drawing
+{
+  border: 1px solid black;
+  border-bottom: none;
+  width: 1fr;
+  min-width: 0.5em;
+  height: 1em;
+  background-color: var(--bg-color-1);
+  display: flex;
+  flex-direction: column;
+
+
+  .row-drawing
+  {
+    height: 32%;
+    border-bottom: 1px solid black;
+  }
+}
+
+.selected-layout
+{
+  background-color: var(--text-color);
+  border-color: var(--bg-color-1);
+
+  .column-drawing
+  {
+    border-color: var(--bg-color-1);
+
+    .row-drawing
+    {
+      background-color: var(--text-color);
+      border-color: var(--bg-color-1);
+    }
+  }
 }
