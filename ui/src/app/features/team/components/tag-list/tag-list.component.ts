@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Tag } from 'src/app/features/team/models/tag.model';
 
 @Component({
@@ -8,14 +8,16 @@ import { Tag } from 'src/app/features/team/models/tag.model';
 })
 export class TagListComponent 
 {
-  @Input() tags?: Tag[] = [];
+  @Input() tags: Tag[] = [];
   @Input() removable?: boolean = false;
+  @Output() removeEvent = new EventEmitter<Tag>()
 
   remove(index: number)
   {
     if(this.removable)
     {
-      this.tags?.splice(index, 1);
+      this.removeEvent.emit(this.tags[index]);
+      this.tags.splice(index, 1);
     }
   }
 }

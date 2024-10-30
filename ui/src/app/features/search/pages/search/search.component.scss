@@ -197,10 +197,11 @@
   }
 }
 
-.selected-layout
+.selected
 {
   background-color: var(--text-color);
   border-color: var(--bg-color-1);
+  color: var(--bg-color-1);
 
   .column-drawing
   {

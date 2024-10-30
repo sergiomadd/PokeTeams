@@ -66,7 +66,7 @@
         </div>
       </div>
       <div class="storages">  
-        <app-tag-list [tags]="tags" [removable]="true"></app-tag-list>
+        <app-tag-list [tags]="tags" [removable]="true" (removeEvent)="tagRemoveEvent($event)"></app-tag-list>
       </div>
     </div>
   </div>
@@ -77,8 +77,23 @@
   >
     <div class="bar">
       <div class="row b-gap">
-        <div class="category">
-          Logged?
+        <div 
+        class="category tooltip-wrapper" 
+        [ngClass]="{'selected': userSelected}"
+        (click)="toggleLoggedUser()"
+        >
+          <ng-container *ngIf="(loggedUser$ | async) as user">
+            <div class="row s-gap">
+              <ng-container *ngIf="user.picture">
+                <img src="{{user.picture}}" alt="Profile picture" class="icon">
+              </ng-container>
+              {{user.username}}
+            </div>
+            <app-tooltip
+            [text]="'Show only your teams'"
+            [side]="'top'"
+            ></app-tooltip>
+          </ng-container>
         </div>
         <div class="category" (click)="changeSorter(0)">
           Date
@@ -127,7 +142,7 @@
         </div>
         <div 
         class="column-icon category"
-        [ngClass]="{'selected-layout': layout === 0}"
+        [ngClass]="{'selected': layout === 0}"
         (click)="changeLayout(0)"
         >
           <div class="column-drawing">
@@ -138,7 +153,7 @@
         </div>
         <div 
         class="column-icon category"
-        [ngClass]="{'selected-layout': layout === 1}"
+        [ngClass]="{'selected': layout === 1}"
         (click)="changeLayout(1)"
         >
           <div class="column-drawing">
@@ -171,7 +186,7 @@
               <app-team-preview 
               [team]="team" 
               [layout]="layout"
-              [logged]="logged"></app-team-preview>
+              [logged]="isTeamOwnerLogged(team)"></app-team-preview>
             </div>
           </ng-container>
         </div>

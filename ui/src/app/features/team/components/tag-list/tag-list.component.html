@@ -1,4 +1,4 @@
-<ng-container *ngIf="tags && tags.length > 0">
+<ng-container *ngIf="tags.length > 0">
   <div class="tag-list custom-scrollbar">
     <ng-container *ngFor="let tag of tags; index as i">
       <app-tag [tag]="tag" [removable]="removable ?? false" (removeEvent)="remove(i)"></app-tag>

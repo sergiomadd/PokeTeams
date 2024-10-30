@@ -1,5 +1,7 @@
 import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
 import { Layout } from 'src/app/features/search/models/layout.enum';
 import { TeamSearchOrder } from 'src/app/features/search/models/teamSearchOrder.enum';
@@ -7,6 +9,7 @@ import { QueryService } from 'src/app/features/search/services/query.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
+import { User } from 'src/app/features/user/models/user.model';
 import { UserService } from 'src/app/features/user/services/user.service';
 import { SearchQueryDTO } from 'src/app/models/DTOs/searchQuery.dto';
 import { SearchQueryResponseDTO } from 'src/app/models/DTOs/searchQueryResponse.dto';
@@ -24,9 +27,12 @@ export class SearchComponent
   userService = inject(UserService);
   teamService = inject(TeamService);
   pokemonService = inject(PokemonService);
+  store = inject(Store);
 
   teams: TeamPreview[] = [];
-  logged?: boolean = true;
+  loggedUser$ = this.store.select(selectLoggedUser);
+  user?: User;
+  userSelected: boolean = false;
   sortedTeams: TeamPreview[] = [];
   searched: boolean = false;
   tags: Tag[] = [];
@@ -40,7 +46,22 @@ export class SearchComponent
 
   querySelectEvent($event: Tag)
   {
-    this.tags?.push($event);
+    if(!this.tags.find(t => t.identifier === $event.identifier)) { this.tags?.push($event); }
+    else { console.log("Tag already added") }
+  }
+
+  tagRemoveEvent($event: Tag)
+  {
+    if($event.identifier === this.user?.username) 
+    { 
+      this.userSelected = false;
+      this.defaultSearch();
+    }
+  }
+
+  isTeamOwnerLogged(team: TeamPreview)
+  {
+    return team.player?.username === this.user?.username;
   }
 
   ngOnChanges(changes: SimpleChanges)
@@ -55,6 +76,18 @@ export class SearchComponent
   async ngOnInit()
   {
     this.search(this.buildQuery());
+    this.loggedUser$.subscribe(
+      {
+        next: (value) =>
+        {
+          this.user = value ?? undefined;
+        }
+      }
+    )
+  }
+
+  async ngAfterContentInit()
+  {
   }
 
   buildQuery(): SearchQueryDTO
@@ -109,9 +142,34 @@ export class SearchComponent
     )
   }
 
+  async toggleLoggedUser()
+  {
+    this.userSelected = !this.userSelected;
+    const userTag: Tag = 
+    {
+      name: this.user?.username ?? "",
+      identifier: this.user?.username ?? "",
+      icon: this.user?.picture,
+      type: "username"
+    }
+    if(this.userSelected)
+    {
+      this.querySelectEvent(userTag);
+      this.defaultSearch();
+    }
+    else
+    {
+      const index = this.tags.findIndex(t => t.identifier == userTag.identifier);
+      if(index > -1)
+      {
+        this.tags.splice(index, 1);
+        this.defaultSearch();
+      }
+    }
+  }
+
   changeLayout(columNumber: number)
   {
-    console.log(this.layout)
     switch(columNumber)
     {
       case 0:
