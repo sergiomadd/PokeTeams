@@ -1,13 +1,19 @@
 <div 
-class="checkbox"
+class="checkbox tooltip-wrapper"
 (click)="clickEvent()"
 [ngClass]="{'checked-border': icon && checked,
 checked: !icon && checked}"
 >
   <ng-container *ngIf="icon">
-    <img src="{{icon}}" alt="{{label}}" class="icon">
+    <img src="{{icon}}" alt="{{label}}" class="big-icon">
   </ng-container>
   <ng-container *ngIf="!icon">
     {{label}}
+  </ng-container>
+  <ng-container *ngIf="tooltipText">
+    <app-tooltip
+    [text]="tooltipText"
+    [side]="'top'"
+    ></app-tooltip>
   </ng-container>
 </div>

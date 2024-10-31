@@ -1,15 +1,21 @@
 
 <div class="radio">
   <ng-container *ngFor="let option of options; index as i">
-    <div class="option" (click)="select(i)" 
+    <div class="option tooltip-wrapper" (click)="select(i)" 
     [ngClass]="{selected: selectedIndex == i && !optionIcons[i],
     'checked-border': selectedIndex == i && optionIcons[i]}"
     >
       <ng-container *ngIf="optionIcons[i]">
-        <img src="{{optionIcons[i]}}" alt="{{optionNames[i]}}" class="icon">
+        <img src="{{optionIcons[i]}}" alt="{{optionNames[i]}}" class="big-icon">
       </ng-container>
       <ng-container *ngIf="!optionIcons[i]">
         {{optionNames[i]}}
+      </ng-container>
+      <ng-container *ngIf="tooltipTexts && tooltipTexts[i]">
+        <app-tooltip
+        [text]="tooltipTexts[i]"
+        [side]="'top'"
+        ></app-tooltip>
       </ng-container>
     </div>
   </ng-container>

@@ -10,6 +10,7 @@ export class RadioComponent
   @Input() options: any[] = [];
   @Input() optionNames: string[] = [];
   @Input() optionIcons: string[] = [];
+  @Input() tooltipTexts?: string[] = [];
   @Input() selectedIndex?: number;
   @Output() selectEvent = new EventEmitter<number>();
 
