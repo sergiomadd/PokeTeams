@@ -66,8 +66,19 @@
   
       .storages
       {
+        position: relative;
+        min-height: calc(0.4em + 2em);
         width: 70%;
         margin: auto;
+        border: 1px solid black;
+        border-radius: 5px;
+
+        .storage-settings
+        {
+          position: absolute;
+          top: -2.6em;
+          left: 0;
+        }
       }
     }  
   }

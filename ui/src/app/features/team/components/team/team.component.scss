@@ -3,7 +3,6 @@ $cardWidth: 25vw;
 .team
 {
 
-
   .team-row
   {
     margin: 0.5em auto;
@@ -23,7 +22,7 @@ $cardWidth: 25vw;
   {
     width: fit-content;
     max-width: 10vw;
-    //height: 1.2em;
+    min-height: 1.2em;
     display: flex;
     align-items: center;
     background-color: var(--bg-color-2);

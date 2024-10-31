@@ -65,7 +65,17 @@
           <button (click)="defaultSearch()" class="button-primary search-button">Search</button>
         </div>
       </div>
-      <div class="storages">  
+      <div class="storages">
+        <div class="storage-settings row">
+          <app-radio
+          [options]="unionTypeSettings"
+          [optionIcons]="['assets/intersection.png', 'assets/union2.png']"
+          [optionNames]="['intersection', 'union']"
+          [tooltipTexts]="['Teams that match all', 'Teams that match any']"
+          [selectedIndex]="0"
+          (selectEvent)="tagsSettingsSelectEvent($event)"
+          ></app-radio>
+        </div>
         <app-tag-list [tags]="tags" [removable]="true" (removeEvent)="tagRemoveEvent($event)"></app-tag-list>
       </div>
     </div>

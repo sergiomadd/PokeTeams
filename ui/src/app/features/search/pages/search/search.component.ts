@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
 import { Layout } from 'src/app/features/search/models/layout.enum';
+import { SearchQueryResponseDTO } from 'src/app/features/search/models/searchQueryResponse.dto';
 import { TeamSearchOrder } from 'src/app/features/search/models/teamSearchOrder.enum';
 import { QueryService } from 'src/app/features/search/services/query.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
@@ -11,10 +12,10 @@ import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
 import { User } from 'src/app/features/user/models/user.model';
 import { UserService } from 'src/app/features/user/services/user.service';
-import { SearchQueryDTO } from 'src/app/models/DTOs/searchQuery.dto';
-import { SearchQueryResponseDTO } from 'src/app/models/DTOs/searchQueryResponse.dto';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
+import { SearchQueryDTO } from '../../models/searchQuery.dto';
+import { SetOperation } from '../../models/setOperation.enum';
 
 @Component({
   selector: 'app-search',
@@ -39,6 +40,9 @@ export class SearchComponent
   searched: boolean = false;
   tags: Tag[] = [];
   layout: Layout = Layout.single;
+
+  unionType: SetOperation = SetOperation.intersection;
+  unionTypeSettings: SetOperation[] = [SetOperation.intersection, SetOperation.union];
 
   //pagination
   paginationForm = this.formBuilder.group(
@@ -104,6 +108,11 @@ export class SearchComponent
     }
   }
 
+  tagsSettingsSelectEvent($event)
+  {
+    this.unionType = $event;
+  }
+
   buildQuery(): SearchQueryDTO
   {
     let searchQuery: SearchQueryDTO = 
@@ -111,7 +120,8 @@ export class SearchComponent
       queries: this.tags ?? [],
       teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
       selectedPage: 1,
-      order: this.sortOrder
+      order: this.sortOrder,
+      setOperation: this.unionType
     }
     return searchQuery;
   }
@@ -123,7 +133,8 @@ export class SearchComponent
       queries: this.tags ?? [],
       teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
       selectedPage: 1,
-      order: TeamSearchOrder.DateDescending
+      order: TeamSearchOrder.DateDescending,
+      setOperation: this.unionType
     }
     return searchQuery;
   }
