@@ -98,7 +98,7 @@ export class PokemonEditorComponent
       if(value)
       {
         
-        if(typeof +value === "number" && !isNaN(+value))
+        if(!this.util.isNaN(value))
         {
           if(this.pokemonForm.controls.level.valid)
           {

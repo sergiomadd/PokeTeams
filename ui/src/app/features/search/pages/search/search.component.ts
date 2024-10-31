@@ -68,7 +68,7 @@ export class SearchComponent
       {
         if(value)
         {
-          if(typeof +value !== "number" || isNaN(+value))
+          if(this.util.isNaN(value))
           {
             this.paginationForm.controls.teamsPerPage.setErrors({ "nan": true });
           }

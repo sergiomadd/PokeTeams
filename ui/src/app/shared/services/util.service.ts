@@ -308,4 +308,9 @@ export class UtilService
     //https://localhost:7134/images/sprites/types/generation-ix/fire.png
     return typeIconPath ? typeIconPath.replace("ix", "ix_names") : typeIconPath;
   }
+
+  isNaN(value)
+  {
+    return typeof +value !== "number" || isNaN(+value)
+  }
 }
