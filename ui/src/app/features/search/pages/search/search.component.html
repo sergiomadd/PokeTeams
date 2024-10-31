@@ -60,10 +60,6 @@
             ></app-smart-input>
           </div>
         </div>
-        <div class="buttons">
-          <button class="button-tertiary-clear search-button">Reset</button>
-          <button (click)="defaultSearch()" class="button-primary search-button">Search</button>
-        </div>
       </div>
       <div class="storages">
         <div class="storage-settings row">
@@ -75,6 +71,14 @@
           [selectedIndex]="0"
           (selectEvent)="tagsSettingsSelectEvent($event)"
           ></app-radio>
+        </div>
+        <div class="storage-buttons row b-gap">
+          <button class="button-primary" (click)="defaultSearch()">
+            <img src="assets/search-white.png" alt="" class="big-icon">
+          </button>
+          <button (click)="reset()">
+            <img src="assets/reset.png" alt="" class="big-icon">
+          </button>
         </div>
         <app-tag-list [tags]="tags" [removable]="true" (removeEvent)="tagRemoveEvent($event)"></app-tag-list>
       </div>

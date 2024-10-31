@@ -167,6 +167,11 @@ export class SearchComponent
     )
   }
 
+  reset()
+  {
+    this.tags = [];
+  }
+
   async toggleLoggedUser()
   {
     this.userSelected = !this.userSelected;
