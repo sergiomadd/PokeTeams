@@ -6,6 +6,7 @@
         public int? TeamsPerPage { get; set; }
         public int? SelectedPage { get; set; }
         public TeamSearchOrder? Order { get; set; }
+        public string? SetOperation { get; set; }
     }
 
     public enum TeamSearchOrder

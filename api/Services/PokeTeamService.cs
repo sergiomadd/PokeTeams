@@ -183,7 +183,7 @@ namespace api.Services
                 {
                     foreach (TagDTO tagDTO in inputTeam.Tags)
                     {
-                        Tag tag = await _pokeTeamContext.Tag.FindAsync(tagDTO.Identifier);
+                        Tag? tag = await _pokeTeamContext.Tag.FindAsync(tagDTO.Identifier);
                         if(tag == null) 
                         {
                             tag = new Tag()
@@ -198,10 +198,14 @@ namespace api.Services
                     }
                 }
 
-                Tournament tournament = null;
+                Tournament? tournament = null;
                 if (inputTeam.Tournament != null && inputTeam.Tournament.Name != null)
                 {
-                    tournament = new Tournament(inputTeam.Tournament);
+                    tournament = await _pokeTeamContext.Tournament.FindAsync(Formatter.NormalizeString(inputTeam.Tournament.Name));
+                    if(tournament == null)
+                    {
+                        tournament = new Tournament(inputTeam.Tournament);
+                    }
                 }
 
                 newTeam = new Team
@@ -362,26 +366,56 @@ namespace api.Services
             {
                 foreach (TagDTO query in searchQuery.Queries)
                 {
-                    switch (query.Type)
+                    if(searchQuery.SetOperation.Equals("union"))
                     {
-                        case "username":
-                            teams = await FilterTeamsByPlayer(teams, query.Name);
-                            break;
-                        case "tournament":
-                            teams = FilterTeamsByTournament(teams, query.Name);
-                            break;
-                        case "regulation":
-                            teams = FilterTeamsByRegulation(teams, query.Name);
-                            break;
-                        case "pokemon":
-                            teams = FilterTeamsByPokemons(teams, query.Identifier);
-                            break;
-                        case "move":
-                            teams = FilterTeamsByMoves(teams, query.Identifier);
-                            break;
-                        case "item":
-                            teams = FilterTeamsByItems(teams, query.Identifier);
-                            break;
+                        //Union -> all teams that match any
+                        switch (query.Type)
+                        {
+                            case "username":
+                                teams.AddRange(await FilterTeamsByPlayer(teams, query.Name));
+                                break;
+                            case "tournament":
+                                teams.AddRange(FilterTeamsByTournament(teams, query.Name));
+                                break;
+                            case "regulation":
+                                teams.AddRange(FilterTeamsByRegulation(teams, query.Name));
+                                break;
+                            case "pokemon":
+                                teams.AddRange(FilterTeamsByPokemons(teams, query.Identifier));
+                                break;
+                            case "move":
+                                teams.AddRange(FilterTeamsByMoves(teams, query.Identifier));
+                                break;
+                            case "item":
+                                teams.AddRange(FilterTeamsByItems(teams, query.Identifier));
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        //Default option
+                        //Intersection -> only teams that match all
+                        switch (query.Type)
+                        {
+                            case "username":
+                                teams = await FilterTeamsByPlayer(teams, query.Name);
+                                break;
+                            case "tournament":
+                                teams = FilterTeamsByTournament(teams, query.Name);
+                                break;
+                            case "regulation":
+                                teams = FilterTeamsByRegulation(teams, query.Name);
+                                break;
+                            case "pokemon":
+                                teams = FilterTeamsByPokemons(teams, query.Identifier);
+                                break;
+                            case "move":
+                                teams = FilterTeamsByMoves(teams, query.Identifier);
+                                break;
+                            case "item":
+                                teams = FilterTeamsByItems(teams, query.Identifier);
+                                break;
+                        }
                     }
                 }
             }
@@ -390,7 +424,7 @@ namespace api.Services
                 teams = _pokeTeamContext.Team.ToList();
             }
 
-            return await BuildTeamSearchQueryResponse(searchQuery, teams);
+            return await BuildTeamSearchQueryResponse(searchQuery, teams.Distinct().ToList());
         }
 
         public List<Team> SortTeams(List<Team> teams , TeamSearchOrder? order)
