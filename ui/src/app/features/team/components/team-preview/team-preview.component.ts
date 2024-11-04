@@ -1,4 +1,5 @@
 import { Component, inject, Input, QueryList, ViewChildren } from '@angular/core';
+import { ThemeService } from 'src/app/core/services/theme.service';
 import { Layout } from 'src/app/features/search/models/layout.enum';
 import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
@@ -16,6 +17,7 @@ export class TeamPreviewComponent
   teamService = inject(TeamService);
   parser = inject(ParserService);
   util = inject(UtilService);
+  theme = inject(ThemeService);
 
   @Input() team?: TeamPreview;
   teamID?: number;
@@ -28,7 +30,7 @@ export class TeamPreviewComponent
 
   ngOnInit()
   {
-    
+    this.theme.selectedTheme$?.getValue().name
   }
 
   getVisibility()

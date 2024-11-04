@@ -65,7 +65,13 @@
         <div class="storage-settings row">
           <app-radio
           [options]="unionTypeSettings"
-          [optionIcons]="['assets/intersection.png', 'assets/union2.png']"
+          [optionIcons]="[
+          (theme.selectedTheme$ | async)?.name === 'light' 
+          ? 'assets/intersection.png' 
+          : 'assets/intersection-white.png',
+          (theme.selectedTheme$ | async)?.name === 'light' 
+          ? 'assets/union.png' 
+          : 'assets/union-white.png']"
           [optionNames]="['intersection', 'union']"
           [tooltipTexts]="['Teams that match all', 'Teams that match any']"
           [selectedIndex]="0"
@@ -117,20 +123,32 @@
             <div class="way">
               <ng-container *ngIf="sortOrder.type != i">
                 <div class="col">
-                  <img src="assets/up-arrow.png" alt="Sort up arrow" class="sort-icon up-arrow">
-                  <img src="assets/down-arrow.png" alt="Sort down arrow" class="sort-icon down-arrow">
+                  <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+                  ? 'assets/up-arrow.png' 
+                  : 'assets/up-arrow-white.png'}}" alt="Sort up arrow" class="sort-icon up-arrow">
+                  <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+                  ? 'assets/down-arrow.png' 
+                  : 'assets/down-arrow-white.png'}}" alt="Sort down arrow" class="sort-icon down-arrow">
                 </div>
               </ng-container>
               <ng-container *ngIf="sortOrder.type == i && sortOrder.way === 1">
                 <div class="col">
-                  <img src="assets/up-arrow.png" alt="Sort up arrow" class="sort-icon up-arrow">
-                  <img src="assets/down-arrow-clear.png" alt="Sort down arrow" class="sort-icon down-arrow">
+                  <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+                  ? 'assets/up-arrow.png' 
+                  : 'assets/up-arrow-white.png'}}" alt="Sort up arrow" class="sort-icon up-arrow">
+                  <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+                  ? 'assets/down-arrow-clear.png' 
+                  : 'assets/down-arrow-clear-white.png'}}" alt="Sort down arrow" class="sort-icon down-arrow">
                 </div>
               </ng-container>
               <ng-container *ngIf="sortOrder.type == i && sortOrder.way === 0">
                 <div class="col">
-                  <img src="assets/up-arrow-clear.png" alt="Sort up arrow" class="sort-icon up-arrow">
-                  <img src="assets/down-arrow.png" alt="Sort down arrow" class="sort-icon down-arrow">
+                  <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+                  ? 'assets/up-arrow-clear.png' 
+                  : 'assets/up-arrow-clear-white.png'}}" alt="Sort up arrow" class="sort-icon up-arrow">
+                  <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+                  ? 'assets/down-arrow.png' 
+                  : 'assets/down-arrow-white.png'}}" alt="Sort down arrow" class="sort-icon down-arrow">
                 </div>
               </ng-container>
             </div>

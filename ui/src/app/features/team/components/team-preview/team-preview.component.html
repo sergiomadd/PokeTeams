@@ -6,7 +6,9 @@
         <div class="row-start s-gap wrap">
           <ng-container *ngIf="logged">
             <ng-container *ngIf="!team?.visibility">
-              <img src="assets/lock.png" alt="" class="icon">
+              <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+              ? 'assets/lock.png' 
+              : 'assets/lock-white.png'}}" alt="" class="icon">
             </ng-container>
           </ng-container>
           <div class="row no-gap">
@@ -40,21 +42,27 @@
         </div>
         <div class="row-end s-gap">
           <div class="detail views">
-            <img src="assets/visible.png" alt="" class="icon">
+            <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+            ? 'assets/visible.png' 
+            : 'assets/visible-white.png'}}" alt="" class="icon">
             {{team?.viewCount}}
           </div>
           <div class="detail">
             {{util.customFormatDate(team?.date!)}}
           </div>  
           <button (click)="copyPaste()" class="button tooltip-wrapper">
-            <img src="assets/copy.png" alt="" class="icon">
+            <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+            ? 'assets/copy.png' 
+            : 'assets/copy-white.png'}}" alt="" class="icon">
             <app-tooltip
             [text]="'Copy paste'"
             [side]="'top'"
             ></app-tooltip>
           </button>
           <button (click)="copyLink()" class="button tooltip-wrapper">
-            <img src="assets/link.png" alt="" class="icon">
+            <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+            ? 'assets/link.png' 
+            : 'assets/link-white.png'}}" alt="" class="icon">
             <app-tooltip
             [text]="'Copy link'"
             [side]="'top'"
@@ -62,7 +70,9 @@
           </button>
           <button class="button tooltip-wrapper">
             <a [routerLink]="['/', team?.id]" target="_blank" class="button">
-              <img src="assets/external-link.png" alt="" class="icon">
+              <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+              ? 'assets/external-link.png' 
+              : 'assets/external-link-white.png'}}" alt="" class="icon">
             </a>
             <app-tooltip
             [text]="'Open team'"
