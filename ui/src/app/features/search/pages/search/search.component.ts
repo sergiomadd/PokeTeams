@@ -2,16 +2,15 @@ import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
-import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
+import { ThemeService } from 'src/app/core/services/theme.service';
 import { Layout } from 'src/app/features/search/models/layout.enum';
 import { SearchQueryResponseDTO } from 'src/app/features/search/models/searchQueryResponse.dto';
-import { TeamSearchOrder } from 'src/app/features/search/models/teamSearchOrder.enum';
+import { SortOrder, SortType, SortWay } from 'src/app/features/search/models/sortOrder.model';
 import { QueryService } from 'src/app/features/search/services/query.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
 import { User } from 'src/app/features/user/models/user.model';
-import { UserService } from 'src/app/features/user/services/user.service';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { SearchQueryDTO } from '../../models/searchQuery.dto';
@@ -26,23 +25,28 @@ export class SearchComponent
 {
   queryService = inject(QueryService);
   formBuilder = inject(FormBuilder);
-  userService = inject(UserService);
   teamService = inject(TeamService);
-  pokemonService = inject(PokemonService);
   store = inject(Store);
   util = inject(UtilService);
+  theme = inject(ThemeService)
 
   teams: TeamPreview[] = [];
+  sortedTeams: TeamPreview[] = [];
+  tags: Tag[] = [];
   loggedUser$ = this.store.select(selectLoggedUser);
   user?: User;
   userSelected: boolean = false;
-  sortedTeams: TeamPreview[] = [];
   searched: boolean = false;
-  tags: Tag[] = [];
   layout: Layout = Layout.single;
-
   unionType: SetOperation = SetOperation.intersection;
   unionTypeSettings: SetOperation[] = [SetOperation.intersection, SetOperation.union];
+
+  sortTypeNames: string[] = ["Date", "Views"];
+  sortOrder: SortOrder = 
+  {
+    type: SortType.date,
+    way: SortWay.descending
+  };
 
   //pagination
   paginationForm = this.formBuilder.group(
@@ -50,7 +54,6 @@ export class SearchComponent
       teamsPerPage: [10, [Validators.min(1), Validators.max(100)]]
     }, { updateOn: "blur" });
   totalTeams?: number;
-  sortOrder: TeamSearchOrder = TeamSearchOrder.DateDescending;
   @ViewChild(PaginationComponent) paginationComponent!: PaginationComponent;
 
   ngOnChanges(changes: SimpleChanges)
@@ -120,7 +123,7 @@ export class SearchComponent
       queries: this.tags ?? [],
       teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
       selectedPage: 1,
-      order: this.sortOrder,
+      sortOrder: this.sortOrder,
       setOperation: this.unionType
     }
     return searchQuery;
@@ -133,7 +136,7 @@ export class SearchComponent
       queries: this.tags ?? [],
       teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
       selectedPage: 1,
-      order: TeamSearchOrder.DateDescending,
+      sortOrder: this.sortOrder,
       setOperation: this.unionType
     }
     return searchQuery;
@@ -217,63 +220,28 @@ export class SearchComponent
   }
 
   //sorting
-  sorterSettings: (TeamSearchOrder | undefined)[] = [TeamSearchOrder.DateDescending, undefined];
 
   changeSorter(index)
   {
-    switch(index)
+    //netural -> descending
+    if(this.sortOrder.type != SortType[SortType[index]])
     {
-      case 0:
-        if(this.sorterSettings[index] === undefined)
-        {
-          this.resetSorter();
-          this.sorterSettings[index] = TeamSearchOrder.DateDescending;
-        }
-        else if(this.sorterSettings[index] === TeamSearchOrder.DateDescending)
-        {
-          this.sorterSettings[index] = TeamSearchOrder.DateAscending;
-        }
-        else if(this.sorterSettings[index] === TeamSearchOrder.DateAscending)
-        {
-          this.sorterSettings[index] = undefined;
-        }
-        break;
-      case 1:
-        if(this.sorterSettings[index] === undefined)
-        {
-          this.resetSorter();
-          this.sorterSettings[index] = TeamSearchOrder.ViewsDescending;
-        }
-        else if(this.sorterSettings[index] === TeamSearchOrder.ViewsDescending)
-        {
-          this.sorterSettings[index] = TeamSearchOrder.ViewsAscending;
-        }
-        else if(this.sorterSettings[index] === TeamSearchOrder.ViewsAscending)
-        {
-          this.sorterSettings[index] = undefined;
-        }
-        break;
-      default:
-        break;
+      this.sortOrder.type = SortType[SortType[index]];
+      this.sortOrder.way = SortWay.descending;
     }
-    this.changeOrder(this.sorterSettings[index]!);
-  }
-
-  resetSorter()
-  {
-    for (let i = 0; i < this.sorterSettings.length; i++) 
+    //descending -> ascending
+    else if(this.sortOrder.type === SortType[SortType[index]] && this.sortOrder.way === SortWay.descending)
     {
-      this.sorterSettings[i] = undefined
+      this.sortOrder.way = SortWay.ascending;
     }
-  }
-
-  changeOrder(newOrder: TeamSearchOrder)
-  {
+    //ascending -> neutral (reset)
+    else if(this.sortOrder.type === SortType[SortType[index]] && this.sortOrder.way === SortWay.ascending)
+    {
+      this.sortOrder.type = undefined;
+    }
     let searchQuery: SearchQueryDTO = this.buildQuery();
     searchQuery.selectedPage = 1;
     this.paginationComponent.currentPage = 1;
-    searchQuery.order = newOrder;
-    this.sortOrder = newOrder;
     this.search(searchQuery);
   }
 

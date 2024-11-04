@@ -4,7 +4,6 @@
 {
   display: flex;
   flex-direction: column;
-  gap: 1vh;
   height: fit-content;
 
   .top-background
@@ -96,17 +95,48 @@
       .category
       {
         display: flex;
-        gap: 0.4vw;
+        gap: 0.4em;
         border: 1px solid var(--text-color);
         border-radius: 10px;
-        padding: 0.4vw;
+        padding: 0.4em;
         cursor: pointer;
         user-select: none;
-        
+      }
+
+      .sorter
+      {
+        padding: 0;
+        gap: 0.2em;
+
+        .sorter-text
+        {
+          padding: 0.4em 0 0.4em 0.4em;
+        }
+
         .way
         {
-          width: 0.6vw;
-          height: 0.6vw;
+          display: flex;
+          align-items: flex-start;
+          margin: 0.1em 0.4em 0.1em 0;
+          width: 16px;
+          position: relative;
+          
+          .sort-icon
+          {
+            width: 16px;
+            height: 16px;
+            position: absolute;
+          }
+
+          .up-arrow
+          {
+            top: 1px;
+          }
+
+          .down-arrow
+          {
+            bottom: 1px;
+          }
         }
       }
     }
@@ -182,7 +212,7 @@
 
 .column-drawing
 {
-  border: 1px solid black;
+  border: 1px solid var(--text-color);
   border-bottom: none;
   width: 1fr;
   min-width: 0.5em;
@@ -195,7 +225,7 @@
   .row-drawing
   {
     height: 32%;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--text-color);
   }
 }
 
