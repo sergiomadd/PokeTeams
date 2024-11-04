@@ -336,9 +336,9 @@ namespace api.Services
             List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
             int totalTeams = teams.Count;
 
-            if (searchQuery.Order != null)
+            if (searchQuery.SortOrder != null)
             {
-                teams = SortTeams(teams, searchQuery.Order ?? null);
+                teams = SortTeams(teams, searchQuery.SortOrder ?? null);
             }
             if (teams != null && teams.Count > 0
                 && searchQuery.TeamsPerPage != null && searchQuery.SelectedPage != null)
@@ -427,21 +427,32 @@ namespace api.Services
             return await BuildTeamSearchQueryResponse(searchQuery, teams.Distinct().ToList());
         }
 
-        public List<Team> SortTeams(List<Team> teams , TeamSearchOrder? order)
+        public List<Team> SortTeams(List<Team> teams , SortOrder? order)
         {
-            switch (order)
+            List<Team> sortedTeams = teams.ToList();
+            if(order.Type == SortType.Date)
             {
-                case TeamSearchOrder.DateAscending:
-                    return teams.OrderBy(t => t.DateCreated).ToList();
-                case TeamSearchOrder.DateDescending:
-                    return teams.OrderByDescending(t => t.DateCreated).ToList();
-                case TeamSearchOrder.ViewsAscending:
-                    return teams.OrderBy(t => t.ViewCount).ToList();
-                case TeamSearchOrder.ViewsDescending:
-                    return teams.OrderByDescending(t => t.ViewCount).ToList();
-                default:
-                    return teams;
+                if(order.Way == SortWay.Ascending)
+                {
+                    sortedTeams = teams.OrderBy(t => t.DateCreated).ToList();
+                }
+                else if(order.Way == SortWay.Descending)
+                {
+                    sortedTeams = teams.OrderByDescending(t => t.DateCreated).ToList();
+                }
             }
+            else if (order.Type == SortType.Views)
+            {
+                if (order.Way == SortWay.Ascending)
+                {
+                    sortedTeams = teams.OrderBy(t => t.ViewCount).ToList();
+                }
+                else if (order.Way == SortWay.Descending)
+                {
+                    sortedTeams = teams.OrderByDescending(t => t.ViewCount).ToList();
+                }
+            }
+            return sortedTeams;
         }
 
         public List<Team> ChunkTeams(List<Team> inteams, int teamsPerPage, int selectedPage)
