@@ -1,55 +1,54 @@
 .menu
 {
   height: 100%;
-  background-color: var(--bg-color-2);
+  background-color: var(--bg-color-1);
   color: var(--text-color);
-  transition: 0.5s all;
+  transition: 0.5s width;
   position: fixed;
   right: 0;
   top: 0;
   bottom: 0;
-  border-right: 1px solid var(--bg-color-3);
+  border-left: 1px solid var(--bg-color-3);
   z-index: 3;
 }
 
 .nav
 {
-
+  width: fit-content;
 }
 
 .opened
 {
-  width: 12em;
+  width: 11em;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 0.2em 0.8em 0.2em 0.8em;
+  padding: 0.2em 0.6em 0.2em 0.6em;
 }
 
 .closed
 {
-  width: 3em;
-  padding: 0.2em 0.8em 0.2em 0.8em;
+  width: 2.6em;
+  padding: 0.2em 0.6em 0.2em 0.6em;
 }
 
 .tabs
 {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.6vw;
+  align-items: flex-start;
+  gap: 0.6em;
   overflow: hidden;
-  padding-top: 0.4vw;
-  padding: 0.4vw;
+  padding-top: 0.4em;
+  width: fit-content;
 
   .tab
   {
-    gap: 0.4vw;
+    gap: 0.4em;
     border-radius: 10px;
     cursor: pointer;
     text-decoration: none;
     padding: 0.4em 0.2em 0.4em 0.2em;
-    width: 100%;
     color: var(--text-color);
     overflow: hidden;
     white-space: nowrap;
@@ -57,13 +56,12 @@
     .title
     {
       text-decoration: none;
-      margin-left: 0.4vw;
       font-size: 1.3em;
     }
 
     &:hover
     {
-      color: var(--primary);
+      background-color: var(--bg-color-3);
       text-decoration: none;
     }
 
@@ -80,6 +78,11 @@
     {
       text-decoration: none;
     }
+  }
+
+  .open-tab
+  {
+    width: calc(11em - 0.5em);
   }
 
 }
@@ -145,17 +148,10 @@
   height: 1vw;
   position: absolute;
   left: -0.55em;
-  top: 1.5em;
+  top: 1.3em;
   background-color: var(--primary-light);
   border-radius: 20px;
   cursor: pointer;
-}
-
-.last
-{
-  background-color: var(--primary);
-  color: var(--text-color-reverse) !important;
-
 }
 
 .footer
