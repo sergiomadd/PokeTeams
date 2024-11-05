@@ -7,11 +7,19 @@
     <div class="row s-gap">
       <div class="col">
         <div class="sprite">
-          <img [src]="pokemonSpritePath" alt="" class="sprite">
-          <div class="item tooltip-wrapper">
-            <img [src]="pokemon?.item?.iconPath" alt="">
-            <app-tooltip [text]="pokemon?.item?.name" [side]="'top'"></app-tooltip>
-          </div>
+          <img [src]="pokemonSpritePath" [alt]="pokemon?.name" class="sprite">
+          <ng-container *ngIf="pokemon?.teraType">
+            <div class="teratype tooltip-wrapper">
+              <img [src]="pokemon?.teraType?.iconPath" [alt]="pokemon?.teraType?.name" class="icon-big">
+              <app-tooltip [text]="pokemon?.teraType?.name" [side]="'top'"></app-tooltip>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="pokemon?.item">
+            <div class="item tooltip-wrapper">
+              <img [src]="pokemon?.item?.iconPath" [alt]="pokemon?.item?.name" class="icon-big">
+              <app-tooltip [text]="pokemon?.item?.name" [side]="'top'"></app-tooltip>
+            </div>
+          </ng-container>
         </div>
       </div>
       <div class="right">
@@ -27,11 +35,19 @@
   </ng-container>
   <ng-container *ngIf="layout === 1">
     <div class="sprite">
-      <img [src]="pokemonSpritePath" alt="" class="sprite">
-      <div class="item tooltip-wrapper">
-        <img [src]="pokemon?.item?.iconPath" alt="">
-        <app-tooltip [text]="pokemon?.item?.name" [side]="'top'"></app-tooltip>
-      </div>
+      <img [src]="pokemonSpritePath" [alt]="pokemon?.name" class="sprite">
+      <ng-container *ngIf="pokemon?.teraType">
+        <div class="teratype tooltip-wrapper">
+          <img [src]="pokemon?.teraType?.iconPath" [alt]="pokemon?.teraType?.name" class="icon-big">
+          <app-tooltip [text]="pokemon?.teraType?.name" [side]="'top'"></app-tooltip>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="pokemon?.item">
+        <div class="item tooltip-wrapper">
+          <img [src]="pokemon?.item?.iconPath" [alt]="pokemon?.item?.name" class="icon-big">
+          <app-tooltip [text]="pokemon?.item?.name" [side]="'top'"></app-tooltip>
+        </div>
+      </ng-container>
     </div>
   </ng-container>
 </div>

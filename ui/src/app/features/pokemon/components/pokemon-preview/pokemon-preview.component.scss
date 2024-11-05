@@ -73,10 +73,29 @@
   }
 }
 
+.teratype
+{
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  &:hover
+  {
+    background-color: var(--bg-color-3);
+    border-radius: 10px;
+  }
+}
+
 .icon
 {
   width: 1em;
   height: 1em;
+}
+
+.icon-big
+{
+  width: 1.5em;
+  height: 1.5em;
 }
 
 .section
