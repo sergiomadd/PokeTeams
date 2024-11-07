@@ -40,11 +40,7 @@ namespace api.Controllers
             Team newTeam = await _teamService.SaveTeam(team, User.Identity.Name);
             if (newTeam == null)
             {
-                object response = new
-                {
-                    content = $"Failed to upload team."
-                };
-                return BadRequest(response);
+                return BadRequest();
             }
             else
             {
