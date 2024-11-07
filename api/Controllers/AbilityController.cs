@@ -39,6 +39,17 @@ namespace api.Controllers
             return Ok(ability);
         }
 
+        [HttpGet, Route("all")]
+        public async Task<ActionResult<List<TagDTO>>> GetAllAbilities()
+        {
+            List<TagDTO> abilities = await _pokemonService.GetAllAbilitiesTags();
+            if (abilities == null)
+            {
+                return NotFound("Couldn't get pokemon abilities");
+            }
+            return Ok(abilities);
+        }
+
         [HttpGet, Route("pokemon/{id}")]
         public async Task<ActionResult<List<TagDTO>>> GetPokemonAbilities(string id)
         {

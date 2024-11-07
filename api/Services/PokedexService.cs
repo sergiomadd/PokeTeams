@@ -272,7 +272,7 @@ namespace api.Services
             if (abilityNames != null)
             {
                 Abilities? abilities = await _pokedexContext.Abilities.FirstOrDefaultAsync(a => a.id == abilityNames.ability_id);
-                Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilityNames.ability_id, abilityNames.local_language_id); ;
+                Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilityNames.ability_id, abilityNames.local_language_id);
                 if (abilities != null && abilityProse != null)
                 {
                     ability = new AbilityDTO(abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
@@ -295,6 +295,24 @@ namespace api.Services
                 }
             }
             return ability;
+        }
+
+        public async Task<List<TagDTO>> GetAllAbilitiesTags()
+        {
+            List<TagDTO> abilityDTOs = new List<TagDTO>();
+            List<Abilities> abilitiesList = _pokedexContext.Abilities.ToList();
+            if (abilitiesList != null)
+            {
+                foreach (Abilities abilities in abilitiesList)
+                {
+                    Ability_names? abilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(a => a.ability_id == abilities.id && a.local_language_id == 9);
+                    if (abilityNames != null)
+                    {
+                        abilityDTOs.Add(new TagDTO(abilityNames.name, abilityNames.ability_id.ToString()));
+                    }
+                }
+            }
+            return abilityDTOs;
         }
 
         public async Task<List<TagDTO>> GetPokemonAbilites(string id)
