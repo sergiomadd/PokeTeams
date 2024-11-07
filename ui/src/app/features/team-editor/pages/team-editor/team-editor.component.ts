@@ -37,6 +37,7 @@ export class TeamEditorComponent
   team: Team = <Team>{};
   showTournamentEditor: boolean = false;
   showTagEditor: boolean = false;
+  tagAlreadyAdded: boolean = false;
 
   async ngOnInit() 
   {
@@ -91,13 +92,12 @@ export class TeamEditorComponent
       && this.team.pokemons.some(p => p.dexNumber))
     {
       console.log("Generating team: ", this.team);
-      /*
       this.teamService.saveTeam(this.team).subscribe(
         {
           next: (response) =>
           {
             this.router.navigate(['/', response])
-            /*
+            
             console.log("response: ", response)
             const w = window.open('', '_blank')!;
             w.document.write("<html><head></head><body>Please wait while we redirect you</body></html>");
@@ -120,7 +120,6 @@ export class TeamEditorComponent
           }
         }
       )
-      */
     }
     else if(this.team.pokemons.length <= 0)
     {
@@ -182,9 +181,10 @@ export class TeamEditorComponent
 
   tagSelectEvent(tag: Tag)
   {
+    this.tagAlreadyAdded = false;
     if(this.team.tags)
     {
-      if(this.team.tags.length < 3)
+      if(this.team.tags.length < 3 && !this.team.tags.some(t => t.identifier == tag.identifier))
       {
         this.team.tags = [...this.team.tags, tag];
         if(this.team.tags.length === 3)
@@ -192,6 +192,10 @@ export class TeamEditorComponent
           this.disableTagSelector();
         }
         this.tagLabel = `Tags (${this.team?.tags ? this.team?.tags?.length : 0}/3)`;
+      }
+      else if(this.team.tags.some(t => t.identifier == tag.identifier))
+      {
+        this.tagAlreadyAdded = true;
       }
     }
     else
