@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, catchError, lastValueFrom, Observable, timeout } from 'rxjs';
+import { catchError, lastValueFrom, Observable, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { authActions } from '../../../auth/store/auth.actions';
 import { TeamId } from '../../../models/DTOs/teamId.dto';
@@ -11,6 +11,7 @@ import { SearchQueryResponseDTO } from '../../search/models/searchQueryResponse.
 import { Regulation } from '../models/regulation.model';
 import { Tag } from '../models/tag.model';
 import { Team } from '../models/team.model';
+import { TeamSaveResponse } from '../models/teamSaveResponse.model';
 import { Tournament } from '../models/tournament.model';
 
 @Injectable({
@@ -52,28 +53,21 @@ export class TeamService
     return this.util.toCamelCase(team); 
   }
 
-  saveTeam(team: Team): BehaviorSubject<string>
+  async saveTeam(team: Team): Promise<TeamSaveResponse>
   {
-    let response$ = new BehaviorSubject<string>("");
+    let response: TeamSaveResponse = <TeamSaveResponse>{};
     let url = this.apiUrl + 'team';
-    this.http.post<string>(url, team, {withCredentials: true})
-    .pipe(catchError(() => ["error"]), timeout(this.dataTimeout))
-    .subscribe(
-      {
-        next: (resp) => 
-        {
-          console.log("saving team response: ",resp);
-          response$.next(resp["content"]);
-          this.store.dispatch(authActions.getLogged());
-        },
-        error: (error) => 
-        {
-          console.log("saving team error", error);
-          response$.next(error);
-        }
-      }
-    );
-    return response$;
+    try
+    {
+      response = await lastValueFrom(this.http.post<TeamSaveResponse>(url, team, {withCredentials: true})
+      .pipe(catchError(() => [response]), timeout(this.dataTimeout)));
+      this.store.dispatch(authActions.getLogged());
+    }
+    catch(error)
+    {
+      console.log("Error saving team in service: ", this.util.getErrorMessage(error));
+    }
+    return response;
   }
 
   async incrementViewCount(teamKey: string)

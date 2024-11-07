@@ -5,6 +5,7 @@ import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
 import { QueryService } from 'src/app/features/search/services/query.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
+import { TeamSaveResponse } from 'src/app/features/team/models/teamSaveResponse.model';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
 import { UserPreview } from 'src/app/features/user/models/userPreview.model';
@@ -38,6 +39,7 @@ export class TeamEditorComponent
   showTournamentEditor: boolean = false;
   showTagEditor: boolean = false;
   tagAlreadyAdded: boolean = false;
+  feedback?: string;
 
   async ngOnInit() 
   {
@@ -88,38 +90,32 @@ export class TeamEditorComponent
   {
     if(this.team.pokemons.length > 0 
       && this.team.pokemons.length <= 6 
-      //If dexNumber is undefined -> empty pokemon
-      && this.team.pokemons.some(p => p.dexNumber))
+      && this.team.pokemons.some(p => p.dexNumber)) //If dexNumber is undefined -> empty pokemon
     {
       console.log("Generating team: ", this.team);
-      this.teamService.saveTeam(this.team).subscribe(
+      const teamResponse: TeamSaveResponse = await this.teamService.saveTeam(this.team);
+      console.log("Team response: ", teamResponse)
+      if(teamResponse && teamResponse.content)
+      {
+        const w: WindowProxy = window.open('', '_blank')!;
+        //Check for popup blocked
+        if(w && !w.closed && typeof w.closed != 'undefined')
         {
-          next: (response) =>
-          {
-            this.router.navigate(['/', response])
-            
-            console.log("response: ", response)
-            const w = window.open('', '_blank')!;
-            w.document.write("<html><head></head><body>Please wait while we redirect you</body></html>");
-            w.location.pathname = response;
-            w.document.close();
-            if(true)
-            {
-
-            }
-            else
-            {
-              console.log("Window popup blocked")
-              this.router.navigate(['/', response])
-            }
-            
-          },
-          error: (error) => 
-          {
-            console.log("Error generating team")
-          }
+          w.document.write("<html><head></head><body>Please wait while we redirect you</body></html>");
+          w.location.pathname = teamResponse.content;
+          w.document.close();
         }
-      )
+        else
+        {
+          console.log("Window popup blocked");
+          this.router.navigate(['/', teamResponse.content])
+        }
+      }
+      else
+      {
+        this.feedback = "Error generating team";
+        console.log("Error generating team: empty response");
+      }
     }
     else if(this.team.pokemons.length <= 0)
     {
@@ -181,7 +177,7 @@ export class TeamEditorComponent
 
   tagSelectEvent(tag: Tag)
   {
-    this.tagAlreadyAdded = false;
+    this.feedback = undefined;
     if(this.team.tags)
     {
       if(this.team.tags.length < 3 && !this.team.tags.some(t => t.identifier == tag.identifier))
@@ -195,7 +191,7 @@ export class TeamEditorComponent
       }
       else if(this.team.tags.some(t => t.identifier == tag.identifier))
       {
-        this.tagAlreadyAdded = true;
+        this.feedback = "Tag already added";
       }
     }
     else
