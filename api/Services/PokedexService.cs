@@ -276,7 +276,6 @@ namespace api.Services
                 if (abilities != null && abilityProse != null)
                 {
                     ability = new AbilityDTO(abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
-                    //ability = new AbilityDTO(abilities.identifier, abilityNames.name, abilityProse.effect);
                 }
             }
             return ability;
@@ -293,7 +292,6 @@ namespace api.Services
                 if (abilityNames != null && abilityProse != null)
                 {
                     ability = new AbilityDTO(abilities.identifier, abilityNames.name, Formatter.FormatProse(abilityProse.effect));
-                    //ability = new AbilityDTO(abilities.identifier, abilityNames.name, abilityProse.effect);
                 }
             }
             return ability;
@@ -302,26 +300,34 @@ namespace api.Services
         public async Task<List<TagDTO>> GetPokemonAbilites(string id)
         {
             List<TagDTO> abilityDTOs = new List<TagDTO>();
-            if(Int32.TryParse(id, out _))
+            try
             {
-                List<Pokemon_abilities> pokemonAbilitiesList = _pokedexContext.Pokemon_abilities.Where(p => p.pokemon_id == Int32.Parse(id)).ToList();
-                if (pokemonAbilitiesList != null && pokemonAbilitiesList.Count > 0)
+                if (Int32.TryParse(id, out _))
                 {
-                    foreach (Pokemon_abilities pokemonAbilities in pokemonAbilitiesList)
+                    List<Pokemon_abilities> pokemonAbilitiesList = _pokedexContext.Pokemon_abilities.Where(p => p.pokemon_id == Int32.Parse(id)).ToList();
+                    if (pokemonAbilitiesList != null && pokemonAbilitiesList.Count > 0)
                     {
-                        Abilities? abilities = await _pokedexContext.Abilities.FindAsync(pokemonAbilities.ability_id);
-                        if (abilities != null)
+                        foreach (Pokemon_abilities pokemonAbilities in pokemonAbilitiesList)
                         {
-                            Ability_names? abilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(a => a.ability_id == abilities.id && a.local_language_id == 9);
-                            if (abilityNames != null)
+                            Abilities? abilities = await _pokedexContext.Abilities.FindAsync(pokemonAbilities.ability_id);
+                            if (abilities != null)
                             {
-                                string pathStart = "https://localhost:7134/images/sprites/";
-                                abilityDTOs.Add(new TagDTO(abilityNames.name, abilities.identifier, icon: pokemonAbilities.is_hidden == 1 ? $"{pathStart}hidden.png" : null));
+                                Ability_names? abilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(a => a.ability_id == abilities.id && a.local_language_id == 9);
+                                if (abilityNames != null)
+                                {
+                                    string pathStart = "https://localhost:7134/images/sprites/";
+                                    abilityDTOs.Add(new TagDTO(abilityNames.name, abilities.identifier, icon: pokemonAbilities.is_hidden ? $"{pathStart}hidden.png" : null));
+                                }
                             }
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Printer.Log(ex);
+            }
+
             return abilityDTOs;
         }
 
