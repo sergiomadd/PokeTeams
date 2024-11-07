@@ -186,6 +186,7 @@ export class PokemonEditorComponent
 
   allAbilitiesSwitch() 
   { 
+    //if no pokemon disabled
     this.allAbilities = !this.allAbilities;
     this.pokemon.ability = undefined;
   }

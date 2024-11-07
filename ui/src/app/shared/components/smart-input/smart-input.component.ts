@@ -157,7 +157,7 @@ export class SmartInputComponent
 
   async onFocus()
   {
-    if(!this.updateOnChange)
+    if(!this.updateOnChange && !this.disabled)
     {
       if(this.allGetter)
       {

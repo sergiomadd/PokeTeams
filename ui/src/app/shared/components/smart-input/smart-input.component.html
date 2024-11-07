@@ -13,6 +13,8 @@
       class="input"
       (focus)="onFocus()"
       (blur)="onBlur()"
+      [attr.disabled]="disabled ? '' : null"
+      [readonly]="disabled"
       [ngClass]="{disabled: disabled}"
       >
     </ng-container>

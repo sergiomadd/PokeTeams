@@ -25,39 +25,47 @@
             ></app-smart-input>
           </div>
           <div class="form-item">
-            <div class="smart-input-wrapper">
-              <div class="smart-input-top">
-                <div class="smart-input-label">
-                  Ability
+            <div class="col-center w-100">
+              <div class="smart-input-wrapper">
+                <div class="smart-input-top">
+                  <div class="smart-input-label">
+                    Ability
+                  </div>
+                  <div class="checkbox-wrapper">
+                    <app-checkbox
+                    [checked]="allAbilities"
+                    [label]="'Show all'"
+                    (checkEvent)="allAbilitiesSwitch()"
+                    ></app-checkbox>
+                  </div>
                 </div>
-                <div class="checkbox-wrapper">
-                  <app-checkbox
-                  [checked]="allAbilities"
-                  [label]="'Show all'"
-                  (checkEvent)="allAbilitiesSwitch()"
-                  ></app-checkbox>
-                </div>
+                <ng-container *ngIf="allAbilities; else notAllAbilities">
+                  <app-smart-input
+                  [value]="util.getAbilityTag(pokemon.ability)"
+                  [keepSelected]="true"
+                  [getter]="queryService.queryAbilityCallback"
+                  [allGetter]="queryService.abilityAllCallback"
+                  (selectEvent)="abilitySelectEvent($event)"
+                  class="smart-input-wrapper"
+                  ></app-smart-input>
+                </ng-container>
+                <ng-template #notAllAbilities>
+                  <app-smart-input
+                  [value]="util.getAbilityTag(pokemon.ability)"
+                  [keepSelected]="true"
+                  [allGetter]="queryService.pokemonAbilitiesCallback"
+                  [allGetterIndex]="this.pokemon?.dexNumber"
+                  [disabled]="!this.pokemon?.dexNumber"
+                  (selectEvent)="abilitySelectEvent($event)"
+                  class="smart-input-wrapper"
+                  ></app-smart-input>
+                </ng-template>
               </div>
-              <ng-container *ngIf="allAbilities; else notAllAbilities">
-                <app-smart-input
-                [value]="util.getAbilityTag(pokemon.ability)"
-                [keepSelected]="true"
-                [getter]="queryService.queryAbilityCallback"
-                [allGetter]="queryService.abilityAllCallback"
-                (selectEvent)="abilitySelectEvent($event)"
-                class="smart-input-wrapper"
-                ></app-smart-input>
+              <ng-container *ngIf="!pokemon.name && !allAbilities">
+                <div class="formFeedbackError row-center">
+                  Select a pokemon or show all
+                </div>
               </ng-container>
-              <ng-template #notAllAbilities>
-                <app-smart-input
-                [value]="util.getAbilityTag(pokemon.ability)"
-                [keepSelected]="true"
-                [allGetter]="queryService.pokemonAbilitiesCallback"
-                [allGetterIndex]="this.pokemon?.dexNumber"
-                (selectEvent)="abilitySelectEvent($event)"
-                class="smart-input-wrapper"
-                ></app-smart-input>
-              </ng-template>
             </div>
           </div>
           <div class="form-item">
@@ -176,7 +184,7 @@
             </div>
             <ng-container *ngIf="!pokemon.name">
               <div class="formFeedbackError row-center">
-                Select a pokemon first!
+                Select a pokemon
               </div>
             </ng-container>
             <div class="range">
