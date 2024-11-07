@@ -43,6 +43,7 @@
                 [value]="util.getAbilityTag(pokemon.ability)"
                 [keepSelected]="true"
                 [getter]="queryService.queryAbilityCallback"
+                [allGetter]="queryService.abilityAllCallback"
                 (selectEvent)="abilitySelectEvent($event)"
                 class="smart-input-wrapper"
                 ></app-smart-input>

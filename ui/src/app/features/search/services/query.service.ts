@@ -104,6 +104,11 @@ export class QueryService
     }
     return [];
   }
+  abilityAllCallback = async (): Promise<Tag[]> => 
+  {
+    return (await this.pokemonService.getAllAbilities());
+
+  }
   pokemonAbilitiesCallback = async (id): Promise<Tag[]> => 
   {
     if(id != undefined)
