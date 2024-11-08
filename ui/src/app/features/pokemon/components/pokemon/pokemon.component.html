@@ -513,61 +513,73 @@
                       <img src="{{move?.damageClass?.iconPath}}" alt="" class="class-icon">
                     </div>
                   </div>
-                  <div class="body">
-                    <div class="property">
-                      <span class="property-title">Effect:</span> 
-                      <span>
-                        <ng-container *ngFor="let chunk of moveEffectsShort[i]">
+                  <div class="body move-body">
+                    <div class="primary">
+                      <div class="atribute">
+                        <span class="property-title">Power: </span>
+                        <ng-container *ngIf="move?.power;else emptyLine">
+                          {{move?.power}}
+                        </ng-container>
+                      </div>
+                      <div class="atribute"><span class="property-title">PP: </span>{{move?.pp}}</div>
+                      <div class="atribute">
+                        <span class="property-title">Accuracy: </span>
+                        <ng-container *ngIf="move?.accuracy;else emptyLine">
+                          {{move?.accuracy}}%
+                        </ng-container>
+                      </div>
+                      <div class="atribute"><span class="property-title">Priority: </span>{{move?.priority}}</div>
+                    </div>
+                    <div class="secondary">
+                      <ng-container *ngIf="move?.meta?.minHits">
+                        <div class="atribute"><span class="property-title">Min Hits: </span>{{move?.meta?.minHits}}</div>
+                      </ng-container>
+                      <ng-container *ngIf="move?.meta?.maxHits">
+                        <div class="atribute"><span class="property-title">Max Hits: </span>{{move?.meta?.maxHits}}</div>
+                      </ng-container>
+                      <ng-container *ngIf="move?.meta?.minTurns">
+                        <div class="atribute"><span class="property-title">Min Turns: </span>{{move?.meta?.minTurns}}</div>
+                      </ng-container>
+                      <ng-container *ngIf="move?.meta?.maxTurns">
+                        <div class="atribute"><span class="property-title">Max Turns: </span>{{move?.meta?.maxTurns}}</div>
+                      </ng-container>
+                      <ng-container *ngIf="move?.meta?.drain">
+                        <div class="atribute"><span class="property-title">Drain: </span>{{move?.meta?.drain}}</div>
+                      </ng-container>
+                      <ng-container *ngIf="move?.meta?.healing">
+                        <div class="atribute"><span class="property-title">Healing: </span>{{move?.meta?.healing}}</div>
+                      </ng-container>
+                      <ng-container *ngIf="move?.meta?.statusChance">
+                        <div class="atribute"><span class="property-title">Status Chance: </span>{{move?.meta?.statusChance}}%</div>
+                      </ng-container>
+                      <ng-container *ngIf="move?.meta?.flinchChance">
+                        <div class="atribute"><span class="property-title">Flinch Chance: </span>{{move?.meta?.flinchChance}}%</div>
+                      </ng-container>
+                    </div>
+                    <div class="properties">
+                      <div class="property">
+                        <span class="property-title">Effect:</span> 
+                        <span class="property-body">
+                          <ng-container *ngFor="let chunk of moveEffectsShort[i]">
+                            <ng-container [ngSwitch]="chunk.type">
+                              <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
+                              <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
+                              <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
+                            </ng-container>
+                          </ng-container>
+                        </span>
+                      </div>
+                      <div class="property">
+                        <span class="property-title">Target:</span>
+                        <span class="property-body">
+                        <ng-container *ngFor="let chunk of moveTargets[i]">
                           <ng-container [ngSwitch]="chunk.type">
                             <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
                             <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
                             <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
                           </ng-container>
                         </ng-container>
-                      </span>
-                    </div>
-                    <div class="property">
-                      <span class="property-title">Target:</span>
-                      <ng-container *ngFor="let chunk of moveTargets[i]">
-                        <ng-container [ngSwitch]="chunk.type">
-                          <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
-                          <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
-                          <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
-                        </ng-container>
-                      </ng-container>
-                    </div>
-                    <div class="move-bottom">
-                      <div class="primary">
-                        <div class="atribute"><span class="property-title">Power</span>{{move?.power}}</div>
-                        <div class="atribute"><span class="property-title">PP</span>{{move?.pp}}</div>
-                        <div class="atribute"><span class="property-title">Accuracy</span>{{move?.accuracy}}%</div>
-                        <div class="atribute"><span class="property-title">Priority</span>{{move?.priority}}</div>
-                      </div>
-                      <div class="secondary">
-                        <ng-container *ngIf="move?.meta?.minHits">
-                          <div class="atribute"><span class="property-title">minHits</span>{{move?.meta?.minHits}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.maxHits">
-                          <div class="atribute"><span class="property-title">maxHits</span>{{move?.meta?.maxHits}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.minTurns">
-                          <div class="atribute"><span class="property-title">minTurns</span>{{move?.meta?.minTurns}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.maxTurns">
-                          <div class="atribute"><span class="property-title">maxTurns</span>{{move?.meta?.maxTurns}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.drain">
-                          <div class="atribute"><span class="property-title">drain</span>{{move?.meta?.drain}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.healing">
-                          <div class="atribute"><span class="property-title">healing</span>{{move?.meta?.healing}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.statusChance">
-                          <div class="atribute"><span class="property-title">statusChance</span>{{move?.meta?.statusChance}}</div>
-                        </ng-container>
-                        <ng-container *ngIf="move?.meta?.flinchChance">
-                          <div class="atribute"><span class="property-title">flinchChance</span>{{move?.meta?.flinchChance}}</div>
-                        </ng-container>
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -727,3 +739,4 @@
 <ng-template #emptyIcon><div class="empty-icon"></div></ng-template>
 <ng-template #emptySection><div class="empty-section"></div></ng-template>
 <ng-template #empty></ng-template>
+<ng-template #emptyLine><div class="empty-line"></div></ng-template>

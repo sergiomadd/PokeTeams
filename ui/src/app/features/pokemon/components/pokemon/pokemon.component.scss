@@ -590,48 +590,60 @@ $padding: 0.2vw;
       }
     }
 
-    .property
+    .move-body
     {
-      display: flex;
-      margin-bottom: $padding;
-
-      .property-title
-      {
-        font-weight: bold;
-        margin-right: $padding;
-      }
-    }
-
-    .move-bottom
-    {
-      display: grid;
 
       .primary
       {
-        display: grid;
+        display: flex;
         justify-content: center;
         text-align: center;
-        grid-template-columns: 25% 15% 30% 25%;
-        margin-bottom: $padding;
         column-gap: $padding;
-        margin: $padding;
+        padding: $padding;
+        background-color: var(--bg-color-2);
+        border-radius: 0 0 5px 5px;
       }
-
+  
       .secondary
       {
         display: flex;
         justify-content: center;
+        text-align: center;
+        flex-wrap: wrap;
+        gap: 0.2em;
       }
 
       .atribute
       {
         padding: 0 $padding 0 $padding;
         display: flex;
-        flex-direction: column;
-        border: 1px solid black;
-        border-radius: 5%;
         background-color: var(--bg-color-3);
-        cursor: pointer;
+        padding: $padding;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+      }
+
+      .properties
+      {
+        display: flex;
+        flex-direction: column;
+        padding: $padding;
+      }
+  
+      .property
+      {
+        display: flex;
+      }
+  
+      .property-title
+      {
+        font-weight: bold;
+        margin-right: $padding;
+      }
+  
+      .property-body
+      {
       }
     }
   }
@@ -711,4 +723,13 @@ $padding: 0.2vw;
 {
   //background-color: var(--bg-color-2);
   //border-radius: 5px;
+}
+
+.empty-line
+{
+  width: 1em;
+  height: 1px;
+  padding: 0.05em;
+  background-color: var(--text-color);
+  border-radius: 20px;
 }
