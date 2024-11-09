@@ -5,16 +5,16 @@
   color: var(--text-color);
   transition: 0.5s width;
   position: fixed;
-  right: 0;
+  left: 0;
   top: 0;
   bottom: 0;
-  border-left: 1px solid var(--bg-color-3);
+  border-right: 1px solid var(--bg-color-3);
   z-index: 3;
 }
 
 .nav
 {
-  width: fit-content;
+  width: inherit;
 }
 
 .opened
@@ -40,7 +40,7 @@
   gap: 0.6em;
   overflow: hidden;
   padding-top: 0.4em;
-  width: fit-content;
+  width: inherit;
 
   .tab
   {
@@ -52,6 +52,9 @@
     color: var(--text-color);
     overflow: hidden;
     white-space: nowrap;
+    width: calc(2.6em - 0.6em);
+    transition: 0.5s width;
+
 
     .title
     {
@@ -147,7 +150,7 @@
   width: 1vw;
   height: 1vw;
   position: absolute;
-  left: -0.55em;
+  right: -0.55em;
   top: 1.3em;
   background-color: var(--primary-light);
   border-radius: 20px;
