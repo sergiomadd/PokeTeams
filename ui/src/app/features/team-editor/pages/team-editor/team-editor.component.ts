@@ -11,8 +11,8 @@ import { TeamService } from 'src/app/features/team/services/team.service';
 import { UserPreview } from 'src/app/features/user/models/userPreview.model';
 import { UserService } from 'src/app/features/user/services/user.service';
 import { SmartInputComponent } from '../../../../shared/components/smart-input/smart-input.component';
-import { TagEditorComponent } from '../../../team/components/tag-editor/tag-editor.component';
 import { TeamComponent } from '../../../team/components/team/team.component';
+import { TagEditorComponent } from '../../components/tag-editor/tag-editor.component';
 import { TeamEditorService } from '../../services/team-editor.service';
 
 @Component({
@@ -47,6 +47,11 @@ export class TeamEditorComponent
     {
       this.team = value;
     })
+  }
+
+  ngOnDestroy()
+  {
+    this.reset();
   }
 
   async ngAfterContentInit()
@@ -97,19 +102,7 @@ export class TeamEditorComponent
       console.log("Team response: ", teamResponse)
       if(teamResponse && teamResponse.content)
       {
-        const w: WindowProxy = window.open('', '_blank')!;
-        //Check for popup blocked
-        if(w && !w.closed && typeof w.closed != 'undefined')
-        {
-          w.document.write("<html><head></head><body>Please wait while we redirect you</body></html>");
-          w.location.pathname = teamResponse.content;
-          w.document.close();
-        }
-        else
-        {
-          console.log("Window popup blocked");
-          this.router.navigate(['/', teamResponse.content])
-        }
+        this.router.navigate(['/', teamResponse.content])
       }
       else
       {
@@ -133,6 +126,11 @@ export class TeamEditorComponent
     {
       console.log("Error: paste not loaded, no pokemons to generate")
     }
+  }
+
+  reset()
+  {
+    this.teamEditorService.setEmptyTeam();
   }
 
   playerUpdateEvent(event: string)
@@ -277,4 +275,6 @@ export class TeamEditorComponent
   {
     this.team.options.showNickname = $event;
   }
+
+
 }
