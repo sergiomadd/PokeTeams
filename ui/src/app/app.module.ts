@@ -42,6 +42,7 @@ import { SwitchComponent } from './shared/components/switch/switch.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
 import { LinkerPipe } from './shared/pipes/linker.pipe';
 import { metaReducers } from './state/app.state';
+import { FooterComponent } from './core/layout/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { metaReducers } from './state/app.state';
     RegulationSelectorComponent,
     PokemonComponent,
     PokemonEditorComponent,
+    FooterComponent,
   ],
   exports: [],
   imports: [
