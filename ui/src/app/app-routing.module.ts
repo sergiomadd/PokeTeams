@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes, UrlSegment } from '@angular/router';
 import { HomeComponent } from './core/pages/home/home.component';
 import { SearchComponent } from './features/search/pages/search/search.component';
+import { TeamEditComponent } from './features/team/pages/team-edit/team-edit.component';
 import { TeamViewComponent } from './features/team/pages/team-view/team-view.component';
 import { UserComponent } from './features/user/components/user/user.component';
 
@@ -20,6 +21,7 @@ const routes: Routes = [
     },
     component: UserComponent
   },
+  { path: 'edit/:id', component: TeamEditComponent },
   { path: ':id', component: TeamViewComponent },
   //{path: '**', component: PageNotFoundComponent}
 ];

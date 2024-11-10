@@ -12,22 +12,24 @@ import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
 import { FooterComponent } from './core/layout/footer/footer.component';
 import { MenuComponent } from './core/layout/menu/menu.component';
+import { HomeComponent } from './core/pages/home/home.component';
 import { EvolutionComponent } from './features/pokemon/components/evolution/evolution.component';
 import { PokemonPreviewComponent } from './features/pokemon/components/pokemon-preview/pokemon-preview.component';
 import { PokemonComponent } from './features/pokemon/components/pokemon/pokemon.component';
 import { SearchComponent } from './features/search/pages/search/search.component';
-import { ColorPickerComponent } from './features/team-editor/components/color-picker/color-picker.component';
-import { InputComponent } from './features/team-editor/components/input/input.component';
-import { PokemonEditorComponent } from './features/team-editor/components/pokemon-editor/pokemon-editor.component';
-import { RegulationSelectorComponent } from './features/team-editor/components/regulation-selector/regulation-selector.component';
-import { TagEditorComponent } from './features/team-editor/components/tag-editor/tag-editor.component';
-import { TournamentEditorComponent } from './features/team-editor/components/tournament-editor/tournament-editor.component';
-import { TeamEditorComponent } from './features/team-editor/pages/team-editor/team-editor.component';
+import { ColorPickerComponent } from './features/team/components/color-picker/color-picker.component';
+import { InputComponent } from './features/team/components/input/input.component';
+import { PokemonEditorComponent } from './features/team/components/pokemon-editor/pokemon-editor.component';
+import { RegulationSelectorComponent } from './features/team/components/regulation-selector/regulation-selector.component';
+import { TagEditorComponent } from './features/team/components/tag-editor/tag-editor.component';
 import { TagListComponent } from './features/team/components/tag-list/tag-list.component';
 import { TagComponent } from './features/team/components/tag/tag.component';
+import { TeamEditorComponent } from './features/team/components/team-editor/team-editor.component';
 import { TeamIconsComponent } from './features/team/components/team-icons/team-icons.component';
 import { TeamPreviewComponent } from './features/team/components/team-preview/team-preview.component';
 import { TeamComponent } from './features/team/components/team/team.component';
+import { TournamentEditorComponent } from './features/team/components/tournament-editor/tournament-editor.component';
+import { TeamEditComponent } from './features/team/pages/team-edit/team-edit.component';
 import { TeamViewComponent } from './features/team/pages/team-view/team-view.component';
 import { UserDetailsComponent } from './features/user/components/user-details/user-details.component';
 import { UserFormComponent } from './features/user/components/user-form/user-form.component';
@@ -43,7 +45,6 @@ import { SwitchComponent } from './shared/components/switch/switch.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
 import { LinkerPipe } from './shared/pipes/linker.pipe';
 import { metaReducers } from './state/app.state';
-import { HomeComponent } from './core/pages/home/home.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import { HomeComponent } from './core/pages/home/home.component';
     PokemonEditorComponent,
     FooterComponent,
     HomeComponent,
+    TeamEditComponent,
   ],
   exports: [],
   imports: [
