@@ -32,11 +32,9 @@
               </ng-container>
             </div>
           </div>
-          <ng-container *ngIf="teamOptions?.showDexNumber && pokemon.dexNumber; else empty">
-            <div class="dex-number">
-              #{{pokemon.dexNumber}}
-            </div>
-          </ng-container>
+          <div class="dex-number">
+            #{{pokemon.dexNumber}}
+          </div>
           <div class="no-overflow row">
             <div class="section-name">
               <ng-container *ngIf="pokemon.nickname && teamOptions?.showNickname; else speciesName">
@@ -370,7 +368,7 @@
         <img src={{pokemonSpritePath}} alt="" class="sprite">
       </div>
       <div class="center-down">
-        <ng-container *ngIf="pokemon.shiny && teamOptions?.showShinyIcon; else emptyIcon">
+        <ng-container *ngIf="pokemon.shiny; else emptyIcon">
           <div 
           class="section"
           (click)="clickSection(0, 'middle')"

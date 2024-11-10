@@ -226,11 +226,6 @@ export class TeamEditorComponent
     this.team.options.showNature = $event;
   }
 
-  showDexNumberCheckEvent($event: boolean)
-  {
-    this.team.options.showDexNumber = $event;
-  }
-
   showNicknameCheckEvent($event: boolean)
   {
     this.team.options.showNickname = $event;

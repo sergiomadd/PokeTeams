@@ -96,10 +96,7 @@ export class TeamEditorService
       showIVs: false,
       showEVs: false,
       showNature: false,
-      showDexNumber: false,
       showNickname: false,
-      showShinyIcon: true,
-      showGenderIcon: true,
       maxLevel: 0
     }
     */
@@ -108,10 +105,7 @@ export class TeamEditorService
       showIVs: true,
       showEVs: true,
       showNature: true,
-      showDexNumber: true,
       showNickname: true,
-      showShinyIcon: true,
-      showGenderIcon: true,
       maxStat: 0
     }
     
