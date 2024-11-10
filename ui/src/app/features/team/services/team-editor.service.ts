@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Pokemon } from '../../pokemon/models/pokemon.model';
-import { Team } from '../../team/models/team.model';
-import { TeamOptions } from '../../team/models/teamOptions.model';
+import { Team } from '../models/team.model';
+import { TeamOptions } from '../models/teamOptions.model';
 
 @Injectable({
   providedIn: 'root'

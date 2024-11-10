@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Pokemon } from '../../features/pokemon/models/pokemon.model';
 import { Stat } from '../../features/pokemon/models/stat.model';
-import { PokePaste } from '../../features/team-editor/models/pokePaste.model';
-import { PokePasteData } from '../../features/team-editor/models/pokePasteData.model';
+import { PokePaste } from '../../features/team/models/pokePaste.model';
+import { PokePasteData } from '../../features/team/models/pokePasteData.model';
 
 @Injectable({
   providedIn: 'root'

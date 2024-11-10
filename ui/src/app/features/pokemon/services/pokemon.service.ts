@@ -4,7 +4,7 @@ import { catchError, lastValueFrom, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { defaultPokemonData, PokemonData } from '../../../models/DTOs/pokemonData.dto';
 import { UtilService } from '../../../shared/services/util.service';
-import { PokePaste } from '../../team-editor/models/pokePaste.model';
+import { PokePaste } from '../../team/models/pokePaste.model';
 import { Tag } from '../../team/models/tag.model';
 import { Ability, defaultAbility } from '../models/ability.model';
 import { DefaultItem, Item } from '../models/item.model';

@@ -81,7 +81,7 @@
           </button>
           <ng-container *ngIf="logged">
             <button class="button tooltip-wrapper">
-              <a [routerLink]="['/', team?.id]" target="_blank" class="button button-tertiary">
+              <a [routerLink]="['/edit/', team?.id]" target="_blank" class="button button-tertiary">
                 <img src="assets/edit-white.png" alt="" class="icon">
               </a>
               <app-tooltip

@@ -11,9 +11,9 @@ import { TeamService } from 'src/app/features/team/services/team.service';
 import { UserPreview } from 'src/app/features/user/models/userPreview.model';
 import { UserService } from 'src/app/features/user/services/user.service';
 import { SmartInputComponent } from '../../../../shared/components/smart-input/smart-input.component';
-import { TeamComponent } from '../../../team/components/team/team.component';
-import { TagEditorComponent } from '../../components/tag-editor/tag-editor.component';
 import { TeamEditorService } from '../../services/team-editor.service';
+import { TagEditorComponent } from '../tag-editor/tag-editor.component';
+import { TeamComponent } from '../team/team.component';
 
 @Component({
   selector: 'app-team-editor',
@@ -46,7 +46,7 @@ export class TeamEditorComponent
     this.teamEditorService.selectedTeam$.subscribe((value) => 
     {
       this.team = value;
-    })
+    });
   }
 
   ngOnDestroy()
