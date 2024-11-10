@@ -12,7 +12,6 @@ import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
 import { FooterComponent } from './core/layout/footer/footer.component';
 import { MenuComponent } from './core/layout/menu/menu.component';
-import { HomeComponent } from './core/pages/home/home.component';
 import { EvolutionComponent } from './features/pokemon/components/evolution/evolution.component';
 import { PokemonPreviewComponent } from './features/pokemon/components/pokemon-preview/pokemon-preview.component';
 import { PokemonComponent } from './features/pokemon/components/pokemon/pokemon.component';
@@ -31,6 +30,7 @@ import { TeamComponent } from './features/team/components/team/team.component';
 import { TournamentEditorComponent } from './features/team/components/tournament-editor/tournament-editor.component';
 import { TeamEditComponent } from './features/team/pages/team-edit/team-edit.component';
 import { TeamViewComponent } from './features/team/pages/team-view/team-view.component';
+import { UploadComponent } from './features/team/pages/upload/upload.component';
 import { UserDetailsComponent } from './features/user/components/user-details/user-details.component';
 import { UserFormComponent } from './features/user/components/user-form/user-form.component';
 import { UserOptionsComponent } from './features/user/components/user-options/user-options.component';
@@ -81,8 +81,8 @@ import { metaReducers } from './state/app.state';
     PokemonComponent,
     PokemonEditorComponent,
     FooterComponent,
-    HomeComponent,
     TeamEditComponent,
+    UploadComponent,
   ],
   exports: [],
   imports: [

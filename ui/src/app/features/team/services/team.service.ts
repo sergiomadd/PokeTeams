@@ -69,7 +69,7 @@ export class TeamService
     }
     return response;
   }
-
+  
   async incrementViewCount(teamKey: string)
   {
     let url = this.apiUrl + 'team/increment';

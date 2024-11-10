@@ -1,11 +1,10 @@
-import { Component, EventEmitter, Output, ViewChild, inject } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
 import { QueryService } from 'src/app/features/search/services/query.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
-import { TeamSaveResponse } from 'src/app/features/team/models/teamSaveResponse.model';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
 import { UserPreview } from 'src/app/features/user/models/userPreview.model';
@@ -29,8 +28,6 @@ export class TeamEditorComponent
   router = inject(Router);
   queryService = inject(QueryService);
   teamEditorService = inject(TeamEditorService);
-
-  @Output() outputTeam = new EventEmitter<Team>();
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
@@ -89,43 +86,6 @@ export class TeamEditorComponent
       picture: "assets/anon.png"
     }
     return anonPlayer
-  }
-
-  async generateTeam()
-  {
-    if(this.team.pokemons.length > 0 
-      && this.team.pokemons.length <= 6 
-      && this.team.pokemons.some(p => p.dexNumber)) //If dexNumber is undefined -> empty pokemon
-    {
-      console.log("Generating team: ", this.team);
-      const teamResponse: TeamSaveResponse = await this.teamService.saveTeam(this.team);
-      console.log("Team response: ", teamResponse)
-      if(teamResponse && teamResponse.content)
-      {
-        this.router.navigate(['/', teamResponse.content])
-      }
-      else
-      {
-        this.feedback = "Error generating team";
-        console.log("Error generating team: empty response");
-      }
-    }
-    else if(this.team.pokemons.length <= 0)
-    {
-      console.log("Error: no pokemons loaded")
-    }
-    else if(this.team.pokemons.length > 6)
-    {
-      console.log("Error: too many pokemons, limit is 6")
-    }
-    else if(this.team.pokemons.some(p => !p.dexNumber))
-    {
-      console.log("Error: there are empty pokemons")
-    }
-    else
-    {
-      console.log("Error: paste not loaded, no pokemons to generate")
-    }
   }
 
   reset()

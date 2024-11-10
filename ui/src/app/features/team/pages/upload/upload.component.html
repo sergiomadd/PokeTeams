@@ -1,0 +1,17 @@
+<div class="upload">
+  <div class="row-center">
+    <img src="assets/vgc.png">
+  </div>
+  <app-input></app-input>
+  <app-team-editor></app-team-editor>
+  <div class="col">
+    <span class="formFeedbackError text-center">{{feedback}}</span>
+    <div class="buttons">
+      <button
+      (click)="generateTeam()"
+      class="generate button-primary-clear"
+      >Generate Team</button>
+    </div>
+  </div>
+
+</div>
