@@ -1,10 +1,44 @@
 
-.creator
+.pokemon-editor
 {
   display: flex;
   flex-direction: column;
   gap: 0.8vw;
   position: relative;
+
+  .selectors
+  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4vw;
+
+    .selector
+    {
+      width: 2vw;
+      height: 2vw;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border-radius: 40px;
+      border: 1px solid var(--bg-color-3);
+      cursor: pointer;
+      user-select: none;
+
+      &:hover
+      {
+        background-color: var(--bg-color-3);
+      }
+    }
+
+    .selected
+    {
+      background-color: var(--bg-color-3);
+      border: 1px solid black;
+    }
+  }
 
   .editor
   {

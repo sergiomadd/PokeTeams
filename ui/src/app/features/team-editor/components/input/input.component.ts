@@ -74,17 +74,6 @@ export class InputComponent
     //console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
   }
 
-  addEmptyPokemon()
-  {
-    this.teamEditorService.addEmptyPokemon();
-    this.selectedPokemonIndex = this.team.pokemons.length - 1;
-  }
-
-  deletePokemon(index: number)
-  {
-    this.teamEditorService.deletePokemon(index);
-  }
-
   selectTab(index)
   {
     for(let i=0;i<this.tabs.length;i++)
@@ -92,14 +81,6 @@ export class InputComponent
       this.tabs[i] = false;
     }
     this.tabs[index] = true;
-  }
-
-  selectPokemon(index: number)
-  {
-    if(index != this.selectedPokemonIndex)
-    {
-      this.selectedPokemonIndex = index;
-    }
   }
 
   isInvalid(key: string) : boolean

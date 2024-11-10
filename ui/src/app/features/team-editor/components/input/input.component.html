@@ -36,31 +36,6 @@
     </div>
   </ng-container>
   <ng-template #editor>
-    <div class="editor">
-      <div class="selectors">
-        <ng-container *ngFor="let pokemon of team.pokemons; index as i">
-          <div 
-          class="selector"
-          [ngClass]="{selected: selectedPokemonIndex == i}"
-          (click)="selectPokemon(i)"
-          >
-            {{i + 1}}
-          </div>
-        </ng-container>
-        <ng-container *ngIf="team.pokemons.length < 6">
-          <div class="selector" (click)="addEmptyPokemon()">
-            +
-          </div>
-        </ng-container>
-      </div>
-      <div class="editors">
-        <app-pokemon-editor
-        [index]="selectedPokemonIndex"
-        [pokemon]="team.pokemons[selectedPokemonIndex]"
-        [teamOptions]="team.options"
-        (deleteEvent)="deletePokemon($event)"
-        ></app-pokemon-editor>
-      </div>
-    </div>
+    <app-pokemon-editor></app-pokemon-editor>
   </ng-template>
 </div>

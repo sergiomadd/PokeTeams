@@ -1,11 +1,12 @@
-import { Component, EventEmitter, inject, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { Stat } from 'src/app/features/pokemon/models/stat.model';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
 import { QueryService } from 'src/app/features/search/services/query.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
-import { TeamOptions } from 'src/app/features/team/models/teamOptions.model';
+import { Team } from 'src/app/features/team/models/team.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
 import { PokemonData } from 'src/app/models/DTOs/pokemonData.dto';
 import { UtilService } from 'src/app/shared/services/util.service';
@@ -25,12 +26,12 @@ export class PokemonEditorComponent
   formBuilder = inject(FormBuilder);
   util = inject(UtilService);
   teamEditorService = inject(TeamEditorService)
+  router = inject(Router);
 
-  @Input() index: number = 0;
-  @Input() teamOptions!: TeamOptions;
-  @Input() pokemon!: Pokemon;
-  @Output() calculateMaxLvlEvent = new EventEmitter();
-  @Output() deleteEvent = new EventEmitter();
+  teamKey: string = "";
+  team: Team = <Team>{};
+  pokemon: Pokemon = <Pokemon>{};
+  selectedPokemonIndex: number = 0;
 
   @ViewChild(PokemonComponent) pokemonPreviewComponent!: PokemonComponent;
   allAbilities: boolean = false;
@@ -44,7 +45,6 @@ export class PokemonEditorComponent
       ivs: [0],
       evs: [0]
     });
-
 
   emptyStat: Stat =   
   {
@@ -84,12 +84,18 @@ export class PokemonEditorComponent
 
   async ngOnInit()
   {
+    this.teamEditorService.selectedTeam$.subscribe((value) => 
+    {
+      this.team = value;
+      this.pokemon = this.team.pokemons[this.selectedPokemonIndex]
+    });
+
     this.pokemonForm.controls.nickname.valueChanges.subscribe(async (value) => 
     {
       if(this.pokemonForm.controls.nickname.valid)
       {
         this.pokemon.nickname = value ?? undefined;
-        this.teamEditorService.updatePokemon(this.pokemon, this.index);
+        this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
       }
     });
 
@@ -103,7 +109,7 @@ export class PokemonEditorComponent
           if(this.pokemonForm.controls.level.valid)
           {
             this.pokemon.level = value ?? 50;
-            this.teamEditorService.updatePokemon(this.pokemon, this.index);
+            this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
           }
           else
           {
@@ -128,7 +134,7 @@ export class PokemonEditorComponent
           ...this.pokemon,
           gender: value
         }
-        this.teamEditorService.updatePokemon(this.pokemon, this.index);
+        this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
 
       }
     });
@@ -145,7 +151,7 @@ export class PokemonEditorComponent
           ...this.pokemon,
           ivs: ivs
         }
-        this.teamEditorService.updatePokemon(this.pokemon, this.index);
+        this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
         this.calcIVSliderBackground(value, 0, 31);
       }
     });
@@ -161,11 +167,33 @@ export class PokemonEditorComponent
           ...this.pokemon,
           evs: evs
         }
-        this.teamEditorService.updatePokemon(this.pokemon, this.index);
+        this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
         this.calcEVSliderBackground(value, 0, this.currentMaxEVs);
       }
     });
   }
+
+  selectPokemon(index: number)
+  {
+    if(index != this.selectedPokemonIndex)
+    {
+      this.selectedPokemonIndex = index;
+      this.pokemon = this.team.pokemons[this.selectedPokemonIndex];
+    }
+  }
+
+  addEmptyPokemon()
+  {
+    this.teamEditorService.addEmptyPokemon();
+    this.selectPokemon(this.team.pokemons.length - 1);
+  }
+
+  deletePokemon()
+  {
+    this.teamEditorService.deletePokemon(this.selectedPokemonIndex);
+    this.selectPokemon(this.selectedPokemonIndex - 1);
+  }
+
 
   calcIVSliderBackground(currentValue, min, max)
   {
@@ -177,11 +205,6 @@ export class PokemonEditorComponent
   {
     var value = (currentValue-min)/(max-min)*100
     this.evSliders[this.selectedStat] = 'linear-gradient(to right, gold 0%, gold ' + value + '%, var(--bg-color-2) ' + value + '%, var(--bg-color-2) 100%)'
-  }
-
-  deletePokemon()
-  {
-    this.deleteEvent.emit(this.index);
   }
 
   allAbilitiesSwitch() 
@@ -237,7 +260,7 @@ export class PokemonEditorComponent
       }
       this.pokemonPreviewComponent.showStats[0] = false;
     }
-    this.teamEditorService.updatePokemon(this.pokemon, this.index);
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async itemSelectEvent(event: Tag)
@@ -248,32 +271,32 @@ export class PokemonEditorComponent
   async abilitySelectEvent(event: Tag)
   {
     this.pokemon = { ...this.pokemon, ability: event ? await this.pokemonService.getAbilityByName(event.name) : undefined }
-    this.teamEditorService.updatePokemon(this.pokemon, this.index);
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async move1SelectEvent(event: Tag)
   {
     this.pokemon.moves[0] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    this.teamEditorService.updatePokemon(this.pokemon, this.index);
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async move2SelectEvent(event: Tag)
   {
     this.pokemon.moves[1] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    this.teamEditorService.updatePokemon(this.pokemon, this.index);
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async move3SelectEvent(event: Tag)
   {
     this.pokemon.moves[2] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    this.teamEditorService.updatePokemon(this.pokemon, this.index);
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
 
   }
 
   async move4SelectEvent(event: Tag)
   {
     this.pokemon.moves[3] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    this.teamEditorService.updatePokemon(this.pokemon, this.index);
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async natureSelectEvent(event: Tag)
@@ -293,7 +316,7 @@ export class PokemonEditorComponent
       ...this.pokemon,
       shiny: event
     }
-    this.teamEditorService.updatePokemon(this.pokemon, this.index);
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   genderSelectEvent(event: any)
@@ -303,7 +326,7 @@ export class PokemonEditorComponent
       ...this.pokemon,
       gender: event
     }
-    this.teamEditorService.updatePokemon(this.pokemon, this.index);
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   selectStat(index: number)

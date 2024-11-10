@@ -1,5 +1,20 @@
-
-<div class="creator">
+<div class="pokemon-editor">
+  <div class="selectors">
+    <ng-container *ngFor="let pokemon of team.pokemons; index as i">
+      <div 
+      class="selector"
+      [ngClass]="{selected: selectedPokemonIndex == i}"
+      (click)="selectPokemon(i)"
+      >
+        {{i + 1}}
+      </div>
+    </ng-container>
+    <ng-container *ngIf="team.pokemons && team.pokemons!.length < 6">
+      <div class="selector" (click)="addEmptyPokemon()">
+        +
+      </div>
+    </ng-container>
+  </div>
   <ng-container *ngIf="pokemon">
     <div class="editor">
       <form class="form" [formGroup]="pokemonForm">
@@ -70,7 +85,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            [value]="util.getMoveTag(pokemon.moves[0])"
+            [value]="util.getMoveTag(pokemon.moves ? pokemon.moves[0] : undefined)"
             [label]="'Move 1 '"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
@@ -80,7 +95,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            [value]="util.getMoveTag(pokemon.moves[1])"
+            [value]="util.getMoveTag(pokemon.moves ? pokemon.moves[1] : undefined)"
             [label]="'Move 2 '"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
@@ -101,7 +116,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            [value]="util.getMoveTag(pokemon.moves[2])"
+            [value]="util.getMoveTag(pokemon.moves ? pokemon.moves[2] : undefined)"
             [label]="'Move 3 '"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
@@ -111,7 +126,7 @@
           </div>
           <div class="form-item">
             <app-smart-input
-            [value]="util.getMoveTag(pokemon.moves[3])"
+            [value]="util.getMoveTag(pokemon.moves ? pokemon.moves[3] : undefined)"
             [label]="'Move 4 '"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
@@ -219,7 +234,7 @@
         </div>
         <app-pokemon 
         [pokemon]="pokemon" 
-        [teamOptions]="teamOptions" 
+        [teamOptions]="team?.options" 
         [showStatsStart]="true"
         [editorPreview] = "true"
         ></app-pokemon>
