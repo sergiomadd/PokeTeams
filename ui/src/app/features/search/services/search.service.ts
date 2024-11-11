@@ -12,17 +12,21 @@ export class SearchService
 {
   teamService = inject(TeamService);
 
+  private query$: BehaviorSubject<SearchQueryDTO>
+    = new BehaviorSubject<SearchQueryDTO>(<SearchQueryDTO>{});
+  query = this.query$.asObservable();
+
   private teams$: BehaviorSubject<TeamPreview[]>
     = new BehaviorSubject<TeamPreview[]>([]);
   teams = this.teams$.asObservable();
 
-  private searched$: BehaviorSubject<boolean>
-    = new BehaviorSubject<boolean>(false);
-  searched = this.searched$.asObservable();
-
   private totalTeams$: BehaviorSubject<number>
     = new BehaviorSubject<number>(0);
   totalTeams = this.totalTeams$.asObservable();
+
+  private searched$: BehaviorSubject<boolean>
+    = new BehaviorSubject<boolean>(false);
+  searched = this.searched$.asObservable();
 
   constructor() { }
 
@@ -61,5 +65,36 @@ export class SearchService
         }
       }
     )
+  }
+
+  defaultSearch()
+  {
+    this.search(this.buildQuery());
+  }
+
+  buildQuery(): SearchQueryDTO
+  {
+    let searchQuery: SearchQueryDTO = 
+    {
+      queries: this.tags ?? [],
+      teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
+      selectedPage: 1,
+      sortOrder: this.sortOrder,
+      setOperation: this.unionType
+    }
+    return searchQuery;
+  }
+
+  buildQueryLastest(): SearchQueryDTO
+  {
+    let searchQuery: SearchQueryDTO = 
+    {
+      queries: this.tags ?? [],
+      teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
+      selectedPage: 1,
+      sortOrder: this.sortOrder,
+      setOperation: this.unionType
+    }
+    return searchQuery;
   }
 }

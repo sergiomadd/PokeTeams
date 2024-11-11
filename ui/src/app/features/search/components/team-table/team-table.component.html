@@ -1,0 +1,122 @@
+<div 
+class="results" 
+#results
+[ngClass]="{searched: searched}"
+>
+  <div class="bar">
+    <div class="row b-gap">
+      <ng-container *ngFor="let item of sortTypeNames; index as i">
+        <div class="category sorter" (click)="changeSorter(i)">
+          <div class="sorter-text">
+            {{item}}
+          </div>
+          <div class="way">
+            <ng-container *ngIf="sortOrder.type != i">
+              <div class="col">
+                <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+                ? 'assets/up-arrow.png' 
+                : 'assets/up-arrow-white.png'}}" alt="Sort up arrow" class="sort-icon up-arrow">
+                <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+                ? 'assets/down-arrow.png' 
+                : 'assets/down-arrow-white.png'}}" alt="Sort down arrow" class="sort-icon down-arrow">
+              </div>
+            </ng-container>
+            <ng-container *ngIf="sortOrder.type == i && sortOrder.way === 1">
+              <div class="col">
+                <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+                ? 'assets/up-arrow.png' 
+                : 'assets/up-arrow-white.png'}}" alt="Sort up arrow" class="sort-icon up-arrow">
+                <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+                ? 'assets/down-arrow-clear.png' 
+                : 'assets/down-arrow-clear-white.png'}}" alt="Sort down arrow" class="sort-icon down-arrow">
+              </div>
+            </ng-container>
+            <ng-container *ngIf="sortOrder.type == i && sortOrder.way === 0">
+              <div class="col">
+                <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+                ? 'assets/up-arrow-clear.png' 
+                : 'assets/up-arrow-clear-white.png'}}" alt="Sort up arrow" class="sort-icon up-arrow">
+                <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+                ? 'assets/down-arrow.png' 
+                : 'assets/down-arrow-white.png'}}" alt="Sort down arrow" class="sort-icon down-arrow">
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="row b-gap">
+      <div class="category">{{totalTeams ?? '?'}} teams</div>
+      <div 
+      class="column-icon category"
+      [ngClass]="{'selected': layout === 0}"
+      (click)="changeLayout(0)"
+      >
+        <div class="column-drawing">
+          <span class="row-drawing"></span>
+          <span class="row-drawing"></span>
+          <span class="row-drawing"></span>
+        </div>
+      </div>
+      <div 
+      class="column-icon category"
+      [ngClass]="{'selected': layout === 1}"
+      (click)="changeLayout(1)"
+      >
+        <div class="column-drawing">
+          <span class="row-drawing"></span>
+          <span class="row-drawing"></span>
+          <span class="row-drawing"></span>
+        </div>
+        <div class="column-drawing">
+          <span class="row-drawing"></span>
+          <span class="row-drawing"></span>
+          <span class="row-drawing"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="table">
+    <ng-container *ngIf="searched">
+      <div class="loader-wrapper">
+        <div class="pokemon-spinner"></div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="teams && teams.length > 0">
+      <div class="records" [ngClass]="
+      {
+        single: layout === 0,
+        double: layout === 1
+      }">
+        <ng-container *ngFor="let team of teams">
+          <div class="record">
+            <app-team-preview 
+            [team]="team" 
+            [layout]="layout"
+            [logged]="isTeamOwnerLogged(team)"></app-team-preview>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+    <div class="pagination">
+      <div></div>
+      <app-pagination
+      [itemsPerPage]="paginationForm.controls.teamsPerPage.valid ? paginationForm.controls.teamsPerPage.value ?? 20 : 20"
+      [totalItems]="totalTeams ?? 0"
+      (pageChanged)="pageChange($event, results)"
+      ></app-pagination>
+      <form class="col s-gap" [formGroup]="paginationForm">
+        <div class="row-center s-gap">
+          <label for="">Teams per page: </label>
+          <input 
+          type="text" 
+          class="teams-per-page"
+          formControlName="teamsPerPage"
+          [ngClass]="{controlInvalid: isInvalid('teamsPerPage')}"
+          >
+        </div>
+        <span *ngIf="isInvalid('teamsPerPage')" class="formFeedbackError text-center">{{getError('teamsPerPage')}}</span>
+      </form>
+    </div>
+  </div>
+</div>

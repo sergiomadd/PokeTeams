@@ -34,7 +34,7 @@ import { UploadComponent } from './features/team/pages/upload/upload.component';
 import { UserDetailsComponent } from './features/user/components/user-details/user-details.component';
 import { UserFormComponent } from './features/user/components/user-form/user-form.component';
 import { UserOptionsComponent } from './features/user/components/user-options/user-options.component';
-import { UserComponent } from './features/user/components/user/user.component';
+import { UserComponent } from './features/user/pages/user/user.component';
 import { CheckboxComponent } from './shared/components/checkbox/checkbox.component';
 import { DialogComponent } from './shared/components/dialog/dialog.component';
 import { DropdownComponent } from './shared/components/dropdown/dropdown.component';
@@ -45,6 +45,7 @@ import { SwitchComponent } from './shared/components/switch/switch.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
 import { LinkerPipe } from './shared/pipes/linker.pipe';
 import { metaReducers } from './state/app.state';
+import { TeamTableComponent } from './features/search/components/team-table/team-table.component';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,7 @@ import { metaReducers } from './state/app.state';
     FooterComponent,
     TeamEditComponent,
     UploadComponent,
+    TeamTableComponent,
   ],
   exports: [],
   imports: [
