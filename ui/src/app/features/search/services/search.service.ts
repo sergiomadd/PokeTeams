@@ -74,27 +74,29 @@ export class SearchService
 
   buildQuery(): SearchQueryDTO
   {
-    let searchQuery: SearchQueryDTO = 
-    {
-      queries: this.tags ?? [],
-      teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
-      selectedPage: 1,
-      sortOrder: this.sortOrder,
-      setOperation: this.unionType
-    }
+    // let searchQuery: SearchQueryDTO = 
+    // {
+    //   queries: this.tags ?? [],
+    //   teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
+    //   selectedPage: 1,
+    //   sortOrder: this.sortOrder,
+    //   setOperation: this.unionType
+    // }
+    let searchQuery: SearchQueryDTO = <SearchQueryDTO>{}
     return searchQuery;
   }
 
   buildQueryLastest(): SearchQueryDTO
   {
-    let searchQuery: SearchQueryDTO = 
-    {
-      queries: this.tags ?? [],
-      teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
-      selectedPage: 1,
-      sortOrder: this.sortOrder,
-      setOperation: this.unionType
-    }
-    return searchQuery;
+    // let searchQuery: SearchQueryDTO = 
+    // {
+    //   queries: this.tags ?? [],
+    //   teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
+    //   selectedPage: 1,
+    //   sortOrder: this.sortOrder,
+    //   setOperation: this.unionType
+    // }
+    let searchQuery: SearchQueryDTO = <SearchQueryDTO>{}
+    return searchQuery;  
   }
 }

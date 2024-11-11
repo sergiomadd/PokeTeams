@@ -1,11 +1,8 @@
 import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
 import { ThemeService } from 'src/app/core/services/theme.service';
-import { Tag } from 'src/app/features/team/models/tag.model';
 import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
-import { User } from 'src/app/features/user/models/user.model';
 import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { Layout } from '../../models/layout.enum';
@@ -29,10 +26,6 @@ export class TeamTableComponent
   teams: TeamPreview[] = [];
   sortedTeams: TeamPreview[] = [];
   searched: boolean = false;
-
-  loggedUser$ = this.store.select(selectLoggedUser);
-  user?: User;
-  userSelected: boolean = false;
 
   layout: Layout = Layout.double;
 
@@ -77,15 +70,6 @@ export class TeamTableComponent
       }
     );
 
-    this.loggedUser$.subscribe(
-      {
-        next: (value) =>
-        {
-          this.user = value ?? undefined;
-        }
-      }
-    );
-
     this.paginationForm.controls.teamsPerPage.valueChanges.subscribe(value =>
       {
         if(value)
@@ -115,41 +99,7 @@ export class TeamTableComponent
     }
   }
 
-
-  async toggleLoggedUser()
-  {
-    this.userSelected = !this.userSelected;
-    const userTag: Tag = 
-    {
-      name: this.user?.username ?? "",
-      identifier: this.user?.username ?? "",
-      icon: this.user?.picture,
-      type: "username"
-    }
-    if(this.userSelected)
-    {
-      this.querySelectEvent(userTag);
-      this.searchService.defaultSearch();
-    }
-    else
-    {
-      const index = this.tags.findIndex(t => t.identifier == userTag.identifier);
-      if(index > -1)
-      {
-        this.tags.splice(index, 1);
-        this.searchService.defaultSearch();
-      }
-    }
-  }
-
-
-  isTeamOwnerLogged(team: TeamPreview)
-  {
-    return team.player?.username === this.user?.username;
-  }
-
   //sorting
-
   changeSorter(index)
   {
     //netural -> descending
@@ -168,7 +118,7 @@ export class TeamTableComponent
     {
       this.sortOrder.type = undefined;
     }
-    let searchQuery: SearchQueryDTO = this.buildQuery();
+    let searchQuery: SearchQueryDTO = this.searchService.buildQuery();
     searchQuery.selectedPage = 1;
     this.paginationComponent.currentPage = 1;
     this.searchService.search(searchQuery);
@@ -177,7 +127,7 @@ export class TeamTableComponent
   pageChange($event, container)
   {
     container.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
-    let searchQuery: SearchQueryDTO = this.buildQuery();
+    let searchQuery: SearchQueryDTO = this.searchService.buildQuery();
     searchQuery.selectedPage = $event;
     this.searchService.search(searchQuery);
   }

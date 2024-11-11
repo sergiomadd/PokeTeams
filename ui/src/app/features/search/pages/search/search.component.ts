@@ -1,10 +1,7 @@
 import { Component, inject, SimpleChanges } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { Store } from '@ngrx/store';
 import { ThemeService } from 'src/app/core/services/theme.service';
 import { QueryService } from 'src/app/features/search/services/query.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
-import { TeamService } from 'src/app/features/team/services/team.service';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { SetOperation } from '../../models/setOperation.enum';
 import { SearchService } from '../../services/search.service';
@@ -17,9 +14,6 @@ import { SearchService } from '../../services/search.service';
 export class SearchComponent 
 {
   queryService = inject(QueryService);
-  formBuilder = inject(FormBuilder);
-  teamService = inject(TeamService);
-  store = inject(Store);
   util = inject(UtilService);
   theme = inject(ThemeService)
   searchService = inject(SearchService);
@@ -60,11 +54,7 @@ export class SearchComponent
 
   tagRemoveEvent($event: Tag)
   {
-    if($event.identifier === this.user?.username) 
-    { 
-      this.userSelected = false;
-      this.searchService.defaultSearch();
-    }
+
   }
 
   tagsSettingsSelectEvent($event)
