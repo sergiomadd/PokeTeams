@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
 import { ThemeService } from 'src/app/core/services/theme.service';
 import { Layout } from 'src/app/features/search/models/layout.enum';
-import { SearchQueryResponseDTO } from 'src/app/features/search/models/searchQueryResponse.dto';
 import { SortOrder, SortType, SortWay } from 'src/app/features/search/models/sortOrder.model';
 import { QueryService } from 'src/app/features/search/services/query.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
@@ -15,6 +14,7 @@ import { UtilService } from 'src/app/shared/services/util.service';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { SearchQueryDTO } from '../../models/searchQuery.dto';
 import { SetOperation } from '../../models/setOperation.enum';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-search',
@@ -29,6 +29,7 @@ export class SearchComponent
   store = inject(Store);
   util = inject(UtilService);
   theme = inject(ThemeService)
+  searchService = inject(SearchService);
 
   teams: TeamPreview[] = [];
   sortedTeams: TeamPreview[] = [];
@@ -37,7 +38,7 @@ export class SearchComponent
   user?: User;
   userSelected: boolean = false;
   searched: boolean = false;
-  layout: Layout = Layout.single;
+  layout: Layout = Layout.double;
   unionType: SetOperation = SetOperation.intersection;
   unionTypeSettings: SetOperation[] = [SetOperation.intersection, SetOperation.union];
 
@@ -67,6 +68,33 @@ export class SearchComponent
 
   async ngOnInit()
   {
+    this.searchService.teams.subscribe((value: TeamPreview[]) => 
+      {
+        this.teams = value;
+      }
+    );
+  
+    this.searchService.totalTeams.subscribe((value: number) =>
+      {
+        this.totalTeams = value
+      }
+    );
+    
+    this.searchService.searched.subscribe((value: boolean) =>
+      {
+        this.searched = value;
+      }
+    );
+
+    this.loggedUser$.subscribe(
+      {
+        next: (value) =>
+        {
+          this.user = value ?? undefined;
+        }
+      }
+    );
+
     this.paginationForm.controls.teamsPerPage.valueChanges.subscribe(value =>
       {
         if(value)
@@ -80,16 +108,9 @@ export class SearchComponent
             this.defaultSearch();
           }
         }
-      })
-    this.search(this.buildQuery());
-    this.loggedUser$.subscribe(
-      {
-        next: (value) =>
-        {
-          this.user = value ?? undefined;
-        }
       }
-    )
+    );
+    this.searchService.search(this.buildQuery());
   }
 
   async ngAfterContentInit()
@@ -144,30 +165,7 @@ export class SearchComponent
 
   defaultSearch()
   {
-    this.search(this.buildQuery());
-  }
-
-  search(searchQuery: SearchQueryDTO)
-  {
-    this.searched = true;
-    this.teamService.searchTeams(searchQuery)?.subscribe(
-      {
-        next: (response: SearchQueryResponseDTO) => 
-        {
-          this.teams = response.teams;
-          this.sortedTeams = [...response.teams];
-          this.totalTeams = response.totalTeams;
-        },
-        error: (error) => 
-        {
-          console.log("Team search error", error);
-        },
-        complete: () => 
-        {
-          this.searched = false;
-        }
-      }
-    )
+    this.searchService.search(this.buildQuery());
   }
 
   reset()
@@ -242,7 +240,7 @@ export class SearchComponent
     let searchQuery: SearchQueryDTO = this.buildQuery();
     searchQuery.selectedPage = 1;
     this.paginationComponent.currentPage = 1;
-    this.search(searchQuery);
+    this.searchService.search(searchQuery);
   }
 
   pageChange($event, container)
@@ -250,7 +248,7 @@ export class SearchComponent
     container.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
     let searchQuery: SearchQueryDTO = this.buildQuery();
     searchQuery.selectedPage = $event;
-    this.search(searchQuery);
+    this.searchService.search(searchQuery);
   }
 
   isInvalid(key: string) : boolean
