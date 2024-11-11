@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using api.Models.DBModels;
 using System.Numerics;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MethodTimer;
 
 namespace api.Services
 {
@@ -131,6 +132,7 @@ namespace api.Services
             return tags;
         }
 
+        [Time]
         public async Task<TeamDTO?> GetTeam(string id)
         {
             TeamDTO teamDTO = null;

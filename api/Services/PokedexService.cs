@@ -19,6 +19,7 @@ using api.DTOs;
 using api.Models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Hosting;
+using MethodTimer;
 
 namespace api.Services
 {
@@ -31,6 +32,7 @@ namespace api.Services
             _pokedexContext = pokedexContext;
         }
 
+        [Time]
         public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon)
         {
             PokemonDataDTO pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1);
