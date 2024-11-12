@@ -27,6 +27,12 @@ export class TeamSearchComponent
     this.searchService.defaultSearch();
   }
 
+  search()
+  {
+    this.searchService.setQuerySelectedPage(1);
+    this.searchService.defaultSearch();
+  }
+
   tagSelectEvent($event: Tag)
   {
     if(!this.tags.find(t => t.identifier === $event.identifier)) 

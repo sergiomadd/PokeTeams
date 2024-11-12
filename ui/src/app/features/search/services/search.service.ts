@@ -60,6 +60,17 @@ export class SearchService
     this.totalTeams$.next(totalTeams);
   }
   
+  defaultSearch()
+  {
+    this.setQuerySelectedPage(1);
+    this.search(this.query$.getValue());
+  }
+
+  pageChangeSearch()
+  {
+    this.search(this.query$.getValue());
+  }
+  
   search(searchQuery: SearchQueryDTO)
   {
     this.setSearched(true);
@@ -92,7 +103,6 @@ export class SearchService
 
   setQueryTags(tags: Tag[])
   {
-    this.setQuerySelectedPage(1);
     this.query$.next(
       {...this.query$.getValue(), queries: [...tags]}
     )
@@ -100,7 +110,6 @@ export class SearchService
 
   setQueryTeamsPerPage(teamsPerPage: number)
   {
-    this.setQuerySelectedPage(1);
     this.query$.next(
       {...this.query$.getValue(), teamsPerPage: teamsPerPage}
     )
@@ -129,8 +138,8 @@ export class SearchService
     )
   }
 
-  defaultSearch()
+  getCurrentPage(): number
   {
-    this.search(this.query$.getValue());
+    return this.query$.getValue().selectedPage ?? 1;
   }
 }

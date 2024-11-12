@@ -64,6 +64,10 @@ export class TeamTableComponent
     this.searchService.searched.subscribe((value: boolean) =>
       {
         this.searched = value;
+        if(this.searched && this.paginationComponent)
+        {
+          this.paginationComponent.currentPage = this.searchService.getCurrentPage();
+        }
       }
     );
 
@@ -85,15 +89,6 @@ export class TeamTableComponent
     )
 
     this.searchService.defaultSearch();
-  }
-
-  ngAfterViewInit()
-  {
-    this.searchService.searched.subscribe((value: boolean) =>
-      {
-        if(value) { this.paginationComponent.currentPage = 1 }
-      }
-    );
   }
 
   changeLayout(columNumber: number)
@@ -129,15 +124,15 @@ export class TeamTableComponent
       this.sortOrder.type = undefined;
     }
     this.searchService.setQuerySortOrder(this.sortOrder);
-    this.searchService.setQuerySelectedPage(1);
     this.searchService.defaultSearch();
   }
 
   pageChange($event, container)
   {
+    console.log("page event")
     container.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
     this.searchService.setQuerySelectedPage($event);
-    this.searchService.defaultSearch();
+    this.searchService.pageChangeSearch();
   }
 
   isInvalid(key: string) : boolean
