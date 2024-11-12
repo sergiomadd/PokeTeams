@@ -22,11 +22,6 @@ export class TeamSearchComponent
   unionType: SetOperation = SetOperation.intersection;
   unionTypeSettings: SetOperation[] = [SetOperation.intersection, SetOperation.union];
 
-  async ngOnInit()
-  {
-    this.searchService.defaultSearch();
-  }
-
   search()
   {
     this.searchService.setQuerySelectedPage(1);

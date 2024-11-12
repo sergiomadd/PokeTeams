@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-search-page',
@@ -7,5 +8,10 @@ import { Component } from '@angular/core';
 })
 export class SearchPageComponent 
 {
+  searchService = inject(SearchService);
 
+  ngOnInit()
+  {
+    this.searchService.defaultSearch();
+  }
 }

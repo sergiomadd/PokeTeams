@@ -1,4 +1,4 @@
-import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ThemeService } from 'src/app/core/services/theme.service';
 import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
@@ -21,9 +21,7 @@ export class TeamTableComponent
   theme = inject(ThemeService);
 
   teams: TeamPreview[] = [];
-  sortedTeams: TeamPreview[] = [];
   searched: boolean = false;
-
   layout: Layout = Layout.double;
 
   sortTypeNames: string[] = ["Date", "Views"];
@@ -40,13 +38,6 @@ export class TeamTableComponent
     }, { updateOn: "blur" });
   @ViewChild(PaginationComponent) paginationComponent!: PaginationComponent;
 
-  ngOnChanges(changes: SimpleChanges)
-  {
-    if(changes['teams'])
-    {
-      this.sortedTeams = [...this.teams];
-    }
-  }
   
   async ngOnInit()
   {
@@ -87,8 +78,6 @@ export class TeamTableComponent
         }
       }
     )
-
-    this.searchService.defaultSearch();
   }
 
   changeLayout(columNumber: number)
@@ -129,7 +118,6 @@ export class TeamTableComponent
 
   pageChange($event, container)
   {
-    console.log("page event")
     container.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
     this.searchService.setQuerySelectedPage($event);
     this.searchService.pageChangeSearch();
