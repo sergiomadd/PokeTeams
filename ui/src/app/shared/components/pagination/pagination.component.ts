@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-pagination',
@@ -12,10 +12,6 @@ export class PaginationComponent
   @Input() totalItems!: number;
   @Output() pageChanged: EventEmitter<number> = new EventEmitter();
 
-  ngOnChanges(changes: SimpleChanges)
-  {
-  }
-  
   get totalPages(): number
   {
     return Math.ceil(this.totalItems / this.itemsPerPage);

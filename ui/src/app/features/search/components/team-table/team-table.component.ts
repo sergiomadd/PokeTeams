@@ -60,6 +60,7 @@ export class TeamTableComponent
         this.totalTeams = value;
       }
     );
+
     this.searchService.searched.subscribe((value: boolean) =>
       {
         this.searched = value;
@@ -84,6 +85,15 @@ export class TeamTableComponent
     )
 
     this.searchService.defaultSearch();
+  }
+
+  ngAfterViewInit()
+  {
+    this.searchService.searched.subscribe((value: boolean) =>
+      {
+        if(value) { this.paginationComponent.currentPage = 1 }
+      }
+    );
   }
 
   changeLayout(columNumber: number)
