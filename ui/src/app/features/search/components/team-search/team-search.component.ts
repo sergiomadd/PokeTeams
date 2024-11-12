@@ -1,17 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { ThemeService } from 'src/app/core/services/theme.service';
-import { QueryService } from 'src/app/features/search/services/query.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { UtilService } from 'src/app/shared/services/util.service';
+import { QueryService } from '../../../../shared/services/query.service';
 import { SetOperation } from '../../models/setOperation.enum';
 import { SearchService } from '../../services/search.service';
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  styleUrl: './search.component.scss'
+  selector: 'app-team-search',
+  templateUrl: './team-search.component.html',
+  styleUrl: './team-search.component.scss'
 })
-export class SearchComponent 
+export class TeamSearchComponent 
 {
   queryService = inject(QueryService);
   util = inject(UtilService);

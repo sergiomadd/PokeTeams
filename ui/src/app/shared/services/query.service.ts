@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { PokemonService } from '../../pokemon/services/pokemon.service';
-import { Tag } from '../../team/models/tag.model';
-import { TeamService } from '../../team/services/team.service';
-import { UserService } from '../../user/services/user.service';
+import { PokemonService } from '../../features/pokemon/services/pokemon.service';
+import { Tag } from '../../features/team/models/tag.model';
+import { TeamService } from '../../features/team/services/team.service';
+import { UserService } from '../../features/user/services/user.service';
 
 @Injectable({
   providedIn: 'root'

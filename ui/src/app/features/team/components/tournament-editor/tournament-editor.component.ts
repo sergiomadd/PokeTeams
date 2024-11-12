@@ -1,8 +1,8 @@
 import { Component, EventEmitter, inject, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { QueryService } from 'src/app/features/search/services/query.service';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
+import { QueryService } from 'src/app/shared/services/query.service';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { RegulationSelectorComponent } from '../regulation-selector/regulation-selector.component';
 

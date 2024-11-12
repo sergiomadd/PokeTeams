@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, UrlSegment } from '@angular/router';
-import { SearchComponent } from './features/search/pages/search/search.component';
+import { SearchPageComponent } from './features/search/pages/search-page/search-page.component';
 import { TeamEditComponent } from './features/team/pages/team-edit/team-edit.component';
 import { TeamViewComponent } from './features/team/pages/team-view/team-view.component';
 import { UploadComponent } from './features/team/pages/upload/upload.component';
-import { UserComponent } from './features/user/components/user/user.component';
+import { UserComponent } from './features/user/pages/user/user.component';
 
 
 const routes: Routes = [
   { path: '', component: UploadComponent},
-  { path: 'search', component: SearchComponent},
+  { path: 'search', component: SearchPageComponent},
   {
     matcher: (url) => 
     {
