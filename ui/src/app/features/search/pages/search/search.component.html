@@ -11,7 +11,7 @@
             [keepSelected]="false"
             [allowCustom]="true"
             [getter]="queryService.queryUserCallback"
-            (selectEvent)="querySelectEvent($event)"
+            (selectEvent)="tagSelectEvent($event)"
             class="item smart-input-wrapper"
             ></app-smart-input>
             <app-smart-input
@@ -20,7 +20,7 @@
             [keepSelected]="false"
             [allowCustom]="true"
             [getter]="queryService.queryTournamentCallback"
-            (selectEvent)="querySelectEvent($event)"
+            (selectEvent)="tagSelectEvent($event)"
             class="item smart-input-wrapper"
             ></app-smart-input>
             <app-smart-input
@@ -29,7 +29,7 @@
             [keepSelected]="false"
             [getter]="queryService.queryRegulationCallback"
             [allGetter]="queryService.regulationAllCallback"
-            (selectEvent)="querySelectEvent($event)"
+            (selectEvent)="tagSelectEvent($event)"
             class="item smart-input-wrapper"
             ></app-smart-input>
           </div>
@@ -39,7 +39,7 @@
             [label]="'Pokemon'"
             [keepSelected]="false"
             [getter]="queryService.queryPokemonCallback"
-            (selectEvent)="querySelectEvent($event)"
+            (selectEvent)="tagSelectEvent($event)"
             class="item smart-input-wrapper"
             ></app-smart-input>
             <app-smart-input
@@ -47,7 +47,7 @@
             [label]="'Move'"
             [keepSelected]="false"
             [getter]="queryService.queryMoveCallback"
-            (selectEvent)="querySelectEvent($event)"
+            (selectEvent)="tagSelectEvent($event)"
             class="item smart-input-wrapper"
             ></app-smart-input>
             <app-smart-input
@@ -55,7 +55,7 @@
             [label]="'Item '"
             [keepSelected]="false"
             [getter]="queryService.queryItemCallback"
-            (selectEvent)="querySelectEvent($event)"
+            (selectEvent)="tagSelectEvent($event)"
             class="item smart-input-wrapper"
             ></app-smart-input>
           </div>

@@ -1,9 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Tag } from '../../team/models/tag.model';
 import { TeamPreview } from '../../team/models/teamPreview.model';
 import { TeamService } from '../../team/services/team.service';
 import { SearchQueryDTO } from '../models/searchQuery.dto';
 import { SearchQueryResponseDTO } from '../models/searchQueryResponse.dto';
+import { SetOperation } from '../models/setOperation.enum';
+import { SortOrder, SortType, SortWay } from '../models/sortOrder.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +31,19 @@ export class SearchService
     = new BehaviorSubject<boolean>(false);
   searched = this.searched$.asObservable();
 
-  constructor() { }
+  constructor() 
+  {
+    this.setQueryTags([]);
+    this.setQueryTeamsPerPage(10);
+    this.setQuerySelectedPage(1);
+    this.setQuerySortOrder(
+      {
+        type: SortType.date,
+        way: SortWay.descending
+      }
+    );
+    this.setQuerySetOperation(SetOperation.intersection);
+  }
 
   setTeams(teams: TeamPreview[])
   {
@@ -48,6 +63,7 @@ export class SearchService
   search(searchQuery: SearchQueryDTO)
   {
     this.setSearched(true);
+    console.log(searchQuery)
     this.teamService.searchTeams(searchQuery)?.subscribe(
       {
         next: (response: SearchQueryResponseDTO) => 
@@ -58,6 +74,8 @@ export class SearchService
         error: (error) => 
         {
           console.log("Team search error", error);
+          //display error
+          this.setSearched(false);
         },
         complete: () => 
         {
@@ -67,36 +85,52 @@ export class SearchService
     )
   }
 
+  setQuery(query: SearchQueryDTO)
+  {
+    this.query$.next(query);
+  }
+
+  setQueryTags(tags: Tag[])
+  {
+    this.setQuerySelectedPage(1);
+    this.query$.next(
+      {...this.query$.getValue(), queries: [...tags]}
+    )
+  }
+
+  setQueryTeamsPerPage(teamsPerPage: number)
+  {
+    this.setQuerySelectedPage(1);
+    this.query$.next(
+      {...this.query$.getValue(), teamsPerPage: teamsPerPage}
+    )
+  }
+
+  setQuerySelectedPage(selectedPage: number)
+  {
+    this.query$.next(
+      {...this.query$.getValue(), selectedPage: selectedPage}
+    )
+  }
+
+  setQuerySortOrder(sortOrder: SortOrder)
+  {
+    this.setQuerySelectedPage(1);
+    this.query$.next(
+      {...this.query$.getValue(), sortOrder: sortOrder}
+    )
+  }
+
+  setQuerySetOperation(setOperation: SetOperation)
+  {
+    this.setQuerySelectedPage(1);
+    this.query$.next(
+      {...this.query$.getValue(), setOperation: setOperation}
+    )
+  }
+
   defaultSearch()
   {
-    this.search(this.buildQuery());
-  }
-
-  buildQuery(): SearchQueryDTO
-  {
-    // let searchQuery: SearchQueryDTO = 
-    // {
-    //   queries: this.tags ?? [],
-    //   teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
-    //   selectedPage: 1,
-    //   sortOrder: this.sortOrder,
-    //   setOperation: this.unionType
-    // }
-    let searchQuery: SearchQueryDTO = <SearchQueryDTO>{}
-    return searchQuery;
-  }
-
-  buildQueryLastest(): SearchQueryDTO
-  {
-    // let searchQuery: SearchQueryDTO = 
-    // {
-    //   queries: this.tags ?? [],
-    //   teamsPerPage: this.paginationForm.controls.teamsPerPage.value ?? 20,
-    //   selectedPage: 1,
-    //   sortOrder: this.sortOrder,
-    //   setOperation: this.unionType
-    // }
-    let searchQuery: SearchQueryDTO = <SearchQueryDTO>{}
-    return searchQuery;  
+    this.search(this.query$.getValue());
   }
 }

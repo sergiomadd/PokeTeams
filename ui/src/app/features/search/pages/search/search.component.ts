@@ -1,4 +1,4 @@
-import { Component, inject, SimpleChanges } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ThemeService } from 'src/app/core/services/theme.service';
 import { QueryService } from 'src/app/features/search/services/query.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
@@ -19,42 +19,27 @@ export class SearchComponent
   searchService = inject(SearchService);
 
   tags: Tag[] = [];
-
-  searched: boolean = false;
   unionType: SetOperation = SetOperation.intersection;
   unionTypeSettings: SetOperation[] = [SetOperation.intersection, SetOperation.union];
 
-  ngOnChanges(changes: SimpleChanges)
-  {
-    if(changes['teams'])
-    {
-      this.searched = false;
-    }
-  }
-
   async ngOnInit()
   {
-    this.searchService.searched.subscribe((value: boolean) =>
-      {
-        this.searched = value;
-      }
-    );
     this.searchService.defaultSearch();
   }
 
-  async ngAfterContentInit()
+  tagSelectEvent($event: Tag)
   {
-  }
-
-  querySelectEvent($event: Tag)
-  {
-    if(!this.tags.find(t => t.identifier === $event.identifier)) { this.tags?.push($event); }
+    if(!this.tags.find(t => t.identifier === $event.identifier)) 
+    {
+      this.tags?.push($event);
+      this.searchService.setQueryTags(this.tags);
+    }
     else { console.log("Tag already added") }
   }
 
   tagRemoveEvent($event: Tag)
   {
-
+    this.searchService.setQueryTags(this.tags);
   }
 
   tagsSettingsSelectEvent($event)
@@ -65,5 +50,6 @@ export class SearchComponent
   reset()
   {
     this.tags = [];
+    this.searchService.setQueryTags([]);
   }
 }

@@ -1,12 +1,10 @@
 import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
 import { ThemeService } from 'src/app/core/services/theme.service';
 import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
 import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { Layout } from '../../models/layout.enum';
-import { SearchQueryDTO } from '../../models/searchQuery.dto';
 import { SortOrder, SortType, SortWay } from '../../models/sortOrder.model';
 import { SearchService } from '../../services/search.service';
 
@@ -21,7 +19,6 @@ export class TeamTableComponent
   util = inject(UtilService);
   searchService = inject(SearchService);
   theme = inject(ThemeService);
-  store = inject(Store);
 
   teams: TeamPreview[] = [];
   sortedTeams: TeamPreview[] = [];
@@ -50,7 +47,6 @@ export class TeamTableComponent
       this.sortedTeams = [...this.teams];
     }
   }
-
   
   async ngOnInit()
   {
@@ -80,10 +76,14 @@ export class TeamTableComponent
           }
           if(this.paginationForm.controls.teamsPerPage.valid)
           {
+            this.searchService.setQueryTeamsPerPage(value);
             this.searchService.defaultSearch();
           }
         }
-      })
+      }
+    )
+
+    this.searchService.defaultSearch();
   }
 
   changeLayout(columNumber: number)
@@ -118,18 +118,16 @@ export class TeamTableComponent
     {
       this.sortOrder.type = undefined;
     }
-    let searchQuery: SearchQueryDTO = this.searchService.buildQuery();
-    searchQuery.selectedPage = 1;
-    this.paginationComponent.currentPage = 1;
-    this.searchService.search(searchQuery);
+    this.searchService.setQuerySortOrder(this.sortOrder);
+    this.searchService.setQuerySelectedPage(1);
+    this.searchService.defaultSearch();
   }
 
   pageChange($event, container)
   {
     container.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
-    let searchQuery: SearchQueryDTO = this.searchService.buildQuery();
-    searchQuery.selectedPage = $event;
-    this.searchService.search(searchQuery);
+    this.searchService.setQuerySelectedPage($event);
+    this.searchService.defaultSearch();
   }
 
   isInvalid(key: string) : boolean
