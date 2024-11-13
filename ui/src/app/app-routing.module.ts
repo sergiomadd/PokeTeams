@@ -4,7 +4,7 @@ import { SearchPageComponent } from './features/search/pages/search-page/search-
 import { TeamEditComponent } from './features/team/pages/team-edit/team-edit.component';
 import { TeamViewComponent } from './features/team/pages/team-view/team-view.component';
 import { UploadComponent } from './features/team/pages/upload/upload.component';
-import { UserComponent } from './features/user/pages/user/user.component';
+import { UserPageComponent } from './features/user/pages/user-page/user-page.component';
 
 
 const routes: Routes = [
@@ -19,7 +19,7 @@ const routes: Routes = [
       }
       return null;
     },
-    component: UserComponent
+    component: UserPageComponent
   },
   { path: 'edit/:id', component: TeamEditComponent },
   { path: ':id', component: TeamViewComponent },
