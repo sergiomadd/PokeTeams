@@ -25,7 +25,6 @@ namespace api.Services
                     {
                         Name = user.Name,
                         Username = user.UserName,
-                        TeamKeys = await GetUserTeamKeys(user, logged),
                         Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png",
                         Country = user.Country != null ? GetCountry(user.Country) : null,
                         Visibility = user.Visibility ? true : false,
@@ -46,7 +45,6 @@ namespace api.Services
                 {
                     Name = user.Name,
                     Username = user.UserName,
-                    TeamKeys = await GetUserTeamKeys(user, logged),
                     Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png",
                     Country = GetCountry(user.Country),
                     Visibility = user.Visibility ? true : false
@@ -143,35 +141,6 @@ namespace api.Services
                 });
             });
             return queriedUsers;
-        }
-
-        public async Task<List<string>> GetUserTeamKeys(User user, bool logged)
-        {
-            List<string> teamKeys = new List<string>();
-            List<Team> userTeams = new List<Team>();
-            if (user == null) { Printer.Log(user.Name); return teamKeys; }
-            try
-            {
-                //When logged user get all teams
-                if (logged)
-                {
-                    userTeams = _pokeTeamContext.Team.Where(t => t.PlayerId == user.Id).ToList();
-                }
-                //When not logged get only public teams
-                userTeams = _pokeTeamContext.Team.Where(t => t.PlayerId == user.Id && t.Visibility).ToList();
-                //var test = _pokeTeamContext.Team.Where(t => t.PlayerId == user.Id && t.Visibility).Select(t => t.Id);
-
-                foreach (Team team in userTeams)
-                {
-                    teamKeys.Add(team.Id);
-                }
-            }
-            catch (Exception ex)
-            {
-                Printer.Log("Exception in: GetUserTeamKeys(User user)");
-                Printer.Log(ex);
-            }
-            return teamKeys;
         }
     }
 }

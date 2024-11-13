@@ -2,12 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using api.Util;
 using Microsoft.AspNetCore.Authorization;
-using api.Data;
 using api.Models.DBPoketeamModels;
-using Newtonsoft.Json.Linq;
-using System.Diagnostics;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.Extensions.Options;
 using System.Text.Json;
 using api.DTOs;
 using api.Services;
@@ -119,6 +114,10 @@ namespace api.Controllers
             if (user == null)
             {
                 return NotFound("Couldn't find user");
+            }
+            if(!user.Visibility)
+            {
+                return Unauthorized("User is private");
             }
             UserDTO userDTO = await _userService.BuildUserDTO(user ,await UserLoggedIn(user));
             return Ok(userDTO);
