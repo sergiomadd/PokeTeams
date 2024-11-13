@@ -19,13 +19,17 @@ export class UserTeamsComponent
 
   ngOnInit()
   {
-    this.userPageService.user.subscribe((value: User) => 
+    this.userPageService.user.subscribe((value: User | undefined) => 
     {
       if(value)
       {
-        console.log("user", value)
         this.user = value;
         this.searchService.userOnlySearch(this.user.username)
+      }
+      else
+      {
+        //user not found
+        console.log("user for teams not found")
       }
     })
 

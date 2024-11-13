@@ -22,6 +22,8 @@ export class UserPageComponent
   user?: User;
   sections: boolean[] = [true, false, false]
   country?: string;
+  userNotFound: boolean = false;
+  userPrivate: boolean = false;
 
   data$ = combineLatest(
     {
@@ -29,16 +31,36 @@ export class UserPageComponent
     }
   )
 
-  //igual mejor subir esto a user page
   async ngOnInit()
   {
-    //this.searchService.setQueryTags()
-    //search only user teams
-
-    this.user = this.userName ? await this.userService.getUser(this.userName) : undefined;
-    if(this.user)
+    if(this.userName)
     {
-      this.userPageService.setUser(this.user);
+      this.userService.getUser(this.userName).subscribe(
+        {
+          next: (response) =>
+          {
+            console.log("success")
+            this.user = response;
+            this.userPageService.setUser(this.user);
+          },
+          error: (error) => 
+          {
+            console.log(error)
+            if(error.status == 404)
+            {
+              //display not found
+              console.error("ERROR: User not found")
+              this.userNotFound = true;
+            }
+            if(error.status == 401)
+            {
+              //display not allowed -> private user
+              console.error("ERROR: User private")
+              this.userPrivate = true;
+            }
+          }
+        }
+      )
     }
 
     this.data$.forEach(async item => 

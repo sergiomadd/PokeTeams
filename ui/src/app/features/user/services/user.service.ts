@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { catchError, lastValueFrom, timeout } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { catchError, lastValueFrom, Observable, throwError, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { AuthResponseDTO } from '../../../models/DTOs/authResponse.dto';
 import { Country } from '../../../models/DTOs/country.dto';
@@ -45,22 +45,18 @@ export class UserService
     return users;
   }
 
-
-  async getUser(userName: string): Promise<User>
+  getUser(userName: string): Observable<User>
   {
-    let user: User = <User>{};
     let url = this.apiUrl + userName;
-    try
-    {
-      const user$ = this.http.get<User>(url, {withCredentials: true}).pipe(catchError(() => []), timeout(this.dataTimeout));
-      user = await lastValueFrom(user$);
-      console.log("user in service", user);
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
-    return user;
+    return this.http.get<User>(url, {withCredentials: true})
+      .pipe
+      (
+        timeout(this.dataTimeout),
+        catchError((error) => 
+        {
+          return throwError(() => error);
+        })
+      );
   }
   
   async checkUserNameAvailable(userName: string) : Promise<boolean>
