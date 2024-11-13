@@ -32,6 +32,17 @@ body
   }
 }
 
+a
+{
+  text-decoration: inherit;
+  color: var(--text-color-link);
+
+  &:visited
+  {
+    color: var(--text-color-link);
+  }
+}
+
 button
 {
   border-radius: 5px;
