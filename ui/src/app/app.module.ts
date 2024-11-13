@@ -36,7 +36,8 @@ import { UploadComponent } from './features/team/pages/upload/upload.component';
 import { UserDetailsComponent } from './features/user/components/user-details/user-details.component';
 import { UserFormComponent } from './features/user/components/user-form/user-form.component';
 import { UserOptionsComponent } from './features/user/components/user-options/user-options.component';
-import { UserComponent } from './features/user/pages/user/user.component';
+import { UserTeamsComponent } from './features/user/components/user-teams/user-teams.component';
+import { UserPageComponent } from './features/user/pages/user-page/user-page.component';
 import { CheckboxComponent } from './shared/components/checkbox/checkbox.component';
 import { DialogComponent } from './shared/components/dialog/dialog.component';
 import { DropdownComponent } from './shared/components/dropdown/dropdown.component';
@@ -59,7 +60,6 @@ import { metaReducers } from './state/app.state';
     TeamViewComponent,
     EvolutionComponent,
     LinkerPipe,
-    UserComponent,
     TeamPreviewComponent,
     PokemonPreviewComponent,
     UserFormComponent,
@@ -87,6 +87,8 @@ import { metaReducers } from './state/app.state';
     TeamTableComponent,
     TeamSearchComponent,
     SearchPageComponent,
+    UserTeamsComponent,
+    UserPageComponent,
   ],
   exports: [],
   imports: [

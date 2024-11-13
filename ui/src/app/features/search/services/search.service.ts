@@ -70,6 +70,21 @@ export class SearchService
   {
     this.search(this.query$.getValue());
   }
+
+  userOnlySearch(username: string)
+  {
+    const tags: Tag[] = 
+    [
+      {
+        name: username,
+        identifier: username,
+        type: "username"
+      }
+    ]
+    this.setQueryTags(tags);
+    console.log("user only", this.query$.getValue())
+    this.search(this.query$.getValue());
+  }
   
   search(searchQuery: SearchQueryDTO)
   {
@@ -79,6 +94,7 @@ export class SearchService
       {
         next: (response: SearchQueryResponseDTO) => 
         {
+          console.log("Teams gotten: ", response.teams)
           this.setTeams(response.teams);
           this.setTotalTeams(response.totalTeams);
         },

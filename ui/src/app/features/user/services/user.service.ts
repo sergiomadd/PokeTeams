@@ -5,7 +5,6 @@ import { environment } from 'src/environments/environment.development';
 import { AuthResponseDTO } from '../../../models/DTOs/authResponse.dto';
 import { Country } from '../../../models/DTOs/country.dto';
 import { UtilService } from '../../../shared/services/util.service';
-import { Team } from '../../team/models/team.model';
 import { TeamService } from '../../team/services/team.service';
 import { User } from '../models/user.model';
 
@@ -14,7 +13,7 @@ import { User } from '../models/user.model';
 })
 export class UserService 
 {
-  generateTeam = inject(TeamService);
+  teamService = inject(TeamService);
   util = inject(UtilService);
 
 
@@ -61,27 +60,7 @@ export class UserService
     {
       console.log("Error: ", this.util.getErrorMessage(error));
     }
-    if(user)
-    {
-      user = await this.loadUserTeams(user);
-    }
     return user;
-  }
-
-  async loadUserTeams(user: User): Promise<User>
-  {
-    //Clone obj cause user is not extensible
-    let loadedUser: User = JSON.parse(JSON.stringify(user));
-    if(user?.teamKeys)
-    {
-      let teams: Team[] = [];
-      user.teamKeys.forEach(async (key) => 
-      {
-        teams.push(await this.generateTeam.getTeam(key));
-      });
-      loadedUser.teams = teams;
-    }
-    return loadedUser;
   }
   
   async checkUserNameAvailable(userName: string) : Promise<boolean>

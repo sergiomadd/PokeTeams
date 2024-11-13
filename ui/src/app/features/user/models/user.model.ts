@@ -1,12 +1,12 @@
 import { Country } from "../../../models/DTOs/country.dto";
-import { Team } from "../../team/models/team.model";
+import { TeamPreview } from "../../team/models/teamPreview.model";
 
 export interface User
 {
   name: string,
   username: string,
   picture?: string,
-  teams?: Team[],
+  teams?: TeamPreview[],
   teamKeys?: string[],
   country?: Country,
   visibility: boolean,
