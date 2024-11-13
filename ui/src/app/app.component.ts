@@ -15,7 +15,7 @@ export class AppComponent
   teamService = inject(TeamService);
   themes = inject(ThemeService);
 
-  menuOpen: boolean = true;
+  menuOpen: boolean = false;
 
   constructor() 
   {
