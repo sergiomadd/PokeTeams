@@ -7,7 +7,6 @@ import { User } from '../models/user.model';
 })
 export class UserPageService 
 {
-
   private user$: BehaviorSubject<User | undefined>
     = new BehaviorSubject<User | undefined>(undefined);
     user = this.user$.asObservable();

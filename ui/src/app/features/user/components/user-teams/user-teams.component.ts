@@ -1,8 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { SearchService } from 'src/app/features/search/services/search.service';
-import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
-import { User } from '../../models/user.model';
-import { UserPageService } from '../../services/user-page.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-user-teams',
@@ -11,31 +7,5 @@ import { UserPageService } from '../../services/user-page.service';
 })
 export class UserTeamsComponent 
 {
-  userPageService = inject(UserPageService);
-  searchService = inject(SearchService);
-
-  user?: User;
-  teams: TeamPreview[] = [];
-
-  ngOnInit()
-  {
-    this.userPageService.user.subscribe((value: User | undefined) => 
-    {
-      if(value)
-      {
-        this.user = value;
-        this.searchService.userOnlySearch(this.user.username)
-      }
-      else
-      {
-        //user not found
-        console.log("user for teams not found")
-      }
-    })
-
-    this.searchService.teams.subscribe((value: TeamPreview[]) =>
-    {
-      this.teams = value;
-    })
-  }
+  
 }

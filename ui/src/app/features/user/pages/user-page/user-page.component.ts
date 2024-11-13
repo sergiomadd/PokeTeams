@@ -2,6 +2,8 @@ import { Component, inject, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
 import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
+import { SearchService } from 'src/app/features/search/services/search.service';
+import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
 import { User } from '../../models/user.model';
 import { UserPageService } from '../../services/user-page.service';
 import { UserService } from '../../services/user.service';
@@ -16,10 +18,13 @@ export class UserPageComponent
   userService = inject(UserService);
   userPageService = inject(UserPageService);
   store = inject(Store);
+  searchService = inject(SearchService);
 
   @Input() userName?: string;
 
   user?: User;
+  userTeams: TeamPreview[] = [];
+
   sections: boolean[] = [true, false, false]
   country?: string;
   userNotFound: boolean = false;
@@ -42,6 +47,7 @@ export class UserPageComponent
             console.log("success")
             this.user = response;
             this.userPageService.setUser(this.user);
+            this.searchService.userOnlySearch(this.user.username)
           },
           error: (error) => 
           {
@@ -61,6 +67,11 @@ export class UserPageComponent
           }
         }
       )
+
+      this.searchService.teams.subscribe((value: TeamPreview[]) =>
+      {
+        this.userTeams = value;
+      })
     }
 
     this.data$.forEach(async item => 
