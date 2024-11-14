@@ -1,0 +1,239 @@
+<div class="settings">
+  <div class="section row b-gap">
+    <div class="col s-gap">
+      <div class="title">
+        Profile picture
+      </div>
+      <div class="subtitle">
+        Selected: {{getPictureKey(loggedUser?.picture)}}
+      </div>
+    </div>
+    <div class="row b-gap">
+      <img src="{{loggedUser?.picture}}" alt="" class="picture">
+      <div class="picture-selector">
+        <button (click)="clickPictureSelector()">Change</button>
+        <div class="meta-wrapper">
+          <div class="catalog custom-scrollbar" [ngClass]="{visible: displayPictureSelector}">
+            <ng-container *ngFor="let pic of pictures">
+              <img src="{{pic}}" alt="" class="picture" (click)="changePicture(pic)">
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section row">
+    <div class="col s-gap">
+      <div class="title">
+        Country
+      </div>
+      <div class="row s-gap">
+        <ng-container *ngIf="loggedUser?.country">
+          <img src="{{loggedUser?.country?.icon}}" alt="{{loggedUser?.country?.name}}" class="flag">
+          <span class="subtitle">{{loggedUser?.country?.name}}</span>
+        </ng-container>
+        <ng-container *ngIf="!loggedUser?.country">
+          <span class="error">No country selected</span>
+        </ng-container>
+      </div>
+    </div>
+    <app-dropdown
+    [options]="countries"
+    [selectedOption]="loggedUser?.country"
+    (selectEvent)="changeCountry($event)"
+    ></app-dropdown>
+  </div>
+  <div class="section row">
+    <div class="col s-gap">
+      <div class="title">
+        Profile Visibility
+      </div>
+      <div class="subtitle">
+        If private only you will be able to see your profile
+      </div>
+    </div>
+    <app-switch
+    [inputState]="loggedUser?.visibility"
+    [leftText]="'Public'"
+    [rightText]="'Private'"
+    (checkEvent)="changeVisibility($event)"
+    ></app-switch>
+  </div>
+  <div class="section row">
+    <div class="col s-gap">
+      <div class="title">
+        Name
+      </div>
+      <div class="current">
+        <ng-container *ngIf="loggedUser?.name">
+          <span class="subtitle">{{loggedUser?.name}}</span>
+        </ng-container>
+        <ng-container *ngIf="!loggedUser?.name">
+          <span class="error">No name</span>
+        </ng-container>
+      </div>
+    </div>
+    <form [formGroup]="changeUserNameForm" (ngSubmit)="changeUserName()">
+      <div class="col">
+        <div class="row-end b-gap">
+          <span *ngIf="isInvalid('newUserName', 'changeUserNameForm')" class="formFeedbackError">{{getError('newUserName', 'changeUserNameForm')}}</span>
+          <input 
+          type="text" 
+          placeholder="New name" 
+          formControlName="newUserName"
+          [ngClass]="{controlInvalid: isInvalid('newUserName', 'changeUserNameForm')}"
+          >
+          <button
+          type="submit"
+          >Change</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="section row">
+    <div class="col s-gap">
+      <div class="title">
+        Username
+      </div>
+      <div class="subtitle">
+        {{loggedUser?.username}}
+      </div>
+    </div>
+    <form [formGroup]="changeUserNameForm" (ngSubmit)="changeUserName()">
+      <div class="col">
+        <div class="row-end b-gap">
+          <span *ngIf="userNameAvailable" class="formFeedbackSuccess">This username is available</span>
+          <span *ngIf="isInvalid('newUserName', 'changeUserNameForm')" class="formFeedbackError">{{getError('newUserName', 'changeUserNameForm')}}</span>
+          <input 
+          type="text" 
+          placeholder="New username" 
+          formControlName="newUserName"
+          [ngClass]="{controlInvalid: isInvalid('newUserName', 'changeUserNameForm')}"
+          >
+          <button
+          type="submit"
+          >Change</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="section">
+      <div class="title">
+        Email
+      </div>
+      <div class="row">
+        <div class="subtitle">
+          {{loggedUser?.email}}
+        </div>
+        <form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
+          <div class="row b-gap">
+            <span *ngIf="isInvalid('newEmail', 'changeEmailForm')" class="formFeedbackError">{{getError('newEmail', 'changeEmailForm')}}</span>
+            <input 
+            type="text" 
+            placeholder="New email" 
+            formControlName="newEmail"
+            [ngClass]="{controlInvalid: isInvalid('newEmail', 'changeEmailForm')}"
+            >
+            <button
+            type="submit"
+            >Change</button>
+          </div>
+      </form>
+      </div>
+      <div class="row b-gap">
+        <ng-container *ngIf="loggedUser?.emailConfirmed; else notVerified">
+          <div class="formFeedbackSuccess">
+            Email is verified
+          </div>
+        </ng-container>
+        <ng-template #notVerified>
+          <div class="col s-gap">
+            <div class="formFeedbackError">
+              Email not verified
+            </div>
+            <button>Send verification code</button>
+          </div>
+          <form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
+            <div class="row b-gap">
+              <input type="text" placeholder="Code" formControlName="newEmail">
+              <button
+              type="submit"
+              >Confirm</button>
+            </div>
+          </form>
+        </ng-template>
+      </div>
+  </div>
+  <div class="section">
+    <div class="col s-gap">
+      <div class="title">
+        Password
+      </div>
+      <div class="subtitle">
+        Change password
+      </div>
+    </div>
+    <div class="row">
+      <div></div>
+      <form class="row s-gap" [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+        <div class="row-end b-gap">
+          <div class="col">
+            <label for="">Current password</label>
+            <input 
+            type="password" 
+            placeholder="Current password" 
+            formControlName="currentPassword"
+            [ngClass]="{controlInvalid: isInvalid('currentPassword', 'changePasswordForm')}"
+            >
+            <div *ngIf="isInvalid('currentPassword', 'changePasswordForm')" class="formFeedbackError">{{getError('currentPassword', 'changePasswordForm')}}</div>
+          </div>
+          <div class="col">
+            <label for="">New password</label>
+            <input 
+            type="password" 
+            placeholder="New password" 
+            formControlName="password"
+            [ngClass]="{controlInvalid: isInvalid('password', 'changePasswordForm')}"
+            >
+            <div *ngIf="isInvalid('password', 'changePasswordForm')" class="formFeedbackError">{{getError('password', 'changePasswordForm')}}</div>
+          </div>
+          <div class="col">
+            <label for="">Repeat password</label>
+            <input 
+            type="password" 
+            placeholder="Repeat password" 
+            formControlName="confirmPassword"
+            [ngClass]="{controlInvalid: isInvalid('confirmPassword', 'changePasswordForm')}"
+            >
+            <div *ngIf="isInvalid('confirmPassword', 'changePasswordForm')" class="formFeedbackError">{{getError('confirmPassword', 'changePasswordForm')}}</div>
+          </div>
+        </div>
+        <button
+        type="submit"
+        >Change</button>
+      </form>
+    </div>
+  </div>
+  <ng-container *ngIf="backendErrors$ | async as backendErrors">
+    <ng-container *ngFor="let error of backendErrors">
+      <span class="formFeedbackError backendErrors">{{error}}</span>
+    </ng-container>
+  </ng-container>
+  <div class="buttons">
+    <div class="logout">
+      <button (click)="logOut()" class="button-primary-clear">Log Out</button>
+    </div>
+    <div class="delete">
+      <button (click)="tryDeleteAccout()" class="button-primary">Delete Account</button>
+    </div>
+  </div>
+</div>
+<app-dialog 
+[title]="'Are you sure you want to delete your account?'"
+[body]="'All your teams will be removed.'"
+[trueButtonText]="'Decline'"
+[falseButtonText]="'Accept'"
+[visible]="deleteDialog"
+(choose)="chooseEvent($event)"
+*ngIf="deleteDialog"
+></app-dialog>
