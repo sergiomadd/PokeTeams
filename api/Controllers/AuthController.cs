@@ -47,8 +47,7 @@ namespace api.Controllers
                     var user = await _userManager.FindByNameAsync(User.Identity.Name);
                     if (user != null)
                     {
-                        userDTO = await _userService.BuildUserDTO(await _userService.GetUserByUserName(user.UserName), true);
-                        //Printer.Log($"Logged user email: {userDTO.Email}");
+                        userDTO = await _userService.BuildUserDTO(await _userService.GetUserByUserName(user.UserName));
                     }
                     else
                     {

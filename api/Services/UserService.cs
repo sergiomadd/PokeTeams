@@ -15,23 +15,10 @@ namespace api.Services
             _pokeTeamContext = pokeTeamContext;
         }
 
-        public async Task<UserDTO> BuildUserDTO(User user, bool logged)
+        public async Task<UserDTO> BuildUserDTO(User user)
         {
             if (user != null)
             {
-                if (logged)
-                {
-                    return new UserDTO
-                    {
-                        Name = user.Name,
-                        Username = user.UserName,
-                        Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png",
-                        Country = user.Country != null ? GetCountry(user.Country) : null,
-                        Visibility = user.Visibility ? true : false,
-                        Email = user.Email,
-                        EmailConfirmed = user.EmailConfirmed
-                    };
-                }
                 if (!user.Visibility)
                 {
                     return new UserDTO

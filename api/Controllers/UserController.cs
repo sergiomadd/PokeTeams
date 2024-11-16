@@ -40,7 +40,7 @@ namespace api.Controllers
             {
                 return Unauthorized("User is private");
             }
-            UserDTO userDTO = await _userService.BuildUserDTO(user, false);
+            UserDTO userDTO = await _userService.BuildUserDTO(user);
             return Ok(userDTO);
         }
 
