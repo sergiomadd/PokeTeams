@@ -4,10 +4,12 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aeac5df0-104c-4051-a65c-f3ba512a62dc</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MethodTimer.Fody" Version="3.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.5" />

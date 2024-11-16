@@ -10,6 +10,11 @@ using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
 using Newtonsoft.Json;
 using api.Services;
+using api;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,10 +22,12 @@ builder.Services.AddMvc();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
 builder.Services.AddDbContext<PokedexContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPokedex")));
 builder.Services.AddDbContext<PokeTeamContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPoketeam")), ServiceLifetime.Scoped);
-builder.Services.AddScoped<IPokedexContext, PokedexContext>();
 
+builder.Services.AddScoped<IPokedexContext, PokedexContext>();
 builder.Services.AddScoped<IPokedexService, PokedexService>();
 builder.Services.AddScoped<IPokeTeamService, PokeTeamService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -28,12 +35,27 @@ builder.Services.AddScoped<ITournamentService, TournamentService>();
 builder.Services.AddScoped<IRegulationService, RegulationService>();
 builder.Services.AddScoped<ITagService, TagService>();
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
-builder.Services.ConfigureApplicationCookie(options =>
+builder.Services.AddSingleton<TokenGenerator>();
+builder.Services.AddAuthentication(x =>
 {
-    options.Cookie.SameSite = SameSiteMode.None;
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)),
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true
+    };
 });
 builder.Services.AddAuthorization();
+
 builder.Services.AddIdentity<User, IdentityRole>(
     options =>
     {

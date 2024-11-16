@@ -17,114 +17,187 @@ namespace api.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IPokeTeamService _pokeTeamService;
         private readonly IUserService _userService;
-
+        private readonly TokenGenerator _tokenGenerator;
 
         public UserController(UserManager<User> userManager,
             SignInManager<User> signInManager,
             IPokeTeamService teamService,
-            IUserService userService
+            IUserService userService,
+            TokenGenerator tokenGenerator
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _pokeTeamService = teamService;
             _userService = userService;
+            _tokenGenerator = tokenGenerator;
         }
 
-
-        [HttpGet, Route("pictures")]
-        public async Task<ActionResult<List<string>>> GetPictures()
+        private async Task<bool> UserLoggedIn(User user)
         {
-            //full path "https://localhost:7134/images/sprites/profile-pics/blastoise.jpeg",
-            List<string> keys = new List<string> 
+            try
             {
-                "bulbasaur",
-                "charmander",
-                "squirtle",
-                "pikachu",
-                "gengar",
-                "dragonite",
-                "snorlax",
-                "mewtwo",
-            };
-            List<string> pictures = new List<string>();
-
-            foreach(var key in keys )
-            {
-                pictures.Add($"https://localhost:7134/images/sprites/profile-pics/{key}.png");
-            }
-            return pictures;
-        }
-
-        [HttpGet, Route("query")]
-        public async Task<ActionResult<List<UserQueryDTO>>> QueryUsers(string key)
-        {
-            List<UserQueryDTO> users = await _userService.QueryUsers(key);
-            if (users == null)
-            {
-                return NotFound("Couldn't find user");
-            }
-            return Ok(users);
-        }
-
-        [HttpGet, Route("chunkquery")]
-        public async Task<ActionResult<List<UserQueryDTO>>> ChunkQueryUsers(string key, int startIndex, int pageSize)
-        {
-            List<UserQueryDTO> users = await _userService.ChunkQueryUsers(key, startIndex, pageSize);
-            users.Skip(startIndex).Take(pageSize);
-            if (users == null)
-            {
-                return NotFound("Couldn't find user");
-            }
-            return Ok(users);
-        }
-
-        [HttpGet, Route("countries")]
-        public ActionResult<List<CountryDTO>> GetCountries()
-        {
-            List<CountryDTO> countries = new List<CountryDTO>();
-            using (StreamReader r = new StreamReader("wwwroot/data/countries.json"))
-            {
-                string json = r.ReadToEnd();   
-                countries = JsonSerializer.Deserialize<List<CountryDTO>>(json);
-                foreach (var country in countries)
+                if (User.Identity.Name != null)
                 {
-                    country.Icon = $"https://localhost:7134/images/sprites/flags/{country.code}.svg";
+                    var loggedUser = await _userManager.FindByNameAsync(User.Identity.Name);
+                    if (loggedUser != null)
+                    {
+                        return loggedUser.Id == user.Id;
+                    }
                 }
             }
-            return Ok(countries);
+            catch (Exception ex)
+            {
+
+            }
+            return false;
         }
 
-        [HttpGet, Route("countries/{code}")]
-        public ActionResult<CountryDTO> GetCountry(string code)
+
+        [AllowAnonymous]
+        [HttpGet, Route("logged")]
+        public async Task<ActionResult<IdentityResponseDTO>> GetLoggedUser()
         {
-            CountryDTO country = _userService.GetCountry(code);
-            if(country == null)
+            Printer.Log("Trying to get logged user...");
+            UserDTO userDTO;
+            try
             {
-                return BadRequest();
+                Printer.Log("User: ", User.Identity.Name);
+                if (User.Identity.Name != null)
+                {
+                    var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                    if (user != null)
+                    {
+                        userDTO = await _userService.BuildUserDTO(await _userService.GetUserByUserName(user.UserName), true);
+                        Printer.Log($"Logged user email: {userDTO.Email}");
+                    }
+                    else
+                    {
+                        return Unauthorized(new IdentityResponseDTO { Success = false, Errors = new string[] { "Logged user not found" } });
+                    }
+                }
+                else
+                {
+                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new string[] { "No user logged" } });
+                }
+
             }
-            return Ok(country);
+            catch (Exception ex)
+            {
+                Printer.Log(ex.Message);
+                return BadRequest("Getting user error, exception");
+            }
+            return Ok(new IdentityResponseDTO { User = userDTO, Success = true });
         }
 
         [AllowAnonymous]
-        [HttpGet, Route("{userName}")]
-        public async Task<ActionResult<UserDTO>> GetUserByUserName(string userName)
+        [HttpPost, Route("login")]
+        public async Task<ActionResult> LogIn(LogInDTO model)
         {
-            User user = await _userService.GetUserByUserName(userName);
-            if (user == null)
+            Printer.Log("Trying to log in user...");
+            try
             {
-                return NotFound("Couldn't find user");
+                if (model == null || !ModelState.IsValid)
+                {
+                    return BadRequest("Login error, result failed");
+                }
+                User signedUserByEmail = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
+                User signedUserByUserName = await _userManager.FindByNameAsync(model.UserNameOrEmail);
+                Microsoft.AspNetCore.Identity.SignInResult logInResult = new Microsoft.AspNetCore.Identity.SignInResult();
+                if (signedUserByEmail != null)
+                {
+                    return await PerformLogIn(signedUserByEmail, model);
+                }
+                else if (signedUserByUserName != null)
+                {
+                    var token = _tokenGenerator.GenerateToken(signedUserByUserName);
+                    return await PerformLogIn(signedUserByUserName, model);
+                }
+                else
+                {
+                    return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "User not found." } });
+                }
             }
-            if(!user.Visibility)
+            catch (Exception ex)
             {
-                return Unauthorized("User is private");
+                Printer.Log(ex.Message);
+                return BadRequest(new IdentityResponseDTO { Errors = new string[] { "Log in error, exception, Model not valid" } });
             }
-            UserDTO userDTO = await _userService.BuildUserDTO(user ,await UserLoggedIn(user));
-            return Ok(userDTO);
+        }
+
+        private async Task<ActionResult> PerformLogIn(User user, LogInDTO model)
+        {
+            if (await _userManager.CheckPasswordAsync(user, model.Password) == false)
+            {
+                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "Invalid credentials" } });
+            }
+            Microsoft.AspNetCore.Identity.SignInResult logInResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+            if (!logInResult.Succeeded)
+            {
+                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "Log in failed" } });
+            }
+            if (logInResult.IsNotAllowed)
+            {
+                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "You are not allowed" } });
+            }
+            if (logInResult.IsLockedOut)
+            {
+                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "You account is locked" } });
+            }
+            Printer.Log("User successfully loged in.");
+            var token = _tokenGenerator.GenerateToken(user);
+            return Ok(new JwtResponseDTO { Token = token });
+        }
+
+        [AllowAnonymous]
+        [HttpPost, Route("signup")]
+        public async Task<ActionResult> Signup(SignUpDTO model)
+        {
+            User user;
+            Printer.Log("Trying to sign up user...");
+            try
+            {
+                if (model == null || !ModelState.IsValid)
+                {
+                    return BadRequest("Signup error, result failed");
+                }
+                user = new User
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    PasswordHash = model.Password,
+                    EmailConfirmed = false,
+                    Picture = "snorlax",
+                    Visibility = true
+                };
+                var signUpResult = await _userManager.CreateAsync(user, model.Password);
+                if (!signUpResult.Succeeded)
+                {
+                    var errors = signUpResult.Errors.Select(e => e.Description);
+                    return BadRequest(new IdentityResponseDTO { Errors = errors });
+                }
+                Printer.Log("User successfully generated.");
+                await _signInManager.SignInAsync(user, true);
+                Printer.Log("User signed in.");
+            }
+            catch (Exception ex)
+            {
+                Printer.Log(ex.Message);
+                return BadRequest("Signup error, exception, Model not valid");
+            }
+            var token = _tokenGenerator.GenerateToken(user);
+            return Ok(new JwtResponseDTO { Token = token });
+        }
+
+        [HttpGet, Route("logout")]
+        public async Task LogOut()
+        {
+            Printer.Log("User logged out.");
+            await _signInManager.SignOutAsync();
         }
 
         [HttpPost, Route("update/username")]
-        public async Task<ActionResult<IdentityResponseDTO>> UpdateUserName(UserUpdateDTO updateData)
+        public async Task<ActionResult> UpdateUserName(UserUpdateDTO updateData)
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewUserName != null)
             {
@@ -143,8 +216,10 @@ namespace api.Controllers
                 {
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
-                await RefreshLoggedUser(user);
-                return Ok(new IdentityResponseDTO { Success = true, User = await _userService.BuildUserDTO(user, true) });
+                //await RefreshLoggedUser(user);
+                User updatedUser = await _userService.GetUserByUserName(updateData.NewUserName);
+                var token = _tokenGenerator.GenerateToken(updatedUser);
+                return Ok(new JwtResponseDTO { Token = token });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
@@ -156,7 +231,7 @@ namespace api.Controllers
         }
 
         [HttpPost, Route("update/email")]
-        public async Task<ActionResult<IdentityResponseDTO>> UpdateEmail(UserUpdateDTO updateData)
+        public async Task<ActionResult> UpdateEmail(UserUpdateDTO updateData)
         {
             Printer.Log($"Updating email of {updateData.CurrentUserName}");
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewEmail != null)
@@ -177,13 +252,15 @@ namespace api.Controllers
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
                 await _userManager.UpdateAsync(user);
-                return Ok(new IdentityResponseDTO { Success = true, User = await _userService.BuildUserDTO(user, true) });
+                User updatedUser = await _userService.GetUserByUserName(user.UserName);
+                var token = _tokenGenerator.GenerateToken(updatedUser);
+                return Ok(new JwtResponseDTO { Token = token });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } } );
         }
 
         [HttpPost, Route("update/password")]
-        public async Task<ActionResult<IdentityResponseDTO>> UpdatePassword(UserUpdateDTO updateData)
+        public async Task<ActionResult> UpdatePassword(UserUpdateDTO updateData)
         {
             Printer.Log($"Updating password of {updateData.CurrentUserName}");
             if (updateData != null && updateData.CurrentUserName != null 
@@ -199,13 +276,15 @@ namespace api.Controllers
                 {
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
-                return Ok(new IdentityResponseDTO { Success = true });
+                User updatedUser = await _userService.GetUserByUserName(user.UserName);
+                var token = _tokenGenerator.GenerateToken(updatedUser);
+                return Ok(new JwtResponseDTO { Token = token });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
 
         [HttpPost, Route("update/name")]
-        public async Task<ActionResult<UserDTO>> UpdateName(UserUpdateDTO updateData)
+        public async Task<ActionResult> UpdateName(UserUpdateDTO updateData)
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewName != null)
             {
@@ -217,15 +296,17 @@ namespace api.Controllers
                 IdentityResponseDTO result = await _userService.ChangeName(user, updateData.NewName);
                 if (result.Errors.ToList().Count > 0)
                 {
-                    //return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
+                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors });
                 }
-                return Ok(new IdentityResponseDTO { Success = true, User = await _userService.BuildUserDTO(user, true) });
+                User updatedUser = await _userService.GetUserByUserName(user.UserName);
+                var token = _tokenGenerator.GenerateToken(updatedUser);
+                return Ok(new JwtResponseDTO { Token = token });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
 
         [HttpPost, Route("update/picture")]
-        public async Task<ActionResult<UserDTO>> UpdatePicture(UserUpdateDTO updateData)
+        public async Task<ActionResult> UpdatePicture(UserUpdateDTO updateData)
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewPictureKey != null)
             {
@@ -240,13 +321,15 @@ namespace api.Controllers
                 {
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
-                return Ok(new IdentityResponseDTO { Success = true, User = await _userService.BuildUserDTO(user, true) });
+                User updatedUser = await _userService.GetUserByUserName(user.UserName);
+                var token = _tokenGenerator.GenerateToken(updatedUser);
+                return Ok(new JwtResponseDTO { Token = token });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
 
         [HttpPost, Route("update/country")]
-        public async Task<ActionResult<UserDTO>> UpdateCountry(UserUpdateDTO updateData)
+        public async Task<ActionResult> UpdateCountry(UserUpdateDTO updateData)
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewCountryCode != null)
             {
@@ -261,13 +344,15 @@ namespace api.Controllers
                 {
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
-                return Ok(new IdentityResponseDTO { Success = true, User = await _userService.BuildUserDTO(user, true) });
+                User updatedUser = await _userService.GetUserByUserName(user.UserName);
+                var token = _tokenGenerator.GenerateToken(updatedUser);
+                return Ok(new JwtResponseDTO { Token = token });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
 
         [HttpPost, Route("update/visibility")]
-        public async Task<ActionResult<UserDTO>> UpdateVisibility(UserUpdateDTO updateData)
+        public async Task<ActionResult> UpdateVisibility(UserUpdateDTO updateData)
         {
             Printer.Log($"Updating visibility of {updateData.CurrentUserName}");
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewVisibility != null)
@@ -283,14 +368,16 @@ namespace api.Controllers
                 {
                     return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
                 }
-                return Ok(new IdentityResponseDTO { Success = true, User = await _userService.BuildUserDTO(user, true) });
+                User updatedUser = await _userService.GetUserByUserName(user.UserName);
+                var token = _tokenGenerator.GenerateToken(updatedUser);
+                return Ok(new JwtResponseDTO { Token = token });
             }
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
 
         [AllowAnonymous]
         [HttpPost, Route("delete")]
-        public async Task<ActionResult<UserDTO>> DeleteLoggedUser()
+        public async Task<ActionResult> DeleteLoggedUser()
         {
             Printer.Log("Deleting user...");
             if (User.Identity.Name == null)
@@ -322,6 +409,7 @@ namespace api.Controllers
             return Ok(new IdentityResponseDTO { Success = true });
         }
         
+        //Make so only admin
         [HttpPost, Route("delete/{userName}")]
         public async Task<ActionResult<UserDTO>> DeleteUserByUserName(string userName)
         {
@@ -369,165 +457,98 @@ namespace api.Controllers
             return Ok(new IdentityResponseDTO { Success = true });
         }
 
-        [AllowAnonymous]
-        [HttpGet, Route("logged")]
-        public async Task<ActionResult<IdentityResponseDTO>> GetLoggedUser()
-        {
-            Printer.Log("Trying to get logged user...");
-            UserDTO userDTO;
-            try
-            {
-                Printer.Log("User: ", User.Identity.Name);
-                if (User.Identity.Name != null)
-                {
-                    var user = await _userManager.FindByNameAsync(User.Identity.Name);
-                    if (user != null)
-                    {
-                        userDTO = await _userService.BuildUserDTO(await _userService.GetUserByUserName(user.UserName), true);
-                        Printer.Log($"Logged user email: {userDTO.Email}");
-                    }
-                    else
-                    {
-                        return Unauthorized(new IdentityResponseDTO { Success = false, Errors = new string[] { "Logged user not found" } });
-                    }
-                }
-                else
-                {
-                    return NotFound(new IdentityResponseDTO {Success = false, Errors = new string[] { "No user logged" } });
-                }
+        //---------------
 
-            }
-            catch (Exception ex)
+        [HttpGet, Route("query")]
+        public async Task<ActionResult<List<UserQueryDTO>>> QueryUsers(string key)
+        {
+            List<UserQueryDTO> users = await _userService.QueryUsers(key);
+            if (users == null)
             {
-                Printer.Log(ex.Message);
-                return BadRequest("Getting user error, exception");
+                return NotFound("Couldn't find user");
             }
-            return Ok(new IdentityResponseDTO { User = userDTO, Success = true });
+            return Ok(users);
         }
 
-        private async Task<bool> UserLoggedIn(User user)
+        [HttpGet, Route("chunkquery")]
+        public async Task<ActionResult<List<UserQueryDTO>>> ChunkQueryUsers(string key, int startIndex, int pageSize)
         {
-            try
+            List<UserQueryDTO> users = await _userService.ChunkQueryUsers(key, startIndex, pageSize);
+            users.Skip(startIndex).Take(pageSize);
+            if (users == null)
             {
-                if (User.Identity.Name != null)
-                {
-                    var loggedUser = await _userManager.FindByNameAsync(User.Identity.Name);
-                    if (loggedUser != null)
-                    {
-                        return loggedUser.Id == user.Id;
-                    }
-                }
+                return NotFound("Couldn't find user");
             }
-            catch (Exception ex)
-            {
-
-            }
-            return false;
+            return Ok(users);
         }
 
-
-        [AllowAnonymous]
-        [HttpPost, Route("login")]
-        public async Task<ActionResult<IdentityResponseDTO>> LogIn(LogInDTO model)
+        [HttpGet, Route("countries")]
+        public ActionResult<List<CountryDTO>> GetCountries()
         {
-            Printer.Log("Trying to log in user...");
-            try
+            List<CountryDTO> countries = new List<CountryDTO>();
+            using (StreamReader r = new StreamReader("wwwroot/data/countries.json"))
             {
-                if (model == null || !ModelState.IsValid)
+                string json = r.ReadToEnd();
+                countries = JsonSerializer.Deserialize<List<CountryDTO>>(json);
+                foreach (var country in countries)
                 {
-                    return BadRequest("Login error, result failed");
-                }
-                User signedUserByEmail = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
-                User signedUserByUserName = await _userManager.FindByNameAsync(model.UserNameOrEmail);
-                Microsoft.AspNetCore.Identity.SignInResult logInResult = new Microsoft.AspNetCore.Identity.SignInResult();
-                if (signedUserByEmail != null)
-                {
-                    return await PerformLogIn(signedUserByEmail, model);
-                }
-                else if (signedUserByUserName != null)
-                {
-                    return await PerformLogIn(signedUserByUserName, model);
-                }
-                else
-                {
-                    return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "User not found." } });
+                    country.Icon = $"https://localhost:7134/images/sprites/flags/{country.code}.svg";
                 }
             }
-            catch (Exception ex)
-            {
-                Printer.Log(ex.Message);
-                return BadRequest("Log in error, exception, Model not valid");
-            }
+            return Ok(countries);
         }
 
-        private async Task<ActionResult<IdentityResponseDTO>> PerformLogIn(User user, LogInDTO model)
+        [HttpGet, Route("countries/{code}")]
+        public ActionResult<CountryDTO> GetCountry(string code)
         {
-            if (await _userManager.CheckPasswordAsync(user, model.Password) == false)
+            CountryDTO country = _userService.GetCountry(code);
+            if (country == null)
             {
-                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "Invalid credentials" } });
+                return BadRequest();
             }
-            Microsoft.AspNetCore.Identity.SignInResult logInResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
-            if (!logInResult.Succeeded)
-            {
-                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "Log in failed" } });
-            }
-            if (logInResult.IsNotAllowed)
-            {
-                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "You are not allowed" } });
-            }
-            if (logInResult.IsLockedOut)
-            {
-                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "You account is locked" } });
-            }
-            UserDTO userDTO = await _userService.BuildUserDTO(user, true);
-            Printer.Log("User successfully loged in.");
-            return Ok(new IdentityResponseDTO { User = userDTO, Success = true });
+            return Ok(country);
         }
 
         [AllowAnonymous]
-        [HttpPost, Route("signup")]
-        public async Task<ActionResult<IdentityResponseDTO>> Signup(SignUpDTO model)
+        [HttpGet, Route("{userName}")]
+        public async Task<ActionResult<UserDTO>> GetUserByUserName(string userName)
         {
-            Printer.Log("Trying to sign up user...");
-            try
+            User user = await _userService.GetUserByUserName(userName);
+            if (user == null)
             {
-                if (model == null || !ModelState.IsValid)
-                {
-                    return BadRequest("Signup error, result failed");
-                }
-                var user = new User
-                {
-                    UserName = model.UserName,
-                    Email = model.Email,
-                    PasswordHash = model.Password,
-                    EmailConfirmed = false,
-                    Picture = "snorlax",
-                    Visibility = true
-                };
-                var signUpResult = await _userManager.CreateAsync(user, model.Password);
-                if (!signUpResult.Succeeded)
-                {
-                    var errors = signUpResult.Errors.Select(e => e.Description);
-                    return BadRequest(new IdentityResponseDTO { Errors = errors });
-                }
-                Printer.Log("User successfully generated.");
-                await _signInManager.SignInAsync(user, true);
-                Printer.Log("User signed in.");
+                return NotFound("Couldn't find user");
             }
-            catch (Exception ex)
+            if (!user.Visibility)
             {
-                Printer.Log(ex.Message);
-                return BadRequest("Signup error, exception, Model not valid");
+                return Unauthorized("User is private");
             }
-            return Ok(new IdentityResponseDTO { Success = true });
+            UserDTO userDTO = await _userService.BuildUserDTO(user, await UserLoggedIn(user));
+            return Ok(userDTO);
         }
 
-        [HttpGet, Route("logout")]
-        public async Task LogOut()
+        [HttpGet, Route("pictures")]
+        public async Task<ActionResult<List<string>>> GetPictures()
         {
-            await _signInManager.SignOutAsync();
-            Printer.Log("User logged out.");
+            //full path "https://localhost:7134/images/sprites/profile-pics/blastoise.jpeg",
+            List<string> keys = new List<string>
+            {
+                "bulbasaur",
+                "charmander",
+                "squirtle",
+                "pikachu",
+                "gengar",
+                "dragonite",
+                "snorlax",
+                "mewtwo",
+            };
+            List<string> pictures = new List<string>();
+
+            foreach (var key in keys)
+            {
+                pictures.Add($"https://localhost:7134/images/sprites/profile-pics/{key}.png");
+            }
+            return pictures;
         }
-        
+
     }
 }
