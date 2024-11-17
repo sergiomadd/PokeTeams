@@ -64,18 +64,32 @@ namespace api.Services
 
         public async Task<IdentityResponseDTO> ChangeName(User user, string newName)
         {
-            user.Name = newName;
-            _pokeTeamContext.User.Update(user);
-            _pokeTeamContext.SaveChanges();
-            return new IdentityResponseDTO() { Success = true };
+            try
+            {
+                user.Name = newName;
+                _pokeTeamContext.User.Update(user);
+                _pokeTeamContext.SaveChanges();
+                return new IdentityResponseDTO() { Success = true };
+            }
+            catch (Exception ex)
+            {
+                return new IdentityResponseDTO() { Errors = new List<string> { "Couldn't save new name" } };
+            }
         }
 
         public async Task<IdentityResponseDTO> UpdatePicture(User user, string newPictureKey)
         {
-            user.Picture = newPictureKey;
-            _pokeTeamContext.User.Update(user);
-            _pokeTeamContext.SaveChanges();
-            return new IdentityResponseDTO() { Success = true };
+            try
+            {
+                user.Picture = newPictureKey;
+                _pokeTeamContext.User.Update(user);
+                _pokeTeamContext.SaveChanges();
+                return new IdentityResponseDTO() { Success = true };
+            }
+            catch (Exception ex)
+            {
+                return new IdentityResponseDTO() { Errors = new List<string> { "Couldn't save new picture" } };
+            }
         }
 
         public CountryDTO GetCountry(string code)
