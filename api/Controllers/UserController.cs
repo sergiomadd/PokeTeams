@@ -27,7 +27,6 @@ namespace api.Controllers
             _userService = userService;
         }
 
-        [AllowAnonymous]
         [HttpGet, Route("{userName}")]
         public async Task<ActionResult<UserDTO>> GetUserByUserName(string userName)
         {

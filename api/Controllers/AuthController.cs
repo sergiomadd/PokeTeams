@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -17,7 +18,6 @@ namespace api.Controllers
         private readonly TokenGenerator _tokenGenerator;
         private readonly IUserService _userService;
         private readonly IPokeTeamService _pokeTeamService;
-
 
         public AuthController(UserManager<User> userManager,
             SignInManager<User> signInManager,
@@ -33,7 +33,6 @@ namespace api.Controllers
             _pokeTeamService = teamService;
         }
 
-        [AllowAnonymous]
         [HttpGet, Route("logged")]
         public async Task<ActionResult<IdentityResponseDTO>> GetLoggedUser()
         {
@@ -77,7 +76,7 @@ namespace api.Controllers
             {
                 if (model == null || !ModelState.IsValid)
                 {
-                    return BadRequest("Login error, result failed");
+                    return BadRequest(new IdentityResponseDTO { Errors = new string[] { "Form invalid" } });
                 }
                 User signedUserByEmail = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
                 User signedUserByUserName = await _userManager.FindByNameAsync(model.UserNameOrEmail);
@@ -93,7 +92,7 @@ namespace api.Controllers
                 }
                 else
                 {
-                    return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "User not found." } });
+                    return BadRequest(new IdentityResponseDTO { Errors = new string[] { "User not found." } });
                 }
             }
             catch (Exception ex)
@@ -137,7 +136,7 @@ namespace api.Controllers
             {
                 if (model == null || !ModelState.IsValid)
                 {
-                    return BadRequest("Signup error, result failed");
+                    return BadRequest(new IdentityResponseDTO { Errors = new string[] { "Form invalid" } });
                 }
                 user = new User
                 {
@@ -264,6 +263,7 @@ namespace api.Controllers
         [HttpPost, Route("update/name")]
         public async Task<ActionResult> UpdateName(UserUpdateDTO updateData)
         {
+            Printer.Log("Trying to change name of ", updateData.CurrentUserName);
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewName != null)
             {
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
@@ -353,7 +353,6 @@ namespace api.Controllers
             return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
         }
 
-        [AllowAnonymous]
         [HttpPost, Route("delete")]
         public async Task<ActionResult> DeleteLoggedUser()
         {
