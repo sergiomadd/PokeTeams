@@ -1,8 +1,19 @@
-import { User } from "../../features/user/models/user.model";
+import { User } from "src/app/features/user/models/user.model";
 
 export interface AuthState
 {
-  loggedUser: User | null | undefined,
-  validationErrors: string[] | null,
+  token: string | null,
+  user: User | null,
+  errors: string[] | null,
+  isAuthenticated: boolean,
   isSubmitting: boolean
 }
+
+export const initialAuthState: AuthState = 
+{
+  token: null,
+  user: null,
+  errors: null,
+  isAuthenticated: false,
+  isSubmitting: false,
+};

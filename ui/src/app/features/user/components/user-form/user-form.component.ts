@@ -3,9 +3,9 @@ import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
 import { authActions } from 'src/app/auth/store/auth.actions';
-import { selectIsSubmitting, selectLoggedUser, selectValidationErrors } from 'src/app/auth/store/auth.selectors';
+import { selectIsSubmitting, selectValidationErrors } from 'src/app/auth/store/auth.selectors';
+import { AuthResponseDTO } from 'src/app/auth/types/authResponse.dto';
 import { UserService } from 'src/app/features/user/services/user.service';
-import { AuthResponseDTO } from 'src/app/models/DTOs/authResponse.dto';
 import { LogInDTO } from 'src/app/models/DTOs/login.dto';
 import { SignUpDTO } from 'src/app/models/DTOs/signup.dto';
 import { UtilService } from 'src/app/shared/services/util.service';
@@ -26,7 +26,7 @@ export class UserFormComponent
 
   data$ = combineLatest(
     {
-      loggedUser: this.store.select(selectLoggedUser),
+      //loggedUser: this.store.select(selectLoggedUser),
       isSubmitting: this.store.select(selectIsSubmitting),
       backendErrors: this.store.select(selectValidationErrors)
     }
@@ -97,6 +97,7 @@ export class UserFormComponent
         password: this.logInForm.get('password')?.value!,
         rememberMe: true
       }
+      console.log("log in triggered")
       this.store.dispatch(authActions.logIn({request: loginDTO}))
     }
   }

@@ -1,7 +1,7 @@
 import { Component, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
+import { selectToken } from 'src/app/auth/store/auth.selectors';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
@@ -31,7 +31,7 @@ export class TeamEditorComponent
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
-  loggedUser$ = this.store.select(selectLoggedUser);
+  loggedUser$ = this.store.select(selectToken);
   team: Team = <Team>{};
   showTournamentEditor: boolean = false;
   showTagEditor: boolean = false;
@@ -53,6 +53,7 @@ export class TeamEditorComponent
 
   async ngAfterContentInit()
   {
+    /*
     if(this.loggedUser$)
     {
       this.loggedUser$.subscribe
@@ -76,6 +77,7 @@ export class TeamEditorComponent
         }
       )
     }
+    */
   }
 
   buildAnonPlayer() : UserPreview

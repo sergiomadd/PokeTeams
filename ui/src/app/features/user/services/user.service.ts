@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, lastValueFrom, Observable, throwError, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
-import { AuthResponseDTO } from '../../../models/DTOs/authResponse.dto';
+import { AuthResponseDTO } from '../../../auth/types/authResponse.dto';
 import { Country } from '../../../models/DTOs/country.dto';
 import { UtilService } from '../../../shared/services/util.service';
 import { TeamService } from '../../team/services/team.service';

@@ -2,7 +2,8 @@ import { User } from "../../features/user/models/user.model"
 
 export interface AuthResponseDTO
 {
-  user: User | undefined | null,
+  token: string | null,
+  user: User | null,
   success: boolean,
   errors: string[]
 }

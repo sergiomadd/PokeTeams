@@ -7,7 +7,4 @@ export interface User
   picture?: string,
   country?: Country,
   visibility: boolean,
-  //logged
-  email?: string,
-  emailConfirmed?: boolean
 }

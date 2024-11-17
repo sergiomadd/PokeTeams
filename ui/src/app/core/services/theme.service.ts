@@ -24,6 +24,7 @@ interface Theme
     '--tertiary': string,
     '--tertiary-dark': string,
     '--text-color': string,
+    '--text-color-secondary': string,
     '--text-color-highlight': string,
     '--text-color-link': string,
     '--text-color-reverse': string
@@ -43,7 +44,7 @@ export class ThemeService
     '--primary', '--primary-light', '--primary-dark',
     '--secondary', '--secondary-light', '--secondary-dark',
     '--tertiary', '--tertiary-light', '--tertiary-dark',
-    '--text-color', '--text-color-highlight', '--text-color-link', '--text-color-reverse'
+    '--text-color', '--text-color-secondary', '--text-color-highlight', '--text-color-link', '--text-color-reverse'
   ]
 
   themes: Theme[] = 
@@ -69,6 +70,7 @@ export class ThemeService
         '--tertiary': 'hsl(209, 90%, 30%)',
         '--tertiary-dark': 'hsl(209, 70%, 30%)',
         '--text-color': '#000000',
+        '--text-color-secondary': '#888888',
         '--text-color-highlight': '#fdc800',
         '--text-color-link': '#0075BE',
         '--text-color-reverse': '#e1e1e1'
@@ -95,6 +97,7 @@ export class ThemeService
         '--tertiary': '#f37052',
         '--tertiary-dark': '#f37052',
         '--text-color': '#e1e1e1',
+        '--text-color-secondary': '#9e9e9e',
         '--text-color-highlight': '#fdc800',
         '--text-color-link': '#0075BE',
         '--text-color-reverse': '#000000'

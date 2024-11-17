@@ -1,39 +1,40 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TeamService } from '../../features/team/services/team.service';
-import { AuthResponseDTO } from '../../models/DTOs/authResponse.dto';
 import { LogInDTO } from '../../models/DTOs/login.dto';
 import { SignUpDTO } from '../../models/DTOs/signup.dto';
 import { UserUpdateDTO } from '../../models/DTOs/userUpdate.dto';
+import { AuthResponseDTO } from '../types/authResponse.dto';
+import { JWTResponse } from '../types/jwtResponse.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService 
 {
-  private apiUrl = 'https://localhost:7134/api/user/';
+  private apiUrl = 'https://localhost:7134/api/auth/';
 
   generateTeam: TeamService = inject(TeamService)
 
   constructor(private http: HttpClient) { }
 
-  getLogged() : Observable<AuthResponseDTO>
+  getLogged() : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'logged';
-    return this.http.get<AuthResponseDTO>(url, {withCredentials: true});
+    return this.http.get<JWTResponse>(url, {withCredentials: true});
   }
 
-  logIn(form: LogInDTO) : Observable<AuthResponseDTO>
+  logIn(form: LogInDTO) : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'login';
-    return this.http.post<AuthResponseDTO>(url, form, {withCredentials: true});
+    return this.http.post<JWTResponse>(url, form, {withCredentials: true});
   }
 
-  signUp(data: SignUpDTO) : Observable<AuthResponseDTO>
+  signUp(data: SignUpDTO) : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'signup';
-    return this.http.post<AuthResponseDTO>(url, data, {withCredentials: true});
+    return this.http.post<JWTResponse>(url, data, {withCredentials: true});
   }
 
   logOut() : Observable<AuthResponseDTO>

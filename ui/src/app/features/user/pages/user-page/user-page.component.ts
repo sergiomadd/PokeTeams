@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
-import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
+import { Observable } from 'rxjs';
+import { selectUser } from 'src/app/auth/store/auth.selectors';
 import { SearchService } from 'src/app/features/search/services/search.service';
 import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
 import { User } from '../../models/user.model';
@@ -25,16 +25,12 @@ export class UserPageComponent
   user?: User;
   userTeams: TeamPreview[] = [];
 
-  sections: boolean[] = [true, false, false]
+  sections: boolean[] = [false, false, true]
   country?: string;
   userNotFound: boolean = false;
   userPrivate: boolean = false;
 
-  data$ = combineLatest(
-    {
-      loggedUser: this.store.select(selectLoggedUser),
-    }
-  )
+  loggedUser$: Observable<User | null> = this.store.select(selectUser);
 
   async ngOnInit()
   {
@@ -44,7 +40,6 @@ export class UserPageComponent
         {
           next: (response) =>
           {
-            console.log("success")
             this.user = response;
             this.userPageService.setUser(this.user);
             this.searchService.userOnlySearch(this.user.username)
@@ -74,16 +69,7 @@ export class UserPageComponent
       })
     }
 
-    this.data$.forEach(async item => 
-      {
-        if(item.loggedUser != null && item.loggedUser?.username === this.user?.username)
-        {
-          //item.loggedUser = await this.userService.loadUserTeams(item.loggedUser);
-          //this.user = item.loggedUser;
-        }
-      });
-      
-      console.log("User in user page:", this.user)
+    console.log("User in user page:", this.user)
   }
 
   changeSection(index: number)

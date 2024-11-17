@@ -35,7 +35,7 @@ import { TeamViewComponent } from './features/team/pages/team-view/team-view.com
 import { UploadComponent } from './features/team/pages/upload/upload.component';
 import { UserDetailsComponent } from './features/user/components/user-details/user-details.component';
 import { UserFormComponent } from './features/user/components/user-form/user-form.component';
-import { UserOptionsComponent } from './features/user/components/user-options/user-options.component';
+import { UserSettingsComponent } from './features/user/components/user-settings/user-settings.component';
 import { UserTeamsComponent } from './features/user/components/user-teams/user-teams.component';
 import { UserPageComponent } from './features/user/pages/user-page/user-page.component';
 import { CheckboxComponent } from './shared/components/checkbox/checkbox.component';
@@ -47,7 +47,7 @@ import { SmartInputComponent } from './shared/components/smart-input/smart-input
 import { SwitchComponent } from './shared/components/switch/switch.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
 import { LinkerPipe } from './shared/pipes/linker.pipe';
-import { metaReducers } from './state/app.state';
+import { metaReducers } from './store/app.state';
 
 @NgModule({
   declarations: [
@@ -64,7 +64,6 @@ import { metaReducers } from './state/app.state';
     PokemonPreviewComponent,
     UserFormComponent,
     TeamIconsComponent,
-    UserOptionsComponent,
     UserDetailsComponent,
     DialogComponent,
     MenuComponent,
@@ -89,6 +88,7 @@ import { metaReducers } from './state/app.state';
     SearchPageComponent,
     UserTeamsComponent,
     UserPageComponent,
+    UserSettingsComponent,
   ],
   exports: [],
   imports: [

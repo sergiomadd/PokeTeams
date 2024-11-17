@@ -3,10 +3,12 @@ import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
-import { catchError, map, of, switchMap, tap } from "rxjs";
+import { catchError, lastValueFrom, map, of, switchMap, tap } from "rxjs";
 import { AuthService } from "src/app/auth/services/auth.service";
+import { JwtTokenService } from "src/app/core/services/jwttoken.service";
 import { UserService } from "src/app/features/user/services/user.service";
-import { AuthResponseDTO } from "src/app/models/DTOs/authResponse.dto";
+import { AuthResponseDTO } from "../types/authResponse.dto";
+import { JWTResponse } from "../types/jwtResponse.dto";
 import { authActions } from "./auth.actions";
 
 
@@ -18,6 +20,7 @@ export class AuthEffects
   userService = inject(UserService);
   router = inject(Router);
   store = inject(Store);
+  jwtTokenService = inject(JwtTokenService);
 
   getLogged$ = createEffect(() =>
   {
@@ -26,9 +29,18 @@ export class AuthEffects
       switchMap(() =>
       {
         return this.authService.getLogged().pipe(
-          switchMap(async (response: AuthResponseDTO) =>
+          switchMap(async (response: JWTResponse) =>
           {
-            return authActions.getLoggedSuccess({response});
+            const authResponse: AuthResponseDTO = 
+            {
+              token: response.token,
+              user: this.jwtTokenService.getTokenUsername(response.token) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              : null,
+              success: true,
+              errors: []
+            }
+            return authActions.getLoggedSuccess({authResponse});
           }),
           catchError((errorResponse: HttpErrorResponse) => 
           {
@@ -50,12 +62,23 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.logIn(request).pipe(
-          map((response: AuthResponseDTO) =>
+          switchMap(async (response: JWTResponse) =>
           {
-            return authActions.logInSuccess({response});
+            const authResponse: AuthResponseDTO = 
+            {
+              token: response.token,
+              user: this.jwtTokenService.getTokenUsername(response.token) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              : null,
+              success: true,
+              errors: []
+            }
+            return authActions.logInSuccess({authResponse});
           }),
           catchError((errorResponse: HttpErrorResponse) => 
           {
+            console.log("error test:", errorResponse)
+            console.log("Error in log in effect: ", errorResponse.error.errors)
             if(errorResponse.status == 0)
             {
               return of(authActions.logInFailure(
@@ -66,7 +89,7 @@ export class AuthEffects
             }
             return of(authActions.logInFailure(
               {
-                errors: errorResponse.error.errors
+                errors: errorResponse.error
               }
             ))
           })
@@ -83,9 +106,18 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.signUp(request).pipe(
-          map((response: AuthResponseDTO) =>
+          switchMap(async (response: JWTResponse) =>
           {
-            return authActions.signUpSuccess({response});
+            const authResponse: AuthResponseDTO = 
+            {
+              token: response.token,
+              user: this.jwtTokenService.getTokenUsername(response.token) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              : null,
+              success: true,
+              errors: []
+            }
+            return authActions.signUpSuccess({authResponse});
           }),
           catchError((errorResponse: HttpErrorResponse) => 
           {
@@ -132,7 +164,7 @@ export class AuthEffects
         return this.authService.logOut().pipe(
           map((response: AuthResponseDTO) =>
           {
-            return authActions.logOutSuccess({response});
+            return authActions.logOutSuccess();
           }),
           catchError((errorResponse: HttpErrorResponse) => 
           {
