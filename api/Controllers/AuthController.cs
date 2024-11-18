@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace api.Controllers
 {
@@ -35,7 +36,7 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("logged")]
-        public async Task<ActionResult<IdentityResponseDTO>> GetLoggedUser()
+        public async Task<ActionResult> GetLoggedUser()
         {
             Printer.Log("Trying to get logged user...");
             UserDTO userDTO;
@@ -51,21 +52,20 @@ namespace api.Controllers
                     }
                     else
                     {
-                        return Unauthorized(new IdentityResponseDTO { Success = false, Errors = new string[] { "Logged user not found" } });
+                        return Unauthorized("Logged user not found");
                     }
                 }
                 else
                 {
-                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new string[] { "No user logged" } });
+                    return NotFound("No user logged");
                 }
-
             }
             catch (Exception ex)
             {
                 Printer.Log(ex.Message);
                 return BadRequest("Getting user error, exception");
             }
-            return Ok(new IdentityResponseDTO { User = userDTO, Success = true });
+            return Ok(userDTO);
         }
 
         [AllowAnonymous]
@@ -77,7 +77,7 @@ namespace api.Controllers
             {
                 if (model == null || !ModelState.IsValid)
                 {
-                    return BadRequest(new IdentityResponseDTO { Errors = new string[] { "Form invalid" } });
+                    return BadRequest("Form invalid");
                 }
                 User signedUserByEmail = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
                 User signedUserByUserName = await _userManager.FindByNameAsync(model.UserNameOrEmail);
@@ -93,13 +93,13 @@ namespace api.Controllers
                 }
                 else
                 {
-                    return BadRequest(new IdentityResponseDTO { Errors = new string[] { "User not found." } });
+                    return BadRequest("User not found.");
                 }
             }
             catch (Exception ex)
             {
                 Printer.Log(ex.Message);
-                return BadRequest(new IdentityResponseDTO { Errors = new string[] { "Log in error, exception, Model not valid" } });
+                return BadRequest("Log in error, exception, Model not valid");
             }
         }
 
@@ -107,20 +107,20 @@ namespace api.Controllers
         {
             if (await _userManager.CheckPasswordAsync(user, model.Password) == false)
             {
-                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "Invalid credentials" } });
+                return Unauthorized("Invalid credentials");
             }
             Microsoft.AspNetCore.Identity.SignInResult logInResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
             if (!logInResult.Succeeded)
             {
-                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "Log in failed" } });
+                return Unauthorized("Log in failed");
             }
             if (logInResult.IsNotAllowed)
             {
-                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "You are not allowed" } });
+                return Unauthorized("You are not allowed");
             }
             if (logInResult.IsLockedOut)
             {
-                return Unauthorized(new IdentityResponseDTO { Errors = new string[] { "You account is locked" } });
+                return Unauthorized("You account is locked");
             }
             Printer.Log("User successfully loged in.");
             var token = _tokenGenerator.GenerateToken(user);
@@ -137,7 +137,7 @@ namespace api.Controllers
             {
                 if (model == null || !ModelState.IsValid)
                 {
-                    return BadRequest(new IdentityResponseDTO { Errors = new string[] { "Form invalid" } });
+                    return BadRequest("Form invalid");
                 }
                 user = new User
                 {
@@ -151,8 +151,9 @@ namespace api.Controllers
                 var signUpResult = await _userManager.CreateAsync(user, model.Password);
                 if (!signUpResult.Succeeded)
                 {
-                    var errors = signUpResult.Errors.Select(e => e.Description);
-                    return BadRequest(new IdentityResponseDTO { Errors = errors });
+                    //var errors = signUpResult.Errors.Select(e => e.Description);
+                    //Printer log Identity errors: 
+                    return BadRequest("Server error");
                 }
                 Printer.Log("User successfully generated.");
                 await _signInManager.SignInAsync(user, true);
@@ -168,10 +169,19 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("logout")]
-        public async Task LogOut()
+        public async Task<ActionResult> LogOut()
         {
             Printer.Log("User logged out.");
-            await _signInManager.SignOutAsync();
+            try
+            {
+                await _signInManager.SignOutAsync();
+            }
+            catch (Exception ex)
+            {
+                Printer.Log(ex.Message);
+                return BadRequest("Error: could not log out");
+            }
+            return Ok();
         }
 
         [HttpPost, Route("update/username")]
@@ -182,24 +192,26 @@ namespace api.Controllers
                 User newUser = await _userService.GetUserByUserName(updateData.NewUserName);
                 if (newUser != null)
                 {
-                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "UserName already claimed" } });
+                    return BadRequest("UserName already claimed");
                 }
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
-                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+                    return NotFound("Couldn't find user");
                 }
                 IdentityResult result = await _userManager.SetUserNameAsync(user, updateData.NewUserName);
                 if (result.Errors.ToList().Count > 0)
                 {
-                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
+                    //var errors = result.Errors.Select(e => e.Description);
+                    //Printer log Identity errors: 
+                    return BadRequest("Server error");
                 }
                 //await RefreshLoggedUser(user);
                 User updatedUser = await _userService.GetUserByUserName(updateData.NewUserName);
                 var token = _tokenGenerator.GenerateToken(updatedUser);
                 return Ok(new JwtResponseDTO { Token = token });
             }
-            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
+            return BadRequest("Wrong data");
         }
 
         private async Task RefreshLoggedUser(User user)
@@ -217,24 +229,26 @@ namespace api.Controllers
                 User newUser = await _userManager.FindByEmailAsync(updateData.NewEmail);
                 if (newUser != null)
                 {
-                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Email already claimed" } });
+                    return Conflict("Email already taken");
                 }
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
-                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+                    return NotFound("Couldn't find user");
                 }
                 IdentityResult result = await _userManager.SetEmailAsync(user, updateData.NewEmail);
-                if (result.Errors.ToList().Count > 0)
+                if (!result.Succeeded)
                 {
-                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
+                    //var errors = signUpResult.Errors.Select(e => e.Description);
+                    //Printer log Identity errors: 
+                    return BadRequest("Server error");
                 }
                 await _userManager.UpdateAsync(user);
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateToken(updatedUser);
                 return Ok(new JwtResponseDTO { Token = token });
             }
-            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
+            return BadRequest("Wrong data");
         }
 
         [HttpPost, Route("update/password")]
@@ -247,18 +261,20 @@ namespace api.Controllers
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
-                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+                    return NotFound("Couldn't find user");
                 }
                 IdentityResult result = await _userManager.ChangePasswordAsync(user, updateData.CurrentPassword, updateData.NewPassword);
-                if (result.Errors.ToList().Count > 0)
+                if (!result.Succeeded)
                 {
-                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
+                    //var errors = signUpResult.Errors.Select(e => e.Description);
+                    //Printer log Identity errors: 
+                    return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateToken(updatedUser);
                 return Ok(new JwtResponseDTO { Token = token });
             }
-            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
+            return BadRequest("Wrong data");
         }
 
         [HttpPost, Route("update/name")]
@@ -270,18 +286,20 @@ namespace api.Controllers
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
-                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+                    return NotFound("Couldn't find user");
                 }
-                IdentityResponseDTO result = await _userService.ChangeName(user, updateData.NewName);
-                if (result.Errors.ToList().Count > 0)
+                IdentityResult result = await _userService.ChangeName(user, updateData.NewName);
+                if (!result.Succeeded)
                 {
-                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors });
+                    //var errors = signUpResult.Errors.Select(e => e.Description);
+                    //Printer log Identity errors: 
+                    return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateToken(updatedUser);
                 return Ok(new JwtResponseDTO { Token = token });
             }
-            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
+            return BadRequest("Wrong data");
         }
 
         [HttpPost, Route("update/picture")]
@@ -292,19 +310,21 @@ namespace api.Controllers
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
-                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+                    return NotFound("Couldn't find user");
                 }
                 user.Picture = updateData.NewPictureKey;
                 IdentityResult result = await _userManager.UpdateAsync(user);
-                if (result.Errors.ToList().Count > 0)
+                if (!result.Succeeded)
                 {
-                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
+                    //var errors = signUpResult.Errors.Select(e => e.Description);
+                    //Printer log Identity errors: 
+                    return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateToken(updatedUser);
                 return Ok(new JwtResponseDTO { Token = token });
             }
-            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
+            return BadRequest("Wrong data");
         }
 
         [HttpPost, Route("update/country")]
@@ -315,19 +335,21 @@ namespace api.Controllers
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
-                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+                    return NotFound("Couldn't find user");
                 }
                 user.Country = updateData.NewCountryCode;
                 IdentityResult result = await _userManager.UpdateAsync(user);
-                if (result.Errors.ToList().Count > 0)
+                if (!result.Succeeded)
                 {
-                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
+                    //var errors = signUpResult.Errors.Select(e => e.Description);
+                    //Printer log Identity errors: 
+                    return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateToken(updatedUser);
                 return Ok(new JwtResponseDTO { Token = token });
             }
-            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
+            return BadRequest("Wrong data");
         }
 
         [HttpPost, Route("update/visibility")]
@@ -339,19 +361,21 @@ namespace api.Controllers
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
-                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+                    return NotFound("Couldn't find user");
                 }
                 user.Visibility = (bool)updateData.NewVisibility;
                 IdentityResult result = await _userManager.UpdateAsync(user);
-                if (result.Errors.ToList().Count > 0)
+                if (!result.Succeeded)
                 {
-                    return BadRequest(new IdentityResponseDTO { Success = false, Errors = result.Errors.Select(e => e.Description).ToList() });
+                    //var errors = signUpResult.Errors.Select(e => e.Description);
+                    //Printer log Identity errors: 
+                    return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateToken(updatedUser);
                 return Ok(new JwtResponseDTO { Token = token });
             }
-            return BadRequest(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Wrong data" } });
+            return BadRequest("Wrong data");
         }
 
         [HttpPost, Route("delete")]
@@ -360,7 +384,7 @@ namespace api.Controllers
             Printer.Log("Deleting user...");
             if (User.Identity.Name == null)
             {
-                return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "No user logged" } });
+                return NotFound("No user is logged");
             }
             User user = await _userManager.FindByNameAsync(User.Identity.Name);
             if (user != null)
@@ -376,15 +400,15 @@ namespace api.Controllers
                 IdentityResult deleted = await _userManager.DeleteAsync(user);
                 if (!deleted.Succeeded)
                 {
-                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't delete user" } });
+                    return NotFound("Couldn't delete user");
                 }
             }
             else
             {
-                return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+                return NotFound("Couldn't find user");
             }
 
-            return Ok(new IdentityResponseDTO { Success = true });
+            return Ok();
         }
 
         //Make so only admin
@@ -399,40 +423,40 @@ namespace api.Controllers
                 IdentityResult deleted = await _userManager.DeleteAsync(user);
                 if (!deleted.Succeeded)
                 {
-                    return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't delete user" } });
+                    return NotFound("Couldn't delete user");
                 }
             }
             else
             {
-                return NotFound(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Couldn't find user" } });
+                return NotFound("Couldn't find user");
             }
 
-            return Ok(new IdentityResponseDTO { Success = true });
+            return Ok();
         }
 
         [AllowAnonymous]
         [HttpGet, Route("check/username/{userName}")]
-        public async Task<ActionResult<IdentityResponseDTO>> UserNameAvailable(string userName)
+        public async Task<ActionResult> UserNameAvailable(string userName)
         {
             Printer.Log($"Checking availability of {userName}");
             bool available = await _userService.UserNameAvailable(userName);
             if (!available)
             {
-                return Conflict(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Username already taken." } });
+                return Conflict("Username already taken.");
             }
-            return Ok(new IdentityResponseDTO { Success = true });
+            return Ok();
         }
 
         [AllowAnonymous]
         [HttpGet, Route("check/email/{email}")]
-        public async Task<ActionResult<IdentityResponseDTO>> EmailAvailable(string email)
+        public async Task<ActionResult> EmailAvailable(string email)
         {
             User user = await _userManager.FindByEmailAsync(email);
             if (user != null)
             {
-                return Conflict(new IdentityResponseDTO { Success = false, Errors = new List<string> { "Email already taken." } });
+                return Conflict("Email already taken.");
             }
-            return Ok(new IdentityResponseDTO { Success = true });
+            return Ok();
         }
     }
 }
