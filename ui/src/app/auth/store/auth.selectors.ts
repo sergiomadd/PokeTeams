@@ -5,4 +5,4 @@ const selectAuth = createFeatureSelector<AuthState>('auth');
 export const selectToken = createSelector(selectAuth, (auth) => auth.token);
 export const selectUser = createSelector(selectAuth, (auth) => auth.user);
 export const selectIsSubmitting = createSelector(selectAuth, (auth) => auth.isSubmitting);
-export const selectValidationErrors = createSelector(selectAuth, (auth) => auth.errors);
+export const selectError = createSelector(selectAuth, (auth) => auth.error);

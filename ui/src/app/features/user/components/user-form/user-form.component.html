@@ -39,10 +39,8 @@
                 <div class="pokemon-spinner"></div>
               </div>
             </ng-container>
-            <ng-container *ngIf="logInFormSubmitted && data.backendErrors">
-              <ng-container *ngFor="let error of data.backendErrors">
-                <span class="formFeedbackError">{{error}}</span>
-              </ng-container>
+            <ng-container *ngIf="logInFormSubmitted && data.backendError">
+              <span class="formFeedbackError">{{data.backendError}}</span>
             </ng-container>
           </div>
           <button 
@@ -109,10 +107,8 @@
                 <div class="loader"></div>
               </div>
             </ng-container>
-            <ng-container *ngIf="signUpFormSubmitted && data.backendErrors">
-              <ng-container *ngFor="let error of data.backendErrors">
-                <span class="formFeedbackError">{{error}}</span>
-              </ng-container>
+            <ng-container *ngIf="signUpFormSubmitted && data.backendError">
+              <span class="formFeedbackError">{{data.backendError}}</span>
             </ng-container>
           </div>
           <button 

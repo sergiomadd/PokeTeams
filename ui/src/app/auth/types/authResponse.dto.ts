@@ -5,5 +5,5 @@ export interface AuthResponseDTO
   token: string | null,
   user: User | null,
   success: boolean,
-  errors: string[]
+  error: string | null
 }

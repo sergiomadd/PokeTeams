@@ -4,7 +4,7 @@ export interface AuthState
 {
   token: string | null,
   user: User | null,
-  errors: string[] | null,
+  error: string | null,
   isAuthenticated: boolean,
   isSubmitting: boolean
 }
@@ -13,7 +13,7 @@ export const initialAuthState: AuthState =
 {
   token: null,
   user: null,
-  errors: null,
+  error: null,
   isAuthenticated: false,
   isSubmitting: false,
 };

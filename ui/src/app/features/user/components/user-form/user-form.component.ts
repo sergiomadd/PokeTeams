@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
 import { authActions } from 'src/app/auth/store/auth.actions';
-import { selectIsSubmitting, selectValidationErrors } from 'src/app/auth/store/auth.selectors';
+import { selectError, selectIsSubmitting } from 'src/app/auth/store/auth.selectors';
 import { AuthResponseDTO } from 'src/app/auth/types/authResponse.dto';
 import { UserService } from 'src/app/features/user/services/user.service';
 import { LogInDTO } from 'src/app/models/DTOs/login.dto';
@@ -28,7 +28,7 @@ export class UserFormComponent
     {
       //loggedUser: this.store.select(selectLoggedUser),
       isSubmitting: this.store.select(selectIsSubmitting),
-      backendErrors: this.store.select(selectValidationErrors)
+      backendError: this.store.select(selectError)
     }
   )
 

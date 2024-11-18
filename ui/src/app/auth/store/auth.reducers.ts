@@ -9,7 +9,7 @@ export const authReducers = createReducer(
     {
       ...state,
       isSubmitting: true,
-      errors: null
+      error: null
     })),
   on(authActions.signUpSuccess, (state, action) => (
     {
@@ -23,13 +23,13 @@ export const authReducers = createReducer(
     {
       ...state,
       isSubmitting: false,
-      errors: action.errors
+      error: action.error
     })),
   on(authActions.logIn, (state) => (
     {
       ...state,
       isSubmitting: true,
-      errors: null
+      error: null
     })),
   on(authActions.logInSuccess, (state, action) => (
     {
@@ -43,13 +43,13 @@ export const authReducers = createReducer(
     {
       ...state,
       isSubmitting: false,
-      errors: action.errors
+      error: action.error
     })),
   on(authActions.getLogged, (state) => (
     {
       ...state,
       isSubmitting: true,
-      errors: null
+      error: null
     })),
   on(authActions.getLoggedSuccess, (state, action) => (
     {
@@ -65,13 +65,13 @@ export const authReducers = createReducer(
       isSubmitting: false,
       token: null,
       user: null,
-      errors: action.errors
+      error: action.error
     })),
   on(authActions.logOut, (state) => (
     {
       ...state,
       isSubmitting: true,
-      errors: null
+      error: null
     })),
   on(authActions.logOutSuccess, (state) => (
     {
@@ -84,13 +84,13 @@ export const authReducers = createReducer(
     {
       ...state,
       isSubmitting: false,
-      errors: action.errors
+      error: action.error
     })),
   on(authActions.deleteAccount, (state) => (
     {
       ...state,
       isSubmitting: true,
-      errors: null
+      error: null
     })),
   on(authActions.deleteAccountSuccess, (state, action) => (
     {
@@ -102,13 +102,13 @@ export const authReducers = createReducer(
     {
       ...state,
       isSubmitting: false,
-      errors: action.errors
+      error: action.error
     })),
   on(authActions.changeUserName, (state) => (
     {
       ...state,
       isSubmitting: true,
-      errors: null
+      error: null
     })),
   on(authActions.changeUserNameSuccess, (state, action) => (
     {
@@ -120,13 +120,13 @@ export const authReducers = createReducer(
     {
       ...state,
       isSubmitting: false,
-      errors: action.errors
+      error: action.error
     })),
   on(authActions.changeEmail, (state) => (
     {
       ...state,
       isSubmitting: true,
-      errors: null
+      error: null
     })),
   on(authActions.changeEmailSuccess, (state, action) => (
     {
@@ -138,13 +138,13 @@ export const authReducers = createReducer(
     {
       ...state,
       isSubmitting: false,
-      errors: action.errors
+      error: action.error
     })),
   on(authActions.changePassword, (state) => (
     {
       ...state,
       isSubmitting: true,
-      errors: null
+      error: null
     })),
   on(authActions.changePasswordSuccess, (state, action) => (
     {
@@ -155,13 +155,13 @@ export const authReducers = createReducer(
     {
       ...state,
       isSubmitting: false,
-      errors: action.errors
+      error: action.error
     })),
   on(authActions.changePicture, (state) => (
     {
       ...state,
       isSubmitting: true,
-      errors: null
+      error: null
     })),
   on(authActions.changePictureSuccess, (state, action) => (
     {
@@ -173,13 +173,13 @@ export const authReducers = createReducer(
     {
       ...state,
       isSubmitting: false,
-      errors: action.errors
+      error: action.error
     })),
   on(authActions.changeCountry, (state) => (
     {
       ...state,
       isSubmitting: true,
-      errors: null
+      error: null
     })),
   on(authActions.changeCountrySuccess, (state, action) => (
     {
@@ -191,13 +191,13 @@ export const authReducers = createReducer(
     {
       ...state,
       isSubmitting: false,
-      errors: action.errors
+      error: action.error
     })),
   on(authActions.changeVisibility, (state) => (
     {
       ...state,
       isSubmitting: true,
-      errors: null
+      error: null
     })),
   on(authActions.changeVisibilitySuccess, (state, action) => (
     {
@@ -209,6 +209,6 @@ export const authReducers = createReducer(
     {
       ...state,
       isSubmitting: false,
-      errors: action.errors
+      error: action.error
     })),
 )
