@@ -184,9 +184,9 @@ export class AuthEffects
       switchMap(() =>
       {
         return this.authService.deleteAccount().pipe(
-          map((response: AuthResponseDTO) =>
+          map(() =>
           {
-            return authActions.deleteAccountSuccess({response});
+            return authActions.deleteAccountSuccess();
           }),
           catchError((errorResponse: HttpErrorResponse) => 
           {
@@ -219,9 +219,18 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.changeUserName(request).pipe(
-          map((response: AuthResponseDTO) =>
+          switchMap(async (response: JWTResponse) =>
           {
-            return authActions.changeUserNameSuccess({response});
+            const authResponse: AuthResponseDTO = 
+            {
+              token: response.token,
+              user: this.jwtTokenService.getTokenUsername(response.token) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              : null,
+              success: true,
+              error: null
+            }
+            return authActions.changeUserNameSuccess({authResponse});
           }),
           catchError((errorResponse: HttpErrorResponse) => 
           {
@@ -242,7 +251,7 @@ export class AuthEffects
       ofType(authActions.changeUserNameSuccess),
       tap((response) => 
       {
-        this.router.navigate(['/@' + response.response.user?.username]);
+        this.router.navigate(['/@' + response.authResponse.user?.username]);
       })
     )
   },{dispatch: false});
@@ -254,9 +263,18 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.changeEmail(request).pipe(
-          map((response: AuthResponseDTO) =>
+          switchMap(async (response: JWTResponse) =>
           {
-            return authActions.changeEmailSuccess({response});
+            const authResponse: AuthResponseDTO = 
+            {
+              token: response.token,
+              user: this.jwtTokenService.getTokenUsername(response.token) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              : null,
+              success: true,
+              error: null
+            }
+            return authActions.changeEmailSuccess({authResponse});
           }),
           catchError((errorResponse: HttpErrorResponse) => 
           {
@@ -278,15 +296,24 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.changePassword(request).pipe(
-          map((response: AuthResponseDTO) =>
+          switchMap(async (response: JWTResponse) =>
           {
-            return authActions.changePasswordSuccess({response});
+            const authResponse: AuthResponseDTO = 
+            {
+              token: response.token,
+              user: this.jwtTokenService.getTokenUsername(response.token) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              : null,
+              success: true,
+              error: null
+            }
+            return authActions.changePasswordSuccess({authResponse});
           }),
           catchError((errorResponse: HttpErrorResponse) => 
           {
             return of(authActions.changePasswordFailure(
               {
-                error: errorResponse.error.error
+                error: errorResponse.error
               }
             ))
           })
@@ -302,9 +329,18 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.changePicture(request).pipe(
-          map((response: AuthResponseDTO) =>
+          switchMap(async (response: JWTResponse) =>
           {
-            return authActions.changePictureSuccess({response});
+            const authResponse: AuthResponseDTO = 
+            {
+              token: response.token,
+              user: this.jwtTokenService.getTokenUsername(response.token) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              : null,
+              success: true,
+              error: null
+            }
+            return authActions.changePictureSuccess({authResponse});
           }),
           catchError((errorResponse: HttpErrorResponse) => 
           {
@@ -326,9 +362,18 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.changeCountry(request).pipe(
-          map((response: AuthResponseDTO) =>
+          switchMap(async (response: JWTResponse) =>
           {
-            return authActions.changeCountrySuccess({response});
+            const authResponse: AuthResponseDTO = 
+            {
+              token: response.token,
+              user: this.jwtTokenService.getTokenUsername(response.token) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              : null,
+              success: true,
+              error: null
+            }
+            return authActions.changeCountrySuccess({authResponse});
           }),
           catchError((errorResponse: HttpErrorResponse) => 
           {
@@ -350,9 +395,18 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.changeVisibility(request).pipe(
-          map((response: AuthResponseDTO) =>
+          switchMap(async (response: JWTResponse) =>
           {
-            return authActions.changeVisibilitySuccess({response});
+            const authResponse: AuthResponseDTO = 
+            {
+              token: response.token,
+              user: this.jwtTokenService.getTokenUsername(response.token) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              : null,
+              success: true,
+              error: null
+            }
+            return authActions.changeVisibilitySuccess({authResponse});
           }),
           catchError((errorResponse: HttpErrorResponse) => 
           {

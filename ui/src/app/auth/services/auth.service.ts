@@ -49,39 +49,39 @@ export class AuthService
     return this.http.post<AuthResponseDTO>(url, null, {withCredentials: true});
   }
 
-  changeUserName(updateDTO: UserUpdateDTO) : Observable<AuthResponseDTO>
+  changeUserName(updateDTO: UserUpdateDTO) : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'update/username';
-    return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
+    return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
   }
 
-  changeEmail(updateDTO: UserUpdateDTO) : Observable<AuthResponseDTO>
+  changeEmail(updateDTO: UserUpdateDTO) : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'update/email';
-    return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
+    return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
   }
 
-  changePassword(updateDTO: UserUpdateDTO) : Observable<AuthResponseDTO>
+  changePassword(updateDTO: UserUpdateDTO) : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'update/password';
-    return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
+    return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
   }
 
-  changePicture(updateDTO: UserUpdateDTO) : Observable<AuthResponseDTO>
+  changePicture(updateDTO: UserUpdateDTO) : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'update/picture';
-    return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
+    return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
   }
 
-  changeCountry(updateDTO: UserUpdateDTO) : Observable<AuthResponseDTO>
+  changeCountry(updateDTO: UserUpdateDTO) : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'update/country';
-    return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
+    return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
   }
 
-  changeVisibility(updateDTO: UserUpdateDTO) : Observable<AuthResponseDTO>
+  changeVisibility(updateDTO: UserUpdateDTO) : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'update/visibility';
-    return this.http.post<AuthResponseDTO>(url, updateDTO, {withCredentials: true});
+    return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
   }
 }
