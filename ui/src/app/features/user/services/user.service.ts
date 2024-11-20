@@ -36,7 +36,9 @@ export class UserService
           },
           withCredentials: true
         })
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
+        .pipe(catchError(() => []), timeout(this.dataTimeout)));
+      //.pipe(catchError(() => []), timeout({first: this.dataTimeout,
+      //   with: () => throwError(() => new CustomTimeoutError())})));
     }
     catch(error)
     {

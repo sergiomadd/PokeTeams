@@ -4,7 +4,7 @@ import { hydrationMetaReducer } from "./hydration/hydration.reducer";
 
 export interface AppState
 {
-  authState: AuthState
+  auth: AuthState
 }
 
 export const metaReducers: MetaReducer[] = [hydrationMetaReducer]

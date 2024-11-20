@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -10,8 +10,10 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
+import { AuthService } from './auth/services/auth.service';
 import { FooterComponent } from './core/layout/footer/footer.component';
 import { MenuComponent } from './core/layout/menu/menu.component';
+import { TokenInterceptorService } from './core/services/token-interceptor.service';
 import { EvolutionComponent } from './features/pokemon/components/evolution/evolution.component';
 import { PokemonPreviewComponent } from './features/pokemon/components/pokemon-preview/pokemon-preview.component';
 import { PokemonComponent } from './features/pokemon/components/pokemon/pokemon.component';
@@ -33,7 +35,6 @@ import { TournamentEditorComponent } from './features/team/components/tournament
 import { TeamEditComponent } from './features/team/pages/team-edit/team-edit.component';
 import { TeamViewComponent } from './features/team/pages/team-view/team-view.component';
 import { UploadComponent } from './features/team/pages/upload/upload.component';
-import { UserDetailsComponent } from './features/user/components/user-details/user-details.component';
 import { UserFormComponent } from './features/user/components/user-form/user-form.component';
 import { UserSettingsComponent } from './features/user/components/user-settings/user-settings.component';
 import { UserTeamsComponent } from './features/user/components/user-teams/user-teams.component';
@@ -64,7 +65,6 @@ import { metaReducers } from './store/app.state';
     PokemonPreviewComponent,
     UserFormComponent,
     TeamIconsComponent,
-    UserDetailsComponent,
     DialogComponent,
     MenuComponent,
     SmartInputComponent,
@@ -108,7 +108,14 @@ import { metaReducers } from './store/app.state';
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
     }),
     ],
-  providers: [],
+  providers: [
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
