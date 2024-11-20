@@ -5,11 +5,11 @@
         Profile picture
       </div>
       <div class="subtitle">
-        Selected: {{getPictureKey(loggedUser?.picture)}}
+        Selected: {{getPictureKey(user?.picture)}}
       </div>
     </div>
     <div class="row b-gap">
-      <img src="{{loggedUser?.picture}}" alt="" class="picture">
+      <img src="{{user?.picture}}" alt="" class="picture">
       <div class="picture-selector">
         <button (click)="clickPictureSelector()">Change</button>
         <div class="meta-wrapper">
@@ -28,18 +28,18 @@
         Country
       </div>
       <div class="row s-gap">
-        <ng-container *ngIf="loggedUser?.country">
-          <img src="{{loggedUser?.country?.icon}}" alt="{{loggedUser?.country?.name}}" class="flag">
-          <span class="subtitle">{{loggedUser?.country?.name}}</span>
+        <ng-container *ngIf="user?.country">
+          <img src="{{user?.country?.icon}}" alt="{{user?.country?.name}}" class="flag">
+          <span class="subtitle">{{user?.country?.name}}</span>
         </ng-container>
-        <ng-container *ngIf="!loggedUser?.country">
+        <ng-container *ngIf="!user?.country">
           <span class="error">No country selected</span>
         </ng-container>
       </div>
     </div>
     <app-dropdown
     [options]="countries"
-    [selectedOption]="loggedUser?.country"
+    [selectedOption]="user?.country"
     (selectEvent)="changeCountry($event)"
     ></app-dropdown>
   </div>
@@ -53,7 +53,7 @@
       </div>
     </div>
     <app-switch
-    [inputState]="loggedUser?.visibility"
+    [inputState]="user?.visibility"
     [leftText]="'Public'"
     [rightText]="'Private'"
     (checkEvent)="changeVisibility($event)"
@@ -65,10 +65,10 @@
         Name
       </div>
       <div class="current">
-        <ng-container *ngIf="loggedUser?.name">
-          <span class="subtitle">{{loggedUser?.name}}</span>
+        <ng-container *ngIf="user?.name">
+          <span class="subtitle">{{user?.name}}</span>
         </ng-container>
-        <ng-container *ngIf="!loggedUser?.name">
+        <ng-container *ngIf="!user?.name">
           <span class="error">No name</span>
         </ng-container>
       </div>
@@ -96,7 +96,7 @@
         Username
       </div>
       <div class="subtitle">
-        {{loggedUser?.username}}
+        {{user?.username}}
       </div>
     </div>
     <form [formGroup]="changeUserNameForm" (ngSubmit)="changeUserName()">
@@ -123,7 +123,7 @@
       </div>
       <div class="row">
         <div class="subtitle">
-          {{loggedUser?.email}}
+          {{email}}
         </div>
         <form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
           <div class="row b-gap">
@@ -141,7 +141,7 @@
       </form>
       </div>
       <div class="row b-gap">
-        <ng-container *ngIf="loggedUser?.emailConfirmed; else notVerified">
+        <ng-container *ngIf="emailConfirmed; else notVerified">
           <div class="formFeedbackSuccess">
             Email is verified
           </div>

@@ -25,7 +25,7 @@ export class UserPageComponent
   user?: User;
   userTeams: TeamPreview[] = [];
 
-  sections: boolean[] = [false, false, true]
+  tabs: boolean[] = [true, false]
   country?: string;
   userNotFound: boolean = false;
   userPrivate: boolean = false;
@@ -46,14 +46,18 @@ export class UserPageComponent
           },
           error: (error) => 
           {
-            console.log(error)
-            if(error.status == 404)
+            console.log("error in userpage: ", error)
+            if(error.status == 504) 
+            {
+              console.log("TIMEOUT")
+            }
+            else if(error.status == 404)
             {
               //display not found
               console.error("ERROR: User not found")
               this.userNotFound = true;
             }
-            if(error.status == 401)
+            else if(error.status == 401)
             {
               //display not allowed -> private user
               console.error("ERROR: User private")
@@ -72,12 +76,12 @@ export class UserPageComponent
     console.log("User in user page:", this.user)
   }
 
-  changeSection(index: number)
+  changeTab(index: number)
   {
-    for (let i=0; i<this.sections.length; i++) 
+    for (let i=0; i<this.tabs.length; i++) 
     {
-      this.sections[i] = false;
+      this.tabs[i] = false;
     }
-    this.sections[index] = true;
+    this.tabs[index] = true;
   }
 }

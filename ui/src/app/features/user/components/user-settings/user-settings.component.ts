@@ -1,13 +1,14 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { authActions } from 'src/app/auth/store/auth.actions';
-import { selectValidationErrors } from 'src/app/auth/store/auth.selectors';
+import { selectError } from 'src/app/auth/store/auth.selectors';
 import { Country } from 'src/app/models/DTOs/country.dto';
 import { UserUpdateDTO } from 'src/app/models/DTOs/userUpdate.dto';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { User } from '../../models/user.model';
+import { UserPageService } from '../../services/user-page.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -17,16 +18,19 @@ import { UserService } from '../../services/user.service';
 })
 export class UserSettingsComponent 
 {
-  @Input() loggedUser?: User;
-  deleteDialog: boolean = false;
-
   store = inject(Store);
   formBuilder = inject(FormBuilder);
   authService = inject(AuthService);
   userService = inject(UserService);
   util = inject(UtilService);
+  userPageService = inject(UserPageService);
 
-  backendErrors$ = this.store.select(selectValidationErrors);
+  user?: User;
+  email?: string;
+  emailConfirmed?: string
+  deleteDialog: boolean = false;
+
+  backendErrors$ = this.store.select(selectError);
   pictures: string[] = [];
   countries: Country[] = [];
   displayPictureSelector: boolean = false;
@@ -55,6 +59,12 @@ export class UserSettingsComponent
 
   async ngOnInit()
   {
+    this.userPageService.user.subscribe((value) => 
+    {
+      this.user = value;
+    });
+    
+
     this.changeUserNameForm.controls.newUserName.valueChanges.subscribe(async (value) => 
     {
       if(this.changeUserNameForm.controls.newUserName.valid)
@@ -100,7 +110,7 @@ export class UserSettingsComponent
     const key: string = this.getPictureKey(path);
     let updateDTO: UserUpdateDTO = 
     {
-      currentUserName: this.loggedUser?.username,
+      currentUserName: this.user?.username,
       newPictureKey: key
     }
     this.store.dispatch(authActions.changePicture({request: updateDTO}));
@@ -111,7 +121,7 @@ export class UserSettingsComponent
   {
     let updateDTO: UserUpdateDTO = 
     {
-      currentUserName: this.loggedUser?.username,
+      currentUserName: this.user?.username,
       newCountryCode: $event.code
     }
     this.store.dispatch(authActions.changeCountry({request: updateDTO}));
@@ -121,7 +131,7 @@ export class UserSettingsComponent
   {
     let updateDTO: UserUpdateDTO = 
     {
-      currentUserName: this.loggedUser?.username,
+      currentUserName: this.user?.username,
       newVisibility: $event
     }
     console.log(updateDTO)
@@ -135,7 +145,7 @@ export class UserSettingsComponent
     {
       let updateDTO: UserUpdateDTO = 
       {
-        currentUserName: this.loggedUser?.username,
+        currentUserName: this.user?.username,
         newUserName: this.changeUserNameForm.controls.newUserName.value
       }
       this.store.dispatch(authActions.changeUserName({request: updateDTO}));
@@ -149,7 +159,7 @@ export class UserSettingsComponent
     {
       let updateDTO: UserUpdateDTO = 
       {
-        currentUserName: this.loggedUser?.username,
+        currentUserName: this.user?.username,
         newEmail: this.changeEmailForm.controls.newEmail.value
       }
       this.store.dispatch(authActions.changeEmail({request: updateDTO}));
@@ -165,7 +175,7 @@ export class UserSettingsComponent
     {
       let updateDTO: UserUpdateDTO = 
       {
-        currentUserName: this.loggedUser?.username,
+        currentUserName: this.user?.username,
         currentPassword: this.changePasswordForm.controls.currentPassword.value,
         newPassword: this.changePasswordForm.controls.password.value
       }

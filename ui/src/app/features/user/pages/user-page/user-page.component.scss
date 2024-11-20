@@ -4,6 +4,10 @@
 {
   margin: auto;
   width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   .profile
   {
@@ -11,13 +15,15 @@
     justify-content: center;
     align-items: center;
     margin-top: 2vh;
-    gap: 0.4vw;
+    gap: 0.4em;
+    border-radius: 10px;
+    background-color: var(--bg-color-2);
+    padding: 0.4em;
 
     .picture
     {
-      width: 4vw;
-      height: 4vw;
-      margin-right: 1vw;
+      width: 3em;
+      height: 3em;
       border-radius: 5px;
     }
   
@@ -30,38 +36,34 @@
 
     .flag
     {
-      width: 2vw;
-      height: 2vw;
+      width: 1.5em;
     }
   }
 
-  .sections
+  .tabs
   {
     display: flex;
     justify-content: center;
-    height: 2em;
+    flex-direction: column;
+    gap: 0.4em;
+    margin-left: 0.4em;
 
-
-    .section
+    .tab
     {
-      width: 8vw;
-      height: 100%;
+      width: 1.5em;
+      height: 1.5em;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
       background-color: var(--bg-color-2);
-
-
-      &:hover
-      {
-        border-bottom: grey 2px solid;
-      }
+      border-radius: 5px;
+      padding: 0.2em;
     }
 
     .selected
     {
-      border-bottom: grey 2px solid;
+      outline: var(--text-color) 1px solid;
     }
   }
 }
