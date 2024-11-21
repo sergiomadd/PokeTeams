@@ -16,9 +16,20 @@ export class TeamEditComponent
 
   teamKey: string = "";
 
-  async ngAfterContentInit()
+  ngAfterContentInit()
   {
     this.teamKey = this.router.url.slice(6);
-    this.teamEditorService.setTeam(await this.teamService.getTeam(this.teamKey));
+    this.teamService.getTeam(this.teamKey).subscribe(
+      {
+        next: (response) => 
+        {
+          this.teamEditorService.setTeam(response);
+        },
+        error: (error) =>
+        {
+          console.log("error getting team editor", error)
+        }
+      }
+    );
   }
 }

@@ -38,19 +38,11 @@ export class TeamService
 
   }
  
-  async getTeam(id: string) : Promise<Team>
+  getTeam(id: string) : Observable<Team>
   {
-    let team: Team = <Team>{}
     let url = this.apiUrl + 'team/' + id;
-    try
-    {
-      team = await lastValueFrom(this.http.get<Team>(url).pipe(catchError(() => [team]), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
-    return this.util.toCamelCase(team); 
+    return this.http.get<Team>(url);
+    //return this.util.toCamelCase(team); 
   }
 
   async saveTeam(team: Team): Promise<TeamSaveResponse>
