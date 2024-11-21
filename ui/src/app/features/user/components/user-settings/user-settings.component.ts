@@ -35,6 +35,12 @@ export class UserSettingsComponent
   countries: Country[] = [];
   displayPictureSelector: boolean = false;
 
+  changeNameFormSubmitted: boolean = false;
+  changeNameForm = this.formBuilder.group(
+  {
+    newName: ['', [Validators.required, Validators.maxLength(256)]],
+  }, { updateOn: "blur" });
+
   userNameAvailable: boolean = false;
   changeUserNameFormSubmitted: boolean = false;
   changeUserNameForm = this.formBuilder.group(
@@ -136,6 +142,20 @@ export class UserSettingsComponent
     }
     console.log(updateDTO)
     this.store.dispatch(authActions.changeVisibility({request: updateDTO}));
+  }
+
+  async changeName()
+  {
+    this.changeUserNameFormSubmitted = true;
+    if(this.changeUserNameForm.valid && this.changeUserNameForm.controls.newUserName.value != null)
+    {
+      let updateDTO: UserUpdateDTO = 
+      {
+        currentUserName: this.user?.username,
+        newUserName: this.changeUserNameForm.controls.newUserName.value
+      }
+      this.store.dispatch(authActions.changeName({request: updateDTO}));
+    }
   }
 
   async changeUserName()

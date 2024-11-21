@@ -44,7 +44,7 @@ export class AuthEffects
           {
             return of(authActions.getLoggedFailure(
               {
-                error: errorResponse.error.error
+                error: errorResponse.error
               }
             ))
           })
@@ -73,21 +73,12 @@ export class AuthEffects
             }
             return authActions.logInSuccess({authResponse});
           }),
-          catchError((errorResponse: HttpErrorResponse) => 
+          catchError((errorResponse: string) => 
           {
-            console.log("error test:", errorResponse)
-            console.log("Error in log in effect: ", errorResponse.error)
-            if(errorResponse.status == 0)
-            {
-              return of(authActions.logInFailure(
-                {
-                  error: "Server error. Try again."
-                }
-              ))
-            }
+            console.log("Error in log in effect: ", errorResponse)
             return of(authActions.logInFailure(
               {
-                error: errorResponse.error
+                error: errorResponse
               }
             ))
           })
@@ -192,7 +183,7 @@ export class AuthEffects
           {
             return of(authActions.deleteAccountFailure(
               {
-                error: errorResponse.error.error
+                error: errorResponse.error
               }
             ))
           })
@@ -212,6 +203,38 @@ export class AuthEffects
     )
   },{dispatch: false});
   
+  changeNameEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.changeUserName),
+      switchMap(({request}) =>
+      {
+        return this.authService.changeName(request).pipe(
+          switchMap(async (response: JWTResponse) =>
+          {
+            const authResponse: AuthResponseDTO = 
+            {
+              token: response.token,
+              user: this.jwtTokenService.getTokenUsername(response.token) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              : null,
+              success: true,
+              error: null
+            }
+            return authActions.changeNameSuccess({authResponse});
+          }),
+          catchError((errorResponse: HttpErrorResponse) => 
+          {
+            return of(authActions.changeNameFailure(
+              {
+                error: errorResponse.error
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
   changeUserNameEffect = createEffect(() =>
   {
     return this.actions$.pipe(
@@ -236,7 +259,7 @@ export class AuthEffects
           {
             return of(authActions.changeUserNameFailure(
               {
-                error: errorResponse.error.error
+                error: errorResponse.error
               }
             ))
           })
@@ -280,7 +303,7 @@ export class AuthEffects
           {
             return of(authActions.changeEmailFailure(
               {
-                error: errorResponse.error.error
+                error: errorResponse.error
               }
             ))
           })
@@ -346,7 +369,7 @@ export class AuthEffects
           {
             return of(authActions.changePictureFailure(
               {
-                error: errorResponse.error.error
+                error: errorResponse.error
               }
             ))
           })
@@ -379,7 +402,7 @@ export class AuthEffects
           {
             return of(authActions.changeCountryFailure(
               {
-                error: errorResponse.error.error
+                error: errorResponse.error
               }
             ))
           })
@@ -412,7 +435,7 @@ export class AuthEffects
           {
             return of(authActions.changeVisibilityFailure(
               {
-                error: errorResponse.error.error
+                error: errorResponse.error
               }
             ))
           })

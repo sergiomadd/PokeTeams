@@ -107,6 +107,25 @@ export const authReducers = createReducer(
       isSubmitting: false,
       error: action.error
     })),
+  on(authActions.changeName, (state) => (
+    {
+      ...state,
+      isSubmitting: true,
+      error: null
+    })),
+  on(authActions.changeNameSuccess, (state, action) => (
+    {
+      ...state,
+      token: action.authResponse.token,
+      user: action.authResponse.user,
+      isSubmitting: false,
+    })),
+  on(authActions.changeNameFailure, (state, action) => (
+    {
+      ...state,
+      isSubmitting: false,
+      error: action.error
+    })),
   on(authActions.changeUserName, (state) => (
     {
       ...state,
