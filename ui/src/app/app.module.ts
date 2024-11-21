@@ -13,6 +13,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/services/auth.service';
 import { FooterComponent } from './core/layout/footer/footer.component';
 import { MenuComponent } from './core/layout/menu/menu.component';
+import { ErrorInterceptorService } from './core/services/error-interceptor.service';
 import { TokenInterceptorService } from './core/services/token-interceptor.service';
 import { EvolutionComponent } from './features/pokemon/components/evolution/evolution.component';
 import { PokemonPreviewComponent } from './features/pokemon/components/pokemon-preview/pokemon-preview.component';
@@ -115,6 +116,11 @@ import { metaReducers } from './store/app.state';
       useClass: TokenInterceptorService,
       multi: true
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
