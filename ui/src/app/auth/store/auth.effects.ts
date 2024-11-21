@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
@@ -6,6 +5,7 @@ import { catchError, lastValueFrom, map, of, switchMap, tap } from "rxjs";
 import { AuthService } from "src/app/auth/services/auth.service";
 import { JwtTokenService } from "src/app/core/services/jwttoken.service";
 import { UserService } from "src/app/features/user/services/user.service";
+import { CustomError } from "src/app/shared/models/customError.model";
 import { AuthResponseDTO } from "../types/authResponse.dto";
 import { JWTResponse } from "../types/jwtResponse.dto";
 import { authActions } from "./auth.actions";
@@ -40,11 +40,11 @@ export class AuthEffects
             }
             return authActions.getLoggedSuccess({authResponse});
           }),
-          catchError((errorResponse: HttpErrorResponse) => 
+          catchError((error: CustomError) => 
           {
             return of(authActions.getLoggedFailure(
               {
-                error: errorResponse.error
+                error: error.message
               }
             ))
           })
@@ -73,12 +73,12 @@ export class AuthEffects
             }
             return authActions.logInSuccess({authResponse});
           }),
-          catchError((errorResponse: string) => 
+          catchError((error: CustomError) => 
           {
-            console.log("Error in log in effect: ", errorResponse)
+            console.log("Error in log in effect: ", error)
             return of(authActions.logInFailure(
               {
-                error: errorResponse
+                error: error.message
               }
             ))
           })
@@ -108,11 +108,11 @@ export class AuthEffects
             }
             return authActions.signUpSuccess({authResponse});
           }),
-          catchError((errorResponse: HttpErrorResponse) => 
+          catchError((error: CustomError) => 
           {
             return of(authActions.signUpFailure(
               {
-                error: errorResponse.error
+                error: error.message
               }
             ))
           })
@@ -155,11 +155,11 @@ export class AuthEffects
           {
             return authActions.logOutSuccess();
           }),
-          catchError((errorResponse: HttpErrorResponse) => 
+          catchError((error: CustomError) => 
           {
             return of(authActions.logOutFailure(
               {
-                error: errorResponse.error
+                error: error.message
               }
             ))
           })
@@ -179,11 +179,11 @@ export class AuthEffects
           {
             return authActions.deleteAccountSuccess();
           }),
-          catchError((errorResponse: HttpErrorResponse) => 
+          catchError((error: CustomError) => 
           {
             return of(authActions.deleteAccountFailure(
               {
-                error: errorResponse.error
+                error: error.message
               }
             ))
           })
@@ -223,11 +223,11 @@ export class AuthEffects
             }
             return authActions.changeNameSuccess({authResponse});
           }),
-          catchError((errorResponse: HttpErrorResponse) => 
+          catchError((error: CustomError) => 
           {
             return of(authActions.changeNameFailure(
               {
-                error: errorResponse.error
+                error: error.message
               }
             ))
           })
@@ -255,11 +255,11 @@ export class AuthEffects
             }
             return authActions.changeUserNameSuccess({authResponse});
           }),
-          catchError((errorResponse: HttpErrorResponse) => 
+          catchError((error: CustomError) => 
           {
             return of(authActions.changeUserNameFailure(
               {
-                error: errorResponse.error
+                error: error.message
               }
             ))
           })
@@ -299,11 +299,11 @@ export class AuthEffects
             }
             return authActions.changeEmailSuccess({authResponse});
           }),
-          catchError((errorResponse: HttpErrorResponse) => 
+          catchError((error: CustomError) => 
           {
             return of(authActions.changeEmailFailure(
               {
-                error: errorResponse.error
+                error: error.message
               }
             ))
           })
@@ -332,11 +332,11 @@ export class AuthEffects
             }
             return authActions.changePasswordSuccess({authResponse});
           }),
-          catchError((errorResponse: HttpErrorResponse) => 
+          catchError((error: CustomError) => 
           {
             return of(authActions.changePasswordFailure(
               {
-                error: errorResponse.error
+                error: error.message
               }
             ))
           })
@@ -365,11 +365,11 @@ export class AuthEffects
             }
             return authActions.changePictureSuccess({authResponse});
           }),
-          catchError((errorResponse: HttpErrorResponse) => 
+          catchError((error: CustomError) => 
           {
             return of(authActions.changePictureFailure(
               {
-                error: errorResponse.error
+                error: error.message
               }
             ))
           })
@@ -398,11 +398,11 @@ export class AuthEffects
             }
             return authActions.changeCountrySuccess({authResponse});
           }),
-          catchError((errorResponse: HttpErrorResponse) => 
+          catchError((error: CustomError) => 
           {
             return of(authActions.changeCountryFailure(
               {
-                error: errorResponse.error
+                error: error.message
               }
             ))
           })
@@ -431,11 +431,11 @@ export class AuthEffects
             }
             return authActions.changeVisibilitySuccess({authResponse});
           }),
-          catchError((errorResponse: HttpErrorResponse) => 
+          catchError((error: CustomError) => 
           {
             return of(authActions.changeVisibilityFailure(
               {
-                error: errorResponse.error
+                error: error.message
               }
             ))
           })
