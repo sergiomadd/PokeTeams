@@ -1,26 +1,29 @@
-@if(team)
-{
-  <div class="team-view">
-    <app-team [team]="team"></app-team>
-    <div class="buttons">
-      <div class="copy">
-        <button 
-        class="button-primary"
-        (click)="copyPaste()"
-        >Copy paste</button>
-      </div>
-      <div class="share">
-        <button
-        class="button-tertiary"
-        (click)="copyLink()"
-        >Copy link</button>
-      </div>
-    </div> 
+<ng-container *ngIf="loading; else loaded">
+  <div class="spinner-wrapper">
+    <div class="pokemon-spinner"></div>
   </div>
-}
-@else
-{
-  <div>
-    no team
-  </div>
-}
+</ng-container>
+<ng-template #loaded>
+  <ng-container *ngIf="team; else noteam">
+    <div class="team-view">
+      <app-team [team]="team"></app-team>
+      <div class="buttons">
+        <div class="copy">
+          <button 
+          class="button-primary"
+          (click)="copyPaste()"
+          >Copy paste</button>
+        </div>
+        <div class="share">
+          <button
+          class="button-tertiary"
+          (click)="copyLink()"
+          >Copy link</button>
+        </div>
+      </div> 
+    </div>
+  </ng-container>
+  <ng-template #noteam>
+    <app-not-found></app-not-found>
+  </ng-template>
+</ng-template>

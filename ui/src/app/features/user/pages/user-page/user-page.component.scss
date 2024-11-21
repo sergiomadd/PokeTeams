@@ -1,6 +1,6 @@
 
 
-.user
+.user-page
 {
   margin: auto;
   width: 80%;
@@ -66,33 +66,22 @@
       outline: var(--text-color) 1px solid;
     }
   }
-}
 
-.private
-{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 30vw;
-  height: 20vh;
-  background-color: lightgrey;
-  font-size: x-large;
-}
-
-.not-found
-{
-  width: 100%;
-  height: 100vh;
-  font-size: x-large;
-
-  img
+  .private
   {
-    height: 40vh;
-    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30vw;
+    height: 20vh;
+    background-color: lightgrey;
+    font-size: x-large;
   }
 
-  button
+  .spinner-wrapper
   {
-    width: 60%;
+    width: 4em;
+    height: 4em;
+    margin: auto;
   }
 }

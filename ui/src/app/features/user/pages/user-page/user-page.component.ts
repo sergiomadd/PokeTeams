@@ -20,23 +20,24 @@ export class UserPageComponent
   store = inject(Store);
   searchService = inject(SearchService);
 
-  @Input() userName?: string;
+  @Input() username?: string;
 
   user?: User;
   userTeams: TeamPreview[] = [];
+  loading: boolean = false;
 
   tabs: boolean[] = [true, false]
   country?: string;
-  userNotFound: boolean = false;
   userPrivate: boolean = false;
 
   loggedUser$: Observable<User | null> = this.store.select(selectUser);
 
   async ngOnInit()
   {
-    if(this.userName)
+    if(this.username)
     {
-      this.userService.getUser(this.userName).subscribe(
+      this.loading = true;
+      this.userService.getUser(this.username).subscribe(
         {
           next: (response) =>
           {
@@ -46,23 +47,17 @@ export class UserPageComponent
           },
           error: (error) => 
           {
-            console.log("error in userpage: ", error)
-            if(error.status == 504) 
-            {
-              console.log("TIMEOUT")
-            }
-            else if(error.status == 404)
-            {
-              //display not found
-              console.error("ERROR: User not found")
-              this.userNotFound = true;
-            }
-            else if(error.status == 401)
+            if(error.status == 401)
             {
               //display not allowed -> private user
               console.error("ERROR: User private")
               this.userPrivate = true;
             }
+            this.loading = false;
+          },
+          complete: () => 
+          {
+            this.loading = false;
           }
         }
       )

@@ -17,18 +17,35 @@ export class TeamViewComponent
   router = inject(Router);
   util = inject(UtilService);
   parser = inject(ParserService);
-  
   newTeamService = inject(NewTeamService)
 
   teamKey: string = "";
-  team: Team = <Team>{};
-
+  team?: Team;
+  loading: boolean = false;
   viewIncrementCooldown: number = 1;
 
   async ngOnInit()
   {
     this.teamKey = this.router.url.slice(1);
-    this.team = await this.teamService.getTeam(this.teamKey);
+    this.loading = true;
+    this.teamService.getTeam(this.teamKey).subscribe(
+      {
+        next: (response) => 
+        {
+          console.log("response", response)
+          this.team = response;
+        },
+        error: (error) =>
+        {
+          console.log("error getting team", error)
+          this.loading = false;
+        },
+        complete: () => 
+        {
+          this.loading = false;
+        }
+      }
+    );
     const item = sessionStorage.getItem(this.teamKey);
     if(item)
     {
@@ -50,7 +67,10 @@ export class TeamViewComponent
 
   copyPaste()
   {
-    this.util.copyToClipboard(this.parser.reversePaste(this.team.pokemons));
+    if(this.team)
+    {
+      this.util.copyToClipboard(this.parser.reversePaste(this.team.pokemons));
+    }
   }
 
   copyLink()

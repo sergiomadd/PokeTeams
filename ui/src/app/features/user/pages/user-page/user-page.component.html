@@ -1,7 +1,11 @@
-<ng-container *ngIf="user; else noUser">
-  <div class="user">
-    <ng-container *ngIf="user?.visibility 
-      || ((loggedUser$ | async)?.username === user?.username); else private">
+<ng-container *ngIf="loading; else loaded">
+  <div class="spinner-wrapper">
+    <div class="pokemon-spinner"></div>
+  </div>
+</ng-container>
+<ng-template #loaded>
+  <ng-container *ngIf="user; else noUser">
+    <div class="user-page">
       <div class="profile">
         <div class="picture">
           <img src="{{user?.picture}}" alt="" class="picture">
@@ -38,30 +42,20 @@
           <app-user-settings></app-user-settings>
         </ng-container>
       </ng-container>
-    </ng-container>
-    <ng-template #private>
-      <div class="private">
-        This profile is private
-      </div>
-    </ng-template>
-  </div>
-</ng-container>
-<ng-template #noUser>
-  <ng-container *ngIf="userNotFound">
-    <div class="not-found row-center">
-      <div class="row-center align-center b-gap">
-        <div class="col-center b-gap">
-          User &#64;{{userName}} not found!
-          <button class="button-primary-clear">Go back</button>
+    </div>
+  </ng-container>
+  <ng-template #noUser>
+    <ng-container *ngIf="userPrivate; else notFound">
+      <div class="user-page">
+        <div class="private">
+          This profile is private
         </div>
-        <img src="assets/notfound.webp" alt="">
       </div>
-    </div>
-  </ng-container>
-  <ng-container *ngIf="userPrivate">
-    <div class="private">
-      user private
-    </div>
-  </ng-container>
+    </ng-container>
+    <ng-template #notFound>
+      <app-not-found
+      [resourceName]="username"
+      ></app-not-found>
+    </ng-template>
+  </ng-template>
 </ng-template>
-

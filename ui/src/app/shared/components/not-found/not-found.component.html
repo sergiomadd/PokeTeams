@@ -1,0 +1,14 @@
+<div class="not-found row-center">
+  <div class="row-center align-center b-gap">
+    <div class="col-center b-gap">
+      <ng-container *ngIf="resourceName; else noname">
+        User &#64;{{resourceName}} not found!
+      </ng-container>
+      <ng-template #noname>
+        Page not found!
+      </ng-template>
+      <button class="button-primary-clear w-fit">Go back</button>
+    </div>
+    <img src="assets/notfound.webp" alt="">
+  </div>
+</div>

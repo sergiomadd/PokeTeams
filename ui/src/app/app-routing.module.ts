@@ -5,6 +5,7 @@ import { TeamEditComponent } from './features/team/pages/team-edit/team-edit.com
 import { TeamViewComponent } from './features/team/pages/team-view/team-view.component';
 import { UploadComponent } from './features/team/pages/upload/upload.component';
 import { UserPageComponent } from './features/user/pages/user-page/user-page.component';
+import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 
 
 const routes: Routes = [
@@ -15,7 +16,7 @@ const routes: Routes = [
     {
       if (url.length === 1 && url[0].path.includes('@')) 
       {
-        return {consumed: url, posParams: {userName: new UrlSegment(url[0].path.slice(1), {})}};
+        return {consumed: url, posParams: {username: new UrlSegment(url[0].path.slice(1), {})}};
       }
       return null;
     },
@@ -23,7 +24,7 @@ const routes: Routes = [
   },
   { path: 'edit/:id', component: TeamEditComponent },
   { path: ':id', component: TeamViewComponent },
-  //{path: '**', component: PageNotFoundComponent}
+  {path: '**', component: NotFoundComponent}
 ];
 
 @NgModule({

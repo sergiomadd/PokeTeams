@@ -50,6 +50,7 @@ import { SwitchComponent } from './shared/components/switch/switch.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
 import { LinkerPipe } from './shared/pipes/linker.pipe';
 import { metaReducers } from './store/app.state';
+import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { metaReducers } from './store/app.state';
     UserTeamsComponent,
     UserPageComponent,
     UserSettingsComponent,
+    NotFoundComponent,
   ],
   exports: [],
   imports: [
