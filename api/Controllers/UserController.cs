@@ -13,16 +13,16 @@ namespace api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly UserManager<User> _userManager;
         private readonly IPokeTeamService _pokeTeamService;
         private readonly IUserService _userService;
 
         public UserController(UserManager<User> userManager,
-            SignInManager<User> signInManager,
             IPokeTeamService teamService,
-            IUserService userService,
-            TokenGenerator tokenGenerator
+            IUserService userService
             )
         {
+            _userManager = userManager;
             _pokeTeamService = teamService;
             _userService = userService;
         }
@@ -37,7 +37,11 @@ namespace api.Controllers
             }
             if (!user.Visibility)
             {
-                return Unauthorized("User is private");
+                User loggedUser = await _userManager.GetUserAsync(User);
+                if (loggedUser == null || user.Id != loggedUser.Id)
+                {
+                    return Unauthorized("User is private");
+                }
             }
             UserDTO userDTO = await _userService.BuildUserDTO(user);
             return Ok(userDTO);
