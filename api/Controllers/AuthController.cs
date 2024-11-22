@@ -88,12 +88,11 @@ namespace api.Controllers
                 }
                 else if (signedUserByUserName != null)
                 {
-                    var token = _tokenGenerator.GenerateToken(signedUserByUserName);
                     return await PerformLogIn(signedUserByUserName, model);
                 }
                 else
                 {
-                    return BadRequest("User not found.");
+                    return BadRequest("User not found");
                 }
             }
             catch (Exception ex)
@@ -122,7 +121,6 @@ namespace api.Controllers
             {
                 return Unauthorized("You account is locked");
             }
-            Printer.Log("User successfully loged in.");
             var token = _tokenGenerator.GenerateToken(user);
             return Ok(new JwtResponseDTO { Token = token });
         }
@@ -155,9 +153,9 @@ namespace api.Controllers
                     //Printer log Identity errors: 
                     return BadRequest("Server error");
                 }
-                Printer.Log("User successfully generated.");
+                Printer.Log("User successfully generated");
                 await _signInManager.SignInAsync(user, true);
-                Printer.Log("User signed in.");
+                Printer.Log("User signed in");
             }
             catch (Exception ex)
             {
@@ -171,7 +169,7 @@ namespace api.Controllers
         [HttpGet, Route("logout")]
         public async Task<ActionResult> LogOut()
         {
-            Printer.Log("User logged out.");
+            Printer.Log("User logged out");
             try
             {
                 await _signInManager.SignOutAsync();
@@ -229,7 +227,7 @@ namespace api.Controllers
                 User newUser = await _userManager.FindByEmailAsync(updateData.NewEmail);
                 if (newUser != null)
                 {
-                    return Conflict("Email already taken");
+                    return BadRequest("Email already taken");
                 }
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
@@ -288,8 +286,8 @@ namespace api.Controllers
                 {
                     return NotFound("Couldn't find user");
                 }
-                IdentityResult result = await _userService.ChangeName(user, updateData.NewName);
-                if (!result.Succeeded)
+                bool result = await _userService.ChangeName(user, updateData.NewName);
+                if (!result)
                 {
                     //var errors = signUpResult.Errors.Select(e => e.Description);
                     //Printer log Identity errors: 
@@ -442,7 +440,7 @@ namespace api.Controllers
             bool available = await _userService.UserNameAvailable(userName);
             if (!available)
             {
-                return Conflict("Username already taken.");
+                return BadRequest("Username already taken.");
             }
             return Ok();
         }
@@ -454,7 +452,7 @@ namespace api.Controllers
             User user = await _userManager.FindByEmailAsync(email);
             if (user != null)
             {
-                return Conflict("Email already taken.");
+                return BadRequest("Email already taken.");
             }
             return Ok();
         }

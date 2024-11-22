@@ -62,33 +62,33 @@ namespace api.Services
             return true;
         }
 
-        public async Task<IdentityResponseDTO> ChangeName(User user, string newName)
+        public async Task<bool> ChangeName(User user, string newName)
         {
             try
             {
                 user.Name = newName;
                 _pokeTeamContext.User.Update(user);
                 _pokeTeamContext.SaveChanges();
-                return new IdentityResponseDTO() { Success = true };
+                return true;
             }
             catch (Exception ex)
             {
-                return new IdentityResponseDTO() { Errors = new List<string> { "Couldn't save new name" } };
+                return false;
             }
         }
 
-        public async Task<IdentityResponseDTO> UpdatePicture(User user, string newPictureKey)
+        public async Task<bool> UpdatePicture(User user, string newPictureKey)
         {
             try
             {
                 user.Picture = newPictureKey;
                 _pokeTeamContext.User.Update(user);
                 _pokeTeamContext.SaveChanges();
-                return new IdentityResponseDTO() { Success = true };
+                return true;
             }
             catch (Exception ex)
             {
-                return new IdentityResponseDTO() { Errors = new List<string> { "Couldn't save new picture" } };
+                return false;
             }
         }
 
