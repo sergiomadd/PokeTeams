@@ -69,7 +69,6 @@ export class UserSettingsComponent
     {
       this.user = value;
     });
-    
 
     this.changeUserNameForm.controls.newUserName.valueChanges.subscribe(async (value) => 
     {
@@ -140,20 +139,20 @@ export class UserSettingsComponent
       currentUserName: this.user?.username,
       newVisibility: $event
     }
-    console.log(updateDTO)
     this.store.dispatch(authActions.changeVisibility({request: updateDTO}));
   }
 
   async changeName()
   {
-    this.changeUserNameFormSubmitted = true;
-    if(this.changeUserNameForm.valid && this.changeUserNameForm.controls.newUserName.value != null)
+    this.changeNameFormSubmitted = true;
+    if(this.changeNameForm.valid && this.changeNameForm.controls.newName.value != null)
     {
       let updateDTO: UserUpdateDTO = 
       {
         currentUserName: this.user?.username,
-        newUserName: this.changeUserNameForm.controls.newUserName.value
+        newName: this.changeNameForm.controls.newName.value
       }
+      console.log("try to")
       this.store.dispatch(authActions.changeName({request: updateDTO}));
     }
   }
@@ -234,14 +233,17 @@ export class UserSettingsComponent
     let control: AbstractControl | null = null;
     switch(formName)
     {
+      case "changeNameForm":
+        control = this.changeNameForm.get(key);
+        break;
+      case "changeUserNameForm":
+        control = this.changeUserNameForm.get(key);
+      break;
       case "changeEmailForm":
         control = this.changeEmailForm.get(key);
       break;
       case "changePasswordForm":
         control = this.changePasswordForm.get(key);
-      break;
-      case "changeUserNameForm":
-        control = this.changeUserNameForm.get(key);
       break;
     }
     return control;
@@ -252,15 +254,18 @@ export class UserSettingsComponent
     let submitted: boolean | null = null;
     switch(formName)
     {
-      case "changeEmailForm":
-        submitted = this.changeEmailFormSubmitted;
-      break;
-      case "changePasswordForm":
-        submitted = this.changePasswordFormSubmitted;
-      break;
+      case "changeNameForm":
+        submitted = this.changeNameFormSubmitted;
+        break;
       case "changeUserNameForm":
         submitted = this.changeUserNameFormSubmitted;
-      break;
+        break;
+      case "changeEmailForm":
+        submitted = this.changeEmailFormSubmitted;
+        break;
+      case "changePasswordForm":
+        submitted = this.changePasswordFormSubmitted;
+        break;
     }
     return submitted;
   }

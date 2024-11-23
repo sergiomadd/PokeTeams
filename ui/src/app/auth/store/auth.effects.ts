@@ -62,6 +62,8 @@ export class AuthEffects
         return this.authService.logIn(request).pipe(
           switchMap(async (response: JWTResponse) =>
           {
+            console.log("log in correct")
+
             const authResponse: AuthResponseDTO = 
             {
               token: response.token,
@@ -71,6 +73,7 @@ export class AuthEffects
               success: true,
               error: null
             }
+            console.log("log in correct")
             return authActions.logInSuccess({authResponse});
           }),
           catchError((error: CustomError) => 
@@ -206,7 +209,7 @@ export class AuthEffects
   changeNameEffect = createEffect(() =>
   {
     return this.actions$.pipe(
-      ofType(authActions.changeUserName),
+      ofType(authActions.changeName),
       switchMap(({request}) =>
       {
         return this.authService.changeName(request).pipe(

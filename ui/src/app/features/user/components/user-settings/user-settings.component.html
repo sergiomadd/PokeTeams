@@ -73,7 +73,7 @@
         </ng-container>
       </div>
     </div>
-    <form [formGroup]="changeNameForm" (ngSubmit)="changeUserName()">
+    <form [formGroup]="changeNameForm" (ngSubmit)="changeName()">
       <div class="col">
         <div class="row-end b-gap">
           <span *ngIf="isInvalid('newName', 'changeNameForm')" class="formFeedbackError">{{getError('newName', 'changeNameForm')}}</span>
