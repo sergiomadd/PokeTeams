@@ -12,10 +12,12 @@
       <img src="{{user?.picture}}" alt="" class="picture">
       <div class="picture-selector">
         <button (click)="clickPictureSelector()">Change</button>
-        <div class="meta-wrapper">
-          <div class="catalog custom-scrollbar" [ngClass]="{visible: displayPictureSelector}">
+        <div class="catalog-wrapper"
+        [ngClass]="{catalogShow: showCatalog}"
+        >
+          <div class="catalog custom-scrollbar">
             <ng-container *ngFor="let pic of pictures">
-              <img src="{{pic}}" alt="" class="picture" (click)="changePicture(pic)">
+              <img src="{{pic}}" alt="" class="picture animated-border" (click)="changePicture(pic)">
             </ng-container>
           </div>
         </div>

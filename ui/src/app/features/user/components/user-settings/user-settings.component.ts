@@ -33,7 +33,7 @@ export class UserSettingsComponent
   backendErrors$ = this.store.select(selectError);
   pictures: string[] = [];
   countries: Country[] = [];
-  displayPictureSelector: boolean = false;
+  showCatalog: boolean = false;
 
   changeNameFormSubmitted: boolean = false;
   changeNameForm = this.formBuilder.group(
@@ -98,7 +98,7 @@ export class UserSettingsComponent
 
   clickPictureSelector()
   {
-    this.displayPictureSelector = !this.displayPictureSelector;
+    this.showCatalog = !this.showCatalog;
   }
 
   getPictureKey(path: string | undefined) : string
@@ -152,7 +152,6 @@ export class UserSettingsComponent
         currentUserName: this.user?.username,
         newName: this.changeNameForm.controls.newName.value
       }
-      console.log("try to")
       this.store.dispatch(authActions.changeName({request: updateDTO}));
     }
   }
