@@ -66,7 +66,7 @@
           (click)="selectResult(result)"
           >
             <ng-container *ngIf="result.icon">
-              <img [attr.src]="result.icon" alt="" class="icon" fill>
+              <img [attr.src]="result.icon" alt="" class="icon" fill loading="lazy">
             </ng-container>
             {{result.name}}
           </div>
@@ -83,7 +83,7 @@
         (click)="selectResult(result)"
         >
           <ng-container *ngIf="result.icon">
-            <img [attr.src]="result.icon" alt="" class="icon" fill>
+            <img [attr.src]="result.icon" alt="" class="icon" fill loading="lazy">
           </ng-container>
           {{result.name}}
         </div>
