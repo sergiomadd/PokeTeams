@@ -10,7 +10,6 @@ export class SwitchComponent
   @Input() inputState?: boolean;
   @Input() leftText?: string;
   @Input() rightText?: string;
-
   @Output() checkEvent = new EventEmitter<boolean>();
 
   state: boolean = false;
@@ -24,6 +23,5 @@ export class SwitchComponent
   {
     this.state = !this.state;
     this.checkEvent.emit(this.state);
-    console.log("click event")
   }
 }

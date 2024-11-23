@@ -5,65 +5,58 @@
   position: relative;
   display: flex;
 
-  border: 1px solid black;
-  background-color: whitesmoke;
-  border-radius: 10px;
+  border: 1px solid var(--bg-color-reverse-2);
+  background-color: var(--bg-color-2);
+  border-radius: 5px;
   user-select: none;
-
 
   .option
   {
     display: flex;
     align-items: center;
-
-    width: 3vw;
-    height: 2vh;
-    padding: 0.4vw;
-
+    width: 3em;
+    height: 1em;
+    padding: calc(0.4em + 1px);
     background-color: transparent;
     cursor: pointer;
-
     z-index: 2;
+    transition: color 0.3s ease-in-out;
   }
   
   .selected
   {
-    //color: white;
+    color: white;
+    opacity: 1;
   }
 
   .selector
   {
     position: absolute;
-    background-color: cyan;
-    color: white;
-
+    background-color: var(--primary);
     top: 0;
     left: 0;
-
     transition: transform 0.3s ease-in-out, border-radius 0.3s ease;
-
+    border-radius: 5px;
   }
 
   .selectedLeft
   {
     transform: translateX(100%);
-    border-radius: 0 10px 10px 0;
-
+    border-radius: 0 5px 5px 0;
   }
 
   .selectedRight
   {
-    //transform: translateX(50%);
-    border-radius: 10px 0 0 10px;
+    border-radius: 5px 0 0 5px;
   }
 
   .left
   {
-    border-radius: 10px 0 0 10px;
+    border-radius: 5px 0 0 5px;
   }
 
   .right
   {
-    border-radius: 0 10px 10px 0;
+    border-radius: 0 5px 5px 0;
   }
 }
