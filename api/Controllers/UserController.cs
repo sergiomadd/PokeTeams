@@ -6,6 +6,8 @@ using api.Models.DBPoketeamModels;
 using System.Text.Json;
 using api.DTOs;
 using api.Services;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Azure;
 
 namespace api.Controllers
 {
@@ -35,15 +37,15 @@ namespace api.Controllers
             {
                 return NotFound("Couldn't find user");
             }
+            User loggedUser = await _userManager.GetUserAsync(User);
             if (!user.Visibility)
             {
-                User loggedUser = await _userManager.GetUserAsync(User);
                 if (loggedUser == null || user.Id != loggedUser.Id)
                 {
                     return Unauthorized("User is private");
                 }
             }
-            UserDTO userDTO = await _userService.BuildUserDTO(user);
+            UserDTO userDTO = await _userService.BuildUserDTO(user, user.Id == loggedUser.Id);
             return Ok(userDTO);
         }
 
@@ -97,6 +99,17 @@ namespace api.Controllers
             return Ok(countries);
         }
 
+        [HttpGet, Route("countries/query")]
+        public ActionResult<List<TagDTO>> QueryCountriesByName(string key)
+        {
+            List<TagDTO> countries = _userService.QueryCountriesByName(key);
+            if (countries == null)
+            {
+                return NotFound("Couldn't query countries");
+            }
+            return Ok(countries);
+        }
+
         [HttpGet, Route("pictures")]
         public async Task<ActionResult<List<string>>> GetPictures()
         {
@@ -119,6 +132,53 @@ namespace api.Controllers
                 pictures.Add($"https://localhost:7134/images/sprites/profile-pics/{key}.png");
             }
             return pictures;
+        }
+
+        [HttpPost, Route("country/add")]
+        public async Task<ActionResult<object>> AddCountry([FromBody] CountryDTOB countryDTOB)
+        {
+            bool added = await _userService.AddCountry(countryDTOB);
+            if (added)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+
+        [HttpGet, Route("country/process")]
+        public async Task<ActionResult<object>> Process()
+        {
+            List<CountryDTOC> countries = new List<CountryDTOC>();
+            using (StreamReader r = new StreamReader("wwwroot/data/countriesnew.json"))
+            {
+                string json = r.ReadToEnd();
+                countries = JsonSerializer.Deserialize<List<CountryDTOC>>(json);
+                foreach (var country in countries)
+                {
+                    if (country != null)
+                    {
+                        string normalizedName = country.country.ToLower().Replace(" ", "-");
+                        CountryDTOB countryDTOB = new CountryDTOB
+                        {
+                            NormalizedName = normalizedName,
+                            Name = country.country,
+                            Code = country.abbreviation.ToLower()
+                        };
+                        bool added = await _userService.AddCountry(countryDTOB);
+                        if (!added)
+                        {
+                            return BadRequest();
+                        }
+                    }
+                    else
+                    {
+                        return BadRequest(country.country);
+                    }
+
+                }
+            }
+            return Ok();
         }
     }
 }

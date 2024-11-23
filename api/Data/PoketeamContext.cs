@@ -20,6 +20,7 @@ namespace api.Data
         public DbSet<Pokemon> Pokemon { get; set; }
         public DbSet<Tournament> Tournament { get; set; }
         public DbSet<Regulation> Regulation { get; set; }
+        public DbSet<Country> Country { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

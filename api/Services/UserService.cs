@@ -1,5 +1,6 @@
 ﻿using api.Data;
 using api.DTOs;
+using api.Models.DBModels;
 using api.Models.DBPoketeamModels;
 using api.Util;
 using System.Text.Json;
@@ -15,11 +16,11 @@ namespace api.Services
             _pokeTeamContext = pokeTeamContext;
         }
 
-        public async Task<UserDTO> BuildUserDTO(User user)
+        public async Task<UserDTO> BuildUserDTO(User user, bool logged = false)
         {
             if (user != null)
             {
-                if (!user.Visibility)
+                if (!user.Visibility && !logged)
                 {
                     return new UserDTO
                     {
@@ -109,6 +110,26 @@ namespace api.Services
             return country;
         }
 
+        public List<TagDTO> QueryCountriesByName(string key)
+        {
+            List<TagDTO> queryResults = new List<TagDTO>();
+            using (StreamReader r = new StreamReader("wwwroot/data/countries.json"))
+            {
+                string json = r.ReadToEnd();
+                List<CountryDTO> countries = JsonSerializer.Deserialize<List<CountryDTO>>(json);
+                List<CountryDTO> filteredCountries = countries.Where(i => i.name.Contains(key)).ToList();
+                //List<Item_names> itemNames = _pokedexContext.Item_names.Where(i => i.name.Contains(key) && i.local_language_id == 9).ToList();
+                if (filteredCountries != null && filteredCountries.Count > 0)
+                {
+                    filteredCountries.ForEach(country =>
+                    {
+                        queryResults.Add(new TagDTO(country.name, country.code, type: "country", icon: country.Icon));
+                    });
+                }
+            }
+            return queryResults;
+        }
+
         public async Task<List<UserQueryDTO>> QueryUsers(string key)
         {
             List<UserQueryDTO> queriedUsers = new List<UserQueryDTO>();
@@ -143,5 +164,28 @@ namespace api.Services
             });
             return queriedUsers;
         }
+
+        public async Task<bool> AddCountry(CountryDTOB countryDTOB)
+        {
+            try
+            {
+                Country country = new Country
+                {
+                    NormalizedName = countryDTOB.NormalizedName,
+                    Name = countryDTOB.Name,
+                    Code = countryDTOB.Code
+                };
+                await _pokeTeamContext.Country.AddAsync(country);
+                await _pokeTeamContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Printer.Log(e);
+                return false;
+            }
+            return true;
+        }
+
+
     }
 }
