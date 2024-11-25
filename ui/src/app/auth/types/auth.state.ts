@@ -6,7 +6,8 @@ export interface AuthState
   user: User | null,
   error: string | null,
   isAuthenticated: boolean,
-  isSubmitting: boolean
+  isSubmitting: boolean,
+  success: boolean
 }
 
 export const initialAuthState: AuthState = 
@@ -16,4 +17,5 @@ export const initialAuthState: AuthState =
   error: null,
   isAuthenticated: false,
   isSubmitting: false,
+  success: false
 };

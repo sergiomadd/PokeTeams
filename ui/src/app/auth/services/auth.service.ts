@@ -51,6 +51,7 @@ export class AuthService
 
   changeName(updateDTO: UserUpdateDTO) : Observable<JWTResponse>
   {
+    console.log("changing name")
     let url = this.apiUrl + 'update/name';
     return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
   }

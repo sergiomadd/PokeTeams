@@ -6,3 +6,4 @@ export const selectToken = createSelector(selectAuth, (auth) => auth.token);
 export const selectUser = createSelector(selectAuth, (auth) => auth.user);
 export const selectIsSubmitting = createSelector(selectAuth, (auth) => auth.isSubmitting);
 export const selectError = createSelector(selectAuth, (auth) => auth.error);
+export const selectSuccess = createSelector(selectAuth, (auth) => auth.success);
