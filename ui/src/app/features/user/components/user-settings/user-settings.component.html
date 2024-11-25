@@ -7,8 +7,13 @@
       <div class="subtitle">
         Selected: {{getPictureKey(user?.picture)}}
       </div>
-    </div>
-    <div class="row b-gap">
+    </div> 
+    <div class="row s-gap relative">
+      <ng-container *ngIf="changePictureSubmitted">
+        <ng-container *ngIf="(backendError$ | async) as error">
+          <span class="formFeedbackError backendErrors">{{error}}</span>
+        </ng-container>
+      </ng-container>
       <img src="{{user?.picture}}" alt="" class="picture">
       <div class="picture-selector">
         <button (click)="clickPictureSelector()">Change</button>
@@ -22,6 +27,19 @@
           </div>
         </div>
       </div>
+      <ng-container *ngIf="changePictureSubmitted">
+        <ng-container *ngIf="isSubmitting$ | async">
+          <div class="feedback">
+            <div class="pokemon-spinner"></div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="(success$ | async) as error">
+          <img src="assets/tick.png" alt="" class="feedback">
+        </ng-container>
+        <ng-container *ngIf="(backendError$ | async) as error">
+          <img src="assets/x.png" alt="" class="feedback">
+        </ng-container>
+      </ng-container>
     </div>
   </div>
   <div class="section row">
@@ -39,14 +57,32 @@
         </ng-container>
       </div>
     </div>
-    <div class="smart-input-wrapper">
+    <div class="row relative">
+      <ng-container *ngIf="changeCountrySubmitted">
+        <ng-container *ngIf="(backendError$ | async) as error">
+          <span class="formFeedbackError backendErrors">{{error}}</span>
+        </ng-container>
+      </ng-container>
       <app-smart-input
       [keepSelected]="false"
       [getter]="queryService.queryCountriesCallback"
       [allGetter]="queryService.countriesAllCallback"
       (selectEvent)="changeCountry($event)"
-      class="smart-input-wrapper"
+      class="smart-input-custom-wrapper"
       ></app-smart-input>
+      <ng-container *ngIf="changeCountrySubmitted">
+        <ng-container *ngIf="isSubmitting$ | async">
+          <div class="feedback">
+            <div class="pokemon-spinner"></div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="(success$ | async) as error">
+          <img src="assets/tick.png" alt="" class="feedback">
+        </ng-container>
+        <ng-container *ngIf="(backendError$ | async) as error">
+          <img src="assets/x.png" alt="" class="feedback">
+        </ng-container>
+      </ng-container>
     </div>
   </div>
   <div class="section row">
@@ -58,12 +94,32 @@
         If private only you will be able to see your profile
       </div>
     </div>
-    <app-switch
-    [inputState]="user?.visibility"
-    [leftText]="'Public'"
-    [rightText]="'Private'"
-    (checkEvent)="changeVisibility($event)"
-    ></app-switch>
+    <div class="row s-gap relative">
+      <ng-container *ngIf="changeVisibilitySubmitted">
+        <ng-container *ngIf="(backendError$ | async) as error">
+          <span class="formFeedbackError backendErrors">{{error}}</span>
+        </ng-container>
+      </ng-container>
+      <app-switch
+      [inputState]="user?.visibility"
+      [leftText]="'Public'"
+      [rightText]="'Private'"
+      (checkEvent)="changeVisibility($event)"
+      ></app-switch>
+      <ng-container *ngIf="changeVisibilitySubmitted">
+        <ng-container *ngIf="isSubmitting$ | async">
+          <div class="feedback">
+            <div class="pokemon-spinner"></div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="(success$ | async) as error">
+          <img src="assets/tick.png" alt="" class="feedback">
+        </ng-container>
+        <ng-container *ngIf="(backendError$ | async) as error">
+          <img src="assets/x.png" alt="" class="feedback">
+        </ng-container>
+      </ng-container>
+    </div>
   </div>
   <div class="section row">
     <div class="col s-gap">
@@ -81,17 +137,33 @@
     </div>
     <form [formGroup]="changeNameForm" (ngSubmit)="changeName()">
       <div class="col">
-        <div class="row-end b-gap">
+        <div class="row-end b-gap relative">
           <span *ngIf="isInvalid('newName', 'changeNameForm')" class="formFeedbackError">{{getError('newName', 'changeNameForm')}}</span>
+          <ng-container *ngIf="changeNameSubmitted">
+            <ng-container *ngIf="(backendError$ | async) as error">
+              <span class="formFeedbackError backendErrors">{{error}}</span>
+            </ng-container>
+          </ng-container>
           <input 
           type="text" 
           placeholder="New name" 
           formControlName="newName"
           [ngClass]="{controlInvalid: isInvalid('newName', 'changeNameForm')}"
           >
-          <button
-          type="submit"
-          >Change</button>
+          <button type="submit">Change</button>
+          <ng-container *ngIf="changeNameSubmitted">
+            <ng-container *ngIf="isSubmitting$ | async">
+              <div class="feedback">
+                <div class="pokemon-spinner"></div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="(success$ | async) as error">
+              <img src="assets/tick.png" alt="" class="feedback">
+            </ng-container>
+            <ng-container *ngIf="(backendError$ | async) as error">
+              <img src="assets/x.png" alt="" class="feedback">
+            </ng-container>
+          </ng-container>
         </div>
       </div>
     </form>
@@ -110,15 +182,31 @@
         <div class="row-end b-gap">
           <span *ngIf="userNameAvailable" class="formFeedbackSuccess">This username is available</span>
           <span *ngIf="isInvalid('newUserName', 'changeUserNameForm')" class="formFeedbackError">{{getError('newUserName', 'changeUserNameForm')}}</span>
+          <ng-container *ngIf="changeUserNameSubmitted">
+            <ng-container *ngIf="(backendError$ | async) as error">
+              <span class="formFeedbackError backendErrors">{{error}}</span>
+            </ng-container>
+          </ng-container>
           <input 
           type="text" 
           placeholder="New username" 
           formControlName="newUserName"
           [ngClass]="{controlInvalid: isInvalid('newUserName', 'changeUserNameForm')}"
           >
-          <button
-          type="submit"
-          >Change</button>
+          <button type="submit">Change</button>
+          <ng-container *ngIf="changeUserNameSubmitted">
+            <ng-container *ngIf="isSubmitting$ | async">
+              <div class="feedback">
+                <div class="pokemon-spinner"></div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="(success$ | async) as error">
+              <img src="assets/tick.png" alt="" class="feedback">
+            </ng-container>
+            <ng-container *ngIf="(backendError$ | async) as error">
+              <img src="assets/x.png" alt="" class="feedback">
+            </ng-container>
+          </ng-container>
         </div>
       </div>
     </form>
@@ -134,15 +222,31 @@
         <form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
           <div class="row b-gap">
             <span *ngIf="isInvalid('newEmail', 'changeEmailForm')" class="formFeedbackError">{{getError('newEmail', 'changeEmailForm')}}</span>
+            <ng-container *ngIf="changeEmailSubmitted">
+              <ng-container *ngIf="(backendError$ | async) as error">
+                <span class="formFeedbackError backendErrors">{{error}}</span>
+              </ng-container>
+            </ng-container>
             <input 
             type="text" 
             placeholder="New email" 
             formControlName="newEmail"
             [ngClass]="{controlInvalid: isInvalid('newEmail', 'changeEmailForm')}"
             >
-            <button
-            type="submit"
-            >Change</button>
+            <button type="submit">Change</button>
+            <ng-container *ngIf="changeEmailSubmitted">
+              <ng-container *ngIf="isSubmitting$ | async">
+                <div class="feedback">
+                  <div class="pokemon-spinner"></div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="(success$ | async) as error">
+                <img src="assets/tick.png" alt="" class="feedback">
+              </ng-container>
+              <ng-container *ngIf="(backendError$ | async) as error">
+                <img src="assets/x.png" alt="" class="feedback">
+              </ng-container>
+            </ng-container>
           </div>
       </form>
       </div>
@@ -162,9 +266,7 @@
           <form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
             <div class="row b-gap">
               <input type="text" placeholder="Code" formControlName="newEmail">
-              <button
-              type="submit"
-              >Confirm</button>
+              <button type="submit">Confirm</button>
             </div>
           </form>
         </ng-template>
@@ -183,6 +285,11 @@
       <div></div>
       <form class="row s-gap" [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
         <div class="row-end b-gap">
+          <ng-container *ngIf="changePasswordSubmitted">
+            <ng-container *ngIf="(backendError$ | async) as error">
+              <span class="formFeedbackError backendErrors">{{error}}</span>
+            </ng-container>
+          </ng-container>
           <div class="col">
             <label for="">Current password</label>
             <input 
@@ -214,17 +321,23 @@
             <div *ngIf="isInvalid('confirmPassword', 'changePasswordForm')" class="formFeedbackError">{{getError('confirmPassword', 'changePasswordForm')}}</div>
           </div>
         </div>
-        <button
-        type="submit"
-        >Change</button>
+        <button type="submit">Change</button>
+        <ng-container *ngIf="changePasswordSubmitted">
+          <ng-container *ngIf="isSubmitting$ | async">
+            <div class="feedback">
+              <div class="pokemon-spinner"></div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="(success$ | async) as error">
+            <img src="assets/tick.png" alt="" class="feedback">
+          </ng-container>
+          <ng-container *ngIf="(backendError$ | async) as error">
+            <img src="assets/x.png" alt="" class="feedback">
+          </ng-container>
+        </ng-container>
       </form>
     </div>
   </div>
-  <ng-container *ngIf="backendErrors$ | async as backendErrors">
-    <ng-container *ngFor="let error of backendErrors">
-      <span class="formFeedbackError backendErrors">{{error}}</span>
-    </ng-container>
-  </ng-container>
   <div class="buttons">
     <div class="logout">
       <button (click)="logOut()" class="button-primary-clear">Log Out</button>

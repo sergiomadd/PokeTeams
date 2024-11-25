@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators
 import { Store } from '@ngrx/store';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { authActions } from 'src/app/auth/store/auth.actions';
-import { selectError } from 'src/app/auth/store/auth.selectors';
+import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/auth/store/auth.selectors';
 import { Country } from 'src/app/models/DTOs/country.dto';
 import { UserUpdateDTO } from 'src/app/models/DTOs/userUpdate.dto';
 import { QueryService } from 'src/app/shared/services/query.service';
@@ -27,36 +27,46 @@ export class UserSettingsComponent
   userPageService = inject(UserPageService);
   queryService = inject(QueryService);
 
+  isSubmitting$ = this.store.select(selectIsSubmitting);
+  backendError$ = this.store.select(selectError);
+  success$ = this.store.select(selectSuccess);
+
   user?: User;
   email?: string;
   emailConfirmed?: string
   deleteDialog: boolean = false;
 
-  backendErrors$ = this.store.select(selectError);
   pictures: string[] = [];
-  countries: Country[] = [];
   showCatalog: boolean = false;
+  changePictureSubmitted: boolean = false;
+  countries: Country[] = [];
+  changeCountrySubmitted: boolean = false;
+  changeVisibilitySubmitted: boolean = false;
 
-  changeNameFormSubmitted: boolean = false;
+  changeNameButtonClicked: boolean = false;
+  changeNameSubmitted: boolean = false;
   changeNameForm = this.formBuilder.group(
   {
     newName: ['', [Validators.required, Validators.maxLength(256)]],
   }, { updateOn: "blur" });
 
   userNameAvailable: boolean = false;
-  changeUserNameFormSubmitted: boolean = false;
+  changeUserNameButtonClicked: boolean = false;
+  changeUserNameSubmitted: boolean = false;
   changeUserNameForm = this.formBuilder.group(
   {
     newUserName: ['', [Validators.required, Validators.maxLength(256)]],
   }, { updateOn: "blur" });
 
-  changeEmailFormSubmitted: boolean = false;
+  changeEmailButtonClicked: boolean = false;
+  changeEmailSubmitted: boolean = false;
   changeEmailForm = this.formBuilder.group(
   {
     newEmail: ['', [Validators.required, Validators.maxLength(256), Validators.email]],
   }, { updateOn: "blur" });
 
-  changePasswordFormSubmitted: boolean = false;
+  changePasswordButtonClicked: boolean = false;
+  changePasswordSubmitted: boolean = false;
   changePasswordForm = this.formBuilder.group(
   {
     currentPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.samePassword()]],
@@ -112,6 +122,7 @@ export class UserSettingsComponent
 
   async changePicture(path: string)
   {
+    this.changePictureSubmitted = true;
     const key: string = this.getPictureKey(path);
     let updateDTO: UserUpdateDTO = 
     {
@@ -124,6 +135,7 @@ export class UserSettingsComponent
 
   async changeCountry($event)
   {
+    this.changeCountrySubmitted = true;
     let updateDTO: UserUpdateDTO = 
     {
       currentUserName: this.user?.username,
@@ -134,6 +146,7 @@ export class UserSettingsComponent
 
   async changeVisibility($event)
   {
+    this.changeVisibilitySubmitted = true;
     let updateDTO: UserUpdateDTO = 
     {
       currentUserName: this.user?.username,
@@ -144,9 +157,10 @@ export class UserSettingsComponent
 
   async changeName()
   {
-    this.changeNameFormSubmitted = true;
+    this.changeNameButtonClicked = true;
     if(this.changeNameForm.valid && this.changeNameForm.controls.newName.value != null)
     {
+      this.changeNameSubmitted = true;
       let updateDTO: UserUpdateDTO = 
       {
         currentUserName: this.user?.username,
@@ -156,11 +170,12 @@ export class UserSettingsComponent
     }
   }
 
-  async changeUserName()
+  changeUserName()
   {
-    this.changeUserNameFormSubmitted = true;
+    this.changeUserNameButtonClicked = true;
     if(this.changeUserNameForm.valid && this.changeUserNameForm.controls.newUserName.value != null)
     {
+      this.changeUserNameSubmitted = true;
       let updateDTO: UserUpdateDTO = 
       {
         currentUserName: this.user?.username,
@@ -172,9 +187,10 @@ export class UserSettingsComponent
 
   changeEmail()
   {
-    this.changeEmailFormSubmitted = true;
+    this.changeEmailButtonClicked = true;
     if(this.changeEmailForm.valid && this.changeEmailForm.controls.newEmail.value != null)
     {
+      this.changeEmailSubmitted = true;
       let updateDTO: UserUpdateDTO = 
       {
         currentUserName: this.user?.username,
@@ -186,11 +202,12 @@ export class UserSettingsComponent
 
   changePassword()
   {
-    this.changePasswordFormSubmitted = true;
+    this.changePasswordButtonClicked = true;
     if(this.changePasswordForm.valid
       && this.changePasswordForm.controls.currentPassword.value != null
       && this.changePasswordForm.controls.password.value != null)
     {
+      this.changePasswordSubmitted = true;
       let updateDTO: UserUpdateDTO = 
       {
         currentUserName: this.user?.username,
@@ -254,16 +271,16 @@ export class UserSettingsComponent
     switch(formName)
     {
       case "changeNameForm":
-        submitted = this.changeNameFormSubmitted;
+        submitted = this.changeNameButtonClicked;
         break;
       case "changeUserNameForm":
-        submitted = this.changeUserNameFormSubmitted;
+        submitted = this.changeUserNameButtonClicked;
         break;
       case "changeEmailForm":
-        submitted = this.changeEmailFormSubmitted;
+        submitted = this.changeEmailButtonClicked;
         break;
       case "changePasswordForm":
-        submitted = this.changePasswordFormSubmitted;
+        submitted = this.changePasswordButtonClicked;
         break;
     }
     return submitted;
