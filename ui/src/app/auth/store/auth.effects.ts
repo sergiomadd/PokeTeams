@@ -162,6 +162,7 @@ export class AuthEffects
           {
             return of(authActions.logOutFailure(
               {
+                
                 error: error.message
               }
             ))
@@ -228,6 +229,7 @@ export class AuthEffects
           }),
           catchError((error: CustomError) => 
           {
+            console.log(error);
             return of(authActions.changeNameFailure(
               {
                 error: error.message

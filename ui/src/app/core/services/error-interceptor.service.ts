@@ -29,6 +29,10 @@ export class ErrorInterceptorService
            console.log(`Server Error [ Code: ${HttpError.status},  Message: ${HttpError.message} ]`);
            switch(HttpError.status)
            {
+            case 0:
+              //Cant reach server -> connection refused
+              error.message = "Can't connect with server"
+              break;
             case 400:
               //Bad Request
               //Error message provided by backend in HttpErrorResponse
@@ -66,6 +70,7 @@ export class ErrorInterceptorService
               error.message = "Server down";
               break;
             default:
+              error.message = "Server default error";
               break;
            }
         }
