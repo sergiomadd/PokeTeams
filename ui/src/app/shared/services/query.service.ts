@@ -157,4 +157,22 @@ export class QueryService
         icon: n.iconPath
       }));
   }
+
+  queryCountriesCallback = async (args: any): Promise<Tag[]> => 
+  {
+    if(args)
+    {
+      return (await this.userService.queryCountriesByName(args));
+    }
+    return [];
+  }
+  countriesAllCallback = async (): Promise<Tag[]> => 
+  {
+    return (await this.userService.getAllCountries()).map(n => 
+      ({
+        name: n.name,
+        identifier: n.name,
+        icon: n.icon
+      }));
+  }
 }

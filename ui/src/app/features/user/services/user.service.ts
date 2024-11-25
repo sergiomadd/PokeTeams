@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, lastValueFrom, Observable, throwError, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { AuthResponseDTO } from '../../../auth/types/authResponse.dto';
-import { Country } from '../../../models/DTOs/country.dto';
 import { UtilService } from '../../../shared/services/util.service';
+import { Tag } from '../../team/models/tag.model';
 import { TeamService } from '../../team/services/team.service';
 import { User } from '../models/user.model';
 
@@ -37,8 +37,6 @@ export class UserService
           withCredentials: true
         })
         .pipe(catchError(() => []), timeout(this.dataTimeout)));
-      //.pipe(catchError(() => []), timeout({first: this.dataTimeout,
-      //   with: () => throwError(() => new CustomTimeoutError())})));
     }
     catch(error)
     {
@@ -115,20 +113,35 @@ export class UserService
     return pics;
   }
 
-  
-  async getAllCountriesData(): Promise<Country[]>
+  async queryCountriesByName(key: string) : Promise<Tag[]>
   {
-    let countries: Country[] = [];
-    let url = this.apiUrl + "countries";
+    let teraTypes: Tag[] = [];
+    let url = this.apiUrl + 'countries/query';
     try
     {
-      const countries$ = this.http.get<Country[]>(url, {withCredentials: true}).pipe(catchError(() => []), timeout(this.dataTimeout));
-      countries = await lastValueFrom(countries$);
+      let params = new HttpParams().set('key', key ?? "");
+      teraTypes = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
+      .pipe(catchError(() => []), timeout(this.dataTimeout)));
     }
     catch(error)
     {
       console.log("Error: ", this.util.getErrorMessage(error));
     }
-    return countries;
+    return teraTypes; 
+  }
+  async getAllCountries() : Promise<Tag[]>
+  {
+    let tags: Tag[] = [];
+    let url = this.apiUrl + "countries/all";
+    try
+    {
+      const countries$ = this.http.get<Tag[]>(url, {withCredentials: true}).pipe(catchError(() => []), timeout(this.dataTimeout));
+      tags = await lastValueFrom(countries$);
+    }
+    catch(error)
+    {
+      console.log("Error: ", this.util.getErrorMessage(error));
+    }
+    return tags;
   }
 }

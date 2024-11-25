@@ -39,11 +39,15 @@
         </ng-container>
       </div>
     </div>
-    <app-dropdown
-    [options]="countries"
-    [selectedOption]="user?.country"
-    (selectEvent)="changeCountry($event)"
-    ></app-dropdown>
+    <div class="smart-input-wrapper">
+      <app-smart-input
+      [keepSelected]="false"
+      [getter]="queryService.queryCountriesCallback"
+      [allGetter]="queryService.countriesAllCallback"
+      (selectEvent)="changeCountry($event)"
+      class="smart-input-wrapper"
+      ></app-smart-input>
+    </div>
   </div>
   <div class="section row">
     <div class="col s-gap">

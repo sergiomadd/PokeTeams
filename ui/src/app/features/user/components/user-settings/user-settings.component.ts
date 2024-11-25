@@ -6,6 +6,7 @@ import { authActions } from 'src/app/auth/store/auth.actions';
 import { selectError } from 'src/app/auth/store/auth.selectors';
 import { Country } from 'src/app/models/DTOs/country.dto';
 import { UserUpdateDTO } from 'src/app/models/DTOs/userUpdate.dto';
+import { QueryService } from 'src/app/shared/services/query.service';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { User } from '../../models/user.model';
 import { UserPageService } from '../../services/user-page.service';
@@ -24,6 +25,7 @@ export class UserSettingsComponent
   userService = inject(UserService);
   util = inject(UtilService);
   userPageService = inject(UserPageService);
+  queryService = inject(QueryService);
 
   user?: User;
   email?: string;
@@ -79,9 +81,7 @@ export class UserSettingsComponent
       }
     });
     this.pictures = await this.userService.getAllProfilePics();
-    this.countries = await this.userService.getAllCountriesData();
   }
-
 
   chooseEvent($event)
   {
