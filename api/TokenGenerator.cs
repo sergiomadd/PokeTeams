@@ -29,7 +29,7 @@ namespace api
                         new Claim(JwtRegisteredClaimNames.Email, user.Email.ToString()),
                         new Claim("email_verified", user.EmailConfirmed.ToString())
                     ]),
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddMinutes(60),
                 SigningCredentials = credentials,
                 Issuer = configuration["JwtSettings:Issuer"],
                 Audience = configuration["JwtSettings:Audience"],
@@ -58,11 +58,13 @@ namespace api
             {
                 var tokenValidationParameters = new TokenValidationParameters
                 {
+                    ValidIssuer = configuration["JwtSettings:Issuer"],
+                    ValidAudience = configuration["JwtSettings:Audience"],
                     ValidateAudience = true,
                     ValidateIssuer = true,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!)),
-                    ValidateLifetime = false //here we are saying that we don't care about the token's expiration date
+                    ValidateLifetime = false
                 };
                 var tokenHandler = new JwtSecurityTokenHandler();
                 SecurityToken securityToken;
