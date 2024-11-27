@@ -35,6 +35,32 @@ namespace api.Controllers
             _pokeTeamService = teamService;
         }
 
+        [AllowAnonymous]
+        [HttpPost("Refresh")]
+        public async Task<ActionResult> RefreshToken(RefreshTokenDTO token)
+        {
+            if (token is null)
+            {
+                return BadRequest("Invalid client request");
+            }
+            string accessToken = token.AccessToken;
+            string refreshToken = token.RefreshToken;
+            var principal = _tokenGenerator.GetPrincipalFromExpiredToken(accessToken);
+            if (principal == null)
+            {
+                return BadRequest("Invalid client request");
+            }
+            var username = principal.Identity.Name;
+            var user = await _userManager.FindByNameAsync(username);
+            if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            {
+                return BadRequest("Invalid client request");
+            }
+            var newAccessToken = _tokenGenerator.GenerateAccessToken(user);
+
+            return Ok(new JwtResponseDTO { AccessToken = newAccessToken, RefreshToken = refreshToken });
+        }
+
         [HttpGet, Route("logged")]
         public async Task<ActionResult> GetLoggedUser()
         {
@@ -121,8 +147,14 @@ namespace api.Controllers
             {
                 return Unauthorized("You account is locked");
             }
-            var token = _tokenGenerator.GenerateToken(user);
-            return Ok(new JwtResponseDTO { Token = token });
+            string token = _tokenGenerator.GenerateAccessToken(user);
+            string refreshToken = _tokenGenerator.GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(90);
+            await _userManager.UpdateAsync(user);
+
+            return Ok(new JwtResponseDTO { AccessToken = token, RefreshToken = refreshToken });
         }
 
         [AllowAnonymous]
@@ -162,8 +194,8 @@ namespace api.Controllers
                 Printer.Log(ex.Message);
                 return BadRequest("Signup error, exception, Model not valid");
             }
-            var token = _tokenGenerator.GenerateToken(user);
-            return Ok(new JwtResponseDTO { Token = token });
+            var token = _tokenGenerator.GenerateAccessToken(user);
+            return Ok(new JwtResponseDTO { AccessToken = token });
         }
 
         [HttpGet, Route("logout")]
@@ -206,8 +238,8 @@ namespace api.Controllers
                 }
                 //await RefreshLoggedUser(user);
                 User updatedUser = await _userService.GetUserByUserName(updateData.NewUserName);
-                var token = _tokenGenerator.GenerateToken(updatedUser);
-                return Ok(new JwtResponseDTO { Token = token });
+                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+                return Ok(new JwtResponseDTO { AccessToken = token });
             }
             return BadRequest("Wrong data");
         }
@@ -243,8 +275,8 @@ namespace api.Controllers
                 }
                 await _userManager.UpdateAsync(user);
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
-                var token = _tokenGenerator.GenerateToken(updatedUser);
-                return Ok(new JwtResponseDTO { Token = token });
+                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+                return Ok(new JwtResponseDTO { AccessToken = token });
             }
             return BadRequest("Wrong data");
         }
@@ -269,8 +301,8 @@ namespace api.Controllers
                     return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
-                var token = _tokenGenerator.GenerateToken(updatedUser);
-                return Ok(new JwtResponseDTO { Token = token });
+                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+                return Ok(new JwtResponseDTO { AccessToken = token });
             }
             return BadRequest("Wrong data");
         }
@@ -294,8 +326,8 @@ namespace api.Controllers
                     return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
-                var token = _tokenGenerator.GenerateToken(updatedUser);
-                return Ok(new JwtResponseDTO { Token = token });
+                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+                return Ok(new JwtResponseDTO { AccessToken = token });
             }
             return BadRequest("Wrong data");
         }
@@ -319,8 +351,8 @@ namespace api.Controllers
                     return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
-                var token = _tokenGenerator.GenerateToken(updatedUser);
-                return Ok(new JwtResponseDTO { Token = token });
+                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+                return Ok(new JwtResponseDTO { AccessToken = token });
             }
             return BadRequest("Wrong data");
         }
@@ -344,8 +376,8 @@ namespace api.Controllers
                     return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
-                var token = _tokenGenerator.GenerateToken(updatedUser);
-                return Ok(new JwtResponseDTO { Token = token });
+                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+                return Ok(new JwtResponseDTO { AccessToken = token });
             }
             return BadRequest("Wrong data");
         }
@@ -370,8 +402,8 @@ namespace api.Controllers
                     return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
-                var token = _tokenGenerator.GenerateToken(updatedUser);
-                return Ok(new JwtResponseDTO { Token = token });
+                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+                return Ok(new JwtResponseDTO { AccessToken = token });
             }
             return BadRequest("Wrong data");
         }

@@ -19,5 +19,7 @@ namespace api.Models.DBPoketeamModels
         public bool Visibility { get; set; }
 
         public virtual ICollection<Team> Teams { get; set;}
+        public string? RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
     }
 }
