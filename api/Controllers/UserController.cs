@@ -83,18 +83,13 @@ namespace api.Controllers
             return Ok(country);
         }
 
-        [HttpGet, Route("countries")]
-        public ActionResult<List<CountryDTO>> GetCountries()
+        [HttpGet, Route("countries/all")]
+        public ActionResult<List<CountryDTO>> GetAllCountries()
         {
-            List<CountryDTO> countries = new List<CountryDTO>();
-            using (StreamReader r = new StreamReader("wwwroot/data/countries.json"))
-            {
-                string json = r.ReadToEnd();
-                countries = JsonSerializer.Deserialize<List<CountryDTO>>(json);
-                foreach (var country in countries)
+            List<TagDTO> countries = _userService.GetAllCountries();
+            if (countries == null)
                 {
-                    country.Icon = $"https://localhost:7134/images/sprites/flags/{country.code}.svg";
-                }
+                return NotFound("Couldn't query countries");
             }
             return Ok(countries);
         }

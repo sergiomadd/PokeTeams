@@ -110,22 +110,30 @@ namespace api.Services
             return country;
         }
 
+        public List<TagDTO> GetAllCountries()
+        {
+            List<TagDTO> queryResults = new List<TagDTO>();
+            List<Country> countries = _pokeTeamContext.Country.ToList();
+            if (countries != null && countries.Count > 0)
+            {
+                countries.ForEach(country =>
+                {
+                    queryResults.Add(new TagDTO(country.Name, country.Code, type: "country", icon: $"https://localhost:7134/images/sprites/flags/{country.Code}.svg"));
+                });
+            }
+            return queryResults;
+        }
+
         public List<TagDTO> QueryCountriesByName(string key)
         {
             List<TagDTO> queryResults = new List<TagDTO>();
-            using (StreamReader r = new StreamReader("wwwroot/data/countries.json"))
+            List<Country> countries = _pokeTeamContext.Country.Where(i => i.NormalizedName.Contains(key.ToLower())).ToList();
+            if (countries != null && countries.Count > 0)
             {
-                string json = r.ReadToEnd();
-                List<CountryDTO> countries = JsonSerializer.Deserialize<List<CountryDTO>>(json);
-                List<CountryDTO> filteredCountries = countries.Where(i => i.name.Contains(key)).ToList();
-                //List<Item_names> itemNames = _pokedexContext.Item_names.Where(i => i.name.Contains(key) && i.local_language_id == 9).ToList();
-                if (filteredCountries != null && filteredCountries.Count > 0)
+                countries.ForEach(country =>
                 {
-                    filteredCountries.ForEach(country =>
-                    {
-                        queryResults.Add(new TagDTO(country.name, country.code, type: "country", icon: country.Icon));
-                    });
-                }
+                    queryResults.Add(new TagDTO(country.Name, country.Code, type: "country", icon: $"https://localhost:7134/images/sprites/flags/{country.Code}.svg"));
+                });
             }
             return queryResults;
         }
