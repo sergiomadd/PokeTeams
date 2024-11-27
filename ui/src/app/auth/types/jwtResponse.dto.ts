@@ -1,4 +1,5 @@
 export interface JWTResponse
 {
-  token: string
+  accessToken: string,
+  refreshToken: string
 }

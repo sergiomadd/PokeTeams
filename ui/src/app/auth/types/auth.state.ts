@@ -2,7 +2,8 @@ import { User } from "src/app/features/user/models/user.model";
 
 export interface AuthState
 {
-  token: string | null,
+  accessToken: string | null,
+  refreshToken: string | null,
   user: User | null,
   error: string | null,
   isAuthenticated: boolean,
@@ -12,7 +13,8 @@ export interface AuthState
 
 export const initialAuthState: AuthState = 
 {
-  token: null,
+  accessToken: null,
+  refreshToken: null,
   user: null,
   error: null,
   isAuthenticated: false,
