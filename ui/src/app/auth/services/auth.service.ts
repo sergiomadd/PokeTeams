@@ -19,6 +19,12 @@ export class AuthService
 
   constructor(private http: HttpClient) { }
 
+  refreshTokens(tokens: JWTResponse) : Observable<JWTResponse>
+  {
+    let url = this.apiUrl + 'refresh';
+    return this.http.post<JWTResponse>(url, tokens, {headers:{skip:"true"}, withCredentials: true});
+  }
+
   getLogged() : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'logged';

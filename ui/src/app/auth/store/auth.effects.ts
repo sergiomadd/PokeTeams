@@ -6,6 +6,7 @@ import { AuthService } from "src/app/auth/services/auth.service";
 import { JwtTokenService } from "src/app/core/services/jwttoken.service";
 import { UserService } from "src/app/features/user/services/user.service";
 import { CustomError } from "src/app/shared/models/customError.model";
+import { LocalStorageService } from "../services/local-storage.service";
 import { AuthResponseDTO } from "../types/authResponse.dto";
 import { JWTResponse } from "../types/jwtResponse.dto";
 import { authActions } from "./auth.actions";
@@ -19,6 +20,39 @@ export class AuthEffects
   userService = inject(UserService);
   router = inject(Router);
   jwtTokenService = inject(JwtTokenService);
+  localStorage = inject(LocalStorageService);
+
+  refresh$ = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.refresh),
+      switchMap(({request}) =>
+      {
+        return this.authService.refreshTokens(request).pipe(
+          switchMap(async (response: JWTResponse) =>
+          {
+            const authResponse: AuthResponseDTO = 
+            {
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+              user: null,
+              success: true,
+              error: null
+            }
+            return authActions.refreshSuccess({authResponse});
+          }),
+          catchError((error: CustomError) => 
+          {
+            return of(authActions.refreshFailure(
+              {
+                error: error.message
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
 
   getLogged$ = createEffect(() =>
   {
@@ -31,9 +65,10 @@ export class AuthEffects
           {
             const authResponse: AuthResponseDTO = 
             {
-              token: response.token,
-              user: this.jwtTokenService.getTokenUsername(response.token) 
-              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+              user: this.jwtTokenService.getTokenUsername(response.accessToken) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.accessToken)!))
               : null,
               success: true,
               error: null
@@ -66,9 +101,10 @@ export class AuthEffects
 
             const authResponse: AuthResponseDTO = 
             {
-              token: response.token,
-              user: this.jwtTokenService.getTokenUsername(response.token) 
-              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+              user: this.jwtTokenService.getTokenUsername(response.accessToken) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.accessToken)!))
               : null,
               success: true,
               error: null
@@ -102,9 +138,10 @@ export class AuthEffects
           {
             const authResponse: AuthResponseDTO = 
             {
-              token: response.token,
-              user: this.jwtTokenService.getTokenUsername(response.token) 
-              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+              user: this.jwtTokenService.getTokenUsername(response.accessToken) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.accessToken)!))
               : null,
               success: true,
               error: null
@@ -218,9 +255,10 @@ export class AuthEffects
           {
             const authResponse: AuthResponseDTO = 
             {
-              token: response.token,
-              user: this.jwtTokenService.getTokenUsername(response.token) 
-              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+              user: this.jwtTokenService.getTokenUsername(response.accessToken) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.accessToken)!))
               : null,
               success: true,
               error: null
@@ -251,9 +289,10 @@ export class AuthEffects
           {
             const authResponse: AuthResponseDTO = 
             {
-              token: response.token,
-              user: this.jwtTokenService.getTokenUsername(response.token) 
-              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+              user: this.jwtTokenService.getTokenUsername(response.accessToken) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.accessToken)!))
               : null,
               success: true,
               error: null
@@ -295,9 +334,10 @@ export class AuthEffects
           {
             const authResponse: AuthResponseDTO = 
             {
-              token: response.token,
-              user: this.jwtTokenService.getTokenUsername(response.token) 
-              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+              user: this.jwtTokenService.getTokenUsername(response.accessToken) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.accessToken)!))
               : null,
               success: true,
               error: null
@@ -328,9 +368,10 @@ export class AuthEffects
           {
             const authResponse: AuthResponseDTO = 
             {
-              token: response.token,
-              user: this.jwtTokenService.getTokenUsername(response.token) 
-              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+              user: this.jwtTokenService.getTokenUsername(response.accessToken) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.accessToken)!))
               : null,
               success: true,
               error: null
@@ -361,9 +402,10 @@ export class AuthEffects
           {
             const authResponse: AuthResponseDTO = 
             {
-              token: response.token,
-              user: this.jwtTokenService.getTokenUsername(response.token) 
-              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+              user: this.jwtTokenService.getTokenUsername(response.accessToken) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.accessToken)!))
               : null,
               success: true,
               error: null
@@ -394,9 +436,10 @@ export class AuthEffects
           {
             const authResponse: AuthResponseDTO = 
             {
-              token: response.token,
-              user: this.jwtTokenService.getTokenUsername(response.token) 
-              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+              user: this.jwtTokenService.getTokenUsername(response.accessToken) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.accessToken)!))
               : null,
               success: true,
               error: null
@@ -427,9 +470,10 @@ export class AuthEffects
           {
             const authResponse: AuthResponseDTO = 
             {
-              token: response.token,
-              user: this.jwtTokenService.getTokenUsername(response.token) 
-              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.token)!))
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+              user: this.jwtTokenService.getTokenUsername(response.accessToken) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.accessToken)!))
               : null,
               success: true,
               error: null

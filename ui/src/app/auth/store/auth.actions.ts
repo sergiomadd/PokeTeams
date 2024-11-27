@@ -3,6 +3,7 @@ import { AuthResponseDTO } from "src/app/auth/types/authResponse.dto";
 import { LogInDTO } from "src/app/models/DTOs/login.dto";
 import { SignUpDTO } from "src/app/models/DTOs/signup.dto";
 import { UserUpdateDTO } from "src/app/models/DTOs/userUpdate.dto";
+import { JWTResponse } from "../types/jwtResponse.dto";
 
 export enum AuthActionTypes
 {
@@ -16,15 +17,18 @@ export const authActions = createActionGroup(
     source: "Auth",
     events:
     {
-      signUp: props<{request: SignUpDTO}>(),
-      "signUp success": props<{authResponse: AuthResponseDTO}>(),
-      "signUp failure": props<{error: string}>(),
-      logIn: props<{request: LogInDTO}>(),
-      "logIn success": props<{authResponse: AuthResponseDTO}>(),
-      "logIn failure": props<{error: string}>(),
+      refresh: props<{request: JWTResponse}>(),
+      "refresh success": props<{authResponse: AuthResponseDTO}>(),
+      "refresh failure": props<{error: string}>(),
       getLogged: emptyProps(),
       "getLogged success": props<{authResponse: AuthResponseDTO}>(),
       "getLogged failure": props<{error: string}>(),
+      logIn: props<{request: LogInDTO}>(),
+      "logIn success": props<{authResponse: AuthResponseDTO}>(),
+      "logIn failure": props<{error: string}>(),
+      signUp: props<{request: SignUpDTO}>(),
+      "signUp success": props<{authResponse: AuthResponseDTO}>(),
+      "signUp failure": props<{error: string}>(),
       logOut: emptyProps(),
       "logOut success": emptyProps(),
       "logOut failure": props<{error: string}>(),
