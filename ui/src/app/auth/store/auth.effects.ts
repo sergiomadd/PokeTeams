@@ -35,7 +35,9 @@ export class AuthEffects
             {
               accessToken: response.accessToken,
               refreshToken: response.refreshToken,
-              user: null,
+              user: this.jwtTokenService.getTokenUsername(response.accessToken) 
+              ? await lastValueFrom(this.userService.getUser(this.jwtTokenService.getTokenUsername(response.accessToken)!))
+              : null,
               success: true,
               error: null
             }
