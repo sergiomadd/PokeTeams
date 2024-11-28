@@ -1,4 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { selectUser } from 'src/app/auth/store/auth.selectors';
@@ -19,6 +20,7 @@ export class UserPageComponent
   userPageService = inject(UserPageService);
   store = inject(Store);
   searchService = inject(SearchService);
+  route = inject(ActivatedRoute);
 
   @Input() username?: string;
 
@@ -31,44 +33,60 @@ export class UserPageComponent
   userPrivate: boolean = false;
 
   loggedUser$: Observable<User | null> = this.store.select(selectUser);
+  loggedUser: User | null = null;
+
+  load()
+  {
+    if(!this.user?.visibility
+      && !(this.loggedUser && this.loggedUser.username == this.user?.username))
+    {
+      this.userPrivate = true;
+    }
+    else
+    {
+      this.userPrivate = false;
+      this.searchService.userOnlySearch(this.user.username);
+    }
+  }
 
   async ngOnInit()
   {
-    if(this.username)
-    {
-      this.loading = true;
-      this.userService.getUser(this.username).subscribe(
-        {
-          next: (response) =>
-          {
-            this.user = response;
-            this.userPageService.setUser(this.user);
-            if(!this.user.visibility)
-            {
-              this.userPrivate = true;
-            }
-            else
-            {
-              this.searchService.userOnlySearch(this.user.username);
-            }
-          },
-          error: () => 
-          {
-            this.loading = false;
-          },
-          complete: () => 
-          {
-            this.loading = false;
-          }
-        }
-      )
-
-      this.searchService.teams.subscribe((value: TeamPreview[]) =>
+    this.route.params.subscribe(params =>
       {
-        this.userTeams = value;
+        this.username = params["username"];
+        if(this.username)
+        {
+          this.loading = true;
+          this.loggedUser$.subscribe(value => 
+            {
+              this.loggedUser = value;
+              this.load();
+            })
+          this.userService.getUser(this.username).subscribe(
+            {
+              next: (response) =>
+              {
+                this.user = response;
+                this.userPageService.setUser(this.user);
+                this.load();
+              },
+              error: () => 
+              {
+                this.loading = false;
+              },
+              complete: () => 
+              {
+                this.loading = false;
+              }
+            }
+          )
+    
+          this.searchService.teams.subscribe((value: TeamPreview[]) =>
+          {
+            this.userTeams = value;
+          })
+        }
       })
-    }
-
     console.log("User in user page:", this.user)
   }
 

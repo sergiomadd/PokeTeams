@@ -1,9 +1,13 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { authActions } from 'src/app/auth/store/auth.actions';
-import { selectLoggedUser } from 'src/app/auth/store/auth.selectors';
+import { selectUser } from 'src/app/auth/store/auth.selectors';
 import { ThemeService } from 'src/app/core/services/theme.service';
+import { User } from 'src/app/features/user/models/user.model';
+import { UserService } from 'src/app/features/user/services/user.service';
+import { JwtTokenService } from '../../services/jwttoken.service';
 
 @Component({
   selector: 'app-menu',
@@ -15,16 +19,24 @@ export class MenuComponent
   router = inject(Router)
   store = inject(Store);
   themes = inject(ThemeService);
-
-  loggedUser$ = this.store.select(selectLoggedUser);
+  jwtTokenService = inject(JwtTokenService)
+  userService = inject(UserService);
 
   @Input() menuOpen: boolean = true;
-  @Output() toggleEvent = new EventEmitter()
+  @Output() toggleEvent = new EventEmitter();
 
+  loggedUser$: Observable<User | null> = this.store.select(selectUser);
+  loggedUser: User | null = null;
   selectedThemeName?: string;
 
   ngOnInit()
   {
+    this.loggedUser$.subscribe(async value => 
+    {
+      console.log("logged check")
+      this.loggedUser = value;
+    })
+
     this.themes.selectedTheme$?.subscribe(value => 
       {
         this.selectedThemeName = value.name;
@@ -44,7 +56,6 @@ export class MenuComponent
 
   navigateLoggedUser(username)
   {
-    //this.loggedUser$.subscribe()
     this.router.navigate([`/@${username}`]);
   }
 

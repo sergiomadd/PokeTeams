@@ -89,25 +89,24 @@
         </div>
       </div>
       <span class="x-divider"></span>
-      <ng-container *ngIf="loggedUser$ | async as user; else anon">
+      <ng-container *ngIf="loggedUser; else anon">
         <a 
         class="tab row-start"
         [ngClass]="{'open-tab': menuOpen}"
-        [routerLink]="['/', '@' + user?.username]"
+        [routerLink]="['/', '@' + loggedUser?.username]"
         >
-        <div class="icon">
-          <img src="{{user?.picture}}" alt="" class="icon">
-        </div>
-        <div class="title">
-          {{user?.username}}
-        </div>
-      </a>
+          <div class="icon">
+            <img src="{{loggedUser?.picture}}" alt="" class="icon">
+          </div>
+          <div class="title">
+            {{loggedUser?.username}}
+          </div>
+        </a>
       </ng-container>
       <ng-template #anon>
         <a 
         class="tab last row-start"
         [ngClass]="{'open-tab': menuOpen}"
-        [routerLink]="['/']"
         (click)="toggleMenu()"
         >
           <div class="icon">
