@@ -43,6 +43,7 @@ import { UserPageComponent } from './features/user/pages/user-page/user-page.com
 import { CheckboxComponent } from './shared/components/checkbox/checkbox.component';
 import { DialogComponent } from './shared/components/dialog/dialog.component';
 import { DropdownComponent } from './shared/components/dropdown/dropdown.component';
+import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 import { PaginationComponent } from './shared/components/pagination/pagination.component';
 import { RadioComponent } from './shared/components/radio/radio.component';
 import { SmartInputComponent } from './shared/components/smart-input/smart-input.component';
@@ -50,7 +51,6 @@ import { SwitchComponent } from './shared/components/switch/switch.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
 import { LinkerPipe } from './shared/pipes/linker.pipe';
 import { metaReducers } from './store/app.state';
-import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 
 @NgModule({
   declarations: [

@@ -26,7 +26,7 @@ export class UserPageComponent
   userTeams: TeamPreview[] = [];
   loading: boolean = false;
 
-  tabs: boolean[] = [true, false]
+  tabs: boolean[] = [false, true]
   country?: string;
   userPrivate: boolean = false;
 
@@ -43,16 +43,17 @@ export class UserPageComponent
           {
             this.user = response;
             this.userPageService.setUser(this.user);
-            this.searchService.userOnlySearch(this.user.username)
-          },
-          error: (error) => 
-          {
-            if(error.status == 401)
+            if(!this.user.visibility)
             {
-              //display not allowed -> private user
-              console.error("ERROR: User private")
               this.userPrivate = true;
             }
+            else
+            {
+              this.searchService.userOnlySearch(this.user.username);
+            }
+          },
+          error: () => 
+          {
             this.loading = false;
           },
           complete: () => 
