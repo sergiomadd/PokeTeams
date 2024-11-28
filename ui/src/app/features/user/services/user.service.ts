@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, lastValueFrom, Observable, throwError, timeout } from 'rxjs';
+import { catchError, lastValueFrom, Observable, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { AuthResponseDTO } from '../../../auth/types/authResponse.dto';
 import { UtilService } from '../../../shared/services/util.service';
@@ -26,22 +26,15 @@ export class UserService
   {
     let users: User[] = [];
     let url = this.apiUrl + "query";
-    try
-    {
-      users = await lastValueFrom(this.http.get<User[]>(url, 
+    users = await lastValueFrom(this.http.get<User[]>(url, 
+      {
+        params: 
         {
-          params: 
-          {
-            key: key
-          },
-          withCredentials: true
-        })
-        .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+          key: key
+        },
+        withCredentials: true
+      })
+      .pipe(timeout(this.dataTimeout)));
     return users;
   }
 
@@ -51,11 +44,7 @@ export class UserService
     return this.http.get<User>(url, {withCredentials: true})
       .pipe
       (
-        timeout(this.dataTimeout),
-        catchError((error) => 
-        {
-          return throwError(() => error);
-        })
+        timeout(this.dataTimeout)
       );
   }
   
@@ -73,7 +62,6 @@ export class UserService
     catch(error)
     {
       available = false;
-      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return available;
   }
@@ -92,7 +80,6 @@ export class UserService
     catch(error)
     {
       available = false;
-      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return available;
   }
@@ -101,15 +88,8 @@ export class UserService
   {
     let pics: string[] = [];
     let url = this.apiUrl + "pictures";
-    try
-    {
-      const pics$ = this.http.get<string[]>(url, {withCredentials: true}).pipe(catchError(() => []), timeout(this.dataTimeout));
-      pics = await lastValueFrom(pics$);
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    const pics$ = this.http.get<string[]>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+    pics = await lastValueFrom(pics$);
     return pics;
   }
 
@@ -117,31 +97,16 @@ export class UserService
   {
     let teraTypes: Tag[] = [];
     let url = this.apiUrl + 'countries/query';
-    try
-    {
-      let params = new HttpParams().set('key', key ?? "");
-      teraTypes = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    let params = new HttpParams().set('key', key ?? "");
+    teraTypes = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(catchError(() => []), timeout(this.dataTimeout)));
     return teraTypes; 
   }
   async getAllCountries() : Promise<Tag[]>
   {
     let tags: Tag[] = [];
     let url = this.apiUrl + "countries/all";
-    try
-    {
-      const countries$ = this.http.get<Tag[]>(url, {withCredentials: true}).pipe(catchError(() => []), timeout(this.dataTimeout));
-      tags = await lastValueFrom(countries$);
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    const countries$ = this.http.get<Tag[]>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+    tags = await lastValueFrom(countries$);
     return tags;
   }
 }

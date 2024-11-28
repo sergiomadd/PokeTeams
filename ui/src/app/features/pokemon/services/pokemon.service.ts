@@ -94,14 +94,7 @@ export class PokemonService
   {
     let pokemonData: PokemonData = <PokemonData>{}
     let url = this.apiUrl + 'pokemon/' + name;
-    try
-    {
-      pokemonData = await lastValueFrom(this.http.get<PokemonData>(url).pipe(catchError(() => [defaultPokemonData]), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    pokemonData = await lastValueFrom(this.http.get<PokemonData>(url).pipe(catchError(() => [defaultPokemonData]), timeout(this.dataTimeout)));
     return pokemonData;
   }
 
@@ -109,14 +102,7 @@ export class PokemonService
   {
     let item: Item = <Item>{}
     let url = this.apiUrl + 'item/name/' + name;
-    try
-    {
-      item = await lastValueFrom(this.http.get<Item>(url).pipe(catchError(() => [DefaultItem]), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    item = await lastValueFrom(this.http.get<Item>(url).pipe(catchError(() => [DefaultItem]), timeout(this.dataTimeout)));
     return item;
   }
 
@@ -124,14 +110,7 @@ export class PokemonService
   {
     let ability: Ability = <Ability>{}
     let url = this.apiUrl + 'ability/name/' + name;
-    try
-    {
-      ability = await lastValueFrom(this.http.get<Ability>(url).pipe(catchError(() => [defaultAbility]), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    ability = await lastValueFrom(this.http.get<Ability>(url).pipe(catchError(() => [defaultAbility]), timeout(this.dataTimeout)));
     return ability; 
   }
 
@@ -139,14 +118,7 @@ export class PokemonService
   {
     let nature: Nature = <Nature>{}
     let url = this.apiUrl + 'nature/name/' + name;
-    try
-    {
-      nature = await lastValueFrom(this.http.get<Nature>(url).pipe(catchError(() => [defaultNature]), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    nature = await lastValueFrom(this.http.get<Nature>(url).pipe(catchError(() => [defaultNature]), timeout(this.dataTimeout)));
     return nature;
   }
 
@@ -164,14 +136,7 @@ export class PokemonService
   {
     let move: Move = <Move>{}
     let url = this.apiUrl + 'move/' + name;
-    try
-    {
-      move = await lastValueFrom(this.http.get<Move>(url).pipe(catchError(() => [defaultMove]), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    move = await lastValueFrom(this.http.get<Move>(url).pipe(catchError(() => [defaultMove]), timeout(this.dataTimeout)));
     return move;
   }
 
@@ -180,14 +145,7 @@ export class PokemonService
     let type: TypeWithEffectiveness = <TypeWithEffectiveness>{};
     let url = this.apiUrl + 'type/' + (teratype ? 'teratype/' : '') + typeName;
     this.http.get<TypeWithEffectiveness>(url).subscribe
-    try
-    {
-      type = await lastValueFrom(this.http.get<TypeWithEffectiveness>(url).pipe(catchError(() => [defaultTypeWithEffectiveness]), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    type = await lastValueFrom(this.http.get<TypeWithEffectiveness>(url).pipe(catchError(() => [defaultTypeWithEffectiveness]), timeout(this.dataTimeout)));
     return type;
   }
 
@@ -217,14 +175,7 @@ export class PokemonService
   {
     let statName: string = '';
     let url = this.apiUrl + 'stat/' + identifier;
-    try
-    {
-      statName = await lastValueFrom(this.http.get(url, {responseType: 'text'}).pipe(catchError(() => ["Not Found"]), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    statName = await lastValueFrom(this.http.get(url, {responseType: 'text'}).pipe(timeout(this.dataTimeout)));
     return statName;
   }
 
@@ -232,16 +183,8 @@ export class PokemonService
   {
     let pokemons: Tag[] = [];
     let url = this.apiUrl + 'pokemon/query';
-    try
-    {
-      let params = new HttpParams().set('key', key ?? "");
-      pokemons = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    let params = new HttpParams().set('key', key ?? "");
+    pokemons = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
     return pokemons; 
   }
 
@@ -249,16 +192,8 @@ export class PokemonService
   {
     let moves: Tag[] = [];
     let url = this.apiUrl + 'move/query';
-    try
-    {
-      let params = new HttpParams().set('key', key ?? "");
-      moves = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    let params = new HttpParams().set('key', key ?? "");
+    moves = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
     return moves; 
   }
 
@@ -266,16 +201,8 @@ export class PokemonService
   {
     let items: Tag[] = [];
     let url = this.apiUrl + 'item/query';
-    try
-    {
-      let params = new HttpParams().set('key', key ?? "");
-      items = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    let params = new HttpParams().set('key', key ?? "");
+    items = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
     return items; 
   }
 
@@ -283,47 +210,22 @@ export class PokemonService
   {
     let abilities: Tag[] = [];
     let url = this.apiUrl + 'ability/query';
-    try
-    {
-      let params = new HttpParams().set('key', key ?? "");
-      abilities = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    let params = new HttpParams().set('key', key ?? "");
+    abilities = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
     return abilities; 
   }
   async getAllAbilities() : Promise<Tag[]>
   {
     let abilities: Tag[] = [];
     let url = this.apiUrl + 'ability/all';
-    try
-    {
-      abilities = await lastValueFrom(this.http.get<Tag[]>(url)
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    abilities = await lastValueFrom(this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout)));
     return abilities; 
   }
   async getPokemonAbilities(id: number) : Promise<Tag[]>
   {
-    console.log(id)
     let types: Tag[] = [];
     let url = this.apiUrl + 'ability/pokemon/' + id;
-    try
-    {
-      types = await lastValueFrom(this.http.get<Tag[]>(url)
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    types = await lastValueFrom(this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout)));
     console.log(types)
     return types; 
   }
@@ -333,31 +235,15 @@ export class PokemonService
   {
     let natures: Tag[] = [];
     let url = this.apiUrl + 'nature/query';
-    try
-    {
-      let params = new HttpParams().set('key', key ?? "");
-      natures = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    let params = new HttpParams().set('key', key ?? "");
+    natures = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
     return natures; 
   }
   async getAllNatures() : Promise<Nature[]>
   {
     let regulations: Nature[] = [];
     let url = this.apiUrl + 'nature/all';
-    try
-    {
-      regulations = await lastValueFrom(this.http.get<Nature[]>(url)
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    regulations = await lastValueFrom(this.http.get<Nature[]>(url).pipe(timeout(this.dataTimeout)));
     return regulations; 
   }
 
@@ -365,31 +251,15 @@ export class PokemonService
   {
     let teraTypes: Tag[] = [];
     let url = this.apiUrl + 'type/teratype/query';
-    try
-    {
-      let params = new HttpParams().set('key', key ?? "");
-      teraTypes = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    let params = new HttpParams().set('key', key ?? "");
+    teraTypes = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
     return teraTypes; 
   }
   async getAllTeraTypes() : Promise<Type[]>
   {
     let types: Type[] = [];
     let url = this.apiUrl + 'type/teratype/all';
-    try
-    {
-      types = await lastValueFrom(this.http.get<Type[]>(url)
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    types = await lastValueFrom(this.http.get<Type[]>(url).pipe(timeout(this.dataTimeout)));
     return types; 
   }
 } 

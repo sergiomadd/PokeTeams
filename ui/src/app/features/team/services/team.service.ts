@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { catchError, lastValueFrom, Observable, timeout } from 'rxjs';
+import { lastValueFrom, Observable, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { authActions } from '../../../auth/store/auth.actions';
 import { TeamId } from '../../../models/DTOs/teamId.dto';
@@ -49,98 +49,48 @@ export class TeamService
   {
     let response: TeamSaveResponse = <TeamSaveResponse>{};
     let url = this.apiUrl + 'team';
-    try
-    {
-      response = await lastValueFrom(this.http.post<TeamSaveResponse>(url, team, {withCredentials: true})
-      .pipe(catchError(() => [response]), timeout(this.dataTimeout)));
-      this.store.dispatch(authActions.getLogged());
-    }
-    catch(error)
-    {
-      console.log("Error saving team in service: ", this.util.getErrorMessage(error));
-    }
+    response = await lastValueFrom(this.http.post<TeamSaveResponse>(url, team, {withCredentials: true}).pipe(timeout(this.dataTimeout)));
+    this.store.dispatch(authActions.getLogged());
     return response;
   }
   
   async incrementViewCount(teamKey: string)
   {
     let url = this.apiUrl + 'team/increment';
-    try
-    {
-      const data: TeamId = {id: teamKey}
-      this.http.post(url, data, this.httpOptionsString).subscribe();
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-      return this.util.getErrorMessage(error);
-    }
+    const data: TeamId = {id: teamKey}
+    this.http.post(url, data, this.httpOptionsString).subscribe();
   }
 
   async deleteTeam(teamKey: string) : Promise<string | undefined>
   {
     let url = this.apiUrl + 'team/delete';
     let deleted: string | undefined = undefined;
-    try
-    {
-      const data: TeamId = {id: teamKey}
-      deleted = await lastValueFrom(this.http.post<string>(url, data, this.httpOptionsString)
-      .pipe(timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-      return this.util.getErrorMessage(error);
-    }
+    const data: TeamId = {id: teamKey}
+    deleted = await lastValueFrom(this.http.post<string>(url, data, this.httpOptionsString).pipe(timeout(this.dataTimeout)));
     this.store.dispatch(authActions.getLogged());
     return deleted;
   }
 
   searchTeams(searchQuery: SearchQueryDTO) : Observable<SearchQueryResponseDTO> | undefined
   {
-    let response: SearchQueryResponseDTO;
     let url = this.apiUrl + 'team/query';
-    try
-    {
-      return this.http.post<SearchQueryResponseDTO>(url, searchQuery)
-      .pipe(catchError(() => []), timeout(this.dataTimeout));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
-    return undefined; 
+    return this.http.post<SearchQueryResponseDTO>(url, searchQuery).pipe(timeout(this.dataTimeout));
   }
 
   async getTournamentByName(name: string) : Promise<Tournament>
   {
     let tournament: Tournament = <Tournament>{}
     let url = this.apiUrl + 'Tournament/' + name;
-    try
-    {
-      tournament = await lastValueFrom(this.http.get<Tournament>(url).pipe(catchError(() => [tournament]), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
-    return this.util.toCamelCase(tournament); 
+    tournament = await lastValueFrom(this.http.get<Tournament>(url).pipe(timeout(this.dataTimeout)));
+    return tournament; 
   }
 
   async queryTournamentsByName(key: string) : Promise<Tag[]>
   {
     let tournaments: Tag[] = [];
     let url = this.apiUrl + 'tournament/query';
-    try
-    {
-      let params = new HttpParams().set('key', key ?? "");
-      tournaments = await lastValueFrom(this.http.get<Tag[]>(url, {params: params})
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    let params = new HttpParams().set('key', key ?? "");
+    tournaments = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
     return tournaments;
   }
 
@@ -148,15 +98,7 @@ export class TeamService
   {
     let regulations: Regulation[] = [];
     let url = this.apiUrl + 'regulation/all';
-    try
-    {
-      regulations = await lastValueFrom(this.http.get<Regulation[]>(url)
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    regulations = await lastValueFrom(this.http.get<Regulation[]>(url).pipe(timeout(this.dataTimeout)));
     return regulations; 
   }
 
@@ -164,14 +106,8 @@ export class TeamService
   {
     let regulation: Regulation = <Regulation>{}
     let url = this.apiUrl + 'Regulation/' + identifier;
-    try
-    {
-      regulation = await lastValueFrom(this.http.get<Regulation>(url).pipe(catchError(() => [regulation]), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    regulation = await lastValueFrom(this.http.get<Regulation>(url).pipe(timeout(this.dataTimeout)));
+
     return this.util.toCamelCase(regulation); 
   }
 
@@ -179,15 +115,7 @@ export class TeamService
   {
     let tags: Tag[] = [];
     let url = this.apiUrl + 'tag/all';
-    try
-    {
-      tags = await lastValueFrom(this.http.get<Tag[]>(url)
-      .pipe(catchError(() => []), timeout(this.dataTimeout)));
-    }
-    catch(error)
-    {
-      console.log("Error: ", this.util.getErrorMessage(error));
-    }
+    tags = await lastValueFrom(this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout)));
     return tags; 
   }
 
@@ -203,7 +131,6 @@ export class TeamService
     catch(error)
     {
       available = false;
-      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return available;
   }
@@ -220,7 +147,6 @@ export class TeamService
     catch(error)
     {
       available = false;
-      console.log("Error: ", this.util.getErrorMessage(error));
     }
     return available;
   }

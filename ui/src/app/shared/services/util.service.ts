@@ -1,5 +1,4 @@
 
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Ability } from '../../features/pokemon/models/ability.model';
@@ -18,19 +17,6 @@ export class UtilService
 
 
   constructor() { }
-
-  getErrorMessage(error: unknown) 
-  {
-    if(error instanceof Error)
-    {
-      return error.message;
-    } 
-    if(error instanceof HttpErrorResponse)
-    {
-      return error.error;
-    } 
-    return error;
-  }
 
   toCamelCase(o) 
   {
