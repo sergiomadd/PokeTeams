@@ -45,7 +45,7 @@
             <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
             ? 'assets/visible.png' 
             : 'assets/visible-white.png'}}" alt="" class="icon">
-            {{team?.viewCount}}
+            {{team && team?.viewCount ? util.formatCount(team.viewCount) : team?.viewCount}}
           </div>
           <div class="detail">
             {{util.customFormatDate(team?.date!)}}
