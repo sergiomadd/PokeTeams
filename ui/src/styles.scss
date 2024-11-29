@@ -50,14 +50,13 @@ button
   padding: 0.4em;
   border: none;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.26);
-  transition: .4s;
+  transition: box-shadow .4s;
   display: flex;
   align-items: center;
   justify-content: center;
 
   &:hover
   {
-    transition: .4s;
     box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.26);
   }
 }
@@ -69,7 +68,7 @@ button
 
 .button
 {
-  background-color: var(--bg-color-1);
+  background-color: var(--bg-color-2);
   color: var(--text-color);
 }
 

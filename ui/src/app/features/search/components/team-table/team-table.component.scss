@@ -21,7 +21,7 @@
     {
       display: flex;
       gap: 0.4em;
-      border: 1px solid var(--text-color);
+      border: 1px solid var(--bg-color-3);
       border-radius: 10px;
       padding: 0.4em;
       cursor: pointer;
@@ -91,18 +91,15 @@
 
     .selected
     {
-      background-color: var(--text-color);
-      border-color: var(--bg-color-1);
+      background-color: var(--bg-color-2);
+      border-color: var(--text-color);
       color: var(--bg-color-1);
 
       .column-drawing
       {
-        border-color: var(--bg-color-1);
-
         .row-drawing
         {
-          background-color: var(--text-color);
-          border-color: var(--bg-color-1);
+          background-color: var(--bg-color-2);
         }
       }
     }
@@ -118,7 +115,6 @@
     align-items: center;
     gap: 1em;
     margin: auto;
-    transition: all ease 0.5s;
     width: 100%;
 
     .records
@@ -129,7 +125,6 @@
       align-items: center;
       justify-content: space-between;
       gap: 1em;
-      transition: all ease 0.5s;
     }
 
     .single
@@ -138,7 +133,7 @@
       .record
       {
         width: 100%;
-        transition: all ease 0.5s;
+        transition: width ease 0.5s;
       }
     }
 
@@ -148,7 +143,7 @@
       .record
       {
         width: 49%;
-        transition: all ease 0.5s;
+        transition: width ease 0.5s;
       }
     }
   }
