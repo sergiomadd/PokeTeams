@@ -118,9 +118,12 @@ export class TeamTableComponent
 
   pageChange($event, container)
   {
-    container.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
-    this.searchService.setQuerySelectedPage($event);
-    this.searchService.pageChangeSearch();
+    if(this.searchService.getCurrentPage() != $event)
+    {
+      container.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+      this.searchService.setQuerySelectedPage($event);
+      this.searchService.pageChangeSearch();
+    }
   }
 
   isInvalid(key: string) : boolean

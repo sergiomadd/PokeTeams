@@ -13,65 +13,65 @@
     > < </button>
     <div class="pages">
       <ng-container *ngIf="currentPage <= 3">
-        <div class="page" (click)="changePage(1)" [ngClass]="{selected: currentPage == 1}">
+        <button class="page" (click)="changePage(1)" [ngClass]="{selected: currentPage == 1}">
           1
-        </div>
+        </button>
         <ng-container *ngIf="totalPages > 1">
-          <div class="page" (click)="changePage(2)" [ngClass]="{selected: currentPage == 2}">
+          <button class="page" (click)="changePage(2)" [ngClass]="{selected: currentPage == 2}">
             2
-          </div>
+          </button>
         </ng-container>
         <ng-container *ngIf="totalPages > 2">
-          <div class="page" (click)="changePage(3)" [ngClass]="{selected: currentPage == 3}">
+          <button class="page" (click)="changePage(3)" [ngClass]="{selected: currentPage == 3}">
             3
-          </div>
+          </button>
         </ng-container>
         <ng-container *ngIf="totalPages > 3">
-          <div class="page" (click)="changePage(4)" [ngClass]="{selected: currentPage == 4}">
+          <button class="page" (click)="changePage(4)" [ngClass]="{selected: currentPage == 4}">
             4
-          </div>
+          </button>
         </ng-container>
         <ng-container *ngIf="totalPages > 4">
-          <div class="page" (click)="changePage(5)" [ngClass]="{selected: currentPage == 5}">
+          <button class="page" (click)="changePage(5)" [ngClass]="{selected: currentPage == 5}">
             5
-          </div>
+          </button>
         </ng-container>
       </ng-container>
       <ng-container *ngIf="currentPage > 3 && (currentPage <= totalPages - 3)">
-        <div class="page" 
+        <button class="page" 
         (click)="changePage(currentPage - 2)">
           {{currentPage - 2}}
-        </div>
-        <div class="page" 
+        </button>
+        <button class="page" 
         (click)="changePage(currentPage - 1)">
           {{currentPage - 1}}
-        </div>
-        <div class="page selected">
+        </button>
+        <button class="page selected">
           {{currentPage}}
-        </div>
-        <div class="page" (click)="changePage(currentPage + 1)">
+        </button>
+        <button class="page" (click)="changePage(currentPage + 1)">
           {{currentPage + 1}}
-        </div>
-        <div class="page" (click)="changePage(currentPage + 2)">
+        </button>
+        <button class="page" (click)="changePage(currentPage + 2)">
           {{currentPage + 2}}
-        </div>
+        </button>
       </ng-container>
       <ng-container *ngIf="currentPage > 3 && currentPage > totalPages - 3">
-        <div class="page" (click)="changePage(totalPages - 4)" [ngClass]="{selected: currentPage == totalPages - 4}">
+        <button class="page" (click)="changePage(totalPages - 4)" [ngClass]="{selected: currentPage == totalPages - 4}">
           {{totalPages - 4}}
-        </div>
-        <div class="page" (click)="changePage(totalPages - 3)" [ngClass]="{selected: currentPage == totalPages - 3}">
+        </button>
+        <button class="page" (click)="changePage(totalPages - 3)" [ngClass]="{selected: currentPage == totalPages - 3}">
           {{totalPages - 3}}
-        </div>
-        <div class="page" (click)="changePage(totalPages - 2)" [ngClass]="{selected: currentPage == totalPages - 2}">
+        </button>
+        <button class="page" (click)="changePage(totalPages - 2)" [ngClass]="{selected: currentPage == totalPages - 2}">
           {{totalPages - 2}}
-        </div>
-        <div class="page" (click)="changePage(totalPages - 1)" [ngClass]="{selected: currentPage == totalPages - 1}">
+        </button>
+        <button class="page" (click)="changePage(totalPages - 1)" [ngClass]="{selected: currentPage == totalPages - 1}">
           {{totalPages - 1}}
-        </div>
-        <div class="page" (click)="changePage(totalPages)" [ngClass]="{selected: currentPage == totalPages}">
+        </button>
+        <button class="page" (click)="changePage(totalPages)" [ngClass]="{selected: currentPage == totalPages}">
           {{totalPages}}
-        </div>
+        </button>
       </ng-container>
     </div>
     <button 

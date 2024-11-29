@@ -1,5 +1,4 @@
-$pageWidth: 1vw;
-$pagePadding: 0.4vw;
+
 
 .pagination
 {
@@ -7,44 +6,36 @@ $pagePadding: 0.4vw;
   width: fit-content;
   display: flex;
   align-items: center;
-  gap: 0.4vw;
+  gap: 0.4em;
 
   .pages
   {
     display: flex;
     justify-items: center;
-    gap: 0.4vw;
+    gap: 0.4em;
+  }
 
-    .page
-    {
-      text-align: center;
-      width: $pageWidth;
-      padding: $pagePadding;
-      border-radius: 5px;
-      background-color: var(--bg-color-2);
-      color: var(--text-color);
-      border: 1px solid black;
-      cursor: pointer;
-      user-select: none; 
-  
-      &:hover
-      {
-        opacity: 0.7;
-      }
-    }
+  .page
+  {
+    text-align: center;
+    width: 2.5em;
+    padding: 0.6em;
+    border-radius: 5px;
+    background-color: var(--bg-color-1);
+    color: var(--text-color);
+    border: 1px solid var(--bg-color-2);
+    cursor: pointer;
+    user-select: none; 
+  }
 
-    .selected
-    {
-      border: 1px solid var(--bg-color-3);
-      background-color: var(--bg-color-2);
-    }
+  .selected
+  {
+    border: 1px solid var(--text-color);
   }
 
   button:disabled 
   {
-    background-color: var(--bg-color-2) !important;
-    color: var(--text-color) !important;
-    border-color: var(--bg-color-3) !important;
+    opacity: 0.5;
     pointer-events: none;
   }
 
@@ -57,6 +48,6 @@ $pagePadding: 0.4vw;
     color: var(--text-color);
     border: 1px solid black;
     border-radius: 5px;
-    padding: $pagePadding;
+    padding: 0.6em;
   }
 }
