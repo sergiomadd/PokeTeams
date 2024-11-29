@@ -349,9 +349,9 @@
 </div>
 <app-dialog 
 [title]="'Are you sure you want to delete your account?'"
-[body]="'All your teams will be removed.'"
-[trueButtonText]="'Decline'"
-[falseButtonText]="'Accept'"
+[body]="'All your teams will be removed'"
+[trueButtonText]="'No'"
+[falseButtonText]="'Yes'"
 [visible]="deleteDialog"
 (choose)="chooseEvent($event)"
 *ngIf="deleteDialog"
