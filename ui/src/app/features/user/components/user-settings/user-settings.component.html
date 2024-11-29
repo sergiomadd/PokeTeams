@@ -91,7 +91,12 @@
         Profile Visibility
       </div>
       <div class="subtitle">
-        If private only you will be able to see your profile
+        <ng-container *ngIf="user?.visibility">
+          Public: anyone will be able to see your profile
+        </ng-container>
+        <ng-container *ngIf="!user?.visibility">
+          Private: only you will be able to see your profile
+        </ng-container>
       </div>
     </div>
     <div class="row s-gap relative">
