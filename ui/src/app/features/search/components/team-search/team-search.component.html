@@ -32,8 +32,17 @@
             (selectEvent)="tagSelectEvent($event)"
             class="item smart-input-wrapper"
             ></app-smart-input>
+            <app-smart-input
+            #tagInput
+            [label]="'Tag'"
+            [keepSelected]="false"
+            [getter]="queryService.queryTagCallback"
+            [allGetter]="queryService.tagAllCallback"
+            (selectEvent)="tagSelectEvent($event)"
+            class="item smart-input-wrapper"
+            ></app-smart-input>
           </div>
-          <div class="row">
+          <div class="row-center">
             <app-smart-input
             #pokemonInput
             [label]="'Pokemon'"

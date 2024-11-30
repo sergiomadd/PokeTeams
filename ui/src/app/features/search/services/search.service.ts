@@ -82,19 +82,16 @@ export class SearchService
       }
     ]
     this.setQueryTags(tags);
-    console.log("user only", this.query$.getValue())
     this.search(this.query$.getValue());
   }
   
   search(searchQuery: SearchQueryDTO)
   {
     this.setSearched(true);
-    console.log(searchQuery)
     this.teamService.searchTeams(searchQuery)?.subscribe(
       {
         next: (response: SearchQueryResponseDTO) => 
         {
-          console.log("Teams gotten: ", response.teams)
           this.setTeams(response.teams);
           this.setTotalTeams(response.totalTeams);
         },
