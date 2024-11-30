@@ -53,7 +53,7 @@
           <button (click)="copyPaste()" class="button tooltip-wrapper">
             <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
             ? 'assets/copy.png' 
-            : 'assets/copy-white.png'}}" alt="" class="icon">
+            : 'assets/copy-white.png'}}" alt="" class="icon">            
             <app-tooltip
             [text]="'Copy paste'"
             [side]="'top'"
@@ -62,7 +62,7 @@
           <button (click)="copyLink()" class="button tooltip-wrapper">
             <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
             ? 'assets/link.png' 
-            : 'assets/link-white.png'}}" alt="" class="icon">
+            : 'assets/link-white.png'}}" alt="" class="icon">            
             <app-tooltip
             [text]="'Copy link'"
             [side]="'top'"

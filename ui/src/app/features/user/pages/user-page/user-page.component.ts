@@ -28,7 +28,7 @@ export class UserPageComponent
   userTeams: TeamPreview[] = [];
   loading: boolean = false;
 
-  tabs: boolean[] = [false, true]
+  tabs: boolean[] = [true, false]
   country?: string;
   userPrivate: boolean = false;
 

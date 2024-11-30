@@ -33,7 +33,6 @@ export class MenuComponent
   {
     this.loggedUser$.subscribe(async value => 
     {
-      console.log("logged check")
       this.loggedUser = value;
     })
 

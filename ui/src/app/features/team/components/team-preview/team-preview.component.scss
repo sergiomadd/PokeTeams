@@ -6,14 +6,13 @@
   background-color: var(--bg-color-3);
   padding: 0.2em;
   border-radius: 5px;
+  gap: 0.2em;
   
   .top
   {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 0 0.2em 0;
-    padding-top: 0;
 
     .detail
     {
@@ -91,8 +90,8 @@
 
 .icon
 {
-  width: 1vw;
-  height: 1vw;
+  width: 1.5em;
+  height: 1.5em;
 }
 
 .unkownPlayer
