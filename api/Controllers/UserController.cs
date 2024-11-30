@@ -38,15 +38,31 @@ namespace api.Controllers
                 return NotFound("Couldn't find user");
             }
             User loggedUser = await _userManager.GetUserAsync(User);
-            if (!user.Visibility)
-            {
-                if (loggedUser == null || user.Id != loggedUser.Id)
-                {
-                    return Unauthorized("User is private");
-                }
-            }
-            UserDTO userDTO = await _userService.BuildUserDTO(user, user.Id == loggedUser.Id);
+            UserDTO userDTO = await _userService.BuildUserDTO(user, loggedUser != null ? user.Id == loggedUser.Id : false);
             return Ok(userDTO);
+        }
+
+        [HttpGet, Route("check/username/{userName}")]
+        public async Task<ActionResult> UserNameAvailable(string userName)
+        {
+            Printer.Log($"Checking availability of {userName}");
+            bool available = await _userService.UserNameAvailable(userName);
+            if (!available)
+            {
+                return BadRequest("Username already taken.");
+            }
+            return Ok();
+        }
+
+        [HttpGet, Route("check/email/{email}")]
+        public async Task<ActionResult> EmailAvailable(string email)
+        {
+            User user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                return BadRequest("Email already taken.");
+            }
+            return Ok();
         }
 
         [HttpGet, Route("query")]
@@ -88,7 +104,7 @@ namespace api.Controllers
         {
             List<TagDTO> countries = _userService.GetAllCountries();
             if (countries == null)
-                {
+            {
                 return NotFound("Couldn't query countries");
             }
             return Ok(countries);

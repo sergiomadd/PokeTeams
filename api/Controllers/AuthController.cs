@@ -460,32 +460,6 @@ namespace api.Controllers
             {
                 return NotFound("Couldn't find user");
             }
-
-            return Ok();
-        }
-
-        [AllowAnonymous]
-        [HttpGet, Route("check/username/{userName}")]
-        public async Task<ActionResult> UserNameAvailable(string userName)
-        {
-            Printer.Log($"Checking availability of {userName}");
-            bool available = await _userService.UserNameAvailable(userName);
-            if (!available)
-            {
-                return BadRequest("Username already taken.");
-            }
-            return Ok();
-        }
-
-        [AllowAnonymous]
-        [HttpGet, Route("check/email/{email}")]
-        public async Task<ActionResult> EmailAvailable(string email)
-        {
-            User user = await _userManager.FindByEmailAsync(email);
-            if (user != null)
-            {
-                return BadRequest("Email already taken.");
-            }
             return Ok();
         }
     }
