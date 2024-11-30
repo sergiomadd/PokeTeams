@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Gen9IconColors, Gen9IconColorsDark, Gen9IconColorsLight } from '../../features/pokemon/models/pokemonColors';
+import { Gen9IconColors, Gen9IconColorsDark, Gen9IconColorsLight, StatColor, StatColorDark } from '../../features/pokemon/models/pokemonColors';
 
 interface Theme
 {
@@ -173,5 +173,15 @@ export class ThemeService
     }
   }
 
-
+  getStatColor(identifier: string)
+  {
+    if(this.selectedTheme$?.getValue().name === "light")
+    {
+      return identifier ? StatColor[identifier] : "";
+    }
+    else
+    {
+      return identifier ? StatColorDark[identifier] : "";
+    }
+  }
 }

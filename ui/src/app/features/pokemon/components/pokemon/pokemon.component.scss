@@ -243,6 +243,7 @@ $padding: 0.2vw;
       height: inherit;
       display: flex;
       align-items: center;
+      justify-content: space-between;
 
       .name
       {
@@ -255,6 +256,8 @@ $padding: 0.2vw;
       {
         height: 1.5vh;
         display: flex;
+        justify-content: start;
+        width: 100%;
 
         .bar
         {
@@ -263,31 +266,14 @@ $padding: 0.2vw;
           transition: visibility 1s ease;
         }
 
-        .base
-        {
-
-        }
-
-        .ivs
-        {
-          background-color: lightblue;
-        }
-
         .evs
         {
-          background-color: gold;
           border-radius: 0 15px 15px 0;
-          border-radius: none;
-        }
-
-        .total
-        {
-          margin-left: $padding;
         }
         
         .maxed
         {
-          border: 0.4vh solid black;
+          border: 0.2em solid black;
         }
         
         .nature
@@ -315,6 +301,14 @@ $padding: 0.2vw;
             background-color: grey;
           }
         }
+      }
+
+      .total
+      {
+        display: flex;
+        justify-content: center;
+        width: 2vw;
+        margin-left: $padding;
       }
     }
   }

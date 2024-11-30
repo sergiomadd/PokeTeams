@@ -21,6 +21,29 @@ export enum PokeColor
     fairy = "#D685AD"
 }
 
+export enum PokeColorHsl
+{
+    //Type colors
+    normal = "hsl(59, 21%, 57%)",
+    fire = "hsl(26, 85%, 56%)",
+    water = "hsl(221, 82%, 66%)",
+    electric = "hsl(48, 93%, 57%)",
+    grass = "hsl(98, 52%, 54%)",
+    ice = "hsl(177, 47%, 72%)",
+    fighting = "hsl(2, 66%, 46%)",
+    poison = "hsl(301, 45%, 44%)",
+    ground = "hsl(43, 68%, 64%)",
+    flying = "hsl(256, 81%, 76%)",
+    psychic = "hsl(342, 93%, 65%)",
+    bug = "hsl(67, 75%, 41%)",
+    rock = "hsl(50, 54%, 46%)",
+    ghost = "hsl(266, 27%, 47%)",
+    dragon = "hsl(257, 97%, 60%)",
+    dark = "hsl(24, 23%, 36%)",
+    steel = "hsl(240, 19%, 76%)",
+    fairy = "hsl(330, 50%, 68%)"
+}
+
 export enum Gen9IconColors
 {
     normal = "hsl(120, 1%, 63%)",
@@ -68,47 +91,47 @@ export enum Gen9IconColorsLight
 export enum Gen9IconColorsDark
 {
     normal = "hsl(120, 1%, 43%)",
-    fire = "hsl(360, 69%, 33%)",
-    water = "hsl(214, 66%, 35%)",
-    electric = "hsl(46, 80%, 29%)",
-    grass = "hsl(109, 59%, 20%)",
+    fire = "hsl(360, 69%, 43%)",
+    water = "hsl(214, 66%, 40%)",
+    electric = "hsl(46, 80%, 40%)",
+    grass = "hsl(109, 59%, 30%)",
     ice = "hsl(192, 80%, 42%)",
-    fighting = "hsl(30, 80%, 30%)",
-    poison = "hsl(275, 57%, 33%)",
-    ground = "hsl(26, 63%, 15%)",
+    fighting = "hsl(30, 80%, 40%)",
+    poison = "hsl(275, 57%, 43%)",
+    ground = "hsl(26, 63%, 25%)",
     flying = "hsl(209, 67%, 52%)",
-    psychic = "hsl(341, 64%, 40%)",
-    bug = "hsl(67, 73%, 16%)",
+    psychic = "hsl(341, 64%, 50%)",
+    bug = "hsl(67, 73%, 26%)",
     rock = "hsl(52, 22%, 40%)",
-    ghost = "hsl(300, 27%, 15%)",
-    dragon = "hsl(233, 71%, 40%)",
-    dark = "hsl(7, 12%, 18%)",
+    ghost = "hsl(300, 27%, 25%)",
+    dragon = "hsl(233, 71%, 50%)",
+    dark = "hsl(7, 12%, 23%)",
     steel = "hsl(196, 38%, 35%)",
-    fairy = "hsl(300, 60%, 49%)"
+    fairy = "hsl(300, 60%, 44%)"
 }
 
-
-export enum PokeColorHsl
+export enum StatColor
 {
-    //Type colors
-    normal = "hsl(59, 21%, 57%)",
-    fire = "hsl(26, 85%, 56%)",
-    water = "hsl(221, 82%, 66%)",
-    electric = "hsl(48, 93%, 57%)",
-    grass = "hsl(98, 52%, 54%)",
-    ice = "hsl(177, 47%, 72%)",
-    fighting = "hsl(2, 66%, 46%)",
-    poison = "hsl(301, 45%, 44%)",
-    ground = "hsl(43, 68%, 64%)",
-    flying = "hsl(256, 81%, 76%)",
-    psychic = "hsl(342, 93%, 65%)",
-    bug = "hsl(67, 75%, 41%)",
-    rock = "hsl(50, 54%, 46%)",
-    ghost = "hsl(266, 27%, 47%)",
-    dragon = "hsl(257, 97%, 60%)",
-    dark = "hsl(24, 23%, 36%)",
-    steel = "hsl(240, 19%, 76%)",
-    fairy = "hsl(330, 50%, 68%)"
+    hp = "hsl(0, 100%, 50%)",
+    atk = "hsl(25, 86%, 56%)",
+    def = "hsl(48, 93%, 58%)",
+    spa = "hsl(222, 82%, 67%)",
+    spd = "hsl(100, 52%, 55%)",
+    spe = "hsl(342, 92%, 66%)",
+    iv = "hsl(195, 53%, 79%)",
+    ev = "hsl(239, 58%, 74%)"
+}
+
+export enum StatColorDark
+{
+    hp = "hsl(0, 100%, 40%)",
+    atk = "hsl(25, 86%, 46%)",
+    def = "hsl(48, 93%, 38%)",
+    spa = "hsl(222, 82%, 57%)",
+    spd = "hsl(100, 52%, 45%)",
+    spe = "hsl(342, 92%, 56%)",
+    iv = "hsl(195, 53%, 59%)",
+    ev = "hsl(239, 58%, 64%)"
 }
 
 export enum TagColor

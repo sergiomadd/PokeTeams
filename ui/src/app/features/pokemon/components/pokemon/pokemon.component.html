@@ -596,24 +596,27 @@
           <div class="no-pad section animated-border" (click)="clickSection(i, 'stat')" [ngClass]="{'poke-tooltip-selected':  tooltipStats[i]}">
             <div class="section-content stat poke-tooltip-wrapper ">
               <div class="poke-tooltip poke-tooltip-stat poke-tooltip-top" [ngClass]="{'poke-tooltip-visible':  tooltipStats[i]}">
-                <div class="head" [ngStyle]="{backgroundColor: util.getStatColor(stat)}">{{stat.name}}</div>
+                <div class="head" [ngStyle]="{backgroundColor: theme.getStatColor(stat.identifier)}">{{stat.name}}</div>
                 <div class="body row s-gap">
                   <div class="col">
                     <div class="item"></div>
                     <div class="item">Initial</div>
                     <div class="item"><span>LvL({{pokemon.level ?? 50}})</span></div>
                   </div>
-                  <div class="col"  [ngStyle]="{backgroundColor: util.getStatColor(stat)}">
+                  <div class="col" [ngStyle]="{backgroundColor: theme.getStatColor(stat.identifier)}">
                     <div class="item">Base</div>
                     <div class="item">{{stat.value}}</div>
                     <div class="item">{{calculatedStats.base[i]?.value}}</div>
                   </div>
-                  <div class="col ivs">
+                  <div class="col ivs" [ngStyle]="{backgroundColor: theme.getStatColor('iv')}">
                     <div class="item">IVs</div>
                     <div class="item">{{teamOptions?.showIVs ? pokemon.ivs ? pokemon.ivs[i].value : "??" : "??"}}</div>
                     <div class="item">{{teamOptions?.showIVs ? pokemon.ivs ? calculatedStats.ivs[i].value : "??" : "??"}}</div>
                   </div>
-                  <div class="col evs" [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}">
+                  <div class="col evs" 
+                  [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}"
+                  [ngStyle]="{backgroundColor: theme.getStatColor('ev')}"
+                  >
                     <div class="item">EVs</div>
                     <div class="item">{{teamOptions?.showEVs ? pokemon.evs ? pokemon.evs[i].value : "??" : "??"}}</div>
                     <div class="item">{{teamOptions?.showEVs ? pokemon.evs ? calculatedStats.evs[i].value : '??' : "??"}}</div>
@@ -654,14 +657,14 @@
               </div>
               <div class="name">
                 {{util.getStatName(stat)}}
-                </div>
+              </div>
               <div class="values">
                 <div 
-                class="base bar"
+                class="bar"
                 [ngStyle]="
                 {
                   width: getStatSize(calculatedStats.base[i].value),
-                  backgroundColor: util.getStatColor(stat),
+                  backgroundColor: theme.getStatColor(stat.identifier),
                   borderRadius: (teamOptions?.showIVs && pokemon.ivs ? (pokemon.ivs[i].value / 4) === 0 ? false : true : false)  ||
                    (teamOptions?.showEVs && pokemon.evs ? (pokemon.evs[i].value / 4) === 0 ? false : true : false) ? ('15px 0 0 15px') : '15px'
                 }"
@@ -669,10 +672,11 @@
                 </div>
                 <ng-container *ngIf="teamOptions?.showIVs">
                   <div 
-                  class="ivs bar"
+                  class="bar"
                   [ngStyle]="
                   {
                     width: pokemon.ivs ? getStatSize(calculatedStats.ivs[i].value) : 'none',
+                    backgroundColor: theme.getStatColor('iv'),
                     borderRadius: teamOptions?.showEVs && (pokemon.evs ? (pokemon.evs[i].value / 4) == 0 ? false : true : false) ? '0' : '0 15px 15px 0'
                   }"
                   >
@@ -680,14 +684,15 @@
                 </ng-container>
                 <ng-container *ngIf="teamOptions?.showEVs">
                   <div class="evs bar" 
-                  [ngStyle]="{width: pokemon.evs ? getStatSize(calculatedStats.evs[i].value) : 'none'}"
+                  [ngStyle]="
+                  {
+                    width: pokemon.evs ? getStatSize(calculatedStats.evs[i].value) : 'none',
+                    backgroundColor: theme.getStatColor('ev'),
+                  }"
                   [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}"
                   >
                   </div>
                 </ng-container>
-                <div class="total">
-                  {{calculatedStats.total[i].value}}
-                </div>
                 <ng-container *ngIf="teamOptions?.showNature">
                   <ng-container *ngIf="!(stat.identifier===pokemon.nature?.increasedStat?.identifier
                   && stat.identifier===pokemon.nature?.decreasedStat?.identifier); else neutral">
@@ -708,6 +713,9 @@
                     </div>
                   </ng-template>
                 </ng-container>
+              </div>
+              <div class="total">
+                {{calculatedStats.total[i].value}}
               </div>
             </div>
           </div>
