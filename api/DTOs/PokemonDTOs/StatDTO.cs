@@ -7,7 +7,7 @@
         public int? Value { get; set; }
         public StatDTO(string? identifier, string? name, int? value)
         {
-            Identifier = identifier != null ? StatIdentifierConverter[identifier] : identifier;
+            Identifier = identifier != null && StatIdentifierConverter.ContainsKey(identifier) ? StatIdentifierConverter[identifier] : identifier;
             Name = name;
             Value = value;
         }
