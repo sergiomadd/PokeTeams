@@ -47,7 +47,8 @@ namespace api.Services
                     tag.Name, 
                     tag.Identifier, 
                     description: tag.Description,
-                    color: tag.Color
+                    color: tag.Color,
+                    type: "tag"
                     ));
             }
             return tagDTOs;

@@ -382,6 +382,9 @@ namespace api.Services
                             case "regulation":
                                 teams.AddRange(FilterTeamsByRegulation(teams, query.Name));
                                 break;
+                            case "tag":
+                                teams.AddRange(FilterTeamsByTag(teams, query.Name));
+                                break;
                             case "pokemon":
                                 teams.AddRange(FilterTeamsByPokemons(teams, query.Identifier));
                                 break;
@@ -407,6 +410,9 @@ namespace api.Services
                                 break;
                             case "regulation":
                                 teams = FilterTeamsByRegulation(teams, query.Name);
+                                break;
+                            case "tag":
+                                teams = FilterTeamsByTag(teams, query.Name);
                                 break;
                             case "pokemon":
                                 teams = FilterTeamsByPokemons(teams, query.Identifier);
@@ -542,6 +548,30 @@ namespace api.Services
                 else
                 {
                     inteams = inteams.Where(t => t.Regulation == regulationIdentifier).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Printer.Log(ex.ToString());
+            }
+            return inteams;
+        }
+
+        public List<Team> FilterTeamsByTag(List<Team> inteams, string tagName)
+        {
+            try
+            {
+                if (inteams.Count == 0)
+                {
+                    inteams = _pokeTeamContext.Team
+                        .Include(t => t.Pokemons)
+                        .Include(t => t.Tags)
+                        .Include(t => t.Tournament)
+                        .Where(t => t.Tags.Any(t => t.Name == tagName)).ToList();
+                }
+                else
+                {
+                    inteams = inteams.Where(t => t.Tags.Any(t => t.Name == tagName)).ToList();
                 }
             }
             catch (Exception ex)
