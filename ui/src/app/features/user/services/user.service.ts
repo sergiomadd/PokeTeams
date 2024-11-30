@@ -2,7 +2,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, lastValueFrom, Observable, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
-import { AuthResponseDTO } from '../../../auth/types/authResponse.dto';
 import { UtilService } from '../../../shared/services/util.service';
 import { Tag } from '../../team/models/tag.model';
 import { TeamService } from '../../team/services/team.service';
@@ -48,16 +47,13 @@ export class UserService
       );
   }
   
-  async checkUserNameAvailable(userName: string) : Promise<boolean>
+  checkUserNameAvailable(userName: string) : boolean
   {
-    let available: boolean = false;
-    let exists: AuthResponseDTO = <AuthResponseDTO>{};
-    let url = this.apiUrl + 'check/' + 'username/' + userName;
+    let available: boolean = true;
+    let url = this.apiUrl + 'check/' + 'email/' + userName;
     try
     {
-      const exists$ = this.http.get<AuthResponseDTO>(url);
-      exists = await lastValueFrom(exists$);
-      if(exists) {available = exists.success}
+      this.http.get(url).subscribe();
     }
     catch(error)
     {
@@ -68,14 +64,11 @@ export class UserService
 
   async checkEmailAvailable(email: string) : Promise<boolean>
   {
-    let available: boolean = false;
-    let exists: AuthResponseDTO = <AuthResponseDTO>{};
+    let available: boolean = true;
     let url = this.apiUrl + 'check/' + 'email/' + email;
     try
     {
-      const exists$ = this.http.get<AuthResponseDTO>(url);
-      exists = await lastValueFrom(exists$);
-      if(exists) {available = exists.success}
+      this.http.get(url).subscribe();
     }
     catch(error)
     {
