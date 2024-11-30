@@ -104,23 +104,40 @@
       </ng-container>
       <div class="item options">
         <div 
-        class="section animated-border"
+        class="section"
         (click)="triggerStats()"
-        [ngClass]="{'poke-tooltip-selected': showStats[0]}"
+        [ngClass]="
+        {
+          'poke-tooltip-selected': pokemon.stats.length > 0 && showStats[0],
+          'option-disabled': pokemon.stats.length <= 0,
+          'animated-border': pokemon.stats.length > 0
+        }"
         >
           <div class="section-content option poke-tooltip-wrapper">
             <div class="poke-tooltip poke-tooltip-top">
               <div class="one-piece">
-                <span class="one-line">Show stats</span>
+                <span class="one-line">
+                  <ng-container *ngIf="pokemon.stats.length > 0; else nostats">
+                    Show stats
+                  </ng-container>
+                  <ng-template #nostats>
+                    No pokemon
+                  </ng-template>
+                </span>
               </div>
             </div>
             <img src="assets/align-left.png" alt="" class="icon">
           </div>
         </div>
         <div 
-        class="section animated-border" 
+        class="section" 
         (click)="triggerNotes()"
-        [ngClass]="{'poke-tooltip-selected': showNotes[0], 'option-disabled': !pokemon.notes}"
+        [ngClass]="
+        {
+          'poke-tooltip-selected': showNotes[0],
+          'option-disabled': !pokemon.notes && !editorPreview,
+          'animated-border': pokemon.notes || editorPreview
+        }"
         >
           <div 
           class="section-content option poke-tooltip-wrapper"
@@ -128,7 +145,7 @@
             <div class="poke-tooltip poke-tooltip-top">
               <div class="one-piece">
                 <span class="one-line">
-                  <ng-container *ngIf="pokemon.notes; else nonotes">
+                  <ng-container *ngIf="pokemon.notes || editorPreview; else nonotes">
                     Show notes
                   </ng-container>
                   <ng-template #nonotes>
@@ -589,7 +606,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="showStats[0]; else empty">
+  <div *ngIf="showStats[0] && pokemon.stats.length > 0; else empty">
     <div class="stats">
       <ng-container *ngIf="pokemon.stats; else nostats">
         <ng-container *ngFor="let stat of pokemon.stats; index as i">
@@ -723,22 +740,10 @@
       </ng-container>
     </div>
   </div>
-  <ng-container *ngIf="showNotes[0]; else empty">
-    <ng-container *ngIf="editorPreview; else editableNotes">
-      <div class="notes-editor">
-        <textarea
-        class=" custom-scrollbar-dark" 
-        rows="5" 
-        formControlName="notes"
-        spellcheck="false"
-        ></textarea>
-      </div>
-    </ng-container>
-    <ng-template #editableNotes>
-      <div class="notes custom-scrollbar-dark">
-        {{pokemon.notes}}
-      </div>
-    </ng-template>
+  <ng-container *ngIf="showNotes[0] && !editorPreview">
+    <div class="notes custom-scrollbar-dark">
+      {{pokemon.notes}}
+    </div>
   </ng-container>
 </div>
 <ng-template #nostats class="center error">NO STATS FOUND</ng-template>

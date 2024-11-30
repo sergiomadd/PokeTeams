@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { ThemeService } from 'src/app/core/services/theme.service';
 import { Nature } from 'src/app/features/pokemon/models/nature.model';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
@@ -35,9 +35,8 @@ export class PokemonComponent
   @Input() teamOptions?: TeamOptions;
   @Input() showStatsStart?: boolean = false;
   @Input() editorPreview?: boolean = false;
+  @Output() triggerNotesEvent = new EventEmitter<boolean>()
   @Output() updateStats = new EventEmitter();
-
-  test: string = "test"
 
   pokemonSpritePath?: string = '';
   spriteCategory: number = 0;
@@ -70,7 +69,7 @@ export class PokemonComponent
   showNotes: boolean[] = [false]
   tooltipStats: boolean[] = [false, false, false, false, false, false]
 
-  constructor(private cdref: ChangeDetectorRef) 
+  constructor() 
   {
 
   }
@@ -103,16 +102,6 @@ export class PokemonComponent
     {
       this.showStats[0] = true;
     }
-    
-    
-    this.pokemon.notes = `
-    Lorem ipsum odor amet, consectetuer adipiscing elit. Est taciti etiam cursus rutrum cras tincidunt nostra curae. Consectetur bibendum parturient accumsan imperdiet augue fermentum dolor scelerisque. Faucibus rhoncus varius non convallis egestas ridiculus ornare consectetur curae. Ut fringilla inceptos taciti; consectetur egestas blandit. Euismod fames ridiculus iaculis amet mus himenaeos dignissim.
-
-Nulla morbi auctor platea tincidunt ut semper nam. Nisl donec auctor nulla fames tristique, nibh integer. Cubilia quisque tellus quam erat quam dolor nullam justo. Vestibulum tincidunt varius etiam faucibus varius dui dictum ullamcorper vulputate. Mauris aliquet conubia aliquet amet laoreet interdum habitant. Gravida amet suspendisse amet platea, egestas vulputate sapien. Vitae facilisis platea platea, nunc nostra laoreet. Tempus convallis condimentum fringilla; porta aptent commodo dictum.
-
-Nisi pharetra venenatis congue elit, dui nisi bibendum enim parturient. Praesent condimentum finibus sit; vulputate mus vulputate convallis vehicula. Id natoque vitae himenaeos montes torquent vitae. Ac purus laoreet facilisi lacus ultrices penatibus feugiat condimentum. Mi dignissim ultricies dapibus; nec nec habitant. Orci iaculis euismod tortor cras consequat penatibus. Ridiculus leo dictumst facilisis ipsum diam tristique porta diam per. Fermentum vivamus ultrices; eros magnis potenti tempus. Pharetra fusce elementum dignissim at auctor nec accumsan malesuada.
-    `
-    
   }
 
   async linkify()
@@ -228,13 +217,20 @@ Nisi pharetra venenatis congue elit, dui nisi bibendum enim parturient. Praesent
 
   triggerStats()
   {
-    if(this.showStats[0]) { this.tooltipStats = this.tooltipStats.fill(false); }
-    this.showStats[0] = !this.showStats[0];
+    if(this.pokemon.stats.length > 0)
+    {
+      if(this.showStats[0]) { this.tooltipStats = this.tooltipStats.fill(false); }
+      this.showStats[0] = !this.showStats[0];
+    }
   }
 
   triggerNotes()
   {
-    this.showNotes[0] = !this.showNotes[0];
+    if(this.pokemon.notes || this.editorPreview)
+    {
+      this.showNotes[0] = !this.showNotes[0];
+      this.triggerNotesEvent.emit(this.showNotes[0]);
+    }
   }
 
   closeAllTooltips()
@@ -248,6 +244,7 @@ Nisi pharetra venenatis congue elit, dui nisi bibendum enim parturient. Praesent
     this.showStats = this.showStats.fill(false);
     this.showNotes = this.showNotes.fill(false);
     this.tooltipStats = this.tooltipStats.fill(false);
+    this.triggerNotesEvent.emit(false);
   }
 
   copyPokemon()
