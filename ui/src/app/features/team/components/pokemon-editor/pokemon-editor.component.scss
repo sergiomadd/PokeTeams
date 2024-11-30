@@ -58,12 +58,11 @@
     .preview
     {
       width: fit-content;
-      height: fit-content;
+      height: 40vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-content: flex-start;
-      gap: 1vw;
+      justify-content: flex-start;
+      gap: 0.1em;
       position: relative;
 
       .delete
@@ -215,4 +214,17 @@
 .error
 {
   border: 1px solid red !important;
+}
+
+.notes-editor
+{
+  background-color: var(--bg-color-3);
+  height: 10em;
+  padding: 0.4em;
+
+  textarea
+  {
+    width: 100%;
+    height: 100%;
+  }
 }

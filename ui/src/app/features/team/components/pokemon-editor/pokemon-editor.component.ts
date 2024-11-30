@@ -33,9 +33,9 @@ export class PokemonEditorComponent
   pokemon: Pokemon = <Pokemon>{};
   selectedPokemonIndex: number = 0;
 
-  @ViewChild(PokemonComponent) pokemonPreviewComponent!: PokemonComponent;
+  @ViewChild(PokemonComponent) pokemonPreviewComponent?: PokemonComponent;
   allAbilities: boolean = false;
-
+  showNotes: boolean = false;
   pokemonFormSubmitted: boolean = false;
   pokemonForm = this.formBuilder.group(
     {
@@ -43,7 +43,8 @@ export class PokemonEditorComponent
       gender: [false],
       level: [50, [Validators.min(1), Validators.max(100)]],
       ivs: [0],
-      evs: [0]
+      evs: [0],
+      notes: [""]
     });
 
   emptyStat: Stat =   
@@ -171,6 +172,15 @@ export class PokemonEditorComponent
         this.calcEVSliderBackground(value, 0, this.currentMaxEVs);
       }
     });
+
+    this.pokemonForm.controls.notes.valueChanges.subscribe(value =>
+      {
+        if(value && this.pokemonForm.controls.notes.valid)
+        {
+          this.pokemon = { ...this.pokemon, notes: value }
+          this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+        }
+      })
   }
 
   selectPokemon(index: number)
@@ -243,7 +253,10 @@ export class PokemonEditorComponent
         preEvolution: data.preEvolution,
         stats: [...data.stats]
       };
-      this.pokemonPreviewComponent.showStats[0] = true;
+      if(this.pokemonPreviewComponent)
+      {
+        this.pokemonPreviewComponent.showStats[0] = true;
+      }
     }
     else
     {
@@ -258,7 +271,10 @@ export class PokemonEditorComponent
         preEvolution: undefined,
         stats: []
       }
-      this.pokemonPreviewComponent.showStats[0] = false;
+      if(this.pokemonPreviewComponent)
+      {
+        this.pokemonPreviewComponent.showStats[0] = false;
+      }
     }
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
@@ -342,15 +358,23 @@ export class PokemonEditorComponent
       this.currentIVs = 0;
       this.pokemonForm.controls.evs.setValue(this.pokemon.evs![index].value);
       this.currentEVs = 0;
-      this.pokemonPreviewComponent.showStats[0] = true;
+      if(this.pokemonPreviewComponent)
+      {
+        this.pokemonPreviewComponent.showStats[0] = true;
+      }
     }
     this.calcIVSliderBackground(this.pokemon.ivs[index].value, 0, 31);
     this.calcEVSliderBackground(this.pokemon.evs[index].value, 0, this.currentMaxEVs);
   }
 
+  triggerNotes($event)
+  {
+    this.showNotes = $event;
+  }
+
   isFormValid()
   {
-    return this.pokemonForm.valid
+    return this.pokemonForm.valid;
   }
 
   isInvalid(key: string) : boolean

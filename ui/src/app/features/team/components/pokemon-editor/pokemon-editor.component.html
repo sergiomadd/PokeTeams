@@ -232,12 +232,26 @@
         <div class="delete">
           <button (click)="deletePokemon()">X</button>
         </div>
-        <app-pokemon 
+        <app-pokemon
         [pokemon]="pokemon" 
         [teamOptions]="team?.options" 
         [showStatsStart]="true"
         [editorPreview] = "true"
+        (triggerNotesEvent)="triggerNotes($event)"
         ></app-pokemon>
+        <ng-container *ngIf="showNotes">
+          <form [formGroup]="pokemonForm" class="notes-editor">
+            <textarea
+            class="custom-scrollbar-dark" 
+            rows="5" 
+            formControlName="notes"
+            spellcheck="false"
+            value="pokemon.notes ?? ''"
+            [ngClass]="{controlInvalid: isInvalid('notes')}"
+            ></textarea>
+            <span *ngIf="isInvalid('notes')" class="formFeedbackError text-center">{{getError('notes')}}</span>
+          </form>
+        </ng-container>
       </div>
     </div>
   </ng-container>
