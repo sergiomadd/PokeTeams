@@ -135,26 +135,20 @@ export class UtilService
     };
   }
 
-  copyToClipboard(data: string)
+  copyToClipboard(text: string): boolean
   {
-    navigator.clipboard.writeText(data);
-  }
-  /*
-  copyTextToClipboard(text) 
-  {
-    if (!navigator.clipboard) {
-      fallbackCopyTextToClipboard(text);
-      return;
+    let copied: boolean = false;
+    if (!navigator.clipboard) 
+    {
+      return false;
     }
-    navigator.clipboard.writeText(text).then(function() 
+    navigator.clipboard.writeText(text).then(() =>
     {
-      console.log('Async: Copying to clipboard was successful!');
-    }, function(err) 
-    {
-      console.error('Async: Could not copy text: ', err);
+      copied = true;
     });
+    return true;
   }
-  */
+  
   /*
   fallbackCopyTextToClipboard(text) 
   {
@@ -180,6 +174,7 @@ export class UtilService
     document.body.removeChild(textArea);
   }
   */
+ 
   haveMinutesPassed(lastTime: number, minutesToPass: number) : boolean
   {
     const milisecondsToPass = minutesToPass * 60000;

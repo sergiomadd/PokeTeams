@@ -160,11 +160,24 @@
         <div 
         class="section animated-border" 
         (click)="copyPokemon()"
+        (mouseenter)="copyReset()"
         >
           <div class="section-content option poke-tooltip-wrapper">
             <div class="poke-tooltip poke-tooltip-top">
               <div class="one-piece">
-                <span class="one-line">Copy pokemon</span>
+                <span class="one-line">
+                  <ng-container *ngIf="copied != undefined; else copyUndefined">
+                    <ng-container *ngIf="copied; else copyError">
+                      Copied!
+                    </ng-container>
+                    <ng-template #copyError>
+                      Error copying
+                    </ng-template>
+                  </ng-container>
+                  <ng-template #copyUndefined>
+                    Copy pokemon
+                  </ng-template>
+                </span>
               </div>
             </div>
             <img src="assets/copy.png" alt="" class="icon">

@@ -42,6 +42,7 @@ export class PokemonComponent
   spriteCategory: number = 0;
   maleIconPath: string = '';
   femaleIconPath: string = '';
+  copied?: boolean;
 
   calculatedStats: CalculatedStats = 
   {
@@ -249,7 +250,19 @@ export class PokemonComponent
 
   copyPokemon()
   {
-    this.util.copyToClipboard(this.parser.reverseParsePokemon(this.pokemon));
+    if(this.util.copyToClipboard(this.parser.reverseParsePokemon(this.pokemon)))
+    {
+      this.copied = true;
+    }
+    else
+    {
+      this.copied = false;
+    }
+  }
+
+  copyReset()
+  {
+    if(this.copied != undefined) { this.copied = undefined }
   }
 
   formatItemProse(value: string | undefined) : string
