@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, Observable, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
-import { authActions } from '../../../auth/store/auth.actions';
 import { TeamId } from '../../../models/DTOs/teamId.dto';
 import { UtilService } from '../../../shared/services/util.service';
 import { SearchQueryDTO } from '../../search/models/searchQuery.dto';
@@ -50,7 +49,6 @@ export class TeamService
     let response: TeamSaveResponse = <TeamSaveResponse>{};
     let url = this.apiUrl + 'team';
     response = await lastValueFrom(this.http.post<TeamSaveResponse>(url, team, {withCredentials: true}).pipe(timeout(this.dataTimeout)));
-    this.store.dispatch(authActions.getLogged());
     return response;
   }
   
@@ -67,7 +65,6 @@ export class TeamService
     let deleted: string | undefined = undefined;
     const data: TeamId = {id: teamKey}
     deleted = await lastValueFrom(this.http.post<string>(url, data, this.httpOptionsString).pipe(timeout(this.dataTimeout)));
-    this.store.dispatch(authActions.getLogged());
     return deleted;
   }
 

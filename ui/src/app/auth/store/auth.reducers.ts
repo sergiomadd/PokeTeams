@@ -31,30 +31,6 @@ export const authReducers = createReducer(
       username: null,
       error: action.error
     })),
-  on(authActions.getLogged, (state) => (
-    {
-      ...state,
-      isSubmitting: true,
-      error: null,
-      success: false
-    })),
-  on(authActions.getLoggedSuccess, (state, action) => (
-    {
-      ...state,
-      username: action.authResponse.username,
-      accessToken: action.authResponse.accessToken,
-      refreshToken: action.authResponse.refreshToken,
-      isAuthenticated: true,
-      isSubmitting: false,
-      success: true
-    })),
-  on(authActions.getLoggedFailure, (state, action) => (
-    {
-      ...state,
-      isSubmitting: false,
-      username: null,
-      error: action.error
-    })),
   on(authActions.logIn, (state) => (
     {
       ...state,

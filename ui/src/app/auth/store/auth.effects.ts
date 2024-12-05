@@ -53,38 +53,6 @@ export class AuthEffects
       })
     )
   });
-
-  getLogged$ = createEffect(() =>
-  {
-    return this.actions$.pipe(
-      ofType(authActions.getLogged),
-      switchMap(() =>
-      {
-        return this.authService.getLogged().pipe(
-          switchMap(async (response: JWTResponse) =>
-          {
-            const authResponse: AuthResponseDTO = 
-            {
-              accessToken: response.accessToken,
-              refreshToken: response.refreshToken,
-              username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
-              success: true,
-              error: null
-            }
-            return authActions.getLoggedSuccess({authResponse});
-          }),
-          catchError((error: CustomError) => 
-          {
-            return of(authActions.getLoggedFailure(
-              {
-                error: error.message
-              }
-            ))
-          })
-        )
-      })
-    )
-  });
   
   logInEffect = createEffect(() =>
   {
