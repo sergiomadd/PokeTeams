@@ -1,11 +1,13 @@
 import { Component, ViewChild, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { selectToken } from 'src/app/auth/store/auth.selectors';
+import { Observable } from 'rxjs';
+import { selectUser } from 'src/app/auth/store/auth.selectors';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
+import { User } from 'src/app/features/user/models/user.model';
 import { UserPreview } from 'src/app/features/user/models/userPreview.model';
 import { UserService } from 'src/app/features/user/services/user.service';
 import { QueryService } from 'src/app/shared/services/query.service';
@@ -31,7 +33,9 @@ export class TeamEditorComponent
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
-  loggedUser$ = this.store.select(selectToken);
+  loggedUser$: Observable<User | null> = this.store.select(selectUser);
+  loggedUserTag?: Tag;
+
   team: Team = <Team>{};
   showTournamentEditor: boolean = false;
   showTagEditor: boolean = false;
@@ -44,40 +48,34 @@ export class TeamEditorComponent
     {
       this.team = value;
     });
+    this.loggedUser$.subscribe(value => 
+      {
+        if(value)
+        {
+          this.loggedUserTag = 
+          {
+            identifier: value.username,
+            name: value.username,
+            icon: value.picture
+          };
+          this.team.player = 
+          {
+            username: value.username,
+            picture: value.picture
+          };
+        }
+        else
+        {
+          this.loggedUserTag = undefined;
+          this.team.player = undefined;
+        }
+
+      })
   }
 
   ngOnDestroy()
   {
     this.reset();
-  }
-
-  async ngAfterContentInit()
-  {
-    /*
-    if(this.loggedUser$)
-    {
-      this.loggedUser$.subscribe
-      (
-        {
-          next: (value) => 
-          {
-            if(value)
-            {
-              this.team.player = 
-              {
-                username: value.username,
-                picture: value.picture
-              }
-            }
-            else
-            {
-              this.team.player = this.buildAnonPlayer();
-            }
-          }
-        }
-      )
-    }
-    */
   }
 
   buildAnonPlayer() : UserPreview

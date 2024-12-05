@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, inject, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { Tag } from 'src/app/features/team/models/tag.model';
-import { User } from 'src/app/features/user/models/user.model';
 
 @Component({
   selector: 'app-smart-input',
@@ -17,8 +15,8 @@ export class SmartInputComponent
 
   @Input() value?: Tag;
   @Input() label?: string;
-  @Input() logged$?: Observable<User | null | undefined>;
-  @Input() keepSelected?: boolean;
+  @Input() keepSelected?: boolean = false;
+  @Input() removeKeptSelected?: boolean = false;
   @Input() updateOnChange?: boolean;
   @Input() allowCustom?: boolean;
   @Input() allowNew?: boolean;
@@ -31,6 +29,7 @@ export class SmartInputComponent
   @Output() updateEvent = new EventEmitter<string>();
 
   @ViewChild('input') input!: ElementRef;
+
   searchForm = this.formBuilder.group(
   {
     key: [''],
@@ -47,32 +46,6 @@ export class SmartInputComponent
 
   async ngOnInit()
   {
-    if(this.logged$)
-    {
-      this.logged$.subscribe
-      (
-        {
-          next: (value) => 
-          {
-            if(value)
-            {
-              this.selected = 
-              {
-                name: value?.username ?? "",
-                identifier: "user",
-                icon: value?.picture
-              }
-              this.updateEvent.emit(this.selected.name);
-            }
-            else
-            {
-              this.selected = undefined
-              this.updateEvent.emit(undefined);
-            }
-          }
-        }
-      )
-    }
     if(this.allowCustom)
     {
       this.results[0] = 

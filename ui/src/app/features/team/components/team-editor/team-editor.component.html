@@ -2,16 +2,19 @@
   <div class="col-center s-gap">
     <div class="row">
       <div class="editor-input">
-        <div class="anon-warning tooltip-wrapper">
-          <div>!</div>
-          <app-tooltip
-          [text]="'You are not logged, the team wont be added to a user. Make sure to save the link!'"
-          [side]="'left'"
-          ></app-tooltip>
-        </div>
+        <ng-container *ngIf="!(loggedUser$ | async)">
+          <div class="anon-warning tooltip-wrapper">
+            <div>!</div>
+            <app-tooltip
+            [text]="'You are not logged, the team wont be added to a user. Make sure to save the link!'"
+            [side]="'left'"
+            ></app-tooltip>
+          </div>
+        </ng-container>
         <app-smart-input
         #userInput
         [label]="'Player'"
+        [value]="loggedUserTag"
         [updateOnChange]="true"
         (updateEvent)="playerUpdateEvent($event)"
         class="item smart-input-wrapper"
@@ -22,6 +25,7 @@
         #tournamentInput
         [label]="'Tournament'"
         [keepSelected]="true"
+        [removeKeptSelected]="true"
         [allowNew]="true"
         [getter]="queryService.queryTournamentCallback"
         (selectEvent)="tournamentSelectEvent($event)"
@@ -40,7 +44,6 @@
         #tagInput
         (disabled)="team?.tags ? team?.tags!.length > 2 : false"
         [label]="tagLabel"
-        [keepSelected]="false"
         [allowNew]="true"
         [getter]="queryService.queryTagCallback"
         [allGetter]="queryService.tagAllCallback"
