@@ -22,7 +22,7 @@ export class AuthService
   refreshTokens(tokens: JWTResponse) : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'refresh';
-    return this.http.post<JWTResponse>(url, tokens, {headers:{skip:"true"}, withCredentials: true});
+    return this.http.post<JWTResponse>(url, tokens, {withCredentials: true});
   }
 
   getLogged() : Observable<JWTResponse>
@@ -96,5 +96,17 @@ export class AuthService
   {
     let url = this.apiUrl + 'update/visibility';
     return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
+  }
+
+  verifyEmail(updateDTO: UserUpdateDTO) : Observable<JWTResponse>
+  {
+    let url = this.apiUrl + 'update/code';
+    return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
+  }
+
+  getEmailVerificationCode() : Observable<JWTResponse>
+  {
+    let url = this.apiUrl + 'code';
+    return this.http.get<JWTResponse>(url);
   }
 }

@@ -55,7 +55,10 @@ export const authActions = createActionGroup(
       "changeCountry failure": props<{error: string}>(),
       changeVisibility: props<{request: UserUpdateDTO}>(),
       "changeVisibility success": props<{authResponse: AuthResponseDTO}>(),
-      "changeVisibility failure": props<{error: string}>()
+      "changeVisibility failure": props<{error: string}>(),
+      sendVerification: emptyProps(),
+      "sendVerification success": emptyProps(),
+      "sendVerification failure": props<{error: string}>()
     },
   }
 )

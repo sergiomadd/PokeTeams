@@ -494,4 +494,28 @@ export class AuthEffects
       })
     )
   });
+
+  sendVerificationEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.sendVerification),
+      switchMap(() =>
+      {
+        return this.authService.getEmailVerificationCode().pipe(
+          map(() =>
+          {
+            return authActions.sendVerificationSuccess();
+          }),
+          catchError((error: CustomError) => 
+          {
+            return of(authActions.sendVerificationFailure(
+              {
+                error: error.message
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
 }

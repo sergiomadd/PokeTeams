@@ -298,4 +298,23 @@ export const authReducers = createReducer(
       isSubmitting: false,
       error: action.error
     })),
+  on(authActions.sendVerification, (state) => (
+    {
+      ...state,
+      isSubmitting: true,
+      error: null,
+      success: false
+    })),
+  on(authActions.sendVerificationSuccess, (state) => (
+    {
+      ...state,
+      isSubmitting: false,
+      success: true
+    })),
+  on(authActions.sendVerificationFailure, (state, action) => (
+    {
+      ...state,
+      isSubmitting: false,
+      error: action.error
+    })),
 )
