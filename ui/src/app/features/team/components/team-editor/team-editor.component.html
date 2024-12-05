@@ -2,7 +2,7 @@
   <div class="col-center s-gap">
     <div class="row">
       <div class="editor-input">
-        <ng-container *ngIf="!(loggedUser$ | async)">
+        <ng-container *ngIf="!(loggedUsername$ | async)">
           <div class="anon-warning tooltip-wrapper">
             <div>!</div>
             <app-tooltip

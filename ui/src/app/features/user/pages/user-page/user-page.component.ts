@@ -1,8 +1,8 @@
 import { Component, inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { selectUser } from 'src/app/auth/store/auth.selectors';
+import { lastValueFrom, Observable } from 'rxjs';
+import { selectUsername } from 'src/app/auth/store/auth.selectors';
 import { SearchService } from 'src/app/features/search/services/search.service';
 import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
 import { User } from '../../models/user.model';
@@ -28,11 +28,11 @@ export class UserPageComponent
   userTeams: TeamPreview[] = [];
   loading: boolean = false;
 
-  tabs: boolean[] = [true, false]
+  tabs: boolean[] = [false, true]
   country?: string;
   userPrivate: boolean = false;
 
-  loggedUser$: Observable<User | null> = this.store.select(selectUser);
+  loggedUsername$: Observable<string | null> = this.store.select(selectUsername);
   loggedUser: User | null = null;
 
   load()
@@ -57,9 +57,12 @@ export class UserPageComponent
         if(this.username)
         {
           this.loading = true;
-          this.loggedUser$.subscribe(value => 
+          this.loggedUsername$.subscribe(async value => 
             {
-              this.loggedUser = value;
+              if(value) 
+              {
+                this.loggedUser = await lastValueFrom(this.userService.getUser(value));
+              }
               this.load();
             })
           this.userService.getUser(this.username).subscribe(

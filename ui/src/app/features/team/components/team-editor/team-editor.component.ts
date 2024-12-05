@@ -1,13 +1,12 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { selectUser } from 'src/app/auth/store/auth.selectors';
+import { lastValueFrom, Observable } from 'rxjs';
+import { selectUsername } from 'src/app/auth/store/auth.selectors';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
-import { User } from 'src/app/features/user/models/user.model';
 import { UserPreview } from 'src/app/features/user/models/userPreview.model';
 import { UserService } from 'src/app/features/user/services/user.service';
 import { QueryService } from 'src/app/shared/services/query.service';
@@ -33,7 +32,7 @@ export class TeamEditorComponent
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
-  loggedUser$: Observable<User | null> = this.store.select(selectUser);
+  loggedUsername$: Observable<string | null> = this.store.select(selectUsername);
   loggedUserTag?: Tag;
 
   team: Team = <Team>{};
@@ -48,20 +47,21 @@ export class TeamEditorComponent
     {
       this.team = value;
     });
-    this.loggedUser$.subscribe(value => 
+    this.loggedUsername$.subscribe(async value => 
       {
         if(value)
         {
+          const loggedUser = await lastValueFrom(this.userService.getUser(value));
           this.loggedUserTag = 
           {
-            identifier: value.username,
-            name: value.username,
-            icon: value.picture
+            identifier: loggedUser.username,
+            name: loggedUser.username,
+            icon: loggedUser.picture
           };
           this.team.player = 
           {
-            username: value.username,
-            picture: value.picture
+            username: loggedUser.username,
+            picture: loggedUser.picture
           };
         }
         else
@@ -69,7 +69,6 @@ export class TeamEditorComponent
           this.loggedUserTag = undefined;
           this.team.player = undefined;
         }
-
       })
   }
 
