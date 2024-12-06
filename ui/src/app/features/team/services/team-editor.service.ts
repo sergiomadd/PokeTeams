@@ -138,27 +138,27 @@ export class TeamEditorService
         },
         {
           name: "Atk",
-          identifier: "attack",
+          identifier: "atk",
           value: 0
         },
         {
           name: "Def",
-          identifier: "defense",
+          identifier: "def",
           value: 0
         },
         {
           name: "SpA",
-          identifier: "special-attack",
+          identifier: "spa",
           value: 0
         },
         {
           name: "SpD",
-          identifier: "special-defense",
+          identifier: "spd",
           value: 0
         },
         {
           name: "Spe",
-          identifier: "speed",
+          identifier: "spe",
           value: 0
         }
       ],
@@ -171,27 +171,27 @@ export class TeamEditorService
         },
         {
           name: "Atk",
-          identifier: "attack",
+          identifier: "atk",
           value: 0
         },
         {
           name: "Def",
-          identifier: "defense",
+          identifier: "def",
           value: 0
         },
         {
           name: "SpA",
-          identifier: "special-attack",
+          identifier: "spa",
           value: 0
         },
         {
           name: "SpD",
-          identifier: "special-defense",
+          identifier: "spd",
           value: 0
         },
         {
           name: "Spe",
-          identifier: "speed",
+          identifier: "spe",
           value: 0
         }
       ],
