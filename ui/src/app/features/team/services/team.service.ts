@@ -44,12 +44,10 @@ export class TeamService
     //return this.util.toCamelCase(team); 
   }
 
-  async saveTeam(team: Team): Promise<TeamSaveResponse>
+  saveTeam(team: Team): Observable<TeamSaveResponse>
   {
-    let response: TeamSaveResponse = <TeamSaveResponse>{};
     let url = this.apiUrl + 'team';
-    response = await lastValueFrom(this.http.post<TeamSaveResponse>(url, team, {withCredentials: true}).pipe(timeout(this.dataTimeout)));
-    return response;
+    return this.http.post<TeamSaveResponse>(url, team, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
   
   async incrementViewCount(teamKey: string)

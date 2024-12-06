@@ -4,13 +4,20 @@
   </div>
   <app-input></app-input>
   <app-team-editor></app-team-editor>
-  <div class="col">
-    <span class="formFeedbackError text-center">{{feedback}}</span>
-    <div class="buttons">
+  <div class="col-center s-gap">
+    <div class="row relative">
       <button
       (click)="generateTeam()"
       class="generate button-primary-clear"
       >Generate Team</button>
+      <ng-container *ngIf="teamSubmitted">
+        <div class="spinner-wrapper">
+          <div class="pokemon-spinner"></div>
+        </div>
+      </ng-container>
     </div>
+    <ng-container *ngIf="feedback">
+      <span class="formFeedbackError text-center">{{feedback}}</span>
+    </ng-container>
   </div>
 </div>

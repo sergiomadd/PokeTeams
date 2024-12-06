@@ -6,8 +6,11 @@
   align-items: center;
   gap: 1em;
 
-  .buttons
+  .spinner-wrapper
   {
-    margin-bottom: 2vw;
+    width: 1.5em;
+    height: 1.5em;
+    position: absolute;
+    right: -1.8em;
   }
 }
