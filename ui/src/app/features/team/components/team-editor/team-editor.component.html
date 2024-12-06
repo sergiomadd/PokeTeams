@@ -15,6 +15,7 @@
         #userInput
         [label]="'Player'"
         [value]="loggedUserTag"
+        [disableRemove]="true"
         [updateOnChange]="true"
         (updateEvent)="playerUpdateEvent($event)"
         class="item smart-input-wrapper"
@@ -25,7 +26,6 @@
         #tournamentInput
         [label]="'Tournament'"
         [keepSelected]="true"
-        [removeKeptSelected]="true"
         [allowNew]="true"
         [getter]="queryService.queryTournamentCallback"
         (selectEvent)="tournamentSelectEvent($event)"

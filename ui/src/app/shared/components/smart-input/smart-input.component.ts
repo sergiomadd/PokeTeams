@@ -16,7 +16,7 @@ export class SmartInputComponent
   @Input() value?: Tag;
   @Input() label?: string;
   @Input() keepSelected?: boolean = false;
-  @Input() removeKeptSelected?: boolean = false;
+  @Input() disableRemove?: boolean = false;
   @Input() updateOnChange?: boolean;
   @Input() allowCustom?: boolean;
   @Input() allowNew?: boolean;

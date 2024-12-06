@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, Observable } from 'rxjs';
 import { selectUsername } from 'src/app/auth/store/auth.selectors';
+import { ThemeService } from 'src/app/core/services/theme.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
@@ -29,6 +30,7 @@ export class TeamEditorComponent
   router = inject(Router);
   queryService = inject(QueryService);
   teamEditorService = inject(TeamEditorService);
+  themeService = inject(ThemeService);
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
@@ -94,10 +96,11 @@ export class TeamEditorComponent
 
   playerUpdateEvent(event: string)
   {
-    if(this.team.player)
+    this.team.player = 
     {
-      this.team.player.username = event;
-    }
+      username: event,
+      picture: this.themeService.selectedTheme$?.getValue().name === 'light' ? "assets/anon.png" : "assets/anon-white.png"
+    };
   }
 
   async tournamentSelectEvent(event: Tag)
