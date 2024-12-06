@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using api.DTOs;
 using System.Text.Json;
+using Microsoft.AspNetCore.Identity;
 using api.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controllers
 {
@@ -32,11 +35,13 @@ namespace api.Controllers
             }
             return Ok(team);
         }
-        
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<string>> Post([FromBody] TeamDTO team)
         {
-            Printer.Log("User in team: ", User.Identity.Name);
+            Printer.Log("Saving team...");
             Team newTeam = await _teamService.SaveTeam(team, User.Identity.Name);
             if (newTeam == null)
             {
