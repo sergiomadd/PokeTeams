@@ -9,12 +9,13 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthModule } from './auth/auth.module';
-import { AuthService } from './auth/services/auth.service';
+import { AuthModule } from './core/auth/auth.module';
+import { AuthService } from './core/auth/services/auth.service';
 import { FooterComponent } from './core/layout/footer/footer.component';
 import { MenuComponent } from './core/layout/menu/menu.component';
 import { ErrorInterceptorService } from './core/services/error-interceptor.service';
 import { TokenInterceptorService } from './core/services/token-interceptor.service';
+import { metaReducers } from './core/store/app.state';
 import { EvolutionComponent } from './features/pokemon/components/evolution/evolution.component';
 import { PokemonPreviewComponent } from './features/pokemon/components/pokemon-preview/pokemon-preview.component';
 import { PokemonComponent } from './features/pokemon/components/pokemon/pokemon.component';
@@ -50,7 +51,6 @@ import { SmartInputComponent } from './shared/components/smart-input/smart-input
 import { SwitchComponent } from './shared/components/switch/switch.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
 import { LinkerPipe } from './shared/pipes/linker.pipe';
-import { metaReducers } from './store/app.state';
 
 @NgModule({
   declarations: [

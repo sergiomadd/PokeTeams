@@ -2,7 +2,7 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, Observable } from 'rxjs';
-import { selectUsername } from 'src/app/auth/store/auth.selectors';
+import { selectUsername } from 'src/app/core/auth/store/auth.selectors';
 import { ThemeService } from 'src/app/core/services/theme.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';

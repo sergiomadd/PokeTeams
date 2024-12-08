@@ -2,7 +2,7 @@ import { Component, inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, Observable } from 'rxjs';
-import { selectUsername } from 'src/app/auth/store/auth.selectors';
+import { selectUsername } from 'src/app/core/auth/store/auth.selectors';
 import { SearchService } from 'src/app/features/search/services/search.service';
 import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
 import { User } from '../../models/user.model';

@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
-import { selectToken } from 'src/app/auth/store/auth.selectors';
-import { JWTResponse } from 'src/app/auth/types/jwtResponse.dto';
-import { AppState } from 'src/app/store/app.state';
+import { selectToken } from 'src/app/core/auth/store/auth.selectors';
+import { JWTResponse } from 'src/app/core/auth/types/jwtResponse.dto';
+import { AppState } from 'src/app/core/store/app.state';
 
 @Injectable({
   providedIn: 'root'

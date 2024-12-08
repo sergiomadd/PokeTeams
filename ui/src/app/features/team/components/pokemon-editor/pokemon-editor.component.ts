@@ -7,7 +7,7 @@ import { PokemonService } from 'src/app/features/pokemon/services/pokemon.servic
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
-import { PokemonData } from 'src/app/models/DTOs/pokemonData.dto';
+import { PokemonData } from 'src/app/shared/DTOs/pokemonData.dto';
 import { QueryService } from 'src/app/shared/services/query.service';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { PokemonComponent } from '../../../pokemon/components/pokemon/pokemon.component';

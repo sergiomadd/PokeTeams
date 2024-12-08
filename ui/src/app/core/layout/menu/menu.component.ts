@@ -2,8 +2,8 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, Observable } from 'rxjs';
-import { authActions } from 'src/app/auth/store/auth.actions';
-import { selectUsername } from 'src/app/auth/store/auth.selectors';
+import { authActions } from 'src/app/core/auth/store/auth.actions';
+import { selectUsername } from 'src/app/core/auth/store/auth.selectors';
 import { ThemeService } from 'src/app/core/services/theme.service';
 import { User } from 'src/app/features/user/models/user.model';
 import { UserService } from 'src/app/features/user/services/user.service';
@@ -43,7 +43,7 @@ export class MenuComponent
       {
         this.selectedThemeName = value.name;
       });
-    //this.toggleTheme();
+    this.toggleTheme();
   }
 
   toggleMenu()

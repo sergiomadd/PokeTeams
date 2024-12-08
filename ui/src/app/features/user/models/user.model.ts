@@ -1,4 +1,4 @@
-import { Country } from "../../../models/DTOs/country.dto";
+import { Country } from "../../../shared/DTOs/country.dto";
 
 export interface User
 {
