@@ -107,7 +107,6 @@ export class ThemeService
 
   selectedTheme$?: BehaviorSubject<Theme>;
 
-
   constructor() 
   {
     this.selectedTheme$ = new BehaviorSubject<Theme>(this.themes[0]);
@@ -137,21 +136,31 @@ export class ThemeService
 
   tagBackgroundColors: string[] = 
   [
-    '#f44336', '#e81e63','#9c27b0','#673ab7',
-    '#3f51b5', '#2196f3','#03a9f4','#00bcd4',
-    '#009688', '#4caf50','#8bc34a','#cddc39',
-    '#ffeb3b', '#ffc107','#ff9800','#ff5722',
+    '#1f1723', '#3c2f52', '#8c7f90', '#bcb0b3',
+    '#e2e2e2', '#d86830', '#f09548', '#efd081',
+    '#b22741', '#f5464c', '#f79c88', '#4656a5',
+    '#4995f3', '#72deeb', '#3ec54b', '#b4e656',
+  ];
+
+  //white -> true
+  //black -> false
+  tagTextColors: boolean[] = 
+  [
+    true, true, true, false,
+    false, true, false, false,
+    true,  true, false, true,
+    true,  false, false, false,
   ];
 
   getTagTextColor(backgroundColor: string): string
   {
-    if(this.tagBackgroundColors.indexOf(backgroundColor) > 7)
+    if(this.tagTextColors[this.tagBackgroundColors.indexOf(backgroundColor)])
     {
-      return this.themes[0].colors['--text-color'];
+      return this.themes[1].colors['--text-color'];
     }
     else
     {
-      return this.themes[1].colors['--text-color'];
+      return this.themes[0].colors['--text-color'];
     }
   }
 

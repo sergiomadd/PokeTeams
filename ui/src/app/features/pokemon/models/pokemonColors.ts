@@ -133,13 +133,3 @@ export enum StatColorDark
     iv = "hsl(195, 53%, 59%)",
     ev = "hsl(239, 58%, 64%)"
 }
-
-export enum TagColor
-{
-    orange = "#FFA579",
-    lime = "#69E3AA",
-    purple = "#5E48BF",
-    pink = "#FFA8FD",
-    green = "#16CEA4",
-    yellow = "#F7D075",
-}
