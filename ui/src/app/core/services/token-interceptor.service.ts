@@ -1,5 +1,5 @@
 import { HttpEvent, HttpHandler, HttpRequest } from '@angular/common/http';
-import { inject, Injectable, Injector } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { authActions } from 'src/app/auth/store/auth.actions';
@@ -11,19 +11,13 @@ import { JwtTokenService } from './jwttoken.service';
 export class TokenInterceptorService 
 {
   jwtTokenService = inject(JwtTokenService);
-  injector = inject(Injector)
   store = inject(Store);
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> 
   {
-    const skipIntercept = request.headers.has('skip');
-    if (skipIntercept) 
+    if (request.url.includes("refresh")) 
     {
-        request = request.clone(
-          {
-            headers: request.headers.delete('skip')
-        });
-        return next.handle(request);
+      return next.handle(request);
     }
     const accessToken: string | null = this.jwtTokenService.getAccessToken();
     if(accessToken)
