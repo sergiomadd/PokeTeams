@@ -1,5 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { ThemeService } from 'src/app/core/services/theme.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { selectTheme } from 'src/app/core/config/store/config.selectors';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { QueryService } from '../../../../shared/services/query.service';
@@ -15,12 +17,15 @@ export class TeamSearchComponent
 {
   queryService = inject(QueryService);
   util = inject(UtilService);
-  theme = inject(ThemeService)
+  store = inject(Store)
   searchService = inject(SearchService);
 
   tags: Tag[] = [];
   unionType: SetOperation = SetOperation.intersection;
   unionTypeSettings: SetOperation[] = [SetOperation.intersection, SetOperation.union];
+
+  selectedTheme$: Observable<string> = this.store.select(selectTheme);
+  selectedThemeName?: string;
 
   search()
   {

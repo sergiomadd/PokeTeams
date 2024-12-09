@@ -1,35 +1,10 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Gen9IconColors, Gen9IconColorsDark, Gen9IconColorsLight, StatColor, StatColorDark } from '../../features/pokemon/models/pokemonColors';
-
-interface Theme
-{
-  name: string,
-  colors:
-  {
-    '--bg-color-1': string,
-    '--bg-color-2': string,
-    '--bg-color-3': string,
-    '--bg-color-reverse-1': string,
-    '--bg-color-reverse-2': string,
-    '--bg-color-reverse-3': string,
-    '--bg-color-tooltip': string,
-    '--primary-light': string,
-    '--primary': string,
-    '--primary-dark': string,
-    '--secondary-light': string,
-    '--secondary': string,
-    '--secondary-dark': string,
-    '--tertiary-light': string,
-    '--tertiary': string,
-    '--tertiary-dark': string,
-    '--text-color': string,
-    '--text-color-secondary': string,
-    '--text-color-highlight': string,
-    '--text-color-link': string,
-    '--text-color-reverse': string
-  }
-} 
+import { inject, Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable, of, throwError } from 'rxjs';
+import { Gen9IconColors, Gen9IconColorsDark, Gen9IconColorsLight, StatColor, StatColorDark } from '../../../features/pokemon/models/pokemonColors';
+import { Theme } from '../models/theme.model';
+import { configActions } from '../store/config.actions';
+import { selectTheme } from '../store/config.selectors';
 
 @Injectable({
   providedIn: 'root'
@@ -105,33 +80,60 @@ export class ThemeService
     }
   ]
 
-  selectedTheme$?: BehaviorSubject<Theme>;
+  store = inject(Store);
+  selectedTheme$: Observable<string> = this.store.select(selectTheme);
+  selectedTheme?: Theme;
 
-  constructor() 
+  ngOnInit()
   {
-    this.selectedTheme$ = new BehaviorSubject<Theme>(this.themes[0]);
-  }
-
-  changeTheme(themeName: string)
-  {
-    let theme: Theme = this.themes.find(t => t.name === themeName)!;
-    this.selectedTheme$?.next(theme);
-    this.properties.forEach(property => 
+    //probklema -> on init no se apply theme nunca
+    this.selectedTheme$.subscribe((value) =>
     {
-      document.documentElement.style.setProperty(property, theme.colors[property]);
+      console.log("Selected theme subscribe theme service ", value)
+      if(value)
+      {
+        this.selectedTheme = this.getTheme(value);
+      }
     })
   }
 
-  switchThemes()
+  getTheme(themeName: string) : Theme | undefined
   {
-    if(this.selectedTheme$?.getValue().name === "light")
+    return this.themes.find(t => t.name === themeName);
+  }
+
+  tryGetTheme(themeName: string) : Observable<Theme>
+  {
+    const gotTheme = this.getTheme(themeName);
+    if(gotTheme)
     {
-      this.changeTheme("dark");
+      return of(gotTheme);
+    }
+    return throwError(() => new Error("Error: theme not found"));
+  }
+
+  toggleTheme()
+  {
+    this.store.dispatch(configActions.toggleTheme({request: "dark"}))
+    /*
+    if(this.selectedTheme && this.selectedTheme.name === "light")
+    {
+      this.store.dispatch(configActions.toggleTheme({request: "dark"}))
     }
     else
     {
-      this.changeTheme("light");
+      this.store.dispatch(configActions.toggleTheme({request: "light"}))
     }
+    */
+  }
+
+  applyTheme(theme: Theme)
+  {
+    console.log("Aplaying theme ", this.selectedTheme)
+    this.properties.forEach(property => 
+      {
+        document.documentElement.style.setProperty(property, theme.colors[property]);
+      })
   }
 
   tagBackgroundColors: string[] = 
@@ -171,7 +173,7 @@ export class ThemeService
 
   getMoveColor(name?: string)
   {
-    if(this.selectedTheme$?.getValue().name === "light")
+    if(this.selectedTheme?.name === "light")
     {
       return name ? Gen9IconColorsLight[name.toLowerCase()] : "";
 
@@ -184,7 +186,7 @@ export class ThemeService
 
   getStatColor(identifier: string)
   {
-    if(this.selectedTheme$?.getValue().name === "light")
+    if(this.selectedTheme?.name === "light")
     {
       return identifier ? StatColor[identifier] : "";
     }

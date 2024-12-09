@@ -1,6 +1,8 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { ThemeService } from 'src/app/core/services/theme.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { selectTheme } from 'src/app/core/config/store/config.selectors';
 import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
 import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
 import { UtilService } from 'src/app/shared/services/util.service';
@@ -18,7 +20,7 @@ export class TeamTableComponent
   formBuilder = inject(FormBuilder);
   util = inject(UtilService);
   searchService = inject(SearchService);
-  theme = inject(ThemeService);
+  store = inject(Store);
 
   teams: TeamPreview[] = [];
   searched: boolean = false;
@@ -38,7 +40,9 @@ export class TeamTableComponent
     }, { updateOn: "blur" });
   @ViewChild(PaginationComponent) paginationComponent!: PaginationComponent;
 
-  
+  selectedTheme$: Observable<string> = this.store.select(selectTheme);
+  selectedThemeName?: string;
+
   async ngOnInit()
   {
     this.searchService.teams.subscribe((value: TeamPreview[]) =>

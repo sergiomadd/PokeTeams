@@ -1,5 +1,7 @@
 import { Component, inject, Input, QueryList, ViewChildren } from '@angular/core';
-import { ThemeService } from 'src/app/core/services/theme.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { selectTheme } from 'src/app/core/config/store/config.selectors';
 import { Layout } from 'src/app/features/search/models/layout.enum';
 import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
@@ -17,7 +19,7 @@ export class TeamPreviewComponent
   teamService = inject(TeamService);
   parser = inject(ParserService);
   util = inject(UtilService);
-  theme = inject(ThemeService);
+  store = inject(Store);
 
   @Input() team?: TeamPreview;
   teamID?: number;
@@ -28,9 +30,18 @@ export class TeamPreviewComponent
 
   feedback: string | undefined = undefined;
 
+  selectedTheme$: Observable<string> = this.store.select(selectTheme);
+  selectedThemeName?: string;
+
   ngOnInit()
   {
-    this.theme.selectedTheme$?.getValue().name
+    this.selectedTheme$.subscribe((value) =>
+    {
+      if(value)
+      {
+        this.selectedThemeName = value;
+      }
+    })
   }
 
   getVisibility()

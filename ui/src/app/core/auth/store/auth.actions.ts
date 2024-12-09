@@ -1,16 +1,9 @@
-import { createAction, createActionGroup, emptyProps, props } from "@ngrx/store";
+import { createActionGroup, emptyProps, props } from "@ngrx/store";
 import { AuthResponseDTO } from "src/app/core/auth/types/authResponse.dto";
 import { LogInDTO } from "src/app/shared/DTOs/login.dto";
 import { SignUpDTO } from "src/app/shared/DTOs/signup.dto";
 import { UserUpdateDTO } from "src/app/shared/DTOs/userUpdate.dto";
 import { JWTResponse } from "../types/jwtResponse.dto";
-
-export enum AuthActionTypes
-{
-  LOGIN = "[Auth] Login"
-}
-
-export const signUp = createAction(AuthActionTypes.LOGIN, props<{ request: LogInDTO }>());
 
 export const authActions = createActionGroup(
   {

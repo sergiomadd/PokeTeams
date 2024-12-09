@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { ThemeService } from 'src/app/core/services/theme.service';
+import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 
 @Component({

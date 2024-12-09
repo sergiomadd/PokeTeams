@@ -75,10 +75,10 @@
           <app-radio
           [options]="unionTypeSettings"
           [optionIcons]="[
-          (theme.selectedTheme$ | async)?.name === 'light' 
+          (selectedTheme$ | async) === 'light' 
           ? 'assets/intersection.png' 
           : 'assets/intersection-white.png',
-          (theme.selectedTheme$ | async)?.name === 'light' 
+          (selectedTheme$ | async) === 'light' 
           ? 'assets/union.png' 
           : 'assets/union-white.png']"
           [optionNames]="['intersection', 'union']"

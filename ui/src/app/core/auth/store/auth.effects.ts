@@ -6,7 +6,7 @@ import { AuthService } from "src/app/core/auth/services/auth.service";
 import { JwtTokenService } from "src/app/core/services/jwttoken.service";
 import { UserService } from "src/app/features/user/services/user.service";
 import { CustomError } from "src/app/shared/models/customError.model";
-import { LocalStorageService } from "../services/local-storage.service";
+import { LocalStorageService } from "../../services/local-storage.service";
 import { AuthResponseDTO } from "../types/authResponse.dto";
 import { JWTResponse } from "../types/jwtResponse.dto";
 import { authActions } from "./auth.actions";

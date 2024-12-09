@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ThemeService } from './core/services/theme.service';
 import { TeamService } from './features/team/services/team.service';
 
 @Component({
@@ -13,7 +12,6 @@ export class AppComponent
   title = 'ui';
   store = inject(Store);
   teamService = inject(TeamService);
-  themes = inject(ThemeService);
 
   menuOpen: boolean = false;
 
@@ -24,13 +22,11 @@ export class AppComponent
 
   ngOnInit()
   {
-    this.themes.changeTheme("light");
+    //this.store.dispatch(configActions.toggleTheme({request: "light"}))
   }
 
   toggleMenu()
   {
     this.menuOpen = !this.menuOpen;
   }
-
-
 }

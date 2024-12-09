@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
-import { ThemeService } from 'src/app/core/services/theme.service';
+import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { Nature } from 'src/app/features/pokemon/models/nature.model';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { Stat } from 'src/app/features/pokemon/models/stat.model';

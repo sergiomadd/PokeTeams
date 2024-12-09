@@ -6,7 +6,7 @@
         <div class="row-start s-gap wrap">
           <ng-container *ngIf="logged">
             <ng-container *ngIf="!team?.visibility">
-              <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+              <img src="{{(selectedTheme$ | async) === 'light' 
               ? 'assets/lock.png' 
               : 'assets/lock-white.png'}}" alt="" class="icon">
             </ng-container>
@@ -42,7 +42,7 @@
         </div>
         <div class="row-end s-gap">
           <div class="detail views">
-            <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+            <img src="{{(selectedTheme$ | async) === 'light' 
             ? 'assets/visible.png' 
             : 'assets/visible-white.png'}}" alt="" class="icon">
             {{team && team?.viewCount ? util.formatCount(team.viewCount) : team?.viewCount}}
@@ -51,7 +51,7 @@
             {{util.customFormatDate(team?.date!)}}
           </div>  
           <button (click)="copyPaste()" class="button tooltip-wrapper">
-            <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+            <img src="{{(selectedTheme$ | async) === 'light' 
             ? 'assets/copy.png' 
             : 'assets/copy-white.png'}}" alt="" class="icon">            
             <app-tooltip
@@ -60,7 +60,7 @@
             ></app-tooltip>
           </button>
           <button (click)="copyLink()" class="button tooltip-wrapper">
-            <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+            <img src="{{(selectedTheme$ | async) === 'light' 
             ? 'assets/link.png' 
             : 'assets/link-white.png'}}" alt="" class="icon">            
             <app-tooltip
@@ -70,7 +70,7 @@
           </button>
           <button class="button tooltip-wrapper">
             <a [routerLink]="['/', team?.id]" target="_blank" class="button">
-              <img src="{{(theme.selectedTheme$ | async)?.name === 'light' 
+              <img src="{{(selectedTheme$ | async) === 'light' 
               ? 'assets/external-link.png' 
               : 'assets/external-link-white.png'}}" alt="" class="icon">
             </a>

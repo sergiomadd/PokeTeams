@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, Observable } from 'rxjs';
 import { selectUsername } from 'src/app/core/auth/store/auth.selectors';
-import { ThemeService } from 'src/app/core/services/theme.service';
+import { selectTheme } from 'src/app/core/config/store/config.selectors';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
@@ -30,12 +30,14 @@ export class TeamEditorComponent
   router = inject(Router);
   queryService = inject(QueryService);
   teamEditorService = inject(TeamEditorService);
-  themeService = inject(ThemeService);
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
   loggedUsername$: Observable<string | null> = this.store.select(selectUsername);
   loggedUserTag?: Tag;
+
+  selectedTheme$: Observable<string> = this.store.select(selectTheme);
+  selectedThemeName?: string;
 
   team: Team = <Team>{};
   showTournamentEditor: boolean = false;
@@ -99,7 +101,7 @@ export class TeamEditorComponent
     this.team.player = 
     {
       username: event,
-      picture: this.themeService.selectedTheme$?.getValue().name === 'light' ? "assets/anon.png" : "assets/anon-white.png"
+      picture: this.selectedThemeName === 'light' ? "assets/anon.png" : "assets/anon-white.png"
     };
   }
 

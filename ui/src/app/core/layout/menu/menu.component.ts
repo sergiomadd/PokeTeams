@@ -4,9 +4,10 @@ import { Store } from '@ngrx/store';
 import { lastValueFrom, Observable } from 'rxjs';
 import { authActions } from 'src/app/core/auth/store/auth.actions';
 import { selectUsername } from 'src/app/core/auth/store/auth.selectors';
-import { ThemeService } from 'src/app/core/services/theme.service';
+import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { User } from 'src/app/features/user/models/user.model';
 import { UserService } from 'src/app/features/user/services/user.service';
+import { selectTheme } from '../../config/store/config.selectors';
 import { JwtTokenService } from '../../services/jwttoken.service';
 
 @Component({
@@ -21,13 +22,14 @@ export class MenuComponent
   themes = inject(ThemeService);
   jwtTokenService = inject(JwtTokenService)
   userService = inject(UserService);
+  themeService = inject(ThemeService);
 
   @Input() menuOpen: boolean = true;
   @Output() toggleEvent = new EventEmitter();
 
   loggedUsername$: Observable<string | null> = this.store.select(selectUsername);
   loggedUser: User | null = null;
-  selectedThemeName?: string;
+  selectedTheme$: Observable<string> = this.store.select(selectTheme);
 
   ngOnInit()
   {
@@ -38,12 +40,6 @@ export class MenuComponent
         this.loggedUser = await lastValueFrom(this.userService.getUser(value));
       }
     })
-
-    this.themes.selectedTheme$?.subscribe(value => 
-      {
-        this.selectedThemeName = value.name;
-      });
-    this.toggleTheme();
   }
 
   toggleMenu()
@@ -68,7 +64,7 @@ export class MenuComponent
 
   toggleTheme()
   {
-    this.themes.switchThemes();
+    this.themeService.toggleTheme();
   }
 
   toggleSettings()
