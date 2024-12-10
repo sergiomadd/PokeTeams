@@ -17,7 +17,7 @@ import { MenuComponent } from './core/layout/menu/menu.component';
 import { ErrorInterceptorService } from './core/services/error-interceptor.service';
 import { TokenInterceptorService } from './core/services/token-interceptor.service';
 import { metaReducers } from './core/store/app.state';
-import { InitEffects } from './core/store/hydration/init.effects';
+import { HydrationEffects } from './core/store/hydration/hydration.effects';
 import { EvolutionComponent } from './features/pokemon/components/evolution/evolution.component';
 import { PokemonPreviewComponent } from './features/pokemon/components/pokemon-preview/pokemon-preview.component';
 import { PokemonComponent } from './features/pokemon/components/pokemon/pokemon.component';
@@ -107,7 +107,7 @@ import { LinkerPipe } from './shared/pipes/linker.pipe';
     AuthModule,
     ConfigModule,
     StoreModule.forRoot({}, {metaReducers}),
-    EffectsModule.forRoot(InitEffects),
+    EffectsModule.forRoot(HydrationEffects),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       //logOnly: environment.production, // Restrict extension to log-only mode
