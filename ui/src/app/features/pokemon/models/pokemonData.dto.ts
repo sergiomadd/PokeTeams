@@ -1,7 +1,7 @@
-import { Pokemon } from "../../features/pokemon/models/pokemon.model"
-import { Sprite } from "../../features/pokemon/models/sprite.model"
-import { Stat } from "../../features/pokemon/models/stat.model"
-import { defaultTypesWithEffectiveness, TypesWithEffectiveness } from "../../features/pokemon/models/typeswitheffectiveness.model"
+import { Pokemon } from "./pokemon.model"
+import { Sprite } from "./sprite.model"
+import { Stat } from "./stat.model"
+import { defaultTypesWithEffectiveness, TypesWithEffectiveness } from "./typeswitheffectiveness.model"
 
 export interface PokemonData
 {

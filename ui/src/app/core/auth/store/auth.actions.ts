@@ -1,8 +1,8 @@
 import { createActionGroup, emptyProps, props } from "@ngrx/store";
 import { AuthResponseDTO } from "src/app/core/auth/types/authResponse.dto";
-import { LogInDTO } from "src/app/shared/DTOs/login.dto";
-import { SignUpDTO } from "src/app/shared/DTOs/signup.dto";
-import { UserUpdateDTO } from "src/app/shared/DTOs/userUpdate.dto";
+import { LogInDTO } from "src/app/features/user/models/login.dto";
+import { SignUpDTO } from "src/app/features/user/models/signup.dto";
+import { UserUpdateDTO } from "src/app/features/user/models/userUpdate.dto";
 import { JWTResponse } from "../types/jwtResponse.dto";
 
 export const authActions = createActionGroup(

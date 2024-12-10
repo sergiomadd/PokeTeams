@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TeamService } from '../../../features/team/services/team.service';
-import { LogInDTO } from '../../../shared/DTOs/login.dto';
-import { SignUpDTO } from '../../../shared/DTOs/signup.dto';
-import { UserUpdateDTO } from '../../../shared/DTOs/userUpdate.dto';
+import { LogInDTO } from '../../../features/user/models/login.dto';
+import { SignUpDTO } from '../../../features/user/models/signup.dto';
+import { UserUpdateDTO } from '../../../features/user/models/userUpdate.dto';
 import { AuthResponseDTO } from '../types/authResponse.dto';
 import { JWTResponse } from '../types/jwtResponse.dto';
 
@@ -98,13 +98,13 @@ export class AuthService
     return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
   }
 
-  verifyEmail(updateDTO: UserUpdateDTO) : Observable<JWTResponse>
+  confirmEmail(updateDTO: UserUpdateDTO) : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'update/code';
     return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
   }
 
-  getEmailVerificationCode() : Observable<JWTResponse>
+  getEmailConfirmationCode() : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'code';
     return this.http.get<JWTResponse>(url);

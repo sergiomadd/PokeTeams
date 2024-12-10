@@ -5,9 +5,9 @@ import { combineLatest } from 'rxjs';
 import { authActions } from 'src/app/core/auth/store/auth.actions';
 import { selectError, selectIsSubmitting } from 'src/app/core/auth/store/auth.selectors';
 import { AuthResponseDTO } from 'src/app/core/auth/types/authResponse.dto';
+import { LogInDTO } from 'src/app/features/user/models/login.dto';
+import { SignUpDTO } from 'src/app/features/user/models/signup.dto';
 import { UserService } from 'src/app/features/user/services/user.service';
-import { LogInDTO } from 'src/app/shared/DTOs/login.dto';
-import { SignUpDTO } from 'src/app/shared/DTOs/signup.dto';
 import { UtilService } from 'src/app/shared/services/util.service';
 
 

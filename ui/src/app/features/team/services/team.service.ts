@@ -3,13 +3,13 @@ import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, Observable, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
-import { TeamId } from '../../../shared/DTOs/teamId.dto';
 import { UtilService } from '../../../shared/services/util.service';
 import { SearchQueryDTO } from '../../search/models/searchQuery.dto';
 import { SearchQueryResponseDTO } from '../../search/models/searchQueryResponse.dto';
 import { Regulation } from '../models/regulation.model';
 import { Tag } from '../models/tag.model';
 import { Team } from '../models/team.model';
+import { TeamId } from '../models/teamId.dto';
 import { TeamSaveResponse } from '../models/teamSaveResponse.model';
 import { Tournament } from '../models/tournament.model';
 
