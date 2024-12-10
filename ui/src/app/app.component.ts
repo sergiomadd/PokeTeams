@@ -20,11 +20,6 @@ export class AppComponent
 
   }
 
-  ngOnInit()
-  {
-    //this.store.dispatch(configActions.toggleTheme({request: "light"}))
-  }
-
   toggleMenu()
   {
     this.menuOpen = !this.menuOpen;

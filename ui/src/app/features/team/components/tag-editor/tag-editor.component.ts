@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, inject, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { ThemeService } from 'src/app/core/services/theme.service';
+import { tagBackgroundColors } from 'src/app/core/config/models/tagColors.model';
+import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
 import { UtilService } from 'src/app/shared/services/util.service';
@@ -40,9 +41,11 @@ export class TagEditorComponent
   };
 
   colorPickerOpen: boolean = false;
+  tagBackgroundColors = tagBackgroundColors;
 
   ngOnInit()
   {
+
   }
 
   async ngAfterContentInit()
@@ -75,7 +78,7 @@ export class TagEditorComponent
       name: this.form.controls.name.value ?? "",
       identifier: "",
       description: this.form.controls.desc.value ?? "",
-      color: this.form.controls.color.value ?? this.themeService.tagBackgroundColors[0]
+      color: this.form.controls.color.value ?? this.tagBackgroundColors[0]
     };
     this.form.controls.name.setValue("");
     this.form.controls.name.markAsUntouched();
@@ -85,7 +88,7 @@ export class TagEditorComponent
     this.form.controls.desc.markAsUntouched();
     this.form.controls.desc.markAsPristine();
 
-    this.form.controls.color.setValue(this.themeService.tagBackgroundColors[0]);
+    this.form.controls.color.setValue(this.tagBackgroundColors[0]);
     this.colorPickerOpen = false;
 
     this.formSubmitted = false;

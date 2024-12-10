@@ -26,8 +26,7 @@ export class ConfigEffects
           }),
           catchError((error) => 
           {
-            console.log(error)
-            console.log("Error toggleling themes")
+            console.log("Error toggleling theme: ", error)
             return of(configActions.toggleThemeFailure(
               {
                 error: error.message
