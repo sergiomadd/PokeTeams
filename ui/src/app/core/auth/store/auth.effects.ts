@@ -119,29 +119,6 @@ export class AuthEffects
     )
   });
   
-  //use this for team generating
-  redirectAfterSignUpEffect = createEffect(() => 
-  {
-    return this.actions$.pipe(
-      ofType(authActions.signUpSuccess),
-      tap(() => 
-      {
-        window.location.reload();
-      })
-    )
-  },{ dispatch: false });
-  
-  redirectAfterLogInEffect = createEffect(() => 
-  {
-    return this.actions$.pipe(
-      ofType(authActions.logInSuccess),
-      tap(() => 
-      {
-        //window.location.reload();
-      })
-    )
-  },{dispatch: false});
-  
   logOutEffect = createEffect(() =>
   {
     return this.actions$.pipe(
@@ -214,7 +191,7 @@ export class AuthEffects
             const authResponse: AuthResponseDTO = 
             {
               accessToken: response.accessToken,
-              refreshToken: response.refreshToken,
+              refreshToken: null,
               username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
@@ -246,7 +223,7 @@ export class AuthEffects
             const authResponse: AuthResponseDTO = 
             {
               accessToken: response.accessToken,
-              refreshToken: response.refreshToken,
+              refreshToken: null,
               username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
@@ -289,7 +266,7 @@ export class AuthEffects
             const authResponse: AuthResponseDTO = 
             {
               accessToken: response.accessToken,
-              refreshToken: response.refreshToken,
+              refreshToken: null,
               username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
@@ -321,7 +298,7 @@ export class AuthEffects
             const authResponse: AuthResponseDTO = 
             {
               accessToken: response.accessToken,
-              refreshToken: response.refreshToken,
+              refreshToken: null,
               username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
@@ -353,7 +330,7 @@ export class AuthEffects
             const authResponse: AuthResponseDTO = 
             {
               accessToken: response.accessToken,
-              refreshToken: response.refreshToken,
+              refreshToken: null,
               username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
@@ -385,7 +362,7 @@ export class AuthEffects
             const authResponse: AuthResponseDTO = 
             {
               accessToken: response.accessToken,
-              refreshToken: response.refreshToken,
+              refreshToken: null,
               username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
@@ -417,7 +394,7 @@ export class AuthEffects
             const authResponse: AuthResponseDTO = 
             {
               accessToken: response.accessToken,
-              refreshToken: response.refreshToken,
+              refreshToken: null,
               username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
@@ -473,7 +450,7 @@ export class AuthEffects
             const authResponse: AuthResponseDTO = 
             {
               accessToken: response.accessToken,
-              refreshToken: response.refreshToken,
+              refreshToken: null,
               username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
