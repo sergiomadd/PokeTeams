@@ -2,7 +2,7 @@ import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { AuthState } from "../types/auth.state";
 
 const selectAuth = createFeatureSelector<AuthState>('auth');
-export const selectToken = createSelector(selectAuth, (auth) => auth.accessToken);
+export const selectAccessToken = createSelector(selectAuth, (auth) => auth.accessToken);
 export const selectUsername = createSelector(selectAuth, (auth) => auth.username);
 export const selectIsSubmitting = createSelector(selectAuth, (auth) => auth.isSubmitting);
 export const selectError = createSelector(selectAuth, (auth) => auth.error);

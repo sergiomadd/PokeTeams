@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators
 import { Store } from '@ngrx/store';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
 import { authActions } from 'src/app/core/auth/store/auth.actions';
-import { selectError, selectIsSubmitting, selectSuccess, selectToken } from 'src/app/core/auth/store/auth.selectors';
+import { selectAccessToken, selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/auth/store/auth.selectors';
 import { JwtTokenService } from 'src/app/core/services/jwttoken.service';
 import { Country } from 'src/app/features/user/models/country.dto';
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
@@ -29,7 +29,7 @@ export class UserSettingsComponent
   queryService = inject(QueryService);
   jwtTokenService = inject(JwtTokenService);
 
-  token$ = this.store.select(selectToken);
+  token$ = this.store.select(selectAccessToken);
   isSubmitting$ = this.store.select(selectIsSubmitting);
   backendError$ = this.store.select(selectError);
   success$ = this.store.select(selectSuccess);

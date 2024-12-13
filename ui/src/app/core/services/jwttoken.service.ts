@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
-import { selectToken } from 'src/app/core/auth/store/auth.selectors';
+import { selectAccessToken } from 'src/app/core/auth/store/auth.selectors';
 import { JWTResponse } from 'src/app/core/auth/types/jwtResponse.dto';
 import { AppState } from 'src/app/core/store/app.state';
 
@@ -12,7 +12,7 @@ export class JwtTokenService
 {
   store = inject(Store)
 
-  token$ = this.store.select(selectToken)
+  token$ = this.store.select(selectAccessToken)
 
   constructor() { }
   
