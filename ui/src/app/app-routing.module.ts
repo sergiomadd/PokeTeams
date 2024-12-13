@@ -4,6 +4,7 @@ import { SearchPageComponent } from './features/search/pages/search-page/search-
 import { TeamEditComponent } from './features/team/pages/team-edit/team-edit.component';
 import { TeamViewComponent } from './features/team/pages/team-view/team-view.component';
 import { UploadComponent } from './features/team/pages/upload/upload.component';
+import { EmailConfirmationComponent } from './features/user/components/email-confirmation/email-confirmation.component';
 import { UserPageComponent } from './features/user/pages/user-page/user-page.component';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 
@@ -11,6 +12,7 @@ import { NotFoundComponent } from './shared/components/not-found/not-found.compo
 const routes: Routes = [
   { path: '', component: UploadComponent},
   { path: 'search', component: SearchPageComponent},
+  { path: 'emailconfirmation', component: EmailConfirmationComponent },
   {
     matcher: (url) => 
     {

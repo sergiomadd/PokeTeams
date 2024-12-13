@@ -39,6 +39,7 @@ import { TournamentEditorComponent } from './features/team/components/tournament
 import { TeamEditComponent } from './features/team/pages/team-edit/team-edit.component';
 import { TeamViewComponent } from './features/team/pages/team-view/team-view.component';
 import { UploadComponent } from './features/team/pages/upload/upload.component';
+import { EmailConfirmationComponent } from './features/user/components/email-confirmation/email-confirmation.component';
 import { UserFormComponent } from './features/user/components/user-form/user-form.component';
 import { UserSettingsComponent } from './features/user/components/user-settings/user-settings.component';
 import { UserTeamsComponent } from './features/user/components/user-teams/user-teams.component';
@@ -94,6 +95,7 @@ import { LinkerPipe } from './shared/pipes/linker.pipe';
     UserPageComponent,
     UserSettingsComponent,
     NotFoundComponent,
+    EmailConfirmationComponent,
   ],
   exports: [],
   imports: [

@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { AuthService } from 'src/app/auth/services/auth.service';
-import { authActions } from 'src/app/auth/store/auth.actions';
-import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/auth/store/auth.selectors';
-import { Country } from 'src/app/models/DTOs/country.dto';
-import { UserUpdateDTO } from 'src/app/models/DTOs/userUpdate.dto';
+import { AuthService } from 'src/app/core/auth/services/auth.service';
+import { authActions } from 'src/app/core/auth/store/auth.actions';
+import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/auth/store/auth.selectors';
+import { Country } from 'src/app/features/user/models/country.dto';
+import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
 import { QueryService } from 'src/app/shared/services/query.service';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { User } from '../../models/user.model';
@@ -42,6 +42,7 @@ export class UserSettingsComponent
   countries: Country[] = [];
   changeCountrySubmitted: boolean = false;
   changeVisibilitySubmitted: boolean = false;
+  sendEmailVerificationCodeSubmitted: boolean = false;
 
   changeNameButtonClicked: boolean = false;
   changeNameSubmitted: boolean = false;
@@ -231,6 +232,12 @@ export class UserSettingsComponent
   logOut()
   {
     this.store.dispatch(authActions.logOut());
+  }
+
+  sendEmailVerificationCode()
+  {
+    this.sendEmailVerificationCodeSubmitted = true;
+    this.store.dispatch(authActions.sendVerification());
   }
 
   isInvalid(key: string, formName: string) : boolean

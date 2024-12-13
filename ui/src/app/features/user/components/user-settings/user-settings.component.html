@@ -216,7 +216,7 @@
       </div>
     </form>
   </div>
-  <div class="section">
+  <div class="section col b-gap">
       <div class="title">
         Email
       </div>
@@ -253,7 +253,7 @@
               </ng-container>
             </ng-container>
           </div>
-      </form>
+        </form>
       </div>
       <div class="row b-gap">
         <ng-container *ngIf="emailConfirmed; else notVerified">
@@ -266,15 +266,29 @@
             <div class="formFeedbackError">
               Email not verified
             </div>
-            <button>Send verification code</button>
           </div>
-          <form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
-            <div class="row b-gap">
-              <input type="text" placeholder="Code" formControlName="newEmail">
-              <button type="submit">Confirm</button>
-            </div>
-          </form>
         </ng-template>
+        <div class="row-center s-gap relative">
+          <ng-container *ngIf="sendEmailVerificationCodeSubmitted">
+            <ng-container *ngIf="(backendError$ | async) as error">
+              <span class="formFeedbackError backendErrors">{{error}}</span>
+            </ng-container>
+          </ng-container>
+          <button (click)="sendEmailVerificationCode()">Send verification code</button>
+          <ng-container *ngIf="sendEmailVerificationCodeSubmitted">
+            <ng-container *ngIf="isSubmitting$ | async">
+              <div class="feedback">
+                <div class="pokemon-spinner"></div>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="(success$ | async) as error">
+              <img src="assets/tick.png" alt="" class="feedback">
+            </ng-container>
+            <ng-container *ngIf="(backendError$ | async) as error">
+              <img src="assets/x.png" alt="" class="feedback">
+            </ng-container>
+          </ng-container>
+        </div>
       </div>
   </div>
   <div class="section">
