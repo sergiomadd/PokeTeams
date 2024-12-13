@@ -52,7 +52,7 @@ export class UserSettingsComponent
   changeNameForm = this.formBuilder.group(
   {
     newName: ['', [Validators.required, Validators.maxLength(256)]],
-  }, { updateOn: "blur" });
+  }, { updateOn: "submit" });
 
   userNameAvailable: boolean = false;
   changeUserNameButtonClicked: boolean = false;
@@ -60,14 +60,14 @@ export class UserSettingsComponent
   changeUserNameForm = this.formBuilder.group(
   {
     newUserName: ['', [Validators.required, Validators.maxLength(256)]],
-  }, { updateOn: "blur" });
+  }, { updateOn: "submit" });
 
   changeEmailButtonClicked: boolean = false;
   changeEmailSubmitted: boolean = false;
   changeEmailForm = this.formBuilder.group(
   {
     newEmail: ['', [Validators.required, Validators.maxLength(256), Validators.email]],
-  }, { updateOn: "blur" });
+  }, { updateOn: "submit" });
 
   changePasswordButtonClicked: boolean = false;
   changePasswordSubmitted: boolean = false;
@@ -105,7 +105,34 @@ export class UserSettingsComponent
     });
     this.pictures = await this.userService.getAllProfilePics();
 
-
+    this.success$.subscribe(value => 
+      {
+        if(value)
+        {
+          if(this.changeNameSubmitted)
+          {
+            this.changeNameForm.reset();
+            this.changeNameForm.controls.newName.setErrors(null);
+          }
+          if(this.changeUserNameSubmitted)
+          {
+            this.changeUserNameForm.reset();
+            this.changeUserNameForm.controls.newUserName.setErrors(null);
+          }
+          if(this.changeEmailSubmitted)
+          {
+            this.changeEmailForm.reset();
+            this.changeEmailForm.controls.newEmail.setErrors(null);
+          }
+          if(this.changePasswordSubmitted)
+          {
+            this.changePasswordForm.reset();
+            this.changePasswordForm.controls.currentPassword.setErrors(null);
+            this.changePasswordForm.controls.password.setErrors(null);
+            this.changePasswordForm.controls.confirmPassword.setErrors(null);
+          }
+        }
+      })
   }
 
   chooseEvent($event)
@@ -170,7 +197,7 @@ export class UserSettingsComponent
     this.store.dispatch(authActions.changeVisibility({request: updateDTO}));
   }
 
-  async changeName()
+  changeName()
   {
     this.changeNameButtonClicked = true;
     if(this.changeNameForm.valid && this.changeNameForm.controls.newName.value != null)
