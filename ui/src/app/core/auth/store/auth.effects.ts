@@ -63,8 +63,6 @@ export class AuthEffects
         return this.authService.logIn(request).pipe(
           switchMap(async (response: JWTResponse) =>
           {
-            console.log("log in correct")
-
             const authResponse: AuthResponseDTO = 
             {
               accessToken: response.accessToken,
@@ -73,7 +71,6 @@ export class AuthEffects
               success: true,
               error: null
             }
-            console.log("log in correct")
             return authActions.logInSuccess({authResponse});
           }),
           catchError((error: CustomError) => 
@@ -88,8 +85,7 @@ export class AuthEffects
         )
       })
     )
-  }
-  );
+  });
   
   signUpEffect = createEffect(() =>
   {
@@ -447,7 +443,7 @@ export class AuthEffects
       ofType(authActions.sendVerification),
       switchMap(() =>
       {
-        return this.authService.getEmailVerificationCode().pipe(
+        return this.authService.getEmailConfirmationCode().pipe(
           map(() =>
           {
             return authActions.sendVerificationSuccess();
@@ -455,6 +451,31 @@ export class AuthEffects
           catchError((error: CustomError) => 
           {
             return of(authActions.sendVerificationFailure(
+              {
+                error: error.message
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
+
+  confirmEmailEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.confirmEmail),
+      switchMap(({request}) =>
+      {
+        return this.authService.confirmEmail(request).pipe(
+          map(() =>
+          {
+            return authActions.confirmEmailSuccess();
+          }),
+          catchError((error: CustomError) => 
+          {
+            console.log("Error in log in effect: ", error)
+            return of(authActions.confirmEmailFailure(
               {
                 error: error.message
               }

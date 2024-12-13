@@ -98,15 +98,15 @@ export class AuthService
     return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
   }
 
-  confirmEmail(updateDTO: UserUpdateDTO) : Observable<JWTResponse>
-  {
-    let url = this.apiUrl + 'update/code';
-    return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
-  }
-
   getEmailConfirmationCode() : Observable<JWTResponse>
   {
     let url = this.apiUrl + 'code';
     return this.http.get<JWTResponse>(url);
+  }
+
+  confirmEmail(updateDTO: UserUpdateDTO) : Observable<JWTResponse>
+  {
+    let url = this.apiUrl + 'update/code';
+    return this.http.post<JWTResponse>(url, updateDTO, {withCredentials: true});
   }
 }

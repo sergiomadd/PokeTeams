@@ -48,7 +48,10 @@ export const authActions = createActionGroup(
       "changeVisibility failure": props<{error: string}>(),
       sendVerification: emptyProps(),
       "sendVerification success": emptyProps(),
-      "sendVerification failure": props<{error: string}>()
+      "sendVerification failure": props<{error: string}>(),
+      confirmEmail: props<{request: UserUpdateDTO}>(),
+      "confirmEmail success": emptyProps(),
+      "confirmEmail failure": props<{error: string}>()
     },
   }
 )
