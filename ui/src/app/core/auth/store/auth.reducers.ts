@@ -300,9 +300,12 @@ export const authReducers = createReducer(
       error: null,
       success: false
     })),
-  on(authActions.confirmEmailSuccess, (state) => (
+  on(authActions.confirmEmailSuccess, (state, action) => (
     {
       ...state,
+      accessToken: action.authResponse.accessToken,
+      refreshToken: action.authResponse.refreshToken,
+      username: action.authResponse.username,
       isSubmitting: false,
       success: true
     })),

@@ -468,9 +468,17 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.confirmEmail(request).pipe(
-          map(() =>
+          switchMap(async (response: JWTResponse) =>
           {
-            return authActions.confirmEmailSuccess();
+            const authResponse: AuthResponseDTO = 
+            {
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+              username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
+              success: true,
+              error: null
+            }
+            return authActions.confirmEmailSuccess({authResponse});
           }),
           catchError((error: CustomError) => 
           {
