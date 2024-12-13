@@ -226,7 +226,13 @@
           {{email}}
         </div>
         <ng-container *ngIf="emailConfirmed">
-          <img src="assets/confirmed.png" alt="" class="big-icon">
+          <div class="tooltip-wrapper">
+            <img src="assets/confirmed.png" alt="" class="big-icon selectable">
+            <app-tooltip
+            [text]="'Your email is confirmed'"
+            [side]="'right'"
+            ></app-tooltip>
+          </div>
         </ng-container>
       </div>
       <ng-container *ngIf="!emailConfirmed">

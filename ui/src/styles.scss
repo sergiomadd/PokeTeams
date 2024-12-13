@@ -739,3 +739,8 @@ input[type="range"]::-moz-range-thumb {
       background-position: 6px 0, -6px 100%, 0 -6px, 100% 6px;
   }
 } 
+
+.selectable
+{
+  cursor: pointer;
+}
