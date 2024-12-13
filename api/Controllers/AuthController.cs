@@ -323,8 +323,8 @@ namespace api.Controllers
         public async Task<ActionResult> ConfirmEmail(UserUpdateDTO updateData)
         {
             string email = updateData.CurrentEmail;
-            string token = updateData.EmailConfirmationCode;
-            var decodedTokenBytes = WebEncoders.Base64UrlDecode(token);
+            string inputToken = updateData.EmailConfirmationCode;
+            var decodedTokenBytes = WebEncoders.Base64UrlDecode(inputToken);
             var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
 
             var user = await _userManager.FindByEmailAsync(email);
@@ -335,11 +335,11 @@ namespace api.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
             if (!result.Succeeded)
             {
-                //var errors = signUpResult.Errors.Select(e => e.Description);
-                //Printer log Identity errors: 
                 return BadRequest("Error confirming email");
             }
-            return Ok();
+            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+            return Ok(new JwtResponseDTO { AccessToken = token });
         }
 
         [HttpPost, Route("update/password")]
