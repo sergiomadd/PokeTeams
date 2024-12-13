@@ -216,58 +216,57 @@
       </div>
     </form>
   </div>
-  <div class="section col b-gap">
+  <div class="section row">
+    <div class="col s-gap">
       <div class="title">
         Email
       </div>
-      <div class="row">
+      <div class="row s-gap">
         <div class="subtitle">
           {{email}}
         </div>
-        <form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
-          <div class="row b-gap">
-            <span *ngIf="isInvalid('newEmail', 'changeEmailForm')" class="formFeedbackError">{{getError('newEmail', 'changeEmailForm')}}</span>
-            <ng-container *ngIf="changeEmailSubmitted">
-              <ng-container *ngIf="(backendError$ | async) as error">
-                <span class="formFeedbackError backendErrors">{{error}}</span>
-              </ng-container>
-            </ng-container>
-            <input 
-            type="text" 
-            placeholder="New email" 
-            formControlName="newEmail"
-            [ngClass]="{controlInvalid: isInvalid('newEmail', 'changeEmailForm')}"
-            >
-            <button type="submit">Change</button>
-            <ng-container *ngIf="changeEmailSubmitted">
-              <ng-container *ngIf="isSubmitting$ | async">
-                <div class="feedback">
-                  <div class="pokemon-spinner"></div>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="(success$ | async) as error">
-                <img src="assets/tick.png" alt="" class="feedback">
-              </ng-container>
-              <ng-container *ngIf="(backendError$ | async) as error">
-                <img src="assets/x.png" alt="" class="feedback">
-              </ng-container>
-            </ng-container>
-          </div>
-        </form>
-      </div>
-      <div class="row b-gap">
-        <ng-container *ngIf="emailConfirmed; else notVerified">
-          <div class="formFeedbackSuccess">
-            Email is verified
-          </div>
+        <ng-container *ngIf="emailConfirmed">
+          <img src="assets/confirmed.png" alt="" class="big-icon">
         </ng-container>
-        <ng-template #notVerified>
-          <div class="col s-gap">
-            <div class="formFeedbackError">
-              Email not verified
+      </div>
+    </div>
+    <form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
+      <div class="row b-gap">
+        <span *ngIf="isInvalid('newEmail', 'changeEmailForm')" class="formFeedbackError">{{getError('newEmail', 'changeEmailForm')}}</span>
+        <ng-container *ngIf="changeEmailSubmitted">
+          <ng-container *ngIf="(backendError$ | async) as error">
+            <span class="formFeedbackError backendErrors">{{error}}</span>
+          </ng-container>
+        </ng-container>
+        <input 
+        type="text" 
+        placeholder="New email" 
+        formControlName="newEmail"
+        [ngClass]="{controlInvalid: isInvalid('newEmail', 'changeEmailForm')}"
+        >
+        <button type="submit">Change</button>
+        <ng-container *ngIf="changeEmailSubmitted">
+          <ng-container *ngIf="isSubmitting$ | async">
+            <div class="feedback">
+              <div class="pokemon-spinner"></div>
             </div>
+          </ng-container>
+          <ng-container *ngIf="(success$ | async) as error">
+            <img src="assets/tick.png" alt="" class="feedback">
+          </ng-container>
+          <ng-container *ngIf="(backendError$ | async) as error">
+            <img src="assets/x.png" alt="" class="feedback">
+          </ng-container>
+        </ng-container>
+      </div>
+    </form>
+    <ng-container *ngIf="!emailConfirmed">
+      <div class="row b-gap">
+        <div class="col s-gap">
+          <div class="formFeedbackError">
+            Email not verified
           </div>
-        </ng-template>
+        </div>
         <div class="row-center s-gap relative">
           <ng-container *ngIf="sendEmailVerificationCodeSubmitted">
             <ng-container *ngIf="(backendError$ | async) as error">
@@ -290,6 +289,7 @@
           </ng-container>
         </div>
       </div>
+    </ng-container>
   </div>
   <div class="section">
     <div class="col s-gap">

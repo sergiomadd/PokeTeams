@@ -87,8 +87,6 @@ export class UserSettingsComponent
         {
           this.email = this.jwtTokenService.getTokenEmail(value);
           this.emailConfirmed = this.util.stringToBoolean(this.jwtTokenService.getTokenEmailConfirmed(value));
-          console.log("email: ", this.email);
-          console.log("email confirmed? ", this.emailConfirmed)
         }
       })
     
