@@ -6,7 +6,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System.Net.Mail;
+using System.Net;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using NuGet.Common;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Text;
+using Humanizer;
 
 namespace api.Controllers
 {
@@ -20,12 +27,14 @@ namespace api.Controllers
         private readonly TokenGenerator _tokenGenerator;
         private readonly IUserService _userService;
         private readonly IPokeTeamService _pokeTeamService;
+        private readonly IEmailService _emailService;
 
         public AuthController(UserManager<User> userManager,
             SignInManager<User> signInManager,
             TokenGenerator tokenGenerator,
             IUserService userService,
-            IPokeTeamService teamService
+            IPokeTeamService teamService,
+            IEmailService emailService
             )
         {
             _userManager = userManager;
@@ -33,6 +42,7 @@ namespace api.Controllers
             _tokenGenerator = tokenGenerator;
             _userService = userService;
             _pokeTeamService = teamService;
+            _emailService = emailService;
         }
 
         [AllowAnonymous]
@@ -68,8 +78,7 @@ namespace api.Controllers
             UserDTO userDTO;
             try
             {
-                Printer.Log("User: ", User.Identity.Name);
-                if (User.Identity.Name != null)
+                if (User.Identity?.Name != null)
                 {
                     var user = await _userManager.FindByNameAsync(User.Identity.Name);
                     if (user != null)
@@ -134,7 +143,7 @@ namespace api.Controllers
             {
                 return Unauthorized("Invalid credentials");
             }
-            Microsoft.AspNetCore.Identity.SignInResult logInResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+            Microsoft.AspNetCore.Identity.SignInResult logInResult = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, lockoutOnFailure: false);
             if (!logInResult.Succeeded)
             {
                 return Unauthorized("Log in failed");
@@ -279,6 +288,58 @@ namespace api.Controllers
                 return Ok(new JwtResponseDTO { AccessToken = token });
             }
             return BadRequest("Wrong data");
+        }
+
+        [HttpGet, Route("code")]
+        public async Task<ActionResult> GetEmailConfirmationCode()
+        {
+            Printer.Log($"Getting email verification code");
+            if (User.Identity.Name != null)
+            {
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                if (user == null)
+                {
+                    return NotFound("Couldn't find user");
+                }
+                string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var tokenBytes = Encoding.UTF8.GetBytes(token);
+                var encodedToken = WebEncoders.Base64UrlEncode(tokenBytes);
+                string confirmationLink = $"http://localhost:4200/emailconfirmation?email={user.Email}&token={encodedToken}";
+                string emailTo = user.Email;
+                string subject = "Confirm email";
+                string message = $"Confirmation email link {confirmationLink}";
+
+                bool emailSent = await _emailService.SendEmailAsync(emailTo, subject, message);
+                if (!emailSent)
+                {
+                    return BadRequest("Error sending email");
+                }
+                return Ok();
+            }
+            return BadRequest("No user logged");
+        }
+
+        [HttpPost, Route("update/code")]
+        public async Task<ActionResult> ConfirmEmail(UserUpdateDTO updateData)
+        {
+            string email = updateData.CurrentEmail;
+            string token = updateData.EmailConfirmationCode;
+            var decodedTokenBytes = WebEncoders.Base64UrlDecode(token);
+            var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+            if (!result.Succeeded)
+            {
+                //var errors = signUpResult.Errors.Select(e => e.Description);
+                //Printer log Identity errors: 
+                return BadRequest("Error confirming email");
+            }
+            return Ok();
         }
 
         [HttpPost, Route("update/password")]

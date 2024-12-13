@@ -8,7 +8,5 @@ namespace api.DTOs
         public string UserNameOrEmail { get; set; }
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
-        [Required(ErrorMessage = "Remember option is required")]
-        public bool RememberMe { get; set; }
     }
 }
