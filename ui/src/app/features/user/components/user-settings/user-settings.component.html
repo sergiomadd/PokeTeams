@@ -184,7 +184,7 @@
     </div>
     <form [formGroup]="changeUserNameForm" (ngSubmit)="changeUserName()">
       <div class="col">
-        <div class="row-end b-gap">
+        <div class="row-end s-gap">
           <span *ngIf="userNameAvailable" class="formFeedbackSuccess">This username is available</span>
           <span *ngIf="isInvalid('newUserName', 'changeUserNameForm')" class="formFeedbackError">{{getError('newUserName', 'changeUserNameForm')}}</span>
           <ng-container *ngIf="changeUserNameSubmitted">
@@ -231,7 +231,7 @@
       </div>
     </div>
     <form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
-      <div class="row b-gap">
+      <div class="row s-gap">
         <span *ngIf="isInvalid('newEmail', 'changeEmailForm')" class="formFeedbackError">{{getError('newEmail', 'changeEmailForm')}}</span>
         <ng-container *ngIf="changeEmailSubmitted">
           <ng-container *ngIf="(backendError$ | async) as error">
@@ -291,7 +291,7 @@
       </div>
     </ng-container>
   </div>
-  <div class="section">
+  <div class="section row">
     <div class="col s-gap">
       <div class="title">
         Password
@@ -300,62 +300,54 @@
         Change password
       </div>
     </div>
-    <div class="row">
-      <div></div>
-      <form class="row s-gap" [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
-        <div class="row-end b-gap">
-          <ng-container *ngIf="changePasswordSubmitted">
-            <ng-container *ngIf="(backendError$ | async) as error">
-              <span class="formFeedbackError backendErrors">{{error}}</span>
-            </ng-container>
-          </ng-container>
-          <div class="col">
-            <label for="">Current password</label>
-            <input 
-            type="password" 
-            placeholder="Current password" 
-            formControlName="currentPassword"
-            [ngClass]="{controlInvalid: isInvalid('currentPassword', 'changePasswordForm')}"
-            >
-            <div *ngIf="isInvalid('currentPassword', 'changePasswordForm')" class="formFeedbackError">{{getError('currentPassword', 'changePasswordForm')}}</div>
-          </div>
-          <div class="col">
-            <label for="">New password</label>
-            <input 
-            type="password" 
-            placeholder="New password" 
-            formControlName="password"
-            [ngClass]="{controlInvalid: isInvalid('password', 'changePasswordForm')}"
-            >
-            <div *ngIf="isInvalid('password', 'changePasswordForm')" class="formFeedbackError">{{getError('password', 'changePasswordForm')}}</div>
-          </div>
-          <div class="col">
-            <label for="">Repeat password</label>
-            <input 
-            type="password" 
-            placeholder="Repeat password" 
-            formControlName="confirmPassword"
-            [ngClass]="{controlInvalid: isInvalid('confirmPassword', 'changePasswordForm')}"
-            >
-            <div *ngIf="isInvalid('confirmPassword', 'changePasswordForm')" class="formFeedbackError">{{getError('confirmPassword', 'changePasswordForm')}}</div>
-          </div>
-        </div>
-        <button type="submit">Change</button>
-        <ng-container *ngIf="changePasswordSubmitted">
-          <ng-container *ngIf="isSubmitting$ | async">
-            <div class="feedback">
-              <div class="pokemon-spinner"></div>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="(success$ | async) as error">
-            <img src="assets/tick.png" alt="" class="feedback">
-          </ng-container>
-          <ng-container *ngIf="(backendError$ | async) as error">
-            <img src="assets/x.png" alt="" class="feedback">
-          </ng-container>
+    <form class="row b-gap" [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+      <ng-container *ngIf="changePasswordSubmitted">
+        <ng-container *ngIf="(backendError$ | async) as error">
+          <span class="formFeedbackError backendErrors">{{error}}</span>
         </ng-container>
-      </form>
-    </div>
+      </ng-container>
+      <div class="col">
+        <input 
+        type="password" 
+        placeholder="Current password" 
+        formControlName="currentPassword"
+        [ngClass]="{controlInvalid: isInvalid('currentPassword', 'changePasswordForm')}"
+        >
+        <div *ngIf="isInvalid('currentPassword', 'changePasswordForm')" class="formFeedbackError">{{getError('currentPassword', 'changePasswordForm')}}</div>
+      </div>
+      <div class="col">
+        <input 
+        type="password" 
+        placeholder="New password" 
+        formControlName="password"
+        [ngClass]="{controlInvalid: isInvalid('password', 'changePasswordForm')}"
+        >
+        <div *ngIf="isInvalid('password', 'changePasswordForm')" class="formFeedbackError">{{getError('password', 'changePasswordForm')}}</div>
+      </div>
+      <div class="col">
+        <input 
+        type="password" 
+        placeholder="Repeat password" 
+        formControlName="confirmPassword"
+        [ngClass]="{controlInvalid: isInvalid('confirmPassword', 'changePasswordForm')}"
+        >
+        <div *ngIf="isInvalid('confirmPassword', 'changePasswordForm')" class="formFeedbackError">{{getError('confirmPassword', 'changePasswordForm')}}</div>
+      </div>
+      <button type="submit">Change</button>
+      <ng-container *ngIf="changePasswordSubmitted">
+        <ng-container *ngIf="isSubmitting$ | async">
+          <div class="feedback">
+            <div class="pokemon-spinner"></div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="(success$ | async) as error">
+          <img src="assets/tick.png" alt="" class="feedback">
+        </ng-container>
+        <ng-container *ngIf="(backendError$ | async) as error">
+          <img src="assets/x.png" alt="" class="feedback">
+        </ng-container>
+      </ng-container>
+    </form>
   </div>
   <div class="buttons">
     <div class="logout">
