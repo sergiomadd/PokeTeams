@@ -281,6 +281,19 @@ export class UtilService
     return typeof +value !== "number" || isNaN(+value)
   }
 
+  stringToBoolean(string?: string): boolean | undefined
+  {
+    if(string === "true" || string === "True" || string === "TRUE")
+    {
+      return true;
+    }
+    else if(string === "false" || string === "False" || string === "FALSE")
+    {
+      return false;
+    }
+    return undefined
+  }
+
   formatCount(count: number)
   {
     let formated: string = count.toString();

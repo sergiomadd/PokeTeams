@@ -3,7 +3,8 @@ import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators
 import { Store } from '@ngrx/store';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
 import { authActions } from 'src/app/core/auth/store/auth.actions';
-import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/auth/store/auth.selectors';
+import { selectError, selectIsSubmitting, selectSuccess, selectToken } from 'src/app/core/auth/store/auth.selectors';
+import { JwtTokenService } from 'src/app/core/services/jwttoken.service';
 import { Country } from 'src/app/features/user/models/country.dto';
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
 import { QueryService } from 'src/app/shared/services/query.service';
@@ -26,14 +27,16 @@ export class UserSettingsComponent
   util = inject(UtilService);
   userPageService = inject(UserPageService);
   queryService = inject(QueryService);
+  jwtTokenService = inject(JwtTokenService);
 
+  token$ = this.store.select(selectToken);
   isSubmitting$ = this.store.select(selectIsSubmitting);
   backendError$ = this.store.select(selectError);
   success$ = this.store.select(selectSuccess);
 
   user?: User;
   email?: string;
-  emailConfirmed?: string
+  emailConfirmed?: boolean
   deleteDialog: boolean = false;
 
   pictures: string[] = [];
@@ -78,6 +81,17 @@ export class UserSettingsComponent
 
   async ngOnInit()
   {
+    this.token$.subscribe(value => 
+      {
+        if(value)
+        {
+          this.email = this.jwtTokenService.getTokenEmail(value);
+          this.emailConfirmed = this.util.stringToBoolean(this.jwtTokenService.getTokenEmailConfirmed(value));
+          console.log("email: ", this.email);
+          console.log("email confirmed? ", this.emailConfirmed)
+        }
+      })
+    
     this.userPageService.user.subscribe((value) => 
     {
       this.user = value;
@@ -92,6 +106,8 @@ export class UserSettingsComponent
       }
     });
     this.pictures = await this.userService.getAllProfilePics();
+
+
   }
 
   chooseEvent($event)

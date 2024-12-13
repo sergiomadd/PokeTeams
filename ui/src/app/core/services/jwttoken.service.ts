@@ -10,7 +10,6 @@ import { AppState } from 'src/app/core/store/app.state';
 })
 export class JwtTokenService 
 {
-
   store = inject(Store)
 
   token$ = this.store.select(selectToken)
@@ -25,6 +24,16 @@ export class JwtTokenService
   getTokenUsername(token: string): string | undefined
   {
     return jwtDecode(token).sub;
+  }
+
+  getTokenEmail(token: string): string | undefined
+  {
+    return jwtDecode(token)['email'];
+  }
+
+  getTokenEmailConfirmed(token: string): string | undefined
+  {
+    return jwtDecode(token)['email_verified'];
   }
 
   getAccessToken(): string | null
