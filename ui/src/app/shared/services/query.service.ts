@@ -28,6 +28,24 @@ export class QueryService
       }));
   }
 
+  queryCountriesCallback = async (args: any): Promise<Tag[]> => 
+  {
+    if(args)
+    {
+      return (await this.userService.queryCountriesByName(args));
+    }
+    return [];
+  }
+  countriesAllCallback = async (): Promise<Tag[]> => 
+  {
+    return (await this.userService.getAllCountries()).map(n => 
+      ({
+        name: n.name,
+        identifier: n.identifier,
+        icon: n.icon
+      }));
+  }
+
   //Team
   
   queryTournamentCallback = async (args: any): Promise<Tag[]> => 
@@ -155,24 +173,6 @@ export class QueryService
         name: n.name,
         identifier: n.name,
         icon: n.iconPath
-      }));
-  }
-
-  queryCountriesCallback = async (args: any): Promise<Tag[]> => 
-  {
-    if(args)
-    {
-      return (await this.userService.queryCountriesByName(args));
-    }
-    return [];
-  }
-  countriesAllCallback = async (): Promise<Tag[]> => 
-  {
-    return (await this.userService.getAllCountries()).map(n => 
-      ({
-        name: n.name,
-        identifier: n.name,
-        icon: n.icon
       }));
   }
 }

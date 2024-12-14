@@ -162,7 +162,7 @@ export class UserSettingsComponent
     return '';
   }
 
-  async changePicture(path: string)
+  changePicture(path: string)
   {
     this.changePictureSubmitted = true;
     const key: string = this.getPictureKey(path);
@@ -175,18 +175,18 @@ export class UserSettingsComponent
     this.clickPictureSelector();
   }
 
-  async changeCountry($event)
+  changeCountry($event)
   {
     this.changeCountrySubmitted = true;
     let updateDTO: UserUpdateDTO = 
     {
       currentUserName: this.user?.username,
-      newCountryCode: $event.code
+      newCountryCode: $event.identifier
     }
     this.store.dispatch(authActions.changeCountry({request: updateDTO}));
   }
 
-  async changeVisibility($event)
+  changeVisibility($event)
   {
     this.changeVisibilitySubmitted = true;
     let updateDTO: UserUpdateDTO = 
