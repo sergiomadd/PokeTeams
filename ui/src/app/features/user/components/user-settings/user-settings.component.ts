@@ -29,7 +29,7 @@ export class UserSettingsComponent
   queryService = inject(QueryService);
   jwtTokenService = inject(JwtTokenService);
 
-  token$ = this.store.select(selectAccessToken);
+  accessToken$ = this.store.select(selectAccessToken);
   isSubmitting$ = this.store.select(selectIsSubmitting);
   backendError$ = this.store.select(selectError);
   success$ = this.store.select(selectSuccess);
@@ -81,7 +81,7 @@ export class UserSettingsComponent
 
   async ngOnInit()
   {
-    this.token$.subscribe(value => 
+    this.accessToken$.subscribe(value => 
       {
         if(value)
         {

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, Observable } from 'rxjs';
 import { authActions } from 'src/app/core/auth/store/auth.actions';
-import { selectUsername } from 'src/app/core/auth/store/auth.selectors';
+import { selectAccessToken } from 'src/app/core/auth/store/auth.selectors';
 import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { User } from 'src/app/features/user/models/user.model';
 import { UserService } from 'src/app/features/user/services/user.service';
@@ -27,17 +27,22 @@ export class MenuComponent
   @Input() menuOpen: boolean = true;
   @Output() toggleEvent = new EventEmitter();
 
-  loggedUsername$: Observable<string | null> = this.store.select(selectUsername);
-  loggedUser: User | null = null;
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
+  accessToken$ = this.store.select(selectAccessToken);
+  loggedUser: User | null = null;
 
   ngOnInit()
   {
-    this.loggedUsername$.subscribe(async value => 
+    this.accessToken$.subscribe(async value => 
     {
       if(value) 
       {
-        this.loggedUser = await lastValueFrom(this.userService.getUser(value));
+        const loggedUsername = this.jwtTokenService.getTokenUsername(value);
+        this.loggedUser = loggedUsername ? await lastValueFrom(this.userService.getUser(loggedUsername)) : null;
+      }
+      else
+      {
+        this.loggedUser = null;
       }
     })
   }

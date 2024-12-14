@@ -19,6 +19,4 @@ export class UserPageService
   {
     this.user$.next(user);
   }
-
-
 }

@@ -1,8 +1,8 @@
 import { Component, inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { lastValueFrom, Observable } from 'rxjs';
-import { selectUsername } from 'src/app/core/auth/store/auth.selectors';
+import { selectAccessToken } from 'src/app/core/auth/store/auth.selectors';
+import { JwtTokenService } from 'src/app/core/services/jwttoken.service';
 import { SearchService } from 'src/app/features/search/services/search.service';
 import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
 import { User } from '../../models/user.model';
@@ -21,6 +21,7 @@ export class UserPageComponent
   store = inject(Store);
   searchService = inject(SearchService);
   route = inject(ActivatedRoute);
+  jwtTokenService = inject(JwtTokenService);
 
   @Input() username?: string;
 
@@ -28,28 +29,14 @@ export class UserPageComponent
   userTeams: TeamPreview[] = [];
   loading: boolean = false;
 
-  tabs: boolean[] = [false, true]
+  tabs: boolean[] = [true, false]
   country?: string;
   userPrivate: boolean = false;
 
-  loggedUsername$: Observable<string | null> = this.store.select(selectUsername);
-  loggedUser: User | null = null;
+  accessToken$ = this.store.select(selectAccessToken);
+  loggedUsername?: string;
 
-  load()
-  {
-    if(!this.user?.visibility
-      && !(this.loggedUser && this.loggedUser.username == this.user?.username))
-    {
-      this.userPrivate = true;
-    }
-    else
-    {
-      this.userPrivate = false;
-      this.searchService.userOnlySearch(this.user.username);
-    }
-  }
-
-  async ngOnInit()
+  ngOnInit()
   {
     this.route.params.subscribe(params =>
       {
@@ -57,40 +44,67 @@ export class UserPageComponent
         if(this.username)
         {
           this.loading = true;
-          this.loggedUsername$.subscribe(async value => 
-            {
-              if(value) 
-              {
-                this.loggedUser = await lastValueFrom(this.userService.getUser(value));
-              }
-              this.load();
-            })
-          this.userService.getUser(this.username).subscribe(
-            {
-              next: (response) =>
-              {
-                this.user = response;
-                this.userPageService.setUser(this.user);
-                this.load();
-              },
-              error: () => 
-              {
-                this.loading = false;
-              },
-              complete: () => 
-              {
-                this.loading = false;
-              }
-            }
-          )
-    
+          this.updateUser(this.username);
           this.searchService.teams.subscribe((value: TeamPreview[]) =>
           {
             this.userTeams = value;
           })
         }
+        this.searchService.teams.subscribe((value: TeamPreview[]) =>
+        {
+          this.userTeams = value;
+        })
       })
-    console.log("User in user page:", this.user)
+    this.accessToken$.subscribe(async value => 
+      {
+        if(value) 
+        {
+          this.loggedUsername = this.jwtTokenService.getTokenUsername(value);
+          if(this.username && this.loggedUsername && this.username === this.loggedUsername)
+          {
+            this.updateUser(this.username)
+          }
+        }
+        else
+        {
+          this.loggedUsername = undefined;
+        }
+      })
+  }
+
+  updateUser(username: string)
+  {
+    this.userService.getUser(username).subscribe(
+      {
+        next: (response) =>
+        {
+          this.user = response;
+          this.userPageService.setUser(this.user);
+          this.load();
+        },
+        error: () => 
+        {
+          this.loading = false;
+        },
+        complete: () => 
+        {
+          this.loading = false;
+        }
+      }
+    )
+  }
+
+  load()
+  {
+    if(!this.user?.visibility && !(this.loggedUsername === this.user?.username))
+    {
+      this.userPrivate = true;
+    }
+    else
+    {
+      this.userPrivate = false;
+      if(this.user) { this.searchService.userOnlySearch(this.user.username);}
+    }
   }
 
   changeTab(index: number)
