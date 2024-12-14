@@ -20,6 +20,7 @@ namespace api.Services
         {
             if (user != null)
             {
+                //private and not logged
                 if (!user.Visibility && !logged)
                 {
                     return new UserDTO
@@ -34,7 +35,7 @@ namespace api.Services
                     Name = user.Name,
                     Username = user.UserName,
                     Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png",
-                    Country = GetCountry(user.Country),
+                    Country = user.Country != null ? GetCountry(user.Country) : null,
                     Visibility = user.Visibility ? true : false
                 };
             }
@@ -93,21 +94,15 @@ namespace api.Services
             }
         }
 
-        public CountryDTO GetCountry(string code)
+        public CountryDTO? GetCountry(string code)
         {
-            CountryDTO country = null;
-            using (StreamReader r = new StreamReader("wwwroot/data/countries.json"))
+            CountryDTO? countryDTO = null;
+            Country? country = _pokeTeamContext.Country.FirstOrDefault(c => c.Code == code);
+            if (country != null)
             {
-                string json = r.ReadToEnd();
-                List<CountryDTO> countries = JsonSerializer.Deserialize<List<CountryDTO>>(json);
-                country = countries.Find(c => c.code.Equals(code));
-                if (country != null)
-                {
-                    country.Icon = $"https://localhost:7134/images/sprites/flags/{country.code}.svg";
-                }
-                r.Close();
+                countryDTO = new CountryDTO(country);
             }
-            return country;
+            return countryDTO;
         }
 
         public List<TagDTO> GetAllCountries()
@@ -173,6 +168,8 @@ namespace api.Services
             return queriedUsers;
         }
 
+        //Keep incase countries change
+        /*
         public async Task<bool> AddCountry(CountryDTOB countryDTOB)
         {
             try
@@ -193,7 +190,7 @@ namespace api.Services
             }
             return true;
         }
-
+        */
 
     }
 }

@@ -14,9 +14,9 @@ namespace api.Services
         public Task<bool> UserNameAvailable(string userName);
         public Task<bool> ChangeName(User user, string newName);
         public Task<bool> UpdatePicture(User user, string newPictureKey);
-        public CountryDTO GetCountry(string code);
+        public CountryDTO? GetCountry(string code);
         public List<TagDTO> GetAllCountries();
         public List<TagDTO> QueryCountriesByName(string key);
-        public Task<bool> AddCountry(CountryDTOB countryDTOB);
+        //public Task<bool> AddCountry(CountryDTOB countryDTOB);
     }
 }

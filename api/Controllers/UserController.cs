@@ -144,7 +144,8 @@ namespace api.Controllers
             }
             return pictures;
         }
-
+        //Keep incase countries change
+        /*
         [HttpPost, Route("country/add")]
         public async Task<ActionResult<object>> AddCountry([FromBody] CountryDTOB countryDTOB)
         {
@@ -155,7 +156,7 @@ namespace api.Controllers
             }
             return BadRequest();
         }
-
+        
 
         [HttpGet, Route("country/process")]
         public async Task<ActionResult<object>> Process()
@@ -191,5 +192,6 @@ namespace api.Controllers
             }
             return Ok();
         }
+        */
     }
 }
