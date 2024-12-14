@@ -17,7 +17,6 @@ export const authReducers = createReducer(
       ...state,
       accessToken: action.authResponse.accessToken,
       refreshToken: action.authResponse.refreshToken,
-      username: action.authResponse.username,
       isAuthenticated: true,
       isSubmitting: false,
       success: true
@@ -43,7 +42,6 @@ export const authReducers = createReducer(
       ...state,
       accessToken: action.authResponse.accessToken,
       refreshToken: action.authResponse.refreshToken,
-      username: action.authResponse.username,
       isAuthenticated: true,
       isSubmitting: false,
       success: true
@@ -66,7 +64,6 @@ export const authReducers = createReducer(
       ...state,
       accessToken: action.authResponse.accessToken,
       refreshToken: action.authResponse.refreshToken,
-      username: action.authResponse.username,
       isAuthenticated: true,
       isSubmitting: false,
       success: true,
@@ -134,7 +131,6 @@ export const authReducers = createReducer(
     {
       ...state,
       accessToken: action.authResponse.accessToken,
-      username: action.authResponse.username,
       isSubmitting: false,
       success: true
     })),
@@ -155,7 +151,6 @@ export const authReducers = createReducer(
     {
       ...state,
       accessToken: action.authResponse.accessToken,
-      username: action.authResponse.username,
       isSubmitting: false,
       success: true
     })),
@@ -176,7 +171,6 @@ export const authReducers = createReducer(
     {
       ...state,
       accessToken: action.authResponse.accessToken,
-      username: action.authResponse.username,
       isSubmitting: false,
       success: true
     })),
@@ -216,7 +210,6 @@ export const authReducers = createReducer(
     {
       ...state,
       accessToken: action.authResponse.accessToken,
-      username: action.authResponse.username,
       isSubmitting: false,
       success: true
     })),
@@ -237,7 +230,6 @@ export const authReducers = createReducer(
     {
       ...state,
       accessToken: action.authResponse.accessToken,
-      username: action.authResponse.username,
       isSubmitting: false,
       success: true
     })),
@@ -258,7 +250,6 @@ export const authReducers = createReducer(
     {
       ...state,
       accessToken: action.authResponse.accessToken,
-      username: action.authResponse.username,
       isSubmitting: false,
       success: true
     })),
@@ -298,7 +289,6 @@ export const authReducers = createReducer(
     {
       ...state,
       accessToken: action.authResponse.accessToken,
-      username: action.authResponse.username,
       isSubmitting: false,
       success: true
     })),

@@ -19,8 +19,8 @@ export class AuthEffects
   authService = inject(AuthService);
   userService = inject(UserService);
   router = inject(Router);
-  jwtTokenService = inject(JwtTokenService);
   localStorage = inject(LocalStorageService);
+  jwtTokenService = inject(JwtTokenService);
 
   refresh$ = createEffect(() =>
   {
@@ -35,7 +35,6 @@ export class AuthEffects
             {
               accessToken: response.accessToken,
               refreshToken: response.refreshToken,
-              username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
             }
@@ -67,7 +66,6 @@ export class AuthEffects
             {
               accessToken: response.accessToken,
               refreshToken: response.refreshToken,
-              username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
             }
@@ -100,7 +98,6 @@ export class AuthEffects
             {
               accessToken: response.accessToken,
               refreshToken: response.refreshToken,
-              username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
             }
@@ -192,7 +189,6 @@ export class AuthEffects
             {
               accessToken: response.accessToken,
               refreshToken: null,
-              username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
             }
@@ -224,7 +220,6 @@ export class AuthEffects
             {
               accessToken: response.accessToken,
               refreshToken: null,
-              username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
             }
@@ -249,7 +244,11 @@ export class AuthEffects
       ofType(authActions.changeUserNameSuccess),
       tap((response) => 
       {
-        this.router.navigate(['/@' + response.authResponse.username]);
+        const newUsername = this.jwtTokenService.getTokenUsername(response.authResponse.accessToken ?? "");
+        if(newUsername)
+        {
+          this.router.navigate(['/@' + newUsername]);
+        }
       })
     )
   },{dispatch: false});
@@ -267,7 +266,6 @@ export class AuthEffects
             {
               accessToken: response.accessToken,
               refreshToken: null,
-              username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
             }
@@ -299,7 +297,6 @@ export class AuthEffects
             {
               accessToken: response.accessToken,
               refreshToken: null,
-              username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
             }
@@ -331,7 +328,6 @@ export class AuthEffects
             {
               accessToken: response.accessToken,
               refreshToken: null,
-              username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
             }
@@ -363,7 +359,6 @@ export class AuthEffects
             {
               accessToken: response.accessToken,
               refreshToken: null,
-              username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
             }
@@ -395,7 +390,6 @@ export class AuthEffects
             {
               accessToken: response.accessToken,
               refreshToken: null,
-              username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
             }
@@ -451,7 +445,6 @@ export class AuthEffects
             {
               accessToken: response.accessToken,
               refreshToken: null,
-              username: this.jwtTokenService.getTokenUsername(response.accessToken) ?? null,
               success: true,
               error: null
             }
