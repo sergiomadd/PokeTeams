@@ -12,6 +12,6 @@ export class SearchPageComponent
 
   ngOnInit()
   {
-    this.searchService.defaultSearch();
+    this.searchService.resetDefaultSearch();
   }
 }

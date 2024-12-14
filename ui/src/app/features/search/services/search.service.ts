@@ -33,6 +33,11 @@ export class SearchService
 
   constructor() 
   {
+    this.resetQuery();
+  }
+
+  resetQuery()
+  {
     this.setQueryTags([]);
     this.setQueryTeamsPerPage(10);
     this.setQuerySelectedPage(1);
@@ -58,6 +63,12 @@ export class SearchService
   setTotalTeams(totalTeams: number)
   {
     this.totalTeams$.next(totalTeams);
+  }
+
+  resetDefaultSearch()
+  {
+    this.resetQuery();
+    this.search(this.query$.getValue());
   }
   
   defaultSearch()
