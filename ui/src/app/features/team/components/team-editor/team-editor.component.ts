@@ -2,8 +2,9 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, Observable } from 'rxjs';
-import { selectUsername } from 'src/app/core/auth/store/auth.selectors';
+import { selectAccessToken } from 'src/app/core/auth/store/auth.selectors';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
+import { JwtTokenService } from 'src/app/core/services/jwttoken.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
@@ -30,10 +31,11 @@ export class TeamEditorComponent
   router = inject(Router);
   queryService = inject(QueryService);
   teamEditorService = inject(TeamEditorService);
+  jwtTokenService = inject(JwtTokenService);
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
-  loggedUsername$: Observable<string | null> = this.store.select(selectUsername);
+  accessToken$: Observable<string | null> = this.store.select(selectAccessToken);
   loggedUserTag?: Tag;
 
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
@@ -51,22 +53,31 @@ export class TeamEditorComponent
     {
       this.team = value;
     });
-    this.loggedUsername$.subscribe(async value => 
+    this.accessToken$.subscribe(async value => 
       {
         if(value)
         {
-          const loggedUser = await lastValueFrom(this.userService.getUser(value));
-          this.loggedUserTag = 
+          const username = this.jwtTokenService.getTokenUsername(value);
+          if(username)
           {
-            identifier: loggedUser.username,
-            name: loggedUser.username,
-            icon: loggedUser.picture
-          };
-          this.team.player = 
+            const loggedUser = await lastValueFrom(this.userService.getUser(username));
+            this.loggedUserTag = 
+            {
+              identifier: loggedUser.username,
+              name: loggedUser.username,
+              icon: loggedUser.picture
+            };
+            this.team.player = 
+            {
+              username: loggedUser.username,
+              picture: loggedUser.picture
+            };
+          }
+          else
           {
-            username: loggedUser.username,
-            picture: loggedUser.picture
-          };
+            this.loggedUserTag = undefined;
+            this.team.player = undefined;
+          }
         }
         else
         {
