@@ -1,8 +1,8 @@
 import { Component, inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { LoggedUserService } from 'src/app/core/auth/services/logged-user.service';
 import { selectAccessToken } from 'src/app/core/auth/store/auth.selectors';
-import { JwtTokenService } from 'src/app/core/services/jwttoken.service';
 import { SearchService } from 'src/app/features/search/services/search.service';
 import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
 import { User } from '../../models/user.model';
@@ -21,7 +21,7 @@ export class UserPageComponent
   store = inject(Store);
   searchService = inject(SearchService);
   route = inject(ActivatedRoute);
-  jwtTokenService = inject(JwtTokenService);
+  loggedUserService = inject(LoggedUserService);
 
   @Input() username?: string;
 
@@ -29,7 +29,7 @@ export class UserPageComponent
   userTeams: TeamPreview[] = [];
   loading: boolean = false;
 
-  tabs: boolean[] = [true, false]
+  tabs: boolean[] = [false, true]
   country?: string;
   userPrivate: boolean = false;
 
@@ -38,6 +38,21 @@ export class UserPageComponent
 
   ngOnInit()
   {
+    this.loggedUserService.loggedUser.subscribe(value =>
+      {
+        if(value) 
+        {
+          this.loggedUsername = value?.username;
+          if(this.username && this.loggedUsername && this.username === this.loggedUsername)
+          {
+            this.updateUser(this.username)
+          }
+        }
+        else
+        {
+          this.loggedUsername = undefined;
+        }
+      })
     this.route.params.subscribe(params =>
       {
         this.username = params["username"];
@@ -54,21 +69,6 @@ export class UserPageComponent
         {
           this.userTeams = value;
         })
-      })
-    this.accessToken$.subscribe(async value => 
-      {
-        if(value) 
-        {
-          this.loggedUsername = this.jwtTokenService.getTokenUsername(value);
-          if(this.username && this.loggedUsername && this.username === this.loggedUsername)
-          {
-            this.updateUser(this.username)
-          }
-        }
-        else
-        {
-          this.loggedUsername = undefined;
-        }
       })
   }
 

@@ -1,10 +1,10 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { lastValueFrom, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
+import { LoggedUserService } from 'src/app/core/auth/services/logged-user.service';
 import { selectAccessToken } from 'src/app/core/auth/store/auth.selectors';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
-import { JwtTokenService } from 'src/app/core/services/jwttoken.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
@@ -31,7 +31,7 @@ export class TeamEditorComponent
   router = inject(Router);
   queryService = inject(QueryService);
   teamEditorService = inject(TeamEditorService);
-  jwtTokenService = inject(JwtTokenService);
+  loggedUserService = inject(LoggedUserService);
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
@@ -53,31 +53,21 @@ export class TeamEditorComponent
     {
       this.team = value;
     });
-    this.accessToken$.subscribe(async value => 
+    this.loggedUserService.loggedUser.subscribe(async value => 
       {
         if(value)
         {
-          const username = this.jwtTokenService.getTokenUsername(value);
-          if(username)
+          this.loggedUserTag = 
           {
-            const loggedUser = await lastValueFrom(this.userService.getUser(username));
-            this.loggedUserTag = 
-            {
-              identifier: loggedUser.username,
-              name: loggedUser.username,
-              icon: loggedUser.picture
-            };
-            this.team.player = 
-            {
-              username: loggedUser.username,
-              picture: loggedUser.picture
-            };
-          }
-          else
+            identifier: value.username,
+            name: value.username,
+            icon: value.picture
+          };
+          this.team.player = 
           {
-            this.loggedUserTag = undefined;
-            this.team.player = undefined;
-          }
+            username: value.username,
+            picture: value.picture
+          };
         }
         else
         {
