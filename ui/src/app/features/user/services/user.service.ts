@@ -15,7 +15,6 @@ export class UserService
   teamService = inject(TeamService);
   util = inject(UtilService);
 
-
   private apiUrl = environment.apiURL + 'user/';
   private dataTimeout = 2000;
 

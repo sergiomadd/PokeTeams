@@ -42,7 +42,7 @@ export class UserFormComponent
   {
     userNameOrEmail: ['', [Validators.required, Validators.maxLength(256)]],
     password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256)]],
-  }, { updateOn: "blur" });
+  }, { updateOn: "submit" });
 
   signUpFormSubmitted: boolean = false;
   signUpForm = this.formBuilder.group(
