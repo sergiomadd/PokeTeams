@@ -12,18 +12,18 @@
               <ng-container *ngIf="pokemon.preEvolution">
                 <ng-container *ngIf="pokemon.preEvolution.preEvolution">
                   <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon.preEvolution.preEvolution" [teamOptions]="teamOptions"></app-evolution>
-                  <img src="assets/right-arrow.png" alt="" class="icon">
+                  <img src="assets/img/right-arrow.png" alt="" class="icon">
                 </ng-container>
                 <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon.preEvolution" [teamOptions]="teamOptions"></app-evolution>
-                <img src="assets/right-arrow.png" alt="" class="icon">
+                <img src="assets/img/right-arrow.png" alt="" class="icon">
               </ng-container>
               <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon" [teamOptions]="teamOptions"></app-evolution>
               <ng-container *ngIf="pokemon.evolutions ? pokemon.evolutions.length > 0 ? true : false : false">
-                <img src="assets/right-arrow.png" alt="" class="icon">
+                <img src="assets/img/right-arrow.png" alt="" class="icon">
                 <ng-container *ngFor="let evolution of pokemon.evolutions">
                   <app-evolution [sourcePokemon]="pokemon" [pokemon]="evolution" [teamOptions]="teamOptions"></app-evolution>
                   <ng-container *ngIf="evolution.evolutions ? evolution.evolutions.length > 0 ? true : false : false">
-                    <img src="assets/right-arrow.png" alt="" class="icon">
+                    <img src="assets/img/right-arrow.png" alt="" class="icon">
                     <ng-container *ngFor="let evolution of evolution.evolutions">
                       <app-evolution [sourcePokemon]="pokemon" [pokemon]="evolution" [teamOptions]="teamOptions"></app-evolution>
                     </ng-container>
@@ -126,7 +126,7 @@
                 </span>
               </div>
             </div>
-            <img src="assets/align-left.png" alt="" class="icon">
+            <img src="assets/img/align-left.png" alt="" class="icon">
           </div>
         </div>
         <div 
@@ -154,7 +154,7 @@
                 </span>
               </div>
             </div>
-            <img src="assets/edit.png" alt="" class="icon">
+            <img src="assets/img/edit.png" alt="" class="icon">
           </div>
         </div>
         <div 
@@ -180,7 +180,7 @@
                 </span>
               </div>
             </div>
-            <img src="assets/copy.png" alt="" class="icon">
+            <img src="assets/img/copy.png" alt="" class="icon">
           </div>
         </div>
       </div>
@@ -410,7 +410,7 @@
                   <span class="one-line">This pokemon is shiny</span>
                 </div>
               </div>
-              <img src="assets/shiny.png" alt="" class="icon">
+              <img src="assets/img/shiny.png" alt="" class="icon">
             </div>
           </div>
         </ng-container>
@@ -447,10 +447,10 @@
               </ng-template>  
             </div>
             <ng-container *ngIf="pokemon.gender == true; else male">
-              <img src="assets/female.png" alt="" class="icon">
+              <img src="assets/img/female.png" alt="" class="icon">
             </ng-container>
             <ng-template #male>
-              <img src="assets/male.png" alt="" class="icon">
+              <img src="assets/img/male.png" alt="" class="icon">
             </ng-template>   
           </div>
         </div>
@@ -728,12 +728,12 @@
                   && stat.identifier===pokemon.nature?.decreasedStat?.identifier); else neutral">
                     <ng-container *ngIf="stat.identifier===pokemon.nature?.increasedStat?.identifier">
                       <div class="nature">
-                        <img src="assets/up-arrow-nature.png" alt="" class="icon">
+                        <img src="assets/img/up-arrow-nature.png" alt="" class="icon">
                       </div>
                     </ng-container>
                     <ng-container *ngIf="stat.identifier===pokemon.nature?.decreasedStat?.identifier">
                       <div class="nature">
-                        <img src="assets/down-arrow-nature.png" alt="" class="icon">
+                        <img src="assets/img/down-arrow-nature.png" alt="" class="icon">
                       </div>
                     </ng-container>
                   </ng-container>

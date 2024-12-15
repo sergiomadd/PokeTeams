@@ -7,8 +7,8 @@
           <ng-container *ngIf="logged">
             <ng-container *ngIf="!team?.visibility">
               <img src="{{(selectedTheme$ | async) === 'light' 
-              ? 'assets/lock.png' 
-              : 'assets/lock-white.png'}}" alt="" class="icon">
+              ? 'assets/img/lock.png' 
+              : 'assets/img/lock-white.png'}}" alt="" class="icon">
             </ng-container>
           </ng-container>
           <div class="row no-gap">
@@ -21,7 +21,7 @@
           </div>
           <ng-container *ngIf="team?.tournament">
             <div class="detail">
-              <img src="assets/regionals.png" alt="" class="icon">
+              <img src="assets/img/regionals.png" alt="" class="icon">
               {{team?.tournament?.name}}
             </div>
           </ng-container>
@@ -43,8 +43,8 @@
         <div class="row-end s-gap">
           <div class="detail views">
             <img src="{{(selectedTheme$ | async) === 'light' 
-            ? 'assets/visible.png' 
-            : 'assets/visible-white.png'}}" alt="" class="icon">
+            ? 'assets/img/visible.png' 
+            : 'assets/img/visible-white.png'}}" alt="" class="icon">
             {{team && team?.viewCount ? util.formatCount(team.viewCount) : team?.viewCount}}
           </div>
           <div class="detail">
@@ -52,8 +52,8 @@
           </div>  
           <button (click)="copyPaste()" class="button tooltip-wrapper">
             <img src="{{(selectedTheme$ | async) === 'light' 
-            ? 'assets/copy.png' 
-            : 'assets/copy-white.png'}}" alt="" class="icon">            
+            ? 'assets/img/copy.png' 
+            : 'assets/img/copy-white.png'}}" alt="" class="icon">            
             <app-tooltip
             [text]="'Copy paste'"
             [side]="'top'"
@@ -61,8 +61,8 @@
           </button>
           <button (click)="copyLink()" class="button tooltip-wrapper">
             <img src="{{(selectedTheme$ | async) === 'light' 
-            ? 'assets/link.png' 
-            : 'assets/link-white.png'}}" alt="" class="icon">            
+            ? 'assets/img/link.png' 
+            : 'assets/img/link-white.png'}}" alt="" class="icon">            
             <app-tooltip
             [text]="'Copy link'"
             [side]="'top'"
@@ -71,8 +71,8 @@
           <button class="button tooltip-wrapper">
             <a [routerLink]="['/', team?.id]" target="_blank" class="button">
               <img src="{{(selectedTheme$ | async) === 'light' 
-              ? 'assets/external-link.png' 
-              : 'assets/external-link-white.png'}}" alt="" class="icon">
+              ? 'assets/img/external-link.png' 
+              : 'assets/img/external-link-white.png'}}" alt="" class="icon">
             </a>
             <app-tooltip
             [text]="'Open team'"
@@ -82,7 +82,7 @@
           <ng-container *ngIf="logged">
             <button class="button tooltip-wrapper">
               <a [routerLink]="['/edit/', team?.id]" target="_blank" class="button button-tertiary">
-                <img src="assets/edit-white.png" alt="" class="icon">
+                <img src="assets/img/edit-white.png" alt="" class="icon">
               </a>
               <app-tooltip
               [text]="'Edit team'"
@@ -90,7 +90,7 @@
               ></app-tooltip>
             </button>
             <button (click)="delete()" class="button button-primary tooltip-wrapper">
-              <img src="assets/trash-white.png" alt="" class="icon">
+              <img src="assets/img/trash-white.png" alt="" class="icon">
               <app-tooltip
               [text]="'Delete team'"
               [side]="'top'"

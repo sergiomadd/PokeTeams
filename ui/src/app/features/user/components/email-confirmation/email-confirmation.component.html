@@ -8,7 +8,7 @@
     <ng-container *ngIf="(success$ | async) as error">
       <div class="col-center b-gap">
         <div class="row-center b-gap">
-          <img src="assets/tick.png" alt="" class="feedback">
+          <img src="assets/img/tick.png" alt="" class="feedback">
           <span>Email successfully confirmed</span>
         </div>
         <button class="button-primary" [routerLink]="['/']">Go home</button>
@@ -17,7 +17,7 @@
     <ng-container *ngIf="(backendError$ | async) as error">
       <div class="col-center b-gap">
         <div class="row-center b-gap">
-          <img src="assets/x.png" alt="" class="feedback">
+          <img src="assets/img/x.png" alt="" class="feedback">
           <span class="formFeedbackError">{{error}}</span>
         </div>
         <button class="button-primary" [routerLink]="['/']">Go home</button>
@@ -27,7 +27,7 @@
   <ng-template #noparams>
     <div class="col-center b-gap">
       <div class="row-center b-gap">
-        <img src="assets/x.png" alt="" class="feedback">
+        <img src="assets/img/x.png" alt="" class="feedback">
         <span class="formFeedbackError">Incorrect credentials</span>
       </div>
       <button class="button-primary" [routerLink]="['/']">Go home</button>

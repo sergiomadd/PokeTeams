@@ -175,14 +175,14 @@
               <app-radio
               [options]="[false, true]"
               [optionNames]="['Male', 'Female']"
-              [optionIcons]="['assets/male.png', 'assets/female.png']"
+              [optionIcons]="['assets/img/male.png', 'assets/img/female.png']"
               [selectedIndex]="0"
               (selectEvent)="genderSelectEvent($event)"
               ></app-radio>
               <app-checkbox
               [checked]="pokemon.shiny ?? false"
               [label]="'shiny'"
-              [icon]="'assets/shiny.png'"
+              [icon]="'assets/img/shiny.png'"
               (checkEvent)="shinySelectEvent($event)"
               ></app-checkbox>
             </div>
@@ -202,25 +202,32 @@
                 Select a pokemon
               </div>
             </ng-container>
-            <div class="range">
+            <div class="range" [ngClass]="{notAllowed: !pokemon.name}">
               <label for="" class="text-center">IV</label>
               <div class="range-slider">
                 <input type="range" min="0" max="31" 
                 value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat].value : ''}}" 
-                class="slider" id="myRange" formControlName="ivs" [ngStyle]="{background: ivSliders[this.selectedStat]}">
+                class="slider" id="myRange" formControlName="ivs"
+                [ngClass]="{notAllowed: !pokemon.name}" 
+                [ngStyle]="{background: ivSliders[this.selectedStat]}">
               </div>
               <input class="level" formControlName="ivs"
+              [ngClass]="{notAllowed: !pokemon.name}"
               value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat].value : ''}}">
             </div>
-            <div class="range">
+            <div class="range" [ngClass]="{notAllowed: !pokemon.name}">
               <label for="" class="text-center">EV</label>
               <div class="range-slider">
                 <input type="range" min="0" max="{{currentMaxEVs}}" 
                 value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat].value : ''}}" 
-                class="slider" id="myRange" formControlName="evs" [ngStyle]="{background: evSliders[this.selectedStat]}">
+                class="slider" id="myRange" formControlName="evs"
+                [ngClass]="{notAllowed: !pokemon.name}"
+                [ngStyle]="{background: evSliders[this.selectedStat]}">
               </div>
               <input class="level" 
               value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat].value : ''}}"
+              [ngClass]="{notAllowed: !pokemon.name}"
+              [disabled]="true"
               formControlName="evs">
             </div>
             <div class="row-center">
