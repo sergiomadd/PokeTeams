@@ -1,9 +1,11 @@
 export interface ConfigState
 {
-  theme: string
+  theme: string,
+  lang: string
 }
 
 export const initialConfigState: ConfigState = 
 {
-  theme: ""
+  theme: "",
+  lang: ""
 };

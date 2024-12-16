@@ -9,6 +9,9 @@ export const configActions = createActionGroup(
       toggleTheme: props<{request: string}>(),
       "toggleTheme success": props<{theme: Theme}>(),
       "toggleTheme failure": props<{error: string}>(),
+      changeLang: props<{request: string}>(),
+      "changeLang success": props<{lang: string}>(),
+      "changeLang failure": props<{error: string}>(),
     },
   }
 )

@@ -21,4 +21,21 @@ export const configReducers = createReducer(
       theme: "light"
     }
   )),
+  on(configActions.changeLang, (state) => (
+    {
+      ...state,
+    }
+  )),
+  on(configActions.changeLangSuccess, (state, action) => (
+    {
+      ...state,
+      lang: action.lang
+    }
+  )),
+  on(configActions.changeLangFailure, (state) => (
+    {
+      ...state,
+      lang: "en"
+    }
+  )),
 )
