@@ -7,7 +7,7 @@
           <div class="row">
             <app-smart-input
             #userInput
-            [label]="'search.team-search.player' | translate"
+            [label]="'search.team_search.player' | translate"
             [keepSelected]="false"
             [allowCustom]="true"
             [getter]="queryService.queryUserCallback"
@@ -16,7 +16,7 @@
             ></app-smart-input>
             <app-smart-input
             #tournamentInput
-            [label]="'search.team-search.tournament' | translate"
+            [label]="'search.team_search.tournament' | translate"
             [keepSelected]="false"
             [allowCustom]="true"
             [getter]="queryService.queryTournamentCallback"
@@ -25,7 +25,7 @@
             ></app-smart-input>
             <app-smart-input
             #regulationInput
-            [label]="'search.team-search.regulation' | translate"
+            [label]="'search.team_search.regulation' | translate"
             [keepSelected]="false"
             [getter]="queryService.queryRegulationCallback"
             [allGetter]="queryService.regulationAllCallback"
@@ -34,7 +34,7 @@
             ></app-smart-input>
             <app-smart-input
             #tagInput
-            [label]="'search.team-search.tag' | translate"
+            [label]="'search.team_search.tag' | translate"
             [keepSelected]="false"
             [getter]="queryService.queryTagCallback"
             [allGetter]="queryService.tagAllCallback"
@@ -45,7 +45,7 @@
           <div class="row-center">
             <app-smart-input
             #pokemonInput
-            [label]="'search.team-search.pokemon' | translate"
+            [label]="'search.team_search.pokemon' | translate"
             [keepSelected]="false"
             [getter]="queryService.queryPokemonCallback"
             (selectEvent)="tagSelectEvent($event)"
@@ -53,7 +53,7 @@
             ></app-smart-input>
             <app-smart-input
             #moveInput
-            [label]="'search.team-search.move' | translate"
+            [label]="'search.team_search.move' | translate"
             [keepSelected]="false"
             [getter]="queryService.queryMoveCallback"
             (selectEvent)="tagSelectEvent($event)"
@@ -61,7 +61,7 @@
             ></app-smart-input>
             <app-smart-input
             #itemInput
-            [label]="'search.team-search.item' | translate"
+            [label]="'search.team_search.item' | translate"
             [keepSelected]="false"
             [getter]="queryService.queryItemCallback"
             (selectEvent)="tagSelectEvent($event)"
@@ -82,7 +82,7 @@
           ? 'assets/img/union.png' 
           : 'assets/img/union-white.png']"
           [optionNames]="['intersection', 'union']"
-          [tooltipTexts]="['search.team-search.intersection' | translate, 'search.team-search.union' | translate]"
+          [tooltipTexts]="['search.team_search.intersection' | translate, 'search.team_search.union' | translate]"
           [selectedIndex]="0"
           (selectEvent)="tagsSettingsSelectEvent($event)"
           ></app-radio>

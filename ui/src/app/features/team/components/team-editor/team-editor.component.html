@@ -6,14 +6,14 @@
           <div class="anon-warning tooltip-wrapper">
             <div>!</div>
             <app-tooltip
-            [text]="'You are not logged, the team wont be added to a user. Make sure to save the link!'"
+            [text]="'team.editor.not_logged-warning' | translate"
             [side]="'left'"
             ></app-tooltip>
           </div>
         </ng-container>
         <app-smart-input
         #userInput
-        [label]="'team.editor.player-input-label' | translate"
+        [label]="'team.editor.player_input-label' | translate"
         [value]="loggedUserTag"
         [disableRemove]="true"
         [updateOnChange]="true"
@@ -24,7 +24,7 @@
       <div class="editor-input">
         <app-smart-input
         #tournamentInput
-        [label]="'team.editor.tournament-input-label' | translate"
+        [label]="'team.editor.tournament_input-label' | translate"
         [keepSelected]="true"
         [allowNew]="true"
         [getter]="queryService.queryTournamentCallback"
@@ -43,7 +43,7 @@
         <app-smart-input
         #tagInput
         (disabled)="team?.tags ? team?.tags!.length > 2 : false"
-        [label]="'team.editor.tag-input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
+        [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
         [allowNew]="true"
         [getter]="queryService.queryTagCallback"
         [allGetter]="queryService.tagAllCallback"

@@ -22,7 +22,7 @@
             <app-smart-input
             #pokemonInput 
             [value]="util.getPokemonTag(pokemon)"
-            [label]="'team.pokemon-editor.pokemon' | translate"
+            [label]="'team.pokemon_editor.pokemon' | translate"
             [keepSelected]="true"
             [getter]="queryService.queryPokemonCallback"
             (selectEvent)="pokemonSelectEvent($event)"
@@ -32,7 +32,7 @@
           <div class="form-item">
             <app-smart-input
             [value]="pokemon.item"
-            [label]="'team.pokemon-editor.item' | translate"
+            [label]="'team.pokemon_editor.item' | translate"
             [keepSelected]="true"
             [getter]="queryService.queryItemCallback"
             (selectEvent)="itemSelectEvent($event)"
@@ -44,12 +44,12 @@
               <div class="smart-input-wrapper">
                 <div class="smart-input-top">
                   <div class="smart-input-label">
-                    {{'team.pokemon-editor.ability' | translate}}
+                    {{'team.pokemon_editor.ability' | translate}}
                   </div>
                   <div class="checkbox-wrapper">
                     <app-checkbox
                     [checked]="allAbilities"
-                    [label]="'team.pokemon-editor.show-all' | translate"
+                    [label]="'team.pokemon_editor.show-all' | translate"
                     (checkEvent)="allAbilitiesSwitch()"
                     ></app-checkbox>
                   </div>
@@ -78,7 +78,7 @@
               </div>
               <ng-container *ngIf="!pokemon.name && !allAbilities">
                 <div class="formFeedbackError row-center">
-                  {{'team.pokemon-editor.no-pokemon-ability-error' | translate}}
+                  {{'team.pokemon_editor.no-pokemon-ability-error' | translate}}
                 </div>
               </ng-container>
             </div>
@@ -86,7 +86,7 @@
           <div class="form-item">
             <app-smart-input
             [value]="util.getMoveTag(pokemon.moves ? pokemon.moves[0] : undefined)"
-            [label]="'team.pokemon-editor.move' | translate:{'index':1}"
+            [label]="'team.pokemon_editor.move' | translate:{'index':1}"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
             (selectEvent)="move1SelectEvent($event)"
@@ -96,7 +96,7 @@
           <div class="form-item">
             <app-smart-input
             [value]="util.getMoveTag(pokemon.moves ? pokemon.moves[1] : undefined)"
-            [label]="'team.pokemon-editor.move' | translate:{'index':2}"
+            [label]="'team.pokemon_editor.move' | translate:{'index':2}"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
             (selectEvent)="move2SelectEvent($event)"
@@ -106,7 +106,7 @@
           <div class="form-item">
             <app-smart-input
             [value]="util.getNatureTag(pokemon.nature)"
-            [label]="'team.pokemon-editor.nature' | translate"
+            [label]="'team.pokemon_editor.nature' | translate"
             [keepSelected]="true"
             [getter]="queryService.queryNatureCallback"
             [allGetter]="queryService.naturesAllCallback"
@@ -117,7 +117,7 @@
           <div class="form-item">
             <app-smart-input
             [value]="util.getMoveTag(pokemon.moves ? pokemon.moves[2] : undefined)"
-            [label]="'team.pokemon-editor.move' | translate:{'index':3}"
+            [label]="'team.pokemon_editor.move' | translate:{'index':3}"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
             (selectEvent)="move3SelectEvent($event)"
@@ -127,7 +127,7 @@
           <div class="form-item">
             <app-smart-input
             [value]="util.getMoveTag(pokemon.moves ? pokemon.moves[3] : undefined)"
-            [label]="'team.pokemon-editor.move' | translate:{'index':4}"
+            [label]="'team.pokemon_editor.move' | translate:{'index':4}"
             [keepSelected]="true"
             [getter]="queryService.queryMoveCallback"
             (selectEvent)="move4SelectEvent($event)"
@@ -137,7 +137,7 @@
           <div class="form-item">
             <app-smart-input
             [value]="util.getTypeTag(pokemon.teraType)"
-            [label]="'team.pokemon-editor.teratype' | translate"
+            [label]="'team.pokemon_editor.teratype' | translate"
             [keepSelected]="true"
             [getter]="queryService.queryTeratypeCallback"
             [allGetter]="queryService.teraTypesAllCallback"
@@ -148,7 +148,7 @@
           <div class="form-item form-item-col">
             <div class="col">
               <div class="row-center s-gap">
-                <label for="">{{"team.pokemon-editor.nickname" | translate}}</label>
+                <label for="">{{"team.pokemon_editor.nickname" | translate}}</label>
                 <input type="text" class="nickname" formControlName="nickname"
                 [ngClass]="{controlInvalid: isInvalid('nickname')}"
                 value="pokemon.nickname ?? 'error'"
@@ -159,7 +159,7 @@
             <div class="row-center s-gap">
               <div class="col">
                 <div class="row-center s-gap">
-                  <label for="">{{"team.pokemon-editor.level" | translate}}</label>
+                  <label for="">{{"team.pokemon_editor.level" | translate}}</label>
                   <input 
                   type="text" 
                   class="level" 
@@ -199,7 +199,7 @@
             </div>
             <ng-container *ngIf="!pokemon.name">
               <div class="formFeedbackError row-center">
-                {{"team.pokemon-editor.no-pokemon-stats-error" | translate}}
+                {{"team.pokemon_editor.no-pokemon-stats-error" | translate}}
               </div>
             </ng-container>
             <div class="range" [ngClass]="{notAllowed: !pokemon.name}">
@@ -231,7 +231,7 @@
               formControlName="evs">
             </div>
             <div class="row-center">
-              {{"team.pokemon-editor.remaining-evs" | translate}} {{remainingEVs}}
+              {{"team.pokemon_editor.remaining-evs" | translate}} {{remainingEVs}}
             </div>
           </div>
       </form>

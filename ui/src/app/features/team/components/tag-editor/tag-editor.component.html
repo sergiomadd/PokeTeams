@@ -9,11 +9,11 @@
         </g></svg>  
     </button>
     <div class="title">
-      {{"team.tag-editor.title" | translate}}
+      {{"team.tag_editor.title" | translate}}
     </div>
     <form class="form" [formGroup]="form">
       <div class="item">
-        <label for="">{{"team.tag-editor.name" | translate}}</label>
+        <label for="">{{"team.tag_editor.name" | translate}}</label>
         <input 
         #inputName 
         type="text" 
@@ -23,7 +23,7 @@
         <span *ngIf="isInvalid('name')" class="formFeedbackError">{{getError('name')}}</span>
       </div>
       <div class="item">
-        <label for="">{{"team.tag-editor.description" | translate}}</label>
+        <label for="">{{"team.tag_editor.description" | translate}}</label>
         <textarea 
           class="custom-scrollbar-dark" 
           rows="3" 
@@ -40,9 +40,9 @@
         <button 
         class="button-tertiary-clear" 
         (click)="toggleColorPicker()"
-        >{{"team.tag-editor.show-colors" | translate}}</button>
+        >{{"team.tag_editor.show-colors" | translate}}</button>
       </div>
-      <button class="button-primary" (click)="add()">{{"team.tag-editor.add" | translate}}</button>
+      <button class="button-primary" (click)="add()">{{"team.tag_editor.add" | translate}}</button>
     </form>
   </div>
   <app-color-picker 

@@ -18,20 +18,20 @@
     },
     "view":
     {
-      "copy-paste-button": "Copy paste",
-      "copy-link-button": "Copy link"
+      "copy_paste-button": "Copy paste",
+      "copy_link-button": "Copy link"
     },
     "edit":
     {
-      "save-team-button": "Save team"
+      "save_team-button": "Save team"
     },
     "editor":
     {
-      "not-logged-warning": "You are not logged, the team wont be added to a user. Make sure to save the link!",
-      "player-input-label": "Player",
-      "tournament-input-label": "Tournament",
-      "tag-input-label": "Tags ({{currentTags}}/{{maxTags}})",
-      "tag-input-feedback": ""
+      "not_logged-warning": "You are not logged, the team wont be added to a user. Make sure to save the link!",
+      "player_input-label": "Player",
+      "tournament_input-label": "Tournament",
+      "tag_input-label": "Tags ({{currentTags}}/{{maxTags}})",
+      "tag_input-feedback": "Tag already added"
     },
     "input":
     {
@@ -39,36 +39,36 @@
       "editor": "Editor",
       "example": "Load paste example"
     },
-    "pokemon-editor": 
+    "pokemon_editor": 
     {
       "pokemon": "Pokemon",
       "item": "Item",
       "ability": "Ability",
-      "show-all": "Show all",
+      "show_all": "Show all",
       "move": "Move {{index}}",
       "nature": "Nature",
       "teratype": "Teratype",
       "nickname": "Nickname",
       "level": "Level",
-      "remaining-evs": "Remaining EVs: ",
-      "no-pokemon-ability-error": "Select a pokemon or show all",
-      "no-pokemon-stats-error": "Select a pokemon"
+      "remaining_evs": "Remaining EVs: ",
+      "no_pokemon_ability-error": "Select a pokemon or show all",
+      "no_pokemon_stats-error": "Select a pokemon"
     },
     "team":
     {
-      "tooltip.show-all-stats": "Show all stats",
-      "tooltip.show-all-notes": "Show all notes",
-      "tooltip.close-all-tooltips": "Close all tooltips"
+      "show_all_stats-tooltip": "Show all stats",
+      "show_all_notes-tooltip": "Show all notes",
+      "close_all_tooltips-tooltip": "Close all tooltips"
     },
-    "tag-editor":
+    "tag_editor":
     {
       "title": "Tag Editor",
       "name": "Name",
       "description": "Description",
-      "show-colors": "Show colors",
+      "show_colors": "Show colors",
       "add": "Add"
     },
-    "color-picker":
+    "color_picker":
     {
       "title": "Choose color"
     } 
@@ -76,7 +76,7 @@
   },
   "search":
   {
-    "team-search":
+    "team_search":
     {
       "player": "Player",
       "tournament": "Tournament",
@@ -88,23 +88,23 @@
       "intersection": "Teams that match all",
       "union": "Teams that match any"
     },
-    "team-table":
+    "team_table":
     {
-      "sort-date": "Date",
-      "sort-views": "Views",
-      "total-teams": " teams",
-      "teams-per-page": "Teams per page: "
+      "sort_date": "Date",
+      "sort_views": "Views",
+      "total_teams": " teams",
+      "teams_per_page": "Teams per page: "
     }
   },
   "pokemon": 
   {
-    "show-stats": "Show stats",
-    "no-stats": "No pokemon",
-    "show-notes": "Show stats",
-    "no-notes": "No pokemon",
+    "show_stats": "Show stats",
+    "no_stats": "No pokemon",
+    "show_notes": "Show stats",
+    "no_notes": "No pokemon",
     "copy": "Copy pokemon",
     "copied": "Copied!",
-    "copy-error": "Error copying",
+    "copy_error": "Error copying",
     "shiny": "This pokemon is shiny",
     "level": "The Pokemon's level",
     "female": "This pokemon is female",
@@ -114,10 +114,10 @@
       "power": "Power",
       "accuracy": "Accuracy",
       "priority": "Priority",
-      "min-hits": "Min Hits",
-      "max-hits": "Max Hits",
-      "min-turns": "Min Turns",
-      "max-turns": "Max Turns",
+      "min_hits": "Min Hits",
+      "max_hits": "Max Hits",
+      "min_turns": "Min Turns",
+      "max_turns": "Max Turns",
       "drain": "Drain",
       "healing": "Healing",
       "status-chance": "Status Chance",

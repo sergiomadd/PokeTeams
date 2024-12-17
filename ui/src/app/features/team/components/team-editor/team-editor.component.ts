@@ -1,6 +1,7 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { LoggedUserService } from 'src/app/core/auth/services/logged-user.service';
 import { selectAccessToken } from 'src/app/core/auth/store/auth.selectors';
@@ -32,6 +33,7 @@ export class TeamEditorComponent
   queryService = inject(QueryService);
   teamEditorService = inject(TeamEditorService);
   loggedUserService = inject(LoggedUserService);
+  translateSergice = inject(TranslateService);
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
@@ -155,7 +157,7 @@ export class TeamEditorComponent
       }
       else if(this.team.tags.some(t => t.identifier == tag.identifier))
       {
-        this.feedback = "Tag already added";
+        this.feedback = this.translateSergice.instant("tag_input-feedback");
       }
     }
     else
