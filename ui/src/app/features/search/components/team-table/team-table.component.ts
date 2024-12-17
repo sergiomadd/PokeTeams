@@ -26,7 +26,7 @@ export class TeamTableComponent
   searched: boolean = false;
   layout: Layout = Layout.double;
 
-  sortTypeNames: string[] = ["Date", "Views"];
+  sortTypeIds: string[] = ["date", "views"];
   sortOrder: SortOrder = 
   {
     type: SortType.date,

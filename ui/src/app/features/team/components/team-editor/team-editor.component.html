@@ -13,7 +13,7 @@
         </ng-container>
         <app-smart-input
         #userInput
-        [label]="'Player'"
+        [label]="'team.editor.player-input-label' | translate"
         [value]="loggedUserTag"
         [disableRemove]="true"
         [updateOnChange]="true"
@@ -24,7 +24,7 @@
       <div class="editor-input">
         <app-smart-input
         #tournamentInput
-        [label]="'Tournament'"
+        [label]="'team.editor.tournament-input-label' | translate"
         [keepSelected]="true"
         [allowNew]="true"
         [getter]="queryService.queryTournamentCallback"
@@ -43,7 +43,7 @@
         <app-smart-input
         #tagInput
         (disabled)="team?.tags ? team?.tags!.length > 2 : false"
-        [label]="tagLabel"
+        [label]="'team.editor.tag-input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
         [allowNew]="true"
         [getter]="queryService.queryTagCallback"
         [allGetter]="queryService.tagAllCallback"

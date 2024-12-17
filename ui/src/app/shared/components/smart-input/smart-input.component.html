@@ -7,7 +7,7 @@
       <input 
       #input
       type="text" 
-      placeholder="Search..." 
+      [placeholder]="'shared.smart_input_placeholder' | translate" 
       formControlName="key"
       value="result"
       class="input"
@@ -57,7 +57,7 @@
       </div>    
       <div class="divider"></div>
       <div class="count">
-        Results: {{results.length - 1}}
+        {{'shared.smart_input_results' | translate}}: {{results.length - 1}}
       </div>
       <ng-container *ngFor="let result of results; index as i">
         <ng-container *ngIf="i > 0;">
@@ -75,7 +75,7 @@
     </ng-container>
     <ng-template #all>
       <div class="count">
-        Results: {{results.length}}
+        {{'shared.smart_input_results' | translate}}: {{results.length}}
       </div>
       <ng-container *ngFor="let result of results; index as i">
         <div 

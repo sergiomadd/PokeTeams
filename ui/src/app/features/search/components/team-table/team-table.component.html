@@ -5,10 +5,10 @@ class="team-table"
 >
   <div class="bar">
     <div class="row b-gap">
-      <ng-container *ngFor="let item of sortTypeNames; index as i">
+      <ng-container *ngFor="let item of sortTypeIds; index as i">
         <div class="category sorter" (click)="changeSorter(i)">
           <div class="sorter-text">
-            {{item}}
+            {{'search.team-table.sort-' + item | translate}}
           </div>
           <div class="way">
             <ng-container *ngIf="sortOrder.type != i">
@@ -46,7 +46,7 @@ class="team-table"
       </ng-container>
     </div>
     <div class="row b-gap">
-      <div class="category">{{totalTeams ?? '?'}} teams</div>
+      <div class="category">{{totalTeams ?? '?'}} {{'search.team-table.total-teams' | translate}}</div>
       <div 
       class="column-icon category"
       [ngClass]="{'selected': layout === 0}"
@@ -107,7 +107,7 @@ class="team-table"
       ></app-pagination>
       <form class="col s-gap" [formGroup]="paginationForm">
         <div class="row-center s-gap">
-          <label for="">Teams per page: </label>
+          <label for="">{{'search.team-table.teams-per-page' | translate}}</label>
           <input 
           type="text" 
           class="teams-per-page"

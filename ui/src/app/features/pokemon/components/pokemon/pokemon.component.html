@@ -118,10 +118,10 @@
               <div class="one-piece">
                 <span class="one-line">
                   <ng-container *ngIf="pokemon.stats.length > 0; else nostats">
-                    Show stats
+                    {{'pokemon.show-stats' | translate}} 
                   </ng-container>
                   <ng-template #nostats>
-                    No pokemon
+                    {{'pokemon.no-stats' | translate}} 
                   </ng-template>
                 </span>
               </div>
@@ -146,10 +146,10 @@
               <div class="one-piece">
                 <span class="one-line">
                   <ng-container *ngIf="pokemon.notes || editorPreview; else nonotes">
-                    Show notes
+                    {{'pokemon.show-notes' | translate}} 
                   </ng-container>
                   <ng-template #nonotes>
-                    No notes
+                    {{'pokemon.no-notes' | translate}} 
                   </ng-template>
                 </span>
               </div>
@@ -168,14 +168,14 @@
                 <span class="one-line">
                   <ng-container *ngIf="copied != undefined; else copyUndefined">
                     <ng-container *ngIf="copied; else copyError">
-                      Copied!
+                      {{'pokemon.copied' | translate}} 
                     </ng-container>
                     <ng-template #copyError>
-                      Error copying
+                      {{'pokemon.copy-error' | translate}} 
                     </ng-template>
                   </ng-container>
                   <ng-template #copyUndefined>
-                    Copy pokemon
+                    {{'pokemon.copy' | translate}} 
                   </ng-template>
                 </span>
               </div>
@@ -407,7 +407,7 @@
             <div class="section-content poke-tooltip-wrapper">
               <div class="poke-tooltip poke-tooltip-top" [ngClass]="{'poke-tooltip-visible':  tooltipMiddle[0]}">
                 <div class="one-piece">
-                  <span class="one-line">This pokemon is shiny</span>
+                  <span class="one-line">{{'pokemon.shiny' | translate}}</span>
                 </div>
               </div>
               <img src="assets/img/shiny.png" alt="" class="icon">
@@ -422,7 +422,7 @@
           <div class="section-content poke-tooltip-wrapper">
             <div class="poke-tooltip poke-tooltip-top" [ngClass]="{'poke-tooltip-visible':  tooltipMiddle[1]}">
               <div class="one-piece">
-                <span class="one-line">The Pokemon's level</span>
+                <span class="one-line">{{'pokemon.level' | translate}}</span>
               </div>
             </div>
             {{pokemon.level}}
@@ -437,12 +437,12 @@
             <div class="poke-tooltip poke-tooltip-top" [ngClass]="{'poke-tooltip-visible':  tooltipMiddle[2]}">
               <ng-container *ngIf="pokemon.gender == true; else maleText">
                 <div class="one-piece">
-                  <span class="one-line">This pokemon is female</span>
+                  <span class="one-line">{{'pokemon.female' | translate}}</span>
                 </div>
               </ng-container>
               <ng-template #maleText>
                 <div class="one-piece">
-                  <span class="one-line">This pokemon is male</span>
+                  <span class="one-line">{{'pokemon.male' | translate}}</span>
                 </div>
               </ng-template>  
             </div>
@@ -544,49 +544,49 @@
                   <div class="body move-body">
                     <div class="primary">
                       <div class="atribute">
-                        <span class="property-title">Power: </span>
+                        <span class="property-title">{{'pokemon.move.power' | translate}}: </span>
                         <ng-container *ngIf="move?.power;else emptyLine">
                           {{move?.power}}
                         </ng-container>
                       </div>
                       <div class="atribute"><span class="property-title">PP: </span>{{move?.pp}}</div>
                       <div class="atribute">
-                        <span class="property-title">Accuracy: </span>
+                        <span class="property-title">{{'pokemon.move.accuracy' | translate}}: </span>
                         <ng-container *ngIf="move?.accuracy;else emptyLine">
                           {{move?.accuracy}}%
                         </ng-container>
                       </div>
-                      <div class="atribute"><span class="property-title">Priority: </span>{{move?.priority}}</div>
+                      <div class="atribute"><span class="property-title">{{'pokemon.move.priority' | translate}}: </span>{{move?.priority}}</div>
                     </div>
                     <div class="secondary">
                       <ng-container *ngIf="move?.meta?.minHits">
-                        <div class="atribute"><span class="property-title">Min Hits: </span>{{move?.meta?.minHits}}</div>
+                        <div class="atribute"><span class="property-title">{{'pokemon.move.min-hits' | translate}}: </span>{{move?.meta?.minHits}}</div>
                       </ng-container>
                       <ng-container *ngIf="move?.meta?.maxHits">
-                        <div class="atribute"><span class="property-title">Max Hits: </span>{{move?.meta?.maxHits}}</div>
+                        <div class="atribute"><span class="property-title">{{'pokemon.move.max-hits' | translate}}: </span>{{move?.meta?.maxHits}}</div>
                       </ng-container>
                       <ng-container *ngIf="move?.meta?.minTurns">
-                        <div class="atribute"><span class="property-title">Min Turns: </span>{{move?.meta?.minTurns}}</div>
+                        <div class="atribute"><span class="property-title">{{'pokemon.move.min-turns' | translate}}: </span>{{move?.meta?.minTurns}}</div>
                       </ng-container>
                       <ng-container *ngIf="move?.meta?.maxTurns">
-                        <div class="atribute"><span class="property-title">Max Turns: </span>{{move?.meta?.maxTurns}}</div>
+                        <div class="atribute"><span class="property-title">{{'pokemon.move.max-turns' | translate}}: </span>{{move?.meta?.maxTurns}}</div>
                       </ng-container>
                       <ng-container *ngIf="move?.meta?.drain">
-                        <div class="atribute"><span class="property-title">Drain: </span>{{move?.meta?.drain}}</div>
+                        <div class="atribute"><span class="property-title">{{'pokemon.move.drain' | translate}}: </span>{{move?.meta?.drain}}</div>
                       </ng-container>
                       <ng-container *ngIf="move?.meta?.healing">
-                        <div class="atribute"><span class="property-title">Healing: </span>{{move?.meta?.healing}}</div>
+                        <div class="atribute"><span class="property-title">{{'pokemon.move.healing' | translate}}: </span>{{move?.meta?.healing}}</div>
                       </ng-container>
                       <ng-container *ngIf="move?.meta?.statusChance">
-                        <div class="atribute"><span class="property-title">Status Chance: </span>{{move?.meta?.statusChance}}%</div>
+                        <div class="atribute"><span class="property-title">{{'pokemon.move.status-chance' | translate}}: </span>{{move?.meta?.statusChance}}%</div>
                       </ng-container>
                       <ng-container *ngIf="move?.meta?.flinchChance">
-                        <div class="atribute"><span class="property-title">Flinch Chance: </span>{{move?.meta?.flinchChance}}%</div>
+                        <div class="atribute"><span class="property-title">{{'pokemon.move.flinch-chance' | translate}}: </span>{{move?.meta?.flinchChance}}%</div>
                       </ng-container>
                     </div>
                     <div class="properties">
                       <div class="property">
-                        <span class="property-title">Effect:</span> 
+                        <span class="property-title">{{'pokemon.move.effect' | translate}}: </span> 
                         <span class="property-body">
                           <ng-container *ngFor="let chunk of moveEffectsShort[i]">
                             <ng-container [ngSwitch]="chunk.type">
@@ -598,7 +598,7 @@
                         </span>
                       </div>
                       <div class="property">
-                        <span class="property-title">Target:</span>
+                        <span class="property-title">{{'pokemon.move.target' | translate}}: </span>
                         <span class="property-body">
                         <ng-container *ngFor="let chunk of moveTargets[i]">
                           <ng-container [ngSwitch]="chunk.type">
@@ -630,11 +630,11 @@
                 <div class="body row s-gap">
                   <div class="col">
                     <div class="item"></div>
-                    <div class="item">Initial</div>
+                    <div class="item">{{'pokemon.stat.initial' | translate}}</div>
                     <div class="item"><span>LvL({{pokemon.level ?? 50}})</span></div>
                   </div>
                   <div class="col" [ngStyle]="{backgroundColor: theme.getStatColor(stat.identifier)}">
-                    <div class="item">Base</div>
+                    <div class="item">{{'pokemon.stat.base' | translate}}</div>
                     <div class="item">{{stat.value}}</div>
                     <div class="item">{{calculatedStats.base[i]?.value}}</div>
                   </div>
@@ -652,7 +652,7 @@
                     <div class="item">{{teamOptions?.showEVs ? pokemon.evs ? calculatedStats.evs[i].value : '??' : "??"}}</div>
                   </div>
                   <div class="col">
-                    <div class="item">Nature</div>
+                    <div class="item">{{'pokemon.stat.nature' | translate}}</div>
                     <div class="item">{{teamOptions?.showNature ? pokemon.nature ? pokemon.nature.name : '---' : "??"}}</div>
                     <div class="item">
                       <ng-container *ngIf="teamOptions?.showNature; else notNature">
@@ -670,7 +670,7 @@
                           </ng-container>
                         </ng-container>
                         <ng-template #neutral>
-                          Neutral
+                          {{'pokemon.stat.neutral' | translate}}
                         </ng-template>
                       </ng-container>
                       <ng-template #notNature>
@@ -679,7 +679,7 @@
                     </div>
                   </div>
                   <div class="col">
-                    <div class="item">Total</div>
+                    <div class="item">{{'pokemon.stat.total' | translate}}</div>
                     <div class="item">---</div>
                     <div class="item">{{calculatedStats.total[i].value}}</div>
                   </div>

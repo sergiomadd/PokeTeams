@@ -2,12 +2,12 @@
   <div class="row-center align-center b-gap">
     <div class="col-center b-gap">
       <ng-container *ngIf="resourceName; else noname">
-        User &#64;{{resourceName}} not found!
+        {{'shared.user_not_found' | translate:{resourceName} }}
       </ng-container>
       <ng-template #noname>
-        Page not found!
+        {{'shared.page_not_found' | translate}}
       </ng-template>
-      <button class="button-primary-clear w-fit">Go back</button>
+      <button class="button-primary-clear w-fit">{{'shared.back-button' | translate}}</button>
     </div>
     <img src="assets/notfound.webp" alt="">
   </div>

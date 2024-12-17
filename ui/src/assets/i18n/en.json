@@ -1,0 +1,203 @@
+{
+  "lang":
+  {
+    "en": "English",
+    "es": "Spanish"
+  },
+  "menu":
+  { 
+    "upload": "Upload",
+    "search": "Search",
+    "theme": "Theme"
+  },
+  "team":
+  {
+    "upload":
+    {
+      "generate-button": "Generate Team"
+    },
+    "view":
+    {
+      "copy-paste-button": "Copy paste",
+      "copy-link-button": "Copy link"
+    },
+    "edit":
+    {
+      "save-team-button": "Save team"
+    },
+    "editor":
+    {
+      "not-logged-warning": "You are not logged, the team wont be added to a user. Make sure to save the link!",
+      "player-input-label": "Player",
+      "tournament-input-label": "Tournament",
+      "tag-input-label": "Tags ({{currentTags}}/{{maxTags}})",
+      "tag-input-feedback":""
+    },
+    "input":
+    {
+      "paste": "Paste",
+      "editor": "Editor",
+      "example": "Load paste example"
+    },
+    "pokemon-editor": 
+    {
+      "pokemon": "Pokemon",
+      "item": "Item",
+      "ability": "Ability",
+      "show-all": "Show all",
+      "move": "Move {{index}}",
+      "nature": "Nature",
+      "teratype": "Teratype",
+      "nickname": "Nickname",
+      "level": "Level",
+      "remaining-evs": "Remaining EVs: ",
+      "no-pokemon-ability-error": "Select a pokemon or show all",
+      "no-pokemon-stats-error": "Select a pokemon"
+    },
+    "team":
+    {
+      "tooltip.show-all-stats": "Show all stats",
+      "tooltip.show-all-notes": "Show all notes",
+      "tooltip.close-all-tooltips": "Close all tooltips"
+    },
+    "tag-editor":
+    {
+      "title": "Tag Editor",
+      "name": "Name",
+      "description": "Description",
+      "show-colors": "Show colors",
+      "add": "Add"
+    },
+    "color-picker":
+    {
+      "title": "Choose color"
+    } 
+    
+  },
+  "search":
+  {
+    "team-search":
+    {
+      "player": "Player",
+      "tournament": "Tournament",
+      "regulation": "Regulation",
+      "tag": "Tag",
+      "pokemon": "Pokemon",
+      "move": "Move",
+      "item": "Item",
+      "intersection": "Teams that match all",
+      "union": "Teams that match any"
+    },
+    "team-table":
+    {
+      "sort-date": "Date",
+      "sort-views": "Views",
+      "total-teams": " teams",
+      "teams-per-page": "Teams per page: "
+    }
+  },
+  "pokemon": 
+  {
+    "show-stats": "Show stats",
+    "no-stats": "No pokemon",
+    "show-notes": "Show stats",
+    "no-notes": "No pokemon",
+    "copy": "Copy pokemon",
+    "copied": "Copied!",
+    "copy-error": "Error copying",
+    "shiny": "This pokemon is shiny",
+    "level": "The Pokemon's level",
+    "female": "This pokemon is female",
+    "male": "This pokemon is male",
+    "move": 
+    {
+      "power": "Power",
+      "accuracy": "Accuracy",
+      "priority": "Priority",
+      "min-hits": "Min Hits",
+      "max-hits": "Max Hits",
+      "min-turns": "Min Turns",
+      "max-turns": "Max Turns",
+      "drain": "Drain",
+      "healing": "Healing",
+      "status-chance": "Status Chance",
+      "flinch-chance": "Flinch Chance",
+      "effect": "Effect",
+      "target": "Target"
+    },
+    "stat":
+    {
+      "initial": "Initial",
+      "base": "Base",
+      "nature": "Nature",
+      "neutral": "Neutral",
+      "total": "Total"
+    }
+  },
+  "user":
+  {
+    "private": "This user is private",
+    "settings":
+    {
+      "change-button": "Change",
+      "picture-title": "Profile picture",
+      "picture_selected-subtitle": "Selected",
+      "country-title": "Country",
+      "country_undefined-feedback": "No country selected",
+      "visibility-title": "Profile Visibility",
+      "visibility_public-subtitle": "Public: anyone will be able to see your profile",
+      "visibility_private-subtitle": "Private: only you will be able to see your profile",
+      "visibility_public-button": "Public",
+      "visibility_private-button": "Private",
+      "name-title": "Name",
+      "name-input_placeholder": "New name",
+      "name_undefined-feedback": "No name",
+      "username-title": "Username",
+      "username-input_placeholder": "New username",
+      "username_available-feedback": "This username is available",
+      "email-title": "Email",
+      "email-input_placeholder": "New email",
+      "email_not_verified-feedback": "Email not verified",
+      "email_verification-button": "Send verification code",
+      "email_verified-tooltip": "Your email is confirmed",
+      "password-title": "Username",
+      "password-subtitle": "Change password",
+      "current_password-input_placeholder": "Current password",
+      "new_password-input_placeholder": "New password",
+      "new_repeat_password-input_placeholder": "Repeat password",
+      "logout-button": "Log Out",
+      "delete-button": "Delete Account"
+    },
+    "form":
+    {
+      "login": "Log In",
+      "signup": "Sign Up",
+      "username-label": "Username",
+      "email-label": "Email",
+      "password-label": "Password",
+      "confirm_password-label": "Confirm Password",
+      "username_available-feedback": "This username is available",
+      "email_available-feedback": "This email is available"
+    },
+    "email_confirmation":
+    {
+      "email_confirmed-feedback": "Email successfully confirmed",
+      "incorrect_credentials-feedback": "Incorrect Credentials",
+      "home-button": "Go home"
+    }
+  },
+  "shared":
+  {
+    "user_not_found": "User @{{resourceName}} not found!",
+    "page_not_found": "Page not found!",
+    "back-button": "Go back",
+    "smart_input_placeholder": "Search...",
+    "smart_input_results": "Results"
+  },
+  "footer":
+  {
+    
+  },
+  "placeholder": "{{'user.form.' | translate}}",
+  "placeholder2": "'user.form.' | translate"
+}

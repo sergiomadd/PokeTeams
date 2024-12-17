@@ -9,9 +9,9 @@
       <div class="col-center b-gap">
         <div class="row-center b-gap">
           <img src="assets/img/tick.png" alt="" class="feedback">
-          <span>Email successfully confirmed</span>
+          <span>{{'user.form.email_confirmed-feedback' | translate}}</span>
         </div>
-        <button class="button-primary" [routerLink]="['/']">Go home</button>
+        <button class="button-primary" [routerLink]="['/']">{{'user.form.home-button' | translate}}</button>
       </div>
     </ng-container>
     <ng-container *ngIf="(backendError$ | async) as error">
@@ -20,7 +20,7 @@
           <img src="assets/img/x.png" alt="" class="feedback">
           <span class="formFeedbackError">{{error}}</span>
         </div>
-        <button class="button-primary" [routerLink]="['/']">Go home</button>
+        <button class="button-primary" [routerLink]="['/']">{{'user.form.home-button' | translate}}</button>
       </div>
     </ng-container>
   </ng-container>
@@ -28,9 +28,9 @@
     <div class="col-center b-gap">
       <div class="row-center b-gap">
         <img src="assets/img/x.png" alt="" class="feedback">
-        <span class="formFeedbackError">Incorrect credentials</span>
+        <span class="formFeedbackError">{{'user.form.incorrect_credentials-feedback' | translate}}</span>
       </div>
-      <button class="button-primary" [routerLink]="['/']">Go home</button>
+      <button class="button-primary" [routerLink]="['/']">{{'user.form.home-button' | translate}}</button>
     </div>
   </ng-template>
 </div>

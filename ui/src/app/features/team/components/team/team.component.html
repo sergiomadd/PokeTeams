@@ -59,7 +59,7 @@
         [ngClass]="{active: showAllStats}"
         >
           <app-tooltip
-          [text]="'Show all stats'"
+          [text]="'team.team.tooltip.show-all-stats' | translate"
           [side]="'right'"
           ></app-tooltip>
           <img src="assets/img/align-left.png" alt="" class="option-icon">
@@ -70,7 +70,7 @@
         [ngClass]="{active: showAllNotes}"
         >
           <app-tooltip
-          [text]="'Show all notes'"
+          [text]="'team.team.tooltip.show-all-notes' | translate"
           [side]="'right'"
           ></app-tooltip>
           <img src="assets/img/edit.png" alt="" class="option-icon">
@@ -80,7 +80,7 @@
         (click)="clickOptions(2)"
         >
           <app-tooltip
-          [text]="'Close all tooltips'"
+          [text]="'team.team.tooltip.close-all-tooltips' | translate"
           [side]="'right'"
           ></app-tooltip>
           <img src="assets/img/tooltip-close.svg" alt="" class="option-icon">

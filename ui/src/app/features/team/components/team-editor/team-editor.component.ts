@@ -136,7 +136,8 @@ export class TeamEditorComponent
     }
   }
 
-  tagLabel: string = `Tags (${this.team?.tags ? this.team?.tags?.length : 0}/3)`;
+  currentTags: number = this.team?.tags ? this.team?.tags?.length : 0;
+  maxTags: number = 3;
 
   tagSelectEvent(tag: Tag)
   {
@@ -150,7 +151,7 @@ export class TeamEditorComponent
         {
           this.disableTagSelector();
         }
-        this.tagLabel = `Tags (${this.team?.tags ? this.team?.tags?.length : 0}/3)`;
+        this.currentTags = this.team?.tags ? this.team?.tags?.length : 0;
       }
       else if(this.team.tags.some(t => t.identifier == tag.identifier))
       {
@@ -179,7 +180,7 @@ export class TeamEditorComponent
   removeTag()
   {
     this.enableTagSelector();
-    this.tagLabel = `Tags (${this.team?.tags ? this.team?.tags?.length : 0}/3)`;
+    this.currentTags = this.team?.tags ? this.team?.tags?.length : 0;
   }
 
   tagEditorCloseEvent()

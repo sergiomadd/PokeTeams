@@ -2,10 +2,10 @@
   <div class="section row b-gap">
     <div class="col s-gap">
       <div class="title">
-        Profile picture
+        {{'user.settings.picture-title' | translate}}
       </div>
       <div class="subtitle">
-        Selected: {{getPictureKey(user?.picture)}}
+        {{'user.settings.picture_selected-subtitle' | translate}}: {{getPictureKey(user?.picture)}}
       </div>
     </div> 
     <div class="row s-gap relative">
@@ -16,7 +16,7 @@
       </ng-container>
       <img src="{{user?.picture}}" alt="" class="picture">
       <div class="picture-selector">
-        <button (click)="clickPictureSelector()">Change</button>
+        <button (click)="clickPictureSelector()">{{'user.settings.change-button' | translate}}</button>
         <div class="catalog-wrapper"
         [ngClass]="{catalogShow: showCatalog}"
         >
@@ -45,7 +45,7 @@
   <div class="section row">
     <div class="col s-gap">
       <div class="title">
-        Country
+        {{'user.settings.country-title' | translate}}
       </div>
       <div class="row s-gap">
         <ng-container *ngIf="user?.country">
@@ -53,7 +53,7 @@
           <span class="subtitle">{{user?.country?.name}}</span>
         </ng-container>
         <ng-container *ngIf="!user?.country">
-          <span class="error">No country selected</span>
+          <span class="error">{{'user.settings.country_undefined-feedback' | translate}}</span>
         </ng-container>
       </div>
     </div>
@@ -88,14 +88,14 @@
   <div class="section row">
     <div class="col s-gap">
       <div class="title">
-        Profile Visibility
+        {{'user.settings.visibility-title' | translate}}
       </div>
       <div class="subtitle">
         <ng-container *ngIf="user?.visibility">
-          Public: anyone will be able to see your profile
+          {{'user.settings.visibility_public-subtitle' | translate}}
         </ng-container>
         <ng-container *ngIf="!user?.visibility">
-          Private: only you will be able to see your profile
+          {{'user.settings.visibility_private-subtitle' | translate}}
         </ng-container>
       </div>
     </div>
@@ -107,8 +107,8 @@
       </ng-container>
       <app-switch
       [inputState]="user?.visibility"
-      [leftText]="'Public'"
-      [rightText]="'Private'"
+      [leftText]="'user.settings.visibility_public-button' | translate"
+      [rightText]="'user.settings.visibility_private-button' | translate"
       (checkEvent)="changeVisibility($event)"
       ></app-switch>
       <ng-container *ngIf="changeVisibilitySubmitted">
@@ -129,14 +129,14 @@
   <div class="section row">
     <div class="col s-gap">
       <div class="title">
-        Name
+        {{'user.settings.name-title' | translate}}
       </div>
       <div class="current">
         <ng-container *ngIf="user?.name">
           <span class="subtitle">{{user?.name}}</span>
         </ng-container>
         <ng-container *ngIf="!user?.name">
-          <span class="error">No name</span>
+          <span class="error">{{'user.settings.name_undefined-feedback' | translate}}</span>
         </ng-container>
       </div>
     </div>
@@ -151,11 +151,11 @@
           </ng-container>
           <input 
           type="text" 
-          placeholder="New name" 
+          [placeholder]="'user.settings.name-input_placeholder' | translate" 
           formControlName="newName"
           [ngClass]="{controlInvalid: isInvalid('newName', 'changeNameForm')}"
           >
-          <button type="submit">Change</button>
+          <button type="submit">{{'user.settings.change-button' | translate}}</button>
           <ng-container *ngIf="changeNameSubmitted">
             <ng-container *ngIf="isSubmitting$ | async">
               <div class="feedback">
@@ -176,7 +176,7 @@
   <div class="section row">
     <div class="col s-gap">
       <div class="title">
-        Username
+        {{'user.settings.username-title' | translate}}
       </div>
       <div class="subtitle">
         {{user?.username}}
@@ -185,7 +185,7 @@
     <form [formGroup]="changeUserNameForm" (ngSubmit)="changeUserName()">
       <div class="col">
         <div class="row-end s-gap">
-          <span *ngIf="userNameAvailable" class="formFeedbackSuccess">This username is available</span>
+          <span *ngIf="userNameAvailable" class="formFeedbackSuccess">{{'user.settings.username_available-feedback' | translate}}</span>
           <span *ngIf="isInvalid('newUserName', 'changeUserNameForm')" class="formFeedbackError">{{getError('newUserName', 'changeUserNameForm')}}</span>
           <ng-container *ngIf="changeUserNameSubmitted">
             <ng-container *ngIf="(backendError$ | async) as error">
@@ -194,11 +194,11 @@
           </ng-container>
           <input 
           type="text" 
-          placeholder="New username" 
+          [placeholder]="'user.settings.username-input_placeholder' | translate" 
           formControlName="newUserName"
           [ngClass]="{controlInvalid: isInvalid('newUserName', 'changeUserNameForm')}"
           >
-          <button type="submit">Change</button>
+          <button type="submit">{{'user.settings.change-button' | translate}}</button>
           <ng-container *ngIf="changeUserNameSubmitted">
             <ng-container *ngIf="isSubmitting$ | async">
               <div class="feedback">
@@ -219,7 +219,7 @@
   <div class="section row">
     <div class="col s-gap">
       <div class="title">
-        Email
+        {{'user.settings.email-title' | translate}}
       </div>
       <div class="row s-gap">
         <div class="subtitle">
@@ -229,7 +229,7 @@
           <div class="tooltip-wrapper">
             <img src="assets/img/confirmed.png" alt="" class="big-icon selectable">
             <app-tooltip
-            [text]="'Your email is confirmed'"
+            [text]="'user.settings.email_verified-tooltip' | translate"
             [side]="'right'"
             ></app-tooltip>
           </div>
@@ -238,7 +238,7 @@
       <ng-container *ngIf="!emailConfirmed">
         <div class="col s-gap">
           <div class="formFeedbackError">
-            Email not verified
+            {{'user.settings.email_not_verified-feedback' | translate}}
           </div>
         </div>
       </ng-container>
@@ -254,11 +254,11 @@
           </ng-container>
           <input 
           type="text" 
-          placeholder="New email" 
+          [placeholder]="'user.settings.email-input_placeholder' | translate" 
           formControlName="newEmail"
           [ngClass]="{controlInvalid: isInvalid('newEmail', 'changeEmailForm')}"
           >
-          <button type="submit">Change</button>
+          <button type="submit">{{'user.settings.change-button' | translate}}</button>
           <ng-container *ngIf="changeEmailSubmitted">
             <ng-container *ngIf="isSubmitting$ | async">
               <div class="feedback">
@@ -281,7 +281,7 @@
               <span class="formFeedbackError backendErrors">{{error}}</span>
             </ng-container>
           </ng-container>
-          <button (click)="sendEmailVerificationCode()">Send verification code</button>
+          <button (click)="sendEmailVerificationCode()">{{'user.settings.email_verification-button' | translate}}</button>
           <ng-container *ngIf="sendEmailVerificationCodeSubmitted">
             <ng-container *ngIf="isSubmitting$ | async">
               <div class="feedback">
@@ -302,10 +302,10 @@
   <div class="section row">
     <div class="col s-gap">
       <div class="title">
-        Password
+        {{'user.settings.password-title' | translate}}
       </div>
       <div class="subtitle">
-        Change password
+        {{'user.settings.password-subtitle' | translate}}
       </div>
     </div>
     <form class="row b-gap" [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
@@ -317,7 +317,7 @@
       <div class="col">
         <input 
         type="password" 
-        placeholder="Current password" 
+        [placeholder]="'user.settings.current_password-input_placeholder' | translate" 
         formControlName="currentPassword"
         [ngClass]="{controlInvalid: isInvalid('currentPassword', 'changePasswordForm')}"
         >
@@ -326,7 +326,7 @@
       <div class="col">
         <input 
         type="password" 
-        placeholder="New password" 
+        [placeholder]="'user.settings.new_password-input_placeholder' | translate" 
         formControlName="password"
         [ngClass]="{controlInvalid: isInvalid('password', 'changePasswordForm')}"
         >
@@ -335,13 +335,13 @@
       <div class="col">
         <input 
         type="password" 
-        placeholder="Repeat password" 
+        [placeholder]="'user.settings.new_repeat_password-input_placeholder' | translate" 
         formControlName="confirmPassword"
         [ngClass]="{controlInvalid: isInvalid('confirmPassword', 'changePasswordForm')}"
         >
         <div *ngIf="isInvalid('confirmPassword', 'changePasswordForm')" class="formFeedbackError">{{getError('confirmPassword', 'changePasswordForm')}}</div>
       </div>
-      <button type="submit">Change</button>
+      <button type="submit">{{'user.settings.change-button' | translate}}</button>
       <ng-container *ngIf="changePasswordSubmitted">
         <ng-container *ngIf="isSubmitting$ | async">
           <div class="feedback">
@@ -359,10 +359,10 @@
   </div>
   <div class="buttons">
     <div class="logout">
-      <button (click)="logOut()" class="button-primary-clear">Log Out</button>
+      <button (click)="logOut()" class="button-primary-clear">{{'user.settings.logout-button' | translate}}</button>
     </div>
     <div class="delete">
-      <button (click)="tryDeleteAccout()" class="button-primary">Delete Account</button>
+      <button (click)="tryDeleteAccout()" class="button-primary">{{'user.settings.delete-button' | translate}}</button>
     </div>
   </div>
 </div>

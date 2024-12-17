@@ -3,10 +3,10 @@
     <ng-container *ngIf="login">
       <div class="nav">
         <button class="tab tab-left tab-selected button-primary" (click)="showLogInForm()">
-          Log In
+          {{'user.form.login' | translate}}
         </button>
         <button class="tab tab-right" (click)="showSignUpForm()">
-          Sign Up
+          {{'user.form.signup' | translate}}
         </button>
       </div>
       <form
@@ -16,7 +16,7 @@
       >
         <div class="inputs">
           <div class="item">
-            <label for="">Username</label>
+            <label for="">{{'user.form.username-label' | translate}}</label>
             <input type="text" 
             formControlName="userNameOrEmail"
             [ngClass]="{controlInvalid: isInvalid('userNameOrEmail', 'login')}"
@@ -24,7 +24,7 @@
             <span *ngIf="isInvalid('userNameOrEmail', 'login')" class="formFeedbackError">{{getError('userNameOrEmail', 'login')}}</span>
           </div>
           <div class="item">
-            <label for="">Password</label>
+            <label for="">{{'user.form.password-label' | translate}}</label>
             <input type="password" 
             formControlName="password"
             [ngClass]="{controlInvalid: isInvalid('password', 'login')}"
@@ -47,17 +47,17 @@
           type="submit" 
           class="button-primary"
           [disabled]="data.isSubmitting"
-          >Log In</button>
+          >{{'user.form.login' | translate}}</button>
         </div>
       </form>
     </ng-container>
     <ng-container *ngIf="signup">
       <div class="nav">
         <button class="tab tab-left" (click)="showLogInForm()">
-          Log In
+          {{'user.form.login' | translate}}
         </button>
         <button class="tab tab-right tab-selected" (click)="showSignUpForm()">
-          Sign Up
+          {{'user.form.signup' | translate}}
         </button>
       </div>
       <form class="form"
@@ -66,25 +66,25 @@
       >
         <div class="inputs">
           <div class="item">
-            <label>Username*</label>
+            <label>{{'user.form.username-label' | translate}}*</label>
             <input type="text" 
             formControlName="username"
             [ngClass]="{controlInvalid: isInvalid('username', 'signup')}"
             >
-            <span *ngIf="userNameAvailable" class="formFeedbackSuccess">This username is available</span>
+            <span *ngIf="userNameAvailable" class="formFeedbackSuccess">{{'user.form.username_available-feedback' | translate}}</span>
             <span *ngIf="isInvalid('username', 'signup')" class="formFeedbackError">{{getError('username', 'signup')}}</span>
           </div>
           <div class="item">
-            <label>Email*</label>
+            <label>{{'user.form.email-label' | translate}}*</label>
             <input type="text" 
             formControlName="email"
             [ngClass]="{controlInvalid: isInvalid('email', 'signup')}"
             >
-            <span *ngIf="emailAvailable" class="formFeedbackSuccess">This email is available</span>
+            <span *ngIf="emailAvailable" class="formFeedbackSuccess">{{'user.form.email_available-feedback' | translate}}</span>
             <span *ngIf="isInvalid('email', 'signup')" class="formFeedbackError">{{getError('email', 'signup')}}</span>
           </div>
           <div class="item">
-            <label>Password*</label>
+            <label>{{'user.form.password-label' | translate}}*</label>
             <input type="password" 
             formControlName="password"
             [ngClass]="{controlInvalid: isInvalid('password', 'signup')}"
@@ -92,7 +92,7 @@
             <span *ngIf="isInvalid('password', 'signup')" class="formFeedbackError">{{getError('password', 'signup')}}</span>
           </div>
           <div class="item">
-            <label>Confirm Password*</label>
+            <label>{{'user.form.confirm_password-label' | translate}}*</label>
             <input type="password" 
             formControlName="confirmPassword"
             [ngClass]="{controlInvalid: isInvalid('confirmPassword', 'signup')}"
@@ -115,7 +115,7 @@
           type="submit" 
           class="button-primary"
           [disabled]="data.isSubmitting"
-          >Sign Up</button>
+          >{{'user.form.signup' | translate}}</button>
         </div>
       </form>
     </ng-container>
