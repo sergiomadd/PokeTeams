@@ -1,13 +1,23 @@
-$optionWidth: 9vw;
 $optionHeight: 3vh;
-$optionsMaxHeight: 30vh;
+$optionsMaxHeight: 25vh;
 
 .icon
 {
-  width: 1vw;
-  height: 1vw;
-  padding-right: 0.25vw;
+  width: 1.4rem;
+  height: 1.4rem;
+  padding: 0.2rem 0.3rem 0.2rem 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.icon-small
+{
+  width: 1.4em;
+  height: 1.4em;
+  padding: 0.2rem;
+}
+
 
 .disabled
 {
@@ -17,99 +27,103 @@ $optionsMaxHeight: 30vh;
 
 .dropdown
 {
-  .dropdown-selector
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+
+  .selector
   {
-    position: relative;
+    height: calc($optionHeight + 0.4em);
+    width: 100%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-
-    width: $optionWidth;
-    height: calc($optionHeight + 0.4vw);
-    padding: 0 0.4vw;
-
-    background-color: white;
-    color: var(--text-color);
-    border: 1px solid black;
-    border-radius: 5px;
+    justify-content: space-between;
     overflow: hidden;
-    cursor: pointer;
-
-    input
-    {
-      color: var(--text-color);
-      background-color: white;
-      border: var(--bg-color-3) solid 1px;
-      width: 90%;
-    }
+    font-size: 1.3em;
 
     .dropdown-arrow
     {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100%;
 
       .arrow 
       {
         display: inline-block;
         padding: 3px;
-        transition: all ease-in 0.5s;
+        transition: transform ease-in 0.3s;
       }
 
       .up 
       {
-        transform: rotate(-180deg);
-        -webkit-transform: rotate(-180deg);
+        transform: rotate(180deg);
+        -webkit-transform: rotate(180deg);
       }
     }
   }
 
-  .dropdown-options
+  .options
   {
     position: absolute;
-    align-items: center;
-
-    width: calc($optionWidth + 0.2vw);
+    top: calc(100% + 0.8em);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
     max-height: 0;
-    padding: 0.2vw;
-    padding-left: 0.4vw;
+    padding: 4px;
+    box-sizing:border-box;
 
-    background-color: white;
+    background-color: var(--bg-color-1);
     color: var(--text-color);
     border: 1px solid black;
-    border-radius: .25em;
+    border-radius: 5px;
     font-size: small;
+    overflow: hidden;
 
     visibility: hidden;
-    overflow-y: scroll;
-    overflow-x: auto;
-    z-index: 2;
-    cursor: pointer;
+    z-index: 3;
 
-    transition: all ease-in 0.5s;
-
-    .dropdown-option
-    {
-      display: flex;
-      align-items: center;
-
-      max-width: $optionWidth;
-      height: 100%;
-      height: $optionHeight;
-      padding: 0.2vw 1em;
-      border-radius: .25em;
-
-      &:hover
-      {
-        background-color: var(--bg-color-2);
-      }
-    }
+    transition: all ease-in-out 500ms;
   }
 
-  .dropdown-options-visible 
+  .options-visible 
   {
     max-height: calc($optionHeight * 12);
     visibility: visible !important;
   }
+
+  .option
+  {
+    display: flex;
+    align-items: center;
+    min-height: calc($optionHeight + 0.5em);
+    padding: 0 0.2vw 0 0.2vw;
+    gap: 0.4rem;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+
+    &:hover
+    {
+      background-color: var(--bg-color-3);
+    }
+  }
+}
+
+.only-icon-options
+{
+  padding: 0 !important;
+}
+
+.only-icon-option
+{
+  display: flex;
+  justify-content: center;
+}
+
+.selected
+{
+  padding: 0 !important;
 }
