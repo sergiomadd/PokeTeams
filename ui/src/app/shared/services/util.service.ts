@@ -1,6 +1,7 @@
 
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { Ability } from '../../features/pokemon/models/ability.model';
 import { Move } from '../../features/pokemon/models/move.model';
 import { Nature } from '../../features/pokemon/models/nature.model';
@@ -14,9 +15,11 @@ import { Tag } from '../../features/team/models/tag.model';
 })
 export class UtilService 
 {
+  translate = inject(TranslateService);
 
-
-  constructor() { }
+  constructor() 
+  {
+  }
 
   toCamelCase(o) 
   {
@@ -49,59 +52,59 @@ export class UtilService
   {
     if(control?.hasError('required'))
     {
-      return "This field is required";
+      return this.translate.instant('shared.errors.required');
     }
     if(control?.hasError('minlength'))
     {
-      return `The field has to be longer than ${control?.getError('minlength')['requiredLength']} characters`;
+      return this.translate.instant('shared.errors.minlength', {"minlength": control?.getError('minlength')['requiredLength']});
     }
     if(control?.hasError('maxlength'))
     {
-      return `The field has to be shorter than ${control.getError('maxlength')['requiredLength']} characters`;
+      return this.translate.instant('shared.errors.maxlength', {"maxlength": control.getError('maxlength')['requiredLength']});
     }
     if(control?.hasError('email'))
     {
-      return "This field has to be a valid email";
+      return this.translate.instant('shared.errors.email');
     }
     if(control?.hasError('passwordMismatch'))
     {
-      return "The passwords must match";
+      return this.translate.instant('shared.errors.passwordMismatch');
     }
     if(control?.hasError('samePassword'))
     {
-      return "The new password must be different";
+      return this.translate.instant('shared.errors.samePassword');
     }
     if(control?.hasError('usernameTaken'))
     {
-      return "This username is already registered";
+      return this.translate.instant('shared.errors.usernameTaken');
     }
     if(control?.hasError('emailTaken'))
     {
-      return "This email is already registered";
+      return this.translate.instant('shared.errors.emailTaken');
     }
     if(control?.hasError('tournamentTaken'))
     {
-      return "This tournament is already registered";
+      return this.translate.instant('shared.errors.tournamentTaken');
     }
     if(control?.hasError('tagTaken'))
     {
-      return "This tag is already registered";
+      return this.translate.instant('shared.errors.tagTaken');
     }
     if(control?.hasError('notLoggedUserName'))
     {
-      return "The team wont be added to your user";
+      return this.translate.instant('shared.errors.notLoggedUserName');
     }
     if(control?.hasError('min'))
     {
-      return `The value has to be higher than ${control.getError('min')['min']}`;
+      return this.translate.instant('shared.errors.min', {"min": control.getError('min')['min']});
     }
     if(control?.hasError('max'))
     {
-      return `The value has to be lower than ${control.getError('max')['max']}`;
+      return this.translate.instant('shared.errors.max', {"max": control.getError('max')['max']});
     }
     if(control?.hasError('nan'))
     {
-      return `The value has to be a number`;
+      return this.translate.instant('shared.errors.nan');
     }
     return "error";
   }

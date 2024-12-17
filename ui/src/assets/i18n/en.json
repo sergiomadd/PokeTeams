@@ -31,7 +31,7 @@
       "player-input-label": "Player",
       "tournament-input-label": "Tournament",
       "tag-input-label": "Tags ({{currentTags}}/{{maxTags}})",
-      "tag-input-feedback":""
+      "tag-input-feedback": ""
     },
     "input":
     {
@@ -192,12 +192,23 @@
     "page_not_found": "Page not found!",
     "back-button": "Go back",
     "smart_input_placeholder": "Search...",
-    "smart_input_results": "Results"
-  },
-  "footer":
-  {
-    
-  },
-  "placeholder": "{{'user.form.' | translate}}",
-  "placeholder2": "'user.form.' | translate"
+    "smart_input_results": "Results",
+    "errors":
+    {
+      "required": "This field is required",
+      "minlength": "The field must be longer than {{minlength}} characters",
+      "maxlength": "The field must be shorter than {{maxlength}} characters",
+      "email": "This field must be a valid email",
+      "passwordMismatch": "The passwords must match",
+      "samePassword": "The new password must be different",
+      "usernameTaken": "This username is already registered",
+      "emailTaken": "This email is already registered",
+      "tournamentTaken": "This tournament is already registered",
+      "tagTaken": "This tag is already registered",
+      "notLoggedUserName": "The team wont be added to your user",
+      "min": "The value must be higher than {{min}}",
+      "max": "The value must be lower than {{max}}",
+      "nan": "The value must be a number"
+    }
+  }
 }
