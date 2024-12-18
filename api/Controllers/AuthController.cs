@@ -203,8 +203,14 @@ namespace api.Controllers
                 Printer.Log(ex.Message);
                 return BadRequest("Signup error, exception, Model not valid");
             }
-            var token = _tokenGenerator.GenerateAccessToken(user);
-            return Ok(new JwtResponseDTO { AccessToken = token });
+            string token = _tokenGenerator.GenerateAccessToken(user);
+            string refreshToken = _tokenGenerator.GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(90);
+            await _userManager.UpdateAsync(user);
+
+            return Ok(new JwtResponseDTO { AccessToken = token, RefreshToken = refreshToken });
         }
 
         [HttpGet, Route("logout")]
