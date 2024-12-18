@@ -1,0 +1,212 @@
+{
+  "lang":
+  {
+    "en": "Ingles",
+    "es": "Español"
+  },
+  "menu":
+  { 
+    "upload": "Subir",
+    "search": "Buscar",
+    "theme": "Tema"
+  },
+  "team":
+  {
+    "upload":
+    {
+      "generate-button": "Generar Equipo"
+    },
+    "view":
+    {
+      "copy-paste-button": "Copiar paste",
+      "copy-link-button": "Copiar link"
+    },
+    "edit":
+    {
+      "save_team-button": "Guardar equipo"
+    },
+    "editor":
+    {
+      "not_logged-warning": "No estas logeado, por lo que el equipo no se te añadira a tu usuario. Asegurate de guardar el link!",
+      "player_input-label": "Jugador",
+      "tournament_input-label": "Torneo",
+      "tag_input-label": "Tags ({{currentTags}}/{{maxTags}})",
+      "tag_input-feedback": "Tag ya añadida"
+    },
+    "input":
+    {
+      "paste": "Paste",
+      "editor": "Editor",
+      "example": "Cargar paste de ejemplo"
+    },
+    "pokemon_editor": 
+    {
+      "pokemon": "Pokémon",
+      "item": "Objecto",
+      "ability": "Habilidad",
+      "show_all": "Mostar todas",
+      "move": "Movimiento {{index}}",
+      "nature": "Naturaleza",
+      "teratype": "Teratipo",
+      "nickname": "Apodo",
+      "level": "Nivel",
+      "remaining_evs": "EVs restantes: ",
+      "no_pokemon_ability-error": "Selecciona un pokemon o muestra todas",
+      "no_pokemon_stats-error": "Selecciona un pokemon"
+    },
+    "team":
+    {
+      "show_all_stats-tooltip": "Mostrar todas las estadísticas",
+      "show_all_notes-tooltip": "Mostrar todas las notas",
+      "close_all_tooltips-tooltip": "Cerrar todas las tooltips"
+    },
+    "tag_editor":
+    {
+      "title": "Editor de tags",
+      "name": "Nombre",
+      "description": "Descripción",
+      "show_colors": "Mostrar colores",
+      "add": "Añadir"
+    },
+    "color_picker":
+    {
+      "title": "Elige color"
+    } 
+  },
+  "search":
+  {
+    "team_search":
+    {
+      "player": "Jugador",
+      "tournament": "Torneo",
+      "regulation": "Regulación",
+      "tag": "Tag",
+      "pokemon": "Pokemon",
+      "move": "Movimiento",
+      "item": "Objecto",
+      "intersection": "Equipos que tienen todas",
+      "union": "Equipos que tienen almenos una"
+    },
+    "team_table":
+    {
+      "sort_date": "Fecha",
+      "sort_views": "Visitas",
+      "total_teams": " equipos",
+      "teams_per_page": "Equipos por página: "
+    }
+  },
+  "pokemon": 
+  {
+    "show_stats": "Mostrar stats",
+    "no_stats": "No hay pokemon",
+    "show_notes": "Mostrar notas",
+    "no_notes": "No hay pokemon",
+    "copy": "Copiar pokemon",
+    "copied": "Copiado!",
+    "copy_error": "Error copiando",
+    "shiny": "El pokemon es variocolor",
+    "level": "El nivel del pokemon",
+    "female": "Este pokemon es hembra",
+    "male": "Este pokemon es macho",
+    "move": 
+    {
+      "power": "Potencia",
+      "accuracy": "Precisión",
+      "priority": "Prioridad",
+      "min_hits": "Golpes min",
+      "max_hits": "Golpes max",
+      "min_turns": "Turnos min",
+      "max_turns": "Turnos max",
+      "drain": "Drenaje",
+      "healing": "Cura",
+      "status-chance": "Probabilidad de estado",
+      "flinch-chance": "Probabilidad de amedrentar",
+      "effect": "Efecto",
+      "target": "Objetivo"
+    },
+    "stat":
+    {
+      "initial": "Inicial",
+      "base": "Base",
+      "nature": "Naturaleza",
+      "neutral": "Neutral",
+      "total": "Total"
+    }
+  },
+  "user":
+  {
+    "private": "Este usuario es privado",
+    "settings":
+    {
+      "change-button": "Cambiar",
+      "picture-title": "Imagen de perfil",
+      "picture_selected-subtitle": "Seleccionada",
+      "country-title": "País",
+      "country_undefined-feedback": "No has seleccionado ningun país",
+      "visibility-title": "Privacidad del perfil",
+      "visibility_public-subtitle": "Publico: cualquiera puede ver tu perfil",
+      "visibility_private-subtitle": "Privado: solo tu podras ver tu perfil",
+      "visibility_public-button": "Publico",
+      "visibility_private-button": "Privado",
+      "name-title": "Nombre",
+      "name-input_placeholder": "Nuevo numbre",
+      "name_undefined-feedback": "Sin nombre",
+      "username-title": "Nombre de usuario",
+      "username-input_placeholder": "Nuevo nombre de usuario",
+      "username_available-feedback": "Este nombre de usuario está disponible",
+      "email-title": "Correo",
+      "email-input_placeholder": "Nuevo correo",
+      "email_not_verified-feedback": "Correo sin confirmar",
+      "email_verification-button": "Enviar confirmacion del correo",
+      "email_verified-tooltip": "Tu correo esta confirmado",
+      "password-title": "Contraseña",
+      "password-subtitle": "Cambiar contraseña",
+      "current_password-input_placeholder": "Contraseña actual",
+      "new_password-input_placeholder": "Nueva contraseña",
+      "new_repeat_password-input_placeholder": "Repetir contraseña",
+      "logout-button": "Cerrar sesión",
+      "delete-button": "Eliminar cuenta"
+    },
+    "form":
+    {
+      "login": "Iniciar sesión",
+      "signup": "Registrarse",
+      "username-label": "Nombre de usuario",
+      "email-label": "Correo",
+      "password-label": "Contraseña",
+      "confirm_password-label": "Confirmar contraseña",
+      "username_available-feedback": "Este nombre de usuario está disponible",
+      "email_available-feedback": "Este correo está disponible"
+    },
+    "email_confirmation":
+    {
+      "email_confirmed-feedback": "Correo confirmado!",
+      "incorrect_credentials-feedback": "Credenciales incorrectos",
+      "home-button": "Ir a inicio"
+    }
+  },
+  "shared":
+  {
+    "user_not_found": "Usuario @{{resourceName}} no encontrado!",
+    "page_not_found": "Pagina no encontrada!",
+    "back-button": "Ir a inicio",
+    "smart_input_placeholder": "Buscar...",
+    "smart_input_results": "Resultados",
+    "errors":
+    {
+      "required": "Este campo es obligatorio",
+      "minlength": "Este campo debe tener mas de {{minlength}} caracteres",
+      "maxlength": "Este campo debe tener menos de {{maxlength}} caracteres",
+      "email": "Este campo debe ser un correo valido",
+      "passwordMismatch": "Las contraseñas deben ser iguales",
+      "samePassword": "La nueva contraseña debe ser diferente",
+      "usernameTaken": "Este nombre de usuario ya esta registrado",
+      "emailTaken": "Este correo ya esta registrado",
+      "tournamentTaken": "Este torneo ya esta registrado",
+      "tagTaken": "Esta tag ya esta registrada",
+      "min": "Debe ser mayor que {{min}}",
+      "max": "Debe ser menor que {{max}}",
+      "nan": "Debe ser un numero"
+    }
+  }
+}

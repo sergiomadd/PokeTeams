@@ -72,7 +72,6 @@
     {
       "title": "Choose color"
     } 
-    
   },
   "search":
   {
@@ -100,13 +99,13 @@
   {
     "show_stats": "Show stats",
     "no_stats": "No pokemon",
-    "show_notes": "Show stats",
+    "show_notes": "Show notes",
     "no_notes": "No pokemon",
     "copy": "Copy pokemon",
     "copied": "Copied!",
     "copy_error": "Error copying",
     "shiny": "This pokemon is shiny",
-    "level": "The Pokemon's level",
+    "level": "The pokemon's level",
     "female": "This pokemon is female",
     "male": "This pokemon is male",
     "move": 
@@ -157,10 +156,10 @@
       "username_available-feedback": "This username is available",
       "email-title": "Email",
       "email-input_placeholder": "New email",
-      "email_not_verified-feedback": "Email not verified",
-      "email_verification-button": "Send verification code",
+      "email_not_verified-feedback": "Email not confirmed",
+      "email_verification-button": "Send confirmation code",
       "email_verified-tooltip": "Your email is confirmed",
-      "password-title": "Username",
+      "password-title": "Password",
       "password-subtitle": "Change password",
       "current_password-input_placeholder": "Current password",
       "new_password-input_placeholder": "New password",
@@ -205,7 +204,6 @@
       "emailTaken": "This email is already registered",
       "tournamentTaken": "This tournament is already registered",
       "tagTaken": "This tag is already registered",
-      "notLoggedUserName": "The team wont be added to your user",
       "min": "The value must be higher than {{min}}",
       "max": "The value must be lower than {{max}}",
       "nan": "The value must be a number"

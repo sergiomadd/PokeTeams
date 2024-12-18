@@ -49,7 +49,7 @@
                   <div class="checkbox-wrapper">
                     <app-checkbox
                     [checked]="allAbilities"
-                    [label]="'team.pokemon_editor.show-all' | translate"
+                    [label]="'team.pokemon_editor.show_all' | translate"
                     (checkEvent)="allAbilitiesSwitch()"
                     ></app-checkbox>
                   </div>
@@ -78,7 +78,7 @@
               </div>
               <ng-container *ngIf="!pokemon.name && !allAbilities">
                 <div class="formFeedbackError row-center">
-                  {{'team.pokemon_editor.no-pokemon-ability-error' | translate}}
+                  {{'team.pokemon_editor.no_pokemon_ability-error' | translate}}
                 </div>
               </ng-container>
             </div>
@@ -199,7 +199,7 @@
             </div>
             <ng-container *ngIf="!pokemon.name">
               <div class="formFeedbackError row-center">
-                {{"team.pokemon_editor.no-pokemon-stats-error" | translate}}
+                {{"team.pokemon_editor.no_pokemon_stats-error" | translate}}
               </div>
             </ng-container>
             <div class="range" [ngClass]="{notAllowed: !pokemon.name}">
