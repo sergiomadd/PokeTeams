@@ -8,6 +8,9 @@ using api.DTOs;
 using api.Services;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Azure;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace api.Controllers
 {
@@ -29,6 +32,8 @@ namespace api.Controllers
             _userService = userService;
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AllowAnonymous]
         [HttpGet, Route("{userName}")]
         public async Task<ActionResult<UserDTO>> GetUserByUserName(string userName)
         {
@@ -37,8 +42,8 @@ namespace api.Controllers
             {
                 return NotFound("Couldn't find user");
             }
-            User loggedUser = await _userManager.GetUserAsync(User);
-            UserDTO userDTO = await _userService.BuildUserDTO(user, loggedUser != null ? user.Id == loggedUser.Id : false);
+            UserDTO userDTO = await _userService.BuildUserDTO(user, 
+                User.Identity.Name != null ? User.Identity.Name == user.UserName : false);
             return Ok(userDTO);
         }
 
