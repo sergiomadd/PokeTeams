@@ -17,6 +17,7 @@ import { ConfigModule } from './core/config/config.module';
 import { FooterComponent } from './core/layout/footer/footer.component';
 import { MenuComponent } from './core/layout/menu/menu.component';
 import { ErrorInterceptorService } from './core/services/error-interceptor.service';
+import { LangInterceptorService } from './core/services/lang-interceptor.service';
 import { TokenInterceptorService } from './core/services/token-interceptor.service';
 import { metaReducers } from './core/store/app.state';
 import { HydrationEffects } from './core/store/hydration/hydration.effects';
@@ -137,7 +138,12 @@ import { LinkerPipe } from './shared/pipes/linker.pipe';
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptorService,
       multi: true
-    }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LangInterceptorService, 
+      multi: true
+    },
   ],
   bootstrap: [AppComponent]
 })
