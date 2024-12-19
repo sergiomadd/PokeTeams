@@ -28,12 +28,13 @@ namespace api.Data
         public DbSet<Move_meta> Move_meta { get; set; }
         public DbSet<Move_meta_stat_changes> Move_meta_stat_changes { get; set; }
         public DbSet<Pokemon_moves> Pokemon_moves { get; set; }
-
         //
         public DbSet<Types> Types { get; set; }
         public DbSet<Type_names> Type_names { get; set; }
         public DbSet<Type_efficacy> Type_efficacy { get; set; }
         public DbSet<Stats> Stats { get; set; }
         public DbSet<Stat_names> Stat_names { get; set; }
+        //
+        public DbSet<Languages> Languages { get; set; }
     }
 }

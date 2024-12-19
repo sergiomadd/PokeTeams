@@ -56,5 +56,7 @@ namespace api.Data
         public DbSet<Type_efficacy> Type_efficacy { get; set; }
         public DbSet<Type_names> Type_names { get; set; }
         public DbSet<Types> Types { get; set; }
+
+        public DbSet<Languages> Languages { get; set; }
     }
 }
