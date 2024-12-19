@@ -822,5 +822,14 @@ namespace api.Services
             return pokeTypes;
         }
 
+        public int GetLangId(string lang)
+        {
+            Languages? languages = _pokedexContext.Languages.FirstOrDefault(l => l.identifier == lang);
+            if(languages != null)
+            {
+                return languages.id;
+            }
+            return 9;
+        }
     }
 }

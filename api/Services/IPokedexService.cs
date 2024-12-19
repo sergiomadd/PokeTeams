@@ -32,6 +32,7 @@ namespace api.Services
         public List<TagDTO> QueryPokemonsByName(string key);
         public List<TagDTO> QueryMovesByName(string key);
         public List<TagDTO> QueryItemsByName(string key);
+        public int GetLangId(string lang);
 
     }
 }
