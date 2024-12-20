@@ -19,7 +19,10 @@ namespace api.Controllers
         [HttpGet("{typeName}", Name = "GetTypeByIdentifier")]
         public async Task<ActionResult<PokeTypeWithEffectivenessDTO>> GetTypeByIdentifier(string typeName)
         {
-            var type = await _pokemonService.GetTypeWithEffectivenessByIdentifier(typeName);
+            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+
+            var type = await _pokemonService.GetTypeWithEffectivenessByIdentifier(typeName, langId);
             if (type == null)
             {
                 return BadRequest("Type not found.");
@@ -30,7 +33,10 @@ namespace api.Controllers
         [HttpGet("teratype/{typeName}", Name = "GetTeraTypeByIdentifier")]
         public async Task<ActionResult<PokeTypeWithEffectivenessDTO>> GetTeraTypeByIdentifier(string typeName)
         {
-            var type = await _pokemonService.GetTypeWithEffectivenessByIdentifier(typeName, true);
+            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+
+            var type = await _pokemonService.GetTypeWithEffectivenessByIdentifier(typeName, langId, true);
             if (type == null)
             {
                 return BadRequest("Type not found.");
@@ -41,7 +47,10 @@ namespace api.Controllers
         [HttpGet("all", Name = "GetAllTypes")]
         public async Task<ActionResult<List<PokeTypeDTO>>> GetAllTypes()
         {
-            var types = await _pokemonService.GetAllTypes();
+            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+
+            var types = await _pokemonService.GetAllTypes(langId);
             if (types == null)
             {
                 return BadRequest("Type not found.");
@@ -52,7 +61,10 @@ namespace api.Controllers
         [HttpGet("teratype/all", Name = "GetAllTeraTypes")]
         public async Task<ActionResult<List<PokeTypeDTO>>> GetAllTeraTypes()
         {
-            var types = await _pokemonService.GetAllTeraTypes();
+            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+
+            var types = await _pokemonService.GetAllTeraTypes(langId);
             if (types == null)
             {
                 return BadRequest("Type not found.");
@@ -63,7 +75,10 @@ namespace api.Controllers
         [HttpGet, Route("query")]
         public async Task<ActionResult<List<TagDTO>>> QueryTypesByName(string key)
         {
-            List<TagDTO> types = _pokemonService.QueryTypesByName(key);
+            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+
+            List<TagDTO> types = _pokemonService.QueryTypesByName(key, langId);
             if (types == null)
             {
                 return NotFound("Couldn't query types");
@@ -74,7 +89,10 @@ namespace api.Controllers
         [HttpGet, Route("teratype/query")]
         public async Task<ActionResult<List<TagDTO>>> QueryTeraTypesByName(string key)
         {
-            List<TagDTO> types = _pokemonService.QueryTypesByName(key, true);
+            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+
+            List<TagDTO> types = _pokemonService.QueryTypesByName(key, langId, true);
             if (types == null)
             {
                 return NotFound("Couldn't query types");

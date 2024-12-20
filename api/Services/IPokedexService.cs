@@ -7,31 +7,31 @@ namespace api.Services
 {
     public interface IPokedexService
     {
-        public Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon);
-        public Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, TeamOptionsDTO editorOptions);
-        public Task<PokemonDataDTO?> GetPokemonByName(string name);
-        public Task<PokemonDataDTO?> GetPokemonById(int id);
-        public Task<ItemDTO?> GetItemByName(string name);
-        public Task<ItemDTO?> GetItemByIdentifier(string identifier);
-        public Task<AbilityDTO?> GetAbilityByName(string name);
-        public Task<AbilityDTO?> GetAbilityByIdentifier(string identifier);
-        public Task<List<TagDTO>> GetAllAbilitiesTags();
-        public Task<List<TagDTO>> GetPokemonAbilites(string id);
-        public List<TagDTO> QueryAbilitiesByName(string key);
-        public Task<NatureDTO?> GetNatureByName(string name);
-        public Task<NatureDTO?> GetNatureByIdentifier(string identifier);
-        public Task<List<NatureDTO>> GetAllNatures();
-        public List<TagDTO> QueryNaturesByName(string key);
-        public Task<MoveDTO?> GetMoveByName(string name);
-        public Task<List<TagDTO>> GetPokemonMoves(string id);
-        public Task<List<PokeTypeDTO>> GetAllTypes();
-        public Task<List<PokeTypeDTO>> GetAllTeraTypes();
-        public List<TagDTO> QueryTypesByName(string key, bool teraType = false);
-        public Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessByIdentifier(string identifier, bool teraType = false);
-        public Task<string?> GetStatNameByIdentifier(string identifier);
-        public List<TagDTO> QueryPokemonsByName(string key);
-        public List<TagDTO> QueryMovesByName(string key);
-        public List<TagDTO> QueryItemsByName(string key);
+        public Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon, int langId);
+        public Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, TeamOptionsDTO editorOptions, int langId);
+        public Task<PokemonDataDTO?> GetPokemonByName(string name, int langId);
+        public Task<PokemonDataDTO?> GetPokemonById(int id, int langId);
+        public Task<ItemDTO?> GetItemByName(string name, int langId);
+        public Task<ItemDTO?> GetItemByIdentifier(string identifier, int langId);
+        public Task<AbilityDTO?> GetAbilityByName(string name, int langId);
+        public Task<AbilityDTO?> GetAbilityByIdentifier(string identifier, int langId);
+        public Task<List<TagDTO>> GetAllAbilitiesTags(int langId);
+        public Task<List<TagDTO>> GetPokemonAbilites(string id, int langId);
+        public List<TagDTO> QueryAbilitiesByName(string key, int langId);
+        public Task<NatureDTO?> GetNatureByName(string name, int langId);
+        public Task<NatureDTO?> GetNatureByIdentifier(string identifier, int langId);
+        public Task<List<NatureDTO>> GetAllNatures(int langId);
+        public Task<MoveDTO?> GetMoveByName(string name, int langId);
+        public Task<List<TagDTO>> GetPokemonMoves(string id, int langId);
+        public Task<List<PokeTypeDTO>> GetAllTypes(int langId);
+        public Task<List<PokeTypeDTO>> GetAllTeraTypes(int langId);
+        public List<TagDTO> QueryTypesByName(string key, int langId, bool teraType = false);
+        public Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessByIdentifier(string identifier, int langId, bool teraType = false);
+        public Task<string?> GetStatNameByIdentifier(string identifier, int langId);
+        public List<TagDTO> QueryPokemonsByName(string key, int langId);
+        public List<TagDTO> QueryMovesByName(string key, int langId);
+        public List<TagDTO> QueryItemsByName(string key, int langId);
+        public List<TagDTO> QueryNaturesByName(string key, int langId);
         public int GetLangId(string lang);
 
     }

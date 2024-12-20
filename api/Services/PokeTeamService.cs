@@ -11,6 +11,10 @@ using api.Models.DBModels;
 using System.Numerics;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MethodTimer;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using System.Linq;
+using api.Models;
 
 namespace api.Services
 {
@@ -22,6 +26,9 @@ namespace api.Services
         private readonly ITournamentService _tournamentService;
         private readonly IRegulationService _regulationService;
 
+        private readonly UserManager<User> _userManager;
+
+
         private static Random random = new Random();
 
         public PokeTeamService
@@ -30,7 +37,8 @@ namespace api.Services
                 IPokedexService pokedexService,
                 IUserService userService,
                 ITournamentService tournamentService,
-                IRegulationService regulationService
+                IRegulationService regulationService,
+                UserManager<User> userManager
             )
         {
             _pokeTeamContext = dataContext;
@@ -38,9 +46,11 @@ namespace api.Services
             _userService = userService;
             _tournamentService = tournamentService;
             _regulationService = regulationService;
+            _userManager = userManager;
+
         }
 
-        public async Task<TeamDTO?> BuildTeamDTO(Team team)
+        public async Task<TeamDTO?> BuildTeamDTO(Team team, int langId)
         {
             TeamDTO teamDTO = null;
             if (team != null)
@@ -50,7 +60,7 @@ namespace api.Services
 
                 foreach (Pokemon pokemon in pokemons)
                 {
-                    pokemonDTOs.Add(await _pokedexService.BuildPokemonDTO(pokemon));
+                    pokemonDTOs.Add(await _pokedexService.BuildPokemonDTO(pokemon, langId));
                 }
 
                 teamDTO = new TeamDTO(
@@ -69,7 +79,7 @@ namespace api.Services
             return teamDTO;
         }
 
-        public async Task<TeamPreviewDTO?> BuildTeamPreviewDTO(Team team)
+        public async Task<TeamPreviewDTO?> BuildTeamPreviewDTO(Team team, int langId)
         {
             TeamPreviewDTO teamPreviewDTO = null;
             List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
@@ -79,7 +89,7 @@ namespace api.Services
 
             foreach (Pokemon pokemon in pokemons)
             {
-                pokemonPreviewDTOs.Add(await _pokedexService.BuildPokemonPreviewDTO(pokemon, editorOptions));
+                pokemonPreviewDTOs.Add(await _pokedexService.BuildPokemonPreviewDTO(pokemon, editorOptions, langId));
             }
 
             teamPreviewDTO = new TeamPreviewDTO
@@ -133,13 +143,13 @@ namespace api.Services
         }
 
         [Time]
-        public async Task<TeamDTO?> GetTeam(string id)
+        public async Task<TeamDTO?> GetTeam(string id, int langId)
         {
             TeamDTO teamDTO = null;
             try
             {
                 Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
-                teamDTO = await BuildTeamDTO(team);
+                teamDTO = await BuildTeamDTO(team, langId);
             }
             catch (Exception ex)
             {
@@ -173,10 +183,8 @@ namespace api.Services
                 string optionsString = JsonSerializer.Serialize(inputTeam.Options, options);
 
                 User player = null;
-                Printer.Log("logged username", loggedUserName);
                 if (inputTeam.Player != null && inputTeam.Player.Username != null && loggedUserName == inputTeam.Player.Username)
                 {
-                    Printer.Log("Getting logged user in service");
                     player = await _userService.GetUserByUserName(inputTeam.Player.Username);
                 }
 
@@ -257,7 +265,8 @@ namespace api.Services
                 evs = pokemonDTO.evs != null ? JsonSerializer.Serialize(pokemonDTO.evs, options) : null,
                 Level = pokemonDTO.Level,
                 Shiny = pokemonDTO.Shiny,
-                Gender = pokemonDTO.Gender
+                Gender = pokemonDTO.Gender,
+                Notes = pokemonDTO.Notes,
             };
         }
 
@@ -333,7 +342,7 @@ namespace api.Services
             return "Team incremented";
         }
 
-        private async Task<TeamSearchQueryResponseDTO> BuildTeamSearchQueryResponse(TeamSearchQueryDTO searchQuery, List<Team> teams)
+        private async Task<TeamSearchQueryResponseDTO> BuildTeamSearchQueryResponse(TeamSearchQueryDTO searchQuery, List<Team> teams, int langId)
         {
             List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
             int totalTeams = teams.Count;
@@ -350,7 +359,7 @@ namespace api.Services
 
             foreach (Team team in teams)
             {
-                teamsPreviews.Add(await BuildTeamPreviewDTO(team));
+                teamsPreviews.Add(await BuildTeamPreviewDTO(team, langId));
             }
 
             return new TeamSearchQueryResponseDTO
@@ -360,7 +369,7 @@ namespace api.Services
             };
         }
 
-        public async Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery)
+        public async Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery, int langId)
         {
             List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
             List<Team> teams = new List<Team>();
@@ -432,7 +441,7 @@ namespace api.Services
                 teams = _pokeTeamContext.Team.ToList();
             }
 
-            return await BuildTeamSearchQueryResponse(searchQuery, teams.Distinct().ToList());
+            return await BuildTeamSearchQueryResponse(searchQuery, teams.Distinct().ToList(), langId);
         }
 
         public List<Team> SortTeams(List<Team> teams , SortOrder? order)
@@ -465,40 +474,48 @@ namespace api.Services
 
         public List<Team> ChunkTeams(List<Team> inteams, int teamsPerPage, int selectedPage)
         {
-            return inteams.Chunk(teamsPerPage).ToArray()[selectedPage-1].ToList();
+            try
+            {
+                return inteams.Chunk(teamsPerPage).ToArray()[selectedPage - 1].ToList();
+            }
+            catch (Exception ex)
+            {
+                Printer.Log($"Error chunking teams: teamsperpage {teamsPerPage}, selectedpage {selectedPage}", ex);
+                return inteams.Chunk(teamsPerPage).ToArray()[0].ToList();
+            }
         }
 
-        public async Task<List<Team>> FilterTeamsByPlayer(List<Team> inteams, string playerName)
+        public async Task<List<Team>> FilterTeamsByPlayer(List<Team> inteams, string username)
         {
-            User player = await _userService.GetUserByUserName(playerName);
+            User user = await _userService.GetUserByUserName(username);
             try
             {
                 if (inteams.Count == 0)
                 {
-                    if (player != null)
+                    if (user != null)
                     {
                         inteams = _pokeTeamContext.Team
                             .Include(t => t.Pokemons)
                             .Include(t => t.Tags)
-                            .Where(t => t.PlayerId == player.Id).ToList();
+                            .Where(t => t.PlayerId == user.Id).ToList();
                     }
                     else
                     {
                         inteams = _pokeTeamContext.Team
                             .Include(t => t.Pokemons)
                             .Include(t => t.Tags)
-                            .Where(t => t.AnonPlayer.Contains(playerName)).ToList();
+                            .Where(t => t.AnonPlayer.Contains(username)).ToList();
                     }
                 }
                 else
                 {
-                    if (player != null)
+                    if (user != null)
                     {
-                        inteams = inteams.Where(t => t.PlayerId == player.Id).ToList();
+                        inteams = inteams.Where(t => t.PlayerId == user.Id).ToList();
                     }
                     else
                     {
-                        inteams = inteams.Where(t => t.AnonPlayer.Contains(playerName)).ToList();
+                        inteams = inteams.Where(t => t.AnonPlayer.Contains(username)).ToList();
                     }
                 }
             }

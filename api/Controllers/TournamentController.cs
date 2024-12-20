@@ -77,7 +77,6 @@ namespace api.Controllers
         [HttpGet, Route("check/{tournamentName}")]
         public async Task<ActionResult<bool>> TournamentAvailable(string tournamentName)
         {
-            Printer.Log($"Checking tournament availability of {tournamentName}");
             bool available = _tournamentService.TournamentAvailable(tournamentName);
             if (!available)
             {

@@ -19,16 +19,21 @@ namespace api.Controllers
     public class TeamController : ControllerBase
     {
         private readonly IPokeTeamService _teamService;
+        private readonly IPokedexService _pokemonService;
 
-        public TeamController(IPokeTeamService teamService)
+        public TeamController(IPokeTeamService teamService, IPokedexService pokemonService)
         {
             _teamService = teamService;
+            _pokemonService = pokemonService;
         }
         
         [HttpGet("{id}")]
         public async Task<ActionResult<TeamDTO>> Get(string id)
         {
-            var team = await _teamService.GetTeam(id);
+            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+
+            var team = await _teamService.GetTeam(id, langId);
             if (team == null)
             {
                 return BadRequest("Team not found.");
@@ -85,7 +90,10 @@ namespace api.Controllers
         [HttpPost, Route("query")]
         public async Task<ActionResult<TeamSearchQueryResponseDTO>> QueryTeams(TeamSearchQueryDTO key)
         {
-            TeamSearchQueryResponseDTO teams = await _teamService.QueryTeams(key);
+            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+
+            TeamSearchQueryResponseDTO teams = await _teamService.QueryTeams(key, langId);
             if (teams == null)
             {
                 return NotFound("Couldn't find teams");
