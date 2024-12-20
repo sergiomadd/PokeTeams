@@ -119,8 +119,8 @@
       "max_turns": "Max Turns",
       "drain": "Drain",
       "healing": "Healing",
-      "status-chance": "Status Chance",
-      "flinch-chance": "Flinch Chance",
+      "status_chance": "Status Chance",
+      "flinch_chance": "Flinch Chance",
       "effect": "Effect",
       "target": "Target"
     },

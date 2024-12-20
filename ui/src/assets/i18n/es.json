@@ -119,8 +119,8 @@
       "max_turns": "Turnos max",
       "drain": "Drenaje",
       "healing": "Cura",
-      "status-chance": "Probabilidad de estado",
-      "flinch-chance": "Probabilidad de amedrentar",
+      "status_chance": "Probabilidad de estado",
+      "flinch_chance": "Probabilidad de amedrentar",
       "effect": "Efecto",
       "target": "Objetivo"
     },
