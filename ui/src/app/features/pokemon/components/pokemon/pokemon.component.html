@@ -465,9 +465,9 @@
             [ngClass]="{'poke-tooltip-selected':  tooltipRight[i]}"
             >
               <div class="move section-content poke-tooltip-wrapper"
-              [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.name ?? '')}"
+              [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.identifier ?? '')}"
               >
-                <div class="move-type" [ngStyle]="{'background': theme.getTypeColor(move?.pokeType?.name ?? '')}">
+                <div class="move-type" [ngStyle]="{'background': theme.getTypeColor(move?.pokeType?.identifier ?? '')}">
                   <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="move-type-icon">
                 </div>
                 <div class="no-overflow">
@@ -477,7 +477,7 @@
                 </div>
                 <div class="poke-tooltip poke-tooltip-move" [ngClass]="{'poke-tooltip-visible':  tooltipRight[i]}">
                   <div class="head move-head" 
-                  [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.name ?? '')}"
+                  [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.identifier ?? '')}"
                   >
                     <div class="section animated-border"
                     (click)="clickSection(i, 'rightType'); $event.stopPropagation()"

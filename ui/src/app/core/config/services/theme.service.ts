@@ -81,21 +81,21 @@ export class ThemeService
     }
   }
 
-  getTypeColor(name?: string)
+  getTypeColor(identifier?: string)
   {
-    return name ? Gen9IconColors[name.toLowerCase()] : "";  
+    return identifier ? Gen9IconColors[identifier] : "";  
   }
 
-  getMoveColor(name?: string)
+  getMoveColor(identifier?: string)
   {
     if(this.selectedTheme?.name === "light")
     {
-      return name ? Gen9IconColorsLight[name.toLowerCase()] : "";
+      return identifier ? Gen9IconColorsLight[identifier] : "";
 
     }
     else
     {
-      return name ? Gen9IconColorsDark[name.toLowerCase()] : "";
+      return identifier ? Gen9IconColorsDark[identifier] : "";
     }
   }
 
