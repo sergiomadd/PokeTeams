@@ -1,6 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { TeamService } from './features/team/services/team.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +8,6 @@ import { TeamService } from './features/team/services/team.service';
 export class AppComponent 
 {
   title = 'ui';
-  store = inject(Store);
-  teamService = inject(TeamService);
-
   menuOpen: boolean = false;
 
   constructor() 

@@ -130,7 +130,7 @@ export class SmartInputComponent
 
   async onFocus()
   {
-    if(!this.updateOnChange && !this.disabled)
+    if(!this.disabled)
     {
       if(this.allGetter)
       {
@@ -151,7 +151,7 @@ export class SmartInputComponent
           }
         }
       }
-      //this.showOptions = true;
+      this.showOptions = true;
     }
   }
 
