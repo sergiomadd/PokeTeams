@@ -3,11 +3,11 @@
     public class PokeTypeDTO
     {
         public string Identifier { get; set; }
-        public string Name { get; set; }
+        public LocalizedText Name { get; set; }
         public string IconPath { get; set; }
         public bool Teratype { get; set; }
 
-        public PokeTypeDTO(string identifier, string name, bool teraType = false)
+        public PokeTypeDTO(string identifier, LocalizedText name, bool teraType = false)
         {
             Identifier = identifier;
             Name = name;

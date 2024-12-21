@@ -4,7 +4,7 @@ namespace api.DTOs.PokemonDTOs
 {
     public class PokemonDTO
     {
-        public string? Name { get; set; }
+        public LocalizedText? Name { get; set; }
         public string? Nickname { get; set; }
         public int? DexNumber { get; set; }
         public PokemonDataDTO? PreEvolution { get; set; }
@@ -22,6 +22,7 @@ namespace api.DTOs.PokemonDTOs
         public bool? Shiny { get; set; }
         public bool? Gender { get; set; }
         public SpriteDTO? Sprite { get; set; }
-        public string? Notes { get; set; }  
+        public string? Notes { get; set; }
+        public Lang Lang { get; set; }
     }
 }

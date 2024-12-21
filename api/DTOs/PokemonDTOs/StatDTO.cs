@@ -3,9 +3,9 @@
     public class StatDTO
     {
         public string? Identifier { get; set; }
-        public string? Name { get; set; }
+        public LocalizedText? Name { get; set; }
         public int? Value { get; set; }
-        public StatDTO(string? identifier, string? name, int? value)
+        public StatDTO(string? identifier, LocalizedText? name, int? value)
         {
             Identifier = identifier != null && StatIdentifierConverter.ContainsKey(identifier) ? StatIdentifierConverter[identifier] : identifier;
             Name = name;

@@ -27,19 +27,19 @@ namespace api.DTOs.PokemonDTOs
                     switch (value.Item2)
                     {
                         case 4:
-                            DoubleSuperEffective.Add(new PokeTypeDTO(value.Item1, value.Item1));
+                            //DoubleSuperEffective.Add(new PokeTypeDTO(value.Item1, value.Item1));
                             break;
                         case 2:
-                            SuperEffective.Add(new PokeTypeDTO(value.Item1, value.Item1));
+                            //SuperEffective.Add(new PokeTypeDTO(value.Item1, value.Item1));
                             break;
                         case 0.5:
-                            NotVeryEffective.Add(new PokeTypeDTO(value.Item1, value.Item1));
+                            //NotVeryEffective.Add(new PokeTypeDTO(value.Item1, value.Item1));
                             break;
                         case 0.25:
-                            DoubleNotVeryEffective.Add(new PokeTypeDTO(value.Item1, value.Item1));
+                            //DoubleNotVeryEffective.Add(new PokeTypeDTO(value.Item1, value.Item1));
                             break;
                         case 0:
-                            Inmune.Add(new PokeTypeDTO(value.Item1, value.Item1));
+                            //Inmune.Add(new PokeTypeDTO(value.Item1, value.Item1));
                             break;
                     }
                 }

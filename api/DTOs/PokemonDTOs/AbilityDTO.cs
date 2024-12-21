@@ -3,10 +3,9 @@
     public class AbilityDTO
     {
         public string Identifier { get; set; }
-        public string Name { get; set; }
-        public string Prose { get; set; }
-
-        public AbilityDTO(string identifier, string name, string prose)
+        public LocalizedText Name { get; set; }
+        public LocalizedText Prose { get; set; }
+        public AbilityDTO(string identifier, LocalizedText name, LocalizedText prose)
         {
             Identifier = identifier;
             Name = name;

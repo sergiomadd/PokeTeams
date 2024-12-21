@@ -3,7 +3,7 @@
     public class MoveDTO
     {
         public string Identifier { get; set; }
-        public string? Name { get; set; }
+        public LocalizedText? Name { get; set; }
         public PokeTypeWithEffectivenessDTO? PokeType { get; set; }
         public MoveDamageClass? DamageClass { get; set; }
         public int? Power { get; set; }
@@ -24,13 +24,13 @@
         public class MoveTarget
         {
             public string Name { get; set; }
-            public string Description { get; set; }
+            public LocalizedText Description { get; set; }
         }
 
         public class MoveEffect
         {
-            public string Short { get; set; }
-            public string Long { get; set; }
+            public LocalizedText Short { get; set; }
+            public LocalizedText Long { get; set; }
             public int? Chance { get; set; }
         }
 
@@ -47,8 +47,6 @@
             public int? FlinchChance { get; set; }
             public StatChange? StatChange { get; set; }
         }
-
-
         public class StatChange
         {
             public StatDTO? Stat { get; set; }
@@ -56,7 +54,5 @@
             public int? ChangeChance { get; set; }
 
         }
-
-
     }
 }
