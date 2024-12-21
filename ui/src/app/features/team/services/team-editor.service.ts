@@ -117,7 +117,11 @@ export class TeamEditorService
   {
     let pokemon: Pokemon = 
     {
-      name: "",
+      name: 
+      {
+        content: "",
+        language: "en"
+      },
       nickname: undefined,
       dexNumber: undefined,
       preEvolution: undefined,
@@ -132,32 +136,56 @@ export class TeamEditorService
       ivs:     
       [
         {
-          name: "HP",
+          name: 
+          {
+            content: "HP",
+            language: "en"
+          },
           identifier: "hp",
           value: 0
         },
         {
-          name: "Atk",
+          name: 
+          {
+            content: "Atk",
+            language: "en"
+          },
           identifier: "atk",
           value: 0
         },
         {
-          name: "Def",
+          name: 
+          {
+            content: "Def",
+            language: "en"
+          },
           identifier: "def",
           value: 0
         },
         {
-          name: "SpA",
+          name: 
+          {
+            content: "SpA",
+            language: "en"
+          },
           identifier: "spa",
           value: 0
         },
         {
-          name: "SpD",
+          name: 
+          {
+            content: "SpD",
+            language: "en"
+          },
           identifier: "spd",
           value: 0
         },
         {
-          name: "Spe",
+          name: 
+          {
+            content: "Spe",
+            language: "en"
+          },
           identifier: "spe",
           value: 0
         }
@@ -165,32 +193,56 @@ export class TeamEditorService
       evs: 
       [
         {
-          name: "HP",
+          name: 
+          {
+            content: "HP",
+            language: "en"
+          },
           identifier: "hp",
           value: 0
         },
         {
-          name: "Atk",
+          name: 
+          {
+            content: "Atk",
+            language: "en"
+          },
           identifier: "atk",
           value: 0
         },
         {
-          name: "Def",
+          name: 
+          {
+            content: "Def",
+            language: "en"
+          },
           identifier: "def",
           value: 0
         },
         {
-          name: "SpA",
+          name: 
+          {
+            content: "SpA",
+            language: "en"
+          },
           identifier: "spa",
           value: 0
         },
         {
-          name: "SpD",
+          name: 
+          {
+            content: "SpD",
+            language: "en"
+          },
           identifier: "spd",
           value: 0
         },
         {
-          name: "Spe",
+          name: 
+          {
+            content: "Spe",
+            language: "en"
+          },
           identifier: "spe",
           value: 0
         }

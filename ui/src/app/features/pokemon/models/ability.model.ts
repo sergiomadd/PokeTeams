@@ -1,13 +1,23 @@
+import { LocalizedText } from "src/app/shared/models/localizedText.model"
+
 export interface Ability
 {
   identifier: string,
-  name: string,
-  prose: string	
+  name: LocalizedText,
+  prose: LocalizedText	
 }
 
 export const defaultAbility: Ability = 
 {
   identifier: "error",
-  name: "Not Found",
-  prose: ""
+  name: 
+  {
+    content: "Not Found",
+    language: "en"
+  },
+  prose: 
+  {
+    content: "Not Found",
+    language: "en"
+  }
 }

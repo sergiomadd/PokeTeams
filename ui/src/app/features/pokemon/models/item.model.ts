@@ -1,15 +1,27 @@
+import { LocalizedText } from "../../../shared/models/localizedText.model"
+
 export interface Item
 {
   identifier: string,
-  name: string,
-  prose: string,
-  iconPath: string
+  name: LocalizedText,
+  prose: LocalizedText,
+  iconPath: string,
+  language: string
 }
 
 export const DefaultItem: Item =
 {
   identifier: "error",
-  name: "Not Found",
-  prose: "",
-  iconPath: "assets/error.png"
+  name:
+  {
+    content: "Not Found",
+    language: "en"
+  },
+  prose:   
+  {
+    content: "Not Found",
+    language: "en"
+  },
+  iconPath: "assets/error.png",
+  language: ""
 }

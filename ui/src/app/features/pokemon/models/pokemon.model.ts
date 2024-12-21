@@ -1,3 +1,4 @@
+import { LocalizedText } from "src/app/shared/models/localizedText.model"
 import { Ability } from "./ability.model"
 import { Item } from "./item.model"
 import { Move } from "./move.model"
@@ -9,7 +10,7 @@ import { TypeWithEffectiveness } from "./typewitheffectiveness.model"
 
 export interface Pokemon 
 {
-	name?: string,
+	name?: LocalizedText,
 	nickname?: string,
 	dexNumber?: number,
 	preEvolution?: Pokemon,

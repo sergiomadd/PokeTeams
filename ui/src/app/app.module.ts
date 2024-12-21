@@ -57,6 +57,7 @@ import { SmartInputComponent } from './shared/components/smart-input/smart-input
 import { SwitchComponent } from './shared/components/switch/switch.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
 import { LinkerPipe } from './shared/pipes/linker.pipe';
+import { NoTranslationComponent } from './shared/components/no-translation/no-translation.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -98,6 +99,7 @@ import { LinkerPipe } from './shared/pipes/linker.pipe';
     UserSettingsComponent,
     NotFoundComponent,
     EmailConfirmationComponent,
+    NoTranslationComponent,
   ],
   exports: [],
   imports: [

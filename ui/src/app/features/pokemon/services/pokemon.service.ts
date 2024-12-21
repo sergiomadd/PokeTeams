@@ -50,7 +50,7 @@ export class PokemonService
       await Promise.allSettled([pokemonDataPromise, teraTypePromise, itemPromise, abilityPromise, naturePromise, movesPromise, ivsPromise, evsPromise])
       .then(([pokemonData, teraType, itemPromise, abilityPromise, naturePromise, movesPromise, ivsPromise, evsPromise]) => 
       {
-        pokemon.name = pokemonData.status == "fulfilled" ? pokemonData.value?.name : '';
+        pokemon.name = pokemonData.status == "fulfilled" ? pokemonData.value?.name : undefined;
         pokemon.dexNumber = pokemonData.status == "fulfilled" ? pokemonData.value?.dexNumber : 0;
         pokemon.preEvolution = pokemonData.status == "fulfilled" ? pokemonData.value?.preEvolution : undefined;
         pokemon.evolutions = pokemonData.status == "fulfilled" ? pokemonData.value?.evolutions ?? [] : [];
@@ -165,7 +165,11 @@ export class PokemonService
     {
       let stat: Stat = <Stat>{}
       stat.identifier = statData[0];
-      stat.name = value;
+      stat.name = 
+      {
+        content: value,
+        language: ""
+      };
       stat.value = Number(statData[1]);
       return stat;
     })

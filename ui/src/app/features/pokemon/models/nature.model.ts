@@ -1,15 +1,20 @@
+import { LocalizedText } from "src/app/shared/models/localizedText.model";
 import { defaultStat, Stat } from "./stat.model";
 
 export interface Nature
 {
-  name: string,
+  name: LocalizedText,
   increasedStat: Stat,
   decreasedStat: Stat
 }
 
 export const defaultNature: Nature = 
 {
-  name: "Not Found",
+  name: 
+  {
+    content: "Not Found",
+    language: "en"
+  },
   increasedStat: defaultStat,
   decreasedStat: defaultStat
 }

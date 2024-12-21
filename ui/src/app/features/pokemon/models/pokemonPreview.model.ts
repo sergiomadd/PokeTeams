@@ -1,3 +1,4 @@
+import { LocalizedText } from "src/app/shared/models/localizedText.model";
 import { Item } from "./item.model";
 import { MovePreview } from "./movePreview.model";
 import { Sprite } from "./sprite.model";
@@ -6,7 +7,7 @@ import { Types } from "./types.model";
 
 export interface PokemonPreview
 {
-  name?: string,
+  name?: LocalizedText,
 	dexNumber?: number,
 	types?: Types,
 	teraType?: Type,

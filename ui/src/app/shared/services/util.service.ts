@@ -74,7 +74,7 @@ export class UtilService
     {
       return this.translate.instant('shared.errors.samePassword');
     }
-    if(control?.hasError('usernameTaken'))
+    if(control?.hasError('userTaken'))
     {
       return this.translate.instant('shared.errors.usernameTaken');
     }
@@ -214,8 +214,8 @@ export class UtilService
     {
       let tag: Tag = 
       {
-        name: pokemon.name ?? "",
-        identifier: pokemon.name ?? "",
+        name: pokemon.name.content ?? "",
+        identifier: pokemon.name.content ?? "",
         icon: pokemon.sprite?.base
       }
       return tag;
@@ -228,8 +228,8 @@ export class UtilService
     if(move)
     {
       return {
-        name: move.name,
-        identifier: move.name,
+        name: move.name.content,
+        identifier: move.name.content,
         icon: move.pokeType?.iconPath
       }
     }
@@ -241,8 +241,8 @@ export class UtilService
     if(ability)
     {
       return {
-        name: ability.name,
-        identifier: ability.name,
+        name: ability.name.content,
+        identifier: ability.name.content,
       }
     }
     return undefined;
@@ -253,8 +253,8 @@ export class UtilService
     if(nature)
     {
       return {
-        name: nature.name,
-        identifier: nature.name,
+        name: nature.name.content,
+        identifier: nature.name.content,
       }
     }
     return undefined;
@@ -265,8 +265,8 @@ export class UtilService
     if(type)
     {
       return {
-        name: type.name,
-        identifier: type.name,
+        name: type.name.content,
+        identifier: type.name.content,
         icon: type.iconPath
       }
     }

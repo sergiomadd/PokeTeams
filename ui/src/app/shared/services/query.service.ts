@@ -153,8 +153,8 @@ export class QueryService
   {
     return (await this.pokemonService.getAllNatures()).map(n => 
       ({
-        name: n.name,
-        identifier: n.name
+        name: n.name.content,
+        identifier: n.name.content
       }));
   }
 
@@ -170,8 +170,8 @@ export class QueryService
   {
     return (await this.pokemonService.getAllTeraTypes()).map(n => 
       ({
-        name: n.name,
-        identifier: n.name,
+        name: n.name.content,
+        identifier: n.name.content,
         icon: n.iconPath
       }));
   }

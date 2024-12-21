@@ -1,3 +1,4 @@
+import { LocalizedText } from "src/app/shared/models/localizedText.model"
 import { Pokemon } from "./pokemon.model"
 import { Sprite } from "./sprite.model"
 import { Stat } from "./stat.model"
@@ -5,7 +6,7 @@ import { defaultTypesWithEffectiveness, TypesWithEffectiveness } from "./typeswi
 
 export interface PokemonData
 {
-  name?: string,
+  name?: LocalizedText,
   dexNumber?: number,
   preEvolution?: Pokemon,
 	evolutions: Pokemon[],
@@ -16,7 +17,11 @@ export interface PokemonData
 
 export const defaultPokemonData: PokemonData =
 {
-  name: "Not Found",
+  name: 
+  {
+    content: "Not Found",
+    language: "en"
+  },
   dexNumber: 0,
   preEvolution: undefined,
 	evolutions: [],

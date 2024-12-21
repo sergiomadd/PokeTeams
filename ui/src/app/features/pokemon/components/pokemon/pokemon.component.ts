@@ -1,5 +1,8 @@
 import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { ThemeService } from 'src/app/core/config/services/theme.service';
+import { selectLang } from 'src/app/core/config/store/config.selectors';
 import { Nature } from 'src/app/features/pokemon/models/nature.model';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { Stat } from 'src/app/features/pokemon/models/stat.model';
@@ -30,6 +33,7 @@ export class PokemonComponent
   util = inject(UtilService);
   linkifier = inject(LinkifierService);
   theme = inject(ThemeService);
+  store = inject(Store);
 
   @Input() pokemon!: Pokemon;
   @Input() teamOptions?: TeamOptions;
@@ -37,6 +41,9 @@ export class PokemonComponent
   @Input() editorPreview?: boolean = false;
   @Output() triggerNotesEvent = new EventEmitter<boolean>()
   @Output() updateStats = new EventEmitter();
+
+  selectedLang$: Observable<string> = this.store.select(selectLang);
+  selectedLang?: string;
 
   pokemonSpritePath?: string = '';
   spriteCategory: number = 0;
@@ -109,35 +116,35 @@ export class PokemonComponent
   {
     if(this.pokemon?.ability)
     {
-      this.abilityProse = this.linkifier.linkifyProse(this.pokemon.ability?.prose);
+      this.abilityProse = this.linkifier.linkifyProse(this.pokemon.ability?.prose.content);
     }
     if(this.pokemon?.item)
     {
-      this.itemProse = this.linkifier.linkifyProse(this.pokemon.item?.prose);
+      this.itemProse = this.linkifier.linkifyProse(this.pokemon.item?.prose.content);
     }
     if(this.pokemon?.moves && this.pokemon.moves[0] && this.pokemon.moves[0].effect)
     {
-      this.moveEffectsShort[0] = this.linkifier.linkifyProse(this.pokemon.moves[0].effect.short);
-      this.moveEffectsLong[0] = this.linkifier.linkifyProse(this.pokemon.moves[0].effect.long);
-      this.moveTargets[0] = this.linkifier.linkifyProse(this.pokemon.moves[0].target?.description);
+      this.moveEffectsShort[0] = this.linkifier.linkifyProse(this.pokemon.moves[0].effect.short.content);
+      this.moveEffectsLong[0] = this.linkifier.linkifyProse(this.pokemon.moves[0].effect.long.content);
+      this.moveTargets[0] = this.linkifier.linkifyProse(this.pokemon.moves[0].target?.description.content);
     }
     if(this.pokemon?.moves && this.pokemon.moves[1] && this.pokemon.moves[1].effect)
     {
-      this.moveEffectsShort[1] = this.linkifier.linkifyProse(this.pokemon.moves[1].effect.short);
-      this.moveEffectsLong[1] = this.linkifier.linkifyProse(this.pokemon.moves[1].effect.long);
-      this.moveTargets[1] = this.linkifier.linkifyProse(this.pokemon.moves[1].target?.description);
+      this.moveEffectsShort[1] = this.linkifier.linkifyProse(this.pokemon.moves[1].effect.short.content);
+      this.moveEffectsLong[1] = this.linkifier.linkifyProse(this.pokemon.moves[1].effect.long.content);
+      this.moveTargets[1] = this.linkifier.linkifyProse(this.pokemon.moves[1].target?.description.content);
     }
     if(this.pokemon?.moves && this.pokemon.moves[2] && this.pokemon.moves[2].effect)
     {
-      this.moveEffectsShort[2] = this.linkifier.linkifyProse(this.pokemon.moves[2].effect.short);
-      this.moveEffectsLong[2] = this.linkifier.linkifyProse(this.pokemon.moves[2].effect.long);
-      this.moveTargets[2] = this.linkifier.linkifyProse(this.pokemon.moves[2].target?.description);
+      this.moveEffectsShort[2] = this.linkifier.linkifyProse(this.pokemon.moves[2].effect.short.content);
+      this.moveEffectsLong[2] = this.linkifier.linkifyProse(this.pokemon.moves[2].effect.long.content);
+      this.moveTargets[2] = this.linkifier.linkifyProse(this.pokemon.moves[2].target?.description.content);
     }
     if(this.pokemon?.moves && this.pokemon.moves[3] && this.pokemon.moves[3].effect)
     {
-      this.moveEffectsShort[3] = this.linkifier.linkifyProse(this.pokemon.moves[3].effect.short);
-      this.moveEffectsLong[3] = this.linkifier.linkifyProse(this.pokemon.moves[3].effect.long);
-      this.moveTargets[3] = this.linkifier.linkifyProse(this.pokemon.moves[3].target?.description);
+      this.moveEffectsShort[3] = this.linkifier.linkifyProse(this.pokemon.moves[3].effect.short.content);
+      this.moveEffectsLong[3] = this.linkifier.linkifyProse(this.pokemon.moves[3].effect.long.content);
+      this.moveTargets[3] = this.linkifier.linkifyProse(this.pokemon.moves[3].target?.description.content);
     }
   }
 

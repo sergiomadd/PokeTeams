@@ -49,7 +49,11 @@ export class PokemonEditorComponent
 
   emptyStat: Stat =   
   {
-    name: "",
+    name: 
+    {
+      content: "",
+      language: "en"
+    },
     identifier: "",
     value: 0
   };
@@ -245,7 +249,7 @@ export class PokemonEditorComponent
       this.pokemon = 
       { 
         ...this.pokemon,
-        name: event.name,
+        name: data.name,
         dexNumber: data.dexNumber,
         types: data.types,
         sprite: data.sprite,

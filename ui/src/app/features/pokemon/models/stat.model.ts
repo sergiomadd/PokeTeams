@@ -1,13 +1,19 @@
+import { LocalizedText } from "src/app/shared/models/localizedText.model"
+
 export interface Stat
 {
   identifier: string,
-  name: string,
+  name: LocalizedText,
   value: number
 }
 
 export const defaultStat: Stat = 
 {
   identifier: "error",
-  name: "Not Found",
+  name: 
+  {
+    content: "",
+    language: "en"
+  },
   value: 0
 }

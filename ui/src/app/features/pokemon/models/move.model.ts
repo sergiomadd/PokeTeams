@@ -1,10 +1,11 @@
+import { LocalizedText } from "src/app/shared/models/localizedText.model"
 import { defaultTypeWithEffectiveness, TypeWithEffectiveness } from "./typewitheffectiveness.model"
 
 
 export interface Move
 {
   identifier: string,
-  name: string,
+  name: LocalizedText,
   pokeType?: TypeWithEffectiveness,
   damageClass?: 
   {
@@ -19,12 +20,12 @@ export interface Move
   target?: 
   {
     name: string,
-    description: string
+    description: LocalizedText
   },
   effect?: 
   {
-    short: string,
-    long: string,
+    short: LocalizedText,
+    long: LocalizedText,
     chance?: number
   },
   meta?: 
@@ -55,7 +56,11 @@ export interface Move
 export const defaultMove: Move = 
 {
   identifier: "error",
-  name: "Not Found",
+  name: 
+  {
+    content: "Not Found",
+    language: "en"
+  },
   pokeType: defaultTypeWithEffectiveness,
   damageClass: 
   {

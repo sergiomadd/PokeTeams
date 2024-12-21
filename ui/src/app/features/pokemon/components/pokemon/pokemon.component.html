@@ -41,7 +41,7 @@
                 {{pokemon.nickname}}
               </ng-container>
               <ng-template #speciesName>
-                {{pokemon.name}}
+                {{pokemon.name?.content}}
               </ng-template>
             </div>
           </div>
@@ -56,7 +56,7 @@
           <div class="section-content row-start poke-tooltip-wrapper">
             <div class="poke-tooltip poke-tooltip-left" [ngClass]="{'poke-tooltip-visible':  tooltipLeft[0]}">
               <div class="head">
-                <span class="head-text">{{pokemon.item?.name}}</span>
+                <span class="head-text">{{pokemon.item?.name?.content}}</span>
               </div>
               <div class="body">
                 <ng-container *ngFor="let chunk of itemProse">
@@ -66,10 +66,13 @@
                     <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
                   </ng-container>
                 </ng-container>
+                <ng-container *ngIf="pokemon.item?.language != (selectedLang$ | async)">
+                  <app-no-translation></app-no-translation>
+                </ng-container>
               </div>
             </div>
             <div class="section-name">
-              {{pokemon.item?.name}}
+              {{pokemon.item?.name?.content}}
             </div>
             <img src="{{pokemon.item?.iconPath}}" alt="" class="icon-big">
           </div>
@@ -84,7 +87,7 @@
           <div class="section-content poke-tooltip-wrapper">
             <div class="poke-tooltip poke-tooltip-left" [ngClass]="{'poke-tooltip-visible':  tooltipLeft[1]}">
               <div class="head">
-                <span class="head-text">{{pokemon.ability?.name}}</span>
+                <span class="head-text">{{pokemon.ability?.name?.content}}</span>
               </div>
               <div class="body">
                 <ng-container *ngFor="let chunk of abilityProse">
@@ -97,7 +100,7 @@
               </div>
             </div>
             <div class="section-name">
-              {{pokemon.ability?.name}} 
+              {{pokemon.ability?.name?.content}} 
             </div>
           </div>
         </div>
@@ -204,7 +207,7 @@
                       </div>
                       <div class="icons">
                         <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.superEffective">
-                          <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                          <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                         </ng-container>
                       </div>
                     </div>
@@ -217,7 +220,7 @@
                       </div>
                       <div class="icons">
                         <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.notVeryEffective">
-                          <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                          <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                         </ng-container>
                       </div>
                     </div>
@@ -232,7 +235,7 @@
                       </div>
                       <div class="icons">
                         <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.inmune">
-                          <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                          <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                         </ng-container>
                       </div>
                     </div>
@@ -267,7 +270,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleSuperEffective">
-                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -285,7 +288,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.superEffective">
-                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -302,7 +305,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.notVeryEffective">
-                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -318,7 +321,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleNotVeryEffective">
-                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -333,7 +336,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.inmune">
-                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -347,7 +350,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.superEffective">
-                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -360,7 +363,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.notVeryEffective">
-                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -375,7 +378,7 @@
                         </div>
                         <div class="icons">
                           <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.inmune">
-                            <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                            <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                           </ng-container>
                         </div>
                       </div>
@@ -384,11 +387,11 @@
                 </div>
               </div>
               <ng-container *ngIf="pokemon.types?.dualEffectiveness ?? false; else monotype">
-                <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name}}" alt="{{pokemon.types?.type1?.name}}" class="icon">
-                <img src="{{pokemon.types?.type2?.iconPath}}" title="{{pokemon.types?.type2?.name}}" alt="{{pokemon.types?.type2?.name}}" class="icon">
+                <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon">
+                <img src="{{pokemon.types?.type2?.iconPath}}" title="{{pokemon.types?.type2?.name?.content}}" alt="{{pokemon.types?.type2?.name?.content}}" class="icon">
               </ng-container>
               <ng-template #monotype>
-                <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name}}" alt="{{pokemon.types?.type1?.name}}" class="icon">
+                <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon">
               </ng-template>
             </div>
           </div>
@@ -468,11 +471,11 @@
               [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.identifier ?? '')}"
               >
                 <div class="move-type" [ngStyle]="{'background': theme.getTypeColor(move?.pokeType?.identifier ?? '')}">
-                  <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name}}" alt="{{move?.pokeType?.name}}" class="move-type-icon">
+                  <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name?.content}}" alt="{{move?.pokeType?.name?.content}}" class="move-type-icon">
                 </div>
                 <div class="no-overflow">
                   <div class="name">
-                    {{move?.name}}
+                    {{move?.name?.content}}
                   </div>
                 </div>
                 <div class="poke-tooltip poke-tooltip-move" [ngClass]="{'poke-tooltip-visible':  tooltipRight[i]}">
@@ -493,7 +496,7 @@
                                 </div>
                                 <div class="icons">
                                   <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.superEffective">
-                                    <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                                   </ng-container>
                                 </div>
                               </div>
@@ -506,7 +509,7 @@
                                 </div>
                                 <div class="icons">
                                   <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.notVeryEffective">
-                                    <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                                   </ng-container>
                                 </div>
                               </div>
@@ -521,7 +524,7 @@
                                 </div>
                                 <div class="icons">
                                   <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.inmune">
-                                    <img src="{{type.iconPath}}" title="{{type.name}}" alt="{{type.name}}" class="icon">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                                   </ng-container>
                                 </div>
                               </div>
@@ -529,13 +532,13 @@
                           </div>
                         </div>
                         <img src="{{util.getTypeNameImagePath(move?.pokeType?.iconPath ?? '')}}" 
-                        title="{{move?.pokeType?.name}}" 
-                        alt="{{move?.pokeType?.name}}" 
+                        title="{{move?.pokeType?.name?.content}}" 
+                        alt="{{move?.pokeType?.name?.content}}" 
                         class="icon-name">
                       </div>
                     </div>
                     <div class="head-text">
-                      {{move?.name}}
+                      {{move?.name?.content}}
                     </div>
                     <div class="head-class">
                       <img src="{{move?.damageClass?.iconPath}}" alt="" class="class-icon">
@@ -626,7 +629,7 @@
           <div class="no-pad section animated-border" (click)="clickSection(i, 'stat')" [ngClass]="{'poke-tooltip-selected':  tooltipStats[i]}">
             <div class="section-content stat poke-tooltip-wrapper ">
               <div class="poke-tooltip poke-tooltip-stat poke-tooltip-top" [ngClass]="{'poke-tooltip-visible':  tooltipStats[i]}">
-                <div class="head" [ngStyle]="{backgroundColor: theme.getStatColor(stat.identifier)}">{{stat.name}}</div>
+                <div class="head" [ngStyle]="{backgroundColor: theme.getStatColor(stat.identifier)}">{{stat.name?.content}}</div>
                 <div class="body row s-gap">
                   <div class="col">
                     <div class="item"></div>
@@ -653,7 +656,7 @@
                   </div>
                   <div class="col">
                     <div class="item">{{'pokemon.stat.nature' | translate}}</div>
-                    <div class="item">{{teamOptions?.showNature ? pokemon.nature ? pokemon.nature.name : '---' : "??"}}</div>
+                    <div class="item">{{teamOptions?.showNature ? pokemon.nature ? pokemon.nature.name?.content : '---' : "??"}}</div>
                     <div class="item">
                       <ng-container *ngIf="teamOptions?.showNature; else notNature">
                         <ng-container *ngIf="!(stat.identifier===pokemon.nature?.increasedStat?.identifier
