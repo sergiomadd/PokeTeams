@@ -1,6 +1,6 @@
 ﻿namespace api.Models
 {
-    public enum Langs
+    public enum Lang
     {
         hk = 1, //Japanese hiragana and katakana
         ro = 2, //Japanese romaji (often no data)
