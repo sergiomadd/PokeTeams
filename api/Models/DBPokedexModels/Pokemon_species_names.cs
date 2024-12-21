@@ -16,6 +16,6 @@ namespace api.Models.DBModels
         public int local_language_id { get; set; }
         [Key]
         [Column(Order = 3)]
-        public string? name { get; set; }
+        public string name { get; set; }
     }
 }

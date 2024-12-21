@@ -13,8 +13,8 @@ namespace api.Models.DBModels
         public int move_target_id { get; set; }
         [Key]
         [Column(Order = 2)]
-        public int? local_language_id { get; set; }
-        public string? name { get; set; }
-        public string? description { get; set; }
+        public int local_language_id { get; set; }
+        public string name { get; set; }
+        public string description { get; set; }
     }
 }

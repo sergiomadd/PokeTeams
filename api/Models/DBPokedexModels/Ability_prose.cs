@@ -12,8 +12,8 @@ namespace api.Models.DBModels
         public int ability_id { get; set; }
         [Key]
         [Column(Order = 2)]
-        public int? local_language_id { get; set; }
-        public string? short_effect { get; set; }
-        public string? effect { get; set; }
+        public int local_language_id { get; set; }
+        public string short_effect { get; set; }
+        public string effect { get; set; }
     }
 }

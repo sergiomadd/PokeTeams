@@ -6,8 +6,8 @@ namespace api.Models.DBModels
     {
         [Key]
         public int id { get; set; }
-        public string? identifier { get; set; }
-        public int? type_id { get; set; }
+        public string identifier { get; set; }
+        public int type_id { get; set; }
         public int? power { get; set; }
         public int? pp { get; set; }
         public int? accuracy { get; set; }
