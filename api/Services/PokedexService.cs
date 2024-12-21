@@ -494,7 +494,7 @@ namespace api.Services
         public async Task<MoveDTO?> GetMoveByName(string name, int langId)
         {
             MoveDTO? move = null;
-            Move_names? moveNames = await _pokedexContext.Move_names.FindAsync(name);
+            Move_names? moveNames = _pokedexContext.Move_names.FirstOrDefault(m => m.name == name);
             if (moveNames != null)
             {
                 Move_names? localizedMoveNames = _pokedexContext.Move_names.FirstOrDefault(m => m.move_id == moveNames.move_id && m.local_language_id == langId);
