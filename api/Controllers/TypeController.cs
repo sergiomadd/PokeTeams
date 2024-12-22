@@ -20,7 +20,7 @@ namespace api.Controllers
         public async Task<ActionResult<PokeTypeWithEffectivenessDTO>> GetTypeByIdentifier(string typeName)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             var type = await _pokemonService.GetTypeWithEffectivenessByIdentifier(typeName, langId);
             if (type == null)
@@ -34,7 +34,7 @@ namespace api.Controllers
         public async Task<ActionResult<PokeTypeWithEffectivenessDTO>> GetTeraTypeByIdentifier(string typeName)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             var type = await _pokemonService.GetTypeWithEffectivenessByIdentifier(typeName, langId, true);
             if (type == null)
@@ -48,7 +48,7 @@ namespace api.Controllers
         public async Task<ActionResult<List<PokeTypeDTO>>> GetAllTypes()
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             var types = await _pokemonService.GetAllTypes(langId);
             if (types == null)
@@ -62,7 +62,7 @@ namespace api.Controllers
         public async Task<ActionResult<List<PokeTypeDTO>>> GetAllTeraTypes()
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             var types = await _pokemonService.GetAllTeraTypes(langId);
             if (types == null)
@@ -76,9 +76,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<TagDTO>>> QueryTypesByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> types = _pokemonService.QueryTypesByName(key, langId);
+            List<TagDTO> types = await _pokemonService.QueryTypesByName(key, langId);
             if (types == null)
             {
                 return NotFound("Couldn't query types");
@@ -90,9 +90,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<TagDTO>>> QueryTeraTypesByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> types = _pokemonService.QueryTypesByName(key, langId, true);
+            List<TagDTO> types = await _pokemonService.QueryTypesByName(key, langId, true);
             if (types == null)
             {
                 return NotFound("Couldn't query types");

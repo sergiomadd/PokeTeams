@@ -22,7 +22,7 @@ namespace api.Controllers
         public async Task<ActionResult<ItemDTO>> GetItemByName(string itemName)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             var item = await _pokemonService.GetItemByName(itemName, langId);
             if (item == null)
@@ -36,7 +36,7 @@ namespace api.Controllers
         public async Task<ActionResult<ItemDTO>> GetItemByIdentifier(string itemIdentifier)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             var item = await _pokemonService.GetItemByIdentifier(itemIdentifier, langId);
             if (item == null)
@@ -50,9 +50,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<TagDTO>>> QueryItemsByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> items = _pokemonService.QueryItemsByName(key, langId);
+            List<TagDTO> items = await _pokemonService.QueryItemsByName(key, langId);
             if (items == null)
             {
                 return NotFound("Couldn't find items");

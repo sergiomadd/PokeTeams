@@ -21,7 +21,7 @@ namespace api.Controllers
         public async Task<ActionResult<AbilityDTO>> GetAbilityByName(string abilityName)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             var ability = await _pokemonService.GetAbilityByName(abilityName, langId);
             if (ability == null)
@@ -35,7 +35,7 @@ namespace api.Controllers
         public async Task<ActionResult<AbilityDTO>> GetAbilityByIdentifier(string abilityIdentifier)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             var ability = await _pokemonService.GetAbilityByIdentifier(abilityIdentifier, langId);
             if (ability == null)
@@ -49,7 +49,7 @@ namespace api.Controllers
         public async Task<ActionResult<List<TagDTO>>> GetAllAbilities()
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             List<TagDTO> abilities = await _pokemonService.GetAllAbilitiesTags(langId);
             if (abilities == null)
@@ -63,7 +63,7 @@ namespace api.Controllers
         public async Task<ActionResult<List<TagDTO>>> GetPokemonAbilities(string id)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             List<TagDTO> abilities = await _pokemonService.GetPokemonAbilites(id, langId);
             if (abilities == null)
@@ -77,9 +77,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<TagDTO>>> QueryAbilitiesByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> abilities = _pokemonService.QueryAbilitiesByName(key, langId);
+            List<TagDTO> abilities = await _pokemonService.QueryAbilitiesByName(key, langId);
             if (abilities == null)
             {
                 return NotFound("Couldn't query abilities");

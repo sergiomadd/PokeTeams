@@ -31,7 +31,7 @@ namespace api.Controllers
         public async Task<ActionResult<TeamDTO>> Get(string id)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             var team = await _teamService.GetTeam(id, langId);
             if (team == null)
@@ -91,7 +91,7 @@ namespace api.Controllers
         public async Task<ActionResult<TeamSearchQueryResponseDTO>> QueryTeams(TeamSearchQueryDTO key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             TeamSearchQueryResponseDTO teams = await _teamService.QueryTeams(key, langId);
             if (teams == null)

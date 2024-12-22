@@ -22,7 +22,7 @@ namespace api.Controllers
         public async Task<ActionResult<NatureDTO>> GetNatureByName(string natureName)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             var nature = await _pokemonService.GetNatureByName(natureName, langId);
             if (nature == null)
@@ -36,7 +36,7 @@ namespace api.Controllers
         public async Task<ActionResult<NatureDTO>> GetNatureByIdentifier(string natureIdentifier)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             var nature = await _pokemonService.GetNatureByIdentifier(natureIdentifier, langId);
             if (nature == null)
@@ -50,7 +50,7 @@ namespace api.Controllers
         public async Task<ActionResult<List<NatureDTO>>> GetAllNatures()
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
             List<NatureDTO> naures = await _pokemonService.GetAllNatures(langId);
             if (naures == null)
@@ -64,9 +64,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<TagDTO>>> QueryNaturesByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString());
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> natures = _pokemonService.QueryNaturesByName(key, langId);
+            List<TagDTO> natures = await _pokemonService.QueryNaturesByName(key, langId);
             if (natures == null)
             {
                 return NotFound("Couldn't query natures");

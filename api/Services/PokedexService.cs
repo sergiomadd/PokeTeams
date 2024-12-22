@@ -5,6 +5,7 @@ using api.Models.DBModels;
 using api.Models.DBPokedexModels;
 using api.Models.DBPoketeamModels;
 using api.Util;
+using MethodTimer;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using static api.DTOs.PokemonDTOs.MoveDTO;
@@ -20,7 +21,7 @@ namespace api.Services
             _pokedexContext = pokedexContext;
         }
 
-        //[Time]
+        [Time]
         public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon, int langId)
         {
             PokemonDataDTO pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1, langId);
@@ -57,9 +58,11 @@ namespace api.Services
             };
         }
 
+        [Time]
         public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, TeamOptionsDTO editorOptions, int langId)
         {
             PokemonDataDTO pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1, langId);
+            /*
             List<MovePreviewDTO> moves = new List<MovePreviewDTO>()
             {
                 await BuildMovePreview(pokemon.Move1Identifier, langId),
@@ -67,19 +70,20 @@ namespace api.Services
                 await BuildMovePreview(pokemon.Move3Identifier, langId),
                 await BuildMovePreview(pokemon.Move4Identifier, langId)
             };
+            */
 
             return new PokemonPreviewDTO
             {
                 Name = pokemonData.Name,
                 DexNumber = pokemonData.DexNumber,
-                Types = await GetPokemonTypes(pokemonData.DexNumber, langId),
-                TeraType = await GetTypeByIdentifier(pokemon.TeraTypeIdentifier, true, langId),
+                //Types = await GetPokemonTypes(pokemonData.DexNumber, langId),
+                //TeraType = await GetTypeByIdentifier(pokemon.TeraTypeIdentifier, true, langId),
                 Sprite = pokemonData.Sprite,
                 Shiny = pokemon.Shiny,
                 Gender = pokemon.Gender,
-                Moves = moves,
-                Item = await GetItemByIdentifier(pokemon.ItemIdentifier, langId),
-                AbilityName = GetAbilityByIdentifier(pokemon.AbilityIdentifier, langId).Result != null ? GetAbilityByIdentifier(pokemon.AbilityIdentifier, langId).Result.Name : null
+               // Moves = moves,
+                //Item = await GetItemByIdentifier(pokemon.ItemIdentifier, langId),
+               // AbilityName = GetAbilityByIdentifier(pokemon.AbilityIdentifier, langId).Result != null ? GetAbilityByIdentifier(pokemon.AbilityIdentifier, langId).Result.Name : null
             };
         }
 
@@ -90,19 +94,19 @@ namespace api.Services
             {
                 return null;
             }
-            Moves moves = _pokedexContext.Moves.FirstOrDefault(m => m.identifier == identifier);
+            Moves moves = await _pokedexContext.Moves.FirstOrDefaultAsync(m => m.identifier == identifier);
             if (moves != null)
             {
-                Move_names moveNames = _pokedexContext.Move_names.FirstOrDefault(m => m.move_id == moves.id && m.local_language_id == langId);
+                Move_names moveNames = await _pokedexContext.Move_names.FirstOrDefaultAsync(m => m.move_id == moves.id && m.local_language_id == langId);
                 if (moveNames == null)
                 {
-                    moveNames = _pokedexContext.Move_names.FirstOrDefault(m => m.move_id == moves.id && m.local_language_id == (int)Lang.en);
+                    moveNames = await _pokedexContext.Move_names.FirstOrDefaultAsync(m => m.move_id == moves.id && m.local_language_id == (int)Lang.en);
                 }
                 if (moveNames != null)
                 {
                     movePreview = new MovePreviewDTO(
                         moves.identifier,
-                        new LocalizedText(moveNames.name, GetLangIdentifier(moveNames.local_language_id)),
+                        new LocalizedText(moveNames.name, await GetLangIdentifier(moveNames.local_language_id)),
                         await GetTypeById(moves.type_id, langId));
                 }
             }
@@ -112,19 +116,19 @@ namespace api.Services
         public async Task<PokemonDataDTO?> GetPokemonById(int id, int langId)
         {
             PokemonDataDTO pokemonData = new PokemonDataDTO(
-                GetPokemonName(id, langId),
+                await GetPokemonName(id, langId),
                 id,
                 GetPokemonTypesWithEffectiveness(id, langId).Result,
                 GetPokemonStats(id, langId).Result,
                 new SpriteDTO(id),
-                preEvolution: GetPokemonPreEvolution(id, langId),
-                evolutions: GetPokemonEvolutions(id, langId));
+                preEvolution: await GetPokemonPreEvolution(id, langId),
+                evolutions: await GetPokemonEvolutions(id, langId));
             return pokemonData;
         }
 
         public async Task<PokemonDataDTO?> GetPokemonByName(string name, int langId)
         {
-            Pokemon_species_names? pokemonName = _pokedexContext.Pokemon_species_names.Where(p => p.name == name).FirstOrDefault();
+            Pokemon_species_names? pokemonName = await _pokedexContext.Pokemon_species_names.FirstOrDefaultAsync(p => p.name == name);
             if (pokemonName != null)
             {
                 return await GetPokemonById(pokemonName.pokemon_species_id, langId);
@@ -132,16 +136,16 @@ namespace api.Services
             return null;
         }
 
-        private LocalizedText? GetPokemonName(int id, int langId)
+        private async Task<LocalizedText?> GetPokemonName(int id, int langId)
         {
-            Pokemon_species_names? pokemonSpeciesNames = _pokedexContext.Pokemon_species_names.FirstOrDefault(p => p.pokemon_species_id == id && p.local_language_id == langId);
+            Pokemon_species_names? pokemonSpeciesNames = await _pokedexContext.Pokemon_species_names.FirstOrDefaultAsync(p => p.pokemon_species_id == id && p.local_language_id == langId);
             if (pokemonSpeciesNames == null)
             {
-                pokemonSpeciesNames = _pokedexContext.Pokemon_species_names.FirstOrDefault(p => p.pokemon_species_id == id && p.local_language_id == (int)Lang.en);
+                pokemonSpeciesNames = await _pokedexContext.Pokemon_species_names.FirstOrDefaultAsync(p => p.pokemon_species_id == id && p.local_language_id == (int)Lang.en);
             }
             if (pokemonSpeciesNames != null)
             {
-                return new LocalizedText(pokemonSpeciesNames?.name, GetLangIdentifier(pokemonSpeciesNames.local_language_id));
+                return new LocalizedText(pokemonSpeciesNames?.name, await GetLangIdentifier(pokemonSpeciesNames.local_language_id));
             }
             return null;
         }
@@ -160,27 +164,33 @@ namespace api.Services
                 Stats? stats = await _pokedexContext.Stats.FirstOrDefaultAsync(s => s.id == i);
                 if (pokemonStats != null && statNames != null && stats != null)
                 {
-                    pokeStats.Add(new StatDTO(stats.identifier, new LocalizedText(statNames.name, GetLangIdentifier(statNames.local_language_id)), pokemonStats.base_stat));
+                    pokeStats.Add(new StatDTO(stats.identifier, new LocalizedText(statNames.name, await GetLangIdentifier(statNames.local_language_id)), pokemonStats.base_stat));
                 }
             }
             return pokeStats;
         }
 
-        private PokemonDataDTO? GetPokemonPreEvolution(int id, int langId)
+        private async Task<PokemonDataDTO?> GetPokemonPreEvolution(int id, int langId)
         {
             Pokemon_species? pokemonSpeciesPreEvolution = _pokedexContext.Pokemon_species.FirstOrDefault(p => p.id == id);
             if (pokemonSpeciesPreEvolution != null && pokemonSpeciesPreEvolution.evolves_from_species_id != null)
             {
                 int newID = pokemonSpeciesPreEvolution.evolves_from_species_id ?? 0;
-                return new PokemonDataDTO(GetPokemonName(newID, langId), newID, GetPokemonTypesWithEffectiveness(newID, langId).Result, GetPokemonStats(newID, langId).Result, new SpriteDTO(newID), preEvolution: GetPokemonPreEvolution(newID, langId));
+                return new PokemonDataDTO(
+                    await GetPokemonName(newID, langId),
+                    newID,
+                    await GetPokemonTypesWithEffectiveness(newID, langId),
+                    await GetPokemonStats(newID, langId), 
+                    new SpriteDTO(newID),
+                    preEvolution: await GetPokemonPreEvolution(newID, langId));
             }
             return null;
         }
 
-        private List<PokemonDataDTO?> GetPokemonEvolutions(int id, int langId)
+        private async Task<List<PokemonDataDTO?>> GetPokemonEvolutions(int id, int langId)
         {
             List<PokemonDataDTO?> evolutions = new List<PokemonDataDTO?>();
-            List<Pokemon_species?> pokemonSpeciesEvolutionList = _pokedexContext.Pokemon_species.Where(p => p.evolves_from_species_id == id).ToList();
+            List<Pokemon_species?> pokemonSpeciesEvolutionList = await _pokedexContext.Pokemon_species.Where(p => p.evolves_from_species_id == id).ToListAsync();
             if (pokemonSpeciesEvolutionList.Count() > 0)
             {
                 foreach (Pokemon_species pokemonSpeciesEvolution in pokemonSpeciesEvolutionList)
@@ -188,10 +198,11 @@ namespace api.Services
                     if (pokemonSpeciesEvolution != null)
                     {
                         int newID = pokemonSpeciesEvolution.id;
-                        evolutions.Add(new PokemonDataDTO(GetPokemonName(newID, langId), newID,
-                            GetPokemonTypesWithEffectiveness(newID, langId).Result,
-                            GetPokemonStats(newID, langId).Result, new SpriteDTO(newID),
-                            evolutions: GetPokemonEvolutions(newID, langId)));
+                        evolutions.Add(new PokemonDataDTO(
+                            await GetPokemonName(newID, langId), newID,
+                            await GetPokemonTypesWithEffectiveness(newID, langId),
+                            await GetPokemonStats(newID, langId), new SpriteDTO(newID),
+                            evolutions: await GetPokemonEvolutions(newID, langId)));
                     }
                 }
             }
@@ -204,10 +215,10 @@ namespace api.Services
             Item_names? itemNames = await _pokedexContext.Item_names.FirstOrDefaultAsync(i => i.name == name);
             if (itemNames != null)
             {
-                Item_names? localizedItemNames = _pokedexContext.Item_names.FirstOrDefault(i => i.item_id == itemNames.item_id && i.local_language_id == langId);
+                Item_names? localizedItemNames = await _pokedexContext.Item_names.FirstOrDefaultAsync(i => i.item_id == itemNames.item_id && i.local_language_id == langId);
                 if(localizedItemNames == null)
                 {
-                    localizedItemNames = _pokedexContext.Item_names.FirstOrDefault(i => i.item_id == itemNames.item_id && i.local_language_id == (int)Lang.en);
+                    localizedItemNames = await _pokedexContext.Item_names.FirstOrDefaultAsync(i => i.item_id == itemNames.item_id && i.local_language_id == (int)Lang.en);
                 }
                 Item_prose? itemProse = await _pokedexContext.Item_prose.FirstOrDefaultAsync(i => i.item_id == itemNames.item_id && i.local_language_id == langId);
                 if (itemProse == null)
@@ -218,8 +229,8 @@ namespace api.Services
                 if (itemProse != null && items != null)
                 {
                     item = new ItemDTO(items.Identifier,
-                        new LocalizedText(localizedItemNames.name, GetLangIdentifier(localizedItemNames.local_language_id)),
-                        new LocalizedText(Formatter.FormatProse(itemProse.effect), GetLangIdentifier(localizedItemNames.local_language_id)));
+                        new LocalizedText(localizedItemNames.name, await GetLangIdentifier(localizedItemNames.local_language_id)),
+                        new LocalizedText(Formatter.FormatProse(itemProse.effect), await GetLangIdentifier(localizedItemNames.local_language_id)));
                 }
             }
             return item;
@@ -236,16 +247,16 @@ namespace api.Services
                 {
                     itemNames = await _pokedexContext.Item_names.FirstOrDefaultAsync(i => i.item_id == items.Id && i.local_language_id == (int)Lang.en);
                 }
-                Item_prose? itemProse = await _pokedexContext.Item_prose.FindAsync(itemNames.item_id, langId);
+                Item_prose? itemProse = await _pokedexContext.Item_prose.FirstOrDefaultAsync(i => i.item_id == itemNames.item_id && i.local_language_id == langId);
                 if (itemProse == null)
                 {
-                    itemProse = await _pokedexContext.Item_prose.FindAsync(itemNames.item_id, (int)Lang.en);
+                    itemProse = await _pokedexContext.Item_prose.FirstOrDefaultAsync(i => i.item_id == itemNames.item_id && i.local_language_id == (int)Lang.en);
                 }
                 if (itemNames != null && itemProse != null)
                 {
                     item = new ItemDTO(items.Identifier,
-                        new LocalizedText(itemNames.name, GetLangIdentifier(itemNames.local_language_id)),
-                        new LocalizedText(Formatter.FormatProse(itemProse.effect), GetLangIdentifier(itemProse.local_language_id)));
+                        new LocalizedText(itemNames.name, await GetLangIdentifier(itemNames.local_language_id)),
+                        new LocalizedText(Formatter.FormatProse(itemProse.effect), await GetLangIdentifier(itemProse.local_language_id)));
                 }
             }
             return item;
@@ -257,10 +268,10 @@ namespace api.Services
             Ability_names? abilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(n => n.name == name);
             if (abilityNames != null)
             {
-                Ability_names? localizedAbilityNames = _pokedexContext.Ability_names.FirstOrDefault(a => a.ability_id == abilityNames.ability_id && a.local_language_id == langId);
+                Ability_names? localizedAbilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(a => a.ability_id == abilityNames.ability_id && a.local_language_id == langId);
                 if (localizedAbilityNames == null)
                 {
-                    localizedAbilityNames = _pokedexContext.Ability_names.FirstOrDefault(a => a.ability_id == abilityNames.ability_id && a.local_language_id == (int)Lang.en);
+                    localizedAbilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(a => a.ability_id == abilityNames.ability_id && a.local_language_id == (int)Lang.en);
                 }
                 Abilities? abilities = await _pokedexContext.Abilities.FirstOrDefaultAsync(a => a.id == abilityNames.ability_id);
                 Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FirstOrDefaultAsync(a => a.ability_id == abilityNames.ability_id && a.local_language_id == langId);
@@ -271,8 +282,8 @@ namespace api.Services
                 if (abilities != null && abilityProse != null)
                 {
                     ability = new AbilityDTO(abilities.identifier, 
-                        new LocalizedText(localizedAbilityNames.name, GetLangIdentifier(localizedAbilityNames.local_language_id)),
-                        new LocalizedText(Formatter.FormatProse(abilityProse.effect), GetLangIdentifier(abilityProse.local_language_id)));
+                        new LocalizedText(localizedAbilityNames.name, await GetLangIdentifier(localizedAbilityNames.local_language_id)),
+                        new LocalizedText(Formatter.FormatProse(abilityProse.effect), await GetLangIdentifier(abilityProse.local_language_id)));
                 }
             }
             return ability;
@@ -289,16 +300,16 @@ namespace api.Services
                 {
                     abilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(a => a.ability_id == abilities.id && a.local_language_id == (int)Lang.en);
                 }
-                Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilities.id, langId);
+                Ability_prose? abilityProse = await _pokedexContext.Ability_prose.FirstOrDefaultAsync(a => a.ability_id == abilities.id && a.local_language_id == langId);
                 if (abilityProse == null)
                 {
-                    abilityProse = await _pokedexContext.Ability_prose.FindAsync(abilities.id, (int)Lang.en);
+                    abilityProse = await _pokedexContext.Ability_prose.FirstOrDefaultAsync(a => a.ability_id == abilities.id && a.local_language_id == (int)Lang.en);
                 }
                 if (abilityNames != null && abilityProse != null)
                 {
                     ability = new AbilityDTO(abilities.identifier,
-                        new LocalizedText(abilityNames.name, GetLangIdentifier(abilityNames.local_language_id)),
-                        new LocalizedText(Formatter.FormatProse(abilityProse.effect), GetLangIdentifier(abilityProse.local_language_id)));
+                        new LocalizedText(abilityNames.name, await GetLangIdentifier(abilityNames.local_language_id)),
+                        new LocalizedText(Formatter.FormatProse(abilityProse.effect), await GetLangIdentifier(abilityProse.local_language_id)));
                 }
             }
             return ability;
@@ -307,7 +318,7 @@ namespace api.Services
         public async Task<List<TagDTO>> GetAllAbilitiesTags(int langId)
         {
             List<TagDTO> abilityDTOs = new List<TagDTO>();
-            List<Abilities> abilitiesList = _pokedexContext.Abilities.ToList();
+            List<Abilities> abilitiesList = await _pokedexContext.Abilities.ToListAsync();
             if (abilitiesList != null)
             {
                 foreach (Abilities abilities in abilitiesList)
@@ -333,7 +344,7 @@ namespace api.Services
             {
                 if (Int32.TryParse(id, out _))
                 {
-                    List<Pokemon_abilities> pokemonAbilitiesList = _pokedexContext.Pokemon_abilities.Where(p => p.pokemon_id == Int32.Parse(id)).ToList();
+                    List<Pokemon_abilities> pokemonAbilitiesList = await _pokedexContext.Pokemon_abilities.Where(p => p.pokemon_id == Int32.Parse(id)).ToListAsync();
                     if (pokemonAbilitiesList != null && pokemonAbilitiesList.Count > 0)
                     {
                         foreach (Pokemon_abilities pokemonAbilities in pokemonAbilitiesList)
@@ -368,7 +379,7 @@ namespace api.Services
         {
 
             List<NatureDTO> natureDTOs = new List<NatureDTO>();
-            List<Natures> naturesList = _pokedexContext.Natures.ToList();
+            List<Natures> naturesList = await _pokedexContext.Natures.ToListAsync();
             if (naturesList != null)
             {
                 foreach(Natures natures in naturesList)
@@ -385,10 +396,10 @@ namespace api.Services
                     if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
                     {
                         natureDTOs.Add(new NatureDTO(
-                            new LocalizedText(natureNames.name, GetLangIdentifier(natureNames.local_language_id)),
+                            new LocalizedText(natureNames.name, await GetLangIdentifier(natureNames.local_language_id)),
                             natures.identifier,
-                            new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName.name, GetLangIdentifier(increasedStatName.local_language_id)), 0),
-                            new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, GetLangIdentifier(decreasedStatName.local_language_id)), 0)));
+                            new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName.name, await GetLangIdentifier(increasedStatName.local_language_id)), 0),
+                            new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, await GetLangIdentifier(decreasedStatName.local_language_id)), 0)));
                     }
                 }
             }
@@ -404,7 +415,7 @@ namespace api.Services
                 Nature_names? localizedNatureNames = _pokedexContext.Nature_names.FirstOrDefault(n => n.nature_id == natureNames.nature_id && n.local_language_id == langId);
                 if(localizedNatureNames == null)
                 {
-                    localizedNatureNames = _pokedexContext.Nature_names.FirstOrDefault(n => n.nature_id == natureNames.nature_id && n.local_language_id == (int)Lang.en);
+                    localizedNatureNames = await _pokedexContext.Nature_names.FirstOrDefaultAsync(n => n.nature_id == natureNames.nature_id && n.local_language_id == (int)Lang.en);
                 }
                 if(localizedNatureNames != null)
                 {
@@ -418,10 +429,10 @@ namespace api.Services
                         if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
                         {
                             nature = new NatureDTO(
-                                new LocalizedText(localizedNatureNames.name, GetLangIdentifier(localizedNatureNames.local_language_id)),
+                                new LocalizedText(localizedNatureNames.name, await GetLangIdentifier(localizedNatureNames.local_language_id)),
                                 natures.identifier,
-                                new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName.name, GetLangIdentifier(increasedStatName.local_language_id)), 0),
-                                new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, GetLangIdentifier(decreasedStatName.local_language_id)), 0));
+                                new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName.name, await GetLangIdentifier(increasedStatName.local_language_id)), 0),
+                                new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, await GetLangIdentifier(decreasedStatName.local_language_id)), 0));
                         }
                     }
                 }
@@ -449,10 +460,10 @@ namespace api.Services
                     if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
                     {
                         nature = new NatureDTO(
-                            new LocalizedText(natureNames.name, GetLangIdentifier(natureNames.local_language_id)),
+                            new LocalizedText(natureNames.name, await GetLangIdentifier(natureNames.local_language_id)),
                             natures.identifier,
-                            new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName.name, GetLangIdentifier(increasedStatName.local_language_id)), 0),
-                            new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, GetLangIdentifier(decreasedStatName.local_language_id)), 0));
+                            new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName.name, await GetLangIdentifier(increasedStatName.local_language_id)), 0),
+                            new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, await GetLangIdentifier(decreasedStatName.local_language_id)), 0));
                     }
                 }
             }
@@ -480,13 +491,13 @@ namespace api.Services
         public async Task<MoveDTO?> GetMoveByName(string name, int langId)
         {
             MoveDTO? move = null;
-            Move_names? moveNames = _pokedexContext.Move_names.FirstOrDefault(m => m.name == name);
+            Move_names? moveNames = await _pokedexContext.Move_names.FirstOrDefaultAsync(m => m.name == name);
             if (moveNames != null)
             {
-                Move_names? localizedMoveNames = _pokedexContext.Move_names.FirstOrDefault(m => m.move_id == moveNames.move_id && m.local_language_id == langId);
+                Move_names? localizedMoveNames = await _pokedexContext.Move_names.FirstOrDefaultAsync(m => m.move_id == moveNames.move_id && m.local_language_id == langId);
                 if (localizedMoveNames == null)
                 {
-                    localizedMoveNames = _pokedexContext.Move_names.FirstOrDefault(m => m.move_id == moveNames.move_id && m.local_language_id == (int)Lang.en);
+                    localizedMoveNames = await _pokedexContext.Move_names.FirstOrDefaultAsync(m => m.move_id == moveNames.move_id && m.local_language_id == (int)Lang.en);
                 }
                 Moves? moves = await _pokedexContext.Moves.FirstOrDefaultAsync(m => m.id == moveNames.move_id);
                 if (moves != null)
@@ -517,7 +528,7 @@ namespace api.Services
                         Stats? metaStat = await _pokedexContext.Stats.FirstOrDefaultAsync(s => s.id == metaStatChange.stat_id);
                         statChange = new StatChange
                         {
-                            Stat = new StatDTO(metaStat.identifier, new LocalizedText(metaStatName.name, GetLangIdentifier(metaStatName.local_language_id)), null),
+                            Stat = new StatDTO(metaStat.identifier, new LocalizedText(metaStatName.name, await GetLangIdentifier(metaStatName.local_language_id)), null),
                             Change = metaStatChange.change,
                             ChangeChance = meta.stat_chance
                         };
@@ -526,12 +537,12 @@ namespace api.Services
                     move = new MoveDTO
                     {
                         Identifier = moves.identifier,
-                        Name = new LocalizedText(localizedMoveNames.name, GetLangIdentifier(localizedMoveNames.local_language_id)),
+                        Name = new LocalizedText(localizedMoveNames.name, await GetLangIdentifier(localizedMoveNames.local_language_id)),
                         PokeType = new PokeTypeWithEffectivenessDTO(
                             type.identifier,
-                            new LocalizedText(typeName.name, GetLangIdentifier(typeName.local_language_id)),
-                            GetTypeEffectivenessAttack((int)typeName.type_id, typeName.local_language_id).Result,
-                            GetTypeEffectivenessDefense((int)typeName.type_id, typeName.local_language_id).Result),
+                            new LocalizedText(typeName.name, await GetLangIdentifier(typeName.local_language_id)),
+                            await GetTypeEffectivenessAttack((int)typeName.type_id, typeName.local_language_id),
+                            await GetTypeEffectivenessDefense((int)typeName.type_id, typeName.local_language_id)),
                         DamageClass = new MoveDamageClass
                         {
                             Name = damageClass.name,
@@ -545,12 +556,12 @@ namespace api.Services
                         Target = target != null ? new MoveTarget
                         {
                             Name = target.name,
-                            Description = new LocalizedText(Formatter.FormatProse(target.description), GetLangIdentifier(target.local_language_id))
+                            Description = new LocalizedText(Formatter.FormatProse(target.description), await GetLangIdentifier(target.local_language_id))
                         } : null,
                         Effect = effect != null ? new MoveEffect
                         {
-                            Short = new LocalizedText(Formatter.FormatProse(effect.short_effect, new string[] { moves.effect_chance.ToString() }), GetLangIdentifier(effect.local_language_id)),
-                            Long = new LocalizedText(Formatter.FormatProse(effect.effect, new string[] { moves.effect_chance.ToString() }), GetLangIdentifier(effect.local_language_id)),
+                            Short = new LocalizedText(Formatter.FormatProse(effect.short_effect, new string[] { moves.effect_chance.ToString() }), await GetLangIdentifier(effect.local_language_id)),
+                            Long = new LocalizedText(Formatter.FormatProse(effect.effect, new string[] { moves.effect_chance.ToString() }), await GetLangIdentifier(effect.local_language_id)),
                             Chance = moves.effect_chance
                         } : null,
                         Meta = new Metadata
@@ -577,23 +588,23 @@ namespace api.Services
             List<TagDTO> moveDTOs = new List<TagDTO>();
             if (Int32.TryParse(id, out _))
             {
-                List<Pokemon_moves> pokemonMovesList = _pokedexContext.Pokemon_moves.Where(p => p.pokemon_id == Int32.Parse(id) && p.version_group_id == 20).ToList();
+                List<Pokemon_moves> pokemonMovesList = await _pokedexContext.Pokemon_moves.Where(p => p.pokemon_id == Int32.Parse(id) && p.version_group_id == 20).ToListAsync();
                 pokemonMovesList = pokemonMovesList.DistinctBy(p => p.move_id).ToList();
                 if (pokemonMovesList != null && pokemonMovesList.Count > 0)
                 {
                     foreach (Pokemon_moves pokemonMoves in pokemonMovesList)
                     {
-                        Moves? moves = _pokedexContext.Moves.FirstOrDefault(m => m.id == pokemonMoves.move_id);
+                        Moves? moves = await _pokedexContext.Moves.FirstOrDefaultAsync(m => m.id == pokemonMoves.move_id);
                         if (moves != null)
                         {
-                            Move_names moveNames = _pokedexContext.Move_names.FirstOrDefault(m => m.move_id == moves.id && m.local_language_id == langId);
+                            Move_names moveNames = await _pokedexContext.Move_names.FirstOrDefaultAsync(m => m.move_id == moves.id && m.local_language_id == langId);
                             if(moveNames == null)
                             {
-                                moveNames = _pokedexContext.Move_names.FirstOrDefault(m => m.move_id == moves.id && m.local_language_id == (int)Lang.en);
+                                moveNames = await _pokedexContext.Move_names.FirstOrDefaultAsync(m => m.move_id == moves.id && m.local_language_id == (int)Lang.en);
                             }
                             if (moveNames != null)
                             {
-                                Types? targetType = _pokedexContext.Types.FirstOrDefault(t => t.id == moves.type_id);
+                                Types? targetType = await _pokedexContext.Types.FirstOrDefaultAsync(t => t.id == moves.type_id);
                                 if (targetType != null)
                                 {
                                     var pathStart = "https://localhost:7134/images/sprites/types/generation-viii/";
@@ -613,7 +624,7 @@ namespace api.Services
 
         public async Task<string?> GetStatNameByIdentifier(string identifier, int langId)
         {
-            List<Stats> stats = _pokedexContext.Stats.Where(s => s.identifier == identifier).ToList();
+            List<Stats> stats = await _pokedexContext.Stats.Where(s => s.identifier == identifier).ToListAsync();
             if (stats.Count > 0)
             {
                 Stat_names? stat_names = await _pokedexContext.Stat_names.FirstOrDefaultAsync(s => s.stat_id == stats[0].id && s.local_language_id == (int)Lang.en);
@@ -660,7 +671,7 @@ namespace api.Services
                 }
                 if (targetTypeName != null)
                 {
-                    pokeType = new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, GetLangIdentifier(targetTypeName.local_language_id)), teraType);
+                    pokeType = new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, await GetLangIdentifier(targetTypeName.local_language_id)), teraType);
                 }
             }
             return pokeType;
@@ -679,7 +690,7 @@ namespace api.Services
                 }
                 if (targetTypeName != null)
                 {
-                    pokeType = new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, GetLangIdentifier(targetTypeName.local_language_id)), teraType);
+                    pokeType = new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, await GetLangIdentifier(targetTypeName.local_language_id)), teraType);
                 }
             }
             return pokeType;
@@ -718,7 +729,7 @@ namespace api.Services
                 {
                     pokeType = new PokeTypeWithEffectivenessDTO(
                         targetType.identifier, 
-                        new LocalizedText(targetTypeName.name, GetLangIdentifier(targetTypeName.local_language_id)),
+                        new LocalizedText(targetTypeName.name, await GetLangIdentifier(targetTypeName.local_language_id)),
                         GetTypeEffectivenessAttack(targetType.id, langId).Result,
                         GetTypeEffectivenessDefense(targetType.id, langId).Result);
                 }
@@ -742,7 +753,7 @@ namespace api.Services
                 {
                     pokeType = new PokeTypeWithEffectivenessDTO(
                         targetType.identifier,
-                        new LocalizedText(targetTypeName.name, GetLangIdentifier(targetTypeName.local_language_id)),
+                        new LocalizedText(targetTypeName.name, await GetLangIdentifier(targetTypeName.local_language_id)),
                         GetTypeEffectivenessAttack(targetType.id, langId).Result,
                         GetTypeEffectivenessDefense(targetType.id, langId).Result, teraType);
                 }
@@ -754,7 +765,7 @@ namespace api.Services
         {
             EffectivenessDTO effectiveness = null;
             List<Tuple<PokeTypeDTO, double>> allValues = new List<Tuple<PokeTypeDTO, double>>();
-            List<Type_efficacy> typeEfficacyList = _pokedexContext.Type_efficacy.Where(t => t.damage_type_id == id && t.damage_factor != 100).ToList();
+            List<Type_efficacy> typeEfficacyList = await _pokedexContext.Type_efficacy.Where(t => t.damage_type_id == id && t.damage_factor != 100).ToListAsync();
             if (typeEfficacyList != null)
             {
                 foreach (var typeEfficacy in typeEfficacyList)
@@ -767,7 +778,7 @@ namespace api.Services
                     }
                     if (targetType != null && targetTypeName != null)
                     {
-                        allValues.Add(new (new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, GetLangIdentifier(targetTypeName.local_language_id))),
+                        allValues.Add(new (new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, await GetLangIdentifier(targetTypeName.local_language_id))),
                             typeEfficacy.damage_factor / (double)100));
                     }
                 }
@@ -780,7 +791,7 @@ namespace api.Services
         {
             EffectivenessDTO effectiveness = null;
             List<Tuple<PokeTypeDTO, double>> allValues = new List<Tuple<PokeTypeDTO, double>>(); ;
-            List<Type_efficacy> typeEfficacyList = _pokedexContext.Type_efficacy.Where(t => t.target_type_id == id && t.damage_factor != 100).ToList();
+            List<Type_efficacy> typeEfficacyList = await _pokedexContext.Type_efficacy.Where(t => t.target_type_id == id && t.damage_factor != 100).ToListAsync();
             if (typeEfficacyList != null)
             {
                 foreach (var typeEfficacy in typeEfficacyList)
@@ -793,7 +804,7 @@ namespace api.Services
                     }
                     if (targetType != null && targetTypeName != null)
                     {
-                        allValues.Add(new(new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, GetLangIdentifier(targetTypeName.local_language_id))),
+                        allValues.Add(new(new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, await GetLangIdentifier(targetTypeName.local_language_id))),
                             typeEfficacy.damage_factor / (double)100));
                     }
                 }
@@ -802,10 +813,10 @@ namespace api.Services
             return effectiveness;
         }
 
-        public List<TagDTO> QueryPokemonsByName(string key, int langId)
+        public async Task<List<TagDTO>> QueryPokemonsByName(string key, int langId)
         {
             List<TagDTO> queryResults = new List<TagDTO>();
-            List<Pokemon_species_names> pokemonNames = _pokedexContext.Pokemon_species_names.Where(p => p.name.Contains(key) && p.local_language_id == langId).ToList();
+            List<Pokemon_species_names> pokemonNames = await _pokedexContext.Pokemon_species_names.Where(p => p.name.Contains(key) && p.local_language_id == langId).ToListAsync();
             if (pokemonNames != null && pokemonNames.Count > 0)
             {
                 pokemonNames.ForEach(pokemonName =>
@@ -816,18 +827,18 @@ namespace api.Services
             }
             return queryResults;
         }
-        public List<TagDTO> QueryMovesByName(string key, int langId)
+        public async Task<List<TagDTO>> QueryMovesByName(string key, int langId)
         {
             List<TagDTO> queryResults = new List<TagDTO>();
-            List<Move_names> moveNames = _pokedexContext.Move_names.Where(m => m.name.Contains(key) && m.local_language_id == langId).ToList();
+            List<Move_names> moveNames = await _pokedexContext.Move_names.Where(m => m.name.Contains(key) && m.local_language_id == langId).ToListAsync();
             if (moveNames != null && moveNames.Count > 0)
             {
-                moveNames.ForEach(moveName =>
+                moveNames.ForEach(async moveName =>
                 {
-                    Moves? moves = _pokedexContext.Moves.FirstOrDefault(m => m.id == moveName.move_id);
+                    Moves? moves = await _pokedexContext.Moves.FirstOrDefaultAsync(m => m.id == moveName.move_id);
                     if (moves != null)
                     {
-                        Types? targetType = _pokedexContext.Types.FirstOrDefault(t => t.id == moves.type_id);
+                        Types? targetType = await _pokedexContext.Types.FirstOrDefaultAsync(t => t.id == moves.type_id);
                         if (targetType != null)
                         {
                             var pathStart = "https://localhost:7134/images/sprites/types/generation-ix/";
@@ -847,15 +858,15 @@ namespace api.Services
             return queryResults;
         }
 
-        public List<TagDTO> QueryItemsByName(string key, int langId)
+        public async Task<List<TagDTO>> QueryItemsByName(string key, int langId)
         {
             List<TagDTO> queryResults = new List<TagDTO>();
-            List<Item_names> itemNames = _pokedexContext.Item_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToList();
+            List<Item_names> itemNames = await _pokedexContext.Item_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
             if (itemNames != null && itemNames.Count > 0)
             {
-                itemNames.ForEach(itemName =>
+                itemNames.ForEach(async itemName =>
                 {
-                    Items items = _pokedexContext.Items.FirstOrDefault(i => i.Id == itemName.item_id);
+                    Items items = await _pokedexContext.Items.FirstOrDefaultAsync(i => i.Id == itemName.item_id);
                     if (items != null)
                     {
                         string pathStart = "https://localhost:7134/images/sprites/items/";
@@ -870,10 +881,10 @@ namespace api.Services
             return queryResults;
         }
 
-        public List<TagDTO> QueryAbilitiesByName(string key, int langId)
+        public async Task<List<TagDTO>> QueryAbilitiesByName(string key, int langId)
         {
             List<TagDTO> queryResults = new List<TagDTO>();
-            List<Ability_names> abilityNames = _pokedexContext.Ability_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToList();
+            List<Ability_names> abilityNames = await _pokedexContext.Ability_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
             if (abilityNames != null && abilityNames.Count > 0)
             {
                 abilityNames.ForEach(abilityName =>
@@ -884,10 +895,10 @@ namespace api.Services
             return queryResults;
         }
 
-        public List<TagDTO> QueryNaturesByName(string key, int langId)
+        public async Task<List<TagDTO>> QueryNaturesByName(string key, int langId)
         {
             List<TagDTO> queryResults = new List<TagDTO>();
-            List<Nature_names> natureNames = _pokedexContext.Nature_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToList();
+            List<Nature_names> natureNames = await _pokedexContext.Nature_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
             if (natureNames != null && natureNames.Count > 0)
             {
                 natureNames.ForEach(natureName =>
@@ -898,15 +909,15 @@ namespace api.Services
             return queryResults;
         }
 
-        public List<TagDTO> QueryTypesByName(string key, int langId, bool teraType = false)
+        public async Task<List<TagDTO>> QueryTypesByName(string key, int langId, bool teraType = false)
         {
             List<TagDTO> queryResults = new List<TagDTO>();
-            List<Type_names> typeNames = _pokedexContext.Type_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToList();
+            List<Type_names> typeNames = await _pokedexContext.Type_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
             if (typeNames != null && typeNames.Count > 0)
             {
-                typeNames.ForEach(typeName =>
+                typeNames.ForEach(async typeName =>
                 {
-                    Types types = _pokedexContext.Types.FirstOrDefault(i => i.id == typeName.type_id);
+                    Types types = await _pokedexContext.Types.FirstOrDefaultAsync(i => i.id == typeName.type_id);
                     if (types != null)
                     {
                         string pathStart = teraType ? "https://localhost:7134/images/sprites/types/generation-viii/"
@@ -925,7 +936,7 @@ namespace api.Services
         public async Task<List<PokeTypeDTO>> GetAllTypes(int langId)
         {
             List<PokeTypeDTO> pokeTypes = new List<PokeTypeDTO>();
-            List<Types> types = _pokedexContext.Types.ToList();
+            List<Types> types = await _pokedexContext.Types.ToListAsync();
             foreach (Types type in types)
             {
                 pokeTypes.Add(await GetTypeById(type.id, langId));
@@ -936,7 +947,7 @@ namespace api.Services
         public async Task<List<PokeTypeDTO>> GetAllTeraTypes(int langId)
         {
             List<PokeTypeDTO> pokeTypes = new List<PokeTypeDTO>();
-            List<Types> types = _pokedexContext.Types.ToList();
+            List<Types> types = await _pokedexContext.Types.ToListAsync();
             foreach (Types type in types)
             {
                 pokeTypes.Add(await GetTypeById(type.id, langId, true));
@@ -944,9 +955,9 @@ namespace api.Services
             return pokeTypes;
         }
 
-        public int GetLangId(string lang)
+        public async Task<int> GetLangId(string lang)
         {
-            Languages? languages = _pokedexContext.Languages.FirstOrDefault(l => l.identifier == lang);
+            Languages? languages = await _pokedexContext.Languages.FirstOrDefaultAsync(l => l.identifier == lang);
             if(languages != null)
             {
                 return languages.id;
@@ -954,9 +965,9 @@ namespace api.Services
             return 9;
         }
 
-        public string GetLangIdentifier(int langId)
+        public async Task<string> GetLangIdentifier(int langId)
         {
-            Languages? languages = _pokedexContext.Languages.FirstOrDefault(l => l.id == langId);
+            Languages? languages = await _pokedexContext.Languages.FirstOrDefaultAsync(l => l.id == langId);
             if (languages != null)
             {
                 return languages.identifier;

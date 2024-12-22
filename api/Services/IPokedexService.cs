@@ -17,7 +17,6 @@ namespace api.Services
         public Task<AbilityDTO?> GetAbilityByIdentifier(string identifier, int langId);
         public Task<List<TagDTO>> GetAllAbilitiesTags(int langId);
         public Task<List<TagDTO>> GetPokemonAbilites(string id, int langId);
-        public List<TagDTO> QueryAbilitiesByName(string key, int langId);
         public Task<NatureDTO?> GetNatureByName(string name, int langId);
         public Task<NatureDTO?> GetNatureByIdentifier(string identifier, int langId);
         public Task<List<NatureDTO>> GetAllNatures(int langId);
@@ -25,14 +24,15 @@ namespace api.Services
         public Task<List<TagDTO>> GetPokemonMoves(string id, int langId);
         public Task<List<PokeTypeDTO>> GetAllTypes(int langId);
         public Task<List<PokeTypeDTO>> GetAllTeraTypes(int langId);
-        public List<TagDTO> QueryTypesByName(string key, int langId, bool teraType = false);
+        public Task<List<TagDTO>> QueryTypesByName(string key, int langId, bool teraType = false);
         public Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessByIdentifier(string identifier, int langId, bool teraType = false);
         public Task<string?> GetStatNameByIdentifier(string identifier, int langId);
-        public List<TagDTO> QueryPokemonsByName(string key, int langId);
-        public List<TagDTO> QueryMovesByName(string key, int langId);
-        public List<TagDTO> QueryItemsByName(string key, int langId);
-        public List<TagDTO> QueryNaturesByName(string key, int langId);
-        public int GetLangId(string lang);
+        public Task<List<TagDTO>> QueryPokemonsByName(string key, int langId);
+        public Task<List<TagDTO>> QueryMovesByName(string key, int langId);
+        public Task<List<TagDTO>> QueryItemsByName(string key, int langId);
+        public Task<List<TagDTO>> QueryAbilitiesByName(string key, int langId);
+        public Task<List<TagDTO>> QueryNaturesByName(string key, int langId);
+        public Task<int> GetLangId(string lang);
 
     }
 }
