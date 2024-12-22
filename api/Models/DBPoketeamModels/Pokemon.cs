@@ -49,10 +49,10 @@ namespace api.Models.DBPoketeamModels
         [MaxLength(128, ErrorMessage = "Move4Identifier is too long")]
         public string? Move4Identifier { get; set; }
 
-        [MaxLength(512, ErrorMessage = "IVs are too long")]
+        [MaxLength(2048, ErrorMessage = "IVs are too long")]
         public string? ivs { get; set; }
 
-        [MaxLength(512, ErrorMessage = "EVs are too long")]
+        [MaxLength(2048, ErrorMessage = "EVs are too long")]
         public string? evs { get; set; }
 
         [Range(1, 100, ErrorMessage = "Level is too long")]

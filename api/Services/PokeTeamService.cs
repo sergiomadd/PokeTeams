@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using System.Linq;
 using api.Models;
+using System.Collections.Generic;
 
 namespace api.Services
 {
@@ -142,7 +143,6 @@ namespace api.Services
             return tags;
         }
 
-        [Time]
         public async Task<TeamDTO?> GetTeam(string id, int langId)
         {
             TeamDTO teamDTO = null;
@@ -245,7 +245,19 @@ namespace api.Services
 
         public Pokemon BreakPokemonDTO(PokemonDTO pokemonDTO, string teamId)
         {
-            JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
+            JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = true };
+
+            string? serializedIVs = null;
+            string? serializedEVs = null;
+            try
+            {
+                serializedIVs = pokemonDTO.ivs != null ? JsonSerializer.Serialize(pokemonDTO.ivs, options) : null;
+                serializedEVs = pokemonDTO.evs != null ? JsonSerializer.Serialize(pokemonDTO.evs, options) : null;
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Error serializing ivs/evs on team upload ", ex);
+            }
             return new Pokemon
             {
                 TeamId = teamId,
@@ -261,8 +273,8 @@ namespace api.Services
                 Move2Identifier = pokemonDTO.Moves[1]?.Identifier,
                 Move3Identifier = pokemonDTO.Moves[2]?.Identifier,
                 Move4Identifier = pokemonDTO.Moves[3]?.Identifier,
-                ivs = pokemonDTO.ivs != null ? JsonSerializer.Serialize(pokemonDTO.ivs, options) : null,
-                evs = pokemonDTO.evs != null ? JsonSerializer.Serialize(pokemonDTO.evs, options) : null,
+                ivs = serializedIVs,
+                evs = serializedEVs,
                 Level = pokemonDTO.Level,
                 Shiny = pokemonDTO.Shiny,
                 Gender = pokemonDTO.Gender,
@@ -341,10 +353,12 @@ namespace api.Services
             }
             return "Team incremented";
         }
-
+        [Time]
         private async Task<TeamSearchQueryResponseDTO> BuildTeamSearchQueryResponse(TeamSearchQueryDTO searchQuery, List<Team> teams, int langId)
         {
             List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
+            List<Task<TeamPreviewDTO>> teamsPreviewBuilds = new List<Task<TeamPreviewDTO>>();
+
             int totalTeams = teams.Count;
 
             if (searchQuery.SortOrder != null)
@@ -368,7 +382,7 @@ namespace api.Services
                 TotalTeams = totalTeams
             };
         }
-
+        [Time]
         public async Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery, int langId)
         {
             List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();

@@ -7,6 +7,7 @@ using api.Models.DBPoketeamModels;
 using api.Util;
 using MethodTimer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
 using static api.DTOs.PokemonDTOs.MoveDTO;
 
@@ -21,7 +22,6 @@ namespace api.Services
             _pokedexContext = pokedexContext;
         }
 
-        [Time]
         public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon, int langId)
         {
             PokemonDataDTO pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1, langId);
@@ -48,8 +48,8 @@ namespace api.Services
                 Nature = await GetNatureByIdentifier(pokemon.NatureIdentifier, langId),
                 Moves = moves,
                 Stats = pokemonData.Stats,
-                ivs = pokemon.ivs != null ? JsonSerializer.Deserialize<List<StatDTO?>>(pokemon.ivs, new JsonSerializerOptions { IncludeFields = false }) : null,
-                evs = pokemon.evs != null ? JsonSerializer.Deserialize<List<StatDTO?>>(pokemon.evs, new JsonSerializerOptions { IncludeFields = false }) : null,
+                ivs = pokemon.ivs != null ? JsonSerializer.Deserialize<List<StatDTO?>>(pokemon.ivs, new JsonSerializerOptions { IncludeFields = true }) : null,
+                evs = pokemon.evs != null ? JsonSerializer.Deserialize<List<StatDTO?>>(pokemon.evs, new JsonSerializerOptions { IncludeFields = true }) : null,
                 Level = pokemon.Level,
                 Shiny = pokemon.Shiny,
                 Gender = pokemon.Gender,
@@ -58,11 +58,10 @@ namespace api.Services
             };
         }
 
-        [Time]
         public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, TeamOptionsDTO editorOptions, int langId)
         {
             PokemonDataDTO pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1, langId);
-            /*
+            
             List<MovePreviewDTO> moves = new List<MovePreviewDTO>()
             {
                 await BuildMovePreview(pokemon.Move1Identifier, langId),
@@ -70,20 +69,19 @@ namespace api.Services
                 await BuildMovePreview(pokemon.Move3Identifier, langId),
                 await BuildMovePreview(pokemon.Move4Identifier, langId)
             };
-            */
 
             return new PokemonPreviewDTO
             {
                 Name = pokemonData.Name,
                 DexNumber = pokemonData.DexNumber,
-                //Types = await GetPokemonTypes(pokemonData.DexNumber, langId),
-                //TeraType = await GetTypeByIdentifier(pokemon.TeraTypeIdentifier, true, langId),
+                Types = await GetPokemonTypes(pokemonData.DexNumber, langId),
+                TeraType = await GetTypeByIdentifier(pokemon.TeraTypeIdentifier, true, langId),
                 Sprite = pokemonData.Sprite,
                 Shiny = pokemon.Shiny,
                 Gender = pokemon.Gender,
-               // Moves = moves,
-                //Item = await GetItemByIdentifier(pokemon.ItemIdentifier, langId),
-               // AbilityName = GetAbilityByIdentifier(pokemon.AbilityIdentifier, langId).Result != null ? GetAbilityByIdentifier(pokemon.AbilityIdentifier, langId).Result.Name : null
+                Moves = moves,
+                Item = await GetItemByIdentifier(pokemon.ItemIdentifier, langId),
+                AbilityName = GetAbilityByIdentifier(pokemon.AbilityIdentifier, langId).Result != null ? GetAbilityByIdentifier(pokemon.AbilityIdentifier, langId).Result.Name : null
             };
         }
 
@@ -112,14 +110,13 @@ namespace api.Services
             }
             return movePreview;
         }
-
         public async Task<PokemonDataDTO?> GetPokemonById(int id, int langId)
         {
             PokemonDataDTO pokemonData = new PokemonDataDTO(
                 await GetPokemonName(id, langId),
                 id,
-                GetPokemonTypesWithEffectiveness(id, langId).Result,
-                GetPokemonStats(id, langId).Result,
+                await GetPokemonTypesWithEffectiveness(id, langId),
+                await GetPokemonStats(id, langId),
                 new SpriteDTO(id),
                 preEvolution: await GetPokemonPreEvolution(id, langId),
                 evolutions: await GetPokemonEvolutions(id, langId));
