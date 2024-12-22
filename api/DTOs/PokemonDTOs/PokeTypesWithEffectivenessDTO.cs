@@ -15,12 +15,12 @@ namespace api.DTOs.PokemonDTOs
             Type2 = type2;
             if (Type1 != null && Type2 != null)
             {
-                List<Tuple<string, double>> allValues = new List<Tuple<string, double>>();
-                List<Tuple<string, double>> summedValues = new List<Tuple<string, double>>();
+                List<Tuple<PokeTypeDTO, double>> allValues = new List<Tuple<PokeTypeDTO, double>>();
+                List<Tuple<PokeTypeDTO, double>> summedValues = new List<Tuple<PokeTypeDTO, double>>();
                 allValues.AddRange(Type1.EffectivenessDefense.AllValues);
                 allValues.AddRange(Type2.EffectivenessDefense.AllValues);
                 var group = allValues
-                  .GroupBy(x => x.Item1)
+                  .GroupBy(x => x.Item1.Identifier)
                   .Where(g => g.Count() > 1);
                 foreach (var item in group)
                 {
@@ -29,7 +29,7 @@ namespace api.DTOs.PokemonDTOs
                 }
                 foreach (var item in allValues.ToList())
                 {
-                    if (summedValues.Exists(i => i.Item1.Equals(item.Item1)))
+                    if (summedValues.Exists(i => i.Item1.Identifier.Equals(item.Item1.Identifier)))
                     {
                         allValues.Remove(item);
                     }

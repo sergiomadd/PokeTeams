@@ -4,14 +4,14 @@ namespace api.DTOs.PokemonDTOs
 {
     public class EffectivenessDTO
     {
-        public List<Tuple<string, double>>? AllValues { get; set; }
+        public List<Tuple<PokeTypeDTO, double>>? AllValues { get; set; }
         public List<PokeTypeDTO> DoubleSuperEffective { get; set; }
         public List<PokeTypeDTO> SuperEffective { get; set; }
         public List<PokeTypeDTO> NotVeryEffective { get; set; }
         public List<PokeTypeDTO> DoubleNotVeryEffective { get; set; }
         public List<PokeTypeDTO> Inmune { get; set; }
 
-        public EffectivenessDTO(List<Tuple<string, double>> allValues)
+        public EffectivenessDTO(List<Tuple<PokeTypeDTO, double>> allValues)
         {
             DoubleSuperEffective = new List<PokeTypeDTO>();
             SuperEffective = new List<PokeTypeDTO>();
@@ -27,19 +27,19 @@ namespace api.DTOs.PokemonDTOs
                     switch (value.Item2)
                     {
                         case 4:
-                            //DoubleSuperEffective.Add(new PokeTypeDTO(value.Item1, value.Item1));
+                            DoubleSuperEffective.Add(value.Item1);
                             break;
                         case 2:
-                            //SuperEffective.Add(new PokeTypeDTO(value.Item1, value.Item1));
+                            SuperEffective.Add(value.Item1);
                             break;
                         case 0.5:
-                            //NotVeryEffective.Add(new PokeTypeDTO(value.Item1, value.Item1));
+                            NotVeryEffective.Add(value.Item1);
                             break;
                         case 0.25:
-                            //DoubleNotVeryEffective.Add(new PokeTypeDTO(value.Item1, value.Item1));
+                            DoubleNotVeryEffective.Add(value.Item1);
                             break;
                         case 0:
-                            //Inmune.Add(new PokeTypeDTO(value.Item1, value.Item1));
+                            Inmune.Add(value.Item1);
                             break;
                     }
                 }

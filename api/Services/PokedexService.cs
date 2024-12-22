@@ -628,13 +628,13 @@ namespace api.Services
         private async Task<PokeTypesDTO> GetPokemonTypes(int id, int langId)
         {
             PokeTypeDTO? type1 = null;
-            Pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.type_id == 1);
+            Pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 1);
             if (pokemonType1 != null)
             {
                 type1 = GetTypeById(pokemonType1.type_id, langId).Result;
             }
             PokeTypeDTO? type2 = null;
-            Pokemon_types? pokemonType2 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.type_id == 2);
+            Pokemon_types? pokemonType2 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 2);
             if (pokemonType2 != null)
             {
                 type2 = GetTypeById(pokemonType2.type_id, langId).Result;
@@ -688,13 +688,13 @@ namespace api.Services
         private async Task<PokeTypesWithEffectivenessDTO> GetPokemonTypesWithEffectiveness(int id, int langId)
         {
             PokeTypeWithEffectivenessDTO? type1 = null;
-            Pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.type_id == 1);
+            Pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 1);
             if (pokemonType1 != null)
             {
                 type1 = GetTypeWithEffectivenessById(pokemonType1.type_id, langId).Result;
             }
             PokeTypeWithEffectivenessDTO? type2 = null;
-            Pokemon_types? pokemonType2 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.type_id == 2);
+            Pokemon_types? pokemonType2 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 2);
             if (pokemonType2 != null)
             {
                 type2 = GetTypeWithEffectivenessById(pokemonType2.type_id, langId).Result;
@@ -753,7 +753,7 @@ namespace api.Services
         public async Task<EffectivenessDTO?> GetTypeEffectivenessAttack(int id, int langId)
         {
             EffectivenessDTO effectiveness = null;
-            List<Tuple<string, double>> allValues = new List<Tuple<string, double>>();
+            List<Tuple<PokeTypeDTO, double>> allValues = new List<Tuple<PokeTypeDTO, double>>();
             List<Type_efficacy> typeEfficacyList = _pokedexContext.Type_efficacy.Where(t => t.damage_type_id == id && t.damage_factor != 100).ToList();
             if (typeEfficacyList != null)
             {
@@ -767,7 +767,8 @@ namespace api.Services
                     }
                     if (targetType != null && targetTypeName != null)
                     {
-                        allValues.Add(new(targetType.identifier, typeEfficacy.damage_factor / (double)100));
+                        allValues.Add(new (new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, GetLangIdentifier(targetTypeName.local_language_id))),
+                            typeEfficacy.damage_factor / (double)100));
                     }
                 }
                 effectiveness = new EffectivenessDTO(allValues);
@@ -778,7 +779,7 @@ namespace api.Services
         public async Task<EffectivenessDTO?> GetTypeEffectivenessDefense(int id, int langId)
         {
             EffectivenessDTO effectiveness = null;
-            List<Tuple<string, double>> allValues = new List<Tuple<string, double>>(); ;
+            List<Tuple<PokeTypeDTO, double>> allValues = new List<Tuple<PokeTypeDTO, double>>(); ;
             List<Type_efficacy> typeEfficacyList = _pokedexContext.Type_efficacy.Where(t => t.target_type_id == id && t.damage_factor != 100).ToList();
             if (typeEfficacyList != null)
             {
@@ -792,7 +793,8 @@ namespace api.Services
                     }
                     if (targetType != null && targetTypeName != null)
                     {
-                        allValues.Add(new(targetType.identifier, typeEfficacy.damage_factor / (double)100));
+                        allValues.Add(new(new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, GetLangIdentifier(targetTypeName.local_language_id))),
+                            typeEfficacy.damage_factor / (double)100));
                     }
                 }
                 effectiveness = new EffectivenessDTO(allValues);
