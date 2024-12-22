@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Models.DBModels
 {
+    [Keyless]
     public class Natures
     {
-        [Key]
         public int id { get; set; }
         public string identifier { get; set; }
         public int decreased_stat_id { get; set; }

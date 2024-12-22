@@ -23,7 +23,6 @@ namespace api.Data
 
         }
 
-
         public DbSet<Abilities> Abilities { get; set; }
         public DbSet<Ability_names> Ability_names { get; set; }
         public DbSet<Ability_prose> Ability_prose { get; set; }

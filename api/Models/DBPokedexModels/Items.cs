@@ -1,5 +1,8 @@
-﻿namespace api.Models.DBModels
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace api.Models.DBModels
 {
+    [Keyless]
     public class Items
     {
         public int Id { get; set; }

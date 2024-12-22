@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using static api.DTOs.PokemonDTOs.MoveDTO;
 
 namespace api.Models.DBModels
 {
+    [Keyless]
     public class Move_meta
     {
-        [Key]
         public int move_id { get; set; }
         public int? meta_ailment_id { get; set; }
         public int? min_hits { get; set; }
