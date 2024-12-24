@@ -207,6 +207,7 @@
       "min": "The value must be higher than {{min}}",
       "max": "The value must be lower than {{max}}",
       "nan": "The value must be a number"
-    }
+    },
+    "no_translation": "No translation"
   }
 }
