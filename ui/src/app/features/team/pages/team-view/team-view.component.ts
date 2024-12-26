@@ -1,5 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { selectLang } from 'src/app/core/config/store/config.selectors';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
 import { Team } from 'src/app/features/team/models/team.model';
 import { TeamService as NewTeamService, TeamService } from 'src/app/features/team/services/team.service';
@@ -21,6 +24,9 @@ export class TeamViewComponent
   parser = inject(ParserService);
   newTeamService = inject(NewTeamService)
   pokemonService = inject(PokemonService)
+  store = inject(Store);
+  
+  selectedLang$: Observable<string> = this.store.select(selectLang);
 
   teamKey: string = "";
   team?: Team;
@@ -31,6 +37,16 @@ export class TeamViewComponent
   async ngOnInit()
   {
     this.teamKey = this.router.url.slice(1);
+    this.selectedLang$.subscribe(value =>
+      {
+        this.loadTeam();
+      });
+
+    this.triggerViewCount();
+  }
+
+  loadTeam()
+  {
     this.loading = true;
     this.teamService.getTeamData(this.teamKey).subscribe(
       {
@@ -68,7 +84,6 @@ export class TeamViewComponent
         }
       }
     );
-    this.triggerViewCount();
   }
 
   loadPokemonPlaceholders(pokemonIDs: number[])
