@@ -1,9 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
 import { Team } from 'src/app/features/team/models/team.model';
 import { TeamService as NewTeamService, TeamService } from 'src/app/features/team/services/team.service';
 import { ParserService } from 'src/app/shared/services/parser.service';
 import { UtilService } from 'src/app/shared/services/util.service';
+import { TeamData } from '../../models/teamData.model';
 
 @Component({
   selector: 'app-team-view',
@@ -18,9 +20,11 @@ export class TeamViewComponent
   util = inject(UtilService);
   parser = inject(ParserService);
   newTeamService = inject(NewTeamService)
+  pokemonService = inject(PokemonService)
 
   teamKey: string = "";
   team?: Team;
+  teamData?: TeamData;
   loading: boolean = false;
   viewIncrementCooldown: number = 1;
 
@@ -28,16 +32,34 @@ export class TeamViewComponent
   {
     this.teamKey = this.router.url.slice(1);
     this.loading = true;
-    this.teamService.getTeam(this.teamKey).subscribe(
+    this.teamService.getTeamData(this.teamKey).subscribe(
       {
         next: (response) => 
         {
-          console.log("response", response)
-          this.team = response;
+          this.teamData = response;
+          if(this.teamData)
+          {
+            this.team = 
+            {
+              ...this.team,
+              pokemons: [],
+              id: this.teamData.id,
+              options: this.teamData.options,
+              player: this.teamData.player,
+              tournament: this.teamData.tournament,
+              regulation: this.teamData.regulation,
+              viewCount: this.teamData.viewCount,
+              date: this.teamData.date,
+              visibility: this.teamData.visibility,
+              tags: this.teamData.tags,
+            };
+            this.loadPokemonPlaceholders(this.teamData.pokemonIDs)
+            this.loadPokemons(this.teamData.pokemonIDs);
+          }
         },
         error: (error) =>
         {
-          console.log("error getting team", error)
+          console.log("Error getting team data", error)
           this.loading = false;
         },
         complete: () => 
@@ -46,6 +68,35 @@ export class TeamViewComponent
         }
       }
     );
+    this.triggerViewCount();
+  }
+
+  loadPokemonPlaceholders(pokemonIDs: number[])
+  {
+    for (const pokemonID in pokemonIDs) 
+    {
+      this.team?.pokemons.push(this.pokemonService.createEmptyPokemon());
+    }
+  }
+
+  async loadPokemons(pokemonIDs: number[])
+  {
+    if(this.team)
+    {
+      await Promise.all(
+        pokemonIDs.map(async (pokemonID, index) => 
+        {
+          const pokemon = await this.teamService.getPokemonById(pokemonID);
+          if(this.team && pokemon) 
+          { 
+            this.team.pokemons[index] = pokemon;
+          }
+        }))
+    }
+  }
+
+  triggerViewCount()
+  {
     const item = sessionStorage.getItem(this.teamKey);
     if(item)
     {
@@ -69,7 +120,7 @@ export class TeamViewComponent
   {
     if(this.team)
     {
-      this.util.copyToClipboard(this.parser.reversePaste(this.team.pokemons));
+      this.util.copyToClipboard(this.parser.reversePaste(this.team.pokemons ?? []));
     }
   }
 

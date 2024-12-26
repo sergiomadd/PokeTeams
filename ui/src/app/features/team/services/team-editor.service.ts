@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Pokemon } from '../../pokemon/models/pokemon.model';
+import { PokemonService } from '../../pokemon/services/pokemon.service';
 import { Team } from '../models/team.model';
 import { TeamOptions } from '../models/teamOptions.model';
 
@@ -9,6 +10,8 @@ import { TeamOptions } from '../models/teamOptions.model';
 })
 export class TeamEditorService 
 {
+  pokemonService = inject(PokemonService);
+
   private team$: BehaviorSubject<Team> = new BehaviorSubject<Team>(<Team>{});
   selectedTeam$ = this.team$.asObservable();
 
@@ -36,7 +39,7 @@ export class TeamEditorService
 
   addEmptyPokemon()
   {
-    this.addPokemon(this.createEmptyPokemon());
+    this.addPokemon(this.pokemonService.createEmptyPokemon());
   }
 
   deletePokemon(index: number): boolean
@@ -110,148 +113,5 @@ export class TeamEditorService
     }
     
     return options;
-
-  }
-
-  createEmptyPokemon(): Pokemon
-  {
-    let pokemon: Pokemon = 
-    {
-      name: 
-      {
-        content: "",
-        language: "en"
-      },
-      nickname: undefined,
-      dexNumber: undefined,
-      preEvolution: undefined,
-      evolutions: [],
-      types: undefined,
-      teraType: undefined,
-      item: undefined,
-      ability: undefined,
-      nature: undefined,
-      moves: [undefined, undefined, undefined, undefined],
-      stats: [],
-      ivs:     
-      [
-        {
-          name: 
-          {
-            content: "HP",
-            language: "en"
-          },
-          identifier: "hp",
-          value: 0
-        },
-        {
-          name: 
-          {
-            content: "Atk",
-            language: "en"
-          },
-          identifier: "atk",
-          value: 0
-        },
-        {
-          name: 
-          {
-            content: "Def",
-            language: "en"
-          },
-          identifier: "def",
-          value: 0
-        },
-        {
-          name: 
-          {
-            content: "SpA",
-            language: "en"
-          },
-          identifier: "spa",
-          value: 0
-        },
-        {
-          name: 
-          {
-            content: "SpD",
-            language: "en"
-          },
-          identifier: "spd",
-          value: 0
-        },
-        {
-          name: 
-          {
-            content: "Spe",
-            language: "en"
-          },
-          identifier: "spe",
-          value: 0
-        }
-      ],
-      evs: 
-      [
-        {
-          name: 
-          {
-            content: "HP",
-            language: "en"
-          },
-          identifier: "hp",
-          value: 0
-        },
-        {
-          name: 
-          {
-            content: "Atk",
-            language: "en"
-          },
-          identifier: "atk",
-          value: 0
-        },
-        {
-          name: 
-          {
-            content: "Def",
-            language: "en"
-          },
-          identifier: "def",
-          value: 0
-        },
-        {
-          name: 
-          {
-            content: "SpA",
-            language: "en"
-          },
-          identifier: "spa",
-          value: 0
-        },
-        {
-          name: 
-          {
-            content: "SpD",
-            language: "en"
-          },
-          identifier: "spd",
-          value: 0
-        },
-        {
-          name: 
-          {
-            content: "Spe",
-            language: "en"
-          },
-          identifier: "spe",
-          value: 0
-        }
-      ],
-      level: 50,
-      shiny: undefined,
-      gender: false,
-      sprite: undefined,
-    }
-    return pokemon;
   }
 }

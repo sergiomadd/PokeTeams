@@ -38,7 +38,7 @@ export class PokemonService
     try 
     {
       
-      const pokemonDataPromise: Promise<PokemonData> | undefined = pokePaste.name ? this.getPokemon(pokePaste.name) : undefined;
+      const pokemonDataPromise: Promise<PokemonData> | undefined = pokePaste.name ? this.getPokemonData(pokePaste.name) : undefined;
       const teraTypePromise: Promise<TypeWithEffectiveness> | undefined = pokePaste.teratype ? this.getType(pokePaste.teratype, true) : undefined;
       const itemPromise: Promise<Item> | undefined = pokePaste.item ? this.getItemByName(pokePaste.item) : undefined;
       const abilityPromise: Promise<Ability> | undefined = pokePaste.ability ? this.getAbilityByName(pokePaste.ability) : undefined;
@@ -82,15 +82,7 @@ export class PokemonService
     return pokemon;
   }
 
-  /*
-  Use if api uses api/pokemon/?pokemonName=Metagross
-  Instead of api/pokemon/metagross
-  let poke = 'Metagross';
-  let url = this.apiUrl + 'pokemon/';
-  let params = new HttpParams().set("pokemonName", poke);
-  return this.http.get(url, {params: params});
-  */
-  async getPokemon(name: string) : Promise<PokemonData>
+  async getPokemonData(name: string) : Promise<PokemonData>
   {
     let pokemonData: PokemonData = <PokemonData>{}
     let url = this.apiUrl + 'pokemon/' + name;
@@ -265,5 +257,143 @@ export class PokemonService
     let url = this.apiUrl + 'type/teratype/all';
     types = await lastValueFrom(this.http.get<Type[]>(url).pipe(timeout(this.dataTimeout)));
     return types; 
+  }
+
+  createEmptyPokemon(): Pokemon
+  {
+    let pokemon: Pokemon = 
+    {
+      name: undefined,
+      nickname: undefined,
+      dexNumber: undefined,
+      preEvolution: undefined,
+      evolutions: [],
+      types: undefined,
+      teraType: undefined,
+      item: undefined,
+      ability: undefined,
+      nature: undefined,
+      moves: [undefined, undefined, undefined, undefined],
+      stats: [],
+      ivs:     
+      [
+        {
+          name: 
+          {
+            content: "HP",
+            language: "en"
+          },
+          identifier: "hp",
+          value: 0
+        },
+        {
+          name: 
+          {
+            content: "Atk",
+            language: "en"
+          },
+          identifier: "atk",
+          value: 0
+        },
+        {
+          name: 
+          {
+            content: "Def",
+            language: "en"
+          },
+          identifier: "def",
+          value: 0
+        },
+        {
+          name: 
+          {
+            content: "SpA",
+            language: "en"
+          },
+          identifier: "spa",
+          value: 0
+        },
+        {
+          name: 
+          {
+            content: "SpD",
+            language: "en"
+          },
+          identifier: "spd",
+          value: 0
+        },
+        {
+          name: 
+          {
+            content: "Spe",
+            language: "en"
+          },
+          identifier: "spe",
+          value: 0
+        }
+      ],
+      evs: 
+      [
+        {
+          name: 
+          {
+            content: "HP",
+            language: "en"
+          },
+          identifier: "hp",
+          value: 0
+        },
+        {
+          name: 
+          {
+            content: "Atk",
+            language: "en"
+          },
+          identifier: "atk",
+          value: 0
+        },
+        {
+          name: 
+          {
+            content: "Def",
+            language: "en"
+          },
+          identifier: "def",
+          value: 0
+        },
+        {
+          name: 
+          {
+            content: "SpA",
+            language: "en"
+          },
+          identifier: "spa",
+          value: 0
+        },
+        {
+          name: 
+          {
+            content: "SpD",
+            language: "en"
+          },
+          identifier: "spd",
+          value: 0
+        },
+        {
+          name: 
+          {
+            content: "Spe",
+            language: "en"
+          },
+          identifier: "spe",
+          value: 0
+        }
+      ],
+      level: 50,
+      shiny: undefined,
+      gender: false,
+      sprite: undefined,
+    }
+    return pokemon;
   }
 } 

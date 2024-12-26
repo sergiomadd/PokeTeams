@@ -4,11 +4,13 @@ import { Store } from '@ngrx/store';
 import { lastValueFrom, Observable, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { UtilService } from '../../../shared/services/util.service';
+import { Pokemon } from '../../pokemon/models/pokemon.model';
 import { SearchQueryDTO } from '../../search/models/searchQuery.dto';
 import { SearchQueryResponseDTO } from '../../search/models/searchQueryResponse.dto';
 import { Regulation } from '../models/regulation.model';
 import { Tag } from '../models/tag.model';
 import { Team } from '../models/team.model';
+import { TeamData } from '../models/teamData.model';
 import { TeamId } from '../models/teamId.dto';
 import { TeamSaveResponse } from '../models/teamSaveResponse.model';
 import { Tournament } from '../models/tournament.model';
@@ -41,7 +43,20 @@ export class TeamService
   {
     let url = this.apiUrl + 'team/' + id;
     return this.http.get<Team>(url);
-    //return this.util.toCamelCase(team); 
+  }
+
+  getTeamData(id: string) : Observable<TeamData>
+  {
+    let url = this.apiUrl + 'team/data/' + id;
+    return this.http.get<TeamData>(url);
+  }
+
+  async getPokemonById(id: number) : Promise<Pokemon>
+  {
+    let pokemon: Pokemon = <Pokemon>{}
+    let url = this.apiUrl + 'team/pokemon/' + id;
+    pokemon = await lastValueFrom(this.http.get<Pokemon>(url));
+    return pokemon;
   }
 
   saveTeam(team: Team): Observable<TeamSaveResponse>
@@ -69,7 +84,7 @@ export class TeamService
   searchTeams(searchQuery: SearchQueryDTO) : Observable<SearchQueryResponseDTO> | undefined
   {
     let url = this.apiUrl + 'team/query';
-    return this.http.post<SearchQueryResponseDTO>(url, searchQuery).pipe(timeout(this.dataTimeout));
+    return this.http.post<SearchQueryResponseDTO>(url, searchQuery);
   }
 
   async getTournamentByName(name: string) : Promise<Tournament>

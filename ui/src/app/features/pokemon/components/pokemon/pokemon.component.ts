@@ -35,7 +35,7 @@ export class PokemonComponent
   theme = inject(ThemeService);
   store = inject(Store);
 
-  @Input() pokemon!: Pokemon;
+  @Input() pokemon?: Pokemon;
   @Input() teamOptions?: TeamOptions;
   @Input() showStatsStart?: boolean = false;
   @Input() editorPreview?: boolean = false;
@@ -150,7 +150,7 @@ export class PokemonComponent
 
   loadSprite()
   {
-    if(this.pokemon.sprite)
+    if(this.pokemon?.sprite)
     {
       if(this.pokemon.gender && this.pokemon.sprite.female)
       {
@@ -163,7 +163,7 @@ export class PokemonComponent
     }
     else
     {
-      this.pokemonSpritePath = "assets/error.png"
+      this.pokemonSpritePath = "assets/img/error.png"
     }
   }
 
@@ -225,7 +225,7 @@ export class PokemonComponent
 
   triggerStats()
   {
-    if(this.pokemon.stats.length > 0)
+    if(this.pokemon && this.pokemon.stats.length > 0)
     {
       if(this.showStats[0]) { this.tooltipStats = this.tooltipStats.fill(false); }
       this.showStats[0] = !this.showStats[0];
@@ -234,7 +234,7 @@ export class PokemonComponent
 
   triggerNotes()
   {
-    if(this.pokemon.notes || this.editorPreview)
+    if((this.pokemon && this.pokemon.notes) || this.editorPreview)
     {
       this.showNotes[0] = !this.showNotes[0];
       this.triggerNotesEvent.emit(this.showNotes[0]);
@@ -257,7 +257,7 @@ export class PokemonComponent
 
   copyPokemon()
   {
-    if(this.util.copyToClipboard(this.parser.reverseParsePokemon(this.pokemon)))
+    if(this.pokemon && this.util.copyToClipboard(this.parser.reverseParsePokemon(this.pokemon)))
     {
       this.copied = true;
     }
@@ -300,7 +300,7 @@ export class PokemonComponent
 
   calculateStats()
   {
-    if(this.pokemon.stats)
+    if(this.pokemon && this.pokemon.stats)
     {
       this.pokemon.stats.forEach((stat, index) => 
       {
@@ -314,19 +314,19 @@ export class PokemonComponent
         {
           identifier: stat.identifier,
           name: stat.name,
-          value: this.calculateIV(this.pokemon.ivs ? this.pokemon.ivs[index].value : 0)
+          value: this.calculateIV(this.pokemon?.ivs ? this.pokemon.ivs[index].value : 0)
         }
         this.calculatedStats.evs[index] = 
         {
           identifier: stat.identifier,
           name: stat.name,
-          value: this.calculateEV(this.pokemon.evs ? this.pokemon.evs[index].value : 0)
+          value: this.calculateEV(this.pokemon?.evs ? this.pokemon.evs[index].value : 0)
         }
         this.calculatedStats.natures[index] = 
         {
           identifier: stat.identifier,
           name: stat.name,
-          value: this.getNatureValue(stat, this.pokemon.nature)
+          value: this.getNatureValue(stat, this.pokemon?.nature)
         }
         this.calculatedStats.total[index] = 
         {
@@ -334,10 +334,10 @@ export class PokemonComponent
           name: stat.name,
           value: this.calculateStat(
             stat.value, 
-            this.pokemon.level ? this.pokemon.level : 50,
-            this.teamOptions?.showIVs ? this.pokemon.ivs ? this.pokemon.ivs[index].value : 0 : 0,
-            this.teamOptions?.showEVs ? this.pokemon.evs ? this.pokemon.evs[index].value : 0 : 0, 
-            this.teamOptions?.showNature ? this.pokemon.nature ? this.calculatedStats.natures[index].value : 1 : 1,
+            this.pokemon?.level ? this.pokemon.level : 50,
+            this.teamOptions?.showIVs ? this.pokemon?.ivs ? this.pokemon.ivs[index].value : 0 : 0,
+            this.teamOptions?.showEVs ? this.pokemon?.evs ? this.pokemon.evs[index].value : 0 : 0, 
+            this.teamOptions?.showNature ? this.pokemon?.nature ? this.calculatedStats.natures[index].value : 1 : 1,
             stat.identifier === "hp" ? true : false)
         }
       });
@@ -362,7 +362,7 @@ export class PokemonComponent
 
   calculateTotals()
   {
-    if(this.pokemon.stats)
+    if(this.pokemon && this.pokemon.stats)
     {
       this.pokemon.stats.forEach((stat, index) => 
       {
@@ -372,10 +372,10 @@ export class PokemonComponent
           name: stat.name,
           value: this.calculateStat(
             stat.value, 
-            this.pokemon.level ? this.pokemon.level : 50,
-            this.teamOptions?.showIVs ? this.pokemon.ivs ? this.pokemon.ivs[index].value : 0 : 0,
-            this.teamOptions?.showEVs ? this.pokemon.evs ? this.pokemon.evs[index].value : 0 : 0, 
-            this.teamOptions?.showNature ? this.pokemon.nature ? this.calculatedStats.natures[index].value : 1 : 1,
+            this.pokemon?.level ? this.pokemon.level : 50,
+            this.teamOptions?.showIVs ? this.pokemon?.ivs ? this.pokemon.ivs[index].value : 0 : 0,
+            this.teamOptions?.showEVs ? this.pokemon?.evs ? this.pokemon.evs[index].value : 0 : 0, 
+            this.teamOptions?.showNature ? this.pokemon?.nature ? this.calculatedStats.natures[index].value : 1 : 1,
             stat.identifier === "hp" ? true : false)
         }
       });
@@ -400,17 +400,17 @@ export class PokemonComponent
 
   calculateBaseStat(baseStat: Stat) : number
   {
-    return this.calculateStat(baseStat.value, this.pokemon.level ? this.pokemon.level : 50, 0, 0, 1, baseStat.identifier === "hp" ? true : false);
+    return this.calculateStat(baseStat.value, this.pokemon?.level ? this.pokemon.level : 50, 0, 0, 1, baseStat.identifier === "hp" ? true : false);
   }
 
   calculateIV(iv: number) : number
   {
-    return Math.round((iv * (this.pokemon.level ? this.pokemon.level : 50)) / 100);
+    return Math.round((iv * (this.pokemon?.level ? this.pokemon.level : 50)) / 100);
   }
 
   calculateEV(ev: number) : number
   {
-    return Math.round((Math.floor(ev / 4) * (this.pokemon.level ? this.pokemon.level : 50)) / 100);
+    return Math.round((Math.floor(ev / 4) * (this.pokemon?.level ? this.pokemon.level : 50)) / 100);
   }
 
   getNatureValue(baseStat?: Stat, nature?: Nature) : number

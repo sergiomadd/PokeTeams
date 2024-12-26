@@ -198,11 +198,6 @@ export class TeamEditorComponent
       this.showTagEditor = false;
     }
   }
-
-  updateTeam(option)
-  {
-    this.teamComponent.forceChange(this.team.options)
-  }
   
   toggleTournamentEditor()
   {
@@ -231,7 +226,7 @@ export class TeamEditorComponent
 
   showNatureCheckEvent($event: boolean)
   {
-    this.team.options.showNature = $event;
+    this.team.options.showNature = $event; 
   }
 
   showNicknameCheckEvent($event: boolean)

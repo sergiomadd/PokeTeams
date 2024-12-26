@@ -90,7 +90,7 @@ export class TeamComponent
     if(newMax > this.maxStat) 
     {
       this.maxStat = newMax;
-      if(this.team) 
+      if(this.team && this.team.options) 
       {
         this.team.options = {...this.team.options, maxStat: this.maxStat}
       }
