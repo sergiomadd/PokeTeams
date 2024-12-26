@@ -46,6 +46,9 @@
                   </ng-container>
                   <ng-template #speciesName>
                     {{pokemon.name?.content}}
+                    <ng-container *ngIf="pokemon.name && pokemon.name?.language != (selectedLang$ | async)">
+                      <app-no-translation></app-no-translation>
+                    </ng-container>
                   </ng-template>
                 </div>
               </div>
@@ -61,7 +64,12 @@
             <div class="section-content row-start poke-tooltip-wrapper">
               <div class="poke-tooltip poke-tooltip-left" [ngClass]="{'poke-tooltip-visible':  tooltipLeft[0]}">
                 <div class="head">
-                  <span class="head-text">{{pokemon.item?.name?.content}}</span>
+                  <span class="head-text">
+                    {{pokemon.item?.name?.content}}
+                    <ng-container *ngIf="pokemon.item?.name && pokemon.item?.name?.language != (selectedLang$ | async)">
+                      <app-no-translation></app-no-translation>
+                    </ng-container>
+                  </span>
                 </div>
                 <div class="body">
                   <ng-container *ngFor="let chunk of itemProse">
@@ -71,13 +79,16 @@
                       <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
                     </ng-container>
                   </ng-container>
-                  <ng-container *ngIf="pokemon.item?.language != (selectedLang$ | async)">
+                  <ng-container *ngIf="pokemon.item?.prose && pokemon.item?.prose?.language != (selectedLang$ | async)">
                     <app-no-translation></app-no-translation>
                   </ng-container>
                 </div>
               </div>
               <div class="section-name">
                 {{pokemon.item?.name?.content}}
+                <ng-container *ngIf="pokemon.item?.name && pokemon.item?.name?.language != (selectedLang$ | async)">
+                  <app-no-translation></app-no-translation>
+                </ng-container>
               </div>
               <img src="{{pokemon.item?.iconPath}}" alt="" class="icon-big">
             </div>
@@ -92,7 +103,12 @@
             <div class="section-content poke-tooltip-wrapper">
               <div class="poke-tooltip poke-tooltip-left" [ngClass]="{'poke-tooltip-visible':  tooltipLeft[1]}">
                 <div class="head">
-                  <span class="head-text">{{pokemon.ability?.name?.content}}</span>
+                  <span class="head-text">
+                    {{pokemon.ability?.name?.content}}
+                    <ng-container *ngIf="pokemon.ability?.name && pokemon.ability?.name?.language != (selectedLang$ | async)">
+                      <app-no-translation></app-no-translation>
+                    </ng-container>
+                  </span>
                 </div>
                 <div class="body">
                   <ng-container *ngFor="let chunk of abilityProse">
@@ -102,10 +118,16 @@
                       <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
                     </ng-container>
                   </ng-container>
+                  <ng-container *ngIf="pokemon.ability?.prose && pokemon.ability?.prose?.language != (selectedLang$ | async)">
+                    <app-no-translation></app-no-translation>
+                  </ng-container>
                 </div>
               </div>
               <div class="section-name">
-                {{pokemon.ability?.name?.content}} 
+                {{pokemon.ability?.name?.content}}
+                <ng-container *ngIf="pokemon.ability?.name && pokemon.ability?.name?.language != (selectedLang$ | async)">
+                  <app-no-translation></app-no-translation>
+                </ng-container>
               </div>
             </div>
           </div>
@@ -489,6 +511,9 @@
                   <div class="no-overflow">
                     <div class="name">
                       {{move?.name?.content}}
+                      <ng-container *ngIf="move?.name && move?.name?.language != (selectedLang$ | async)">
+                        <app-no-translation></app-no-translation>
+                      </ng-container>
                     </div>
                   </div>
                   <div class="poke-tooltip poke-tooltip-move" [ngClass]="{'poke-tooltip-visible':  tooltipRight[i]}">
@@ -552,6 +577,9 @@
                       </div>
                       <div class="head-text">
                         {{move?.name?.content}}
+                        <ng-container *ngIf="move?.name && move?.name?.language != (selectedLang$ | async)">
+                          <app-no-translation></app-no-translation>
+                        </ng-container>
                       </div>
                       <div class="head-class">
                         <img src="{{move?.damageClass?.iconPath}}" alt="" class="class-icon">
@@ -611,18 +639,24 @@
                                 <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
                               </ng-container>
                             </ng-container>
+                            <ng-container *ngIf="move?.effect?.short && move?.effect?.short?.language != (selectedLang$ | async)">
+                              <app-no-translation></app-no-translation>
+                            </ng-container>
                           </span>
                         </div>
                         <div class="property">
                           <span class="property-title">{{'pokemon.move.target' | translate}}: </span>
                           <span class="property-body">
-                          <ng-container *ngFor="let chunk of moveTargets[i]">
-                            <ng-container [ngSwitch]="chunk.type">
-                              <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
-                              <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
-                              <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
+                            <ng-container *ngFor="let chunk of moveTargets[i]">
+                              <ng-container [ngSwitch]="chunk.type">
+                                <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
+                                <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
+                                <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
+                              </ng-container>
                             </ng-container>
-                          </ng-container>
+                            <ng-container *ngIf="move?.target?.description && move?.target?.description?.language != (selectedLang$ | async)">
+                              <app-no-translation></app-no-translation>
+                            </ng-container>
                           </span>
                         </div>
                       </div>
@@ -642,7 +676,12 @@
             <div class="no-pad section animated-border" (click)="clickSection(i, 'stat')" [ngClass]="{'poke-tooltip-selected':  tooltipStats[i]}">
               <div class="section-content stat poke-tooltip-wrapper ">
                 <div class="poke-tooltip poke-tooltip-stat poke-tooltip-top" [ngClass]="{'poke-tooltip-visible':  tooltipStats[i]}">
-                  <div class="head" [ngStyle]="{backgroundColor: theme.getStatColor(stat.identifier)}">{{stat.name?.content}}</div>
+                  <div class="head" [ngStyle]="{backgroundColor: theme.getStatColor(stat.identifier)}">
+                    {{stat.name?.content}}
+                    <ng-container *ngIf="stat.name && stat.name?.language != (selectedLang$ | async)">
+                      <app-no-translation></app-no-translation>
+                    </ng-container>
+                  </div>
                   <div class="body row s-gap">
                     <div class="col">
                       <div class="item"></div>
