@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using api.DTOs.PokemonDTOs;
 
 namespace api.Controllers
 {
@@ -39,6 +40,35 @@ namespace api.Controllers
                 return BadRequest("Team not found.");
             }
             return Ok(team);
+        }
+
+        [HttpGet("data/{id}")]
+        public async Task<ActionResult<TeamDataDTO>> GetTeamData(string id)
+        {
+            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+
+            var team = await _teamService.GetTeamData(id, langId);
+            if (team == null)
+            {
+                return BadRequest("Team data not found.");
+            }
+            return Ok(team);
+        }
+
+        [HttpGet("pokemon/{pokemonId}")]
+        public async Task<ActionResult<PokemonDTO>> GetPokemonById(int pokemonId)
+        {
+            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+
+            var pokemonDTO = await _teamService.GetPokemonById(pokemonId, langId);
+
+            if (pokemonDTO == null)
+            {
+                return NotFound("Pokemon not found.");
+            }
+            return Ok(pokemonDTO);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

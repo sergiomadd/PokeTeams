@@ -159,6 +159,38 @@ namespace api.Services
             return teamDTO;
         }
 
+        public async Task<TeamDataDTO?> GetTeamData(string id, int langId)
+        {
+            TeamDataDTO teamDataDTO = null;
+            Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
+            if (team != null)
+            {
+                List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
+                teamDataDTO = new TeamDataDTO(
+                    team.Id,
+                    pokemons.Select(p => p.Id).ToList(),
+                    team.Options,
+                    await GetTeamPlayer(team),
+                    await _tournamentService.GetTournamentByName(team.TournamentNormalizedName),
+                    await _regulationService.GetRegulationByIdentifier(team.Regulation),
+                    team.ViewCount,
+                    team.DateCreated.ToString("yyyy-MM-dd"),
+                    team.Visibility,
+                    await GetTeamTags(team));
+            }
+            return teamDataDTO;
+        }
+
+        public async Task<PokemonDTO?> GetPokemonById(int id, int langId)
+        {
+            Pokemon? pokemon = _pokeTeamContext.Pokemon.FirstOrDefault(t => t.Id == id);
+            if (pokemon != null)
+            {
+                return await _pokedexService.BuildPokemonDTO(pokemon, langId);
+            }
+            return null;
+        }
+
         public async Task<Team?> SaveTeam(TeamDTO inputTeam, string loggedUserName)
         {
             Team newTeam = null;
