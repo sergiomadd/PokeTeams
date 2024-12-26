@@ -2,6 +2,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { Item } from 'src/app/features/pokemon/models/item.model';
 import { Ability } from '../../features/pokemon/models/ability.model';
 import { Move } from '../../features/pokemon/models/move.model';
 import { Nature } from '../../features/pokemon/models/nature.model';
@@ -222,6 +223,7 @@ export class UtilService
     }
     return undefined;
   }
+  
 
   getMoveTag(move?: Move): Tag | undefined
   {
@@ -231,6 +233,18 @@ export class UtilService
         name: move.name.content,
         identifier: move.name.content,
         icon: move.pokeType?.iconPath
+      }
+    }
+    return undefined;
+  }
+
+  getItemTag(item?: Item): Tag | undefined
+  {
+    if(item)
+    {
+      return {
+        name: item.name.content,
+        identifier: item.name.content,
       }
     }
     return undefined;
