@@ -86,6 +86,7 @@ export class TeamEditorService
       tournament: undefined,
       regulation: undefined,
       viewCount: 0,
+      date: "",
       visibility: true,
       tags: []
     });

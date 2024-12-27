@@ -1,7 +1,7 @@
-import { TeamPreview } from "../../team/models/teamPreview.model";
+import { TeamPreviewData } from "../../team/models/teamPreviewData.model";
 
 export interface SearchQueryResponseDTO
 {
-  teams: TeamPreview[],
+  teams: TeamPreviewData[],
   totalTeams: number
 }

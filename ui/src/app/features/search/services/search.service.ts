@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Tag } from '../../team/models/tag.model';
-import { TeamPreview } from '../../team/models/teamPreview.model';
+import { TeamPreviewData } from '../../team/models/teamPreviewData.model';
 import { TeamService } from '../../team/services/team.service';
 import { SearchQueryDTO } from '../models/searchQuery.dto';
 import { SearchQueryResponseDTO } from '../models/searchQueryResponse.dto';
@@ -19,8 +19,8 @@ export class SearchService
     = new BehaviorSubject<SearchQueryDTO>(<SearchQueryDTO>{});
   query = this.query$.asObservable();
 
-  private teams$: BehaviorSubject<TeamPreview[]>
-    = new BehaviorSubject<TeamPreview[]>([]);
+  private teams$: BehaviorSubject<TeamPreviewData[]>
+    = new BehaviorSubject<TeamPreviewData[]>([]);
   teams = this.teams$.asObservable();
 
   private totalTeams$: BehaviorSubject<number>
@@ -50,7 +50,7 @@ export class SearchService
     this.setQuerySetOperation(SetOperation.intersection);
   }
 
-  setTeams(teams: TeamPreview[])
+  setTeams(teams: TeamPreviewData[])
   {
     this.teams$.next(teams);
   }

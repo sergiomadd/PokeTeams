@@ -1,14 +1,13 @@
-import { PokemonPreview } from "../../pokemon/models/pokemonPreview.model";
 import { UserPreview } from "../../user/models/userPreview.model";
 import { Regulation } from "./regulation.model";
 import { Tag } from "./tag.model";
 import { TeamOptions } from "./teamOptions.model";
 import { Tournament } from "./tournament.model";
 
-export interface TeamPreview
+export interface TeamPreviewData
 {
   id: string,
-  pokemonIDs: PokemonPreview[],
+  pokemonIDs: number[],
   options: TeamOptions,
   player?: UserPreview,
   tournament?: Tournament,

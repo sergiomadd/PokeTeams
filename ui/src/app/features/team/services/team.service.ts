@@ -5,6 +5,7 @@ import { lastValueFrom, Observable, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { UtilService } from '../../../shared/services/util.service';
 import { Pokemon } from '../../pokemon/models/pokemon.model';
+import { PokemonPreview } from '../../pokemon/models/pokemonPreview.model';
 import { SearchQueryDTO } from '../../search/models/searchQuery.dto';
 import { SearchQueryResponseDTO } from '../../search/models/searchQueryResponse.dto';
 import { Regulation } from '../models/regulation.model';
@@ -57,6 +58,22 @@ export class TeamService
     let url = this.apiUrl + 'team/pokemon/' + id;
     pokemon = await lastValueFrom(this.http.get<Pokemon>(url));
     return pokemon;
+  }
+
+  async getPokemonPreviewById(id: number) : Promise<PokemonPreview>
+  {
+    let pokemonPreview: PokemonPreview = <PokemonPreview>{}
+    let url = this.apiUrl + 'team/pokemon/preview/' + id;
+    pokemonPreview = await lastValueFrom(this.http.get<PokemonPreview>(url));
+    return pokemonPreview;
+  }
+  
+  async getTeamPokemonPreviews(teamID: string) : Promise<PokemonPreview[]>
+  {
+    let pokemonPreview: PokemonPreview[] = []
+    let url = this.apiUrl + 'team/pokemon-previews/' + teamID;
+    pokemonPreview = await lastValueFrom(this.http.get<PokemonPreview[]>(url));
+    return pokemonPreview;
   }
 
   saveTeam(team: Team): Observable<TeamSaveResponse>

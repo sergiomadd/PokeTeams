@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { LoggedUserService } from 'src/app/core/auth/services/logged-user.service';
 import { selectAccessToken } from 'src/app/core/auth/store/auth.selectors';
 import { SearchService } from 'src/app/features/search/services/search.service';
-import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
+import { TeamPreviewData } from 'src/app/features/team/models/teamPreviewData.model';
 import { User } from '../../models/user.model';
 import { UserPageService } from '../../services/user-page.service';
 import { UserService } from '../../services/user.service';
@@ -26,7 +26,7 @@ export class UserPageComponent
   @Input() username?: string;
 
   user?: User;
-  userTeams: TeamPreview[] = [];
+  userTeams: TeamPreviewData[] = [];
   loading: boolean = false;
 
   tabs: boolean[] = [false, true]
@@ -60,12 +60,12 @@ export class UserPageComponent
         {
           this.loading = true;
           this.updateUser(this.username);
-          this.searchService.teams.subscribe((value: TeamPreview[]) =>
+          this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
           {
             this.userTeams = value;
           })
         }
-        this.searchService.teams.subscribe((value: TeamPreview[]) =>
+        this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
         {
           this.userTeams = value;
         })

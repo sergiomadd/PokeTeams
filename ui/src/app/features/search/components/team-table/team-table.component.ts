@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
-import { TeamPreview } from 'src/app/features/team/models/teamPreview.model';
+import { TeamPreviewData } from 'src/app/features/team/models/teamPreviewData.model';
 import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { Layout } from '../../models/layout.enum';
@@ -22,7 +22,7 @@ export class TeamTableComponent
   searchService = inject(SearchService);
   store = inject(Store);
 
-  teams: TeamPreview[] = [];
+  teams: TeamPreviewData[] = [];
   searched: boolean = false;
   layout: Layout = Layout.double;
 
@@ -45,7 +45,7 @@ export class TeamTableComponent
 
   async ngOnInit()
   {
-    this.searchService.teams.subscribe((value: TeamPreview[]) =>
+    this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
       {
         this.teams = value;
       }

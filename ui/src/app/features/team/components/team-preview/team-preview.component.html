@@ -118,7 +118,7 @@
     (mouseenter)="expand()"
     (mouseleave)="expand()"
     >
-      <ng-container *ngFor="let pokemon of team?.pokemons">
+      <ng-container *ngFor="let pokemon of pokemons">
         <app-pokemon-preview [pokemon]="pokemon" [layout]="layout"></app-pokemon-preview>
       </ng-container>
     </div>
