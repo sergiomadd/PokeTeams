@@ -37,6 +37,15 @@ export class TeamEditorService
     );
   }
 
+
+  addPokemonPlaceholders(amount: number)
+  {
+    for(let i = 0; i < amount; i++)
+    {
+      this.addEmptyPokemon();
+    }
+  }
+
   addEmptyPokemon()
   {
     this.addPokemon(this.pokemonService.createEmptyPokemon());

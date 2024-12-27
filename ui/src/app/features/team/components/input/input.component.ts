@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
 import { Team } from 'src/app/features/team/models/team.model';
 import { ParserService } from 'src/app/shared/services/parser.service';
@@ -64,11 +63,17 @@ export class InputComponent
       if(data.pokemons && data.pokemons.length > 0)
       {
         this.teamEditorService.updatePokemons([]);
-        for (const pokePaste of data.pokemons)
-        {
-          const pokemon: Pokemon = await this.pokemonService.buildPokemon(pokePaste);
-          this.teamEditorService.addPokemon(pokemon);
-        };
+        this.teamEditorService.addPokemonPlaceholders(data.pokemons.length);
+        await Promise.all(
+          data.pokemons.map(async (pokePaste, index) => 
+          {
+            const pokemon = await this.pokemonService.buildPokemon(pokePaste);
+            if(pokemon) 
+            { 
+              this.teamEditorService.updatePokemon(pokemon, index);
+            }
+          })
+        )
       }
     }
     //console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
