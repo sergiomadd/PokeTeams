@@ -71,6 +71,26 @@ namespace api.Controllers
             return Ok(pokemonDTO);
         }
 
+        [HttpGet("pokemon-previews/{teamId}")]
+        public async Task<ActionResult<List<PokemonPreviewDTO>>> GetTeamPreviewPokemons(string teamId)
+        {
+            if(teamId == null)
+            {
+                return BadRequest("Team id is null");
+            }
+
+            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+
+            var pokemonDTO = await _teamService.GetTeamPreviewPokemons(teamId, langId);
+
+            if (pokemonDTO == null)
+            {
+                return NotFound("Pokemon not found.");
+            }
+            return Ok(pokemonDTO);
+        }
+
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
         [HttpPost]

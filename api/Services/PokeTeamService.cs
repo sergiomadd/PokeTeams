@@ -16,6 +16,7 @@ using System.Security.Claims;
 using System.Linq;
 using api.Models;
 using System.Collections.Generic;
+using NuGet.Packaging.Signing;
 
 namespace api.Services
 {
@@ -84,19 +85,19 @@ namespace api.Services
         {
             TeamPreviewDTO teamPreviewDTO = null;
             List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
-            List<PokemonPreviewDTO> pokemonPreviewDTOs = new List<PokemonPreviewDTO>();
+            List<int> pokemonPreviewIDs = new List<int>();
 
             TeamOptionsDTO editorOptions = JsonSerializer.Deserialize<TeamOptionsDTO?>(team.Options, new JsonSerializerOptions { IncludeFields = false });
 
             foreach (Pokemon pokemon in pokemons)
             {
-                pokemonPreviewDTOs.Add(await _pokedexService.BuildPokemonPreviewDTO(pokemon, editorOptions, langId));
+                pokemonPreviewIDs.Add(pokemon.Id);
             }
 
             teamPreviewDTO = new TeamPreviewDTO
             {
                 ID = team.Id,
-                Pokemons = pokemonPreviewDTOs,
+                PokemonIDs = pokemonPreviewIDs,
                 Options = JsonSerializer.Deserialize<TeamOptionsDTO>(team.Options, new JsonSerializerOptions { IncludeFields = false }),
                 Player = await GetTeamPlayer(team),
                 Tournament = await _tournamentService.GetTournamentByName(team.TournamentNormalizedName),
@@ -189,6 +190,40 @@ namespace api.Services
                 return await _pokedexService.BuildPokemonDTO(pokemon, langId);
             }
             return null;
+        }
+
+        public async Task<PokemonPreviewDTO?> GetPokemonPreviewById(int id, int langId)
+        {
+            Pokemon? pokemon = _pokeTeamContext.Pokemon.FirstOrDefault(t => t.Id == id);
+            if (pokemon != null)
+            {
+                return await _pokedexService.BuildPokemonPreviewDTO(pokemon, langId);
+            }
+            return null;
+        }
+
+        [Time]
+        public async Task<List<PokemonPreviewDTO>> GetTeamPreviewPokemons(string id, int langId)
+        {
+            List<PokemonPreviewDTO> pokemonPreviewDTOs = new List<PokemonPreviewDTO>();
+
+            Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
+            if (team != null)
+            {
+                List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
+                List<int> pokemonIds = pokemons.Select(p => p.Id).ToList();
+
+                foreach (int pokemonId in pokemonIds)
+                {
+                    PokemonPreviewDTO pokemonPreviewDTO = await GetPokemonPreviewById(pokemonId, langId);
+                    if (pokemonPreviewDTO != null)
+                    {
+                        pokemonPreviewDTOs.Add(pokemonPreviewDTO);
+                    }
+                }
+            }
+
+            return pokemonPreviewDTOs;
         }
 
         public async Task<Team?> SaveTeam(TeamDTO inputTeam, string loggedUserName)
@@ -397,8 +432,7 @@ namespace api.Services
             {
                 teams = SortTeams(teams, searchQuery.SortOrder ?? null);
             }
-            if (teams != null && teams.Count > 0
-                && searchQuery.TeamsPerPage != null && searchQuery.SelectedPage != null)
+            if (teams != null && teams.Count > 0 && searchQuery.TeamsPerPage != null && searchQuery.SelectedPage != null)
             {
                 teams = ChunkTeams(teams, searchQuery.TeamsPerPage ?? 0, searchQuery.SelectedPage ?? 0);
             }
