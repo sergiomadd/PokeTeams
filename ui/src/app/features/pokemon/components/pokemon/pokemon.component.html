@@ -814,6 +814,12 @@
       </div>
     </ng-container>
   </ng-container>
+  <ng-container *ngIf="!pokemon?.name && !editorPreview">
+    <div class="pokemon-loading">
+      <div class="pokeball-loader pokeball-loader-ball is-active">
+      </div>
+    </div>
+  </ng-container>
 </div>
 <ng-template #nostats class="center error">NO STATS FOUND</ng-template>
 <ng-template #emptyIcon><div class="empty-icon"></div></ng-template>

@@ -114,14 +114,21 @@
         {{feedback}}
       </div>
     </ng-container>
-    <div class="pokemons"
-    (mouseenter)="expand()"
-    (mouseleave)="expand()"
-    >
-      <ng-container *ngFor="let pokemon of pokemons">
-        <app-pokemon-preview [pokemon]="pokemon" [layout]="layout"></app-pokemon-preview>
-      </ng-container>
-    </div>
+    <ng-container *ngIf="pokemons && pokemons.length > 0; else noPokemons">
+      <div class="pokemons"
+      (mouseenter)="expand()"
+      (mouseleave)="expand()"
+      >
+        <ng-container *ngFor="let pokemon of pokemons">
+          <app-pokemon-preview [pokemon]="pokemon" [layout]="layout"></app-pokemon-preview>
+        </ng-container>
+      </div>
+    </ng-container>
+    <ng-template #noPokemons>
+      <div class="pokemons-placeholder">
+        <div class="dot-pulse"></div>        
+      </div>
+    </ng-template>
   </ng-container>
   <ng-template #private>
     TEAM IS PRIVATE

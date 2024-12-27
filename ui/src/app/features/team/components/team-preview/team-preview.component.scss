@@ -86,6 +86,16 @@
     border-radius: 5px;
     width: 100%;
   }
+
+  .pokemons-placeholder
+  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 5em;
+    background-color: var(--bg-color-2);
+  }
 }
 
 .icon
