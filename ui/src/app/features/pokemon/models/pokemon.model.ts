@@ -1,5 +1,6 @@
 import { LocalizedText } from "src/app/shared/models/localizedText.model"
 import { Ability } from "./ability.model"
+import { Evolution } from "./evolution.model"
 import { Item } from "./item.model"
 import { Move } from "./move.model"
 import { Nature } from "./nature.model"
@@ -13,8 +14,8 @@ export interface Pokemon
 	name?: LocalizedText,
 	nickname?: string,
 	dexNumber?: number,
-	preEvolution?: Pokemon,
-	evolutions: Pokemon[],
+	preEvolution?: Evolution,
+	evolutions: Evolution[],
 	types?: TypesWithEffectiveness,
 	teraType?: TypeWithEffectiveness,
 	item?: Item,
