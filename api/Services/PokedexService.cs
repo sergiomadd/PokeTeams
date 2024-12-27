@@ -21,7 +21,7 @@ namespace api.Services
         {
             _pokedexContext = pokedexContext;
         }
-
+        [Time]
         public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon, int langId)
         {
             PokemonDataDTO? pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1, langId);
@@ -58,9 +58,8 @@ namespace api.Services
             };
         }
 
-        public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, TeamOptionsDTO editorOptions, int langId)
-        {
-            PokemonDataDTO? pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1, langId);
+        public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, int langId)
+        {            
             
             List<MovePreviewDTO?> moves = new List<MovePreviewDTO?>()
             {
@@ -69,14 +68,13 @@ namespace api.Services
                 await BuildMovePreview(pokemon.Move3Identifier ?? "", langId),
                 await BuildMovePreview(pokemon.Move4Identifier ?? "", langId)
             };
-
+            
             return new PokemonPreviewDTO
             {
-                Name = pokemonData?.Name,
-                DexNumber = pokemonData?.DexNumber,
-                Types = await GetPokemonTypes(pokemonData?.DexNumber ?? 0, langId),
+                Name = await GetPokemonName(pokemon.DexNumber ?? 1, langId),
+                DexNumber = pokemon.DexNumber,
                 TeraType = await GetTypeByIdentifier(pokemon.TeraTypeIdentifier ?? "", true, langId),
-                Sprite = pokemonData?.Sprite,
+                Sprite = new SpriteDTO(pokemon.DexNumber ?? 1),
                 Shiny = pokemon.Shiny,
                 Gender = pokemon.Gender,
                 Moves = moves,
@@ -88,10 +86,6 @@ namespace api.Services
         public async Task<MovePreviewDTO?> BuildMovePreview(string identifier, int langId)
         {
             MovePreviewDTO? movePreview = null;
-            if (identifier == null)
-            {
-                return null;
-            }
             Moves? moves = await _pokedexContext.Moves.FirstOrDefaultAsync(m => m.identifier == identifier);
             if (moves != null)
             {
@@ -110,6 +104,7 @@ namespace api.Services
             }
             return movePreview;
         }
+
         public async Task<PokemonDataDTO?> GetPokemonById(int id, int langId)
         {
             PokemonDataDTO pokemonData = new PokemonDataDTO(
@@ -167,16 +162,16 @@ namespace api.Services
             return pokeStats;
         }
 
-        private async Task<PokemonDataDTO?> GetPokemonPreEvolution(int id, int langId)
+        private async Task<EvolutionDTO?> GetPokemonPreEvolution(int id, int langId)
         {
-            Pokemon_species? pokemonSpeciesPreEvolution = _pokedexContext.Pokemon_species.FirstOrDefault(p => p.id == id);
+            Pokemon_species? pokemonSpeciesPreEvolution = await _pokedexContext.Pokemon_species.FirstOrDefaultAsync(p => p.id == id);
             if (pokemonSpeciesPreEvolution != null && pokemonSpeciesPreEvolution.evolves_from_species_id != null)
             {
                 int newID = pokemonSpeciesPreEvolution.evolves_from_species_id ?? 0;
-                return new PokemonDataDTO(
+                return new EvolutionDTO(
                     await GetPokemonName(newID, langId),
                     newID,
-                    await GetPokemonTypesWithEffectiveness(newID, langId),
+                    await GetPokemonTypes(newID, langId),
                     await GetPokemonStats(newID, langId), 
                     new SpriteDTO(newID),
                     preEvolution: await GetPokemonPreEvolution(newID, langId));
@@ -184,9 +179,9 @@ namespace api.Services
             return null;
         }
 
-        private async Task<List<PokemonDataDTO?>> GetPokemonEvolutions(int id, int langId)
+        private async Task<List<EvolutionDTO?>> GetPokemonEvolutions(int id, int langId)
         {
-            List<PokemonDataDTO?> evolutions = new List<PokemonDataDTO?>();
+            List<EvolutionDTO?> evolutions = new List<EvolutionDTO?>();
             List<Pokemon_species> pokemonSpeciesEvolutionList = await _pokedexContext.Pokemon_species.Where(p => p.evolves_from_species_id == id).ToListAsync();
             if (pokemonSpeciesEvolutionList.Count() > 0)
             {
@@ -195,10 +190,11 @@ namespace api.Services
                     if (pokemonSpeciesEvolution != null)
                     {
                         int newID = pokemonSpeciesEvolution.id;
-                        evolutions.Add(new PokemonDataDTO(
+                        evolutions.Add(new EvolutionDTO(
                             await GetPokemonName(newID, langId), newID,
-                            await GetPokemonTypesWithEffectiveness(newID, langId),
-                            await GetPokemonStats(newID, langId), new SpriteDTO(newID),
+                            await GetPokemonTypes(newID, langId),
+                            await GetPokemonStats(newID, langId),
+                            new SpriteDTO(newID),
                             evolutions: await GetPokemonEvolutions(newID, langId)));
                     }
                 }
@@ -227,7 +223,7 @@ namespace api.Services
                 {
                     item = new ItemDTO(items.Identifier,
                         new LocalizedText(localizedItemNames?.name ?? "", await GetLangIdentifier(localizedItemNames.local_language_id)),
-                        new LocalizedText(Formatter.FormatProse(itemProse?.effect), await GetLangIdentifier(localizedItemNames.local_language_id)));
+                        new LocalizedText(Formatter.FormatProse(itemProse?.effect), await GetLangIdentifier(itemProse.local_language_id)));
                 }
             }
             return item;

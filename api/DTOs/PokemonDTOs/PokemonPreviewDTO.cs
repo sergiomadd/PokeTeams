@@ -4,7 +4,6 @@
     {
         public LocalizedText? Name { get; set; }
         public int? DexNumber { get; set; }
-        public PokeTypesDTO? Types { get; set; }
         public PokeTypeDTO? TeraType { get; set; }
         public SpriteDTO? Sprite { get; set; }
         public bool? Shiny { get; set; }

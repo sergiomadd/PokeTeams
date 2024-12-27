@@ -8,7 +8,7 @@ namespace api.Services
     public interface IPokedexService
     {
         public Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon, int langId);
-        public Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, TeamOptionsDTO editorOptions, int langId);
+        public Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, int langId);
         public Task<PokemonDataDTO?> GetPokemonByName(string name, int langId);
         public Task<PokemonDataDTO?> GetPokemonById(int id, int langId);
         public Task<ItemDTO?> GetItemByName(string name, int langId);

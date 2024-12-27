@@ -7,8 +7,8 @@ namespace api.DTOs.PokemonDTOs
         public LocalizedText? Name { get; set; }
         public string? Nickname { get; set; }
         public int? DexNumber { get; set; }
-        public PokemonDataDTO? PreEvolution { get; set; }
-        public List<PokemonDataDTO?>? Evolutions { get; set; }
+        public EvolutionDTO? PreEvolution { get; set; }
+        public List<EvolutionDTO?>? Evolutions { get; set; }
         public PokeTypesWithEffectivenessDTO? Types { get; set; }
         public PokeTypeWithEffectivenessDTO? TeraType { get; set; }
         public ItemDTO? Item { get; set; }
@@ -23,6 +23,5 @@ namespace api.DTOs.PokemonDTOs
         public bool? Gender { get; set; }
         public SpriteDTO? Sprite { get; set; }
         public string? Notes { get; set; }
-        public Lang Lang { get; set; }
     }
 }
