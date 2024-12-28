@@ -11,6 +11,11 @@ namespace api.DTOs.PokemonDTOs
         public PokeTypesDTO? Types { get; set; }
         public SpriteDTO? Sprite { get; set; }
 
+        public EvolutionDTO()
+        {
+
+        }
+
         public EvolutionDTO(LocalizedText? name, int dexNumber, PokeTypesDTO types, List<StatDTO?> stats, SpriteDTO? sprite, EvolutionDTO? preEvolution = null, List<EvolutionDTO?>? evolutions = null)
         {
             Name = name;
