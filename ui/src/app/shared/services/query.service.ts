@@ -171,7 +171,7 @@ export class QueryService
     return (await this.pokemonService.getAllTeraTypes()).map(n => 
       ({
         name: n.name.content,
-        identifier: n.name.content,
+        identifier: n.identifier,
         icon: n.iconPath
       }));
   }
