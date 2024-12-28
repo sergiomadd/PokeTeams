@@ -25,9 +25,7 @@ export class TeamEditorService
     this.team$.next(newTeam);
   }
 
-  //Find using dex number
-
-  addPokemon(pokemon: Pokemon)
+  addPokemon(pokemon: Pokemon | undefined)
   {
     this.team$.next(
       {
@@ -37,18 +35,22 @@ export class TeamEditorService
     );
   }
 
-
   addPokemonPlaceholders(amount: number)
   {
     for(let i = 0; i < amount; i++)
     {
-      this.addEmptyPokemon();
+      this.addUndefinedPokemon();
     }
   }
 
   addEmptyPokemon()
   {
     this.addPokemon(this.pokemonService.createEmptyPokemon());
+  }
+
+  addUndefinedPokemon()
+  {
+    this.addPokemon(undefined);
   }
 
   deletePokemon(index: number): boolean
@@ -62,7 +64,7 @@ export class TeamEditorService
     else { return false }
   }
 
-  updatePokemons(updatedPokemons: Pokemon[])
+  updatePokemons(updatedPokemons: (Pokemon | undefined)[])
   {
     this.team$.next(
       {
@@ -72,16 +74,11 @@ export class TeamEditorService
     );
   }
 
-  updatePokemon(pokemon: Pokemon, index: number)
+  updatePokemon(pokemon: Pokemon | undefined, index: number)
   {
-    if(this.team$.getValue().pokemons[index])
-    {
-      const pokemonsToUpdate: Pokemon[] = this.team$.getValue().pokemons;
-      pokemonsToUpdate[index] = pokemon;
-      this.updatePokemons(pokemonsToUpdate);
-      return true;
-    }
-    else { return false }
+    const pokemonsToUpdate: (Pokemon | undefined)[] = this.team$.getValue().pokemons;
+    pokemonsToUpdate[index] = pokemon;
+    this.updatePokemons(pokemonsToUpdate);
   }
 
   setEmptyTeam()

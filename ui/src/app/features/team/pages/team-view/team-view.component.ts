@@ -133,7 +133,7 @@ export class TeamViewComponent
 
   copyPaste()
   {
-    if(this.team)
+    if(this.team && this.team.pokemons)
     {
       this.util.copyToClipboard(this.parser.reversePaste(this.team.pokemons ?? []));
     }

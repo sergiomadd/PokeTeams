@@ -37,7 +37,6 @@ export class PokemonService
     let pokemon: Pokemon = <Pokemon>{};
     try 
     {
-      
       const pokemonDataPromise: Promise<PokemonData> | undefined = pokePaste.name ? this.getPokemonData(pokePaste.name) : undefined;
       const teraTypePromise: Promise<TypeWithEffectiveness> | undefined = pokePaste.teratype ? this.getType(pokePaste.teratype, true) : undefined;
       const itemPromise: Promise<Item> | undefined = pokePaste.item ? this.getItemByName(pokePaste.item) : undefined;
@@ -222,10 +221,8 @@ export class PokemonService
     let types: Tag[] = [];
     let url = this.apiUrl + 'ability/pokemon/' + id;
     types = await lastValueFrom(this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout)));
-    console.log(types)
     return types; 
   }
-
 
   async queryNaturesByName(key: string) : Promise<Tag[]>
   {

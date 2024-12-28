@@ -8,7 +8,7 @@ import { Tournament } from "./tournament.model";
 export interface Team
 {
   id: string,
-  pokemons: Pokemon[],
+  pokemons: (Pokemon | undefined)[],
   options: TeamOptions,
   player?: UserPreview,
   tournament?: Tournament,

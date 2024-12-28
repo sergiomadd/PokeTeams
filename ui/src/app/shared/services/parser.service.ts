@@ -82,12 +82,15 @@ export class ParserService {
     return pokePaste;
   }
 
-  reversePaste(pokemons: Pokemon[]): string
+  reversePaste(pokemons: (Pokemon | undefined)[]): string
   {
     let paste: string = "";
     pokemons.forEach(pokemon => 
     {
-      paste = paste + this.reverseParsePokemon(pokemon) + "\n"  
+      if(pokemon)
+      {
+        paste = paste + this.reverseParsePokemon(pokemon) + "\n"  
+      }
     });
     return paste;
   }

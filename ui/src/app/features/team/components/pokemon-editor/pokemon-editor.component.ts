@@ -30,7 +30,7 @@ export class PokemonEditorComponent
 
   teamKey: string = "";
   team: Team = <Team>{};
-  pokemon: Pokemon = <Pokemon>{};
+  pokemon?: Pokemon;
   selectedPokemonIndex: number = 0;
 
   @ViewChild(PokemonComponent) pokemonPreviewComponent?: PokemonComponent;
@@ -92,12 +92,12 @@ export class PokemonEditorComponent
     this.teamEditorService.selectedTeam$.subscribe((value) => 
     {
       this.team = value;
-      this.pokemon = this.team.pokemons[this.selectedPokemonIndex]
+      this.pokemon = this.team.pokemons[this.selectedPokemonIndex] ?? undefined
     });
 
     this.pokemonForm.controls.nickname.valueChanges.subscribe(async (value) => 
     {
-      if(this.pokemonForm.controls.nickname.valid)
+      if(this.pokemon && this.pokemonForm.controls.nickname.valid)
       {
         this.pokemon.nickname = value ?? undefined;
         this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
@@ -106,7 +106,7 @@ export class PokemonEditorComponent
 
     this.pokemonForm.controls.level.valueChanges.subscribe(async (value) => 
     {
-      if(value)
+      if(this.pokemon && value)
       {
         
         if(!this.util.isNaN(value))
@@ -132,7 +132,7 @@ export class PokemonEditorComponent
 
     this.pokemonForm.controls.gender.valueChanges.subscribe(async (value) => 
     {
-      if(value)
+      if(this.pokemon && value)
       {
         this.pokemon = 
         { 
@@ -146,7 +146,7 @@ export class PokemonEditorComponent
     
     this.pokemonForm.controls.ivs.valueChanges.subscribe(async (value) => 
     {
-      if(value && value != this.pokemon.ivs![this.selectedStat].value)
+      if(this.pokemon && value && value != this.pokemon.ivs![this.selectedStat].value)
       {
         this.currentIVs = value;
         let ivs = this.pokemon.ivs;
@@ -162,7 +162,7 @@ export class PokemonEditorComponent
     });
     this.pokemonForm.controls.evs.valueChanges.subscribe(async (value) => 
     {
-      if(value)
+      if(this.pokemon && value)
       {
         this.currentEVs = value;
         let evs = this.pokemon.evs;
@@ -179,7 +179,7 @@ export class PokemonEditorComponent
 
     this.pokemonForm.controls.notes.valueChanges.subscribe(value =>
       {
-        if(value && this.pokemonForm.controls.notes.valid)
+        if(this.pokemon && value && this.pokemonForm.controls.notes.valid)
         {
           this.pokemon = { ...this.pokemon, notes: value }
           this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
@@ -192,7 +192,7 @@ export class PokemonEditorComponent
     if(index != this.selectedPokemonIndex)
     {
       this.selectedPokemonIndex = index;
-      this.pokemon = this.team.pokemons[this.selectedPokemonIndex];
+      this.pokemon = this.team.pokemons[this.selectedPokemonIndex] ?? undefined;
     }
   }
 
@@ -223,9 +223,11 @@ export class PokemonEditorComponent
 
   allAbilitiesSwitch() 
   { 
-    //if no pokemon disabled
-    this.allAbilities = !this.allAbilities;
-    this.pokemon.ability = undefined;
+    if(this.pokemon)
+    {
+      this.allAbilities = !this.allAbilities;
+      this.pokemon.ability = undefined;
+    }
   }
 
   calculateAvailableEVs()
@@ -243,132 +245,169 @@ export class PokemonEditorComponent
 
   async pokemonSelectEvent(event: Tag)
   {
-    if(event)
+    console.log(this.pokemon)
+    console.log(event)
+    if(this.pokemon)
     {
-      const data: PokemonData = await this.pokemonService.getPokemonData(event.name);
-      this.pokemon = 
-      { 
-        ...this.pokemon,
-        name: data.name,
-        dexNumber: data.dexNumber,
-        types: data.types,
-        sprite: data.sprite,
-        evolutions: data.evolutions,
-        preEvolution: data.preEvolution,
-        stats: [...data.stats]
-      };
-      if(this.pokemonPreviewComponent)
+      if(event)
       {
-        this.pokemonPreviewComponent.showStats[0] = true;
+        const data: PokemonData = await this.pokemonService.getPokemonData(event.name);
+        this.pokemon = 
+        { 
+          ...this.pokemon,
+          name: data.name,
+          dexNumber: data.dexNumber,
+          types: data.types,
+          sprite: data.sprite,
+          evolutions: data.evolutions,
+          preEvolution: data.preEvolution,
+          stats: [...data.stats]
+        };
+        if(this.pokemonPreviewComponent)
+        {
+          this.pokemonPreviewComponent.showStats[0] = true;
+        }
       }
-    }
-    else
-    {
-      this.pokemon = 
-      { 
-        ...this.pokemon,
-        name: undefined,
-        dexNumber: undefined,
-        types: undefined,
-        sprite: undefined,
-        evolutions: [],
-        preEvolution: undefined,
-        stats: []
-      }
-      if(this.pokemonPreviewComponent)
+      else
       {
-        this.pokemonPreviewComponent.showStats[0] = false;
+        this.pokemon = 
+        { 
+          ...this.pokemon,
+          name: undefined,
+          dexNumber: undefined,
+          types: undefined,
+          sprite: undefined,
+          evolutions: [],
+          preEvolution: undefined,
+          stats: []
+        }
+        if(this.pokemonPreviewComponent)
+        {
+          this.pokemonPreviewComponent.showStats[0] = false;
+        }
       }
+      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async itemSelectEvent(event: Tag)
   {
-    this.pokemon = { ...this.pokemon, item: event ? await this.pokemonService.getItemByName(event.name) : undefined }
+    if(this.pokemon)
+    {
+      this.pokemon = { ...this.pokemon, item: event ? await this.pokemonService.getItemByName(event.name) : undefined }
+    }
   }
 
   async abilitySelectEvent(event: Tag)
   {
-    this.pokemon = { ...this.pokemon, ability: event ? await this.pokemonService.getAbilityByName(event.name) : undefined }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    if(this.pokemon)
+    {
+      this.pokemon = { ...this.pokemon, ability: event ? await this.pokemonService.getAbilityByName(event.name) : undefined }
+      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    }
   }
 
   async move1SelectEvent(event: Tag)
   {
-    this.pokemon.moves[0] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    if(this.pokemon)
+    {
+      this.pokemon.moves[0] = event ? await this.pokemonService.getMove(event.name) : undefined;
+      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    }
   }
 
   async move2SelectEvent(event: Tag)
   {
-    this.pokemon.moves[1] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    if(this.pokemon)
+    {
+      this.pokemon.moves[1] = event ? await this.pokemonService.getMove(event.name) : undefined;
+      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    }
   }
 
   async move3SelectEvent(event: Tag)
   {
-    this.pokemon.moves[2] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-
+    if(this.pokemon)
+    {
+      this.pokemon.moves[2] = event ? await this.pokemonService.getMove(event.name) : undefined;
+      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    }
   }
 
   async move4SelectEvent(event: Tag)
   {
-    this.pokemon.moves[3] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    if(this.pokemon)
+    {
+      this.pokemon.moves[3] = event ? await this.pokemonService.getMove(event.name) : undefined;
+      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    }
   }
 
   async natureSelectEvent(event: Tag)
   {
-    this.pokemon.nature = event ? await this.pokemonService.getNatureByName(event.name) : undefined;
+    if(this.pokemon)
+    {
+      this.pokemon.nature = event ? await this.pokemonService.getNatureByName(event.name) : undefined;
+    }
   }
 
   async teraTypeSelectEvent(event: Tag)
   {
-    this.pokemon.teraType = event ? await this.pokemonService.getType(event.name, true) : undefined;
+    if(this.pokemon)
+    {
+      this.pokemon.teraType = event ? await this.pokemonService.getType(event.name, true) : undefined;
+    }
   }
 
   shinySelectEvent(event: boolean)
   {
-    this.pokemon = 
-    { 
-      ...this.pokemon,
-      shiny: event
+    if(this.pokemon)
+    {
+      this.pokemon = 
+      { 
+        ...this.pokemon,
+        shiny: event
+      }
+      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   genderSelectEvent(event: any)
   {
-    this.pokemon = 
-    { 
-      ...this.pokemon,
-      gender: event
+    if(this.pokemon)
+    {
+      this.pokemon = 
+      { 
+        ...this.pokemon,
+        gender: event
+      }
+      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   selectStat(index: number)
   {
-    if(this.selectedStat === index)
+    if(this.pokemon)
     {
-      this.selectedStat = 0;
-    }
-    else
-    {
-      this.selectedStat = index;
-      this.pokemonForm.controls.ivs.setValue(this.pokemon.ivs![index].value);
-      this.currentIVs = 0;
-      this.pokemonForm.controls.evs.setValue(this.pokemon.evs![index].value);
-      this.currentEVs = 0;
-      if(this.pokemonPreviewComponent)
+      if(this.selectedStat === index)
       {
-        this.pokemonPreviewComponent.showStats[0] = true;
+        this.selectedStat = 0;
       }
+      else
+      {
+        this.selectedStat = index;
+        this.pokemonForm.controls.ivs.setValue(this.pokemon.ivs![index].value);
+        this.currentIVs = 0;
+        this.pokemonForm.controls.evs.setValue(this.pokemon.evs![index].value);
+        this.currentEVs = 0;
+        if(this.pokemonPreviewComponent)
+        {
+          this.pokemonPreviewComponent.showStats[0] = true;
+        }
+      }
+      this.calcIVSliderBackground(this.pokemon.ivs[index].value, 0, 31);
+      this.calcEVSliderBackground(this.pokemon.evs[index].value, 0, this.currentMaxEVs);
     }
-    this.calcIVSliderBackground(this.pokemon.ivs[index].value, 0, 31);
-    this.calcEVSliderBackground(this.pokemon.evs[index].value, 0, this.currentMaxEVs);
   }
 
   triggerNotes($event)

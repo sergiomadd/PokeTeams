@@ -33,7 +33,7 @@ export class UploadComponent
   {
     if(this.team.pokemons.length > 0 
       && this.team.pokemons.length <= 6 
-      && this.team.pokemons.some(p => p.dexNumber)) //If dexNumber is undefined -> empty pokemon
+      && this.team.pokemons.some(p => p && p.dexNumber)) //If dexNumber is undefined -> empty pokemon
     {
       console.log("Generating team: ", this.team);
       this.teamSubmitted = true;
@@ -67,7 +67,7 @@ export class UploadComponent
       console.log("Error: too many pokemons, limit is 6")
       this.feedback = "Too many pokemons, max is 6";
     }
-    else if(this.team.pokemons.some(p => !p.dexNumber))
+    else if(this.team.pokemons.some(p => p && !p.dexNumber))
     {
       console.log("Error: there are empty pokemons")
       this.feedback = "There are empty pokemons";
