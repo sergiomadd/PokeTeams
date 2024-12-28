@@ -21,7 +21,6 @@ namespace api.Services
         {
             _pokedexContext = pokedexContext;
         }
-        [Time]
         public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon, int langId)
         {
             PokemonDataDTO? pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1, langId);
@@ -945,9 +944,10 @@ namespace api.Services
         {
             List<PokeTypeDTO> pokeTypes = new List<PokeTypeDTO>();
             List<Types> types = await _pokedexContext.Types.ToListAsync();
-            foreach (Types type in types)
+            //Avoid adding last 2 types -> (unkown, shadow) UNSUPPORTED
+            for(int i=0; i<types.Count-2; i++)
             {
-                PokeTypeDTO? pokeType = await GetTypeById(type.id, langId, true);
+                PokeTypeDTO? pokeType = await GetTypeById(types[i].id, langId, true);
                 if (pokeType != null)
                 {
                     pokeTypes.Add(pokeType);
