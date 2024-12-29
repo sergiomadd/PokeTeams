@@ -10,7 +10,6 @@ import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
-import { UserPreview } from 'src/app/features/user/models/userPreview.model';
 import { UserService } from 'src/app/features/user/services/user.service';
 import { QueryService } from 'src/app/shared/services/query.service';
 import { SmartInputComponent } from '../../../../shared/components/smart-input/smart-input.component';
@@ -68,7 +67,8 @@ export class TeamEditorComponent
           this.team.player = 
           {
             username: value.username,
-            picture: value.picture
+            picture: value.picture,
+            registered: true
           };
         }
         else
@@ -84,16 +84,6 @@ export class TeamEditorComponent
     this.reset();
   }
 
-  buildAnonPlayer() : UserPreview
-  {
-    let anonPlayer: UserPreview =     
-    {
-      username: "anon",
-      picture: "assets/anon.png"
-    }
-    return anonPlayer
-  }
-
   reset()
   {
     this.teamEditorService.setEmptyTeam();
@@ -101,11 +91,19 @@ export class TeamEditorComponent
 
   playerUpdateEvent(event: string)
   {
-    this.team.player = 
+    if(event)
     {
-      username: event,
-      picture: this.selectedThemeName === 'light' ? "assets/anon.png" : "assets/anon-white.png"
-    };
+      this.team.player = 
+      {
+        username: event,
+        picture: undefined,
+        registered: false
+      };
+    }
+    else
+    {
+      this.team.player = undefined;
+    }
   }
 
   async tournamentSelectEvent(event: Tag)

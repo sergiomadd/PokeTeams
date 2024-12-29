@@ -23,10 +23,12 @@
       display: flex;
       align-items: center;
       background-color: var(--bg-color-2);
-      padding: 0.2vw;
+      padding: 0.2em;
       border-radius: 5px;
       white-space: nowrap;
       text-align: start;
+      gap: 0.2em;
+      cursor: pointer;
     }
     
     .views
@@ -104,7 +106,7 @@
   height: 1.5em;
 }
 
-.unkownPlayer
+.unregisteredPlayer
 {
-  color: grey;
+  color: var(--text-color-secondary);
 }

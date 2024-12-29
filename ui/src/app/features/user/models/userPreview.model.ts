@@ -1,5 +1,6 @@
 export interface UserPreview
 {
   username?: string,
-  picture?: string
+  picture?: string,
+  registered: boolean
 }

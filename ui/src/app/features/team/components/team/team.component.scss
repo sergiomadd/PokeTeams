@@ -21,15 +21,17 @@ $cardWidth: 25vw;
   .detail
   {
     width: fit-content;
-    max-width: 10vw;
-    min-height: 1.2em;
+    max-width: 12em;
+    height: 1.2em;
+    overflow: hidden;
     display: flex;
     align-items: center;
     background-color: var(--bg-color-2);
-    padding: 0.2vw;
+    padding: 0.2em;
     border-radius: 5px;
     white-space: nowrap;
     text-align: start;
+    gap: 0.2em;
     cursor: pointer;
 
     .detail-text
@@ -87,4 +89,9 @@ $cardWidth: 25vw;
       row-gap: 2vh;
     }
   }
+}
+
+.unregisteredPlayer
+{
+  color: var(--text-color-secondary);
 }

@@ -24,16 +24,15 @@ export class TeamPreviewComponent
 
   @Input() team?: TeamPreviewData;
   @Input() pokemons: PokemonPreview[] = [];
-  teamID?: number;
   @Input() layout?: Layout;
   @Input() logged?: boolean;
   
   @ViewChildren(PokemonPreviewComponent) pokemonPreviewsComponents!: QueryList<PokemonPreviewComponent>;
 
-  feedback: string | undefined = undefined;
-
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
   selectedThemeName?: string;
+
+  feedback: string | undefined = undefined;
 
   async ngOnInit()
   {
