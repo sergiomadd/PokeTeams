@@ -193,7 +193,7 @@
                 <div class="stat-box" (click)="selectStat(i)"
                 [ngClass]="{selectedStat: selectedStat === i, disabled: !pokemon.name}"
                 >
-                  {{stat.name}}
+                  {{stat.name.content}}
                 </div>
               </ng-container>
             </div>
@@ -231,7 +231,7 @@
               formControlName="evs">
             </div>
             <div class="row-center">
-              {{"team.pokemon_editor.remaining-evs" | translate}} {{remainingEVs}}
+              {{"team.pokemon_editor.remaining_evs" | translate}} {{remainingEVs}}
             </div>
           </div>
       </form>

@@ -14,7 +14,7 @@ class="dropdown"
     class="option selected"
     >
       <ng-container *ngIf="selectedOption?.icon">
-        <img [attr.src]="selectedOption?.icon" alt="" class="icon" fill>
+        <img [attr.src]="selectedOption?.icon" alt="selectedOption?.name" class="icon" fill>
       </ng-container>
       {{selectedOption ? (selectedOption.name | translate) : ''}}
     </div>

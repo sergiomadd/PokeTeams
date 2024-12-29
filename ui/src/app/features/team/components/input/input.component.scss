@@ -9,11 +9,12 @@
   {
     display: flex;
     justify-content: center;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--bg-color-3);
     gap: 1vw;
     width: 60%;
     margin: auto;
     margin-bottom: 1vw;
+    width: 20vw;
 
     .tab
     {

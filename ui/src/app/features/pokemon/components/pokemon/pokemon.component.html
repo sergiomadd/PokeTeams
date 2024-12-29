@@ -432,7 +432,7 @@
           </div>
         </ng-container>
         <div class="center-down">
-          <ng-container *ngIf="pokemon.shiny; else emptyIcon">
+          <ng-container *ngIf="pokemon.name && pokemon.shiny; else emptyIcon">
             <div 
             class="section animated-border"
             (click)="clickSection(0, 'middle')"
@@ -448,7 +448,7 @@
               </div>
             </div>
           </ng-container>
-          <ng-container *ngIf="pokemon.level && pokemon.name">
+          <ng-container *ngIf="pokemon.name && pokemon.level">
             <div 
             class="section animated-border"
             (click)="clickSection(1, 'middle')"
@@ -669,7 +669,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="showStats[0] && pokemon.stats.length > 0; else empty">
+    <div *ngIf="showStats[0] && pokemon.stats && pokemon.stats.length > 0; else empty">
       <div class="stats">
         <ng-container *ngIf="pokemon.stats; else nostats">
           <ng-container *ngFor="let stat of pokemon.stats; index as i">
@@ -814,16 +814,18 @@
       </div>
     </ng-container>
   </ng-container>
-  <ng-container *ngIf="!pokemon?.name && !editorPreview">
-    <div class="pokemon-loading">
-      <div class="pokeball-loader pokeball-loader-ball is-active">
-      </div>
-    </div>
-  </ng-container>
+
 </div>
 <ng-template #nostats class="center error">NO STATS FOUND</ng-template>
 <ng-template #emptyIcon><div class="empty-icon"></div></ng-template>
 <ng-template #emptySection><div class="empty-section"></div></ng-template>
 <ng-template #empty></ng-template>
 <ng-template #emptyLine><div class="empty-line"></div></ng-template>
-<ng-template #emptyPokemon></ng-template>
+<ng-template #emptyPokemon>
+  <ng-container *ngIf="!editorPreview">
+    <div class="pokemon-loading">
+      <div class="pokeball-loader pokeball-loader-ball is-active">
+      </div>
+    </div>
+  </ng-container>
+</ng-template>
