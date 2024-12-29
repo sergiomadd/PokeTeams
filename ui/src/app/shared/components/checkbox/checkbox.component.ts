@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'app-checkbox',
@@ -10,6 +10,7 @@ export class CheckboxComponent
   @Input() checked: boolean = false;
   @Input() label?: string = "";
   @Input() icon?: string;
+  @Input() svg?: TemplateRef<any>;
   @Input() tooltipText?: string;
   @Output() checkEvent = new EventEmitter<boolean>();
   

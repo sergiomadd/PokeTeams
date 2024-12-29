@@ -7,7 +7,8 @@ checked: !icon && checked}"
   <ng-container *ngIf="icon">
     <img src="{{icon}}" alt="{{label}}" class="big-icon">
   </ng-container>
-  <ng-container *ngIf="!icon">
+  <ng-container *ngIf="svg" [ngTemplateOutlet]="svg"></ng-container>
+  <ng-container *ngIf="!icon && !svg">
     {{label}}
   </ng-container>
   <ng-container *ngIf="tooltipText">
