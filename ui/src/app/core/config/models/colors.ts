@@ -133,3 +133,15 @@ export enum StatColorDark
     iv = "hsl(195, 53%, 59%)",
     ev = "hsl(239, 58%, 64%)"
 }
+
+export enum NatureColors
+{
+    up = "hsl(0, 100%, 32%)",
+    down = "hsl(197, 100%, 38%)"
+}
+
+export enum FeedbackColors
+{
+    success = "hsl(140, 80%, 44%)",
+    error = "hsl(352, 80%, 51%)"
+}

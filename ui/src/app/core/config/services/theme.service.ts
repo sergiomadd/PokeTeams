@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, of, throwError } from 'rxjs';
-import { Gen9IconColors, Gen9IconColorsDark, Gen9IconColorsLight, StatColor, StatColorDark } from '../../../features/pokemon/models/pokemonColors';
+import { Gen9IconColors, Gen9IconColorsDark, Gen9IconColorsLight, StatColor, StatColorDark } from '../models/colors';
 import { tagBackgroundColors, tagTextColors } from '../models/tagColors.model';
 import { Theme, themeProperties, themes } from '../models/theme.model';
 import { configActions } from '../store/config.actions';

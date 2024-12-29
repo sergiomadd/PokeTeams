@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
 import { authActions } from 'src/app/core/auth/store/auth.actions';
 import { selectAccessToken, selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/auth/store/auth.selectors';
+import { FeedbackColors } from 'src/app/core/config/models/colors';
 import { JwtTokenService } from 'src/app/core/services/jwttoken.service';
 import { Country } from 'src/app/features/user/models/country.dto';
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
@@ -38,6 +39,8 @@ export class UserSettingsComponent
   email?: string;
   emailConfirmed?: boolean
   deleteDialog: boolean = false;
+  
+  readonly feedbackColors = FeedbackColors;
 
   pictures: string[] = [];
   showCatalog: boolean = false;
