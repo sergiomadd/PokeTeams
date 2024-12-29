@@ -110,21 +110,19 @@ namespace api.Services
             return teamPreviewDTO;
         }
 
-        private async Task<UserPreviewDTO> GetTeamPlayer(Team team)
+        private async Task<UserPreviewDTO?> GetTeamPlayer(Team team)
         {
-            UserPreviewDTO playerUserName = new UserPreviewDTO();
             if (team.PlayerId != null)
             {
                 User player = await _userService.GetUserById(team.PlayerId);
-                playerUserName.Username = player.UserName;
-                playerUserName.Picture = $"https://localhost:7134/images/sprites/profile-pics/{player.Picture}.png";
+                string? picture = player.Picture != null ? $"https://localhost:7134/images/sprites/profile-pics/{player.Picture}.png" : null;
+                return new UserPreviewDTO(player.UserName, picture, true);
             }
             else if (team.AnonPlayer != null)
             {
-                playerUserName.Username = team.AnonPlayer;
-                playerUserName.Picture = $"https://localhost:7134/images/sprites/profile-pics/anonymous.png";
+                return new UserPreviewDTO(team.AnonPlayer);
             }
-            return playerUserName;
+            return null;
         }
 
         private async Task<List<TagDTO>> GetTeamTags(Team team)
@@ -202,7 +200,6 @@ namespace api.Services
             return null;
         }
 
-        [Time]
         public async Task<List<PokemonPreviewDTO>> GetTeamPreviewPokemons(string id, int langId)
         {
             List<PokemonPreviewDTO> pokemonPreviewDTOs = new List<PokemonPreviewDTO>();
@@ -291,7 +288,7 @@ namespace api.Services
                     Pokemons = pokemons,
                     Options = optionsString,
                     PlayerId = player != null ? player.Id : null,
-                    AnonPlayer = player == null ? inputTeam.Player != null ? inputTeam.Player.Username : "anon" : null,
+                    AnonPlayer = (player == null && inputTeam.Player != null) ? inputTeam.Player.Username : null,
                     TournamentNormalizedName = tournament != null ? tournament.NormalizedName : null,
                     Tournament = tournament,
                     Regulation = inputTeam.Regulation != null ? inputTeam.Regulation.Identifier : null,
@@ -312,7 +309,7 @@ namespace api.Services
 
         public Pokemon BreakPokemonDTO(PokemonDTO pokemonDTO, string teamId)
         {
-            JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = true };
+            JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
 
             string? serializedIVs = null;
             string? serializedEVs = null;
