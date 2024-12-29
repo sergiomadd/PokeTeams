@@ -1,8 +1,8 @@
 <div class="radio">
   <ng-container *ngFor="let option of options; index as i">
     <div class="option tooltip-wrapper" (click)="select(i)" 
-    [ngClass]="{selected: selectedIndex == i && !optionIcons[i],
-    'checked-border': selectedIndex == i && optionIcons[i]}"
+    [ngClass]="{'selected-background': selectedIndex == i && !(optionIcons[i] || optionSVGs[i]),
+    'selected-border': selectedIndex == i && (optionIcons[i] || optionSVGs[i])}"
     >
       <ng-container *ngIf="optionIcons[i]">
         <img src="{{optionIcons[i]}}" alt="{{optionNames[i]}}" class="big-icon">
