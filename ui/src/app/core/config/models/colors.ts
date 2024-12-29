@@ -134,6 +134,12 @@ export enum StatColorDark
     ev = "hsl(239, 58%, 64%)"
 }
 
+export enum GenderColors
+{
+    male = "hsl(219, 100%, 50%)",
+    female = "hsl(344, 100%, 58%)"
+}
+
 export enum NatureColors
 {
     up = "hsl(0, 100%, 32%)",
@@ -145,3 +151,5 @@ export enum FeedbackColors
     success = "hsl(140, 80%, 44%)",
     error = "hsl(352, 80%, 51%)"
 }
+
+export const shinyColor = "hsl(44, 95%, 54%)"

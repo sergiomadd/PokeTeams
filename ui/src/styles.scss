@@ -369,6 +369,10 @@ textarea
   padding: 0.8vw;
 }
 
+.border-100
+{
+  border-radius: 20px;
+}
 
 $tooltipColor: var(--bg-color-tooltip);
 $arrowSize: 0.4vw;

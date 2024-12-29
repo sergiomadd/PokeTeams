@@ -1,6 +1,7 @@
 import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { GenderColors, shinyColor } from 'src/app/core/config/models/colors';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { PokemonData } from 'src/app/features/pokemon/models/pokemonData.dto';
 import { Stat } from 'src/app/features/pokemon/models/stat.model';
@@ -32,6 +33,8 @@ export class PokemonEditorComponent
   team: Team = <Team>{};
   pokemon?: Pokemon;
   selectedPokemonIndex: number = 0;
+  readonly genderColors = GenderColors;
+  readonly shinyColor = shinyColor;
 
   @ViewChild(PokemonComponent) pokemonPreviewComponent?: PokemonComponent;
   allAbilities: boolean = false;
