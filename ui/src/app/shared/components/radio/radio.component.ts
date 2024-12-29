@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'app-radio',
@@ -10,6 +10,7 @@ export class RadioComponent
   @Input() options: any[] = [];
   @Input() optionNames: string[] = [];
   @Input() optionIcons: string[] = [];
+  @Input() optionSVGs: TemplateRef<any>[] = [];
   @Input() tooltipTexts?: string[] = [];
   @Input() selectedIndex?: number;
   @Output() selectEvent = new EventEmitter<number>();

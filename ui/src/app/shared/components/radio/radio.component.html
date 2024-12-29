@@ -1,4 +1,3 @@
-
 <div class="radio">
   <ng-container *ngFor="let option of options; index as i">
     <div class="option tooltip-wrapper" (click)="select(i)" 
@@ -8,7 +7,8 @@
       <ng-container *ngIf="optionIcons[i]">
         <img src="{{optionIcons[i]}}" alt="{{optionNames[i]}}" class="big-icon">
       </ng-container>
-      <ng-container *ngIf="!optionIcons[i]">
+      <ng-container *ngIf="optionSVGs[i]" [ngTemplateOutlet]="optionSVGs[i]"></ng-container>
+      <ng-container *ngIf="!optionIcons[i] && !optionSVGs[i]">
         {{optionNames[i]}}
       </ng-container>
       <ng-container *ngIf="tooltipTexts && tooltipTexts[i]">
