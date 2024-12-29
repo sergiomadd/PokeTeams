@@ -90,7 +90,7 @@ export class TeamViewComponent
   {
     for (const pokemonID in pokemonIDs) 
     {
-      this.team?.pokemons.push(this.pokemonService.createEmptyPokemon());
+      this.team?.pokemons.push(undefined);
     }
   }
 
