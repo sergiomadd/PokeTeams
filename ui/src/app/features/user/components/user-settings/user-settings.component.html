@@ -1,6 +1,6 @@
 <div class="settings">
   <div class="section row b-gap">
-    <div class="col s-gap">
+      <div class="col s-gap">
       <div class="title">
         {{'user.settings.picture-title' | translate}}
       </div>
@@ -28,17 +28,7 @@
         </div>
       </div>
       <ng-container *ngIf="changePictureSubmitted">
-        <ng-container *ngIf="isSubmitting$ | async">
-          <div class="feedback">
-            <div class="pokemon-spinner"></div>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="(success$ | async) as error">
-          <img src="assets/img/tick.png" alt="" class="feedback">
-        </ng-container>
-        <ng-container *ngIf="(backendError$ | async) as error">
-          <img src="assets/img/x.png" alt="" class="feedback">
-        </ng-container>
+        <ng-container *ngTemplateOutlet="feedback"></ng-container>
       </ng-container>
     </div>
   </div>
@@ -71,17 +61,7 @@
       class="smart-input-custom-wrapper"
       ></app-smart-input>
       <ng-container *ngIf="changeCountrySubmitted">
-        <ng-container *ngIf="isSubmitting$ | async">
-          <div class="feedback">
-            <div class="pokemon-spinner"></div>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="(success$ | async) as error">
-          <img src="assets/img/tick.png" alt="" class="feedback">
-        </ng-container>
-        <ng-container *ngIf="(backendError$ | async) as error">
-          <img src="assets/img/x.png" alt="" class="feedback">
-        </ng-container>
+        <ng-container *ngTemplateOutlet="feedback"></ng-container>
       </ng-container>
     </div>
   </div>
@@ -112,17 +92,7 @@
       (checkEvent)="changeVisibility($event)"
       ></app-switch>
       <ng-container *ngIf="changeVisibilitySubmitted">
-        <ng-container *ngIf="isSubmitting$ | async">
-          <div class="feedback">
-            <div class="pokemon-spinner"></div>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="(success$ | async) as error">
-          <img src="assets/img/tick.png" alt="" class="feedback">
-        </ng-container>
-        <ng-container *ngIf="(backendError$ | async) as error">
-          <img src="assets/img/x.png" alt="" class="feedback">
-        </ng-container>
+        <ng-container *ngTemplateOutlet="feedback"></ng-container>
       </ng-container>
     </div>
   </div>
@@ -157,17 +127,7 @@
           >
           <button type="submit">{{'user.settings.change-button' | translate}}</button>
           <ng-container *ngIf="changeNameSubmitted">
-            <ng-container *ngIf="isSubmitting$ | async">
-              <div class="feedback">
-                <div class="pokemon-spinner"></div>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="(success$ | async) as error">
-              <img src="assets/img/tick.png" alt="" class="feedback">
-            </ng-container>
-            <ng-container *ngIf="(backendError$ | async) as error">
-              <img src="assets/img/x.png" alt="" class="feedback">
-            </ng-container>
+            <ng-container *ngTemplateOutlet="feedback"></ng-container>
           </ng-container>
         </div>
       </div>
@@ -200,17 +160,7 @@
           >
           <button type="submit">{{'user.settings.change-button' | translate}}</button>
           <ng-container *ngIf="changeUserNameSubmitted">
-            <ng-container *ngIf="isSubmitting$ | async">
-              <div class="feedback">
-                <div class="pokemon-spinner"></div>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="(success$ | async) as error">
-              <img src="assets/img/tick.png" alt="" class="feedback">
-            </ng-container>
-            <ng-container *ngIf="(backendError$ | async) as error">
-              <img src="assets/img/x.png" alt="" class="feedback">
-            </ng-container>
+            <ng-container *ngTemplateOutlet="feedback"></ng-container>
           </ng-container>
         </div>
       </div>
@@ -227,7 +177,14 @@
         </div>
         <ng-container *ngIf="emailConfirmed">
           <div class="tooltip-wrapper">
-            <img src="assets/img/confirmed.png" alt="" class="big-icon selectable">
+            <svg class="big-icon selectable" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier"> 
+                <path [attr.fill]="feedbackColors.success" d="M3.37752 5.08241C3 5.62028 3 7.21907 3 10.4167V11.9914C3 17.6294 7.23896 20.3655 9.89856 21.5273C10.62 21.8424 10.9807 22 12 22C13.0193 22 13.38 21.8424 14.1014 21.5273C16.761 20.3655 21 17.6294 21 11.9914V10.4167C21 7.21907 21 5.62028 20.6225 5.08241C20.245 4.54454 18.7417 4.02996 15.7351 3.00079L15.1623 2.80472C13.595 2.26824 12.8114 2 12 2C11.1886 2 10.405 2.26824 8.83772 2.80472L8.26491 3.00079C5.25832 4.02996 3.75503 4.54454 3.37752 5.08241Z"></path> 
+                <path fill="var(--bg-color-1)" d="M15.0595 10.4995C15.3353 10.1905 15.3085 9.71643 14.9995 9.44055C14.6905 9.16468 14.2164 9.19152 13.9406 9.5005L10.9286 12.8739L10.0595 11.9005C9.78359 11.5915 9.30947 11.5647 9.0005 11.8406C8.69152 12.1164 8.66468 12.5905 8.94055 12.8995L10.3691 14.4995C10.5114 14.6589 10.7149 14.75 10.9286 14.75C11.1422 14.75 11.3457 14.6589 11.488 14.4995L15.0595 10.4995Z"></path> 
+              </g>
+            </svg>
             <app-tooltip
             [text]="'user.settings.email_verified-tooltip' | translate"
             [side]="'right'"
@@ -260,17 +217,7 @@
           >
           <button type="submit">{{'user.settings.change-button' | translate}}</button>
           <ng-container *ngIf="changeEmailSubmitted">
-            <ng-container *ngIf="isSubmitting$ | async">
-              <div class="feedback">
-                <div class="pokemon-spinner"></div>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="(success$ | async) as error">
-              <img src="assets/img/tick.png" alt="" class="feedback">
-            </ng-container>
-            <ng-container *ngIf="(backendError$ | async) as error">
-              <img src="assets/img/x.png" alt="" class="feedback">
-            </ng-container>
+            <ng-container *ngTemplateOutlet="feedback"></ng-container>
           </ng-container>
         </div>
       </form>
@@ -283,17 +230,7 @@
           </ng-container>
           <button (click)="sendEmailVerificationCode()">{{'user.settings.email_verification-button' | translate}}</button>
           <ng-container *ngIf="sendEmailVerificationCodeSubmitted">
-            <ng-container *ngIf="isSubmitting$ | async">
-              <div class="feedback">
-                <div class="pokemon-spinner"></div>
-              </div>
-            </ng-container>
-            <ng-container *ngIf="(success$ | async) as error">
-              <img src="assets/img/tick.png" alt="" class="feedback">
-            </ng-container>
-            <ng-container *ngIf="(backendError$ | async) as error">
-              <img src="assets/img/x.png" alt="" class="feedback">
-            </ng-container>
+            <ng-container *ngTemplateOutlet="feedback"></ng-container>
           </ng-container>
         </div>
       </ng-container>
@@ -343,17 +280,7 @@
       </div>
       <button type="submit">{{'user.settings.change-button' | translate}}</button>
       <ng-container *ngIf="changePasswordSubmitted">
-        <ng-container *ngIf="isSubmitting$ | async">
-          <div class="feedback">
-            <div class="pokemon-spinner"></div>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="(success$ | async) as error">
-          <img src="assets/img/tick.png" alt="" class="feedback">
-        </ng-container>
-        <ng-container *ngIf="(backendError$ | async) as error">
-          <img src="assets/img/x.png" alt="" class="feedback">
-        </ng-container>
+        <ng-container *ngTemplateOutlet="feedback"></ng-container>
       </ng-container>
     </form>
   </div>
@@ -375,3 +302,31 @@
 (choose)="chooseEvent($event)"
 *ngIf="deleteDialog"
 ></app-dialog>
+<ng-template #feedback>
+  <ng-container *ngIf="isSubmitting$ | async">
+    <div class="feedback">
+      <div class="pokemon-spinner"></div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="(success$ | async) as error">
+    <svg class="feedback" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+      <g id="SVGRepo_iconCarrier"> 
+        <path [attr.fill]="feedbackColors.success" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"></path> 
+        <path fill="var(--bg-color-1)" d="M16.0303 8.96967C16.3232 9.26256 16.3232 9.73744 16.0303 10.0303L11.0303 15.0303C10.7374 15.3232 10.2626 15.3232 9.96967 15.0303L7.96967 13.0303C7.67678 12.7374 7.67678 12.2626 7.96967 11.9697C8.26256 11.6768 8.73744 11.6768 9.03033 11.9697L10.5 13.4393L12.7348 11.2045L14.9697 8.96967C15.2626 8.67678 15.7374 8.67678 16.0303 8.96967Z"></path> 
+      </g>
+    </svg>
+  </ng-container>
+  <ng-container *ngIf="(backendError$ | async) as error">
+    <svg class="feedback" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+      <g id="SVGRepo_iconCarrier"> 
+        <path [attr.fill]="feedbackColors.error" d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"></path> 
+        <path fill="var(--bg-color-1)" d="M12 6.25C12.4142 6.25 12.75 6.58579 12.75 7V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V7C11.25 6.58579 11.5858 6.25 12 6.25Z"></path> 
+        <path fill="var(--bg-color-1)" d="M12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z"></path> 
+      </g>
+    </svg>
+  </ng-container>
+</ng-template>

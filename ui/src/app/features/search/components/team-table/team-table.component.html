@@ -13,32 +13,20 @@ class="team-table"
           <div class="way">
             <ng-container *ngIf="sortOrder.type != i">
               <div class="col">
-                <img src="{{(selectedTheme$ | async) === 'light' 
-                ? 'assets/img/up-arrow.png' 
-                : 'assets/img/up-arrow-white.png'}}" alt="Sort up arrow" class="sort-icon up-arrow">
-                <img src="{{(selectedTheme$ | async) === 'light' 
-                ? 'assets/img/down-arrow.png' 
-                : 'assets/img/down-arrow-white.png'}}" alt="Sort down arrow" class="sort-icon down-arrow">
+                <svg class="sort-icon up-arrow" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M1658 2652 c-475 -488 -880 -906 -900 -930 -43 -48 -47 -77 -17 -116 l20 -26 1799 0 1799 0 20 26 c30 39 26 67 -18 118 -22 25 -427 444 -901 931 -848 871 -862 885 -900 885 -38 0 -52 -14 -902 -888z"/> </g> </svg>
+                <svg class="sort-icon down-arrow" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M783 3543 c-29 -6 -63 -49 -63 -79 0 -15 20 -46 52 -81 29 -32 434 -451 901 -930 834 -858 849 -873 887 -873 38 0 53 15 887 873 467 479 872 898 901 930 59 65 64 91 28 134 l-24 28 -1774 1 c-975 1 -1783 -1 -1795 -3z"/> </g> </svg> 
               </div>
             </ng-container>
             <ng-container *ngIf="sortOrder.type == i && sortOrder.way === 1">
               <div class="col">
-                <img src="{{(selectedTheme$ | async) === 'light' 
-                ? 'assets/img/up-arrow.png' 
-                : 'assets/img/up-arrow-white.png'}}" alt="Sort up arrow" class="sort-icon up-arrow">
-                <img src="{{(selectedTheme$ | async) === 'light' 
-                ? 'assets/img/down-arrow-clear.png' 
-                : 'assets/img/down-arrow-clear-white.png'}}" alt="Sort down arrow" class="sort-icon down-arrow">
+                <svg class="sort-icon up-arrow" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M1658 2652 c-475 -488 -880 -906 -900 -930 -43 -48 -47 -77 -17 -116 l20 -26 1799 0 1799 0 20 26 c30 39 26 67 -18 118 -22 25 -427 444 -901 931 -848 871 -862 885 -900 885 -38 0 -52 -14 -902 -888z"/> </g> </svg>
+                <svg class="sort-icon down-arrow" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M783 3543 c-29 -6 -63 -49 -63 -79 0 -15 20 -46 52 -81 29 -32 434 -451 901 -930 834 -858 849 -873 887 -873 38 0 53 15 887 873 467 479 872 898 901 930 59 65 64 91 28 134 l-24 28 -1774 1 c-975 1 -1783 -1 -1795 -3z m3335 -164 c-4 -12 -1550 -1607 -1558 -1607 -8 0 -1554 1595 -1558 1607 -3 8 448 11 1558 11 1095 0 1561 -3 1558 -11z"/> </g> </svg>
               </div>
             </ng-container>
             <ng-container *ngIf="sortOrder.type == i && sortOrder.way === 0">
               <div class="col">
-                <img src="{{(selectedTheme$ | async) === 'light' 
-                ? 'assets/img/up-arrow-clear.png' 
-                : 'assets/img/up-arrow-clear-white.png'}}" alt="Sort up arrow" class="sort-icon up-arrow">
-                <img src="{{(selectedTheme$ | async) === 'light' 
-                ? 'assets/img/down-arrow.png' 
-                : 'assets/img/down-arrow-white.png'}}" alt="Sort down arrow" class="sort-icon down-arrow">
+                <svg class="sort-icon up-arrow" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M1658 2652 c-475 -488 -880 -906 -900 -930 -43 -48 -47 -77 -17 -116 l20 -26 1799 0 1799 0 20 26 c30 39 26 67 -18 118 -22 25 -427 444 -901 931 -848 871 -862 885 -900 885 -38 0 -52 -14 -902 -888z m1686 -107 l777 -800 -780 -3 c-430 -1 -1132 -1 -1562 0 l-780 3 778 802 c428 441 780 801 784 800 3 -1 355 -362 783 -802z"/> </g> </svg>
+                <svg class="sort-icon down-arrow" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M783 3543 c-29 -6 -63 -49 -63 -79 0 -15 20 -46 52 -81 29 -32 434 -451 901 -930 834 -858 849 -873 887 -873 38 0 53 15 887 873 467 479 872 898 901 930 59 65 64 91 28 134 l-24 28 -1774 1 c-975 1 -1783 -1 -1795 -3z"/> </g> </svg> 
               </div>
             </ng-container>
           </div>

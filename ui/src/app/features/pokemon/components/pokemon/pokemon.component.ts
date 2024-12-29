@@ -1,6 +1,7 @@
 import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { NatureColors } from 'src/app/core/config/models/colors';
 import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { selectLang } from 'src/app/core/config/store/config.selectors';
 import { Nature } from 'src/app/features/pokemon/models/nature.model';
@@ -50,6 +51,7 @@ export class PokemonComponent
   maleIconPath: string = '';
   femaleIconPath: string = '';
   copied?: boolean;
+  readonly natureColors = NatureColors;
 
   calculatedStats: CalculatedStats = 
   {
