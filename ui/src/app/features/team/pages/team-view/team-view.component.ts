@@ -98,15 +98,27 @@ export class TeamViewComponent
   {
     if(this.team)
     {
-      await Promise.all(
-        pokemonIDs.map(async (pokemonID, index) => 
-        {
-          const pokemon = await this.teamService.getPokemonById(pokemonID);
-          if(this.team && pokemon) 
-          { 
-            this.team.pokemons[index] = pokemon;
+      pokemonIDs.map(async (pokemonID, index) => 
+      {
+        this.teamService.getPokemonById(pokemonID).subscribe(
+          {
+            next: (response) =>
+            {
+              if(this.team && response) 
+              { 
+                this.team.pokemons[index] = response;
+              }
+            },
+            error: () =>
+            {
+              if(this.team) 
+              { 
+                this.team.pokemons[index] = null;
+              }            
+            }
           }
-        }))
+        );
+      })
     }
   }
 
@@ -135,7 +147,7 @@ export class TeamViewComponent
   {
     if(this.team && this.team.pokemons)
     {
-      this.util.copyToClipboard(this.parser.reversePaste(this.team.pokemons ?? []));
+      //this.util.copyToClipboard(this.parser.reversePaste(this.team.pokemons ?? []));
     }
   }
 

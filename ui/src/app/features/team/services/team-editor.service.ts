@@ -64,7 +64,7 @@ export class TeamEditorService
     else { return false }
   }
 
-  updatePokemons(updatedPokemons: (Pokemon | undefined)[])
+  updatePokemons(updatedPokemons: (Pokemon | null | undefined)[])
   {
     this.team$.next(
       {
@@ -76,7 +76,7 @@ export class TeamEditorService
 
   updatePokemon(pokemon: Pokemon | undefined, index: number)
   {
-    const pokemonsToUpdate: (Pokemon | undefined)[] = this.team$.getValue().pokemons;
+    const pokemonsToUpdate: (Pokemon | null | undefined)[] = this.team$.getValue().pokemons;
     pokemonsToUpdate[index] = pokemon;
     this.updatePokemons(pokemonsToUpdate);
   }

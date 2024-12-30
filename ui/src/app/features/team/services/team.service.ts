@@ -52,12 +52,10 @@ export class TeamService
     return this.http.get<TeamData>(url);
   }
 
-  async getPokemonById(id: number) : Promise<Pokemon>
+  getPokemonById(id: number) : Observable<Pokemon>
   {
-    let pokemon: Pokemon = <Pokemon>{}
     let url = this.apiUrl + 'team/pokemon/' + id;
-    pokemon = await lastValueFrom(this.http.get<Pokemon>(url));
-    return pokemon;
+    return this.http.get<Pokemon>(url);
   }
 
   async getPokemonPreviewById(id: number) : Promise<PokemonPreview>

@@ -721,3 +721,16 @@ $padding: 0.2vw;
   justify-content: center;
   align-items: center;
 }
+
+.pokemon-error
+{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: $cardWidth/4;
+  height: $cardWidth/4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

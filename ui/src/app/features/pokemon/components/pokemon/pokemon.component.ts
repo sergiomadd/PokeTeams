@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { GenderColors, NatureColors, shinyColor } from 'src/app/core/config/models/colors';
+import { FeedbackColors, GenderColors, NatureColors, shinyColor } from 'src/app/core/config/models/colors';
 import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { selectLang } from 'src/app/core/config/store/config.selectors';
 import { Nature } from 'src/app/features/pokemon/models/nature.model';
@@ -36,7 +36,7 @@ export class PokemonComponent
   theme = inject(ThemeService);
   store = inject(Store);
 
-  @Input() pokemon?: Pokemon;
+  @Input() pokemon?: Pokemon | null;
   @Input() teamOptions?: TeamOptions;
   @Input() showStatsStart?: boolean = false;
   @Input() editorPreview?: boolean = false;
@@ -54,6 +54,7 @@ export class PokemonComponent
   readonly genderColors = GenderColors;
   readonly natureColors = NatureColors;
   readonly shinyColor = shinyColor;
+  readonly feedbackColors = FeedbackColors;
 
   calculatedStats: CalculatedStats = 
   {
