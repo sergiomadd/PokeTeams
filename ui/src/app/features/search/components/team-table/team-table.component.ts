@@ -2,8 +2,10 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { LoggedUserService } from 'src/app/core/auth/services/logged-user.service';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
 import { TeamPreviewData } from 'src/app/features/team/models/teamPreviewData.model';
+import { User } from 'src/app/features/user/models/user.model';
 import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { Layout } from '../../models/layout.enum';
@@ -21,10 +23,12 @@ export class TeamTableComponent
   util = inject(UtilService);
   searchService = inject(SearchService);
   store = inject(Store);
+  loggedUserService = inject(LoggedUserService);
 
   teams: TeamPreviewData[] = [];
   searched: boolean = false;
   layout: Layout = Layout.double;
+  logged?: User;
 
   sortTypeIds: string[] = ["date", "views"];
   sortOrder: SortOrder = 
@@ -82,6 +86,10 @@ export class TeamTableComponent
         }
       }
     )
+    this.loggedUserService.loggedUser.subscribe(value =>
+      {
+        this.logged = value;
+      })
   }
 
   changeLayout(columNumber: number)
