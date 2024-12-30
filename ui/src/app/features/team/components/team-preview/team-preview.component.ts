@@ -1,6 +1,7 @@
 import { Component, inject, Input, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { FeedbackColors } from 'src/app/core/config/models/colors';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
 import { PokemonPreview } from 'src/app/features/pokemon/models/pokemonPreview.model';
 import { Layout } from 'src/app/features/search/models/layout.enum';
@@ -23,7 +24,7 @@ export class TeamPreviewComponent
   store = inject(Store);
 
   @Input() team?: TeamPreviewData;
-  @Input() pokemons: PokemonPreview[] = [];
+  @Input() pokemons?: PokemonPreview[] | null = undefined;
   @Input() layout?: Layout;
   @Input() logged?: boolean;
   
@@ -33,6 +34,7 @@ export class TeamPreviewComponent
   selectedThemeName?: string;
 
   feedback: string | undefined = undefined;
+  readonly feedbackColors = FeedbackColors;
 
   async ngOnInit()
   {
@@ -56,9 +58,23 @@ export class TeamPreviewComponent
     }
   }
 
-  async loadPokemons(teamId: string)
+  loadPokemons(teamId: string)
   {
-    this.pokemons = await this.teamService.getTeamPokemonPreviews(teamId);
+    this.teamService.getTeamPokemonPreviews(teamId).subscribe(
+      {
+        next: (response) =>
+        {
+          if(response)
+          {
+            this.pokemons = response;
+          }
+        },
+        error: () => 
+        {
+          this.pokemons = null;
+        }
+      }
+    );
   }
 
   getVisibility()

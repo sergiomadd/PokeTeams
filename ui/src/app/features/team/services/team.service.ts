@@ -66,12 +66,10 @@ export class TeamService
     return pokemonPreview;
   }
   
-  async getTeamPokemonPreviews(teamID: string) : Promise<PokemonPreview[]>
+  getTeamPokemonPreviews(teamID: string) : Observable<PokemonPreview[]>
   {
-    let pokemonPreview: PokemonPreview[] = []
     let url = this.apiUrl + 'team/pokemon-previews/' + teamID;
-    pokemonPreview = await lastValueFrom(this.http.get<PokemonPreview[]>(url));
-    return pokemonPreview;
+    return this.http.get<PokemonPreview[]>(url);
   }
 
   saveTeam(team: Team): Observable<TeamSaveResponse>
