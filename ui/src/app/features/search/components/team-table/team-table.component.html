@@ -82,6 +82,7 @@ class="team-table"
             [team]="team" 
             [layout]="layout"
             [logged]="logged"
+            (deleteEvent)="deleteTeam()"
             ></app-team-preview>
           </div>
         </ng-container>

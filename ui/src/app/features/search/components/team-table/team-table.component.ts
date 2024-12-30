@@ -105,6 +105,11 @@ export class TeamTableComponent
     }
   }
 
+  deleteTeam()
+  {
+    this.searchService.defaultSearch();
+  }
+
   //sorting
   changeSorter(index)
   {

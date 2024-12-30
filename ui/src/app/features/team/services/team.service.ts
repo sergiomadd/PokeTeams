@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, Observable, timeout } from 'rxjs';
@@ -25,15 +25,8 @@ export class TeamService
   store = inject(Store);
   util = inject(UtilService);
 
-
   private apiUrl = environment.apiURL;
   private dataTimeout = 5000;
-
-  private httpOptionsString = 
-  {
-    headers: new HttpHeaders({'accept': 'text/plain'}),
-    withCredentials: true
-  }
 
   constructor(private http: HttpClient) 
   {
@@ -82,16 +75,14 @@ export class TeamService
   {
     let url = this.apiUrl + 'team/increment';
     const data: TeamId = {id: teamKey}
-    this.http.post(url, data, this.httpOptionsString).subscribe();
+    this.http.post(url, data).subscribe();
   }
 
-  async deleteTeam(teamKey: string) : Promise<string | undefined>
+  deleteTeam(teamKey: string) : Observable<string>
   {
     let url = this.apiUrl + 'team/delete';
-    let deleted: string | undefined = undefined;
     const data: TeamId = {id: teamKey}
-    deleted = await lastValueFrom(this.http.post<string>(url, data, this.httpOptionsString).pipe(timeout(this.dataTimeout)));
-    return deleted;
+    return this.http.post<string>(url, data).pipe(timeout(this.dataTimeout));
   }
 
   searchTeams(searchQuery: SearchQueryDTO) : Observable<SearchQueryResponseDTO> | undefined

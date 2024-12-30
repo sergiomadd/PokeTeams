@@ -1,4 +1,4 @@
-import { Component, inject, Input, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { FeedbackColors } from 'src/app/core/config/models/colors';
@@ -28,6 +28,7 @@ export class TeamPreviewComponent
   @Input() pokemons?: PokemonPreview[] | null = undefined;
   @Input() layout?: Layout;
   @Input() logged?: User;
+  @Output() deleteEvent = new EventEmitter();
   
   @ViewChildren(PokemonPreviewComponent) pokemonPreviewsComponents!: QueryList<PokemonPreviewComponent>;
 
@@ -36,6 +37,7 @@ export class TeamPreviewComponent
 
   feedback: string | undefined = undefined;
   readonly feedbackColors = FeedbackColors;
+  deleteDialog: boolean = false;
 
   async ngOnInit()
   {
@@ -107,11 +109,44 @@ export class TeamPreviewComponent
     }
   }
 
-  async delete()
+  tryDelete()
   {
-    if(this.team) 
+    this.deleteDialog = !this.deleteDialog;
+  }
+
+  deleteChooseEvent($event)
+  {
+    if($event)
     {
-      this.feedback = await this.teamService.deleteTeam(this.team?.id);
+      this.delete();
+      this.deleteDialog = !this.deleteDialog;
+    }
+    else
+    {
+      this.deleteDialog = !this.deleteDialog;
+    }
+  }
+
+  delete()
+  {
+    if(this.team 
+      && this.logged 
+      && this.logged.username == this.team?.player?.username 
+      && this.team?.player?.registered) 
+    {
+      this.teamService.deleteTeam(this.team?.id).subscribe(
+        {
+          next: (response) =>
+          {
+            this.deleteEvent.emit();
+          },
+          error: (error) =>
+          {
+            console.log("Error deleting team: ", error.message)
+            this.feedback = error.message;
+          }
+        }
+      )
     }
   }
 }

@@ -9,6 +9,7 @@
   left: 50%;
   transform: translate(round(-50%, 1px), round(-50%, 1px));
   padding: 1vh;
+  z-index: 9;
 
   .text
   {
