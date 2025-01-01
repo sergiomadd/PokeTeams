@@ -508,7 +508,8 @@ namespace api.Controllers
             return Ok();
         }
 
-        //Make so only admin
+        //Make so only admin\
+        /*
         [HttpPost, Route("delete/{userName}")]
         public async Task<ActionResult<UserDTO>> DeleteUserByUserName(string userName)
         {
@@ -529,5 +530,6 @@ namespace api.Controllers
             }
             return Ok();
         }
+        */
     }
 }
