@@ -96,7 +96,6 @@ namespace api.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Post([FromBody] TeamDTO team)
         {
-            Printer.Log("Saving team...");
             Team newTeam = await _teamService.SaveTeam(team, User.Identity.Name);
             if (newTeam == null)
             {
@@ -111,27 +110,37 @@ namespace api.Controllers
                 return Ok(response);
             }
         }
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost, Route("delete")]
         public async Task<ActionResult<string>> Delete(TeamIdDTO data)
         {
-            bool deleted = await _teamService.DeleteTeam(data.Id);
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Unauthorized("Unauthorized");
+            }
+            Team teammodel = await _teamService.GetTeamModel(data.Id);
+            if (teammodel == null || teammodel.Player == null)
+            {
+                return Unauthorized("Unauthorized");
+            }
+            if (User.Identity.Name != teammodel.Player.UserName)
+            {
+                return Unauthorized("Unauthorized");
+            }           
+            bool deleted = await _teamService.DeleteTeamById(data.Id);
             if (!deleted)
             {
-                return BadRequest($"Failed to delete team.");
+                return BadRequest("Failed to delete team.");
             }
-            return Ok($"Team successfully deleted.");
+            return Ok("Team successfully deleted.");
         }
 
         [HttpPost, Route("increment")]
         public async Task<ActionResult<string>> IncrementViewCount(TeamIdDTO data)
         {
-            Printer.Log($"Incrementing {data.Id} team view count");
             string response = await _teamService.IncrementTeamViewCount(data.Id);
-            Printer.Log(response);
             if (response.Equals("Team incremented"))
             {
-                Printer.Log("returning ok");
                 return Ok();
             }
             return BadRequest();

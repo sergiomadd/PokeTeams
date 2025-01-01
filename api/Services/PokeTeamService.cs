@@ -158,6 +158,22 @@ namespace api.Services
             return teamDTO;
         }
 
+        public async Task<Team?> GetTeamModel(string id)
+        {
+            try
+            {
+                Team? team = await _pokeTeamContext.Team
+                    .Include(t => t.Player)
+                    .FirstOrDefaultAsync(t => t.Id == id);
+                return team;
+            }
+            catch (Exception ex)
+            {
+                Printer.Log(ex.Message);
+                return null;
+            }
+        }
+
         public async Task<TeamDataDTO?> GetTeamData(string id, int langId)
         {
             TeamDataDTO teamDataDTO = null;
@@ -346,9 +362,31 @@ namespace api.Services
             };
         }
 
-        public async Task<bool> DeleteTeam(string teamId)
+        public async Task<bool> DeleteTeam(Team team)
         {
-            Printer.Log("Deleting team: ", teamId);
+            try
+            {
+                if (team != null)
+                {
+                    _pokeTeamContext.Team.Remove(team);
+                    _pokeTeamContext.SaveChanges();
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Exception in: DeleteUserByUserName(string userName)");
+                Printer.Log(ex);
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> DeleteTeamById(string teamId)
+        {
             try
             {
                 Team team = await _pokeTeamContext.Team.FindAsync(teamId);
@@ -387,7 +425,7 @@ namespace api.Services
                 {
                     foreach (Team team in userTeams)
                     {
-                        await DeleteTeam(team.Id);
+                        await DeleteTeamById(team.Id);
                     }
                 }
                 //_pokeTeamContext.Team.Where(t => t.PlayerId == user.Id).ForEachAsync(async t => await DeleteTeam(t.Id));
@@ -417,7 +455,7 @@ namespace api.Services
             }
             return "Team incremented";
         }
-        [Time]
+
         private async Task<TeamSearchQueryResponseDTO> BuildTeamSearchQueryResponse(TeamSearchQueryDTO searchQuery, List<Team> teams, int langId)
         {
             List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
@@ -445,7 +483,7 @@ namespace api.Services
                 TotalTeams = totalTeams
             };
         }
-        [Time]
+
         public async Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery, int langId)
         {
             List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
