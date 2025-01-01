@@ -82,7 +82,7 @@ export class ParserService {
     return pokePaste;
   }
 
-  reversePaste(pokemons: (Pokemon | undefined)[]): string
+  reversePaste(pokemons: (Pokemon | null | undefined)[]): string
   {
     let paste: string = "";
     pokemons.forEach(pokemon => 
@@ -97,17 +97,16 @@ export class ParserService {
 
   reverseParsePokemon(pokemon: Pokemon): string
   {
-    //console.log("Pokemon to reverse:", pokemon)
     let pokePaste: string = ""
     pokePaste = pokePaste + this.getReverseName(pokemon);
-    if(pokemon.ability){ pokePaste = pokePaste + `Ability: ${pokemon.ability.name}\n` }
+    if(pokemon.ability){ pokePaste = pokePaste + `Ability: ${pokemon.ability.name.content}\n` }
     if(pokemon.level){pokePaste = pokePaste + `Level: ${pokemon.level}\n`}
     if(pokemon.shiny !== undefined)
     {
       if(pokemon.shiny) {pokePaste = pokePaste + `Shiny: Yes\n`}
       else {pokePaste = pokePaste + `Shiny: No\n`}
     }
-    if(pokemon.teraType){pokePaste = pokePaste + `Tera Type: ${pokemon.teraType.name}\n`}
+    if(pokemon.teraType){pokePaste = pokePaste + `Tera Type: ${pokemon.teraType.name.content}\n`}
     if(pokemon.evs)
     {
       let evLine = "EVs:";
@@ -119,7 +118,7 @@ export class ParserService {
       evLine = evLine + evs.join("/") + "\n";
       pokePaste = pokePaste + evLine;
     }
-    if(pokemon.nature){pokePaste = pokePaste + `${pokemon.nature.name} Nature\n`}
+    if(pokemon.nature){pokePaste = pokePaste + `${pokemon.nature.name.content} Nature\n`}
     if(pokemon.ivs)
     {
       let ivLine = "IVs:";
@@ -135,7 +134,7 @@ export class ParserService {
     {
       pokemon.moves.forEach(move => 
       {
-        pokePaste = pokePaste + `- ${move?.name}\n`;
+        pokePaste = pokePaste + `- ${move?.name.content}\n`;
       });
     }
     return pokePaste;
@@ -146,19 +145,19 @@ export class ParserService {
     let line: string = "";
     if(pokemon.nickname && pokemon.item)
     {
-      line = `${pokemon.nickname} (${pokemon.name}) @ ${pokemon.item.name}` 
+      line = `${pokemon.nickname} (${pokemon.name?.content}) @ ${pokemon.item?.name.content}` 
     }
     else if(pokemon.nickname)
     {
-      line = `${pokemon.nickname} (${pokemon.name})` 
+      line = `${pokemon.nickname} (${pokemon.name?.content})` 
     }
     else if(pokemon.item)
     {
-      line = `${pokemon.name} @ ${pokemon.item.name}` 
+      line = `${pokemon.name?.content} @ ${pokemon.item.name?.content}` 
     }
     else
     {
-      line = `${pokemon.name}` 
+      line = `${pokemon.name?.content}` 
     }
     return line + "\n";
   }
@@ -171,15 +170,15 @@ export class ParserService {
     {
       case "hp":
         return statNames[0];
-      case "attack":
+      case "atk":
         return statNames[1];
-      case "defense":
+      case "def":
         return statNames[2];
-      case "special-attack":
+      case "spa":
         return statNames[3];
-      case "special-defense":
+      case "spd":
         return statNames[4];
-      case "speed":
+      case "spe":
         return statNames[5];
     }
     return ""

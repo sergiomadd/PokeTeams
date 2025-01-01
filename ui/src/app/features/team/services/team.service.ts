@@ -51,6 +51,12 @@ export class TeamService
     return this.http.get<Pokemon>(url);
   }
 
+  getPokemonByIdNoLang(id: number) : Observable<Pokemon>
+  {
+    let url = this.apiUrl + 'team/pokemon/nolang/' + id;
+    return this.http.get<Pokemon>(url);
+  }
+
   async getPokemonPreviewById(id: number) : Promise<PokemonPreview>
   {
     let pokemonPreview: PokemonPreview = <PokemonPreview>{}

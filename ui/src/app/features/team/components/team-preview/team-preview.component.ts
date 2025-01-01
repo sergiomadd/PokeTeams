@@ -1,8 +1,9 @@
 import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { FeedbackColors } from 'src/app/core/config/models/colors';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
+import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { PokemonPreview } from 'src/app/features/pokemon/models/pokemonPreview.model';
 import { Layout } from 'src/app/features/search/models/layout.enum';
 import { TeamService } from 'src/app/features/team/services/team.service';
@@ -38,6 +39,8 @@ export class TeamPreviewComponent
   feedback: string | undefined = undefined;
   readonly feedbackColors = FeedbackColors;
   deleteDialog: boolean = false;
+  copying?: boolean;
+  copied?: boolean;
 
   async ngOnInit()
   {
@@ -93,11 +96,37 @@ export class TeamPreviewComponent
     });
   }
   
-  copyPaste()
+  async copyPaste()
   {
+    this.copying = true;
+    this.copied = undefined;
     if(this.team?.pokemonIDs)
     {
-      //copyToClipboard(this.parser.reversePaste(this.team?.pokemons));
+      let pokemonObservables: Observable<Pokemon>[] = [];
+      for (const id of this.team?.pokemonIDs) 
+      {
+        pokemonObservables.push(this.teamService.getPokemonByIdNoLang(id));
+      }
+      forkJoin(pokemonObservables).subscribe(
+        {
+          next: (response) => 
+          {
+            if(this.util.copyToClipboard(this.parser.reversePaste(response)))
+            {
+              this.copied = true;
+            }
+            else
+            {
+              this.copied = false;
+            }
+            this.copying = false;
+          },
+          error: () => 
+          {
+            this.copied = false;
+            this.copying = false;
+          }
+        });
     }
   }
 
