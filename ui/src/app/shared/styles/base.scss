@@ -1,0 +1,28 @@
+html, body 
+{
+  height: 100%;
+}
+
+body 
+{
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: var(--bg-color-1);
+  color: var(--text-color);
+}
+
+a
+{
+  text-decoration: inherit;
+  color: var(--text-color-link);
+
+  &:hover
+  {
+    text-decoration: underline;
+  }
+
+  &:visited
+  {
+    color: var(--text-color-link);
+  }
+}

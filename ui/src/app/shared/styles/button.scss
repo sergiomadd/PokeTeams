@@ -1,0 +1,77 @@
+button
+{
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0.4em;
+  border: none;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.26);
+  transition: box-shadow .4s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover
+  {
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.26);
+  }
+}
+
+.button
+{
+  background-color: var(--bg-color-2);
+  color: var(--text-color);
+}
+
+.button-primary
+{
+  background-color: var(--primary);
+  color: white;
+}
+
+.button-primary-clear
+{
+  color: var(--primary-dark);
+  border: 1px solid var(--primary);
+}
+
+.button-primary-shadow
+{
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.button-secondary
+{
+  background-color: var(--secondary);
+  color: var(--secondary-dark);
+}
+
+.button-secondary-clear
+{
+  color: var(--secondary-dark);
+  border: 1px solid var(--secondary);
+}
+
+.button-secondary-shadow
+{
+  background-color: var(--secondary-light);
+  color: var(--secondary-dark);
+}
+
+.button-tertiary
+{
+  background-color: var(--tertiary);
+  color: white;
+}
+
+.button-tertiary-clear
+{
+  color: var(--tertiary-dark);
+  border: 1px solid var(--tertiary);
+}
+
+.button-tertiary-shadow
+{
+  background-color: var(--tertiary-light);
+  color: var(--tertiary-dark);
+}

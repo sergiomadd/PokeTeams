@@ -1,0 +1,220 @@
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: inherit;
+  padding: 4px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: red;
+  --_m: 
+    conic-gradient(#0000 10%,#000),
+    linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+          mask: var(--_m);
+  -webkit-mask-composite: source-out;
+          mask-composite: subtract;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {to{transform: rotate(1turn)}}
+
+//Pokemon themed spinner
+.pokemon-spinner
+{
+  position: relative;
+  height: inherit;
+  width: inherit;
+  animation: spin 1s ease-in-out infinite;
+  background-image: url(/src/assets/img/pokeball.svg);
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+.animated-border
+{
+  padding: 2px;
+  border: 1px solid transparent;
+
+  &:hover
+  {
+    border-radius: 5px;
+    background: 
+        linear-gradient(90deg, #333 50%, transparent 0) repeat-x,
+        linear-gradient(90deg, #333 50%, transparent 0) repeat-x,
+        linear-gradient(0deg, #333 50%, transparent 0) repeat-y,
+        linear-gradient(0deg, #333 50%, transparent 0) repeat-y;
+    background-size: 6px 1px, 6px 1px, 1px 6px, 1px 6px;
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+    animation: linearGradientMove 0.4s infinite linear;
+  }
+}
+
+@keyframes linearGradientMove 
+{
+  100% {
+      background-position: 6px 0, -6px 100%, 0 -6px, 100% 6px;
+  }
+} 
+
+
+/**
+ * ==============================================
+ * Dot Pulse Loader
+ * ==============================================
+ */
+ .dot-pulse {
+  position: relative;
+  left: -9999px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--bg-color3);
+  color: var(--bg-color3);
+  box-shadow: 9999px 0 0 -5px;
+  animation: dot-pulse 1.5s infinite linear;
+  animation-delay: 0.25s;
+}
+.dot-pulse::before, .dot-pulse::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--bg-color3);
+  color: var(--bg-color3);
+}
+.dot-pulse::before {
+  box-shadow: 9984px 0 0 -5px;
+  animation: dot-pulse-before 1.5s infinite linear;
+  animation-delay: 0s;
+}
+.dot-pulse::after {
+  box-shadow: 10014px 0 0 -5px;
+  animation: dot-pulse-after 1.5s infinite linear;
+  animation-delay: 0.5s;
+}
+
+@keyframes dot-pulse-before {
+  0% {
+    box-shadow: 9984px 0 0 -5px;
+  }
+  30% {
+    box-shadow: 9984px 0 0 2px;
+  }
+  60%, 100% {
+    box-shadow: 9984px 0 0 -5px;
+  }
+}
+@keyframes dot-pulse {
+  0% {
+    box-shadow: 9999px 0 0 -5px;
+  }
+  30% {
+    box-shadow: 9999px 0 0 2px;
+  }
+  60%, 100% {
+    box-shadow: 9999px 0 0 -5px;
+  }
+}
+@keyframes dot-pulse-after {
+  0% {
+    box-shadow: 10014px 0 0 -5px;
+  }
+  30% {
+    box-shadow: 10014px 0 0 2px;
+  }
+  60%, 100% {
+    box-shadow: 10014px 0 0 -5px;
+  }
+}
+
+
+//Pokeball sideways loader
+.pokeball-loader {
+	color: #fff;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+
+.pokeball-loader:after,
+.pokeball-loader:before {
+	box-sizing: border-box;
+	display: none
+}
+
+.pokeball-loader.is-active {
+  width: 10em;
+  height: 10em;
+}
+
+.pokeball-loader.is-active:after,
+.pokeball-loader.is-active:before {
+	display: block
+}
+
+.pokeball-loader-ball:before {
+	content: "";
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	top: 50%;
+	left: 50%;
+	margin: -50px 0 0 -50px;
+	background: linear-gradient(180deg, red 42%, #000 0, #000 58%, #fff 0);
+	background-repeat: no-repeat;
+	background-color: #fff;
+	border-radius: 50%;
+	z-index: 1;
+	animation: movePokeball 1s linear infinite both
+}
+
+.pokeball-loader-ball:after {
+	content: "";
+	position: absolute;
+	width: 24px;
+	height: 24px;
+	top: 50%;
+	left: 50%;
+	margin: -12px 0 0 -12px;
+	background-color: #fff;
+	border-radius: 50%;
+	z-index: 2;
+	animation: movePokeball 1s linear infinite both, flashPokeball .5s infinite alternate;
+	border: 2px solid #000;
+	box-shadow: 0 0 0 5px #fff, 0 0 0 10px #000
+}
+
+@keyframes movePokeball {
+	0% {
+		transform: translateX(0) rotate(0)
+	}
+
+	15% {
+		transform: translatex(-10px) rotate(-5deg)
+	}
+
+	30% {
+		transform: translateX(10px) rotate(5deg)
+	}
+
+	45% {
+		transform: translatex(0) rotate(0)
+	}
+}
+
+@keyframes flashPokeball {
+	0% {
+		background-color: #fff
+	}
+
+	to {
+		background-color: #fd0
+	}
+}
