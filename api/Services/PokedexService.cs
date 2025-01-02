@@ -1,13 +1,16 @@
 ﻿using api.Data;
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
+using api.Models;
 using api.Models.DBModels;
 using api.Models.DBPokedexModels;
 using api.Models.DBPoketeamModels;
 using api.Util;
 using MethodTimer;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using System.Collections.Generic;
 using System.Text.Json;
 using static api.DTOs.PokemonDTOs.MoveDTO;
 
@@ -811,21 +814,22 @@ namespace api.Services
             List<Pokemon_species_names> pokemonNames = await _pokedexContext.Pokemon_species_names.Where(p => p.name.Contains(key) && p.local_language_id == langId).ToListAsync();
             if (pokemonNames != null && pokemonNames.Count > 0)
             {
-                pokemonNames.ForEach(pokemonName =>
+                foreach (var pokemonName in pokemonNames)
                 {
                     queryResults.Add(new TagDTO(pokemonName.name, pokemonName.pokemon_species_id.ToString(), type: "pokemon",
-                        icon: $"https://localhost:7134/images/sprites/pokemon/{pokemonName.pokemon_species_id}.png"));
-                });
+                        icon: $"https://localhost:7134/images/sprites/pokemon/{pokemonName.pokemon_species_id}.png"));      
+                }
             }
             return queryResults;
         }
+
         public async Task<List<TagDTO>> QueryMovesByName(string key, int langId)
         {
             List<TagDTO> queryResults = new List<TagDTO>();
             List<Move_names> moveNames = await _pokedexContext.Move_names.Where(m => m.name.Contains(key) && m.local_language_id == langId).ToListAsync();
             if (moveNames != null && moveNames.Count > 0)
             {
-                moveNames.ForEach(async moveName =>
+                foreach (var moveName in moveNames)
                 {
                     Moves? moves = await _pokedexContext.Moves.FirstOrDefaultAsync(m => m.id == moveName.move_id);
                     if (moves != null)
@@ -845,7 +849,7 @@ namespace api.Services
                     {
                         queryResults.Add(new TagDTO(moveName.name, moves.identifier, type: "move"));
                     }
-                });
+                }
             }
             return queryResults;
         }
@@ -856,7 +860,7 @@ namespace api.Services
             List<Item_names> itemNames = await _pokedexContext.Item_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
             if (itemNames != null && itemNames.Count > 0)
             {
-                itemNames.ForEach(async itemName =>
+                foreach (var itemName in itemNames)
                 {
                     Items? items = await _pokedexContext.Items.FirstOrDefaultAsync(i => i.Id == itemName.item_id);
                     if (items != null)
@@ -868,7 +872,7 @@ namespace api.Services
                     {
                         queryResults.Add(new TagDTO(itemName.name, items.Identifier, type: "item"));
                     }
-                });
+                }
             }
             return queryResults;
         }
@@ -879,10 +883,10 @@ namespace api.Services
             List<Ability_names> abilityNames = await _pokedexContext.Ability_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
             if (abilityNames != null && abilityNames.Count > 0)
             {
-                abilityNames.ForEach(abilityName =>
+                foreach (var abilityName in abilityNames)
                 {
                     queryResults.Add(new TagDTO(abilityName.name, abilityName.ability_id.ToString()));
-                });
+                }
             }
             return queryResults;
         }
@@ -893,10 +897,10 @@ namespace api.Services
             List<Nature_names> natureNames = await _pokedexContext.Nature_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
             if (natureNames != null && natureNames.Count > 0)
             {
-                natureNames.ForEach(natureName =>
+                foreach (var natureName in natureNames)
                 {
                     queryResults.Add(new TagDTO(natureName.name, natureName.nature_id.ToString()));
-                });
+                }
             }
             return queryResults;
         }
@@ -907,7 +911,7 @@ namespace api.Services
             List<Type_names> typeNames = await _pokedexContext.Type_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
             if (typeNames != null && typeNames.Count > 0)
             {
-                typeNames.ForEach(async typeName =>
+                foreach (var typeName in typeNames)
                 {
                     Types? types = await _pokedexContext.Types.FirstOrDefaultAsync(i => i.id == typeName.type_id);
                     if (types != null)
@@ -920,7 +924,7 @@ namespace api.Services
                     {
                         queryResults.Add(new TagDTO(typeName.name, typeName.type_id.ToString()));
                     }
-                });
+                }
             }
             return queryResults;
         }
