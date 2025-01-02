@@ -61,3 +61,12 @@
   top: 0;
   right: -2.8em;
 }
+
+@media (max-width: 768px) 
+{
+  .pasteBox
+  {
+    width: 70vw;
+
+  }  
+}

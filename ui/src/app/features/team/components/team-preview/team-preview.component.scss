@@ -60,8 +60,8 @@
     .button
     {
       padding: 0;
-      width: 1.4vw;
-      height: 1.4vw;
+      width: 1.2em;
+      height: 1.2em;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -114,4 +114,12 @@
 .deleting
 {
   outline: 4px solid red;
+}
+
+@media only screen and (max-width: 768px) 
+{
+  .team-table
+  {
+    width: 90vw;
+  }
 }

@@ -28,7 +28,7 @@
 
   .editor-input
   {
-    width: 11vw;
+    width: 11em;
     position: relative;
   }
 
@@ -95,6 +95,20 @@
     {
       transition: .4s;
       box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.26);
+    }
+  }
+}
+@media (max-width: 768px) 
+{
+  .pokemon-editor
+  {
+    .editor
+    {
+
+      .form
+      {
+        
+      }
     }
   }
 }

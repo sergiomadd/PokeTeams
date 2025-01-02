@@ -1,4 +1,4 @@
-$cardWidth: 25vw;
+$cardWidth: 30em;
 
 .team
 {
@@ -78,7 +78,7 @@ $cardWidth: 25vw;
   .pokemons
   {
     display: flex;
-    column-gap: 2vh;
+    column-gap: 1em;
     justify-content: center;
     justify-items: center;
 
@@ -86,7 +86,7 @@ $cardWidth: 25vw;
     {
       display: flex;
       flex-direction: column;
-      row-gap: 2vh;
+      row-gap: 1em;
     }
   }
 }
@@ -94,4 +94,23 @@ $cardWidth: 25vw;
 .unregisteredPlayer
 {
   color: var(--text-color-secondary);
+}
+
+
+@media only screen and (max-width: 768px) 
+{
+  /* For mobile phones: */
+  [class*="pokemons"] 
+  {
+    flex-direction: column;
+    row-gap: 1em;
+  }
+
+  .team
+  {
+    .full
+    {
+      width: calc($cardWidth + 1.3em);
+    }
+  }
 }

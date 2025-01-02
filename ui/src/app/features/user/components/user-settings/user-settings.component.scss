@@ -150,3 +150,11 @@ $pictureSize: 3em;
   position: absolute;
   right: -1.8em;
 }
+
+@media (max-width: 768px) 
+{
+  .settings
+  {
+    width: 90vw;
+  }
+}

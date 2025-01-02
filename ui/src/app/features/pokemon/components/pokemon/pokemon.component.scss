@@ -1,6 +1,6 @@
 
 $cardWidth: 30em;
-$cardheight: 20vh;
+$cardheight: 12em;
 $moveHeight: calc($cardheight/4);
 $statsHeight: 5vh;
 $iconSize: 1.2em;
@@ -108,8 +108,8 @@ $padding: 0.2vw;
 
         .option
         {
-          width: 1.5vw;
-          height: 1.5vw;
+          width: 1.5em;
+          height: 1.5em;
           cursor: pointer;
           display: flex;
           align-items: center;
@@ -357,10 +357,12 @@ $padding: 0.2vw;
   .poke-tooltip-visible
   {
     visibility: visible !important;
+    width: fit-content;
   }
 
   .poke-tooltip
   {
+    width: 0;
     visibility: hidden;
     border: 1px solid black;
     border-radius: 5px;

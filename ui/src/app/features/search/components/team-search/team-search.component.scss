@@ -39,10 +39,10 @@
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          width: 15vw;
+          width: 15em;
           height: inherit;
           max-height: 10vh;
-          max-width: 12vw;
+          max-width: 12em;
         }
       }
   
@@ -70,5 +70,24 @@
         }
       }
     }  
+  }
+}
+
+@media only screen and (max-width: 768px) 
+{
+  .search
+  {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+  
+    .top-background
+    {
+  
+      .top
+      {
+        width: 90%;
+      }
+    }
   }
 }
