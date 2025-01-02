@@ -1,6 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { TeamEditorService } from 'src/app/features/team/services/team-editor.service';
+import { CustomError } from 'src/app/shared/models/customError.model';
+import { Team } from '../../models/team.model';
+import { TeamSaveResponse } from '../../models/teamSaveResponse.model';
 import { TeamService } from '../../services/team.service';
 
 @Component({
@@ -15,6 +18,18 @@ export class TeamEditComponent
   teamEditorService = inject(TeamEditorService)
 
   teamKey: string = "";
+  team: Team = <Team>{};
+  feedback?: string;
+  teamSubmitted: boolean = false;
+
+  async ngOnInit() 
+  {
+    this.teamEditorService.selectedTeam$.subscribe((value) => 
+    {
+      console.log("TEAM UPDATE", value)
+      this.team = value;
+    });
+  }
 
   ngAfterContentInit()
   {
@@ -31,5 +46,37 @@ export class TeamEditComponent
         }
       }
     );
+  }
+
+  saveTeam()
+  {
+    if(this.team)
+    {
+      this.feedback = this.teamEditorService.validateTeam(this.team);
+      if(!this.feedback)
+      {
+        console.log("Updating team: ", this.team);
+        this.teamSubmitted = true;
+        this.teamService.updateTeam(this.team).subscribe(
+          {
+            next: (response: TeamSaveResponse) =>
+            {
+              this.teamSubmitted = false;
+              console.log("Team edit response: ", response)
+              if(response && response.content)
+              {
+                this.router.navigate(['/', response.content])
+              }
+              this.feedback = undefined;
+            },
+            error: (error: CustomError) => 
+            {
+              this.teamSubmitted = false;
+              this.feedback = error.message;
+            }
+          }
+        )
+      }
+    }
   }
 }

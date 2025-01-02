@@ -1,11 +1,20 @@
 <div class="team-edit">
   <app-pokemon-editor></app-pokemon-editor>
   <app-team-editor></app-team-editor>
-  <div class="buttons">
-    <div class="copy">
-      <button 
+  <div class="col-center s-gap">
+    <div class="row relative">
+      <button
+      (click)="saveTeam()"
       class="button-primary"
-      >{{'save_team-button' | translate}}</button>
+      >{{'team.edit.save_team-button' | translate}}</button>
+      <ng-container *ngIf="teamSubmitted">
+        <div class="spinner-wrapper">
+          <div class="pokemon-spinner"></div>
+        </div>
+      </ng-container>
     </div>
-  </div> 
+    <ng-container *ngIf="feedback">
+      <span class="formFeedbackError text-center">{{feedback}}</span>
+    </ng-container>
+  </div>
 </div>

@@ -76,6 +76,12 @@ export class TeamService
     let url = this.apiUrl + 'team';
     return this.http.post<TeamSaveResponse>(url, team, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
+
+  updateTeam(team: Team): Observable<TeamSaveResponse>
+  {
+    let url = this.apiUrl + 'team/update';
+    return this.http.post<TeamSaveResponse>(url, team, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+  }
   
   async incrementViewCount(teamKey: string)
   {
