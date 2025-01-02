@@ -71,6 +71,18 @@ namespace api.Controllers
             return Ok(pokemonDTO);
         }
 
+        [HttpGet("pokemon/nolang/{pokemonId}")]
+        public async Task<ActionResult<PokemonDTO>> GetPokemonByIdNoLang(int pokemonId)
+        {
+            var pokemonDTO = await _teamService.GetPokemonById(pokemonId, (int)Lang.en);
+
+            if (pokemonDTO == null)
+            {
+                return NotFound("Pokemon not found.");
+            }
+            return Ok(pokemonDTO);
+        }
+
         [HttpGet("pokemon-previews/{teamId}")]
         public async Task<ActionResult<List<PokemonPreviewDTO>>> GetTeamPreviewPokemons(string teamId)
         {
@@ -110,6 +122,41 @@ namespace api.Controllers
                 return Ok(response);
             }
         }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost, Route("update")]
+        public async Task<ActionResult<string>> Update([FromBody] TeamDTO teamDTO)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Unauthorized("Unauthorized");
+            }
+            /*
+            Team? currentTeam = await _teamService.GetTeamModel(teamDTO.ID);
+            if (currentTeam == null || currentTeam.Player == null)
+            {
+                return Unauthorized("Unauthorized");
+            }
+            if (User.Identity.Name != currentTeam.Player.UserName)
+            {
+                return Unauthorized("Unauthorized");
+            }
+            */
+            Team? newTeam = await _teamService.UpdateTeam(teamDTO, teamDTO.ID, User.Identity.Name);
+            if (newTeam == null)
+            {
+                return BadRequest("Could not update team");
+            }
+            else
+            {
+                object response = new
+                {
+                    content = newTeam.Id
+                };
+                return Ok(response);
+            }
+        }
+
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost, Route("delete")]
         public async Task<ActionResult<string>> Delete(TeamIdDTO data)
