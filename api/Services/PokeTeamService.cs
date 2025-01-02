@@ -17,6 +17,7 @@ using System.Linq;
 using api.Models;
 using System.Collections.Generic;
 using NuGet.Packaging.Signing;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace api.Services
 {
@@ -231,6 +232,8 @@ namespace api.Services
             {
                 Team? team = await _pokeTeamContext.Team
                     .Include(t => t.Player)
+                    .Include(t => t.Pokemons)
+                    .Include(t => t.Tags)
                     .FirstOrDefaultAsync(t => t.Id == id);
                 return team;
             }
@@ -309,7 +312,6 @@ namespace api.Services
         public async Task<Team?> SaveTeam(TeamDTO inputTeam, string? loggedUserName)
         {
             Team newTeam = null;
-            string teamId = GenerateId(10);
             try
             {
                 string teamId = GenerateId(10);
@@ -321,65 +323,13 @@ namespace api.Services
                     teamId = GenerateId(10);
                     team = await _pokeTeamContext.Team.FindAsync(teamId);
                 }
-                List<Pokemon> pokemons = new List<Pokemon>();
-                foreach (PokemonDTO pokemonDTO in inputTeam.Pokemons)
-                {
-                    pokemons.Add(BreakPokemonDTO(pokemonDTO, teamId));
-                }
 
                 newTeam = await BreakTeamDTO(inputTeam, teamId, loggedUserName);
                 if (newTeam != null)
                 {
-                    player = await _userService.GetUserByUserName(inputTeam.Player.Username);
+                    await _pokeTeamContext.Team.AddAsync(newTeam);
+                    await _pokeTeamContext.SaveChangesAsync();
                 }
-
-                List<Tag> tags = new List<Tag>();
-                if (inputTeam.Tags != null && inputTeam.Tags.Count > 0)
-                {
-                    foreach (TagDTO tagDTO in inputTeam.Tags)
-                    {
-                        Tag? tag = await _pokeTeamContext.Tag.FindAsync(tagDTO.Identifier);
-                        if(tag == null) 
-                        {
-                            tag = new Tag()
-                            {
-                                Identifier = tagDTO.Identifier,
-                                Name = tagDTO.Name,
-                                Description = tagDTO.Description,
-                                Color = tagDTO.Color,
-                            };
-                        }
-                        tags.Add(tag);
-                    }
-                }
-
-                Tournament? tournament = null;
-                if (inputTeam.Tournament != null && inputTeam.Tournament.Name != null)
-                {
-                    tournament = await _pokeTeamContext.Tournament.FindAsync(Formatter.NormalizeString(inputTeam.Tournament.Name));
-                    if(tournament == null)
-                    {
-                        tournament = new Tournament(inputTeam.Tournament);
-                    }
-                }
-
-                newTeam = new Team
-                {
-                    Id = teamId,
-                    Pokemons = pokemons,
-                    Options = optionsString,
-                    PlayerId = player != null ? player.Id : null,
-                    AnonPlayer = (player == null && inputTeam.Player != null) ? inputTeam.Player.Username : null,
-                    TournamentNormalizedName = tournament != null ? tournament.NormalizedName : null,
-                    Tournament = tournament,
-                    Regulation = inputTeam.Regulation != null ? inputTeam.Regulation.Identifier : null,
-                    ViewCount = 0,
-                    Visibility = inputTeam.Visibility,
-                    Tags = tags,
-                };
-                await _pokeTeamContext.Team.AddAsync(newTeam);
-                await _pokeTeamContext.SaveChangesAsync();
-            }
             }
             catch (Exception ex)
             {
@@ -426,6 +376,52 @@ namespace api.Services
                 Gender = pokemonDTO.Gender,
                 Notes = pokemonDTO.Notes,
             };
+        }
+
+        public async Task<Team?> UpdateTeam(TeamDTO inputTeam, string currentTeamID, string? loggedUserName)
+        {
+            Team? newTeam = null;
+            try
+            {
+                newTeam = await BreakTeamDTO(inputTeam, currentTeamID, loggedUserName);
+                if (newTeam != null)
+                {
+                    Team? currentTeam = await GetTeamModel(currentTeamID);
+                    UpdateTeamProperties(currentTeam, newTeam);
+                    await _pokeTeamContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Exception in team update", ex);
+                return null;
+            }
+            return newTeam;
+        }
+
+        public bool UpdateTeamProperties(Team currentTeam, Team newTeam)
+        {
+            try
+            {
+                currentTeam.Id = newTeam.Id;
+                currentTeam.Pokemons = newTeam.Pokemons;
+                currentTeam.Options = newTeam.Options;
+                currentTeam.PlayerId = newTeam.PlayerId;
+                currentTeam.AnonPlayer = newTeam.AnonPlayer;
+                currentTeam.TournamentNormalizedName = newTeam.TournamentNormalizedName;
+                currentTeam.Tournament = newTeam.Tournament;
+                currentTeam.Regulation = newTeam.Regulation;
+                currentTeam.Tags = newTeam.Tags;
+                currentTeam.ViewCount = newTeam.ViewCount;
+                currentTeam.DateCreated = newTeam.DateCreated;
+                currentTeam.Visibility = newTeam.Visibility;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Exception in team update", ex);
+                return false;
+            }
         }
 
         public async Task<bool> DeleteTeam(Team team)

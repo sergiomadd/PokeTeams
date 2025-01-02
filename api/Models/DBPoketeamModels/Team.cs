@@ -19,12 +19,48 @@ namespace api.Models.DBPoketeamModels
         [StringLength(256, ErrorMessage = "Team tournament name is too long")]
         public string? TournamentNormalizedName { get; set; }
         public virtual Tournament? Tournament { get; set; }
-        public virtual ICollection<Tag> Tags { get; set; }
         public string? Regulation { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
         public int ViewCount { get; set; }
         [DataType(DataType.Date)]
-        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        public DateTime DateCreated { get; set; }
         [Required(ErrorMessage = "Team visibility is required")]
         public bool Visibility { get; set; }
+
+        public Team()
+        {
+
+        }
+
+        public Team(
+            string id, 
+            ICollection<Pokemon> pokemons, 
+            string? options,
+            string? playerId,
+            string? anonPlayer,
+            string? tournamentNormalizedName,
+            Tournament tournament,
+            string? regulation,
+            ICollection<Tag> tags,
+            int viewCount,
+            DateTime dateCreated,
+            bool visibility
+            )
+        {
+            Id = id;
+            Pokemons = pokemons;
+            Options = options;
+            PlayerId = playerId;
+            AnonPlayer = anonPlayer;
+            TournamentNormalizedName = tournamentNormalizedName;
+            Tournament = tournament;
+            Regulation = regulation;
+            Tags = tags;
+            ViewCount = viewCount;
+            DateCreated = dateCreated;
+            Visibility = visibility;
+        }
     }
 }
+
+

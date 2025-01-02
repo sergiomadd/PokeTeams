@@ -15,6 +15,7 @@ namespace api.Services
         public Task<PokemonPreviewDTO?> GetPokemonPreviewById(int id, int langId);
         public Task<List<PokemonPreviewDTO?>> GetTeamPreviewPokemons(string id, int langId);
         public Task<Team?> SaveTeam(TeamDTO team, string? loggedUserName);
+        public Task<Team?> UpdateTeam(TeamDTO inputTeam, string currentTeamID, string? loggedUserName);
         public Task<bool> DeleteTeam(Team team);
         public Task<bool> DeleteTeamById(string teamId);
         public Task<bool> DeleteUserTeams(User user);
