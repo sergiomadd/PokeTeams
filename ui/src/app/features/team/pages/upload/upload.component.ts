@@ -31,9 +31,8 @@ export class UploadComponent
 
   async generateTeam()
   {
-    if(this.team.pokemons.length > 0 
-      && this.team.pokemons.length <= 6 
-      && this.team.pokemons.some(p => p && p.dexNumber)) //If dexNumber is undefined -> empty pokemon
+    this.feedback = this.teamEditorService.validateTeam(this.team);
+    if(!this.feedback)
     {
       console.log("Generating team: ", this.team);
       this.teamSubmitted = true;
@@ -56,26 +55,6 @@ export class UploadComponent
           }
         }
       )
-    }
-    else if(this.team.pokemons.length <= 0)
-    {
-      console.log("Error: no pokemons loaded")
-      this.feedback = "No pokemons loaded";
-    }
-    else if(this.team.pokemons.length > 6)
-    {
-      console.log("Error: too many pokemons, limit is 6")
-      this.feedback = "Too many pokemons, max is 6";
-    }
-    else if(this.team.pokemons.some(p => p && !p.dexNumber))
-    {
-      console.log("Error: there are empty pokemons")
-      this.feedback = "There are empty pokemons";
-    }
-    else
-    {
-      console.log("Error: error uploading team")
-      this.feedback = "Error uploading team";
     }
   }
 }

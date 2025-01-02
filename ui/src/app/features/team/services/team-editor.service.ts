@@ -81,6 +81,32 @@ export class TeamEditorService
     this.updatePokemons(pokemonsToUpdate);
   }
 
+  validateTeam(team: Team): string | undefined
+  {
+    if(team.pokemons.length > 0 
+      && team.pokemons.length <= 6 
+      && team.pokemons.some(p => p && p.dexNumber)) //If dexNumber is undefined -> empty pokemon
+    {
+      return undefined;
+    }
+    else if(team.pokemons.length <= 0)
+    {
+      return "No pokemons loaded";
+    }
+    else if(team.pokemons.length > 6)
+    {
+      return "Too many pokemons, max is 6";
+    }
+    else if(team.pokemons.some(p => p && !p.dexNumber))
+    {
+      return "There are empty pokemons";
+    }
+    else
+    {
+      return "Error uploading team";
+    }
+  }
+
   setEmptyTeam()
   {
     this.team$.next(
