@@ -52,6 +52,73 @@ namespace api.Services
 
         }
 
+        public async Task<Team?> BreakTeamDTO(TeamDTO inputTeam, string newTeamId, string loggedUserName)
+        {
+            Team newTeam = null;
+            if (inputTeam != null)
+            {
+                List<Pokemon> pokemons = new List<Pokemon>();
+                foreach (PokemonDTO pokemonDTO in inputTeam.Pokemons)
+                {
+                    pokemons.Add(BreakPokemonDTO(pokemonDTO, newTeamId));
+                }
+
+                JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
+                string optionsString = JsonSerializer.Serialize(inputTeam.Options, options);
+                User player = null;
+                if (inputTeam.Player != null && inputTeam.Player.Username != null && loggedUserName == inputTeam.Player.Username)
+                {
+                    player = await _userService.GetUserByUserName(inputTeam.Player.Username);
+                }
+
+                List<Tag> tags = new List<Tag>();
+                if (inputTeam.Tags != null && inputTeam.Tags.Count > 0)
+                {
+                    foreach (TagDTO tagDTO in inputTeam.Tags)
+                    {
+                        Tag? tag = await _pokeTeamContext.Tag.FindAsync(tagDTO.Identifier);
+                        if (tag == null)
+                        {
+                            tag = new Tag()
+                            {
+                                Identifier = tagDTO.Identifier,
+                                Name = tagDTO.Name,
+                                Description = tagDTO.Description,
+                                Color = tagDTO.Color,
+                            };
+                        }
+                        tags.Add(tag);
+                    }
+                }
+
+                Tournament? tournament = null;
+                if (inputTeam.Tournament != null && inputTeam.Tournament.Name != null)
+                {
+                    tournament = await _pokeTeamContext.Tournament.FindAsync(Formatter.NormalizeString(inputTeam.Tournament.Name));
+                    if (tournament == null)
+                    {
+                        tournament = new Tournament(inputTeam.Tournament);
+                    }
+                }
+
+                newTeam = new Team(
+                    id: newTeamId,
+                    pokemons: pokemons,
+                    options: optionsString,
+                    playerId: player != null ? player.Id : null,
+                    anonPlayer: (player == null && inputTeam.Player != null) ? inputTeam.Player.Username : null,
+                    tournamentNormalizedName: tournament != null ? tournament.NormalizedName : null,
+                    tournament: tournament,
+                    regulation: inputTeam.Regulation != null ? inputTeam.Regulation.Identifier : null,
+                    tags: tags,
+                    viewCount: inputTeam.ViewCount,
+                    dateCreated: inputTeam.Date != null && inputTeam.Date != "" ? DateTime.Parse(inputTeam.Date) : DateTime.Now,
+                    visibility: inputTeam.Visibility
+                    );
+            }
+            return newTeam;
+        }
+
         public async Task<TeamDTO?> BuildTeamDTO(Team team, int langId)
         {
             TeamDTO teamDTO = null;
@@ -239,12 +306,13 @@ namespace api.Services
             return pokemonPreviewDTOs;
         }
 
-        public async Task<Team?> SaveTeam(TeamDTO inputTeam, string loggedUserName)
+        public async Task<Team?> SaveTeam(TeamDTO inputTeam, string? loggedUserName)
         {
             Team newTeam = null;
             string teamId = GenerateId(10);
             try
             {
+                string teamId = GenerateId(10);
                 Team team = await _pokeTeamContext.Team.FindAsync(teamId);
                 //loop maybe too ineficent? seek another way to get unused ids?
                 //is there a way for sql server to auto generate custom ids?
@@ -259,11 +327,8 @@ namespace api.Services
                     pokemons.Add(BreakPokemonDTO(pokemonDTO, teamId));
                 }
 
-                JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
-                string optionsString = JsonSerializer.Serialize(inputTeam.Options, options);
-
-                User player = null;
-                if (inputTeam.Player != null && inputTeam.Player.Username != null && loggedUserName == inputTeam.Player.Username)
+                newTeam = await BreakTeamDTO(inputTeam, teamId, loggedUserName);
+                if (newTeam != null)
                 {
                     player = await _userService.GetUserByUserName(inputTeam.Player.Username);
                 }
@@ -315,9 +380,10 @@ namespace api.Services
                 await _pokeTeamContext.Team.AddAsync(newTeam);
                 await _pokeTeamContext.SaveChangesAsync();
             }
+            }
             catch (Exception ex)
             {
-                Printer.Log("Exception in team upload", ex.Message);
+                Printer.Log("Exception in team upload", ex);
                 return null;
             }
             return newTeam;
