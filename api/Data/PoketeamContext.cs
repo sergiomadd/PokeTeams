@@ -22,12 +22,6 @@ namespace api.Data
         public DbSet<Regulation> Regulation { get; set; }
         public DbSet<Country> Country { get; set; }
 
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.EnableSensitiveDataLogging();
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

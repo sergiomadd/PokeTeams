@@ -1,13 +1,6 @@
 ﻿using api.Models.DBModels;
 using api.Models.DBPokedexModels;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
-using System.IO;
-using System.Data;
-using System.Data.SqlClient;
-using System.Configuration;
 
 namespace api.Data
 {
@@ -21,6 +14,12 @@ namespace api.Data
         public PokedexContext(DbContextOptions<PokedexContext> option) : base(option)
         {
 
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            //optionsBuilder.LogTo(Printer.Log);
+            //optionsBuilder.EnableSensitiveDataLogging();
         }
 
         public DbSet<Abilities> Abilities { get; set; }
