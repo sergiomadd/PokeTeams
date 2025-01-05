@@ -1,3 +1,9 @@
+.font-s
+{
+  font-size: 0.7em;
+}
+
+
 .relative
 {
   position: relative;
@@ -19,9 +25,24 @@
   width: 100%;
 }
 
-.selectable
+.pointer
 {
   cursor: pointer;
+}
+
+.no-decoration
+{
+  text-decoration: none;
+}
+
+.no-select
+{
+  user-select: none;
+}
+
+.not-allowed
+{
+  cursor: not-allowed;
 }
 
 .no-shadow

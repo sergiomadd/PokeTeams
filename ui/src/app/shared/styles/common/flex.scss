@@ -1,79 +1,70 @@
+
+.flex
+{
+  display: flex;
+}
+
+.flex-col
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-inline
+{
+  display: inline-flex;
+}
+
 .wrap
 {
   flex-wrap: wrap;
 }
 
-.center
+.justify-c-s
 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.row
-{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.row-center
-{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.row-around
-{
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.row-between
-{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.row-start
-{
-  display: flex;
   justify-content: start;
-  align-items: center;
 }
 
-.row-end
+.justify-c-c
 {
-  display: flex;
-  justify-content: end;
-  align-items: center;
-}
-
-.row-top
-{
-  display: flex;
   justify-content: center;
-  align-items: flex-start;
 }
 
-.align-top
+.justify-c-e
 {
-  align-items: flex-start;
+  justify-content: end;
 }
 
-.col
+.justify-c-sb
 {
-  display: flex;
-  flex-direction: column;
-}
-
-.col-center
-{
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
+}
+.justify-c-sa
+{
+  justify-content: space-around;
+}
+
+.aling-c-c
+{
+  align-content: center;
+}
+
+.justify-i-c
+{
+  justify-items: center;
+}
+
+.align-i-s
+{
+  align-items: flex-start;
+}
+
+.align-i-c
+{
+  align-items: center;
+}
+
+.align-i-e
+{
   align-items: center;
 }
