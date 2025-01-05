@@ -1,47 +1,37 @@
-
-
-.radio
+.option
 {
-  display: flex;
-  gap: 0.4em;
-  padding: 0.2em;
+  position: relative;
+  min-width: 1em;
+  width: fit-content;
+  height: 100%;
 
-  .option
-  {
-    position: relative;
-    min-width: 1em;
-    width: fit-content;
-    height: 100%;
-  
-    display: flex;
-    align-items: center;
-  
-    background-color: var(--bg-color-2);
-    color: var(--text-color);
-    border: 1px solid var(--bg-color-3);
-    border-radius: 5px;
-  
-    padding: 0.2em;
-    box-sizing: border-box;
-  
-    cursor: pointer;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    opacity: 0.7;
-    font-size: inherit;
-  }
-  
-  .selected-background
-  {
-    background-color: var(--primary);
-    color: white;
-    opacity: 1;
-  }
-  
-  .selected-border
-  {
-    border: 1px solid var(--text-color);
-  }
+  display: flex;
+  align-items: center;
+
+  background-color: var(--bg-color-2);
+  color: var(--text-color);
+  border: 1px solid var(--bg-color-3);
+  border-radius: 5px;
+
+  padding: 0.2em;
+  box-sizing: border-box;
+
+  cursor: pointer;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  opacity: 0.7;
+  font-size: inherit;
 }
 
+.selected-background
+{
+  background-color: var(--primary);
+  color: white;
+  opacity: 1;
+}
+
+.selected-border
+{
+  border: 1px solid var(--text-color);
+}

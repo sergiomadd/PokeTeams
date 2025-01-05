@@ -1,53 +1,23 @@
-
-
-.pagination
+.page
 {
-  margin: auto;
-  width: fit-content;
-  display: flex;
-  align-items: center;
-  gap: 0.4em;
+  text-align: center;
+  width: 2.5em;
+  padding: 0.6em;
+  border-radius: 5px;
+  background-color: var(--bg-color-1);
+  color: var(--text-color);
+  border: 1px solid var(--bg-color-2);
+  cursor: pointer;
+  user-select: none; 
+}
 
-  .pages
-  {
-    display: flex;
-    justify-items: center;
-    gap: 0.4em;
-  }
+.selected
+{
+  border: 1px solid var(--text-color);
+}
 
-  .page
-  {
-    text-align: center;
-    width: 2.5em;
-    padding: 0.6em;
-    border-radius: 5px;
-    background-color: var(--bg-color-1);
-    color: var(--text-color);
-    border: 1px solid var(--bg-color-2);
-    cursor: pointer;
-    user-select: none; 
-  }
-
-  .selected
-  {
-    border: 1px solid var(--text-color);
-  }
-
-  button:disabled 
-  {
-    opacity: 0.5;
-    pointer-events: none;
-  }
-
-  .empty
-  {
-    display: flex;
-    align-items: center;
-    width: fit-content;
-    background-color: var(--bg-color-2);
-    color: var(--text-color);
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 0.6em;
-  }
+button:disabled 
+{
+  opacity: 0.5;
+  pointer-events: none;
 }

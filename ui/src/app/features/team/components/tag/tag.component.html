@@ -3,12 +3,12 @@
 class="tag" 
 [ngClass]="{'tooltip-wrapper': tag.description}"
 [ngStyle]="{backgroundColor: tag.color, 
-  color: tag.color ? themeService.getTagTextColor(tag.color) : '#000000'}"
+  color: tag.color ? themeService.getTagTextColor(tag.color) : 'var(--text-color)'}"
 >
   <ng-container *ngIf="tag.icon">
     <img [attr.src]="tag.icon" alt="" class="icon" fill>
   </ng-container>
-  <div class="name">
+  <div>
     {{tag.name}} 
   </div>
   <ng-container *ngIf="removable">

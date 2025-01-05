@@ -1,8 +1,8 @@
-<div class="stage">
-  <div class="part sprite">
+<div class="col center">
+  <div class="pad-s sprite">
     <img src={{pokemonSpritePath}} alt="" class="sprite-small">
   </div>
-  <div class="part types">
+  <div class="pad-s row-end">
     <ng-container *ngIf="pokemon.types?.type2; else monotype">
       <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon">
       <img src="{{pokemon.types?.type2?.iconPath}}" title="{{pokemon.types?.type2?.name?.content}}" alt="{{pokemon.types?.type2?.name?.content}}" class="icon">
@@ -11,7 +11,7 @@
       <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon">
     </ng-template>
   </div>
-  <div class="part name">
+  <div class="pad-s">
     {{pokemon.name?.content}}
   </div>
 </div>

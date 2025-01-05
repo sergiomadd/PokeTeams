@@ -1,6 +1,6 @@
-<div class="settings">
-  <div class="section row b-gap">
-      <div class="col s-gap">
+<div class="settings flex-col justify-c-c align-i-c m-auto pad-m bor-rad-10 w-60">
+  <div class="section gap-b">
+    <div class="flex-col gap-s">
       <div class="title">
         {{'user.settings.picture-title' | translate}}
       </div>
@@ -8,18 +8,16 @@
         {{'user.settings.picture_selected-subtitle' | translate}}: {{getPictureKey(user?.picture)}}
       </div>
     </div> 
-    <div class="row s-gap relative">
+    <div class="flex align-i-c gap-s relative">
       <ng-container *ngIf="changePictureSubmitted">
         <ng-container *ngIf="(backendError$ | async) as error">
           <span class="formFeedbackError backendErrors">{{error}}</span>
         </ng-container>
       </ng-container>
       <img src="{{user?.picture}}" alt="" class="picture">
-      <div class="picture-selector">
-        <button (click)="clickPictureSelector()">{{'user.settings.change-button' | translate}}</button>
-        <div class="catalog-wrapper"
-        [ngClass]="{catalogShow: showCatalog}"
-        >
+      <div class="flex justify-c-c align-i-c relative">
+        <button type="submit" (click)="clickPictureSelector()">{{'user.settings.change-button' | translate}}</button>
+        <div class="catalog-wrapper" [ngClass]="{catalogShow: showCatalog}">
           <div class="catalog custom-scrollbar">
             <ng-container *ngFor="let pic of pictures">
               <img src="{{pic}}" alt="" class="picture animated-border" (click)="changePicture(pic)">
@@ -32,14 +30,14 @@
       </ng-container>
     </div>
   </div>
-  <div class="section row">
-    <div class="col s-gap">
+  <div class="section">
+    <div class="flex-col gap-s">
       <div class="title">
         {{'user.settings.country-title' | translate}}
       </div>
-      <div class="row s-gap">
+      <div class="flex align-i-c gap-s">
         <ng-container *ngIf="user?.country">
-          <img src="{{user?.country?.icon}}" alt="{{user?.country?.name}}" class="flag">
+          <img src="{{user?.country?.icon}}" alt="{{user?.country?.name}}" class="icon-l bor-rad-5">
           <span class="subtitle">{{user?.country?.name}}</span>
         </ng-container>
         <ng-container *ngIf="!user?.country">
@@ -47,7 +45,7 @@
         </ng-container>
       </div>
     </div>
-    <div class="row relative">
+    <div class="flex align-i-c relative">
       <ng-container *ngIf="changeCountrySubmitted">
         <ng-container *ngIf="(backendError$ | async) as error">
           <span class="formFeedbackError backendErrors">{{error}}</span>
@@ -65,7 +63,7 @@
       </ng-container>
     </div>
   </div>
-  <div class="section row">
+  <div class="section ">
     <div class="col s-gap">
       <div class="title">
         {{'user.settings.visibility-title' | translate}}
@@ -79,7 +77,7 @@
         </ng-container>
       </div>
     </div>
-    <div class="row s-gap relative">
+    <div class="flex align-i-c gap-s relative">
       <ng-container *ngIf="changeVisibilitySubmitted">
         <ng-container *ngIf="(backendError$ | async) as error">
           <span class="formFeedbackError backendErrors">{{error}}</span>
@@ -96,8 +94,8 @@
       </ng-container>
     </div>
   </div>
-  <div class="section row">
-    <div class="col s-gap">
+  <div class="section">
+    <div class="flex-col gap-s">
       <div class="title">
         {{'user.settings.name-title' | translate}}
       </div>
@@ -112,7 +110,7 @@
     </div>
     <form [formGroup]="changeNameForm" (ngSubmit)="changeName()">
       <div class="col">
-        <div class="row-end b-gap relative">
+        <div class="flex justify-c-e align-i-c gap-m relative">
           <span *ngIf="isInvalid('newName', 'changeNameForm')" class="formFeedbackError">{{getError('newName', 'changeNameForm')}}</span>
           <ng-container *ngIf="changeNameSubmitted">
             <ng-container *ngIf="(backendError$ | async) as error">
@@ -121,6 +119,7 @@
           </ng-container>
           <input 
           type="text" 
+          class="input-m"
           [placeholder]="'user.settings.name-input_placeholder' | translate" 
           formControlName="newName"
           [ngClass]="{controlInvalid: isInvalid('newName', 'changeNameForm')}"
@@ -133,7 +132,7 @@
       </div>
     </form>
   </div>
-  <div class="section row">
+  <div class="section ">
     <div class="col s-gap">
       <div class="title">
         {{'user.settings.username-title' | translate}}
@@ -144,7 +143,7 @@
     </div>
     <form [formGroup]="changeUserNameForm" (ngSubmit)="changeUserName()">
       <div class="col">
-        <div class="row-end s-gap">
+        <div class="flex justify-c-e align-i-c gap-m">
           <span *ngIf="userNameAvailable" class="formFeedbackSuccess">{{'user.settings.username_available-feedback' | translate}}</span>
           <span *ngIf="isInvalid('newUserName', 'changeUserNameForm')" class="formFeedbackError">{{getError('newUserName', 'changeUserNameForm')}}</span>
           <ng-container *ngIf="changeUserNameSubmitted">
@@ -154,6 +153,7 @@
           </ng-container>
           <input 
           type="text" 
+          class="input-m"
           [placeholder]="'user.settings.username-input_placeholder' | translate" 
           formControlName="newUserName"
           [ngClass]="{controlInvalid: isInvalid('newUserName', 'changeUserNameForm')}"
@@ -166,12 +166,12 @@
       </div>
     </form>
   </div>
-  <div class="section row">
-    <div class="col s-gap">
+  <div class="section ">
+    <div class="flex-col gap-s">
       <div class="title">
         {{'user.settings.email-title' | translate}}
       </div>
-      <div class="row s-gap">
+      <div class="flex gap-s">
         <div class="subtitle">
           {{email}}
         </div>
@@ -193,16 +193,14 @@
         </ng-container>
       </div>
       <ng-container *ngIf="!emailConfirmed">
-        <div class="col s-gap">
-          <div class="formFeedbackError">
-            {{'user.settings.email_not_verified-feedback' | translate}}
-          </div>
+        <div class="formFeedbackError">
+          {{'user.settings.email_not_verified-feedback' | translate}}
         </div>
       </ng-container>
     </div>
-    <div class="col b-gap">
+    <div class="flex-col gap-m">
       <form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
-        <div class="row s-gap">
+        <div class="flex align-i-c justify-c-e align-i-c gap-m">
           <span *ngIf="isInvalid('newEmail', 'changeEmailForm')" class="formFeedbackError">{{getError('newEmail', 'changeEmailForm')}}</span>
           <ng-container *ngIf="changeEmailSubmitted">
             <ng-container *ngIf="(backendError$ | async) as error">
@@ -211,6 +209,7 @@
           </ng-container>
           <input 
           type="text" 
+          class="input-m"
           [placeholder]="'user.settings.email-input_placeholder' | translate" 
           formControlName="newEmail"
           [ngClass]="{controlInvalid: isInvalid('newEmail', 'changeEmailForm')}"
@@ -222,7 +221,7 @@
         </div>
       </form>
       <ng-container *ngIf="!emailConfirmed">
-        <div class="row-end s-gap relative">
+        <div class="flex justify-c-e gap-s relative">
           <ng-container *ngIf="sendEmailVerificationCodeSubmitted">
             <ng-container *ngIf="(backendError$ | async) as error">
               <span class="formFeedbackError backendErrors">{{error}}</span>
@@ -236,7 +235,7 @@
       </ng-container>
     </div>
   </div>
-  <div class="section row">
+  <div class="section ">
     <div class="col s-gap">
       <div class="title">
         {{'user.settings.password-title' | translate}}
@@ -245,38 +244,41 @@
         {{'user.settings.password-subtitle' | translate}}
       </div>
     </div>
-    <form class="row b-gap" [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+    <form class="flex justify-c-e align-i-c gap-m relative" [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
       <ng-container *ngIf="changePasswordSubmitted">
         <ng-container *ngIf="(backendError$ | async) as error">
           <span class="formFeedbackError backendErrors">{{error}}</span>
         </ng-container>
       </ng-container>
-      <div class="col">
+      <div class="flex-col relative">
         <input 
         type="password" 
+        class="input-m"
         [placeholder]="'user.settings.current_password-input_placeholder' | translate" 
         formControlName="currentPassword"
         [ngClass]="{controlInvalid: isInvalid('currentPassword', 'changePasswordForm')}"
         >
-        <div *ngIf="isInvalid('currentPassword', 'changePasswordForm')" class="formFeedbackError">{{getError('currentPassword', 'changePasswordForm')}}</div>
+        <div *ngIf="isInvalid('currentPassword', 'changePasswordForm')" class="formFeedbackError passwordFeedback">{{getError('currentPassword', 'changePasswordForm')}}</div>
       </div>
-      <div class="col">
+      <div class="flex-col relative">
         <input 
         type="password" 
+        class="input-m"
         [placeholder]="'user.settings.new_password-input_placeholder' | translate" 
         formControlName="password"
         [ngClass]="{controlInvalid: isInvalid('password', 'changePasswordForm')}"
         >
-        <div *ngIf="isInvalid('password', 'changePasswordForm')" class="formFeedbackError">{{getError('password', 'changePasswordForm')}}</div>
+        <div *ngIf="isInvalid('password', 'changePasswordForm')" class="formFeedbackError passwordFeedback">{{getError('password', 'changePasswordForm')}}</div>
       </div>
-      <div class="col">
+      <div class="flex-col relative">
         <input 
         type="password" 
+        class="input-m"
         [placeholder]="'user.settings.new_repeat_password-input_placeholder' | translate" 
         formControlName="confirmPassword"
         [ngClass]="{controlInvalid: isInvalid('confirmPassword', 'changePasswordForm')}"
         >
-        <div *ngIf="isInvalid('confirmPassword', 'changePasswordForm')" class="formFeedbackError">{{getError('confirmPassword', 'changePasswordForm')}}</div>
+        <div *ngIf="isInvalid('confirmPassword', 'changePasswordForm')" class="formFeedbackError passwordFeedback">{{getError('confirmPassword', 'changePasswordForm')}}</div>
       </div>
       <button type="submit">{{'user.settings.change-button' | translate}}</button>
       <ng-container *ngIf="changePasswordSubmitted">

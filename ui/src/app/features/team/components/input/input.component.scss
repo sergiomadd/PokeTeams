@@ -1,38 +1,13 @@
 
-.input
+.tabs
 {
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-
-  .tabs
-  {
-    display: flex;
-    justify-content: center;
-    border-bottom: 1px solid var(--text-color);
-    gap: 1vw;
-    width: 60%;
-    margin: auto;
-    margin-bottom: 1vw;
-    width: 20vw;
-
-    .tab
-    {
-      cursor: pointer;
-      padding: 0.4vw;
-      border-radius: 10px;
-    }
-  }
+  border-bottom: 1px solid var(--text-color);
+  width: 20em;
 }
 
 .pasteBox
 {
-  display: flex;
-  flex-direction: column;
-  gap: 2vh;
-  margin: auto;
-  width: 30vw;
-  position: relative;
+  width: 35em;
 }
 
 .input-text-area
@@ -41,32 +16,9 @@
   outline: 1px solid var(--text-color); 
 }
 
-.submit
-{
-  width: 5vw;
-  height: 2vw;
-
-  margin: auto;
-}
-
-.editors
-{
-  display: flex;
-  justify-content: center;
-}
-
 .example
 {
   position: absolute;
   top: 0;
   right: -2.8em;
-}
-
-@media (max-width: 768px) 
-{
-  .pasteBox
-  {
-    width: 70vw;
-
-  }  
 }

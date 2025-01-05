@@ -18,13 +18,6 @@ $optionsMaxHeight: 25vh;
   padding: 0.2rem;
 }
 
-
-.disabled
-{
-  opacity: 0.4;
-  pointer-events:none;
-}
-
 .dropdown
 {
   position: relative;
@@ -32,83 +25,83 @@ $optionsMaxHeight: 25vh;
   display: flex;
   align-items: center;
   justify-content: start;
+}
 
-  .selector
+.selector
+{
+  height: calc($optionHeight + 0.4em);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  font-size: 1.3em;
+}
+
+.dropdown-arrow
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.arrow 
+{
+  display: inline-block;
+  padding: 3px;
+  transition: transform ease-in 0.3s;
+}
+
+.up 
+{
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+}
+
+.options
+{
+  position: absolute;
+  top: calc(100% + 0.8em);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-height: 0;
+  padding: 4px;
+  box-sizing:border-box;
+
+  background-color: var(--bg-color-1);
+  color: var(--text-color);
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: small;
+  overflow: hidden;
+
+  visibility: hidden;
+  z-index: 3;
+
+  transition: all ease-in-out 500ms;
+}
+
+.options-visible 
+{
+  max-height: calc($optionHeight * 12);
+  visibility: visible !important;
+}
+
+.option
+{
+  display: flex;
+  align-items: center;
+  min-height: calc($optionHeight + 0.5em);
+  padding: 0 0.2vw 0 0.2vw;
+  gap: 0.4rem;
+  border-radius: 5px;
+  cursor: pointer;
+  overflow: hidden;
+
+  &:hover
   {
-    height: calc($optionHeight + 0.4em);
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    overflow: hidden;
-    font-size: 1.3em;
-
-    .dropdown-arrow
-    {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      .arrow 
-      {
-        display: inline-block;
-        padding: 3px;
-        transition: transform ease-in 0.3s;
-      }
-
-      .up 
-      {
-        transform: rotate(180deg);
-        -webkit-transform: rotate(180deg);
-      }
-    }
-  }
-
-  .options
-  {
-    position: absolute;
-    top: calc(100% + 0.8em);
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-height: 0;
-    padding: 4px;
-    box-sizing:border-box;
-
-    background-color: var(--bg-color-1);
-    color: var(--text-color);
-    border: 1px solid black;
-    border-radius: 5px;
-    font-size: small;
-    overflow: hidden;
-
-    visibility: hidden;
-    z-index: 3;
-
-    transition: all ease-in-out 500ms;
-  }
-
-  .options-visible 
-  {
-    max-height: calc($optionHeight * 12);
-    visibility: visible !important;
-  }
-
-  .option
-  {
-    display: flex;
-    align-items: center;
-    min-height: calc($optionHeight + 0.5em);
-    padding: 0 0.2vw 0 0.2vw;
-    gap: 0.4rem;
-    border-radius: 5px;
-    cursor: pointer;
-    overflow: hidden;
-
-    &:hover
-    {
-      background-color: var(--bg-color-3);
-    }
+    background-color: var(--bg-color-3);
   }
 }
 

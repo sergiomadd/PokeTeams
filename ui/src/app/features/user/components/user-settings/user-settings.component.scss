@@ -2,130 +2,123 @@ $pictureSize: 3em;
 
 .settings
 {
+  width: 60em;
+}
+
+.section
+{
   padding: 0.4em;
-  border-radius: 10px;
-  width: 60vw;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin: auto;
 
-  .section
+  .title
   {
-    padding: 0.4vw;
-    width: 100%;
-
-    .title
-    {
-      font-size: 1.2em;
-    }
-
-    .subtitle
-    {
-      color: var(--text-color-secondary);
-    }
-
-    input
-    {
-      width: 10em;
-    }
+    font-size: 1.2em;
   }
 
-  .visibility
+  .subtitle
+  {
+    color: var(--text-color-secondary);
+  }
+
+  input
+  {
+    width: 10em;
+  }
+
+  button
+  {
+    height: 2em;
+  }
+}
+
+.smart-input-custom-wrapper
+{
+  width: 10em;
+}
+
+.visibility
+{
+  display: flex;
+  align-items: center;
+  padding-right: 0.4vw;
+
+  .item
   {
     display: flex;
     align-items: center;
-    padding-right: 0.4vw;
-
-    .item
-    {
-      display: flex;
-      align-items: center;
-    }
   }
+}
+
+.picture
+{
+  width: $pictureSize;
+  height: $pictureSize;
+  border-radius: 5px;
+}
+
+.backendErrors
+{
+  display: flex;
+  justify-content: end;
+}
+
+.catalog-wrapper
+{
+  right: 50%;
+  bottom: 0.2em;
+  transform: translate(50%, calc(100% + 1em));
+  z-index: 1;
+  max-height: 0;
+  width: fit-content;
+  transition: max-height 0.3s ease;
+  overflow: hidden;
+  position: absolute;
+}
+
+.catalogShow
+{
+  max-height: 40rem;
+  transition: max-height 0.5s ease-in;
+  overflow: hidden;
+}
+
+.catalog
+{
+  background-color: var(--bg-color-2);
+  padding: 0.4em;
+  border-radius: 5px;
+  border: 1px solid var(--bg-color-reverse-2);
+  z-index: 8;
+  min-width: calc($pictureSize * 3 + 1.2vw);
+  width: fit-content;
+  max-height: calc($pictureSize * 3 + 2vw);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(auto, auto));
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 0.4em;
 
   .picture
   {
-    width: $pictureSize;
-    height: $pictureSize;
-    border-radius: 5px;
+    cursor: pointer;
   }
+}
 
-  .backendErrors
-  {
-    display: flex;
-    justify-content: end;
-  }
+input[type='checkbox']
+{
+  width: 2vh;
+  height: 2vh;
+}
 
-  .flag
-  {
-    width: 2.5em;
-    border-radius: 5px;
-  }
-
-  .picture-selector
-  {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-
-    .catalog-wrapper
-    {
-      right: 50%;
-      bottom: 0.2em;
-      transform: translate(50%, calc(100% + 1em));
-      z-index: 1;
-      max-height: 0;
-      width: fit-content;
-      transition: max-height 0.3s ease;
-      overflow: hidden;
-      position: absolute;
-    }
-
-    .catalogShow
-    {
-      max-height: 40rem;
-      transition: max-height 0.5s ease-in;
-      overflow: hidden;
-    }
-
-    .catalog
-    {
-      background-color: var(--bg-color-2);
-      padding: 0.4em;
-      border-radius: 5px;
-      border: 1px solid var(--bg-color-reverse-2);
-      z-index: 3;
-      min-width: calc($pictureSize * 3 + 1.2vw);
-      width: fit-content;
-      max-height: calc($pictureSize * 3 + 2vw);
-      display: grid;
-      grid-template-columns: repeat(3, minmax(auto, auto));
-      justify-content: space-evenly;
-      align-items: center;
-      gap: 0.4em;
-
-      .picture
-      {
-        cursor: pointer;
-      }
-    }
-  }
-
-  input[type='checkbox']
-  {
-    width: 2vh;
-    height: 2vh;
-  }
-
-  .buttons
-  {
-    display: flex;
-    justify-content: space-around;
-    margin: 1vw;
-    gap: 1vw;
-  }
+.buttons
+{
+  display: flex;
+  justify-content: space-around;
+  margin: 1vw;
+  gap: 1vw;
 }
 
 .visible
@@ -138,11 +131,6 @@ $pictureSize: 3em;
   color: red;
 }
 
-.smart-input-custom-wrapper
-{
-  width: 10em;
-}
-
 .feedback
 {
   width: 1.5em;
@@ -151,10 +139,22 @@ $pictureSize: 3em;
   right: -1.8em;
 }
 
+.passwordFeedback
+{
+  position: absolute;
+  bottom: -1.5em;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10em;
+  text-align: center;
+}
+
+
 @media (max-width: 768px) 
 {
   .settings
   {
     width: 90vw;
+    margin: auto;
   }
 }

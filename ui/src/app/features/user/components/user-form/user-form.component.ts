@@ -97,7 +97,6 @@ export class UserFormComponent
         password: this.logInForm.get('password')?.value!,
         rememberMe: true
       }
-      console.log("log in triggered")
       this.store.dispatch(authActions.logIn({request: loginDTO}))
     }
   }

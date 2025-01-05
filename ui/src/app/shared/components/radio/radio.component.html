@@ -1,4 +1,4 @@
-<div class="radio">
+<div class="flex gap-m pad-s">
   <ng-container *ngFor="let option of options; index as i">
     <div class="option tooltip-wrapper" (click)="select(i)" 
     [ngClass]="{'selected-background': selectedIndex == i && !(optionIcons[i] || optionSVGs[i]),

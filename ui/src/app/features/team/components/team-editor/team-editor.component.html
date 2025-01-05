@@ -1,7 +1,7 @@
-<div class="team-editor">
-  <div class="col-center s-gap">
-    <div class="row">
-      <div class="editor-input">
+<div class="flex-col align-i-c gap-m">
+  <div class="flex-col gap-m">
+    <div class="flex justify-c-c gap-m">
+      <div class="editor-input relative">
         <ng-container *ngIf="!loggedUserTag">
           <div class="anon-warning tooltip-wrapper">
             <div>!</div>
@@ -18,10 +18,10 @@
         [disableRemove]="true"
         [updateOnChange]="true"
         (updateEvent)="playerUpdateEvent($event)"
-        class="item smart-input-wrapper"
+        class="smart-input-wrapper input-m"
         ></app-smart-input>
       </div>
-      <div class="editor-input">
+      <div class="editor-input relative">
         <app-smart-input
         #tournamentInput
         [label]="'team.editor.tournament_input-label' | translate"
@@ -30,7 +30,7 @@
         [getter]="queryService.queryTournamentCallback"
         (selectEvent)="tournamentSelectEvent($event)"
         (newEvent)="toggleTournamentEditor()"
-        class="item smart-input-wrapper"
+        class="smart-input-wrapper input-m"
         ></app-smart-input>
         <div class="tournament-editor-wrapper" [ngClass]="{tournamentEditorShow: showTournamentEditor}">
           <app-tournament-editor
@@ -39,7 +39,7 @@
           ></app-tournament-editor>
         </div>
       </div>
-      <div class="editor-input">
+      <div class="editor-input relative">
         <app-smart-input
         #tagInput
         (disabled)="team?.tags ? team?.tags!.length > 2 : false"
@@ -49,7 +49,7 @@
         [allGetter]="queryService.tagAllCallback"
         (selectEvent)="tagSelectEvent($event)"
         (newEvent)="toggleTagEditor()"
-        class="item smart-input-wrapper"
+        class="smart-input-wrapper input-m"
         ></app-smart-input>
         <div class="tag-editor-wrapper" [ngClass]="{tagEditorShow: showTagEditor}">
           <app-tag-editor 
@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <div class="row-center s-gap">
+    <div class="flex justify-c-c gap-s">
       <app-checkbox
       [checked]="team.options.showEVs"
       [label]="'EVs'"

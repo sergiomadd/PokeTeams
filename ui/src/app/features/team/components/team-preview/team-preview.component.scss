@@ -1,109 +1,50 @@
 
-.team
+//move to components
+.detail
 {
+  width: fit-content;
+  max-width: 8em;
+  height: 1.2em;
+  overflow: hidden;
   display: flex;
-  flex-direction: column;
-  background-color: var(--bg-color-3);
+  align-items: center;
+  background-color: var(--bg-color-2);
   padding: 0.2em;
   border-radius: 5px;
+  white-space: nowrap;
+  text-align: start;
   gap: 0.2em;
+  cursor: pointer;
+}
   
-  .top
+.views
+{
+  max-width: 4.5em;
+}
+
+.button
+{
+  padding: 0 0.2em 0 0.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  a
   {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .detail
-    {
-      width: fit-content;
-      max-width: 8em;
-      height: 1.2em;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      background-color: var(--bg-color-2);
-      padding: 0.2em;
-      border-radius: 5px;
-      white-space: nowrap;
-      text-align: start;
-      gap: 0.2em;
-      cursor: pointer;
-    }
-    
-    .views
-    {
-      justify-content: space-evenly;
-      max-width: 4.5em;
-    }
-
-    .regulation
-    {
-      background-color: var(--primary);
-      color: white;
-      padding: 0.2vw;
-      border-radius: 5px;
-      width: 1vw;
-      height: 1vw;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .center
-    {
-      display: flex;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .button
-    {
-      padding: 0;
-      width: 1.2em;
-      height: 1.2em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 5px;
-      a
-      {
-        padding: 0;
-      }
-    }
-  }
-
-  .errors
-  {
-    text-align: center;
-    color: red;
-  }
-
-  .pokemons
-  {
-    display: flex;
-    justify-content: space-around;
-    gap: 0.5em;
-    background-color: var(--bg-color-2);
-    border-radius: 5px;
-    width: 100%;
-  }
-
-  .pokemons-placeholder
-  {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    min-height: 5em;
-    background-color: var(--bg-color-2);
+    width: fit-content;
+    height: fit-content;
   }
 }
 
-.icon
+.errors
 {
-  width: 1.5em;
-  height: 1.5em;
+  text-align: center;
+  color: red;
+}
+
+.pokemons-placeholder
+{
+  min-height: 5em;
 }
 
 .unregisteredPlayer

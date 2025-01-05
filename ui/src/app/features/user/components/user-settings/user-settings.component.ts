@@ -80,7 +80,7 @@ export class UserSettingsComponent
     password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.samePassword(), this.util.passwordsMatch()]],
     confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
 
-  }, { updateOn: "blur" });
+  }, { updateOn: "submit" });
 
   async ngOnInit()
   {

@@ -1,5 +1,4 @@
 
-
 .switch
 {
   position: relative;
@@ -9,54 +8,54 @@
   background-color: var(--bg-color-2);
   border-radius: 5px;
   user-select: none;
+}
 
-  .option
-  {
-    display: flex;
-    align-items: center;
-    width: 3em;
-    height: 1em;
-    padding: calc(0.4em + 1px);
-    background-color: transparent;
-    cursor: pointer;
-    z-index: 2;
-    transition: color 0.3s ease-in-out;
-  }
-  
-  .selected
-  {
-    color: white;
-    opacity: 1;
-  }
+.option
+{
+  display: flex;
+  align-items: center;
+  width: 3em;
+  height: 1em;
+  padding: calc(0.4em + 1px);
+  background-color: transparent;
+  cursor: pointer;
+  z-index: 2;
+  transition: color 0.3s ease-in-out;
+}
 
-  .selector
-  {
-    position: absolute;
-    background-color: var(--primary);
-    top: 0;
-    left: 0;
-    transition: transform 0.3s ease-in-out, border-radius 0.3s ease;
-    border-radius: 5px;
-  }
+.selected
+{
+  color: white;
+  opacity: 1;
+}
 
-  .selectedLeft
-  {
-    transform: translateX(100%);
-    border-radius: 0 5px 5px 0;
-  }
+.selector
+{
+  position: absolute;
+  background-color: var(--primary);
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease-in-out, border-radius 0.3s ease;
+  border-radius: 5px;
+}
 
-  .selectedRight
-  {
-    border-radius: 5px 0 0 5px;
-  }
+.selectedLeft
+{
+  transform: translateX(100%);
+  border-radius: 0 5px 5px 0;
+}
 
-  .left
-  {
-    border-radius: 5px 0 0 5px;
-  }
+.selectedRight
+{
+  border-radius: 5px 0 0 5px;
+}
 
-  .right
-  {
-    border-radius: 0 5px 5px 0;
-  }
+.left
+{
+  border-radius: 5px 0 0 5px;
+}
+
+.right
+{
+  border-radius: 0 5px 5px 0;
 }

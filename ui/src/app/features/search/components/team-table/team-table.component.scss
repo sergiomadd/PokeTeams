@@ -1,157 +1,92 @@
-.team-table
+
+.sorter-text
 {
+  padding: 0.4em 0 0.4em 0.4em;
+}
+
+.bar
+{
+  height: 2em;
+}
+
+.way
+{
+  width: 16px;
+  margin-right: 0.2em;
+}
+
+.up-arrow
+{
+  top: 2px;
+}
+
+.down-arrow
+{
+  bottom: 2px;
+}
+
+.column-drawing
+{
+  border: 1px solid var(--text-color);
+  border-bottom: none;
+  width: 1fr;
+  min-width: 0.5em;
+  height: 1em;
+  background-color: var(--bg-color-1);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 5vw;
-  width: 70vw;
+}
+
+.row-drawing
+{
+  height: 32%;
+  border-bottom: 1px solid var(--text-color);
+  background-color: var(--bg-color-2);
+}
+
+.selected
+{
+  background-color: var(--bg-color-2);
+  border-color: var(--text-color);
+  color: var(--bg-color-1);
+
+  &.row-drawing
+  {
+    background-color: var(--bg-color-2);
+  }
+}
+
+.team-table
+{
+  margin-bottom: 5em;
   margin-left: auto;
   margin-right: auto;
+}
 
-  .bar
+.single
+{
+
+  .record
   {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 2em;
     width: 100%;
-    padding: 0.4em;
-
-    .category
-    {
-      display: flex;
-      gap: 0.4em;
-      border: 1px solid var(--bg-color-3);
-      border-radius: 10px;
-      padding: 0.4em;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .sorter
-    {
-      padding: 0;
-      gap: 0.2em;
-
-      .sorter-text
-      {
-        padding: 0.4em 0 0.4em 0.4em;
-      }
-
-      .way
-      {
-        display: flex;
-        align-items: flex-start;
-        margin: 0.1em 0.4em 0.1em 0;
-        width: 16px;
-        position: relative;
-        
-        .sort-icon
-        {
-          width: 16px;
-          height: 16px;
-          position: absolute;
-        }
-
-        .up-arrow
-        {
-          top: 1px;
-        }
-
-        .down-arrow
-        {
-          bottom: 1px;
-        }
-      }
-    }
-
-    .column-icon
-    {
-      display: flex;
-      justify-content: center;
-    }
-
-    .column-drawing
-    {
-      border: 1px solid var(--text-color);
-      border-bottom: none;
-      width: 1fr;
-      min-width: 0.5em;
-      height: 1em;
-      background-color: var(--bg-color-1);
-      display: flex;
-      flex-direction: column;
-
-      .row-drawing
-      {
-        height: 32%;
-        border-bottom: 1px solid var(--text-color);
-      }
-    }
-
-    .selected
-    {
-      background-color: var(--bg-color-2);
-      border-color: var(--text-color);
-      color: var(--bg-color-1);
-
-      .column-drawing
-      {
-        .row-drawing
-        {
-          background-color: var(--bg-color-2);
-        }
-      }
-    }
+    //transition: width ease 0.5s;
   }
+}
 
+.double
+{
 
-
-  .table
+  .record
   {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1em;
-    margin: auto;
-    width: 100%;
-
-    .records
-    {
-      width: 100%;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1em;
-    }
-
-    .single
-    {
-
-      .record
-      {
-        width: 100%;
-        //transition: width ease 0.5s;
-      }
-    }
-
-    .double
-    {
-
-      .record
-      {
-        width: 49%;
-        //transition: width ease 0.5s;
-      }
-    }
+    width: 49%;
+    //transition: width ease 0.5s;
   }
 }
 
 .teams-per-page
 {
-  width: 2em !important;
+  width: 2em;
+  text-align: center;
 }
 
 .pagination
@@ -161,6 +96,7 @@
   grid-template-columns: 15% 1fr 15%;
   justify-content: space-between;
   align-items: center;
+  justify-items: center
 }
 
 .searched
@@ -171,7 +107,6 @@
 
 .loader-wrapper
 {
-  
   position: absolute;
   top: 0;
   left: calc(50% - 2.5vw);
@@ -179,6 +114,7 @@
   width: 5vw;
   height: 5vw;
   margin: auto;
+  z-index: 7;
 }
 
 @media only screen and (max-width: 768px) 

@@ -1,5 +1,5 @@
 
-<div class="pagination">
+<div class="m-auto w-fit flex align-i-c gap-m">
   <ng-container *ngIf="totalItems > 0; else empty">
     <button 
     (click)="changePage(1)" 
@@ -11,7 +11,7 @@
     [disabled]="currentPage === 1"
     class="page"
     > < </button>
-    <div class="pages">
+    <div class="flex justify-i-c gap-m">
       <ng-container *ngIf="currentPage <= 3">
         <button class="page" (click)="changePage(1)" [ngClass]="{selected: currentPage == 1}">
           1
@@ -86,7 +86,7 @@
     > >> </button>
   </ng-container>
   <ng-template #empty>
-    <div class="empty">
+    <div class="flex align-i-c w-fit b-2 text-c bor-1-b bor-rad-5 pad-l">
       No results!
     </div>
   </ng-template>

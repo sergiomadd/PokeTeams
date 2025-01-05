@@ -1,76 +1,37 @@
 
 
-.search
+.item
 {
-  display: flex;
-  flex-direction: column;
-  height: fit-content;
+  width: 15em;
+  max-height: 10vh;
+  max-width: 12em;
+}
 
-  .top-background
-  {
+.top
+{
+  width: 75%;
+  margin: 5vh auto auto auto;
+}  
 
-    .top
-    {
-      width: 75%;
-      margin: 5vh auto auto auto;
-      padding: 0.8vw;
-      display: flex;
-      flex-direction: column;
-      gap: 1vh;
-      border-radius: 5px;
-  
-      .form
-      {
-        display: grid;
-        grid-template-columns: 15% 70% 15%;
-        justify-content: center;
-        align-items: center;
-        gap: 0.4vw;
-    
-        .inputs
-        {
-          margin: auto;
-          width: fit-content;
-        }
-    
-        .item
-        {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          width: 15em;
-          height: inherit;
-          max-height: 10vh;
-          max-width: 12em;
-        }
-      }
-  
-      .storages
-      {
-        position: relative;
-        min-height: calc(0.4em + 2em);
-        width: 70%;
-        margin: auto;
-        border: 1px solid var(--bg-color-3);
-        border-radius: 5px;
+.storages
+{
+  position: relative;
+  min-height: 4em;
+  width: 70%;
+}
 
-        .storage-settings
-        {
-          position: absolute;
-          top: -2.6em;
-          left: 0;
-        }
+.storage-settings
+{
+  position: absolute;
+  top: -2.6em;
+  left: 0;
+}
 
-        .storage-buttons
-        {
-          position: absolute;
-          top: -2.2em;
-          right: 0.2em;
-        }
-      }
-    }  
-  }
+.storage-buttons
+{
+  position: absolute;
+  top: -2.2em;
+  right: 0.2em;
 }
 
 @media only screen and (max-width: 768px) 

@@ -1,192 +1,78 @@
 
-.pokemon-editor
+.selector
 {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8vw;
-  position: relative;
+  width: 2.5em;
+  height: 2.5em;
 
-  .selectors
+  &:hover
   {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.4vw;
-
-    .selector
-    {
-      width: 2vw;
-      height: 2vw;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      border-radius: 40px;
-      border: 1px solid var(--bg-color-3);
-      cursor: pointer;
-      user-select: none;
-
-      &:hover
-      {
-        background-color: var(--bg-color-3);
-      }
-    }
-
-    .selected
-    {
-      background-color: var(--bg-color-3);
-      border: 1px solid black;
-    }
-  }
-
-  .editor
-  {
-    display: flex;
-    align-items: center;
-    gap: 0.8vw;
-    
-    .form
-    {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      grid-template-rows: repeat(3, 1fr);
-      column-gap: 0.8vw;
-      justify-content: end;
-    }
-  
-    .preview
-    {
-      width: fit-content;
-      height: 40vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      gap: 0.1em;
-      position: relative;
-
-      .delete
-      {
-        position: absolute;
-        top: 0.2vw;
-        right: 0.2vw;
-        z-index: 4;
-
-        button
-        {
-          width: 1vw;
-          height: 1vw;
-          background-color: var(--primary);
-        }
-      }
-    }
-  
-    .form-item
-    {
-      display: flex;
-      justify-content: center;
-      min-height: 5.2em;
-      width: 100%;
-    }
-  
-    .form-item-col
-    {
-      flex-direction: column;
-      align-items: center;
-      gap: 0.4vw;
-    }
-  
-    .col
-    {
-      width: 10vw;
-    }
-
-    .stat-col
-    {
-      grid-column: 2 / 4;
-      gap: 0.2em;
-    }
-    
-  
-    .stat-selector
-    {
-      display: flex;
-      justify-content: center;
-      gap: 0.4vw;
-  
-      .stat-box
-      {
-        padding: 0.2vw;
-        background-color: var(--bg-color-2);
-        border-radius: 5px;
-        cursor: pointer;
-        text-align: center;
-        width: 1.5vw;
-        user-select: none;
-  
-        &:hover
-        {
-          outline: 1px black dotted;
-        }
-      }
-  
-      .selectedStat
-      {
-        background-color: var(--primary);
-        color: white;
-      }
-    }
+    background-color: var(--bg-color-3);
   }
 }
 
-.disabled
+.selected
 {
-  opacity: 0.7;
-  pointer-events: none;
+  background-color: var(--bg-color-3);
+  border: 1px solid black;
 }
 
-.notAllowed
+.form
 {
-  cursor: not-allowed;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, 1fr);
+  justify-content: end;
 }
 
-.check-box
+.form-item
 {
-  display: flex;
-  align-items: end;
+  width: 12em;
+}
 
-  input
+.preview
+{
+  height: 40vh;
+}
+
+.delete
+{
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  z-index: 4;
+}
+
+.stat-col
+{
+  grid-column: 2 / 4;
+  gap: 0.2em;
+}
+
+.stat-box
+{
+  background-color: var(--bg-color-2);
+  width: 1.5vw;
+
+  &:hover
   {
-    margin: 0;
-    height: 2vh;
+    outline: 1px black dotted;
   }
 }
 
-.check-group
+.selectedStat
 {
-  padding: 0.2vw;
-  margin: 0;
-  border: none;
-  display: flex;
-  align-items: center;
-}
-
-.checkbox-wrapper
-{
-  //height: 1em;
-  //padding: 0 0.2vw 0 0.2vw;
-  font-size: 0.7em;
+  background-color: var(--primary);
+  color: white;
 }
 
 .level
 {
-  width: 2vw;
-  text-align: center;
+  width: 2em;
 }
 
 .nickname
 {
-  width: 4vw;
+  width: 5em;
 }
 
 .range
@@ -198,21 +84,6 @@
   column-gap: 1%;
   width: 90%;
   gap: 0.2vw;
-
-  .range-slider
-  {
-
-    input
-    {
-      min-height: 1vh;
-      height: 1vh;
-    }
-  }
-}
-
-.error
-{
-  border: 1px solid red !important;
 }
 
 .notes-editor
@@ -226,5 +97,13 @@
     width: 100%;
     height: 100%;
   }
+}
+
+.feedback
+{
+  position: absolute;
+  bottom: -1.2em;
+  text-align: center;
+  width: 20em;
 }
 

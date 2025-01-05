@@ -1,5 +1,5 @@
 <ng-container *ngIf="data$ | async as data">
-  <div class="wrapper">
+  <div class="m-auto flex-col justify-c-c pad-s no-overflow">
     <ng-container *ngIf="login">
       <div class="nav">
         <button class="tab tab-left tab-selected button-primary" (click)="showLogInForm()">
@@ -10,14 +10,15 @@
         </button>
       </div>
       <form
-      class="form" 
+      class="relative flex-col align-i-c gap-m w-100" 
       [formGroup]="logInForm" 
       (ngSubmit)="logIn()"
       >
-        <div class="inputs">
+        <div class="flex-col gap-s pad-m bor-1-b bor-rad-5 bg-2">
           <div class="item">
             <label for="">{{'user.form.username-label' | translate}}</label>
             <input type="text" 
+            class="input-s"
             formControlName="userNameOrEmail"
             [ngClass]="{controlInvalid: isInvalid('userNameOrEmail', 'login')}"
             >
@@ -26,28 +27,29 @@
           <div class="item">
             <label for="">{{'user.form.password-label' | translate}}</label>
             <input type="password" 
+            class="input-s"
             formControlName="password"
             [ngClass]="{controlInvalid: isInvalid('password', 'login')}"
             >
             <span *ngIf="isInvalid('password', 'login')" class="formFeedbackError">{{getError('password', 'login')}}</span>
           </div>
         </div>
-        <div class="row-end s-gap">
-          <div class="progress">
+        <div class="flex-col align-i-c w-90 pad-m gap-m">
+          <div class="flex justify-c-e align-i-c w-100 gap-m">
             <ng-container *ngIf="data.isSubmitting">
-              <div class="loader-wrapper">
+              <div class="icon-m">
                 <div class="pokemon-spinner"></div>
               </div>
             </ng-container>
-            <ng-container *ngIf="logInFormSubmitted && data.backendError">
-              <span class="formFeedbackError">{{data.backendError}}</span>
-            </ng-container>
+            <button 
+            type="submit" 
+            class="button-primary"
+            [disabled]="data.isSubmitting"
+            >{{'user.form.login' | translate}}</button>
           </div>
-          <button 
-          type="submit" 
-          class="button-primary"
-          [disabled]="data.isSubmitting"
-          >{{'user.form.login' | translate}}</button>
+          <ng-container *ngIf="logInFormSubmitted && data.backendError">
+            <span class="formFeedbackError">{{data.backendError}}</span>
+          </ng-container>
         </div>
       </form>
     </ng-container>
@@ -60,14 +62,15 @@
           {{'user.form.signup' | translate}}
         </button>
       </div>
-      <form class="form"
+      <form class="relative flex-col align-i-c gap-m w-100"
       [formGroup]="signUpForm" 
       (ngSubmit)="signUp()"
       >
-        <div class="inputs">
+        <div class="flex-col gap-s pad-m bor-1-b bor-rad-5 bg-2">
           <div class="item">
             <label>{{'user.form.username-label' | translate}}*</label>
             <input type="text" 
+            class="input-s"
             formControlName="username"
             [ngClass]="{controlInvalid: isInvalid('username', 'signup')}"
             >
@@ -77,6 +80,7 @@
           <div class="item">
             <label>{{'user.form.email-label' | translate}}*</label>
             <input type="text" 
+            class="input-s"
             formControlName="email"
             [ngClass]="{controlInvalid: isInvalid('email', 'signup')}"
             >
@@ -86,6 +90,7 @@
           <div class="item">
             <label>{{'user.form.password-label' | translate}}*</label>
             <input type="password" 
+            class="input-s"
             formControlName="password"
             [ngClass]="{controlInvalid: isInvalid('password', 'signup')}"
             >
@@ -94,28 +99,29 @@
           <div class="item">
             <label>{{'user.form.confirm_password-label' | translate}}*</label>
             <input type="password" 
+            class="input-s"
             formControlName="confirmPassword"
             [ngClass]="{controlInvalid: isInvalid('confirmPassword', 'signup')}"
             >
             <span *ngIf="isInvalid('confirmPassword', 'signup')" class="formFeedbackError">{{getError('confirmPassword', 'signup')}}</span>
           </div>
         </div>
-        <div class="row-end">
-          <div class="progress">
+        <div class="flex-col align-i-c w-90 pad-m gap-m">
+          <div class="flex justify-c-e align-i-c w-100 gap-m">
             <ng-container *ngIf="data.isSubmitting">
-              <div class="loader-wrapper">
-                <div class="loader"></div>
+              <div class="icon-m">
+                <div class="pokemon-spinner"></div>
               </div>
             </ng-container>
-            <ng-container *ngIf="signUpFormSubmitted && data.backendError">
-              <span class="formFeedbackError">{{data.backendError}}</span>
-            </ng-container>
+            <button 
+            type="submit" 
+            class="button-primary"
+            [disabled]="data.isSubmitting"
+            >{{'user.form.signup' | translate}}</button>
           </div>
-          <button 
-          type="submit" 
-          class="button-primary"
-          [disabled]="data.isSubmitting"
-          >{{'user.form.signup' | translate}}</button>
+          <ng-container *ngIf="signUpFormSubmitted && data.backendError">
+            <span class="formFeedbackError">{{data.backendError}}</span>
+          </ng-container>
         </div>
       </form>
     </ng-container>
