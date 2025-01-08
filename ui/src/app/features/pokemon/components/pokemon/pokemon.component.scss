@@ -1,6 +1,7 @@
 
 $cardWidth: 30em;
 $cardheight: 12em;
+$sectionHeight: 3em;
 $moveHeight: calc($cardheight/4);
 $statsHeight: 5vh;
 $iconSize: 1.2em;
@@ -46,14 +47,8 @@ $padding: 0.2vw;
     .section-name
     {
       text-align: start;
-      white-space: nowrap;
       padding: 0 0.2em 0 0.2em;
     }
-  }
-
-  &:hover > .section-content > .poke-tooltip
-  {
-    visibility: visible;
   }
 }
 
@@ -348,330 +343,240 @@ $padding: 0.2vw;
   border-radius: 5px;
 }
 
-.poke-tooltip-wrapper
+.poke-tooltip-content
 {
-  position: relative; 
-  width: 0;
-  height: 0;
+  max-width: 20em;
+}
 
-  .poke-tooltip-visible
+.head
+{
+  background-color: var(--bg-color-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $paddingBig $paddingBig $paddingBig $paddingBig;
+  border-radius: 5px 5px 0 0;
+
+  .head-text
   {
-    visibility: visible !important;
-    width: fit-content;
-  }
-
-  .poke-tooltip
-  {
-    width: 0;
-    visibility: hidden;
-    border: 1px solid black;
-    border-radius: 5px;
-    background-color: var(--bg-color-2);
-    z-index: 5;
-    cursor: auto;
-    position: absolute;
-
-    &::before
-    {
-      //Arrow
-      content: "";
-      width: 10px; 
-      height: 10px; 
-      border: 1px solid black;
-      background-color: var(--bg-color-2);
-      position: absolute;
-      transform: rotate(45deg);
-      z-index: -1;
-    }
-
-    .head
-    {
-      background-color: var(--bg-color-3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: $paddingBig $paddingBig $paddingBig $paddingBig;
-      border-radius: 5px 5px 0 0;
-
-      .head-text
-      {
-        font-size: larger;
-        text-align: center;
-      }
-    }
-
-    .body
-    {
-      padding: $padding;
-      background-color: var(--bg-color-2);
-      border-radius: 0 0 5px 5px;
-    }
-
-    .one-piece
-    {
-      padding: $padding;
-      background-color: var(--bg-color-2);
-      border-radius: 5px;
-
-      .one-line
-      {
-        background-color: var(--bg-color-2);
-        padding: $padding;
-        border-radius: 5px;
-        white-space: nowrap;
-        overflow: hidden;
-        border-radius: 5px;
-      }
-    }
-
-    .link
-    {
-      text-decoration: none;
-      cursor: pointer;
-      color: var(--text-color-link);
-
-      &:hover
-      {
-        text-decoration: underline ;
-      }
-    }
-  }
-
-  .poke-tooltip-top
-  {
-    width: fit-content;
-    height: fit-content;
-    display: flex;
-    justify-content: center;
-
-    position: absolute;
-    left: 50%;
-    bottom: 100%;
-    transform: translate(round(-50%, 1px), -15px);
-
-    &::before
-    {
-      //Arrow bottom
-      bottom: -0.35em;
-    }
-
-    .poke-tooltip-types
-    {
-      display: flex;
-      justify-content: center;
-      background-color: var(--bg-color-2);
-      border-radius: 5px;
-
-      .category
-      { 
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        align-items: center;
-        padding: 0.2vw;
-
-        .text
-        {
-          display: flex;
-          justify-content: end;
-        }
-
-        .icons
-        {
-          display: grid;
-          grid-template-columns: 50% 50%;
-        }
-      }
-
-      .divider
-      {
-
-      }
-    }
-
-    .family
-    {
-      display: flex;
-      align-items: center;
-      background-color: var(--bg-color-2);
-      border-radius: 5px;
-
-      .sprite-small
-      {
-        width: $iconSize*2;
-        height: $iconSize*2;
-      }
-    }
-  }
-
-  .poke-tooltip-left
-  {
-    min-width: round(calc($cardWidth/1.5), 1px);
-    height: fit-content;
+    font-size: larger;
     text-align: center;
-
-    position: absolute;
-    right: 100%;
-    top: 50%;
-    transform: translate(-15px, round(calc(-50% - 0.4em), 1px));
-
-
-    &::before
-    {
-      //Arrow right
-      right: -0.4em;
-      top: 50%;
-    }
   }
+}
 
-  .poke-tooltip-move
+.body
+{
+  padding: $padding;
+  background-color: var(--bg-color-2);
+  border-radius: 0 0 5px 5px;
+}
+
+.one-piece
+{
+  padding: $padding;
+  background-color: var(--bg-color-2);
+  border-radius: 5px;
+}
+
+.one-line
+{
+  background-color: var(--bg-color-2);
+  padding: $padding;
+  border-radius: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.link
+{
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--text-color-link);
+
+  &:hover
   {
-    min-width: round(calc($cardWidth/1.3), 1px);
-    height: fit-content;
-    
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translate(15px, round(calc(-50% - 0.4em), 1px));
-
-    &::before
-    {
-      //Arrow left
-      left: -0.4em;
-      top: 50%;
-    }
-
-    .move-head
-    {
-      display: grid;
-      grid-template-columns: auto 1fr 90px;
-      gap: 0.4em;
-
-      .poke-tooltop-move-type
-      {
-        display: flex;
-        justify-content: start;
-        align-items: center;
-      }
-
-      .head-class
-      {
-        display: flex;
-        justify-content: end;
-
-        .class-icon
-        {
-          width: auto;
-          max-height: $iconSize*1.2;
-        }
-      }
-    }
-
-    .move-body
-    {
-
-      .primary
-      {
-        display: flex;
-        justify-content: center;
-        text-align: center;
-        column-gap: $padding;
-        padding: $padding;
-        background-color: var(--bg-color-2);
-        border-radius: 0 0 5px 5px;
-      }
-  
-      .secondary
-      {
-        display: flex;
-        justify-content: center;
-        text-align: center;
-        flex-wrap: wrap;
-        gap: 0.2em;
-      }
-
-      .atribute
-      {
-        padding: 0 $padding 0 $padding;
-        display: flex;
-        background-color: var(--bg-color-3);
-        padding: $padding;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-      }
-
-      .properties
-      {
-        display: flex;
-        flex-direction: column;
-        padding: $padding;
-      }
-  
-      .property
-      {
-        display: flex;
-      }
-  
-      .property-title
-      {
-        font-weight: bold;
-        margin-right: $padding;
-      }
-  
-      .property-body
-      {
-      }
-    }
+    text-decoration: underline ;
   }
+}
 
-  .poke-tooltip-stat
-  {
-    width: fit-content;
-    height: fit-content;
+.poke-tooltip-content-family
+{
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-color-2);
+  border-radius: 5px;
+}
+
+.sprite-small
+{
+  width: $iconSize*2;
+  height: $iconSize*2;
+}
+
+.poke-tooltip-types
+{
+  display: flex;
+  justify-content: center;
+  background-color: var(--bg-color-2);
+  border-radius: 5px;
+
+  .category
+  { 
     display: flex;
     flex-direction: column;
+    width: 100%;
+    align-items: center;
+    padding: 0.2vw;
 
-    &::before
-    {
-      //Arrow bottom
-      left: 50%;
-      bottom: -0.35em;
-    }
-
-    .col
+    .text
     {
       display: flex;
-      flex-direction: column;
-      border-radius: 5px;
-      padding: $padding;
-
-      .item
-      {
-        width: 100%;
-        min-width: 2vw;
-        min-height: 1em;
-        width: fit-content;
-        display: flex;
-        justify-content: center;
-        overflow: hidden;
-      }
+      justify-content: end;
     }
 
-    .ivs
+    .icons
     {
-      background-color: lightblue;
+      display: grid;
+      grid-template-columns: 50% 50%;
     }
+  }
 
-    .evs
-    {
-      background-color: gold;
-    }
+  .divider
+  {
 
-    .maxed
+  }
+}
+
+.move-head
+{
+  display: grid;
+  grid-template-columns: auto 1fr 90px;
+  gap: 0.4em;
+
+  .poke-tooltop-move-type
+  {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+  }
+
+  .head-class
+  {
+    display: flex;
+    justify-content: end;
+
+    .class-icon
     {
-      outline: 0.3vh solid black;
+      width: auto;
+      max-height: $iconSize*1.2;
     }
+  }
+}
+
+.move-body
+{
+
+  .primary
+  {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    column-gap: $padding;
+    padding: $padding;
+    background-color: var(--bg-color-2);
+    border-radius: 0 0 5px 5px;
+  }
+
+  .secondary
+  {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-wrap: wrap;
+    gap: 0.2em;
+  }
+
+  .atribute
+  {
+    padding: 0 $padding 0 $padding;
+    display: flex;
+    background-color: var(--bg-color-3);
+    padding: $padding;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+  }
+
+  .properties
+  {
+    display: flex;
+    flex-direction: column;
+    padding: $padding;
+  }
+
+  .property
+  {
+    display: flex;
+  }
+
+  .property-title
+  {
+    font-weight: bold;
+    margin-right: $padding;
+  }
+
+  .property-body
+  {
+  }
+}
+
+.poke-tooltip-stat
+{
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+
+  &::before
+  {
+    //Arrow bottom
+    left: 50%;
+    bottom: -0.35em;
+  }
+
+  .col
+  {
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    padding: $padding;
+
+    .item
+    {
+      width: 100%;
+      min-width: 2vw;
+      min-height: 1em;
+      width: fit-content;
+      display: flex;
+      justify-content: center;
+      overflow: hidden;
+    }
+  }
+
+  .ivs
+  {
+    background-color: lightblue;
+  }
+
+  .evs
+  {
+    background-color: gold;
+  }
+
+  .maxed
+  {
+    outline: 0.3vh solid black;
   }
 }
 
@@ -694,12 +599,6 @@ $padding: 0.2vw;
 .bold
 {
   font-weight: bold;
-}
-
-.odd-stat
-{
-  //background-color: var(--bg-color-2);
-  //border-radius: 5px;
 }
 
 .empty-line

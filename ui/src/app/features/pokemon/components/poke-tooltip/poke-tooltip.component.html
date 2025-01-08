@@ -1,0 +1,16 @@
+<ng-container *ngIf="content">
+  <div 
+  class="poke-tooltip"
+  [ngClass]="{
+    top: side === 'top', right: side === 'right', 
+    bottom: side === 'bottom', left: side === 'left',
+    'poke-tooltip-visible': visible}"
+  >
+    <span 
+    [ngClass]="{
+      'poke-arrowbottom': side === 'top', 'poke-arrowleft': side === 'right', 
+      'poke-arrowtop': side === 'bottom', 'poke-arrowright': side === 'left'}"
+      ></span>
+    <div [ngTemplateOutlet]="content"></div>
+  </div>
+</ng-container>

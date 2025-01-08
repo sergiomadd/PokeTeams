@@ -58,6 +58,7 @@ import { SwitchComponent } from './shared/components/switch/switch.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
 import { LinkerPipe } from './shared/pipes/linker.pipe';
 import { NoTranslationComponent } from './shared/components/no-translation/no-translation.component';
+import { PokeTooltipComponent } from './features/pokemon/components/poke-tooltip/poke-tooltip.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -100,6 +101,7 @@ import { NoTranslationComponent } from './shared/components/no-translation/no-tr
     NotFoundComponent,
     EmailConfirmationComponent,
     NoTranslationComponent,
+    PokeTooltipComponent,
   ],
   exports: [],
   imports: [

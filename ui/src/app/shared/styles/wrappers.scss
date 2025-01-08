@@ -136,3 +136,27 @@ $arrowSize: 0.4vw;
   top: 50%;
   transform: translate(calc($arrowSize * -1 + 1px), calc(-50%));
 }
+
+.poke-tooltip-wrapper
+{
+  position: relative;
+
+  &:hover > .section-content > .tooltip-component > .poke-tooltip
+  {
+    width: max-content;
+    height: fit-content;
+    
+    display: flex;
+    align-items: center;
+
+    background-color: var(--bg-color-2);
+    color: var(--text-color);
+    border-radius: 5px;
+    border: 1px solid black;
+
+    text-align: center;
+    cursor: default;
+    opacity: 1;
+    overflow: visible;
+  }
+}
