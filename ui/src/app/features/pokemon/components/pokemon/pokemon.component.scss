@@ -348,7 +348,7 @@ $padding: 0.2vw;
   max-width: 20em;
 }
 
-.head
+.poke-tooltip-head
 {
   background-color: var(--bg-color-3);
   display: flex;
@@ -356,15 +356,15 @@ $padding: 0.2vw;
   justify-content: center;
   padding: $paddingBig $paddingBig $paddingBig $paddingBig;
   border-radius: 5px 5px 0 0;
-
-  .head-text
-  {
-    font-size: larger;
-    text-align: center;
-  }
 }
 
-.body
+.poke-tooltip-head-text
+{
+  font-size: larger;
+  text-align: center;
+}
+
+.poke-tooltip-body
 {
   padding: $padding;
   background-color: var(--bg-color-2);
@@ -400,184 +400,51 @@ $padding: 0.2vw;
   }
 }
 
-.poke-tooltip-content-family
-{
+.type-category
+{ 
   display: flex;
+  flex-direction: column;
+  width: 100%;
   align-items: center;
-  background-color: var(--bg-color-2);
-  border-radius: 5px;
+  padding: 0.2vw;
 }
 
-.sprite-small
-{
-  width: $iconSize*2;
-  height: $iconSize*2;
-}
-
-.poke-tooltip-types
+.type-category-text
 {
   display: flex;
-  justify-content: center;
-  background-color: var(--bg-color-2);
-  border-radius: 5px;
+  justify-content: end;
+}
 
-  .category
-  { 
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-    padding: 0.2vw;
-
-    .text
-    {
-      display: flex;
-      justify-content: end;
-    }
-
-    .icons
-    {
-      display: grid;
-      grid-template-columns: 50% 50%;
-    }
-  }
-
-  .divider
-  {
-
-  }
+.type-category-icons
+{
+  display: grid;
+  grid-template-columns: 50% 50%;
 }
 
 .move-head
 {
-  display: grid;
-  grid-template-columns: auto 1fr 90px;
-  gap: 0.4em;
-
-  .poke-tooltop-move-type
-  {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-  }
-
-  .head-class
-  {
-    display: flex;
-    justify-content: end;
-
-    .class-icon
-    {
-      width: auto;
-      max-height: $iconSize*1.2;
-    }
-  }
-}
-
-.move-body
-{
-
-  .primary
-  {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    column-gap: $padding;
-    padding: $padding;
-    background-color: var(--bg-color-2);
-    border-radius: 0 0 5px 5px;
-  }
-
-  .secondary
-  {
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    flex-wrap: wrap;
-    gap: 0.2em;
-  }
-
-  .atribute
-  {
-    padding: 0 $padding 0 $padding;
-    display: flex;
-    background-color: var(--bg-color-3);
-    padding: $padding;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-  }
-
-  .properties
-  {
-    display: flex;
-    flex-direction: column;
-    padding: $padding;
-  }
-
-  .property
-  {
-    display: flex;
-  }
-
-  .property-title
-  {
-    font-weight: bold;
-    margin-right: $padding;
-  }
-
-  .property-body
-  {
-  }
-}
-
-.poke-tooltip-stat
-{
-  width: fit-content;
-  height: fit-content;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+}
 
-  &::before
-  {
-    //Arrow bottom
-    left: 50%;
-    bottom: -0.35em;
-  }
+.stat-atribute
+{
+  background-color: var(--bg-color-3);
+  padding: $padding;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
 
-  .col
-  {
-    display: flex;
-    flex-direction: column;
-    border-radius: 5px;
-    padding: $padding;
+.stat-property-title
+{
+  font-weight: bold;
+  margin-right: $padding;
+}
 
-    .item
-    {
-      width: 100%;
-      min-width: 2vw;
-      min-height: 1em;
-      width: fit-content;
-      display: flex;
-      justify-content: center;
-      overflow: hidden;
-    }
-  }
-
-  .ivs
-  {
-    background-color: lightblue;
-  }
-
-  .evs
-  {
-    background-color: gold;
-  }
-
-  .maxed
-  {
-    outline: 0.3vh solid black;
-  }
+.maxed
+{
+  outline: 0.1em solid black;
 }
 
 .empty-icon

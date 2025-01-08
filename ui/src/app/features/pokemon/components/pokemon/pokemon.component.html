@@ -17,7 +17,7 @@
               >
               </app-poke-tooltip>
               <ng-template #familyTooltip>
-                <div class="poke-tooltip-content-family">
+                <div class="flex align-i-c bg-2 bor-rad-5">
                   <ng-container *ngIf="pokemon.preEvolution">
                     <ng-container *ngIf="pokemon.preEvolution.preEvolution">
                       <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon.preEvolution.preEvolution" [teamOptions]="teamOptions"></app-evolution>
@@ -78,15 +78,15 @@
               </app-poke-tooltip>
               <ng-template #itemTooltip>
                 <div class="poke-tooltip-content">
-                  <div class="head">
-                    <span class="head-text">
+                  <div class="poke-tooltip-head">
+                    <span class="poke-tooltip-head-text">
                       {{pokemon.item?.name?.content}}
                       <ng-container *ngIf="pokemon.item?.name && pokemon.item?.name?.language != (selectedLang$ | async)">
                         <app-no-translation></app-no-translation>
                       </ng-container>
                     </span>
                   </div>
-                  <div class="body">
+                  <div class="poke-tooltip-body">
                     <ng-container *ngFor="let chunk of itemProse">
                       <ng-container [ngSwitch]="chunk.type">
                         <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
@@ -126,15 +126,15 @@
               </app-poke-tooltip>
               <ng-template #abilityTooltip>
                 <div class="poke-tooltip-content">
-                  <div class="head">
-                    <span class="head-text">
+                  <div class="poke-tooltip-head">
+                    <span class="poke-tooltip-head-text">
                       {{pokemon.ability?.name?.content}}
                       <ng-container *ngIf="pokemon.ability?.name && pokemon.ability?.name?.language != (selectedLang$ | async)">
                         <app-no-translation></app-no-translation>
                       </ng-container>
                     </span>
                   </div>
-                  <div class="body">
+                  <div class="poke-tooltip-body">
                     <ng-container *ngFor="let chunk of abilityProse">
                       <ng-container [ngSwitch]="chunk.type">
                         <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
@@ -279,13 +279,13 @@
                 >
                 </app-poke-tooltip>
                 <ng-template #teraTypeTooltip>
-                  <div class="poke-tooltip-types">
+                  <div class="flex justify-c-c bg2 bor-rad-5">
                     <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.superEffective?.length ?? false">
-                      <div class="category">
-                        <div class="text">
+                      <div class="type-category">
+                        <div class="type-category-text">
                           <span class="bold">x2</span>
                         </div>
-                        <div class="icons">
+                        <div class="type-category-icons">
                           <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.superEffective">
                             <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                           </ng-container>
@@ -294,11 +294,11 @@
                       <hr class="divider">
                     </ng-container>
                     <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.notVeryEffective?.length ?? false">
-                      <div class="category">
-                        <div class="text">
+                      <div class="type-category">
+                        <div class="type-category-text">
                           <span class="bold">x0.5</span>
                         </div>
-                        <div class="icons">
+                        <div class="type-category-icons">
                           <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.notVeryEffective">
                             <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                           </ng-container>
@@ -309,11 +309,11 @@
                       </ng-container>
                     </ng-container>
                     <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false">
-                      <div class="category">
-                        <div class="text">
+                      <div class="type-category">
+                        <div class="type-category-text">
                           <span class="bold">x0</span> 
                         </div>
-                        <div class="icons">
+                        <div class="type-category-icons">
                           <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.inmune">
                             <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                           </ng-container>
@@ -348,14 +348,14 @@
                     'dual-type': pokemon.types?.dualEffectiveness,
                   }"
                   >
-                    <div class="poke-tooltip-types">
+                    <div class="flex justify-c-c bg2 bor-rad-5">
                       <ng-container *ngIf="pokemon.types?.dualEffectiveness ?? false; else monotypeTooltip">
                         <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleSuperEffective?.length ?? false">
-                          <div class="category">
-                            <div class="text">
+                          <div class="type-category">
+                            <div class="type-category-text">
                               <span class="bold">x4</span>
                             </div>
-                            <div class="icons">
+                            <div class="type-category-icons">
                               <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleSuperEffective">
                                 <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                               </ng-container>
@@ -369,11 +369,11 @@
                           </ng-container>
                         </ng-container>
                         <ng-container *ngIf="pokemon.types?.dualEffectiveness?.superEffective?.length ?? false">
-                          <div class="category">
-                            <div class="text">
+                          <div class="type-category">
+                            <div class="type-category-text">
                               <span class="bold">x2</span>
                             </div>
-                            <div class="icons">
+                            <div class="type-category-icons">
                               <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.superEffective">
                                 <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                               </ng-container>
@@ -386,11 +386,11 @@
                           </ng-container>
                         </ng-container>
                         <ng-container *ngIf="pokemon.types?.dualEffectiveness?.notVeryEffective?.length ?? false">
-                          <div class="category">
-                            <div class="text">
+                          <div class="type-category">
+                            <div class="type-category-text">
                               <span class="bold">x0.5</span>
                             </div>
-                            <div class="icons">
+                            <div class="type-category-icons">
                               <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.notVeryEffective">
                                 <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                               </ng-container>
@@ -402,11 +402,11 @@
                           </ng-container>
                         </ng-container>
                         <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length ?? false">
-                          <div class="category">
-                            <div class="text">
+                          <div class="type-category">
+                            <div class="type-category-text">
                               <span class="bold">x0.25</span>
                             </div>
-                            <div class="icons">
+                            <div class="type-category-icons">
                               <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleNotVeryEffective">
                                 <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                               </ng-container>
@@ -417,11 +417,11 @@
                           </ng-container>
                         </ng-container>
                         <ng-container *ngIf="pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
-                          <div class="category">
-                            <div class="text">
+                          <div class="type-category">
+                            <div class="type-category-text">
                               <span class="bold">x0</span>
                             </div>
-                            <div class="icons">
+                            <div class="type-category-icons">
                               <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.inmune">
                                 <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                               </ng-container>
@@ -431,11 +431,11 @@
                       </ng-container>
                       <ng-template #monotypeTooltip>
                         <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.superEffective?.length ?? false">
-                          <div class="category">
-                            <div class="text">
+                          <div class="type-category">
+                            <div class="type-category-text">
                               <span class="bold">x2</span>
                             </div>
-                            <div class="icons">
+                            <div class="type-category-icons">
                               <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.superEffective">
                                 <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                               </ng-container>
@@ -444,11 +444,11 @@
                           <hr class="divider">
                         </ng-container>
                         <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.notVeryEffective?.length ?? false">
-                          <div class="category">
-                            <div class="text">
+                          <div class="type-category">
+                            <div class="type-category-text">
                               <span class="bold">x0.5</span>
                             </div>
-                            <div class="icons">
+                            <div class="type-category-icons">
                               <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.notVeryEffective">
                                 <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                               </ng-container>
@@ -459,11 +459,11 @@
                           </ng-container>
                         </ng-container>
                         <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.inmune?.length ?? false">
-                          <div class="category">
+                          <div class="type-category">
                             <div class="text">
                               <span class="bold">x0</span> 
                             </div>
-                            <div class="icons">
+                            <div class="type-category-icons">
                               <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.inmune">
                                 <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                               </ng-container>
@@ -609,7 +609,7 @@
                   </app-poke-tooltip>
                   <ng-template #moveTooltip>
                     <div class="poke-tooltip-content">
-                      <div class="head move-head" 
+                      <div class="poke-tooltip-head move-head" 
                       [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.identifier ?? '')}"
                       >
                         <div class="section animated-border poke-tooltip-wrapper"
@@ -626,13 +626,13 @@
                             </app-poke-tooltip>
                             <ng-template #moveTypeTooltip>
                               <div class="poke-tooltip-content">
-                                <div class="poke-tooltip-types">
+                                <div class="flex justify-c-c bg2 bor-rad-5">
                                   <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.superEffective?.length ?? false">
-                                    <div class="category">
-                                      <div class="text">
+                                    <div class="type-category">
+                                      <div class="type-category-text">
                                         <span class="bold">x2</span>
                                       </div>
-                                      <div class="icons">
+                                      <div class="type-category-icons">
                                         <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.superEffective">
                                           <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                                         </ng-container>
@@ -641,11 +641,11 @@
                                     <hr class="divider">
                                   </ng-container>
                                   <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.notVeryEffective?.length ?? false">
-                                    <div class="category">
-                                      <div class="text">
+                                    <div class="type-category">
+                                      <div class="type-category-text">
                                         <span class="bold">x0.5</span>
                                       </div>
-                                      <div class="icons">
+                                      <div class="type-category-icons">
                                         <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.notVeryEffective">
                                           <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                                         </ng-container>
@@ -656,11 +656,11 @@
                                     </ng-container>
                                   </ng-container>
                                   <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.inmune?.length ?? false">
-                                    <div class="category">
-                                      <div class="text">
+                                    <div class="type-category">
+                                      <div class="type-category-text">
                                         <span class="bold">x0</span> 
                                       </div>
-                                      <div class="icons">
+                                      <div class="type-category-icons">
                                         <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.inmune">
                                           <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
                                         </ng-container>
@@ -673,63 +673,59 @@
                             <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name?.content}}" alt="{{move?.pokeType?.name?.content}}" class="icon-m">
                           </div>
                         </div>
-                        <div class="head-text">
+                        <div class="poke-tooltip-head-text">
                           {{move?.name?.content}}
                           <ng-container *ngIf="move?.name && move?.name?.language != (selectedLang$ | async)">
                             <app-no-translation></app-no-translation>
                           </ng-container>
                         </div>
-                        <div class="head-class">
-                          <img src="{{move?.damageClass?.iconPath}}" alt="" class="class-icon">
-                        </div>
+                        <img src="{{move?.damageClass?.iconPath}}" alt="" class="icon-m">
                       </div>
-                      <div class="body move-body">
-                        <div class="primary">
-                          <div class="atribute">
-                            <span class="property-title">{{'pokemon.move.power' | translate}}: </span>
+                      <div class="poke-tooltip-body">
+                        <div class="flex justify-c-c wrap gap-s">
+                          <div class="stat-atribute">
+                            <span class="stat-property-title">{{'pokemon.move.power' | translate}}: </span>
                             <ng-container *ngIf="move?.power;else emptyLine">
                               {{move?.power}}
                             </ng-container>
                           </div>
-                          <div class="atribute"><span class="property-title">PP: </span>{{move?.pp}}</div>
-                          <div class="atribute">
-                            <span class="property-title">{{'pokemon.move.accuracy' | translate}}: </span>
+                          <div class="stat-atribute"><span class="stat-property-title">PP: </span>{{move?.pp}}</div>
+                          <div class="stat-atribute">
+                            <span class="stat-property-title">{{'pokemon.move.accuracy' | translate}}: </span>
                             <ng-container *ngIf="move?.accuracy;else emptyLine">
                               {{move?.accuracy}}%
                             </ng-container>
                           </div>
-                          <div class="atribute"><span class="property-title">{{'pokemon.move.priority' | translate}}: </span>{{move?.priority}}</div>
-                        </div>
-                        <div class="secondary">
+                          <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.priority' | translate}}: </span>{{move?.priority}}</div>
                           <ng-container *ngIf="move?.meta?.minHits">
-                            <div class="atribute"><span class="property-title">{{'pokemon.move.min_hits' | translate}}: </span>{{move?.meta?.minHits}}</div>
+                            <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.min_hits' | translate}}: </span>{{move?.meta?.minHits}}</div>
                           </ng-container>
                           <ng-container *ngIf="move?.meta?.maxHits">
-                            <div class="atribute"><span class="property-title">{{'pokemon.move.max_hits' | translate}}: </span>{{move?.meta?.maxHits}}</div>
+                            <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.max_hits' | translate}}: </span>{{move?.meta?.maxHits}}</div>
                           </ng-container>
                           <ng-container *ngIf="move?.meta?.minTurns">
-                            <div class="atribute"><span class="property-title">{{'pokemon.move.min_turns' | translate}}: </span>{{move?.meta?.minTurns}}</div>
+                            <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.min_turns' | translate}}: </span>{{move?.meta?.minTurns}}</div>
                           </ng-container>
                           <ng-container *ngIf="move?.meta?.maxTurns">
-                            <div class="atribute"><span class="property-title">{{'pokemon.move.max_turns' | translate}}: </span>{{move?.meta?.maxTurns}}</div>
+                            <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.max_turns' | translate}}: </span>{{move?.meta?.maxTurns}}</div>
                           </ng-container>
                           <ng-container *ngIf="move?.meta?.drain">
-                            <div class="atribute"><span class="property-title">{{'pokemon.move.drain' | translate}}: </span>{{move?.meta?.drain}}</div>
+                            <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.drain' | translate}}: </span>{{move?.meta?.drain}}</div>
                           </ng-container>
                           <ng-container *ngIf="move?.meta?.healing">
-                            <div class="atribute"><span class="property-title">{{'pokemon.move.healing' | translate}}: </span>{{move?.meta?.healing}}</div>
+                            <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.healing' | translate}}: </span>{{move?.meta?.healing}}</div>
                           </ng-container>
                           <ng-container *ngIf="move?.meta?.statusChance">
-                            <div class="atribute"><span class="property-title">{{'pokemon.move.status_chance' | translate}}: </span>{{move?.meta?.statusChance}}%</div>
+                            <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.status_chance' | translate}}: </span>{{move?.meta?.statusChance}}%</div>
                           </ng-container>
                           <ng-container *ngIf="move?.meta?.flinchChance">
-                            <div class="atribute"><span class="property-title">{{'pokemon.move.flinch_chance' | translate}}: </span>{{move?.meta?.flinchChance}}%</div>
+                            <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.flinch_chance' | translate}}: </span>{{move?.meta?.flinchChance}}%</div>
                           </ng-container>
                         </div>
-                        <div class="properties">
-                          <div class="property">
-                            <span class="property-title">{{'pokemon.move.effect' | translate}}: </span> 
-                            <span class="property-body">
+                        <div class="flex-col pad-s">
+                          <div class="flex">
+                            <span class="stat-property-title">{{'pokemon.move.effect' | translate}}: </span> 
+                            <span class="text-start">
                               <ng-container *ngFor="let chunk of moveEffectsShort[i]">
                                 <ng-container [ngSwitch]="chunk.type">
                                   <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
@@ -742,9 +738,9 @@
                               </ng-container>
                             </span>
                           </div>
-                          <div class="property">
-                            <span class="property-title">{{'pokemon.move.target' | translate}}: </span>
-                            <span class="property-body">
+                          <div class="flex">
+                            <span class="stat-property-title">{{'pokemon.move.target' | translate}}: </span>
+                            <span class="text-start">
                               <ng-container *ngFor="let chunk of moveTargets[i]">
                                 <ng-container [ngSwitch]="chunk.type">
                                   <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
@@ -782,41 +778,41 @@
                 >
                 </app-poke-tooltip>
                 <ng-template #statTooltip>
-                  <div class="poke-tooltip-stat">
-                    <div class="head" [ngStyle]="{backgroundColor: theme.getStatColor(stat.identifier)}">
+                  <div class="poke-tooltip-content">
+                    <div class="poke-tooltip-head" [ngStyle]="{backgroundColor: theme.getStatColor(stat.identifier)}">
                       {{stat.name?.content}}
                       <ng-container *ngIf="stat.name && stat.name?.language != (selectedLang$ | async)">
                         <app-no-translation></app-no-translation>
                       </ng-container>
                     </div>
-                    <div class="body flex justify-c-c gap-s">
-                      <div class="col">
-                        <div class="item"></div>
-                        <div class="item">{{'pokemon.stat.initial' | translate}}</div>
-                        <div class="item"><span>LvL({{pokemon.level ?? 50}})</span></div>
+                    <div class="poke-tooltip-body flex justify-c-c gap-s">
+                      <div class="flex-col bor-rad-5 pad-s">
+                        <div style="min-height: 1em;"></div>
+                        <div>{{'pokemon.stat.initial' | translate}}</div>
+                        <div><span>LvL({{pokemon.level ?? 50}})</span></div>
                       </div>
-                      <div class="col" [ngStyle]="{backgroundColor: theme.getStatColor(stat.identifier)}">
-                        <div class="item">{{'pokemon.stat.base' | translate}}</div>
-                        <div class="item">{{stat.value}}</div>
-                        <div class="item">{{calculatedStats.base[i]?.value}}</div>
+                      <div class="flex-col bor-rad-5 pad-s" [ngStyle]="{backgroundColor: theme.getStatColor(stat.identifier)}">
+                        <div>{{'pokemon.stat.base' | translate}}</div>
+                        <div>{{stat.value}}</div>
+                        <div>{{calculatedStats.base[i]?.value}}</div>
                       </div>
-                      <div class="col ivs" [ngStyle]="{backgroundColor: theme.getStatColor('iv')}">
-                        <div class="item">IVs</div>
-                        <div class="item">{{teamOptions?.showIVs ? pokemon.ivs ? pokemon.ivs[i].value : "??" : "??"}}</div>
-                        <div class="item">{{teamOptions?.showIVs ? pokemon.ivs ? calculatedStats.ivs[i].value : "??" : "??"}}</div>
+                      <div class="flex-col bor-rad-5 pad-s" [ngStyle]="{backgroundColor: theme.getStatColor('iv')}">
+                        <div>IVs</div>
+                        <div>{{teamOptions?.showIVs ? pokemon.ivs ? pokemon.ivs[i].value : "??" : "??"}}</div>
+                        <div>{{teamOptions?.showIVs ? pokemon.ivs ? calculatedStats.ivs[i].value : "??" : "??"}}</div>
                       </div>
-                      <div class="col evs" 
+                      <div class="flex-col bor-rad-5 pad-s" 
                       [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}"
                       [ngStyle]="{backgroundColor: theme.getStatColor('ev')}"
                       >
-                        <div class="item">EVs</div>
-                        <div class="item">{{teamOptions?.showEVs ? pokemon.evs ? pokemon.evs[i].value : "??" : "??"}}</div>
-                        <div class="item">{{teamOptions?.showEVs ? pokemon.evs ? calculatedStats.evs[i].value : '??' : "??"}}</div>
+                        <div>EVs</div>
+                        <div>{{teamOptions?.showEVs ? pokemon.evs ? pokemon.evs[i].value : "??" : "??"}}</div>
+                        <div>{{teamOptions?.showEVs ? pokemon.evs ? calculatedStats.evs[i].value : '??' : "??"}}</div>
                       </div>
-                      <div class="col">
-                        <div class="item">{{'pokemon.stat.nature' | translate}}</div>
-                        <div class="item">{{teamOptions?.showNature ? pokemon.nature ? pokemon.nature.name?.content : '---' : "??"}}</div>
-                        <div class="item">
+                      <div class="flex-col bor-rad-5 pad-s">
+                        <div>{{'pokemon.stat.nature' | translate}}</div>
+                        <div>{{teamOptions?.showNature ? pokemon.nature ? pokemon.nature.name?.content : '---' : "??"}}</div>
+                        <div>
                           <ng-container *ngIf="teamOptions?.showNature; else notNature">
                             <ng-container *ngIf="!(stat.identifier===pokemon.nature?.increasedStat?.identifier
                             && stat.identifier===pokemon.nature?.decreasedStat?.identifier); else neutral">
@@ -840,10 +836,10 @@
                           </ng-template>
                         </div>
                       </div>
-                      <div class="col">
-                        <div class="item">{{'pokemon.stat.total' | translate}}</div>
-                        <div class="item">---</div>
-                        <div class="item">{{calculatedStats.total[i].value}}</div>
+                      <div class="flex-col bor-rad-5 pad-s">
+                        <div>{{'pokemon.stat.total' | translate}}</div>
+                        <div>---</div>
+                        <div>{{calculatedStats.total[i].value}}</div>
                       </div>
                     </div>
                   </div>
