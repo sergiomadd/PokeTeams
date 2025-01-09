@@ -44,10 +44,10 @@
   {
     border-radius: 5px;
     background: 
-        linear-gradient(90deg, #333 50%, transparent 0) repeat-x,
-        linear-gradient(90deg, #333 50%, transparent 0) repeat-x,
-        linear-gradient(0deg, #333 50%, transparent 0) repeat-y,
-        linear-gradient(0deg, #333 50%, transparent 0) repeat-y;
+        linear-gradient(90deg, var(--text-color) 50%, transparent 0) repeat-x,
+        linear-gradient(90deg, var(--text-color) 50%, transparent 0) repeat-x,
+        linear-gradient(0deg, var(--text-color) 50%, transparent 0) repeat-y,
+        linear-gradient(0deg, var(--text-color) 50%, transparent 0) repeat-y;
     background-size: 6px 1px, 6px 1px, 1px 6px, 1px 6px;
     background-position: 0 0, 0 100%, 0 0, 100% 0;
     animation: linearGradientMove 0.4s infinite linear;

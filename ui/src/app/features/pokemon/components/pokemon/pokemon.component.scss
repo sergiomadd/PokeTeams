@@ -4,29 +4,8 @@ $cardheight: 12em;
 $sectionHeight: 3em;
 $moveHeight: calc($cardheight/4);
 $statsHeight: 5vh;
-$iconSize: 1.2em;
-$spriteSize: 6em;
-$paddingBig: 0.5vw;
-$padding: 0.2vw;
-
-.icon
-{
-  width: $iconSize;
-  height: $iconSize;
-}
-
-.icon-big
-{
-  width: $iconSize * 1.5;
-  height: $iconSize * 1.5;
-}
-
-.icon-name
-{
-  width: auto;
-  height: $iconSize;
-  border-radius: 10px;
-}
+$paddingBig: 0.4em;
+$padding: 0.2em;
 
 .section
 {
@@ -43,12 +22,6 @@ $padding: 0.2vw;
     height: 100%;
     display: flex;
     align-items: center;
-
-    .section-name
-    {
-      text-align: start;
-      padding: 0 0.2em 0 0.2em;
-    }
   }
 }
 
@@ -61,275 +34,112 @@ $padding: 0.2vw;
   border-radius: 5px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.26);
   position: relative;
+}
 
-  .profile
+.profile
+{
+  display: grid;
+  grid-template-columns: 35% 25% 40%;
+  height: $cardheight;
+}
+
+.left
+{
+  text-align: left;
+  padding: $paddingBig;
+
+  display: grid;
+  grid-template-rows: 25% 25% 25% 25%;
+  align-items: center;
+}
+
+.center
+{
+  display: grid;
+  grid-template-rows: 15% 70% 15%;
+  padding: $paddingBig;
+}
+
+.moves
+{
+  height: 100%;
+  display: grid;
+  grid-template-rows: repeat(4, 23%);
+  gap: 0.2em;
+}
+
+.move
+{
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  position: relative;
+  border-radius:5px;
+  display: grid;
+  grid-template-columns: 20% 80% 0%;
+  grid-template-rows: 100%;
+  justify-items: start;
+  align-content: center;
+}
+
+.type
+{
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;     
+}
+
+.dex-number
+{
+  color: var(--primary);
+  margin-right: 0.5vh;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 0.6em;
+}
+
+.option
+{
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+
+.option-disabled
+{
+  cursor: pointer;
+  background-color: var(--bg-color-3);
+}
+
+.maxed
+{
+  border: 0.15em solid black;
+}
+
+.notes
+{
+  background-color: var(--bg-color-3);
+  height: $cardheight;
+  padding: 1em;
+  overflow-x: scroll;
+}
+
+.notes-editor
+{
+  background-color: var(--bg-color-3);
+  height: $cardheight;
+  padding: 1em;
+
+  textarea
   {
-    display: grid;
-    grid-template-columns: 35% 25% 40%;
-    height: $cardheight;
-
-    .left
-    {
-      text-align: left;
-      padding: $paddingBig;
-
-      display: grid;
-      grid-template-rows: 25% 25% 25% 25%;
-      align-items: center;
-
-      .species
-      {
-        display: flex;
-        align-items: center;
-        position: relative;
-
-        .dex-number
-        {
-          color: var(--primary);
-          margin-right: 0.5vh;
-
-          position: absolute;
-          top: 0;
-          left: 0.4em;
-          font-size: 0.6em;
-        }
-      }
-
-      .options
-      {
-        display: flex;
-        justify-content: space-around;
-        width: 80%;
-
-        .option
-        {
-          width: 1.5em;
-          height: 1.5em;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 5px;
-
-          .icon
-          {
-            width: $iconSize;
-            height: $iconSize;
-          }
-        }
-
-        .option-disabled
-        {
-          cursor: pointer;
-          background-color: var(--bg-color-3);
-        }
-      }
-    }
-
-    .center
-    {
-      display: grid;
-      grid-template-rows: 15% 70% 15%;
-      padding: $paddingBig;
-
-      .types
-      {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-
-        .vertical-divider
-        {
-          border: 0.5px solid grey;
-          height: $iconSize;
-          margin: 0 4px;
-        }
-
-        .type
-        {
-          display: flex;
-          align-items: center;
-          flex-direction: row-reverse;     
-        }
-      }
-
-      .sprite-background
-      {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .sprite
-        {
-          width: $spriteSize;
-          height: $spriteSize;
-        }
-      }
-
-      .center-down
-      {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-    }
-
-    .right
-    {
-      padding: $paddingBig;
-
-      .moves
-      {
-        height: 100%;
-        display: grid;
-        grid-template-rows: repeat(4, 23%);
-        gap: 0.2em;
-
-        .move
-        {
-          width: 100%;
-          height: 100%;
-          max-height: 100%;
-          position: relative;
-          border-radius:5px;
-          display: grid;
-          grid-template-columns: 20% 80% 0%;
-          grid-template-rows: 100%;
-          justify-items: start;
-          align-content: center;
-          
-          .move-type
-          {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 80%;
-            width: 100%;
-            border-radius: 5px;
-            margin-left: 0.2em;
-
-            .move-type-icon
-            {
-              width: 1.6em;
-              height: 1.6em;
-            }
-          }
-
-          .name
-          {
-            margin-left: 0.6em;
-            text-align: start;
-            white-space: nowrap;
-          }
-        }
-      }
-    }
-  }
-
-  .stats
-  {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    gap: $padding/2;
-    padding: $padding;
-    background-color: var(--bg-color-3);
-    border-radius: 0 0 5px 5px;
-
-    .stat
-    {
-      height: inherit;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .name
-      {
-        display: flex;
-        justify-content: center;
-        width: 2vw;
-      }
-
-      .values
-      {
-        height: 1.5vh;
-        display: flex;
-        justify-content: start;
-        width: 100%;
-
-        .bar
-        {
-          cursor: pointer;
-          color: white;
-          transition: visibility 1s ease;
-        }
-
-        .evs
-        {
-          border-radius: 0 15px 15px 0;
-        }
-        
-        .maxed
-        {
-          border: 0.2em solid black;
-        }
-        
-        .nature
-        {
-          margin-left: $padding;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          border-radius:50px;
-          width: 0.8vw;
-          height: 0.8vw;
-
-          .icon
-          {
-            width: 0.5vw;
-            height: 0.5vw;
-          }
-
-          .neutral
-          {
-            height: 30%;
-            width: 80%;
-            border-radius: 30px;
-            background-color: grey;
-          }
-        }
-      }
-
-      .total
-      {
-        display: flex;
-        justify-content: center;
-        width: 2vw;
-        margin-left: $padding;
-      }
-    }
-  }
-
-  .notes
-  {
-    background-color: var(--bg-color-3);
-    height: $cardheight;
-    padding: 1em;
-    overflow-x: scroll;
-  }
-
-  .notes-editor
-  {
-    background-color: var(--bg-color-3);
-    height: $cardheight;
-    padding: 1em;
-
-    textarea
-    {
-      width: 100%;
-      height: 100%;
-    }
+    width: 100%;
+    height: 100%;
   }
 }
 
@@ -354,7 +164,7 @@ $padding: 0.2vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: $paddingBig $paddingBig $paddingBig $paddingBig;
+  padding: $paddingBig;
   border-radius: 5px 5px 0 0;
 }
 
@@ -447,13 +257,6 @@ $padding: 0.2vw;
   outline: 0.1em solid black;
 }
 
-.empty-icon
-{
-  width: $iconSize;
-  height: $iconSize;
-  cursor: auto !important;
-}
-
 .empty-section
 {
   width: 100%;
@@ -461,11 +264,6 @@ $padding: 0.2vw;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.bold
-{
-  font-weight: bold;
 }
 
 .empty-line

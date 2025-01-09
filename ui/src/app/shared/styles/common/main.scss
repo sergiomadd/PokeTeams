@@ -3,6 +3,10 @@
   font-size: 0.7em;
 }
 
+.bold
+{
+  font-weight: bold;
+}
 
 .relative
 {
@@ -14,6 +18,11 @@
   position: absolute;
 }
 
+.text-start
+{
+  text-align: start;
+}
+
 .text-center
 {
   text-align: center;
@@ -23,6 +32,16 @@
 {
   overflow: hidden;
   width: 100%;
+}
+
+.space-nowrap
+{
+  white-space: nowrap;
+}
+
+.cursor-auto
+{
+  cursor: auto;
 }
 
 .pointer
