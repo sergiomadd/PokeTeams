@@ -1,5 +1,5 @@
 $tooltipColor: var(--bg-color-2);
-$arrowSize: 0.4em;
+$arrowSize: 10px;
 
 .poke-tooltip
 {
@@ -60,74 +60,58 @@ $arrowSize: 0.4em;
   transform: translate(calc($arrowSize * -1.5), calc(-50%));
 }
 
-.poke-arrowtop 
+.poke-arrow-top 
 {
-  width: 0; 
-  height: 0; 
-  border-left: $arrowSize solid transparent;
-  border-right: $arrowSize solid transparent;
-  border-bottom: $arrowSize solid black;
-
   position: absolute;
   left: 50%;
   top: 0%;
-  transform: translate(calc(-50%), calc($arrowSize * -1 + 1px));
+  transform: translate(-50%, 50%) rotate(45deg);
   
-  //Old arrow
-  /*
-  &::before
-  {
-    //Arrow
-    content: "";
-    width: 10px; 
-    height: 10px; 
-    border: 1px solid black;
-    background-color: var(--bg-color-2);
-    position: absolute;
-    transform: rotate(45deg);
-    z-index: -1;
-  }
-  */
+  width: $arrowSize; 
+  height: $arrowSize; 
+  border: 1px solid black;
+  background-color: var(--bg-color-2);
+  z-index: -1;
 }
 
-.poke-arrowright 
+.poke-arrow-right 
 {
-  width: 0; 
-  height: 0; 
-  border-top: $arrowSize solid transparent;
-  border-bottom: $arrowSize solid transparent;
-  border-left: $arrowSize solid black;
-
   position: absolute;
   right: 0%;
   top: 50%;
-  transform: translate(calc($arrowSize - 1px), calc(-50%));
+  transform: translate(50%, -50%) rotate(45deg);
+
+  width: $arrowSize; 
+  height: $arrowSize; 
+  border: 1px solid black;
+  background-color: var(--bg-color-2);
+  z-index: -1;
 }
 
-.poke-arrowbottom 
+.poke-arrow-bottom 
 {
-  width: 0; 
-  height: 0; 
-  border-left: $arrowSize solid transparent;
-  border-right: $arrowSize solid transparent;
-  border-top: $arrowSize solid black;
-
   position: absolute;
   left: 50%;
   bottom: 0%;
-  transform: translate(calc(-50%), calc($arrowSize - 1px));
+  transform: translate(-50%, 50%) rotate(45deg);
+
+  width: $arrowSize; 
+  height: $arrowSize; 
+  border: 1px solid black;
+  background-color: var(--bg-color-2);
+  z-index: -1;
 }
 
-.poke-arrowleft 
+.poke-arrow-left 
 {
-  width: 0; 
-  height: 0; 
-  border-top: $arrowSize solid transparent;
-  border-bottom: $arrowSize solid transparent; 
-  border-right: $arrowSize solid black;
-
   position: absolute;
   left: 0%;
   top: 50%;
-  transform: translate(calc($arrowSize * -1 + 1px), calc(-50%));
+  transform: translate(calc(($arrowSize / 2) * -1 - 1px), -50%) rotate(45deg);
+
+  width: $arrowSize; 
+  height: $arrowSize; 
+  border: 1px solid black;
+  background-color: var(--bg-color-2);
+  z-index: -1;
 }

@@ -6,11 +6,13 @@
     bottom: side === 'bottom', left: side === 'left',
     'poke-tooltip-visible': visible}"
   >
-    <span 
-    [ngClass]="{
-      'poke-arrowbottom': side === 'top', 'poke-arrowleft': side === 'right', 
-      'poke-arrowtop': side === 'bottom', 'poke-arrowright': side === 'left'}"
-      ></span>
+  <span
+  [ngClass]="{
+    'poke-arrow-bottom': side === 'top', 'poke-arrow-left': side === 'right', 
+    'poke-arrow-top': side === 'bottom', 'poke-arrow-right': side === 'left'}"
+    >
+
+  </span>
     <div [ngTemplateOutlet]="content"></div>
   </div>
 </ng-container>
