@@ -6,7 +6,7 @@ import { Evolution } from '../../models/evolution.model';
 @Component({
   selector: 'app-evolution',
   templateUrl: './evolution.component.html',
-  styleUrls: ['./evolution.component.scss', '../pokemon/pokemon.component.scss']
+  styleUrls: ['../pokemon/pokemon.component.scss']
 })
 export class EvolutionComponent 
 {
