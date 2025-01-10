@@ -298,9 +298,9 @@ export class PokemonComponent
 
   getStatSize(value: number)
   {
-    let maxValue: number = this.teamOptions && this.teamOptions?.maxStat > 0 ? this.teamOptions?.maxStat : 700; //the maximun stat value of any pokemons
-    let maxSize: number = 24; //the maximun allowed size in em
-    return `${value / maxValue * maxSize}em`;
+    let maxValue: number = this.teamOptions && this.teamOptions?.maxStat > 0 
+    ? this.teamOptions?.maxStat : 700; //the maximun stat value of any pokemons
+    return `${value / maxValue * 100}%`;
   }
 
   calculateStats()
