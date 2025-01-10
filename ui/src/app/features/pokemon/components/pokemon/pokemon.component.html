@@ -100,13 +100,17 @@
                   </div>
                 </div>
               </ng-template>
-              <div class="section-name">
-                {{pokemon.item?.name?.content}}
-                <ng-container *ngIf="pokemon.item?.name && pokemon.item?.name?.language != (selectedLang$ | async)">
-                  <app-no-translation></app-no-translation>
-                </ng-container>
+              <div class="grid-force">
+                <div class="flex align-i-c gap-s no-overflow">
+                  <div class="space-nowrap no-overflow">
+                    {{pokemon.item?.name?.content}}
+                  </div>
+                  <ng-container *ngIf="pokemon.item?.name && pokemon.item?.name?.language != (selectedLang$ | async)">
+                    <app-no-translation></app-no-translation>
+                  </ng-container>
+                  <img src="{{pokemon.item?.iconPath}}" alt="" class="icon-big">
+                </div>
               </div>
-              <img src="{{pokemon.item?.iconPath}}" alt="" class="icon-big">
             </div>
           </div>
         </ng-container>
@@ -116,7 +120,7 @@
           (click)="clickSection(1, 'left')"
           [ngClass]="{'poke-tooltip-selected':  tooltipLeft[1]}"
           >
-            <div class="section-content">
+            <div class="section-content align-c-c grid-force">
               <app-poke-tooltip
               [content]="abilityTooltip"
               [side]="'left'"
@@ -148,17 +152,19 @@
                   </div>
                 </div>
               </ng-template>
-              <div class="section-name">
-                {{pokemon.ability?.name?.content}}
-                <ng-container *ngIf="pokemon.ability?.name && pokemon.ability?.name?.language != (selectedLang$ | async)">
-                  <app-no-translation></app-no-translation>
-                </ng-container>
+              <div class="no-overflow">
+                <div class="space-nowrap">
+                  {{pokemon.ability?.name?.content}}
+                </div>
               </div>
+              <ng-container *ngIf="pokemon.ability?.name && pokemon.ability?.name?.language != (selectedLang$ | async)">
+                <app-no-translation></app-no-translation>
+              </ng-container>
             </div>
           </div>
         </ng-container>
         <ng-container *ngIf="pokemon.name || editorPreview">
-          <div class="item flex justify-c-sa w-80">
+          <div class="card-buttons">
             <div 
             class="section poke-tooltip-wrapper"
             (click)="triggerStats()"
@@ -587,12 +593,12 @@
                   </ng-template>
                   <ng-container *ngIf="pokemon.gender == true; else male">
                     <div class="bor-rad-20 icon-s flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.female}">
-                      <svg class="icon-s" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-gender-female"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M12 14v7" /><path d="M9 18h6" /></svg>
+                      <svg class="icon-s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-female"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M12 14v7" /><path d="M9 18h6" /></svg>
                     </div>
                   </ng-container>
                   <ng-template #male>
                     <div class="bor-rad-20 icon-s flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.male}">
-                      <svg class="icon-s" xmlns="http://www.w3.org/2000/svg" width="24" height="24"  viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-gender-male"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 14m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M19 5l-5.4 5.4" /><path d="M19 5h-5" /><path d="M19 5v5" /></svg>                  
+                      <svg class="icon-s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-male"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 14m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M19 5l-5.4 5.4" /><path d="M19 5h-5" /><path d="M19 5v5" /></svg>                  
                     </div>
                   </ng-template>   
                 </div>
@@ -609,22 +615,20 @@
               (click)="clickSection(i, 'right')"
               [ngClass]="{'poke-tooltip-selected': tooltipRight[i]}"
               >
-                <div class="move section-content"
+                <div class="move section-content gap-m"
                 [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.identifier ?? '')}"
                 >
-                  <div class="pad-s flex justify-c-c align-i-c bor-rad-5" style="margin-left: 0.3em"
+                  <div class="pad-s flex justify-c-c align-i-c bor-rad-5" style="margin-left: 0.3em;"
                   [ngStyle]="{'background': theme.getTypeColor(move?.pokeType?.identifier ?? '')}">
                     <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name?.content}}"
                      alt="{{move?.pokeType?.name?.content}}" class="icon-m">
                   </div>
-                  <div class="no-overflow">
-                    <div class="text-start space-nowrap" style="margin-left: 0.4em;">
+                    <div class="text-start space-nowrap no-overflow w-90">
                       {{move?.name?.content}}
                       <ng-container *ngIf="move?.name && move?.name?.language != (selectedLang$ | async)">
                         <app-no-translation></app-no-translation>
                       </ng-container>
                     </div>
-                  </div>
                   <app-poke-tooltip
                   [content]="moveTooltip"
                   [side]="'right'"
