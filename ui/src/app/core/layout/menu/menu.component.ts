@@ -35,6 +35,7 @@ export class MenuComponent
   selectedLang$: Observable<string> = this.store.select(selectLang);
   selectedLang?: string;
   selectedLangTag?: Tag;
+  rotationAngle: number = 0;
 
   ngOnInit()
   { 
@@ -60,6 +61,7 @@ export class MenuComponent
   toggleMenu()
   {
     this.toggleEvent.emit()
+    this.rotationAngle += this.menuOpen ? 180 : 180;
   }
 
   navigate(pageName:string)
