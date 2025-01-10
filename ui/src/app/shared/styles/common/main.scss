@@ -31,7 +31,12 @@
 .no-overflow
 {
   overflow: hidden;
-  width: 100%;
+  text-overflow: clip;
+}
+
+.no-overflow-text
+{
+  text-overflow: clip;
 }
 
 .space-nowrap

@@ -160,3 +160,17 @@ $arrowSize: 0.4vw;
     overflow: visible;
   }
 }
+
+
+@media (pointer: coarse) 
+{
+  .poke-tooltip-wrapper
+  {
+    position: relative;
+
+    &:hover 
+    {
+      all: revert-layer;
+    }
+  }
+}

@@ -1,0 +1,24 @@
+.grid
+{
+  display: grid;
+}
+
+.grid-force
+{
+  display: grid !important;
+}
+
+.row-1
+{
+  grid-template-rows: 1fr;
+}
+
+.col-1
+{
+  grid-template-columns: 1fr;
+}
+
+.col-2
+{
+  grid-template-columns: 1fr 1fr;
+}

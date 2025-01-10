@@ -1,0 +1,22 @@
+$desktopPokemonCardWidth: 30em;
+$mobilePokemonCardWidth: 25em;
+
+$pokemonCardHeight: 12em;
+
+@media (min-width: 600px) 
+{
+  :root 
+  {
+    --pokemonCardWidth: #{$desktopPokemonCardWidth};
+  }
+}
+
+@media (max-width: 600px) 
+{
+  :root 
+  {
+    --pokemonCardWidth: #{$mobilePokemonCardWidth};
+  }
+}
+
+$mobileBreakpoint: 600px;
