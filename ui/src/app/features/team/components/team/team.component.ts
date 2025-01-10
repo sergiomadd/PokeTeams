@@ -1,4 +1,5 @@
 import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { WindowService } from 'src/app/core/services/window.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
 import { TeamOptions } from 'src/app/features/team/models/teamOptions.model';
@@ -16,6 +17,7 @@ export class TeamComponent
 {
   parser = inject(ParserService);
   util = inject(UtilService);
+  window = inject(WindowService);
 
   @Input() team?: Team;
   @Input() removableTags?: boolean = false;
@@ -33,7 +35,6 @@ export class TeamComponent
       this.team = changes['team'].currentValue;
     }
   }
-  
   
   forceChange(options: TeamOptions)
   {

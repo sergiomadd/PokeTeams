@@ -1,3 +1,4 @@
+@use "/src/app/shared/styles/variables.scss" as *;
 
 .team-view
 {
@@ -6,20 +7,19 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 10vh;
+  margin-top: 5em;
 
-  .buttons
+
+}
+
+.buttons
+{
+  margin: 2.5em 0 2.5em 0;
+  gap: 3em;
+
+  button
   {
-    display: flex;
-    justify-content: center;
-    gap: 1em;
-    width: 100%;
-    margin-bottom: 2.5em;
-
-    button
-    {
-      width: 6em;
-    }
+    width: 6em;
   }
 }
 
@@ -30,13 +30,10 @@
   margin: auto;
 }
 
-@media (max-width: 768px) 
+@media (max-width: $mobileBreakpoint) 
 {
-  .team-view
+  .buttons
   {
-    .buttons
-    {
-      gap: 3em;
-    }
+    gap: 3em;
   }
 }

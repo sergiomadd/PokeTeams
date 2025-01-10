@@ -1,5 +1,5 @@
 <div class="flex-col align-i-c gap-m">
-  <div class="flex full w-100">
+  <div class="flex full">
     <div class="half flex justify-c-s gap-s">
       <ng-container *ngIf="team?.player; else noPlayer">
         <ng-container *ngIf="team?.player?.registered; else unregistered">
@@ -70,7 +70,7 @@
         </div>
       </div>
     </ng-container>
-    <div class="flex justify-c-c gap-l">
+    <div class="flex justify-c-c gap-l" [ngClass]="{'flex-col': window.isMobile}">
       <div class="flex-col gap-l">
         <ng-container *ngFor="let pokemon of team?.pokemons; index as i">
           <ng-container *ngIf="i % 2 === 0">

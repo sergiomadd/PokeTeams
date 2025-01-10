@@ -5,9 +5,9 @@
 </ng-container>
 <ng-template #loaded>
   <ng-container *ngIf="team; else noteam">
-    <div class="team-view">
+    <div class="m-auto flex-col justify-c-c align-i-c" style="margin-top: 5em;">
       <app-team [team]="team"></app-team>
-      <div class="buttons">
+      <div class="buttons flex justify-c-c gap-s w-100">
         <button 
         class="button-primary"
         (click)="copyPaste()"

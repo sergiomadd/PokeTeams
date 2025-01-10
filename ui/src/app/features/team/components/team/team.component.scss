@@ -1,5 +1,7 @@
-$cardWidth: 30em;
-$teamWidth: calc($cardWidth * 2 + 0.8em);
+@use "/src/app/shared/styles/variables.scss" as *;
+
+$pokemonCardWidth: var(--pokemonCardWidth);
+$teamWidth: calc($pokemonCardWidth * 2 + 0.8em);
 
 .full
 {
@@ -43,21 +45,10 @@ $teamWidth: calc($cardWidth * 2 + 0.8em);
   color: var(--text-color-secondary);
 }
 
-
-@media only screen and (max-width: 768px) 
+@media (max-width: $mobileBreakpoint) 
 {
-  /* For mobile phones: */
-  [class*="pokemons"] 
+  .full
   {
-    flex-direction: column;
-    row-gap: 1em;
-  }
-
-  .team
-  {
-    .full
-    {
-      width: calc($cardWidth + 1.3em);
-    }
+    width: calc($pokemonCardWidth);
   }
 }
