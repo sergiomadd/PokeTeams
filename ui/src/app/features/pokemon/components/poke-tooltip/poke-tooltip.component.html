@@ -1,18 +1,19 @@
 <ng-container *ngIf="content">
-  <div 
-  class="poke-tooltip"
-  [ngClass]="{
-    top: side === 'top', right: side === 'right', 
-    bottom: side === 'bottom', left: side === 'left',
-    'poke-tooltip-visible': visible}"
-  >
-  <span
-  [ngClass]="{
-    'poke-arrow-bottom': side === 'top', 'poke-arrow-left': side === 'right', 
-    'poke-arrow-top': side === 'bottom', 'poke-arrow-right': side === 'left'}"
+  <ng-container *ngIf="!window.isMobile || visible">
+    <div 
+    class="poke-tooltip"
+    [ngClass]="{
+      top: side === 'top', right: side === 'right', 
+      bottom: side === 'bottom', left: side === 'left',
+      'poke-tooltip-visible': visible}"
     >
-
-  </span>
-    <div [ngTemplateOutlet]="content"></div>
-  </div>
+      <span
+      [ngClass]="{
+        'poke-arrow-bottom': side === 'top', 'poke-arrow-left': side === 'right', 
+        'poke-arrow-top': side === 'bottom', 'poke-arrow-right': side === 'left'}"
+        >
+      </span>
+      <div [ngTemplateOutlet]="content"></div>
+    </div>
+  </ng-container>
 </ng-container>

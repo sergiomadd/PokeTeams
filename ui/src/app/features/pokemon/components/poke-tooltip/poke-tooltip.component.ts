@@ -1,4 +1,5 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component, inject, Input, TemplateRef } from '@angular/core';
+import { WindowService } from 'src/app/core/services/window.service';
 
 @Component({
   selector: 'app-poke-tooltip',
@@ -7,6 +8,8 @@ import { Component, Input, TemplateRef } from '@angular/core';
 })
 export class PokeTooltipComponent 
 {
+  window = inject(WindowService);
+
   @Input() content?: TemplateRef<any>;
   @Input() side: string = "left";
   @Input() visible: boolean = false;
