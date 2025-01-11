@@ -3,7 +3,7 @@ $mobilePokemonCardWidth: 25em;
 
 $pokemonCardHeight: 12em;
 
-@media (min-width: 600px) 
+@media (min-width: 768px) 
 {
   :root 
   {
@@ -11,7 +11,7 @@ $pokemonCardHeight: 12em;
   }
 }
 
-@media (max-width: 600px) 
+@media (max-width: 768px) 
 {
   :root 
   {
@@ -19,4 +19,4 @@ $pokemonCardHeight: 12em;
   }
 }
 
-$mobileBreakpoint: 600px;
+$mobileBreakpoint: 768px;
