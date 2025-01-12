@@ -1,5 +1,5 @@
 <ng-container *ngIf="content">
-  <ng-container *ngIf="!window.isMobile || visible">
+  <ng-container *ngIf="!window.isMobile() || visible">
     <div 
     class="poke-tooltip"
     [ngClass]="{

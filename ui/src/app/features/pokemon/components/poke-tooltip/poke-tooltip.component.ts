@@ -1,5 +1,5 @@
 import { Component, inject, Input, TemplateRef } from '@angular/core';
-import { WindowService } from 'src/app/core/services/window.service';
+import { WindowService } from 'src/app/core/layout/mobile/window.service';
 
 @Component({
   selector: 'app-poke-tooltip',

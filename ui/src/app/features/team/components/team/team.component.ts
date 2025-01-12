@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
-import { WindowService } from 'src/app/core/services/window.service';
+import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
 import { TeamOptions } from 'src/app/features/team/models/teamOptions.model';
