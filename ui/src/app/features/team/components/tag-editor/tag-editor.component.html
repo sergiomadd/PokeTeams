@@ -1,28 +1,29 @@
-<div class="row">
+<div class="flex">
   <div class="tag-editor">
     <button (click)="close()" class="button close no-shadow">
-      <svg class="icon" viewBox="0 0 24 24" fill="var(--primary)" xmlns="http://www.w3.org/2000/svg">
+      <svg class="icon-m bor-rad-20" viewBox="0 0 24 24" fill="var(--primary)" xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
         <g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="10" stroke="var(--bg-color-2)" stroke-width="1.5"></circle> 
           <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" stroke="var(--bg-color-2)" stroke-width="1.5" stroke-linecap="round"></path> 
         </g></svg>  
     </button>
-    <div class="title">
+    <div class="font-m text-center" style="margin-bottom: 0.4em;">
       {{"team.tag_editor.title" | translate}}
     </div>
-    <form class="form" [formGroup]="form">
-      <div class="item">
+    <form class="flex-col gap-m" [formGroup]="form">
+      <div class="flex-col gap-s">
         <label for="">{{"team.tag_editor.name" | translate}}</label>
         <input 
         #inputName 
         type="text" 
         formControlName="name" 
+        class="input-s"
         [ngClass]="{controlInvalid: isInvalid('name')}"
         >
         <span *ngIf="isInvalid('name')" class="formFeedbackError">{{getError('name')}}</span>
       </div>
-      <div class="item">
+      <div class="flex-col gap-s">
         <label for="">{{"team.tag_editor.description" | translate}}</label>
         <textarea 
           class="custom-scrollbar-dark" 
@@ -33,16 +34,19 @@
           ></textarea>
         <span *ngIf="isInvalid('desc')" class="formFeedbackError">{{getError('desc')}}</span>
       </div>
-      <div class="row-around">
-        <div class="tag-preview">
-          <app-tag [tag]="tag"></app-tag>
+      <div class="flex justify-c-sb align-i-c">
+        <div class="tag-preview bor-rad-5 no-overflow" style="width: 48%;">
+          <app-tag [tag]="tag" [minWidth]="'100%'"></app-tag>
         </div>
-        <button 
-        class="button-tertiary-clear" 
-        (click)="toggleColorPicker()"
-        >{{"team.tag_editor.show_colors" | translate}}</button>
+        <div style="width: 48%;">
+          <button class="button-tertiary-clear" 
+          (click)="toggleColorPicker()"
+          >{{"team.tag_editor.show_colors" | translate}}</button>
+        </div>
       </div>
-      <button class="button-primary" (click)="add()">{{"team.tag_editor.add" | translate}}</button>
+      <div class="flex justify-c-c">
+        <button class="button-primary w-60" (click)="add()">{{"team.tag_editor.add" | translate}}</button>
+      </div>
     </form>
   </div>
   <app-color-picker 

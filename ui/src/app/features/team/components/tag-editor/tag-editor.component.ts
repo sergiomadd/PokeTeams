@@ -54,6 +54,7 @@ export class TagEditorComponent
 
     this.form.controls.name.valueChanges.subscribe(async value => 
       {
+        console.log("name ", name)
         this.tag.name = value ?? "";
         this.tag.identifier = value ?? "";
         if(value && !await this.teamService.checkTagAvailable(value))
@@ -132,8 +133,7 @@ export class TagEditorComponent
   {
     var control = this.form.get(key);
     return (control?.errors
-      && (control?.dirty || control?.touched
-        || (this.formSubmitted))) 
+      && (this.formSubmitted)) 
       ?? false;
   }
 

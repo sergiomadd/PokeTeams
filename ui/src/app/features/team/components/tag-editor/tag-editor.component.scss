@@ -7,72 +7,30 @@
   border-radius: 5px;
   border: 1px solid black;
   z-index: 2;
-  //overflow: visible;
   position: relative;
   width: 11em;
-
-  .close
-  {
-    position: absolute;
-    right: 0;
-    top: 0;
-
-    .icon
-    {
-      width: 1.5em;
-      height: 1.5em;
-      border: none;
-      border-radius: 20px;
-
-      &:hover
-      {
-        transition: .4s;
-        box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.26);
-      }
-    }
-  }
-
-  .title
-  {
-    text-align: center;
-    font-size: 1.3em;
-    margin-bottom: 0.5em;
-  }
-
-  .form
-  {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
-
-    .item
-    {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2em;
-    }
-    
-    .color
-    {
-      height: 1.4em;
-      width: 5em;
-      border-radius: 5px;
-      border: 1px solid black;
-    }
-  }
+  overflow: hidden;
 }
 
-.icon
+.close
 {
-  width: 1em;
-  height: 1em;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.color
+{
+  height: 1.4em;
+  width: 5em;
+  border-radius: 5px;
   border: 1px solid black;
 }
 
 .color-picker-wrapper
 {
   position: relative;
-  bottom: 0;
+  bottom: -0.7em;
   right: 1.2em;
   max-width: 0;
   transition: max-width 0.3s ease;
@@ -87,11 +45,4 @@
   width: fit-content;
   overflow: visible;
   transition: max-width 0.5s ease-in;
-}
-
-.tag-preview
-{
-  width: 4.6em;
-  border-radius: 5px;
-  overflow: hidden;
 }
