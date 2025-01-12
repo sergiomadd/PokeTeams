@@ -10,6 +10,8 @@ import { flags, Lang, langs } from '../../config/models/lang.enum';
 import { I18nService } from '../../config/services/i18n.service';
 import { configActions } from '../../config/store/config.actions';
 import { selectLang, selectTheme } from '../../config/store/config.selectors';
+import { Device } from '../mobile/device.enum';
+import { WindowService } from '../mobile/window.service';
 
 @Component({
   selector: 'app-menu',
@@ -26,6 +28,7 @@ export class MenuComponent
   i18n = inject(I18nService);
   lang = Lang;
   langs = langs;
+  window = inject(WindowService);
 
   @Input() menuOpen: boolean = true;
   @Output() toggleEvent = new EventEmitter();
@@ -54,6 +57,17 @@ export class MenuComponent
             identifier: value,
             icon: `https://localhost:7134/images/sprites/flags/${flags[langs.indexOf(value)]}.svg`
           }
+        }
+      })
+    this.window.currentDevice$.subscribe(value => 
+      {
+        if(value === Device.mobile || Device.smallMobile)
+        {
+          this.rotationAngle = 0;
+        }
+        if(value === Device.desktop)
+        {
+          this.rotationAngle = 180;
         }
       })
   }
