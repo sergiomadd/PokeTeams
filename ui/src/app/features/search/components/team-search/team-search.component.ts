@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
+import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { QueryService } from '../../../../shared/services/query.service';
@@ -19,6 +20,7 @@ export class TeamSearchComponent
   util = inject(UtilService);
   store = inject(Store)
   searchService = inject(SearchService);
+  window = inject(WindowService);
 
   tags: Tag[] = [];
   unionType: SetOperation = SetOperation.intersection;

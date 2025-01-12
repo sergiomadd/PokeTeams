@@ -1,4 +1,4 @@
-
+@use "/src/app/shared/styles/variables.scss" as *;
 
 .item
 {
@@ -34,21 +34,16 @@
   right: 0.2em;
 }
 
-@media only screen and (max-width: 768px) 
+@media (max-width: $mobileBreakpoint) 
 {
-  .search
+  .storages
   {
-    display: flex;
-    flex-direction: column;
-    height: fit-content;
-  
-    .top-background
-    {
-  
-      .top
-      {
-        width: 90%;
-      }
-    }
+    width: 90%;
   }
+
+  .top
+  {
+    width: 100%;
+    margin: 2em auto auto auto;
+  }  
 }
