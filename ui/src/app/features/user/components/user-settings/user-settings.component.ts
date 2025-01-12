@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/core/auth/services/auth.service';
 import { authActions } from 'src/app/core/auth/store/auth.actions';
 import { selectAccessToken, selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/auth/store/auth.selectors';
 import { FeedbackColors } from 'src/app/core/config/models/colors';
+import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { JwtTokenService } from 'src/app/core/services/jwttoken.service';
 import { Country } from 'src/app/features/user/models/country.dto';
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
@@ -29,6 +30,7 @@ export class UserSettingsComponent
   userPageService = inject(UserPageService);
   queryService = inject(QueryService);
   jwtTokenService = inject(JwtTokenService);
+  window = inject(WindowService);
 
   accessToken$ = this.store.select(selectAccessToken);
   isSubmitting$ = this.store.select(selectIsSubmitting);

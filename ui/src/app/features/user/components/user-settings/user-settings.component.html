@@ -132,8 +132,8 @@
       </div>
     </form>
   </div>
-  <div class="section ">
-    <div class="col s-gap">
+  <div class="section">
+    <div class="col s-gap no-overflow">
       <div class="title">
         {{'user.settings.username-title' | translate}}
       </div>
@@ -166,8 +166,8 @@
       </div>
     </form>
   </div>
-  <div class="section ">
-    <div class="flex-col gap-s">
+  <div class="section">
+    <div class="flex-col gap-s no-overflow">
       <div class="title">
         {{'user.settings.email-title' | translate}}
       </div>
@@ -244,7 +244,9 @@
         {{'user.settings.password-subtitle' | translate}}
       </div>
     </div>
-    <form class="flex justify-c-e align-i-c gap-m relative" [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+    <form class="flex justify-c-e align-i-c gap-m relative"
+      [ngClass]="{'flex-col align-i-c': window.isMobile()}"
+      [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
       <ng-container *ngIf="changePasswordSubmitted">
         <ng-container *ngIf="(backendError$ | async) as error">
           <span class="formFeedbackError backendErrors">{{error}}</span>
