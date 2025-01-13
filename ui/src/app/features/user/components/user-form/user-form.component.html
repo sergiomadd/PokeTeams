@@ -1,20 +1,26 @@
 <ng-container *ngIf="data$ | async as data">
-  <div class="m-auto flex-col justify-c-c pad-s no-overflow">
-    <ng-container *ngIf="login">
-      <div class="nav">
-        <button class="tab tab-left tab-selected button-primary" (click)="showLogInForm()">
-          {{'user.form.login' | translate}}
-        </button>
-        <button class="tab tab-right" (click)="showSignUpForm()">
-          {{'user.form.signup' | translate}}
-        </button>
+  <div class="m-auto flex-col justify-c-c align-i-c pad-s no-overflow relative" style="width: 10em;">
+    <div class="nav">
+      <div class="pad-m flex justify-c-c align-i-c pointer bg-2 text-center tab-left" 
+      (click)="showLogInForm()"
+      [ngClass]="{'tab-selected': login}"
+      >
+        {{'user.form.login' | translate}}
       </div>
+      <div class="pad-m flex justify-c-c align-i-c pointer bg-2 text-center tab-right" 
+      (click)="showSignUpForm()"
+      [ngClass]="{'tab-selected': signup}"
+      >
+        {{'user.form.signup' | translate}}
+      </div>
+    </div>
+    <ng-container *ngIf="login">
       <form
-      class="relative flex-col align-i-c gap-m w-100" 
+      class="user-form flex-col justify-c-c align-i-c gap-m w-100" 
       [formGroup]="logInForm" 
       (ngSubmit)="logIn()"
       >
-        <div class="flex-col gap-s pad-m bor-1-b bor-rad-5 bg-2">
+        <div class="flex-col gap-s bor-1-b bg-2 pad-m">
           <div class="item">
             <label for="">{{'user.form.username-label' | translate}}</label>
             <input type="text" 
@@ -34,7 +40,7 @@
             <span *ngIf="isInvalid('password', 'login')" class="formFeedbackError">{{getError('password', 'login')}}</span>
           </div>
         </div>
-        <div class="flex-col align-i-c w-90 pad-m gap-m">
+        <div class="flex-col align-i-c w-100 gap-m">
           <div class="flex justify-c-e align-i-c w-100 gap-m">
             <ng-container *ngIf="data.isSubmitting">
               <div class="icon-m">
@@ -54,19 +60,11 @@
       </form>
     </ng-container>
     <ng-container *ngIf="signup">
-      <div class="nav">
-        <button class="tab tab-left" (click)="showLogInForm()">
-          {{'user.form.login' | translate}}
-        </button>
-        <button class="tab tab-right tab-selected" (click)="showSignUpForm()">
-          {{'user.form.signup' | translate}}
-        </button>
-      </div>
-      <form class="relative flex-col align-i-c gap-m w-100"
+      <form class="user-form flex-col align-i-c gap-m"
       [formGroup]="signUpForm" 
       (ngSubmit)="signUp()"
       >
-        <div class="flex-col gap-s pad-m bor-1-b bor-rad-5 bg-2">
+        <div class="flex-col gap-s bor-1-b bg-2 pad-m">
           <div class="item">
             <label>{{'user.form.username-label' | translate}}*</label>
             <input type="text" 
@@ -106,7 +104,7 @@
             <span *ngIf="isInvalid('confirmPassword', 'signup')" class="formFeedbackError">{{getError('confirmPassword', 'signup')}}</span>
           </div>
         </div>
-        <div class="flex-col align-i-c w-90 pad-m gap-m">
+        <div class="flex-col align-i-c gap-m w-100">
           <div class="flex justify-c-e align-i-c w-100 gap-m">
             <ng-container *ngIf="data.isSubmitting">
               <div class="icon-m">
