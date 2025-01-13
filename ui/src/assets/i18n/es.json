@@ -8,7 +8,8 @@
   { 
     "upload": "Subir",
     "search": "Buscar",
-    "theme": "Tema"
+    "theme": "Tema",
+    "login": "Iniciar Sesión"
   },
   "team":
   {
@@ -150,7 +151,7 @@
       "visibility_public-button": "Publico",
       "visibility_private-button": "Privado",
       "name-title": "Nombre",
-      "name-input_placeholder": "Nuevo numbre",
+      "name-input_placeholder": "Nuevo nombre",
       "name_undefined-feedback": "Sin nombre",
       "username-title": "Nombre de usuario",
       "username-input_placeholder": "Nuevo nombre de usuario",

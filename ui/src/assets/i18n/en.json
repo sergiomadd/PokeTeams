@@ -8,7 +8,8 @@
   { 
     "upload": "Upload",
     "search": "Search",
-    "theme": "Theme"
+    "theme": "Theme",
+    "login": "Log In"
   },
   "team":
   {
