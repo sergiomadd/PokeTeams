@@ -1,3 +1,4 @@
+@use "/src/app/shared/styles/variables.scss" as *;
 
 .tabs
 {
@@ -7,11 +8,8 @@
 
 .pasteBox
 {
-  width: 35em;
-}
-
-.input-text-area
-{
+  width: 30em;
+  height: 20em;
   background-color: var(--bg-color-1);
   outline: 1px solid var(--text-color); 
 }
@@ -21,4 +19,24 @@
   position: absolute;
   top: 0;
   right: -2.8em;
+}
+
+@media (max-width: $smallMobileBreakpoint) 
+{
+  .pasteBox
+  {
+    width: 90vw;
+  }
+
+  .tabs
+  {
+    width: 60vw;
+  }
+
+  .example
+  {
+    position: absolute;
+    top: -4em;
+    right: 0;
+  }
 }

@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
 import { Team } from 'src/app/features/team/models/team.model';
 import { ParserService } from 'src/app/shared/services/parser.service';
@@ -18,6 +19,7 @@ export class InputComponent
   teamEditorService = inject(TeamEditorService);
   formBuilder = inject(FormBuilder);
   util = inject(UtilService);
+  window = inject(WindowService);
 
   pasteBoxFormSubmitted: boolean = false;
   pasteBoxForm = this.formBuilder.group(
