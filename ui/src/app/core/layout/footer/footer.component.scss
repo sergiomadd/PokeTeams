@@ -7,16 +7,16 @@
   justify-content: center;
   font-size: 0.8em;
   margin-top: 3em;
+}
 
-  .info
-  {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4em;
-    justify-content: center;
-    align-items: center;
-    width: 70%;
-    margin: auto;
-    padding: 0.4em;
-  }
+.info
+{
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  margin: auto;
+  padding: 0.4em;
 }

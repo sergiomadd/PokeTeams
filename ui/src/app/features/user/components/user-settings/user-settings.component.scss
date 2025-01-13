@@ -1,8 +1,10 @@
+@use "/src/app/shared/styles/variables.scss" as *;
+
 $pictureSize: 3em;
 
 .settings
 {
-  width: 60em;
+  width: 60vw;
 }
 
 .section
@@ -149,12 +151,22 @@ input[type='checkbox']
   text-align: center;
 }
 
-
-@media (max-width: 768px) 
+@media (max-width: $mobileBreakpoint) 
 {
   .settings
   {
     width: 90vw;
     margin: auto;
+  }
+}
+
+@media (max-width: $smallMobileBreakpoint) 
+{
+  .section
+  {
+    input
+    {
+      width: 6em;
+    }
   }
 }

@@ -6,7 +6,7 @@
   align-items: center;
   width: 95%;
   height: 100%;
-  margin: 0 0.2vw 0 0.2vw;
+  margin: 0 0.2em 0 0.2em;
   border-radius: 10px 10px 0 0;
   border: 1px solid black;
   border-width: 1px 1px 0 1px;
@@ -14,9 +14,8 @@
 
 .tab
 {
-  //height: 80%;
   width: 50%;
-  padding: 0.4vw;
+  padding: 0.4em;
   display: flex;
   justify-content: center;
   cursor: pointer;
