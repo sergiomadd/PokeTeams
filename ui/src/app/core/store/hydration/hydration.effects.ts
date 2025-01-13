@@ -29,6 +29,7 @@ export class HydrationEffects implements OnInitEffects
           try 
           {
             const state: AppState = JSON.parse(storageValue);
+            state.auth.error = null;
             return hydrateActions.hydrateSuccess({ state });
           } 
           catch 

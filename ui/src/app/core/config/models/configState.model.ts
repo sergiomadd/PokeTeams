@@ -6,6 +6,6 @@ export interface ConfigState
 
 export const initialConfigState: ConfigState = 
 {
-  theme: "",
-  lang: ""
+  theme: "light",
+  lang: "en"
 };
