@@ -140,6 +140,17 @@ export class AuthEffects
       })
     )
   });
+
+  redirectAfterLogOutEffect = createEffect(() => 
+  {
+    return this.actions$.pipe(
+      ofType(authActions.logOutSuccess),
+      tap(() => 
+      {
+        this.router.navigate(['']);
+      })
+    )
+  },{dispatch: false});
   
   deleteAccountEffect = createEffect(() =>
   {
