@@ -22,6 +22,7 @@ import { TokenInterceptorService } from './core/services/token-interceptor.servi
 import { metaReducers } from './core/store/app.state';
 import { HydrationEffects } from './core/store/hydration/hydration.effects';
 import { EvolutionComponent } from './features/pokemon/components/evolution/evolution.component';
+import { PokeTooltipComponent } from './features/pokemon/components/poke-tooltip/poke-tooltip.component';
 import { PokemonPreviewComponent } from './features/pokemon/components/pokemon-preview/pokemon-preview.component';
 import { PokemonComponent } from './features/pokemon/components/pokemon/pokemon.component';
 import { TeamSearchComponent } from './features/search/components/team-search/team-search.component';
@@ -38,7 +39,6 @@ import { TeamEditorComponent } from './features/team/components/team-editor/team
 import { TeamIconsComponent } from './features/team/components/team-icons/team-icons.component';
 import { TeamPreviewComponent } from './features/team/components/team-preview/team-preview.component';
 import { TeamComponent } from './features/team/components/team/team.component';
-import { TournamentEditorComponent } from './features/team/components/tournament-editor/tournament-editor.component';
 import { TeamEditComponent } from './features/team/pages/team-edit/team-edit.component';
 import { TeamViewComponent } from './features/team/pages/team-view/team-view.component';
 import { UploadComponent } from './features/team/pages/upload/upload.component';
@@ -50,6 +50,7 @@ import { UserPageComponent } from './features/user/pages/user-page/user-page.com
 import { CheckboxComponent } from './shared/components/checkbox/checkbox.component';
 import { DialogComponent } from './shared/components/dialog/dialog.component';
 import { DropdownComponent } from './shared/components/dropdown/dropdown.component';
+import { NoTranslationComponent } from './shared/components/no-translation/no-translation.component';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 import { PaginationComponent } from './shared/components/pagination/pagination.component';
 import { RadioComponent } from './shared/components/radio/radio.component';
@@ -57,8 +58,6 @@ import { SmartInputComponent } from './shared/components/smart-input/smart-input
 import { SwitchComponent } from './shared/components/switch/switch.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
 import { LinkerPipe } from './shared/pipes/linker.pipe';
-import { NoTranslationComponent } from './shared/components/no-translation/no-translation.component';
-import { PokeTooltipComponent } from './features/pokemon/components/poke-tooltip/poke-tooltip.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -85,7 +84,6 @@ import { PokeTooltipComponent } from './features/pokemon/components/poke-tooltip
     TagComponent,
     TagListComponent,
     ColorPickerComponent,
-    TournamentEditorComponent,
     RegulationSelectorComponent,
     PokemonComponent,
     PokemonEditorComponent,

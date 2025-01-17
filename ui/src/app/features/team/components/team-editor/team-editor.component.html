@@ -27,18 +27,10 @@
         #tournamentInput
         [label]="'team.editor.tournament_input-label' | translate"
         [keepSelected]="true"
-        [allowNew]="true"
         [getter]="queryService.queryTournamentCallback"
         (selectEvent)="tournamentSelectEvent($event)"
-        (newEvent)="toggleTournamentEditor()"
         class="smart-input-wrapper input-m"
         ></app-smart-input>
-        <div class="tournament-editor-wrapper" [ngClass]="{tournamentEditorShow: showTournamentEditor}">
-          <app-tournament-editor
-          (addEvent)="tournamentAddEvent($event)"
-          (closeEvent)="tournamentEditorCloseEvent()"
-          ></app-tournament-editor>
-        </div>
       </div>
       <div class="editor-input relative">
         <app-smart-input
