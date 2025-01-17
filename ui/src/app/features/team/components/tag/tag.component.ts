@@ -13,6 +13,7 @@ export class TagComponent
 
   @Input() tag!: Tag;
   @Input() removable: boolean = false;
+  @Input() minWidth?: string;
   @Output() removeEvent = new EventEmitter<Tag>()
 
   remove()

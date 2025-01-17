@@ -1,9 +1,13 @@
 
 <div 
-class="tag" 
+class="tag"
 [ngClass]="{'tooltip-wrapper': tag.description}"
-[ngStyle]="{backgroundColor: tag.color, 
-  color: tag.color ? themeService.getTagTextColor(tag.color) : 'var(--text-color)'}"
+[ngStyle]="
+{
+  backgroundColor: tag.color, 
+  color: tag.color ? themeService.getTagTextColor(tag.color) : 'var(--text-color)',
+  'min-width': minWidth ?? 'none'
+}"
 >
   <ng-container *ngIf="tag.icon">
     <img [attr.src]="tag.icon" alt="" class="icon" fill>
