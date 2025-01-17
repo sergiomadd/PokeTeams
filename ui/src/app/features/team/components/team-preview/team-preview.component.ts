@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { forkJoin, Observable } from 'rxjs';
 import { FeedbackColors } from 'src/app/core/config/models/colors';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
+import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { PokemonPreview } from 'src/app/features/pokemon/models/pokemonPreview.model';
 import { Layout } from 'src/app/features/search/models/layout.enum';
@@ -24,6 +25,7 @@ export class TeamPreviewComponent
   parser = inject(ParserService);
   util = inject(UtilService);
   store = inject(Store);
+  window = inject(WindowService);
 
   @Input() team?: TeamPreviewData;
   @Input() pokemons?: PokemonPreview[] | null = undefined;
@@ -51,6 +53,7 @@ export class TeamPreviewComponent
         this.selectedThemeName = value;
       }
     })
+
   }
 
   ngOnChanges(changes: SimpleChanges)
