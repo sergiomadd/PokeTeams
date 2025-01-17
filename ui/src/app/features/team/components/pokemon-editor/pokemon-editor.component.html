@@ -76,11 +76,6 @@
               ></app-smart-input>
             </ng-template>
           </div>
-          <ng-container *ngIf="!pokemon.name && !allAbilities">
-            <div class="formFeedbackError feedback flex justify-c-c form-item">
-              {{'team.pokemon_editor.no_pokemon_ability-error' | translate}}
-            </div>
-          </ng-container>
         </div>
         <app-smart-input
         [value]="util.getMoveTag(pokemon.moves ? pokemon.moves[0] : undefined)"
