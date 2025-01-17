@@ -22,3 +22,23 @@
 {
   grid-template-columns: 1fr 1fr;
 }
+
+.col-3
+{
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.col-gap-s
+{
+  column-gap: 0.2em;
+}
+
+.col-gap-m
+{
+  column-gap: 0.4em;
+}
+
+.col-gap-xl
+{
+  column-gap: 2em;
+}

@@ -1,5 +1,5 @@
-$optionHeight: 3vh;
-$optionsMaxHeight: 25vh;
+$optionHeight: 2.5em;
+$optionsMaxHeight: 20em;
 
 .text
 {
@@ -21,11 +21,11 @@ $optionsMaxHeight: 25vh;
 {
   position: absolute;
   top: 100%;
-  width: calc(100% - 0.4vw);
+  width: calc(100% - 0.4em);
   max-height: 0;
   //max-height: 100%;
-  margin-left: 0.2vw;
-  padding: 0.2vw;
+  margin-left: 0.2em;
+  padding: 0.2em;
   box-sizing:border-box;
 
   background-color: var(--bg-color-1);
@@ -52,8 +52,8 @@ $optionsMaxHeight: 25vh;
 {
   display: flex;
   align-items: center;
-  min-height: calc($optionHeight + 0.4vw);
-  padding: 0 0.2vw 0 0.2vw;
+  min-height: calc($optionHeight + 0.4em);
+  padding: 0 0.2em 0 0.2em;
 
   border-radius: .25em;
   cursor: pointer;
@@ -75,7 +75,7 @@ $optionsMaxHeight: 25vh;
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: 0 0.2vw 0 0.2vw;
+  padding: 0 0.2em 0 0.2em;
 }
 
 .remove
@@ -93,13 +93,13 @@ $optionsMaxHeight: 25vh;
 {
   width: 2em;
   height: 2em;
-  padding-right: 0.2vw;
+  padding-right: 0.2em;
 }
 
 .divider
 {
   width: 80%;
-  margin: 0.4vw auto 0.4vw auto;
+  margin: 0.4em auto 0.4em auto;
   height: 2px;
   background-color: var(--bg-color-3);
   border-radius: 5px;
@@ -107,5 +107,5 @@ $optionsMaxHeight: 25vh;
 
 .count
 {
-  margin: 0.2vw auto 0.2vw auto;
+  margin: 0.2em auto 0.2em auto;
 }
