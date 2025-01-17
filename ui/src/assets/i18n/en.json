@@ -28,7 +28,7 @@
     },
     "editor":
     {
-      "not_logged-warning": "You are not logged, the team wont be added to a user. Make sure to save the link!",
+      "not_logged-warning": "Not logged in, the team wont be added to a user. Make sure to save the link!",
       "player_input-label": "Player",
       "tournament_input-label": "Tournament",
       "tag_input-label": "Tags ({{currentTags}}/{{maxTags}})",

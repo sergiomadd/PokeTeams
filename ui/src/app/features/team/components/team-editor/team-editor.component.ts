@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { LoggedUserService } from 'src/app/core/auth/services/logged-user.service';
 import { selectAccessToken } from 'src/app/core/auth/store/auth.selectors';
+import { FeedbackColors } from 'src/app/core/config/models/colors';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
@@ -49,6 +50,7 @@ export class TeamEditorComponent
   showTagEditor: boolean = false;
   tagAlreadyAdded: boolean = false;
   feedback?: string;
+  readonly feedbackColors = FeedbackColors;
 
   async ngOnInit() 
   {
