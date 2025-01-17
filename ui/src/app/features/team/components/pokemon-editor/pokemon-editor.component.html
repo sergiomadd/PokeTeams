@@ -16,8 +16,13 @@
     </ng-container>
   </div>
   <ng-container *ngIf="pokemon">
-    <div class="flex align-i-c gap-l">
-      <form class="gap-l form" [formGroup]="pokemonForm">
+    <div class="flex align-i-c gap-l" [ngClass]="{'flex-col': window.isMobile()}">
+      <form class="gap-l form" [formGroup]="pokemonForm" 
+      [ngClass]="
+      {
+        'gap-m': window.currentDevice === window.DeviceType.smallMobile,
+        'gap-l': window.currentDevice !== window.DeviceType.smallMobile
+      }">
         <app-smart-input
         #pokemonInput 
         [value]="util.getPokemonTag(pokemon)"
@@ -35,7 +40,7 @@
         (selectEvent)="itemSelectEvent($event)"
         class="smart-input-wrapper form-item"
         ></app-smart-input>
-        <div class="flex-col align-i-c w-100 relative">
+        <div class="flex-col justify-c-e align-i-c w-100 relative">
           <div class="smart-input-wrapper">
             <div class="smart-input-top">
               <div class="smart-input-label">
@@ -72,7 +77,7 @@
             </ng-template>
           </div>
           <ng-container *ngIf="!pokemon.name && !allAbilities">
-            <div class="formFeedbackError feedback flex justify-c-c">
+            <div class="formFeedbackError feedback flex justify-c-c form-item">
               {{'team.pokemon_editor.no_pokemon_ability-error' | translate}}
             </div>
           </ng-container>
@@ -129,11 +134,12 @@
         ></app-smart-input>
           <div class="flex-col align-i-c gap-m">
             <div class="flex-col">
-              <div class="flex justify-c-c align-i-c gap-s">
+              <div class="flex justify-c-c align-i-c gap-s" [ngClass]="{'flex-col': window.currentDevice === window.DeviceType.smallMobile}">
                 <label for="">{{"team.pokemon_editor.nickname" | translate}}</label>
                 <input type="text" class="nickname" formControlName="nickname"
                 [ngClass]="{controlInvalid: isInvalid('nickname')}"
                 value="pokemon.nickname ?? 'error'"
+                placeholder="Nickname..."
                 >
               </div>
               <span *ngIf="isInvalid('nickname')" class="formFeedbackError text-center">{{getError('nickname')}}</span>
@@ -153,7 +159,7 @@
                 <span *ngIf="isInvalid('level')" class="formFeedbackError text-center">{{getError('level')}}</span>
               </div>
             </div>
-            <div class="flex justify-c-c gap-s">
+            <div class="flex justify-c-c gap-s" [ngClass]="{'flex-col': window.currentDevice === window.DeviceType.smallMobile}">
               <app-radio
               [options]="[false, true]"
               [optionNames]="['Male', 'Female']"
@@ -180,7 +186,7 @@
               </ng-container>
             </div>
             <ng-container *ngIf="!pokemon.name">
-              <div class="formFeedbackError row-center">
+              <div class="formFeedbackError row-center form-item">
                 {{"team.pokemon_editor.no_pokemon_stats-error" | translate}}
               </div>
             </ng-container>
@@ -265,5 +271,14 @@
   </div>
 </ng-template>
 <ng-template #shinySVG>
-  <svg class="big-icon" [attr.fill]="shinyColor" viewBox="0 0 512 512" id="icons" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M208,512,155.62,372.38,16,320l139.62-52.38L208,128l52.38,139.62L400,320,260.38,372.38Z"></path><path d="M88,176,64.43,111.57,0,88,64.43,64.43,88,0l23.57,64.43L176,88l-64.43,23.57Z"></path><path d="M400,256l-31.11-80.89L288,144l80.89-31.11L400,32l31.11,80.89L512,144l-80.89,31.11Z"></path></g></svg>
+  <div class="row-center border-100 big-icon">
+    <svg class="big-icon" [attr.fill]="shinyColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+      <g id="SVGRepo_iconCarrier"><path d="M208,512,155.62,372.38,16,320l139.62-52.38L208,128l52.38,139.62L400,320,260.38,372.38Z"></path>
+        <path d="M88,176,64.43,111.57,0,88,64.43,64.43,88,0l23.57,64.43L176,88l-64.43,23.57Z"></path>
+        <path d="M400,256l-31.11-80.89L288,144l80.89-31.11L400,32l31.11,80.89L512,144l-80.89,31.11Z"></path>
+      </g>
+    </svg>
+  </div>
 </ng-template>

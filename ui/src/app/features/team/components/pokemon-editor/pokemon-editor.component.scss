@@ -1,3 +1,4 @@
+@use "/src/app/shared/styles/variables.scss" as *;
 
 .selector
 {
@@ -107,3 +108,18 @@
   width: 20em;
 }
 
+@media (max-width: $smallMobileBreakpoint) 
+{
+  .form-item
+  {
+    width: 8em;
+  }
+
+  .form
+  {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 8em));
+    grid-template-rows: repeat(3, 1fr);
+    justify-content: end;
+  }
+}
