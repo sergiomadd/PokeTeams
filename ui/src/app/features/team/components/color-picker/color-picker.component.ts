@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { WindowService } from 'src/app/core/layout/mobile/window.service';
 
 @Component({
   selector: 'app-color-picker',
@@ -7,7 +8,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ColorPickerComponent 
 {
+  window = inject(WindowService);
+
   @Input() colors: string[] = [];
+  @Input() visible: boolean = false;
   @Output() chooseEvent = new EventEmitter<string>();
 
   choose(color: string)

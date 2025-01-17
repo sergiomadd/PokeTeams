@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { LoggedUserService } from 'src/app/core/auth/services/logged-user.service';
 import { selectAccessToken } from 'src/app/core/auth/store/auth.selectors';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
+import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
@@ -33,6 +34,7 @@ export class TeamEditorComponent
   teamEditorService = inject(TeamEditorService);
   loggedUserService = inject(LoggedUserService);
   translateSergice = inject(TranslateService);
+  window = inject(WindowService);
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 

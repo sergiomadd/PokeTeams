@@ -1,15 +1,47 @@
-
+@use "/src/app/shared/styles/variables.scss" as *;
 
 .tag-editor
 {
-  background-color: var(--bg-color-2);
-  padding: 0.5em;
-  border-radius: 5px;
-  border: 1px solid black;
-  z-index: 2;
+  width: 40em;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.tag-editor-visible
+{
+  max-height: 40rem;
+  overflow: hidden;
+  transition: max-height 0.5s 0.1s ease-in;
+}
+
+.tag-editor-content
+{
   position: relative;
   width: 11em;
-  overflow: hidden;
+  background-color: var(--bg-color-2);
+  padding: 0.4em;
+  border-radius: 5px;
+  border: 1px solid black;
+  z-index: 3;
+}
+
+.tag-editor-right
+{
+  position: absolute;
+  left: calc(100% + 0.4em);
+  bottom: 0.2em;
+}
+
+.tag-editor-top
+{
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translate(round(calc(-50%), 1px), round(-4em, 1px));
+
+  display: flex;
+  justify-content: center;
 }
 
 .close
@@ -30,19 +62,15 @@
 .color-picker-wrapper
 {
   position: relative;
-  bottom: -0.7em;
-  right: 1.2em;
-  max-width: 0;
-  transition: max-width 0.3s ease;
-  overflow: hidden;
-  z-index: 0;
-  margin-left: 1em;
 }
 
-.showColorPicker
+@media (max-width: $mobileBreakpoint) 
 {
-  max-width: 20em;
-  width: fit-content;
-  overflow: visible;
-  transition: max-width 0.5s ease-in;
+  /*
+  .color-picker-wrapper
+  {
+    right: 0;
+    left: 0;
+  }  
+  */
 }

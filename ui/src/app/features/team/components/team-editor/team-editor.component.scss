@@ -5,22 +5,12 @@
 
 .tag-editor-wrapper
 {
-  position: absolute;
-  left: calc(100% + 0.2em);
-  bottom: 0.2em;
-  z-index: 1;
-  max-height: 0;
-  min-width: 13em;
-  width: fit-content;
-  transition: max-height 0.3s ease;
-  overflow: hidden;
+  position: relative;
 }
 
-.tagEditorShow
+.color-picker-wrapper
 {
-  max-height: 40rem;
-  overflow: hidden;
-  transition: max-height 0.5s ease-in;
+  position: relative;
 }
 
 .tournament-editor-wrapper

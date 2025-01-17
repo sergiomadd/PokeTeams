@@ -1,7 +1,8 @@
-import { Component, ElementRef, EventEmitter, inject, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { tagBackgroundColors } from 'src/app/core/config/models/tagColors.model';
 import { ThemeService } from 'src/app/core/config/services/theme.service';
+import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
 import { UtilService } from 'src/app/shared/services/util.service';
@@ -17,7 +18,9 @@ export class TagEditorComponent
   themeService = inject(ThemeService);
   teamService = inject(TeamService);
   util = inject(UtilService);
+  window = inject(WindowService);
 
+  @Input() visible: boolean = false;
   @Output() addEvent = new EventEmitter<Tag>();
   @Output() closeEvent = new EventEmitter();
 

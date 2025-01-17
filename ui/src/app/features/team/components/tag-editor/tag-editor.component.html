@@ -1,13 +1,19 @@
-<div class="flex">
-  <div class="tag-editor">
-    <button (click)="close()" class="button close no-shadow">
+<div class="tag-editor" 
+[ngClass]="
+{
+  'tag-editor-visible': visible,
+  'tag-editor-right': !window.isMobile(),
+  'tag-editor-top': window.isMobile()
+}">
+  <div class="tag-editor-content">
+    <div (click)="close()" class="close pointer pad-s">
       <svg class="icon-m bor-rad-20" viewBox="0 0 24 24" fill="var(--primary)" xmlns="http://www.w3.org/2000/svg">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
         <g id="SVGRepo_iconCarrier"> <circle cx="12" cy="12" r="10" stroke="var(--bg-color-2)" stroke-width="1.5"></circle> 
           <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" stroke="var(--bg-color-2)" stroke-width="1.5" stroke-linecap="round"></path> 
         </g></svg>  
-    </button>
+    </div>
     <div class="font-m text-center" style="margin-bottom: 0.4em;">
       {{"team.tag_editor.title" | translate}}
     </div>
@@ -49,10 +55,12 @@
       </div>
     </form>
   </div>
-  <app-color-picker 
-  class="color-picker-wrapper"
-  [ngClass]="{showColorPicker: colorPickerOpen}"
-  [colors]="tagBackgroundColors" 
-  (chooseEvent)="chooseColor($event)"
-  ></app-color-picker>
+  <div class="color-picker-wrapper">
+    <app-color-picker 
+    [colors]="tagBackgroundColors" 
+    [visible]="colorPickerOpen"
+    (chooseEvent)="chooseColor($event)"
+    ></app-color-picker>
+  </div>
 </div>
+

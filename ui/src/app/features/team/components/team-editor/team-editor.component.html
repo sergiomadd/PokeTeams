@@ -1,6 +1,7 @@
 <div class="flex-col align-i-c gap-m">
-  <div class="flex-col gap-m">
-    <div class="flex justify-c-c gap-m">
+  <div class="flex-col gap-l">
+    <div class="flex justify-c-c gap-m"
+    [ngClass]="{'grid col-2 col-gap-m': window.isMobile()}">
       <div class="editor-input relative">
         <ng-container *ngIf="!loggedUserTag">
           <div class="anon-warning tooltip-wrapper">
@@ -51,8 +52,9 @@
         (newEvent)="toggleTagEditor()"
         class="smart-input-wrapper input-m"
         ></app-smart-input>
-        <div class="tag-editor-wrapper" [ngClass]="{tagEditorShow: showTagEditor}">
+        <div class="tag-editor-wrapper">
           <app-tag-editor 
+          [visible]="showTagEditor"
           (addEvent)="tagSelectEvent($event)"
           (closeEvent)="tagEditorCloseEvent()"
           ></app-tag-editor>
