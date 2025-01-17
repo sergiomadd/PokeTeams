@@ -10,7 +10,7 @@ class="tooltip"
     arrowtop: side === 'bottom', arrowright: side === 'left'}"
     ></span>
     <ng-container *ngIf="loading === true">
-      <ng-container *ngIf="loadingText">Copying</ng-container>
+      <ng-container *ngIf="loadingText">{{loadingText}}</ng-container>
       <span class="loading"></span>
     </ng-container>
     <ng-container *ngIf="!loading">
