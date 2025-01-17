@@ -191,7 +191,7 @@
   {
     "user_not_found": "User @{{resourceName}} not found!",
     "page_not_found": "Page not found!",
-    "back-button": "Go back",
+    "back-button": "Go home",
     "smart_input_placeholder": "Search...",
     "smart_input_results": "Results",
     "errors":

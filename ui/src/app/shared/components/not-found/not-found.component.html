@@ -10,7 +10,9 @@
       <ng-template #noname>
         {{'shared.page_not_found' | translate}}
       </ng-template>
-      <button class="button-primary-clear w-fit">{{'shared.back-button' | translate}}</button>
+      <button class="button-primary-clear w-fit pad-0">
+        <a class="pad-m" [routerLink]="['']">{{'shared.back-button' | translate}}</a>
+      </button>
     </div>
     <ng-container *ngIf="!window.isMobile()">
       <img src="assets/img/notfound.webp" alt="">
