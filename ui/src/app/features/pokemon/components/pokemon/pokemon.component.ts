@@ -77,7 +77,7 @@ export class PokemonComponent
   tooltipEvol: boolean[] = [false];
   tooltipTypes: boolean[] = [false, false];
   tooltipLeft: boolean[] = [false, false];
-  tooltipMiddle: boolean[] = [false, false, false];
+  tooltipMiddle: boolean[] = [false];
   tooltipRight: boolean[] = [false, false, false, false];
   tooltipRightType: boolean[] = [false, false, false, false];
   showStats: boolean[] = [false]

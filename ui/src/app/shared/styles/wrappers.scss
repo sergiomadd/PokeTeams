@@ -1,3 +1,5 @@
+@use "/src/app/shared/styles/variables.scss" as *;
+
 .smart-input-wrapper
 {
   display: flex;
@@ -19,7 +21,7 @@
 }
 
 $tooltipColor: var(--bg-color-tooltip);
-$arrowSize: 0.4vw;
+$arrowSize: 0.4em;
 
 .tooltip-wrapper
 {
@@ -140,27 +142,34 @@ $arrowSize: 0.4vw;
 .poke-tooltip-wrapper
 {
   position: relative;
-
-  &:hover > .section-content > .tooltip-component > .poke-tooltip
-  {
-    width: max-content;
-    height: fit-content;
-    
-    display: flex;
-    align-items: center;
-
-    background-color: var(--bg-color-2);
-    color: var(--text-color);
-    border-radius: 5px;
-    border: 1px solid black;
-
-    text-align: center;
-    cursor: default;
-    opacity: 1;
-    overflow: visible;
-  }
 }
 
+
+@media (min-width: $mobileBreakpoint) 
+{
+  .poke-tooltip-wrapper
+  {
+  
+    &:hover > .section-content > .tooltip-component > .poke-tooltip
+    {
+      width: max-content;
+      height: fit-content;
+      
+      display: flex;
+      align-items: center;
+  
+      background-color: var(--bg-color-2);
+      color: var(--text-color);
+      border-radius: 5px;
+      border: 1px solid black;
+  
+      text-align: center;
+      cursor: default;
+      opacity: 1;
+      overflow: visible;
+    }
+  }
+}
 
 @media (pointer: coarse) 
 {

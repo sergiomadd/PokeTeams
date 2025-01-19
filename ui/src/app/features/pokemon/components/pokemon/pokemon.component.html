@@ -534,14 +534,14 @@
             <ng-container *ngIf="pokemon.name && pokemon.level">
               <div 
               class="section animated-border poke-tooltip-wrapper"
-              (click)="clickSection(1, 'middle')"
-              [ngClass]="{'poke-tooltip-selected': tooltipMiddle[1]}"
+              (click)="clickSection(0, 'middle')"
+              [ngClass]="{'poke-tooltip-selected': tooltipMiddle[0]}"
               >
                 <div class="section-content">
                   <app-poke-tooltip
                   [content]="levelTooltip"
                   [side]="'top'"
-                  [visible]="tooltipMiddle[1]"
+                  [visible]="tooltipMiddle[0]"
                   class="tooltip-component"
                   >
                   </app-poke-tooltip>
