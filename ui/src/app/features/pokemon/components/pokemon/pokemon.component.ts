@@ -177,6 +177,10 @@ export class PokemonComponent
   //For tooltip
   clickSection(index: number, type: string)
   {
+    if(this.window.isMobile())
+    {
+      this.closeAllProfileTooltips();
+    }
     let list: boolean[] = [];
     switch(type)
     {
@@ -248,7 +252,7 @@ export class PokemonComponent
     }
   }
 
-  closeAllTooltips()
+  closeAllProfileTooltips()
   {
     this.tooltipEvol = this.tooltipEvol.fill(false);
     this.tooltipTypes = this.tooltipTypes.fill(false);
@@ -256,9 +260,14 @@ export class PokemonComponent
     this.tooltipMiddle = this.tooltipMiddle.fill(false);
     this.tooltipRight = this.tooltipRight.fill(false);
     this.tooltipRightType = this.tooltipRightType.fill(false);
+    this.tooltipStats = this.tooltipStats.fill(false);
+  }
+
+  closeAllTooltips()
+  {
+    this.closeAllProfileTooltips();
     this.showStats = this.showStats.fill(false);
     this.showNotes = this.showNotes.fill(false);
-    this.tooltipStats = this.tooltipStats.fill(false);
     this.triggerNotesEvent.emit(false);
   }
 
