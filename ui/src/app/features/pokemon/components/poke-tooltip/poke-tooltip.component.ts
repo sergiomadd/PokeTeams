@@ -13,4 +13,5 @@ export class PokeTooltipComponent
   @Input() content?: TemplateRef<any>;
   @Input() side: string = "left";
   @Input() visible: boolean = false;
+  @Input() mobileChanged: boolean = false;
 }

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { FeedbackColors, GenderColors, NatureColors, shinyColor } from 'src/app/core/config/models/colors';
 import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { selectLang } from 'src/app/core/config/store/config.selectors';
+import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { Nature } from 'src/app/features/pokemon/models/nature.model';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { Stat } from 'src/app/features/pokemon/models/stat.model';
@@ -35,6 +36,7 @@ export class PokemonComponent
   linkifier = inject(LinkifierService);
   theme = inject(ThemeService);
   store = inject(Store);
+  window = inject(WindowService);
 
   @Input() pokemon?: Pokemon | null;
   @Input() teamOptions?: TeamOptions;

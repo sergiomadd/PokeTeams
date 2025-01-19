@@ -4,11 +4,15 @@
       <div class="left">
         <ng-container *ngIf="pokemon.name; else emptySection">
           <div 
-          class="section animated-border poke-tooltip-wrapper"
+          class="section animated-border"
           (click)="clickSection(0, 'evol')"
-          [ngClass]="{'poke-tooltip-selected': tooltipEvol[0]}"
+          [ngClass]="
+          {
+            'poke-tooltip-selected': tooltipEvol[0],
+            'poke-tooltip-wrapper': !window.isMobile()
+          }"
           >
-            <div class="section-content flex align-i-c relative">
+            <div class="section-content flex align-i-c">
               <app-poke-tooltip
               [content]="familyTooltip"
               [side]="'top'"
@@ -64,15 +68,16 @@
         </ng-container>
         <ng-container *ngIf="pokemon.item; else emptySection">
           <div 
-          class="section animated-border poke-tooltip-wrapper"
+          class="section animated-border"
           (click)="clickSection(0, 'left')"
-          [ngClass]="{'poke-tooltip-selected': tooltipLeft[0]}"
+          [ngClass]="{'poke-tooltip-selected': tooltipLeft[0], 'poke-tooltip-wrapper': !window.isMobile()}"
           >
             <div class="section-content">
               <app-poke-tooltip
               [content]="itemTooltip"
               [side]="'left'"
               [visible]="tooltipLeft[0]"
+              [mobileChanged]="true"
               class="tooltip-component"
               >
               </app-poke-tooltip>
@@ -116,15 +121,16 @@
         </ng-container>
         <ng-container *ngIf="pokemon.ability; else emptySection">
           <div 
-          class="section animated-border poke-tooltip-wrapper"
+          class="section animated-border"
           (click)="clickSection(1, 'left')"
-          [ngClass]="{'poke-tooltip-selected':  tooltipLeft[1]}"
+          [ngClass]="{'poke-tooltip-selected':  tooltipLeft[1], 'poke-tooltip-wrapper': !window.isMobile()}"
           >
             <div class="section-content align-c-c grid-force">
               <app-poke-tooltip
               [content]="abilityTooltip"
               [side]="'left'"
               [visible]="tooltipLeft[1]"
+              [mobileChanged]="true"
               class="tooltip-component"
               >
               </app-poke-tooltip>
@@ -166,11 +172,12 @@
         <ng-container *ngIf="pokemon.name || editorPreview">
           <div class="card-buttons">
             <div 
-            class="section poke-tooltip-wrapper"
+            class="section"
             (click)="triggerStats()"
             [ngClass]="
             {
               'poke-tooltip-selected': pokemon.stats.length > 0 && showStats[0],
+              'poke-tooltip-wrapper': !window.isMobile(),
               'option-disabled': pokemon.stats.length <= 0,
               'animated-border': pokemon.stats.length > 0
             }"
@@ -200,11 +207,12 @@
               </div>
             </div>
             <div 
-            class="section poke-tooltip-wrapper" 
+            class="section" 
             (click)="triggerNotes()"
             [ngClass]="
             {
               'poke-tooltip-selected': showNotes[0],
+              'poke-tooltip-wrapper': !window.isMobile(),
               'option-disabled': !pokemon.notes && !editorPreview,
               'animated-border': pokemon.notes || editorPreview
             }"
@@ -232,7 +240,8 @@
               </div>
             </div>
             <div 
-            class="section animated-border poke-tooltip-wrapper" 
+            class="section animated-border" 
+            [ngClass]="{'poke-tooltip-wrapper': !window.isMobile()}"
             (click)="copyPokemon()"
             (mouseenter)="copyReset()"
             >
@@ -544,7 +553,7 @@
               <div 
               class="section animated-border poke-tooltip-wrapper"
               (click)="clickSection(1, 'middle')"
-              [ngClass]="{'poke-tooltip-selected':  tooltipMiddle[1]}"
+              [ngClass]="{'poke-tooltip-selected': tooltipMiddle[1]}"
               >
                 <div class="section-content">
                   <app-poke-tooltip
@@ -609,9 +618,9 @@
         <div class="moves">
           <ng-container *ngFor="let move of pokemon.moves; index as i">
             <ng-container *ngIf="move; else emptySection">
-              <div class="section animated-border poke-tooltip-wrapper"
+              <div class="section animated-border"
               (click)="clickSection(i, 'right')"
-              [ngClass]="{'poke-tooltip-selected': tooltipRight[i]}"
+              [ngClass]="{'poke-tooltip-selected': tooltipRight[i], 'poke-tooltip-wrapper': !window.isMobile()}"
               >
                 <div class="move section-content gap-m"
                 [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.identifier ?? '')}"
@@ -631,6 +640,7 @@
                   [content]="moveTooltip"
                   [side]="'right'"
                   [visible]="tooltipRight[i]"
+                  [mobileChanged]="true"
                   class="tooltip-component"
                   >
                   </app-poke-tooltip>
@@ -643,7 +653,7 @@
                         (click)="clickSection(i, 'rightType'); $event.stopPropagation()"
                         [ngClass]="{'poke-tooltip-selected':  tooltipRightType[i]}"
                         >
-                          <div class="type section-content poke-tooltop-move-type">
+                          <div class="type section-content">
                             <app-poke-tooltip
                             [content]="moveTypeTooltip"
                             [side]="'top'"
@@ -800,7 +810,8 @@
     <div *ngIf="showStats[0] && pokemon.stats && pokemon.stats.length > 0">
       <div class="flex-col justify-c-sa gap-s pad-s bg-3" style="border-radius: 0 0 5px 5px;">
         <ng-container *ngFor="let stat of pokemon.stats; index as i">
-          <div class="no-pad section animated-border poke-tooltip-wrapper" (click)="clickSection(i, 'stat')" [ngClass]="{'poke-tooltip-selected':  tooltipStats[i]}">
+          <div class="no-pad section animated-border poke-tooltip-wrapper" (click)="clickSection(i, 'stat')" 
+          [ngClass]="{'poke-tooltip-selected': tooltipStats[i]}">
             <div class="section-content flex justify-c-sb align-i-c gap-s">
               <app-poke-tooltip
               [content]="statTooltip"

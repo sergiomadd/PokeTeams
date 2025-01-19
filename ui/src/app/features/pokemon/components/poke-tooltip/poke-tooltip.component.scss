@@ -61,6 +61,16 @@ $arrowSize: 10px;
   transform: translate(round(calc($arrowSize * -1.5), 1px), round(calc(-50%), 1px));
 }
 
+.mobile
+{
+  position: absolute;
+  top: auto;
+  right: auto;
+  left: 50%;
+  bottom: 100%;
+  transform: translate(-50%, -0.4em)
+}
+
 .poke-arrow-top 
 {
   position: absolute;
