@@ -177,10 +177,6 @@ export class PokemonComponent
   //For tooltip
   clickSection(index: number, type: string)
   {
-    if(this.window.isMobile())
-    {
-      this.closeAllProfileTooltips();
-    }
     let list: boolean[] = [];
     switch(type)
     {
@@ -221,6 +217,10 @@ export class PokemonComponent
     //     -> show selected tooltip
     else
     {
+      if(this.window.isMobile())
+      {
+        this.closeAllProfileTooltips();
+      }
       for(var i = 0; i < list.length; i++) 
       {
         //Close nested tooltip if open
