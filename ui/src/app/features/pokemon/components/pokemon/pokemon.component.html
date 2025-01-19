@@ -529,27 +529,7 @@
           </ng-container>
           <div class="flex justify-c-sb align-i-c" style="height: 1.2em;">
             <ng-container *ngIf="pokemon.name && pokemon.shiny; else emptyIcon">
-              <div 
-              class="section animated-border poke-tooltip-wrapper"
-              (click)="clickSection(0, 'middle')"
-              [ngClass]="{'poke-tooltip-selected':  tooltipMiddle[0]}"
-              >
-                <div class="section-content">
-                  <app-poke-tooltip
-                  [content]="shinyTooltip"
-                  [side]="'top'"
-                  [visible]="tooltipMiddle[0]"
-                  class="tooltip-component"
-                  >
-                  </app-poke-tooltip>
-                  <ng-template #shinyTooltip>
-                    <div class="one-piece">
-                      <span class="one-line">{{'pokemon.shiny' | translate}}</span>
-                    </div>
-                  </ng-template>
-                  <svg class="icon-s" [attr.fill]="shinyColor" viewBox="0 0 512 512" id="icons" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M208,512,155.62,372.38,16,320l139.62-52.38L208,128l52.38,139.62L400,320,260.38,372.38Z"></path><path d="M88,176,64.43,111.57,0,88,64.43,64.43,88,0l23.57,64.43L176,88l-64.43,23.57Z"></path><path d="M400,256l-31.11-80.89L288,144l80.89-31.11L400,32l31.11,80.89L512,144l-80.89,31.11Z"></path></g></svg>
-                </div>
-              </div>
+              <svg class="icon-s" [attr.fill]="shinyColor" viewBox="0 0 512 512" id="icons" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M208,512,155.62,372.38,16,320l139.62-52.38L208,128l52.38,139.62L400,320,260.38,372.38Z"></path><path d="M88,176,64.43,111.57,0,88,64.43,64.43,88,0l23.57,64.43L176,88l-64.43,23.57Z"></path><path d="M400,256l-31.11-80.89L288,144l80.89-31.11L400,32l31.11,80.89L512,144l-80.89,31.11Z"></path></g></svg>
             </ng-container>
             <ng-container *ngIf="pokemon.name && pokemon.level">
               <div 
@@ -559,13 +539,13 @@
               >
                 <div class="section-content">
                   <app-poke-tooltip
-                  [content]="shinyTooltip"
+                  [content]="levelTooltip"
                   [side]="'top'"
                   [visible]="tooltipMiddle[1]"
                   class="tooltip-component"
                   >
                   </app-poke-tooltip>
-                  <ng-template #shinyTooltip>
+                  <ng-template #levelTooltip>
                     <div class="one-piece">
                       <span class="one-line">{{'pokemon.level' | translate}}</span>
                     </div>
@@ -575,43 +555,16 @@
               </div>
             </ng-container>
             <ng-container *ngIf="pokemon.name">
-              <div 
-              class="section animated-border poke-tooltip-wrapper"
-              (click)="clickSection(2, 'middle')"
-              [ngClass]="{'poke-tooltip-selected':  tooltipMiddle[2]}"
-              >
-                <div class="section-content">
-                  <app-poke-tooltip
-                  [content]="genderTooltip"
-                  [side]="'top'"
-                  [visible]="tooltipMiddle[2]"
-                  class="tooltip-component"
-                  >
-                  </app-poke-tooltip>
-                  <ng-template #genderTooltip>
-                    <ng-container *ngIf="pokemon.gender == true; else maleText">
-                      <div class="one-piece">
-                        <span class="one-line">{{'pokemon.female' | translate}}</span>
-                      </div>
-                    </ng-container>
-                    <ng-template #maleText>
-                      <div class="one-piece">
-                        <span class="one-line">{{'pokemon.male' | translate}}</span>
-                      </div>
-                    </ng-template>  
-                  </ng-template>
-                  <ng-container *ngIf="pokemon.gender == true; else male">
-                    <div class="bor-rad-20 icon-s flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.female}">
-                      <svg class="icon-s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-female"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M12 14v7" /><path d="M9 18h6" /></svg>
-                    </div>
-                  </ng-container>
-                  <ng-template #male>
-                    <div class="bor-rad-20 icon-s flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.male}">
-                      <svg class="icon-s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-male"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 14m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M19 5l-5.4 5.4" /><path d="M19 5h-5" /><path d="M19 5v5" /></svg>                  
-                    </div>
-                  </ng-template>   
+              <ng-container *ngIf="pokemon.gender == true; else male">
+                <div class="bor-rad-20 icon-s flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.female}">
+                  <svg class="icon-s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-female"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M12 14v7" /><path d="M9 18h6" /></svg>
                 </div>
-              </div>
+              </ng-container>
+              <ng-template #male>
+                <div class="bor-rad-20 icon-s flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.male}">
+                  <svg class="icon-s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-male"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 14m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M19 5l-5.4 5.4" /><path d="M19 5h-5" /><path d="M19 5v5" /></svg>                  
+                </div>
+              </ng-template>
             </ng-container>
           </div>
         </div>
