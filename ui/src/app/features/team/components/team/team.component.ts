@@ -47,18 +47,18 @@ export class TeamComponent
     switch(index)
     {
       case 0:
+        this.showAllStats = !this.showAllStats;
         this.pokemonComponents.forEach(pokemon => 
         {
-          pokemon.triggerStats();
+          pokemon.showStats[0] = this.showAllStats;
         });
-        this.showAllStats = !this.showAllStats;
       break;
       case 1:
+        this.showAllNotes = !this.showAllNotes;
         this.pokemonComponents.forEach(pokemon => 
-          {
-            pokemon.triggerNotes();
-          });
-          this.showAllNotes = !this.showAllNotes;
+        {
+          pokemon.showNotes[0] = this.showAllNotes;
+        });
         break;
       case 2:
         this.closeAllTooltips();
