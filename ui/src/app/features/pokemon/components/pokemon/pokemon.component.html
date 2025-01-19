@@ -45,22 +45,24 @@
                   </ng-container>
                 </div>
               </ng-template>
-              <ng-container *ngIf="pokemon.dexNumber">
-                <div class="dex-number">
-                  #{{pokemon.dexNumber}}
-                </div>
-              </ng-container>
-              <div class="no-overflow row">
-                <div class="section-name">
-                  <ng-container *ngIf="pokemon.nickname && teamOptions?.showNickname; else speciesName">
-                    {{pokemon.nickname}}
-                  </ng-container>
-                  <ng-template #speciesName>
-                    {{pokemon.name?.content}}
-                    <ng-container *ngIf="pokemon.name && pokemon.name?.language != (selectedLang$ | async)">
-                      <app-no-translation></app-no-translation>
+              <div class="relative flex align-i-c h-100 w-100">
+                <ng-container *ngIf="pokemon.dexNumber">
+                  <div class="dex-number">
+                    #{{pokemon.dexNumber}}
+                  </div>
+                </ng-container>
+                <div class="no-overflow row">
+                  <div class="section-name">
+                    <ng-container *ngIf="pokemon.nickname && teamOptions?.showNickname; else speciesName">
+                      {{pokemon.nickname}}
                     </ng-container>
-                  </ng-template>
+                    <ng-template #speciesName>
+                      {{pokemon.name?.content}}
+                      <ng-container *ngIf="pokemon.name && pokemon.name?.language != (selectedLang$ | async)">
+                        <app-no-translation></app-no-translation>
+                      </ng-container>
+                    </ng-template>
+                  </div>
                 </div>
               </div>
             </div>
