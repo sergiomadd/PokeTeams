@@ -1,5 +1,6 @@
 export enum Layout
 {
   single,
-  double
+  double,
+  mobile
 }

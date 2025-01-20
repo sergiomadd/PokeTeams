@@ -16,7 +16,7 @@
             </svg>
             <app-tooltip
             [text]="'team.editor.not_logged-warning' | translate"
-            [side]="'left'"
+            [side]="window.isMobile() ? 'top' : 'left'"
             ></app-tooltip>
           </div>
         </ng-container>

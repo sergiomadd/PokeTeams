@@ -88,8 +88,8 @@
   width: 1.5em;
   height: 1.5em;
   position: absolute;
-  right: -0.75em;
-  top: 1em;
+  right: round(-0.75em, 1px);
+  top: round(1em, 1px);
   border-radius: 20px;
   cursor: pointer;
   transition: transform ease-in-out 0.6s;
@@ -113,7 +113,7 @@
 
   .toggler
   {
-    left: -1.1em;
+    left: round(-1.1em, 1px);
     right: auto;
   }
 
