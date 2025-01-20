@@ -1,87 +1,23 @@
 
-
-.user-page
+.flag
 {
-  margin: auto;
-  width: 80%;
+  width: 1.5em;
+}
+
+.tab
+{
+  width: 1.8em;
+  height: 1.8em;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  background-color: var(--bg-color-2);
+  border-radius: 5px;
+  padding: 0.2em;
+}
 
-  .profile
-  {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 2vh;
-    gap: 0.4em;
-    border-radius: 10px;
-    background-color: var(--bg-color-2);
-    padding: 0.4em;
-
-    .picture
-    {
-      width: 3em;
-      height: 3em;
-      border-radius: 5px;
-    }
-  
-    .names
-    {
-      display: flex;
-      flex-direction: column;
-      justify-content: start;
-    }
-
-    .flag
-    {
-      width: 1.5em;
-    }
-  }
-
-  .tabs
-  {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    gap: 0.4em;
-    margin-left: 0.4em;
-
-    .tab
-    {
-      width: 1.5em;
-      height: 1.5em;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      background-color: var(--bg-color-2);
-      border-radius: 5px;
-      padding: 0.2em;
-    }
-
-    .selected
-    {
-      outline: var(--text-color) 1px solid;
-    }
-  }
-
-  .private
-  {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: x-large;
-    margin-top: 10em;
-    padding: 0.4em;
-    border-radius: 5px;
-  }
-
-  .spinner-wrapper
-  {
-    width: 4em;
-    height: 4em;
-    margin: auto;
-  }
+.selected
+{
+  outline: var(--text-color) 1px solid;
 }
