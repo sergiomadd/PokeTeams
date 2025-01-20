@@ -62,6 +62,14 @@
       "show_all_notes-tooltip": "Show all notes",
       "close_all_tooltips-tooltip": "Close all tooltips"
     },
+    "preview":
+    {
+      "copyTeam": "Copy team",
+      "copyLink": "Copy link",
+      "openTeam": "Open team",
+      "editTeam": "Edit team",
+      "deleteTeam": "Delete team"
+    },
     "tag_editor":
     {
       "title": "Tag Editor",
@@ -210,6 +218,9 @@
       "max": "The value must be lower than {{max}}",
       "nan": "The value must be a number"
     },
-    "no_translation": "No translation"
+    "no_translation": "No translation",
+    "copyLoading": "Copying",
+    "copySuccess": "Copied!",
+    "copyError": "Error copying team"
   }
 }

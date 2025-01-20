@@ -43,6 +43,7 @@ export class TeamPreviewComponent
   deleteDialog: boolean = false;
   copying?: boolean;
   copied?: boolean;
+  linkCopied: boolean = false;
 
   async ngOnInit()
   {
@@ -84,11 +85,6 @@ export class TeamPreviewComponent
         }
       }
     );
-  }
-
-  getVisibility()
-  {
-    return this.logged ? true : this.team?.visibility;
   }
 
   expand()
@@ -135,9 +131,14 @@ export class TeamPreviewComponent
 
   copyLink()
   {
+    this.linkCopied = true;
     if(this.team)
     {
       this.util.copyToClipboard("http://localhost:4200/" + this.team.id);
+      setTimeout(()=>
+      {
+        this.linkCopied = false;
+      }, 300);
     }
   }
 
