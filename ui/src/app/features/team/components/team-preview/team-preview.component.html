@@ -176,9 +176,9 @@
   </ng-template>
 </div>
 <app-dialog 
-[title]="'Are you sure you want to delete this team?'"
-[trueButtonText]="'No'"
-[falseButtonText]="'Yes'"
+[title]="'team.preview.deleteTeamDialog' | translate"
+[trueButtonText]="'shared.no' | translate"
+[falseButtonText]="'shared.yes' | translate"
 [visible]="deleteDialog"
 (choose)="deleteChooseEvent($event)"
 *ngIf="deleteDialog"

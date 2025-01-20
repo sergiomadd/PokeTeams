@@ -68,7 +68,8 @@
       "copyLink": "Copy link",
       "openTeam": "Open team",
       "editTeam": "Edit team",
-      "deleteTeam": "Delete team"
+      "deleteTeam": "Delete team",
+      "deleteTeamDialog": "Are you sure you want to delete this team?"
     },
     "tag_editor":
     {
@@ -221,6 +222,8 @@
     "no_translation": "No translation",
     "copyLoading": "Copying",
     "copySuccess": "Copied!",
-    "copyError": "Error copying team"
+    "copyError": "Error copying team",
+    "yes": "Yes",
+    "no": "No"
   }
 }
