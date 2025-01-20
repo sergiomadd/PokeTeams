@@ -47,103 +47,14 @@ $arrowSize: 0.4em;
     cursor: default;
     opacity: 1;
 
-    transition: opacity 0.2s 0.5s ease;
+    transition: opacity 0.1s 0.5s ease;
   }
-
-  &:hover .top
-  {
-    position: absolute;
-    left: 50%;
-    bottom: 100%;
-    transform: translate(calc(-50%), calc($arrowSize * -1.5));
-  }
-
-  &:hover .right
-  {
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translate(calc($arrowSize * 1.5), calc(-50%));
-  }
-
-  &:hover .bottom
-  {
-    position: absolute;
-    left: 50%;
-    top: 100%;
-    transform: translate(calc(-50%), calc($arrowSize * 1.5));
-  }
-
-  &:hover .left
-  {
-    position: absolute;
-    right: 100%;
-    top: 50%;
-    transform: translate(calc($arrowSize * -1.5), calc(-50%));
-  }
-}
-
-.arrowtop 
-{
-  width: 0; 
-  height: 0; 
-  border-left: $arrowSize solid transparent;
-  border-right: $arrowSize solid transparent;
-  border-bottom: $arrowSize solid $tooltipColor;
-
-  position: absolute;
-  left: 50%;
-  top: 0%;
-  transform: translate(calc(-50%), calc($arrowSize * -1 + 1px));
-}
-
-.arrowright 
-{
-  width: 0; 
-  height: 0; 
-  border-top: $arrowSize solid transparent;
-  border-bottom: $arrowSize solid transparent;
-  border-left: $arrowSize solid $tooltipColor;
-
-  position: absolute;
-  right: 0%;
-  top: 50%;
-  transform: translate(calc($arrowSize - 1px), calc(-50%));
-}
-
-.arrowbottom 
-{
-  width: 0; 
-  height: 0; 
-  border-left: $arrowSize solid transparent;
-  border-right: $arrowSize solid transparent;
-  border-top: $arrowSize solid $tooltipColor;
-
-  position: absolute;
-  left: 50%;
-  bottom: 0%;
-  transform: translate(calc(-50%), calc($arrowSize - 1px));
-}
-
-.arrowleft 
-{
-  width: 0; 
-  height: 0; 
-  border-top: $arrowSize solid transparent;
-  border-bottom: $arrowSize solid transparent; 
-  border-right: $arrowSize solid $tooltipColor;
-
-  position: absolute;
-  left: 0%;
-  top: 50%;
-  transform: translate(calc($arrowSize * -1 + 1px), calc(-50%));
 }
 
 .poke-tooltip-wrapper
 {
   position: relative;
 }
-
 
 @media (min-width: $mobileBreakpoint) 
 {

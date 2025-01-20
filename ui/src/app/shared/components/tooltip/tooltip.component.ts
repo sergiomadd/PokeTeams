@@ -9,6 +9,8 @@ export class TooltipComponent
 {
   @Input() text?: string;
   @Input() side: string = "left";
+  @Input() visible?: boolean = false;
+  @Input() instant?: boolean = false;
   @Input() loading?: boolean = false;
   @Input() loadingText?: string;
 }

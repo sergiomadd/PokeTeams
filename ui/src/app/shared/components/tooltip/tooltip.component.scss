@@ -1,3 +1,6 @@
+$tooltipColor: var(--bg-color-tooltip);
+$arrowSize: 0.4em;
+
 .tooltip
 {
   opacity: 0;
@@ -9,6 +12,120 @@
 {
   overflow: hidden;
   white-space: wrap;
+}
+
+.tooltip-visible
+{
+  width: max-content;
+  height: fit-content;
+  max-width: 10em;
+  padding: 0.4em;
+  
+  display: flex;
+  align-items: center;
+
+  background-color: $tooltipColor;
+  
+  color: var(--text-color-reverse);
+  border-radius: 5px;
+
+  font-size: 0.80rem;
+  text-align: center;
+  cursor: default;
+  opacity: 1;
+}
+
+.transition
+{
+  transition: opacity 0.1s 0.5s ease;
+}
+
+.top
+{
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translate(calc(-50%), calc($arrowSize * -1.5));
+}
+
+.right
+{
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translate(calc($arrowSize * 1.5), calc(-50%));
+}
+
+.bottom
+{
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(calc(-50%), calc($arrowSize * 1.5));
+}
+
+.left
+{
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translate(calc($arrowSize * -1.5), calc(-50%));
+}
+
+.arrowtop 
+{
+  width: 0; 
+  height: 0; 
+  border-left: $arrowSize solid transparent;
+  border-right: $arrowSize solid transparent;
+  border-bottom: $arrowSize solid $tooltipColor;
+
+  position: absolute;
+  left: 50%;
+  top: 0%;
+  transform: translate(calc(-50%), calc($arrowSize * -1 + 1px));
+}
+
+.arrowright 
+{
+  width: 0; 
+  height: 0; 
+  border-top: $arrowSize solid transparent;
+  border-bottom: $arrowSize solid transparent;
+  border-left: $arrowSize solid $tooltipColor;
+
+  position: absolute;
+  right: 0%;
+  top: 50%;
+  transform: translate(calc($arrowSize - 1px), calc(-50%));
+}
+
+.arrowbottom 
+{
+  width: 0; 
+  height: 0; 
+  border-left: $arrowSize solid transparent;
+  border-right: $arrowSize solid transparent;
+  border-top: $arrowSize solid $tooltipColor;
+
+  position: absolute;
+  left: 50%;
+  bottom: 0%;
+  transform: translate(calc(-50%), calc($arrowSize - 1px));
+}
+
+.arrowleft 
+{
+  width: 0; 
+  height: 0; 
+  border-top: $arrowSize solid transparent;
+  border-bottom: $arrowSize solid transparent; 
+  border-right: $arrowSize solid $tooltipColor;
+
+  position: absolute;
+  left: 0%;
+  top: 50%;
+  transform: translate(calc($arrowSize * -1 + 1px), calc(-50%));
 }
 
 .loading:after 

@@ -1,21 +1,31 @@
 <div 
 class="tooltip"
-[ngClass]="{
-  top: side === 'top', right: side === 'right', 
-  bottom: side === 'bottom', left: side === 'left'}"
+[ngClass]="
+{
+  top: side === 'top',
+  right: side === 'right', 
+  bottom: side === 'bottom',
+  left: side === 'left',
+  'tooltip-visible': visible,
+  'transition': !instant && visible
+}"
 >
   <span 
-  [ngClass]="{
-    arrowbottom: side === 'top', arrowleft: side === 'right', 
-    arrowtop: side === 'bottom', arrowright: side === 'left'}"
-    ></span>
-    <ng-container *ngIf="loading === true">
-      <ng-container *ngIf="loadingText">{{loadingText}}</ng-container>
-      <span class="loading"></span>
-    </ng-container>
-    <ng-container *ngIf="!loading">
-      <div class="text">
-        {{text}}
-      </div>
-    </ng-container>
+  [ngClass]="
+  {
+    arrowbottom: side === 'top',
+    arrowleft: side === 'right', 
+    arrowtop: side === 'bottom',
+    arrowright: side === 'left'
+  }"
+  ></span>
+  <ng-container *ngIf="loading === true">
+    <ng-container *ngIf="loadingText">{{loadingText}}</ng-container>
+    <span class="loading"></span>
+  </ng-container>
+  <ng-container *ngIf="!loading">
+    <div class="text">
+      {{text}}
+    </div>
+  </ng-container>
 </div>
