@@ -5,17 +5,34 @@
 </ng-container>
 <ng-template #loaded>
   <ng-container *ngIf="team; else noteam">
-    <div class="m-auto flex-col justify-c-c align-i-c" style="margin-top: 5em;">
+    <div class="m-auto flex-col justify-c-c align-i-c" 
+    style="margin-top: 7em;">
       <app-team [team]="team"></app-team>
       <div class="buttons flex justify-c-c gap-s w-100">
         <button 
-        class="button-primary"
+        class="button-primary relative"
         (click)="copyPaste()"
-        >{{"team.view.copy_paste-button" | translate}}</button>
+        >
+          {{"team.view.copy_paste-button" | translate}}
+          <app-tooltip
+          [text]="'shared.copySuccess' | translate"
+          [side]="'top'"
+          [visible]="pasteCopied"
+          [instant]="true"
+          ></app-tooltip>
+        </button>
         <button
-        class="button-tertiary"
+        class="button-tertiary relative"
         (click)="copyLink()"
-        >{{"team.view.copy_link-button" | translate}}</button>
+        >
+          {{"team.view.copy_link-button" | translate}}
+          <app-tooltip
+          [text]="'shared.copySuccess' | translate"
+          [side]="'top'"
+          [visible]="linkCopied"
+          [instant]="true"
+          ></app-tooltip>
+        </button>
       </div> 
     </div>
   </ng-container>

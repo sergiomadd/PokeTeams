@@ -1,20 +1,7 @@
 @use "/src/app/shared/styles/variables.scss" as *;
 
-.team-view
-{
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 5em;
-
-
-}
-
 .buttons
 {
-  margin: 2.5em 0 2.5em 0;
   gap: 3em;
 
   button
@@ -34,6 +21,7 @@
 {
   .buttons
   {
+    margin: 1em 0 1em 0;
     gap: 3em;
   }
 }

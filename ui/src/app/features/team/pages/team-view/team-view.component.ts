@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { selectLang } from 'src/app/core/config/store/config.selectors';
-import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
+import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { Team } from 'src/app/features/team/models/team.model';
-import { TeamService as NewTeamService, TeamService } from 'src/app/features/team/services/team.service';
+import { TeamService } from 'src/app/features/team/services/team.service';
 import { ParserService } from 'src/app/shared/services/parser.service';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { TeamData } from '../../models/teamData.model';
@@ -22,9 +22,8 @@ export class TeamViewComponent
   router = inject(Router);
   util = inject(UtilService);
   parser = inject(ParserService);
-  newTeamService = inject(NewTeamService)
-  pokemonService = inject(PokemonService)
   store = inject(Store);
+  window = inject(WindowService);
   
   selectedLang$: Observable<string> = this.store.select(selectLang);
 
@@ -33,6 +32,9 @@ export class TeamViewComponent
   teamData?: TeamData;
   loading: boolean = false;
   viewIncrementCooldown: number = 1;
+
+  pasteCopied: boolean = false;
+  linkCopied: boolean = false;
 
   async ngOnInit()
   {
@@ -145,15 +147,25 @@ export class TeamViewComponent
 
   copyPaste()
   {
+    this.pasteCopied = true;
     if(this.team && this.team.pokemons)
     {
-      //this.util.copyToClipboard(this.parser.reversePaste(this.team.pokemons ?? []));
+      this.util.copyToClipboard(this.parser.reversePaste(this.team.pokemons ?? []));
+      setTimeout(()=>
+      {
+        this.pasteCopied = false;
+      }, 1000);
     }
   }
 
   copyLink()
   {
+    this.linkCopied = true;
     const path: string = "http://localhost:4200/"
     this.util.copyToClipboard(path + this.teamKey);
+    setTimeout(()=>
+    {
+      this.linkCopied = false;
+    }, 1000);
   }
 }
