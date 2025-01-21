@@ -21,6 +21,8 @@ namespace api.Models.DBPoketeamModels
         public virtual Tournament? Tournament { get; set; }
         public string? Regulation { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
+        [StringLength(32, ErrorMessage = "Rental code is too long")]
+        public string? RentalCode { get; set; }
         public int ViewCount { get; set; }
         [DataType(DataType.Date)]
         public DateTime DateCreated { get; set; }
@@ -42,6 +44,7 @@ namespace api.Models.DBPoketeamModels
             Tournament tournament,
             string? regulation,
             ICollection<Tag> tags,
+            string? rentalCode,
             int viewCount,
             DateTime dateCreated,
             bool visibility
@@ -56,6 +59,7 @@ namespace api.Models.DBPoketeamModels
             Tournament = tournament;
             Regulation = regulation;
             Tags = tags;
+            RentalCode = rentalCode;
             ViewCount = viewCount;
             DateCreated = dateCreated;
             Visibility = visibility;

@@ -112,6 +112,7 @@ namespace api.Services
                     tournament: tournament,
                     regulation: inputTeam.Regulation != null ? inputTeam.Regulation.Identifier : null,
                     tags: tags,
+                    rentalCode: inputTeam.RentalCode,
                     viewCount: inputTeam.ViewCount,
                     dateCreated: inputTeam.Date != null && inputTeam.Date != "" ? DateTime.Parse(inputTeam.Date) : DateTime.Now,
                     visibility: inputTeam.Visibility
@@ -140,6 +141,7 @@ namespace api.Services
                     await GetTeamPlayer(team),
                     await _tournamentService.GetTournamentByName(team.TournamentNormalizedName),
                     await _regulationService.GetRegulationByIdentifier(team.Regulation),
+                    team.RentalCode,
                     team.ViewCount,
                     team.DateCreated.ToString("yyyy-MM-dd"),
                     team.Visibility,
@@ -258,6 +260,7 @@ namespace api.Services
                     await GetTeamPlayer(team),
                     await _tournamentService.GetTournamentByName(team.TournamentNormalizedName),
                     await _regulationService.GetRegulationByIdentifier(team.Regulation),
+                    team.RentalCode,
                     team.ViewCount,
                     team.DateCreated.ToString("yyyy-MM-dd"),
                     team.Visibility,

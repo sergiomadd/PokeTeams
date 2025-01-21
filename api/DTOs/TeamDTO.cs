@@ -11,6 +11,7 @@ namespace api.DTOs
         public UserPreviewDTO? Player { get; set; }
         public TournamentDTO? Tournament { get; set; }
         public RegulationDTO? Regulation { get; set; }
+        public string? RentalCode { get; set; }
         public int ViewCount { get; set; }
         public string? Date { get; set; }
         public bool Visibility { get; set; }
@@ -29,6 +30,7 @@ namespace api.DTOs
             UserPreviewDTO player,
             TournamentDTO tournament,
             RegulationDTO regulation,
+            string? rentalCode,
             int viewCount,
             string date,
             bool visibility,
@@ -41,6 +43,7 @@ namespace api.DTOs
             Player = player;
             Tournament = tournament;
             Regulation = regulation;
+            RentalCode = rentalCode;
             ViewCount = viewCount;
             Date = date;
             Visibility = visibility;
