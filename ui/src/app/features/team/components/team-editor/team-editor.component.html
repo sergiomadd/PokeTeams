@@ -71,6 +71,14 @@
           ></app-tag-editor>
         </div>
       </div>
+      <div class="editor-input relative" style="grid-column: span 2; justify-self: center;">
+        <app-smart-input
+        [label]="'team.editor.rental_code-label' | translate"
+        [updateOnChange]="true"
+        (updateEvent)="rentalCodeSelectEvent($event)"
+        class="smart-input-wrapper input-m"
+        ></app-smart-input>      
+      </div>
     </div>
     <div class="flex justify-c-c gap-s">
       <app-checkbox

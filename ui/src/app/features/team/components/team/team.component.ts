@@ -27,6 +27,7 @@ export class TeamComponent
   showAllStats: boolean = false;
   showAllNotes: boolean = false;
   maxStat: number = 0;
+  rentalCodeCopied: boolean = false;
 
   ngOnChanges(changes: SimpleChanges)
   {
@@ -95,6 +96,19 @@ export class TeamComponent
       {
         this.team.options = {...this.team.options, maxStat: this.maxStat}
       }
+    }
+  }
+
+  copyRentalCode()
+  {
+    if(this.team?.rentalCode)
+    {
+      this.rentalCodeCopied = true;
+      this.util.copyToClipboard(this.team?.rentalCode);
+      setTimeout(()=>
+      {
+        this.rentalCodeCopied = false;
+      }, 1000);
     }
   }
 }

@@ -13,6 +13,7 @@ export interface Team
   player?: UserPreview,
   tournament?: Tournament,
   regulation?: Regulation,
+  rentalCode?: string,
   viewCount: number,
   date: string,
   visibility: boolean,

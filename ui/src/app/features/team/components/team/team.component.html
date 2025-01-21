@@ -111,12 +111,17 @@
   </div>
   <div class="flex full">
     <div class="half flex justify-c-s gap-s">
-      <div class="detail">
-        Rental Code
-      </div>
-      <div class="detail">
-        Original Author
-      </div>
+      <ng-container *ngIf="team?.rentalCode">
+        <div class="detail tooltip-wrapper" (click)="copyRentalCode()">
+          <div class="detail-text">
+            #{{team?.rentalCode}}
+          </div>
+          <app-tooltip
+          [text]="rentalCodeCopied ? ('shared.copySuccess' | translate) : ('team.team.rental_code-tooltip' | translate)"
+          [side]="'top'"
+          ></app-tooltip>
+        </div>
+      </ng-container>
     </div>
     <div class="half flex justify-c-e gap-s">
       <ng-container *ngIf="team?.viewCount">
@@ -133,7 +138,6 @@
   </div>
 </div>
 <ng-template #rightSideButtons>
-
   <div 
   class="detail tooltip-wrapper"
   (click)="clickOptions(0)"

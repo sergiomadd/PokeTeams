@@ -128,6 +128,11 @@ export class TeamEditorComponent
     this.team.regulation = event ? await this.teamService.getRegulationByIdentifier(event.identifier) : undefined;
   }
 
+  async rentalCodeSelectEvent(event: string)
+  {
+    this.team.rentalCode = event ?? undefined;
+  }
+
   @ViewChild(TagEditorComponent) tagEditorComponent!: TagEditorComponent;
   @ViewChild("tagInput") tagSmartInput!: SmartInputComponent;
   toggleTagEditor()

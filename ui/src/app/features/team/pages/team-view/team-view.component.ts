@@ -57,6 +57,7 @@ export class TeamViewComponent
           this.teamData = response;
           if(this.teamData)
           {
+            console.log(response)
             this.team = 
             {
               ...this.team,
@@ -66,6 +67,7 @@ export class TeamViewComponent
               player: this.teamData.player,
               tournament: this.teamData.tournament,
               regulation: this.teamData.regulation,
+              rentalCode: this.teamData.rentalCode,
               viewCount: this.teamData.viewCount,
               date: this.teamData.date,
               visibility: this.teamData.visibility,
