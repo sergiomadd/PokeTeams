@@ -31,6 +31,7 @@
       "not_logged-warning": "Not logged in, the team wont be added to a user. Make sure to save the link!",
       "player_input-label": "Player",
       "tournament_input-label": "Tournament",
+      "regulation_input-label": "Regulation",
       "tag_input-label": "Tags ({{currentTags}}/{{maxTags}})",
       "tag_input-feedback": "Tag already added"
     },

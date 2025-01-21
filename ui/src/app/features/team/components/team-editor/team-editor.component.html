@@ -42,6 +42,17 @@
       </div>
       <div class="editor-input relative">
         <app-smart-input
+        #regulationInput
+        [label]="'team.editor.regulation_input-label' | translate"
+        [keepSelected]="true"
+        [getter]="queryService.queryRegulationCallback"
+        [allGetter]="queryService.regulationAllCallback"
+        (selectEvent)="regulationSelectEvent($event)"
+        class="smart-input-wrapper input-m"
+        ></app-smart-input>
+      </div>
+      <div class="editor-input relative">
+        <app-smart-input
         #tagInput
         (disabled)="team?.tags ? team?.tags!.length > 2 : false"
         [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
