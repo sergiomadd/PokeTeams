@@ -1,54 +1,7 @@
-.single
-{
-  
-  .sprite
-  {
-    position: relative;
-    width: 5em;
-    height: 5em;
-  }
+@use "/src/app/shared/styles/variables.scss" as *;
 
-  .right
-  {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .moves
-  {
-    width: 5em;
-    width: fit-content;
-    display: flex;
-    flex-direction: column;
-    gap: 0.1em;
-    
-    .move
-    {
-      border-radius: 10px;
-      padding: 0.2em;
-      text-align: center;
-    }
-  }
-}
-
-.double
-{
-
-  .sprite
-  {
-    position: relative;
-    width: 5em;
-    height: 5em;
-  }
-
-  .moves
-  {
-    width: 0;
-    height: 0;
-    overflow: hidden;
-  }
-}
+$moveWidth: 5.5em;
+$moveHeight: 3.4em;
 
 .item
 {
@@ -71,7 +24,6 @@
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  border: 1px solid var(--text-color);
   background: var(--bg-color-2);
 }
 
@@ -80,147 +32,152 @@
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: 50% 50%;
-  width: calc(5.7em * 2);
+  width: calc(($moveWidth + 0.5em) * 2);
+}
+
+.move-section
+{
+  width: $moveWidth;
+  height: $moveHeight;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(3, round($moveWidth/3, 1px));
+  grid-template-rows: repeat(2, round($moveHeight/2, 1px));
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  
+  &:nth-child(1) 
+  {
+    border-radius: 20px 0 0 0;
+    align-items: flex-start;
+    justify-items: start;
+    justify-self: end;
+
+    .row-one
+    {
+      grid-column: 2 / 4;
+      grid-row: 1;
+    }
+
+    .row-two
+    {
+      grid-column: 1 / 3;
+      grid-row: 2;
+    }
+
+    .type
+    {
+      grid-column: 1 / 2;
+      grid-row: 1;
+    }
+
+    .inverted-border
+    {
+      grid-column: 3 / 4;
+      grid-row: 2;
+    }
+  }
+
+  &:nth-child(2) 
+  {
+    border-radius: 0 20px 0 0;
+    text-align: right;
+    align-items: flex-start;
+    justify-items: end;
+    justify-self: start;
+
+    .row-one
+    {
+      grid-column: 1 / 3;
+      grid-row: 1;
+    }
+
+    .row-two
+    {
+      grid-column: 2 / 4;
+      grid-row: 2;
+    }
+
+    .type
+    {
+      grid-column: 3 / 3;
+      grid-row: 1;
+    }
+
+    .inverted-border
+    {
+      grid-column: 1 / 1;
+      grid-row: 2;
+    }
+  }
+
+  &:nth-child(3) 
+  {
+    border-radius: 0 0 0 20px;
+    align-items: end;
+    justify-items: start;
+    justify-self: end;
+
+    .row-one
+    {
+      grid-column: 1 / 2;
+      grid-row: 1;
+    }
+
+    .row-two
+    {
+      grid-column: 2 / 3;
+      grid-row: 2;
+    }
+
+    .type
+    {
+      grid-column: 1 / 1;
+      grid-row: 2;
+    }
+
+    .inverted-border
+    {
+      grid-column: 3 / 3;
+      grid-row: 1;
+    }
+  }
+
+  &:nth-child(4) 
+  {
+    border-radius: 0 0 20px 0;
+    text-align: right;
+    align-items: end;
+    justify-items: end;
+    justify-self: start;
+
+    .row-one
+    {
+      grid-column: 2 / 4;
+      grid-row: 1;
+    }
+
+    .row-two
+    {
+      grid-column: 1 / 3;
+      grid-row: 2;
+    }
+  }
+}
+
+@media (max-width: $mobileBreakpoint) 
+{
+  $moveWidth: 5em;
+  $moveHeight: 3.4em;
+
+  .moves-section
+  {
+    width: calc(($moveWidth + 0.5em) * 2);
+  }  
 
   .move-section
   {
-    width: 5.1em;
-    height: 3.4em;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1.7em 1.7em 1.7em;
-    grid-template-rows: 1.7em 1.7em;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    
-    &:nth-child(1) 
-    {
-      border-top: 1px solid var(--text-color);
-      border-left: 1px solid var(--text-color);
-      border-bottom: 1px solid var(--text-color);
-      border-radius: 20px 0 0 0;
-      align-items: flex-start;
-      justify-items: start;
-      justify-self: end;
-
-      .row-one
-      {
-        grid-column: 2 / 4;
-        grid-row: 1;
-      }
-  
-      .row-two
-      {
-        grid-column: 1 / 3;
-        grid-row: 2;
-      }
-
-      .type
-      {
-        grid-column: 1 / 2;
-        grid-row: 1;
-      }
-
-      .inverted-border
-      {
-        grid-column: 3 / 4;
-        grid-row: 2;
-      }
-    }
-  
-    &:nth-child(2) 
-    {
-      border-top: 1px solid var(--text-color);
-      border-right: 1px solid var(--text-color);
-      border-left: 1px solid var(--text-color);
-      border-bottom: 1px solid var(--text-color);
-      border-radius: 0 20px 0 0;
-      text-align: right;
-      align-items: flex-start;
-      justify-items: end;
-      justify-self: start;
-
-      .row-one
-      {
-        grid-column: 1 / 3;
-        grid-row: 1;
-      }
-  
-      .row-two
-      {
-        grid-column: 2 / 4;
-        grid-row: 2;
-      }
-
-      .type
-      {
-        grid-column: 3 / 3;
-        grid-row: 1;
-      }
-
-      .inverted-border
-      {
-        grid-column: 1 / 1;
-        grid-row: 2;
-      }
-    }
-
-    &:nth-child(3) 
-    {
-      border-left: 1px solid var(--text-color);
-      border-bottom: 1px solid var(--text-color);
-      border-radius: 0 0 0 20px;
-      align-items: end;
-      justify-items: start;
-      justify-self: end;
-
-      .row-one
-      {
-        grid-column: 1 / 2;
-        grid-row: 1;
-      }
-  
-      .row-two
-      {
-        grid-column: 2 / 3;
-        grid-row: 2;
-      }
-
-      .type
-      {
-        grid-column: 1 / 1;
-        grid-row: 2;
-      }
-
-      .inverted-border
-      {
-        grid-column: 3 / 3;
-        grid-row: 1;
-      }
-    }
-
-    &:nth-child(4) 
-    {
-      border-bottom: 1px solid var(--text-color);
-      border-left: 1px solid var(--text-color);
-      border-right: 1px solid var(--text-color);
-      border-radius: 0 0 20px 0;
-      text-align: right;
-      align-items: end;
-      justify-items: end;
-      justify-self: start;
-
-      .row-one
-      {
-        grid-column: 2 / 4;
-        grid-row: 1;
-      }
-  
-      .row-two
-      {
-        grid-column: 1 / 3;
-        grid-row: 2;
-      }
-    }
+    width: $moveWidth;
+    grid-template-columns: repeat(3, round($moveWidth/3, 1px));
   }
 }

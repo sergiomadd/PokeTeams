@@ -1,72 +1,71 @@
-
-<div class="relative pad-s"
-[ngClass]="
-  {
-    single: layout === 0,
-    double: layout === 1
-  }">
-  <ng-container *ngIf="layout === 0">
-    <div class='moves-section'>
-      <ng-container *ngFor="let move of pokemon?.moves; index as i">
-        <div 
-        class="move-section pad-m"
+<div class='moves-section relative pad-s'>
+  <ng-container *ngFor="let move of pokemon?.moves; index as i">
+    <div 
+    class="move-section pad-m"
+    [ngClass]="{'flex-reverse': i % 2 !== 0}"
+    [ngStyle]="{'background': move ? theme.getMoveColor(move?.pokeType?.identifier ?? '') : 'var(--bg-color-3)'}"
+    >
+    <ng-container *ngIf="move">
+      <div class="inverted-border"></div>
+      <span class="row-one">{{getMoveNameRows(i)[0]}}</span>
+      <span class="row-two">{{getMoveNameRows(i)[1]}}</span>
+      <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name?.content}}"
+      alt="{{move?.pokeType?.name?.content}}" class="type"
+      [ngClass]="
+      {
+        'icon-s': window.isMobile(),
+        'icon-m': !window.isMobile()
+      }">
+    </ng-container>
+    </div>
+  </ng-container>
+  <div class="no-overflow">
+    <div class='center'>
+      <div class="pointer tooltip-wrapper">
+        <img [src]="pokemonSpritePath"  
+        [alt]="pokemon?.name?.content"
         [ngClass]="
         {
-          'flex-reverse': i % 2 !== 0
-        }"
-        [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.identifier ?? '')}"
-        >
-        <ng-container *ngIf="move">
-          <div class="inverted-border"></div>
-          <span class="row-one">{{getMoveNameRows(i)[0]}}</span>
-          <span class="row-two">{{getMoveNameRows(i)[1]}}</span>
-          <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name?.content}}"
-          alt="{{move?.pokeType?.name?.content}}" class="icon-m type">
-        </ng-container>
+          'sprite-small': window.isMobile(),
+          'sprite-m': !window.isMobile()
+        }">
+        <app-tooltip 
+        [text]="pokemon?.name?.content" 
+        [side]="'top'"></app-tooltip>
+      </div>
+      <ng-container *ngIf="pokemon?.teraType">
+        <div class="teratype w-fit h-fit bor-rad-20 bg-2 tooltip-wrapper"
+        [ngClass]="
+        {
+          'icon-s': window.isMobile(),
+          'icon-m': !window.isMobile()
+        }">
+          <img [src]="pokemon?.teraType?.iconPath" 
+          [title]="pokemon?.teraType?.name?.content"
+          [alt]="pokemon?.teraType?.name?.content"
+          [ngClass]="
+          {
+            'icon-s': window.isMobile(),
+            'icon-m': !window.isMobile()
+          }">
         </div>
       </ng-container>
-      <div class="no-overflow">
-        <div class='center'>
-          <div class="pointer tooltip-wrapper">
-            <img [src]="pokemonSpritePath"  
-            [alt]="pokemon?.name?.content" class="sprite">
-            <app-tooltip 
-            [text]="pokemon?.name?.content" 
-            [side]="'top'"></app-tooltip>
-          </div>
-          <ng-container *ngIf="pokemon?.teraType">
-            <div class="teratype icon-m bor-1-t bor-rad-20 bg-2 tooltip-wrapper">
-              <img [src]="pokemon?.teraType?.iconPath" 
-              [title]="pokemon?.teraType?.name?.content"
-              [alt]="pokemon?.teraType?.name?.content" class="icon-m">
-            </div>
-          </ng-container>
-          <ng-container *ngIf="pokemon?.item">
-            <div class="item icon-m bor-1-t bor-rad-20 bg-2 pointer tooltip-wrapper">
-              <img [src]="pokemon?.item?.iconPath" [alt]="pokemon?.item?.name?.content" class="icon-m">
-              <app-tooltip [text]="pokemon?.item?.name?.content" [side]="'top'"></app-tooltip>
-            </div>
-          </ng-container>
-          
+      <ng-container *ngIf="pokemon?.item">
+        <div class="item bor-rad-20 bg-2 pointer tooltip-wrapper"
+        [ngClass]="
+        {
+          'icon-s': window.isMobile(),
+          'icon-m': !window.isMobile()
+        }">
+          <img [src]="pokemon?.item?.iconPath" [alt]="pokemon?.item?.name?.content" 
+          [ngClass]="
+          {
+            'icon-s': window.isMobile(),
+            'icon-m': !window.isMobile()
+          }">
+          <app-tooltip [text]="pokemon?.item?.name?.content" [side]="'top'"></app-tooltip>
         </div>
-      </div>
+      </ng-container>
     </div>
-  </ng-container>
-  <ng-container *ngIf="layout === 1 || layout === 2">
-    <div class="sprite">
-      <img [src]="pokemonSpritePath" [alt]="pokemon?.name?.content" class="sprite">
-    </div>
-    <ng-container *ngIf="pokemon?.teraType">
-      <div class="teratype tooltip-wrapper">
-        <img [src]="pokemon?.teraType?.iconPath" [alt]="pokemon?.teraType?.name?.content" class="icon-big">
-        <app-tooltip [text]="pokemon?.teraType?.name?.content" [side]="'top'"></app-tooltip>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="pokemon?.item">
-      <div class="item tooltip-wrapper">
-        <img [src]="pokemon?.item?.iconPath" [alt]="pokemon?.item?.name?.content" class="icon-big">
-        <app-tooltip [text]="pokemon?.item?.name?.content" [side]="'top'"></app-tooltip>
-      </div>
-    </ng-container>
-  </ng-container>
+  </div>
 </div>
