@@ -113,18 +113,37 @@ export class PokemonEditorComponent
     {
       if(this.pokemon && value)
       {
-        
         if(!this.util.isNaN(value))
         {
           if(this.pokemonForm.controls.level.valid)
           {
-            this.pokemon.level = value ?? 50;
+            this.pokemon = 
+            {
+              ...this.pokemon,
+              level: value ?? 50
+            }
             this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
           }
           else
           {
-            if(value > 100) { this.pokemon.level = 100 }
-            else if(value < 0) { this.pokemon.level = 1 }
+            if(value > 100) 
+            {
+              this.pokemon = 
+              {
+                ...this.pokemon,
+                level: 100
+              }
+              this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+            }
+            else if(value < 0) 
+            {
+              this.pokemon = 
+              {
+                ...this.pokemon,
+                level: 1
+              }
+              this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+            }
           }
         }
         else

@@ -73,7 +73,6 @@
               [keepSelected]="true"
               [allGetter]="queryService.pokemonAbilitiesCallback"
               [allGetterIndex]="this.pokemon?.dexNumber"
-              [disabled]="!this.pokemon?.dexNumber"
               (selectEvent)="abilitySelectEvent($event)"
               class="smart-input-wrapper form-item"
               ></app-smart-input>

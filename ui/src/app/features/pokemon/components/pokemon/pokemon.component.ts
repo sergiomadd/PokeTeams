@@ -358,22 +358,6 @@ export class PokemonComponent
         }
       });
     }
-
-    /* TODO: handle no stats (wrong poke name) case
-    else
-    {
-      for(let i=0; i<6; i++) 
-      {
-        let stat: Stat = 
-        {
-          identifier: 'error',
-          name: 'error',
-          value: 0
-        }
-        this.calculatedStats[i] = stat;
-      }
-    }
-    */
   }
 
   calculateTotals()
@@ -398,8 +382,10 @@ export class PokemonComponent
     }
   }
   
-  calculateStat(base: number, level: number, iv: number, ev: number, nature: number, hp: boolean) : number
+  calculateStat(base: number, inlevel: number, iv: number, ev: number, nature: number, hp: boolean) : number
   {
+    //I hate javascript
+    let level = Number(inlevel)
     let total: number;
     //HP: ((2 * base + iv + (ev/4)) * level) / 100) + level + 10
     if(hp)
