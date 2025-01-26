@@ -37,11 +37,14 @@ export class PokemonPreviewComponent
     if(this.pokemon?.moves && this.pokemon?.moves[index] 
       && this.pokemon?.moves[index].name?.content)
     {
-      if(this.pokemon?.moves[index].name?.content.split(" ").length === 1
-        && this.pokemon?.moves[index].name?.content.length > 5)
+      if(this.pokemon?.moves[index].name?.content.split(" ").length === 1)
       {
         const rowOne = this.pokemon?.moves[index].name?.content.substring(0, 7);
         const rowTwo = this.pokemon?.moves[index].name?.content.substring(7);
+        if(index > 1 && this.pokemon?.moves[index].name?.content.length < 7)
+        {
+          return [rowTwo, rowOne];
+        }
         return [rowOne, rowTwo];
       }
       return this.pokemon?.moves[index].name?.content.split(" ");
