@@ -6,7 +6,6 @@ import { selectTheme } from 'src/app/core/config/store/config.selectors';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { PokemonPreview } from 'src/app/features/pokemon/models/pokemonPreview.model';
-import { Layout } from 'src/app/features/search/models/layout.enum';
 import { TeamService } from 'src/app/features/team/services/team.service';
 import { User } from 'src/app/features/user/models/user.model';
 import { ParserService } from 'src/app/shared/services/parser.service';
@@ -29,7 +28,6 @@ export class TeamPreviewComponent
 
   @Input() team?: TeamPreviewData;
   @Input() pokemons?: PokemonPreview[] | null = undefined;
-  @Input() layout?: Layout;
   @Input() logged?: User;
   @Output() deleteEvent = new EventEmitter();
   

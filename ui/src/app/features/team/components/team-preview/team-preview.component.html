@@ -48,20 +48,9 @@
           {{team?.regulation?.identifier}}
         </div>
       </ng-container>
-      <ng-container *ngIf="layout === 0">
-        <ng-container *ngIf="team?.tags && team?.tags!.length > 0">
-          <div class="flex justify-c-s gap-s">
-            <ng-container *ngFor="let tag of team?.tags">
-              <app-tag [tag]="tag"></app-tag>
-            </ng-container>
-          </div>
-        </ng-container>
-      </ng-container>
-      <ng-container *ngIf="layout === 1 || layout === 2">
-        <ng-container *ngIf="team?.tags && team?.tags!.length > 0">
-          <ng-container *ngFor="let tag of team?.tags">
-            <app-tag [tag]="tag"></app-tag>
-          </ng-container>
+      <ng-container *ngIf="team?.tags && team?.tags!.length > 0">
+        <ng-container *ngFor="let tag of team?.tags">
+          <app-tag [tag]="tag"></app-tag>
         </ng-container>
       </ng-container>
     </div>
@@ -143,14 +132,14 @@
     class="bg-2"
     [ngClass]="
     {
-      'grid col-3 justify-i-c': window.isMobile(),
+      'grid col-2 justify-i-c': window.isMobile(),
       'flex justify-c-sa gap-m': window.currentDevice === window.DeviceType.desktop
     }"
     (mouseenter)="expand()"
     (mouseleave)="expand()"
     >
       <ng-container *ngFor="let pokemon of pokemons">
-        <app-pokemon-preview [pokemon]="pokemon" [layout]="layout"></app-pokemon-preview>
+        <app-pokemon-preview [pokemon]="pokemon"></app-pokemon-preview>
       </ng-container>
     </div>
   </ng-container>

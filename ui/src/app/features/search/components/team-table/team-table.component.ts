@@ -4,13 +4,11 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { LoggedUserService } from 'src/app/core/auth/services/logged-user.service';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
-import { Device } from 'src/app/core/layout/mobile/device.enum';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { TeamPreviewData } from 'src/app/features/team/models/teamPreviewData.model';
 import { User } from 'src/app/features/user/models/user.model';
 import { PaginationComponent } from 'src/app/shared/components/pagination/pagination.component';
 import { UtilService } from 'src/app/shared/services/util.service';
-import { Layout } from '../../models/layout.enum';
 import { SortOrder, SortType, SortWay } from '../../models/sortOrder.model';
 import { SearchService } from '../../services/search.service';
 
@@ -30,7 +28,6 @@ export class TeamTableComponent
 
   teams: TeamPreviewData[] = [];
   searched: boolean = false;
-  layout: Layout = Layout.double;
   logged?: User;
 
   sortTypeIds: string[] = ["date", "views"];
@@ -93,34 +90,6 @@ export class TeamTableComponent
       {
         this.logged = value;
       })
-
-    this.window.currentDevice$.subscribe(value => 
-      {
-        if(value === Device.mobile || Device.smallMobile)
-        {
-          this.changeLayout(2);
-        }
-        if(value === Device.desktop)
-        {
-          this.changeLayout(0);
-        }
-      })
-  }
-
-  changeLayout(columNumber: number)
-  {
-    switch(columNumber)
-    {
-      case 0:
-        this.layout = Layout.single
-        break;
-      case 1:
-        this.layout = Layout.double
-        break;
-      case 2:
-        this.layout = Layout.mobile
-        break;
-    }
   }
 
   deleteTeam()

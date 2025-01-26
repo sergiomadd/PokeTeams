@@ -15,6 +15,11 @@
   display: inline-flex;
 }
 
+.flex-reverse
+{
+  flex-direction: row-reverse;
+}
+
 .wrap
 {
   flex-wrap: wrap;
@@ -71,5 +76,5 @@
 
 .align-i-e
 {
-  align-items: center;
+  align-items: flex-end;
 }

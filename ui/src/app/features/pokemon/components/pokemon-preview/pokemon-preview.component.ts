@@ -2,7 +2,6 @@ import { Component, inject, Input, SimpleChanges } from '@angular/core';
 import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { PokemonPreview } from 'src/app/features/pokemon/models/pokemonPreview.model';
-import { Layout } from 'src/app/features/search/models/layout.enum';
 
 @Component({
   selector: 'app-pokemon-preview',
@@ -15,7 +14,6 @@ export class PokemonPreviewComponent
   window = inject(WindowService);
 
   @Input() pokemon?: PokemonPreview;
-  @Input() layout?: Layout;
 
   expanded: boolean = false;
   pokemonSpritePath: string | undefined = undefined;
