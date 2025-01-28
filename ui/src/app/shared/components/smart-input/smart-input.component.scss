@@ -23,8 +23,7 @@ $optionsMaxHeight: 20em;
   top: 100%;
   width: calc(100% - 0.4em);
   max-height: 0;
-  //max-height: 100%;
-  margin-left: 0.2em;
+  margin-left: 0.4em;
   padding: 0.2em;
   box-sizing:border-box;
 
@@ -39,7 +38,7 @@ $optionsMaxHeight: 20em;
   overflow-x: auto;
   z-index: 3;
 
-  transition: all ease-in-out 500ms;
+  transition: max-height ease-in-out 500ms, visibility ease-in-out 500ms;
 }
 
 .results-visible 

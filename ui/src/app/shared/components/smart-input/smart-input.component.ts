@@ -24,6 +24,7 @@ export class SmartInputComponent
   @Input() allGetter?: (args?: any) => Promise<Tag[]>
   @Input() allGetterIndex?: number;
   @Input() disabled?: boolean;
+
   @Output() selectEvent = new EventEmitter<Tag>();
   @Output() newEvent = new EventEmitter();
   @Output() updateEvent = new EventEmitter<string>();
@@ -74,8 +75,15 @@ export class SmartInputComponent
         {
           this.updateEvent.emit(undefined);
         }
-        this.results = [];
-        this.showOptions = false;
+        if(this.allGetter)
+        {
+          this.getAllResults();
+        }
+        else
+        {
+          this.results = [];
+          this.showOptions = false;
+        }
       }
     });
   }
@@ -111,12 +119,8 @@ export class SmartInputComponent
     if(this.keepSelected)
     {
       this.selected = selectedResult;
-      this.searchForm.controls.key.setValue("");
     }
-    else
-    {
-      this.input.nativeElement.focus();
-    }
+    this.searchForm.controls.key.setValue("");
     this.showOptions = false;
     this.selectEvent.emit(selectedResult);
   }
@@ -128,30 +132,41 @@ export class SmartInputComponent
     this.selectEvent.emit(undefined);
   }
 
+  async getAllResults()
+  {
+    if(this.allGetter)
+    {
+      if(this.allGetterIndex)
+      {
+        this.results = await this.allGetter(this.allGetterIndex);
+      }
+      else
+      {
+        if(this.allowCustom)
+        {
+          this.results = [this.customQueryResult].concat(await this.allGetter());
+        }
+        else
+        {
+          this.results = await this.allGetter();
+        }
+      }
+    }
+  }
+
   async onFocus()
   {
     if(!this.disabled)
     {
-      if(this.allGetter)
+      if(this.results.length > 0)
       {
         this.showOptions = true;
-        if(this.allGetterIndex)
-        {
-          this.results = await this.allGetter(this.allGetterIndex);
-        }
-        else
-        {
-          if(this.allowCustom)
-          {
-            this.results = [this.customQueryResult].concat(await this.allGetter());
-          }
-          else
-          {
-            this.results = await this.allGetter();
-          }
-        }
       }
-      this.showOptions = true;
+      else if(this.allGetter)
+      {
+        this.getAllResults();
+        this.showOptions = true;
+      }
     }
   }
 
