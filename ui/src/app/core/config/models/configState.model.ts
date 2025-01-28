@@ -1,11 +1,13 @@
 export interface ConfigState
 {
   theme: string,
-  lang: string
+  lang: string,
+  teamsPerPage: number
 }
 
 export const initialConfigState: ConfigState = 
 {
   theme: "light",
-  lang: "en"
+  lang: "en",
+  teamsPerPage: 20
 };

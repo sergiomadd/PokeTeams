@@ -64,4 +64,16 @@ export class ConfigEffects
       })
     )
   });
+
+  changeTeamsPerPage$ = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(configActions.changeTeamsPerPage),
+      switchMap(({request}) =>
+      {
+        const newTeamsPerPage: number = Number(request);
+        return of(configActions.changeTeamsPerPageSuccess({teamsPerPage: newTeamsPerPage}));
+      })
+    )
+  });
 }

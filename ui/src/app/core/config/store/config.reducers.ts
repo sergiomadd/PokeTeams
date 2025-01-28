@@ -38,4 +38,21 @@ export const configReducers = createReducer(
       lang: "en"
     }
   )),
+  on(configActions.changeTeamsPerPage, (state) => (
+    {
+      ...state,
+    }
+  )),
+  on(configActions.changeTeamsPerPageSuccess, (state, action) => (
+    {
+      ...state,
+      teamsPerPage: action.teamsPerPage
+    }
+  )),
+  on(configActions.changeTeamsPerPageFailure, (state) => (
+    {
+      ...state,
+      teamsPerPage: 10 
+    }
+  )),
 )

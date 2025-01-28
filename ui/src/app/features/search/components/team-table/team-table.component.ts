@@ -3,7 +3,8 @@ import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { LoggedUserService } from 'src/app/core/auth/services/logged-user.service';
-import { selectTheme } from 'src/app/core/config/store/config.selectors';
+import { configActions } from 'src/app/core/config/store/config.actions';
+import { selectTeamsPerPage, selectTheme } from 'src/app/core/config/store/config.selectors';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { TeamPreviewData } from 'src/app/features/team/models/teamPreviewData.model';
 import { User } from 'src/app/features/user/models/user.model';
@@ -82,6 +83,7 @@ export class TeamTableComponent
           {
             this.searchService.setQueryTeamsPerPage(value);
             this.searchService.defaultSearch();
+            this.store.dispatch(configActions.changeTeamsPerPage({request: value}))
           }
         }
       }
@@ -89,6 +91,12 @@ export class TeamTableComponent
     this.loggedUserService.loggedUser.subscribe(value =>
       {
         this.logged = value;
+      })
+    this.store.select(selectTeamsPerPage).subscribe(value => 
+      {
+        this.searchService.setQueryTeamsPerPage(value);
+        this.searchService.defaultSearch();
+        this.paginationForm.controls.teamsPerPage.setValue(value);
       })
   }
 

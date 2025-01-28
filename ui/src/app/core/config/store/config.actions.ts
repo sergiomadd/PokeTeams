@@ -12,6 +12,9 @@ export const configActions = createActionGroup(
       changeLang: props<{request: string}>(),
       "changeLang success": props<{lang: string}>(),
       "changeLang failure": props<{error: string}>(),
+      changeTeamsPerPage: props<{request: number}>(),
+      "changeTeamsPerPage success": props<{teamsPerPage: number}>(),
+      "changeTeamsPerPage failure": props<{error: string}>(),
     },
   }
 )
