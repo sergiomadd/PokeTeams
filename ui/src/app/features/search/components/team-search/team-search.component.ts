@@ -59,5 +59,6 @@ export class TeamSearchComponent
   {
     this.tags = [];
     this.searchService.setQueryTags([]);
+    this.searchService.defaultSearch();
   }
 }
