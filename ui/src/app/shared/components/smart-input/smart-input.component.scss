@@ -39,6 +39,16 @@ $optionsMaxHeight: 20em;
   z-index: 3;
 
   transition: max-height ease-in-out 500ms, visibility ease-in-out 500ms;
+
+  &:focus
+  {
+    border-color: red;
+  }
+}
+
+ul
+{
+  margin: 0;
 }
 
 .results-visible 
@@ -51,7 +61,7 @@ $optionsMaxHeight: 20em;
 {
   display: flex;
   align-items: center;
-  min-height: calc($optionHeight + 0.4em);
+  min-height: round(calc($optionHeight + 0.4em), 1px);
   padding: 0 0.2em 0 0.2em;
 
   border-radius: .25em;
@@ -64,6 +74,13 @@ $optionsMaxHeight: 20em;
     color: var(--text-color);
     border-radius: 5px;
   }
+}
+
+.result-hovered
+{
+  background-color: var(--bg-color-3);
+  color: var(--text-color);
+  border-radius: 5px;
 }
 
 .selected

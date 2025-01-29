@@ -13,6 +13,7 @@
       class="input-m flex align-i-c no-overflow w-100"
       (focus)="onFocus()"
       (blur)="onBlur()"
+      (keyup.enter)="selectResult(results[activeResult])"
       [attr.disabled]="disabled ? '' : null"
       [readonly]="disabled"
       [ngClass]="{disabled: disabled}"
@@ -42,35 +43,40 @@
     </ng-container>
   </form>
   <ng-container *ngIf="showOptions || results.length > 0">
-    <div 
+    <ul
+    #resultsDiv
     class="results custom-scrollbar"
     [ngClass]="{'results-visible': showOptions && results}"
     >
       <ng-container *ngIf="allowCustom; else all">
-        <div 
+        <li 
         class="result"
+        [ngClass]="{'result-hovered': activeResult === 0}"
+        [class.active]="activeResult === 0"
         (click)="selectResult(results[0])"
         >
           <ng-container *ngIf="results[0]?.icon">
             <img [attr.src]="results[0]?.icon" alt="" class="icon" fill>
           </ng-container>
           {{results[0]?.name}}
-        </div>    
+        </li>    
         <div class="divider"></div>
         <div class="count">
           {{'shared.smart_input_results' | translate}}: {{results.length - 1}}
         </div>
         <ng-container *ngFor="let result of results; index as i">
           <ng-container *ngIf="i > 0;">
-            <div 
+            <li 
             class="result"
+            [ngClass]="{'result-hovered': activeResult === i}"
+            [class.active]="activeResult === i"
             (click)="selectResult(result)"
             >
               <ng-container *ngIf="result.icon">
                 <img [attr.src]="result.icon" alt="" class="icon" fill loading="lazy">
               </ng-container>
               {{result.name}}
-            </div>
+            </li>
           </ng-container>
         </ng-container>
       </ng-container>
@@ -79,17 +85,19 @@
           {{'shared.smart_input_results' | translate}}: {{results.length}}
         </div>
         <ng-container *ngFor="let result of results; index as i">
-          <div 
+          <li 
           class="result"
+          [ngClass]="{'result-hovered': activeResult === i}"
+          [class.active]="activeResult === i"
           (click)="selectResult(result)"
           >
             <ng-container *ngIf="result.icon">
               <img [attr.src]="result.icon" alt="" class="icon" fill loading="lazy">
             </ng-container>
             {{result.name}}
-          </div>
+          </li>
         </ng-container>
       </ng-template>
-    </div>
+    </ul>
   </ng-container>
 </div>
