@@ -354,8 +354,7 @@ namespace api.Services
                                 }
                                 if (abilityNames != null)
                                 {
-                                    string pathStart = "https://localhost:7134/images/sprites/";
-                                    abilityDTOs.Add(new TagDTO(abilityNames.name, abilities.identifier, icon: pokemonAbilities.is_hidden ? $"{pathStart}hidden.png" : null));
+                                    abilityDTOs.Add(new TagDTO(abilityNames.name, abilities.identifier, icon: pokemonAbilities.is_hidden ? "hidden" : null));
                                 }
                             }
                         }

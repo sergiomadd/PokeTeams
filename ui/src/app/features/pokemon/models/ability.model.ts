@@ -4,7 +4,8 @@ export interface Ability
 {
   identifier: string,
   name: LocalizedText,
-  prose: LocalizedText	
+  prose: LocalizedText,
+  hidden: boolean
 }
 
 export const defaultAbility: Ability = 
@@ -19,5 +20,6 @@ export const defaultAbility: Ability =
   {
     content: "Not Found",
     language: "en"
-  }
+  },
+  hidden: false
 }
