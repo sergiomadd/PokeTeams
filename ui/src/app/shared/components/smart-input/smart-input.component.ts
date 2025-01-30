@@ -199,7 +199,7 @@ export class SmartInputComponent
 
   onBlur()
   {
-    //this.showOptions = false;
+    this.showOptions = false;
   }
 
   newClick()

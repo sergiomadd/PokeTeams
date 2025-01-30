@@ -324,7 +324,19 @@ export class PokemonEditorComponent
   {
     if(this.pokemon)
     {
-      this.pokemon = { ...this.pokemon, ability: event ? await this.pokemonService.getAbilityByName(event.name) : undefined }
+      if(event)
+      {
+        const ability = await this.pokemonService.getAbilityByName(event.name);
+        if(event.icon?.includes("hidden"))
+        {
+          ability.hidden = true;
+        }
+        this.pokemon = { ...this.pokemon, ability: event ? ability : undefined }
+      }
+      else
+      {
+        this.pokemon = { ...this.pokemon, ability: undefined }
+      }
       this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
   }

@@ -257,6 +257,7 @@ export class UtilService
       return {
         name: ability.name.content,
         identifier: ability.name.content,
+        icon: ability.hidden ? "hidden" : undefined
       }
     }
     return undefined;
