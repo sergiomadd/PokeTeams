@@ -387,10 +387,9 @@ export class PokemonEditorComponent
 
   async teraTypeSelectEvent(event: Tag)
   {
-    console.log(event)
     if(this.pokemon)
     {
-      this.pokemon.teraType = event ? await this.pokemonService.getType(event.identifier, true) : undefined;
+      this.pokemon.teraType = event ? await this.pokemonService.getType(event.name, true) : undefined;
     }
   }
 
