@@ -4,22 +4,25 @@
       <div class="left">
         <ng-container *ngIf="pokemon.name; else emptySection">
           <div 
-          class="section animated-border"
-          (click)="clickSection(0, 'evol')"
+          (click)="pokemon.dexNumber !== -1 ? clickSection(0, 'evol') : false"
           [ngClass]="
           {
+            section: pokemon.dexNumber !== -1,
+            'animated-border': pokemon.dexNumber !== -1,
             'poke-tooltip-selected': tooltipEvol[0],
             'poke-tooltip-wrapper': !window.isMobile()
           }"
           >
             <div class="section-content flex align-i-c">
-              <app-poke-tooltip
-              [content]="familyTooltip"
-              [side]="'top'"
-              [visible]="tooltipEvol[0]"
-              class="tooltip-component"
-              >
-              </app-poke-tooltip>
+              <ng-container *ngIf="pokemon.dexNumber !== -1">
+                <app-poke-tooltip
+                [content]="familyTooltip"
+                [side]="'top'"
+                [visible]="tooltipEvol[0]"
+                class="tooltip-component"
+                >
+                </app-poke-tooltip>
+              </ng-container>
               <ng-template #familyTooltip>
                 <div class="flex align-i-c bg-2 bor-rad-5">
                   <ng-container *ngIf="pokemon.preEvolution">
@@ -46,7 +49,7 @@
                 </div>
               </ng-template>
               <div class="relative flex align-i-c h-100 w-100">
-                <ng-container *ngIf="pokemon.dexNumber">
+                <ng-container *ngIf="pokemon.dexNumber && pokemon.dexNumber !== -1">
                   <div class="dex-number">
                     #{{pokemon.dexNumber}}
                   </div>
@@ -70,19 +73,26 @@
         </ng-container>
         <ng-container *ngIf="pokemon.item; else emptySection">
           <div 
-          class="section animated-border"
-          (click)="clickSection(0, 'left')"
-          [ngClass]="{'poke-tooltip-selected': tooltipLeft[0], 'poke-tooltip-wrapper': !window.isMobile()}"
+          (click)="pokemon.item?.identifier !== 'error' ? clickSection(0, 'left') : false"
+          [ngClass]="
+          {
+            section: pokemon.item?.identifier !== 'error',
+            'animated-border': pokemon.item?.identifier !== 'error',
+            'poke-tooltip-selected': tooltipLeft[0],
+            'poke-tooltip-wrapper': !window.isMobile()
+          }"
           >
             <div class="section-content">
-              <app-poke-tooltip
-              [content]="itemTooltip"
-              [side]="'left'"
-              [visible]="tooltipLeft[0]"
-              [mobileChanged]="true"
-              class="tooltip-component"
-              >
-              </app-poke-tooltip>
+              <ng-container *ngIf="pokemon.item?.identifier !== 'error'">
+                <app-poke-tooltip
+                [content]="itemTooltip"
+                [side]="'left'"
+                [visible]="tooltipLeft[0]"
+                [mobileChanged]="true"
+                class="tooltip-component"
+                >
+                </app-poke-tooltip>
+              </ng-container>
               <ng-template #itemTooltip>
                 <div class="poke-tooltip-content">
                   <div class="poke-tooltip-head">
@@ -123,19 +133,26 @@
         </ng-container>
         <ng-container *ngIf="pokemon.ability; else emptySection">
           <div 
-          class="section animated-border"
-          (click)="clickSection(1, 'left')"
-          [ngClass]="{'poke-tooltip-selected':  tooltipLeft[1], 'poke-tooltip-wrapper': !window.isMobile()}"
+          (click)="pokemon.ability?.identifier !== 'error' ? clickSection(1, 'left') : false"
+          [ngClass]="
+          {
+            section: pokemon.ability?.identifier !== 'error',
+            'animated-border': pokemon.ability?.identifier !== 'error',
+            'poke-tooltip-selected': tooltipLeft[1],
+            'poke-tooltip-wrapper': !window.isMobile()
+          }"
           >
             <div class="section-content align-c-c grid-force">
-              <app-poke-tooltip
-              [content]="abilityTooltip"
-              [side]="'left'"
-              [visible]="tooltipLeft[1]"
-              [mobileChanged]="true"
-              class="tooltip-component"
-              >
-              </app-poke-tooltip>
+              <ng-container *ngIf="pokemon.ability?.identifier !== 'error'">
+                <app-poke-tooltip
+                [content]="abilityTooltip"
+                [side]="'left'"
+                [visible]="tooltipLeft[1]"
+                [mobileChanged]="true"
+                class="tooltip-component"
+                >
+                </app-poke-tooltip>
+              </ng-container>
               <ng-template #abilityTooltip>
                 <div class="poke-tooltip-content">
                   <div class="poke-tooltip-head">
@@ -280,257 +297,265 @@
       <div style="padding: 0.8em 0.4em 0.8em 0.4em;">
         <div class="flex-col h-100">
           <div class="flex justify-c-e align-i-c" style="height: 1.2em;">
-            <ng-container *ngIf="pokemon.teraType; else emptyIcon">
-              <div 
-              class="section animated-border poke-tooltip-wrapper"
-              (click)="clickSection(0, 'types')"
-              [ngClass]="{'poke-tooltip-selected': tooltipTypes[0]}"
-              >
-                <div class="section-content type">
-                  <app-poke-tooltip
-                  [content]="teraTypeTooltip"
-                  [side]="'top'"
-                  [visible]="tooltipTypes[0]"
-                  class="tooltip-component"
-                  >
-                  </app-poke-tooltip>
-                  <ng-template #teraTypeTooltip>
-                    <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
-                      <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.superEffective?.length ?? false">
-                        <div class="type-category">
-                          <div class="type-category-text">
-                            <span class="bold">x2</span>
+            <ng-container *ngIf="pokemon.teraType">
+              <ng-container *ngIf="pokemon.teraType?.identifier !== 'error'; else errorIcon">
+                <div 
+                class="section animated-border poke-tooltip-wrapper"
+                (click)="clickSection(0, 'types')"
+                [ngClass]="{'poke-tooltip-selected': tooltipTypes[0]}"
+                >
+                  <div class="section-content type">
+                    <app-poke-tooltip
+                    [content]="teraTypeTooltip"
+                    [side]="'top'"
+                    [visible]="tooltipTypes[0]"
+                    class="tooltip-component"
+                    >
+                    </app-poke-tooltip>
+                    <ng-template #teraTypeTooltip>
+                      <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
+                        <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.superEffective?.length ?? false">
+                          <div class="type-category">
+                            <div class="type-category-text">
+                              <span class="bold">x2</span>
+                            </div>
+                            <div class="type-category-icons">
+                              <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.superEffective">
+                                <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                              </ng-container>
+                            </div>
                           </div>
-                          <div class="type-category-icons">
-                            <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.superEffective">
-                              <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
-                            </ng-container>
-                          </div>
-                        </div>
-                        <div class="flex align-i-c">
-                          <div class="divider"></div>
-                        </div>
-                      </ng-container>
-                      <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.notVeryEffective?.length ?? false">
-                        <div class="type-category">
-                          <div class="type-category-text">
-                            <span class="bold">x0.5</span>
-                          </div>
-                          <div class="type-category-icons">
-                            <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.notVeryEffective">
-                              <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
-                            </ng-container>
-                          </div>
-                        </div>
-                        <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false">
                           <div class="flex align-i-c">
                             <div class="divider"></div>
                           </div>
                         </ng-container>
-                      </ng-container>
-                      <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false">
-                        <div class="type-category">
-                          <div class="type-category-text">
-                            <span class="bold">x0</span> 
+                        <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.notVeryEffective?.length ?? false">
+                          <div class="type-category">
+                            <div class="type-category-text">
+                              <span class="bold">x0.5</span>
+                            </div>
+                            <div class="type-category-icons">
+                              <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.notVeryEffective">
+                                <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                              </ng-container>
+                            </div>
                           </div>
-                          <div class="type-category-icons">
-                            <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.inmune">
-                              <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
-                            </ng-container>
-                          </div>
-                        </div>
-                      </ng-container>
-                    </div>
-                  </ng-template>
-                  <div class="icon-s">
-                    <img src="{{pokemon.teraType.iconPath}}" alt="" class="icon-s">
-                  </div>
-                </div>
-              </div>
-              <div class="flex align-i-c" style="height: 1.5em; padding-right: 0.1em;">
-                <div class="divider"></div>
-              </div>          
-            </ng-container>
-            <ng-container *ngIf="pokemon.types; else emptyIcon">
-              <div
-              class="section animated-border poke-tooltip-wrapper"
-              (click)="clickSection(1, 'types')"
-              [ngClass]="{'poke-tooltip-selected':  tooltipTypes[1]}"
-              >
-                <div class="section-content type icon-s">
-                  <app-poke-tooltip
-                  [content]="typesTooltip"
-                  [side]="'top'"
-                  [visible]="tooltipTypes[1]"
-                  class="tooltip-component"
-                  >
-                  </app-poke-tooltip>
-                  <ng-template #typesTooltip>
-                    <div [ngClass]="
-                    {
-                      'single-type': !pokemon.types?.dualEffectiveness,
-                      'dual-type': pokemon.types?.dualEffectiveness,
-                    }"
-                    >
-                      <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
-                        <ng-container *ngIf="pokemon.types?.dualEffectiveness ?? false; else monotypeTooltip">
-                          <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleSuperEffective?.length ?? false">
-                            <div class="type-category">
-                              <div class="type-category-text">
-                                <span class="bold">x4</span>
-                              </div>
-                              <div class="type-category-icons">
-                                <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleSuperEffective">
-                                  <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
-                                </ng-container>
-                              </div>
-                            </div>
-                            <ng-container *ngIf="pokemon.types?.dualEffectiveness?.superEffective?.length
-                              || pokemon.types?.dualEffectiveness?.notVeryEffective?.length
-                              || pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
-                              || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
-                              <div class="flex align-i-c">
-                                <div class="divider"></div>
-                              </div>                          
-                            </ng-container>
-                          </ng-container>
-                          <ng-container *ngIf="pokemon.types?.dualEffectiveness?.superEffective?.length ?? false">
-                            <div class="type-category">
-                              <div class="type-category-text">
-                                <span class="bold">x2</span>
-                              </div>
-                              <div class="type-category-icons">
-                                <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.superEffective">
-                                  <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
-                                </ng-container>
-                              </div>
-                            </div>
-                            <ng-container *ngIf="pokemon.types?.dualEffectiveness?.notVeryEffective?.length
-                              || pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
-                              || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
-                              <div></div>
-                              <div class="flex align-i-c">
-                                <div class="divider"></div>
-                              </div>                          
-                            </ng-container>
-                          </ng-container>
-                          <ng-container *ngIf="pokemon.types?.dualEffectiveness?.notVeryEffective?.length ?? false">
-                            <div class="type-category">
-                              <div class="type-category-text">
-                                <span class="bold">x0.5</span>
-                              </div>
-                              <div class="type-category-icons">
-                                <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.notVeryEffective">
-                                  <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
-                                </ng-container>
-                              </div>
-                            </div>
-                            <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
-                              || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
-                              <div class="flex align-i-c">
-                                <div class="divider"></div>
-                              </div>                          
-                            </ng-container>
-                          </ng-container>
-                          <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length ?? false">
-                            <div class="type-category">
-                              <div class="type-category-text">
-                                <span class="bold">x0.25</span>
-                              </div>
-                              <div class="type-category-icons">
-                                <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleNotVeryEffective">
-                                  <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
-                                </ng-container>
-                              </div>
-                            </div>
-                            <ng-container *ngIf="pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
-                              <div class="flex align-i-c">
-                                <div class="divider"></div>
-                              </div>
-                            </ng-container>
-                          </ng-container>
-                          <ng-container *ngIf="pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
-                            <div class="type-category">
-                              <div class="type-category-text">
-                                <span class="bold">x0</span>
-                              </div>
-                              <div class="type-category-icons">
-                                <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.inmune">
-                                  <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
-                                </ng-container>
-                              </div>
-                            </div>
-                          </ng-container>
-                        </ng-container>
-                        <ng-template #monotypeTooltip>
-                          <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.superEffective?.length ?? false">
-                            <div class="type-category">
-                              <div class="type-category-text">
-                                <span class="bold">x2</span>
-                              </div>
-                              <div class="type-category-icons">
-                                <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.superEffective">
-                                  <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
-                                </ng-container>
-                              </div>
-                            </div>
+                          <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false">
                             <div class="flex align-i-c">
                               <div class="divider"></div>
                             </div>
                           </ng-container>
-                          <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.notVeryEffective?.length ?? false">
-                            <div class="type-category">
-                              <div class="type-category-text">
-                                <span class="bold">x0.5</span>
-                              </div>
-                              <div class="type-category-icons">
-                                <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.notVeryEffective">
-                                  <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
-                                </ng-container>
-                              </div>
+                        </ng-container>
+                        <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false">
+                          <div class="type-category">
+                            <div class="type-category-text">
+                              <span class="bold">x0</span> 
                             </div>
-                            <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.inmune?.length ?? false">
+                            <div class="type-category-icons">
+                              <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.inmune">
+                                <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                              </ng-container>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </ng-template>
+                    <div class="icon-s">
+                      <img src="{{pokemon.teraType.iconPath}}" alt="" class="icon-s">
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <div class="flex align-i-c" style="height: 1.5em; padding-right: 0.1em;">
+                <div class="divider"></div>
+              </div>          
+            </ng-container>
+            <ng-container *ngIf="pokemon.types">
+              <ng-container *ngIf="pokemon.types?.type1?.identifier !== 'error'; else errorIcon">
+                <div
+                class="section animated-border poke-tooltip-wrapper"
+                (click)="clickSection(1, 'types')"
+                [ngClass]="{'poke-tooltip-selected':  tooltipTypes[1]}"
+                >
+                  <div class="section-content type icon-s">
+                    <app-poke-tooltip
+                    [content]="typesTooltip"
+                    [side]="'top'"
+                    [visible]="tooltipTypes[1]"
+                    class="tooltip-component"
+                    >
+                    </app-poke-tooltip>
+                    <ng-template #typesTooltip>
+                      <div [ngClass]="
+                      {
+                        'single-type': !pokemon.types?.dualEffectiveness,
+                        'dual-type': pokemon.types?.dualEffectiveness,
+                      }"
+                      >
+                        <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
+                          <ng-container *ngIf="pokemon.types?.dualEffectiveness ?? false; else monotypeTooltip">
+                            <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleSuperEffective?.length ?? false">
+                              <div class="type-category">
+                                <div class="type-category-text">
+                                  <span class="bold">x4</span>
+                                </div>
+                                <div class="type-category-icons">
+                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleSuperEffective">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  </ng-container>
+                                </div>
+                              </div>
+                              <ng-container *ngIf="pokemon.types?.dualEffectiveness?.superEffective?.length
+                                || pokemon.types?.dualEffectiveness?.notVeryEffective?.length
+                                || pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
+                                || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
+                                <div class="flex align-i-c">
+                                  <div class="divider"></div>
+                                </div>                          
+                              </ng-container>
+                            </ng-container>
+                            <ng-container *ngIf="pokemon.types?.dualEffectiveness?.superEffective?.length ?? false">
+                              <div class="type-category">
+                                <div class="type-category-text">
+                                  <span class="bold">x2</span>
+                                </div>
+                                <div class="type-category-icons">
+                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.superEffective">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  </ng-container>
+                                </div>
+                              </div>
+                              <ng-container *ngIf="pokemon.types?.dualEffectiveness?.notVeryEffective?.length
+                                || pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
+                                || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
+                                <div></div>
+                                <div class="flex align-i-c">
+                                  <div class="divider"></div>
+                                </div>                          
+                              </ng-container>
+                            </ng-container>
+                            <ng-container *ngIf="pokemon.types?.dualEffectiveness?.notVeryEffective?.length ?? false">
+                              <div class="type-category">
+                                <div class="type-category-text">
+                                  <span class="bold">x0.5</span>
+                                </div>
+                                <div class="type-category-icons">
+                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.notVeryEffective">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  </ng-container>
+                                </div>
+                              </div>
+                              <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
+                                || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
+                                <div class="flex align-i-c">
+                                  <div class="divider"></div>
+                                </div>                          
+                              </ng-container>
+                            </ng-container>
+                            <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length ?? false">
+                              <div class="type-category">
+                                <div class="type-category-text">
+                                  <span class="bold">x0.25</span>
+                                </div>
+                                <div class="type-category-icons">
+                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleNotVeryEffective">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  </ng-container>
+                                </div>
+                              </div>
+                              <ng-container *ngIf="pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
+                                <div class="flex align-i-c">
+                                  <div class="divider"></div>
+                                </div>
+                              </ng-container>
+                            </ng-container>
+                            <ng-container *ngIf="pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
+                              <div class="type-category">
+                                <div class="type-category-text">
+                                  <span class="bold">x0</span>
+                                </div>
+                                <div class="type-category-icons">
+                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.inmune">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  </ng-container>
+                                </div>
+                              </div>
+                            </ng-container>
+                          </ng-container>
+                          <ng-template #monotypeTooltip>
+                            <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.superEffective?.length ?? false">
+                              <div class="type-category">
+                                <div class="type-category-text">
+                                  <span class="bold">x2</span>
+                                </div>
+                                <div class="type-category-icons">
+                                  <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.superEffective">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  </ng-container>
+                                </div>
+                              </div>
                               <div class="flex align-i-c">
                                 <div class="divider"></div>
                               </div>
-                          </ng-container>
-                          </ng-container>
-                          <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.inmune?.length ?? false">
-                            <div class="type-category">
-                              <div class="text">
-                                <span class="bold">x0</span> 
+                            </ng-container>
+                            <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.notVeryEffective?.length ?? false">
+                              <div class="type-category">
+                                <div class="type-category-text">
+                                  <span class="bold">x0.5</span>
+                                </div>
+                                <div class="type-category-icons">
+                                  <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.notVeryEffective">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  </ng-container>
+                                </div>
                               </div>
-                              <div class="type-category-icons">
-                                <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.inmune">
-                                  <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
-                                </ng-container>
+                              <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.inmune?.length ?? false">
+                                <div class="flex align-i-c">
+                                  <div class="divider"></div>
+                                </div>
+                            </ng-container>
+                            </ng-container>
+                            <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.inmune?.length ?? false">
+                              <div class="type-category">
+                                <div class="text">
+                                  <span class="bold">x0</span> 
+                                </div>
+                                <div class="type-category-icons">
+                                  <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.inmune">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  </ng-container>
+                                </div>
                               </div>
-                            </div>
-                          </ng-container>
-                        </ng-template>
+                            </ng-container>
+                          </ng-template>
+                        </div>
                       </div>
-                    </div>
-                  </ng-template>
-                  <ng-container *ngIf="pokemon.types?.dualEffectiveness ?? false; else monotype">
-                    <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon-s">
-                    <img src="{{pokemon.types?.type2?.iconPath}}" title="{{pokemon.types?.type2?.name?.content}}" alt="{{pokemon.types?.type2?.name?.content}}" class="icon-s">
-                  </ng-container>
-                  <ng-template #monotype>
-                    <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon-s">
-                  </ng-template>
+                    </ng-template>
+                    <ng-container *ngIf="pokemon.types?.dualEffectiveness ?? false; else monotype">
+                      <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon-s">
+                      <img src="{{pokemon.types?.type2?.iconPath}}" title="{{pokemon.types?.type2?.name?.content}}" alt="{{pokemon.types?.type2?.name?.content}}" class="icon-s">
+                    </ng-container>
+                    <ng-template #monotype>
+                      <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon-s">
+                    </ng-template>
+                  </div>
                 </div>
-              </div>
+              </ng-container>
             </ng-container>
           </div>
-          <ng-container *ngIf="pokemon.sprite">
-            <div class="flex justify-c-c align-i-c h-100">
-              <img src={{pokemonSpritePath}} alt="" class="sprite">
-            </div>
-          </ng-container>
-          <div class="flex justify-c-sb align-i-c" style="height: 1.2em;">
-            <ng-container *ngIf="pokemon.name && pokemon.shiny; else emptyIcon">
-              <svg class="icon-s" [attr.fill]="shinyColor" viewBox="0 0 512 512" id="icons" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M208,512,155.62,372.38,16,320l139.62-52.38L208,128l52.38,139.62L400,320,260.38,372.38Z"></path><path d="M88,176,64.43,111.57,0,88,64.43,64.43,88,0l23.57,64.43L176,88l-64.43,23.57Z"></path><path d="M400,256l-31.11-80.89L288,144l80.89-31.11L400,32l31.11,80.89L512,144l-80.89,31.11Z"></path></g></svg>
+          <div class="flex justify-c-c align-i-c h-100">
+            <ng-container *ngIf="pokemon.dexNumber">
+              <ng-container *ngIf="pokemon.dexNumber !== -1; else errorSVG">
+                <img src={{pokemonSpritePath}} alt="" class="sprite">
+              </ng-container>
             </ng-container>
+          </div>
+          <div class="flex justify-c-sb align-i-c" style="height: 1.2em;">
+            <div class="icon-s">
+              <ng-container *ngIf="pokemon.name && pokemon.shiny">
+                <svg [attr.fill]="shinyColor" viewBox="0 0 512 512" id="icons" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M208,512,155.62,372.38,16,320l139.62-52.38L208,128l52.38,139.62L400,320,260.38,372.38Z"></path><path d="M88,176,64.43,111.57,0,88,64.43,64.43,88,0l23.57,64.43L176,88l-64.43,23.57Z"></path><path d="M400,256l-31.11-80.89L288,144l80.89-31.11L400,32l31.11,80.89L512,144l-80.89,31.11Z"></path></g></svg>
+              </ng-container>
+            </div>
             <ng-container *ngIf="pokemon.name && pokemon.level">
               <div 
               class="section animated-border poke-tooltip-wrapper"
@@ -554,18 +579,22 @@
                 </div>
               </div>
             </ng-container>
-            <ng-container *ngIf="pokemon.name">
-              <ng-container *ngIf="pokemon.gender == true; else male">
-                <div class="bor-rad-20 icon-s flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.female}">
-                  <svg class="icon-s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-female"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M12 14v7" /><path d="M9 18h6" /></svg>
-                </div>
+            <div class="icon-s">
+              <ng-container *ngIf="pokemon.dexNumber">
+                <ng-container *ngIf="pokemon.dexNumber !== -1; else errorIcon">
+                  <ng-container *ngIf="pokemon.gender == true; else male">
+                    <div class="bor-rad-20 flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.female}">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-female"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M12 14v7" /><path d="M9 18h6" /></svg>
+                    </div>
+                  </ng-container>
+                  <ng-template #male>
+                    <div class="bor-rad-20 flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.male}">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-male"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 14m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M19 5l-5.4 5.4" /><path d="M19 5h-5" /><path d="M19 5v5" /></svg>                  
+                    </div>
+                  </ng-template>
+                </ng-container>
               </ng-container>
-              <ng-template #male>
-                <div class="bor-rad-20 icon-s flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.male}">
-                  <svg class="icon-s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-male"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 14m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M19 5l-5.4 5.4" /><path d="M19 5h-5" /><path d="M19 5v5" /></svg>                  
-                </div>
-              </ng-template>
-            </ng-container>
+            </div>
           </div>
         </div>
       </div>
@@ -573,17 +602,30 @@
         <div class="moves">
           <ng-container *ngFor="let move of pokemon.moves; index as i">
             <ng-container *ngIf="move; else emptySection">
-              <div class="section animated-border"
-              (click)="clickSection(i, 'right')"
-              [ngClass]="{'poke-tooltip-selected': tooltipRight[i], 'poke-tooltip-wrapper': !window.isMobile()}"
+              <div 
+              (click)="move?.identifier !== 'error' ? clickSection(i, 'right') : false"
+              [ngClass]="
+              {
+                section: move?.identifier !== 'error',
+                'animated-border': move?.identifier !== 'error',
+                'poke-tooltip-selected': tooltipRight[i],
+                'poke-tooltip-wrapper': !window.isMobile()
+              }"
               >
                 <div class="move section-content gap-m"
                 [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.identifier ?? '')}"
                 >
                   <div class="pad-s flex justify-c-c align-i-c bor-rad-5" style="margin-left: 0.3em;"
                   [ngStyle]="{'background': theme.getTypeColor(move?.pokeType?.identifier ?? '')}">
-                    <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name?.content}}"
-                     alt="{{move?.pokeType?.name?.content}}" class="icon-m">
+                    <ng-container *ngIf="move?.identifier === 'error'; else moveIcon">
+                      <div class="icon-m">
+                        <ng-container *ngTemplateOutlet="errorSVG"></ng-container>
+                      </div>
+                    </ng-container>
+                    <ng-template #moveIcon>
+                      <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name?.content}}"
+                      alt="{{move?.pokeType?.name?.content}}" class="icon-m">
+                    </ng-template>
                   </div>
                     <div class="text-start space-nowrap no-overflow w-90">
                       {{move?.name?.content}}
@@ -591,14 +633,16 @@
                         <app-no-translation></app-no-translation>
                       </ng-container>
                     </div>
-                  <app-poke-tooltip
-                  [content]="moveTooltip"
-                  [side]="'right'"
-                  [visible]="tooltipRight[i]"
-                  [mobileChanged]="true"
-                  class="tooltip-component"
-                  >
-                  </app-poke-tooltip>
+                  <ng-container *ngIf="move?.identifier !== 'error'">
+                    <app-poke-tooltip
+                    [content]="moveTooltip"
+                    [side]="'right'"
+                    [visible]="tooltipRight[i]"
+                    [mobileChanged]="true"
+                    class="tooltip-component"
+                    >
+                    </app-poke-tooltip>
+                  </ng-container>
                   <ng-template #moveTooltip>
                     <div class="poke-tooltip-content">
                       <div class="poke-tooltip-head move-head" 
@@ -917,7 +961,7 @@
   </ng-container>
 
 </div>
-<ng-template #emptyIcon><div class="icon-s cursor-auto"></div></ng-template>
+<ng-template #errorIcon><div class="icon-s"><ng-container *ngTemplateOutlet="errorSVG"></ng-container></div></ng-template>
 <ng-template #emptySection><div class="empty-section"></div></ng-template>
 <ng-template #emptyLine><div class="empty-line"></div></ng-template>
 <ng-template #noPokemon>
@@ -942,4 +986,15 @@
       </div>
     </div>
   </ng-container>
+</ng-template>
+<ng-template #errorSVG>
+  <svg class="feedback" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+    <g id="SVGRepo_iconCarrier"> 
+      <path fill="var(--bg-color-3)" d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"></path> 
+      <path fill="var(--text-color)" d="M12 6.25C12.4142 6.25 12.75 6.58579 12.75 7V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V7C11.25 6.58579 11.5858 6.25 12 6.25Z"></path> 
+      <path fill="var(--text-color)" d="M12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z"></path> 
+    </g>
+  </svg>
 </ng-template>

@@ -6,7 +6,7 @@
       [ngClass]="{selected: selectedPokemonIndex == i}"
       (click)="selectPokemon(i)"
       >
-      <ng-container *ngIf="pokemon?.dexNumber; else index">
+      <ng-container *ngIf="pokemon?.dexNumber && pokemon?.dexNumber !== -1; else index">
         <img class="icon-l" src="{{pokemon?.sprite?.base}}" alt="">
       </ng-container>
       <ng-template #index>{{i + 1}}</ng-template>

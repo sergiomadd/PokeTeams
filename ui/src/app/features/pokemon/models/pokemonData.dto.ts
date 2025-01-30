@@ -22,7 +22,7 @@ export const defaultPokemonData: PokemonData =
     content: "Not Found",
     language: "en"
   },
-  dexNumber: 0,
+  dexNumber: -1,
   preEvolution: undefined,
 	evolutions: [],
   types: defaultTypesWithEffectiveness,
