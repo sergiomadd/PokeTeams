@@ -195,16 +195,30 @@ export class UtilService
     return [day, month, year].join('/');
   }
 
-  getStatName(stat: Stat)
+  getStatCode(stat: Stat)
   {
     const nameDict = 
     {
       "hp": "HP",
-      "atk": "Atk",
-      "def": "Def",
-      "spa": "SpA",
-      "spd": "SpD",
-      "spe": "Spe"
+      "attack": "Atk",
+      "defense": "Def",
+      "special-attack": "SpA",
+      "special-defense": "SpD",
+      "speed": "Spe"
+    }
+    return nameDict[stat.identifier];
+  }
+
+  getStatShortIdentifier(stat: Stat)
+  {
+    const nameDict = 
+    {
+      "hp": "hp",
+      "attack": "atk",
+      "defense": "def",
+      "special-attack": "spa",
+      "special-defense": "spd",
+      "speed": "spe"
     }
     return nameDict[stat.identifier];
   }

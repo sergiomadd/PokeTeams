@@ -118,7 +118,7 @@ export enum StatColor
     spa = "hsl(222, 82%, 67%)",
     spd = "hsl(100, 52%, 55%)",
     spe = "hsl(342, 92%, 66%)",
-    iv = "hsl(195, 53%, 79%)",
+    iv = "hsl(195, 53%, 79%)", 
     ev = "hsl(239, 58%, 74%)"
 }
 

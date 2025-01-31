@@ -861,7 +861,7 @@
               </app-poke-tooltip>
               <ng-template #statTooltip>
                 <div class="poke-tooltip-content">
-                  <div class="poke-tooltip-head" [ngStyle]="{backgroundColor: theme.getStatColor(stat.identifier)}">
+                  <div class="poke-tooltip-head" [ngStyle]="{backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat))}">
                     {{stat.name?.content}}
                     <ng-container *ngIf="stat.name && stat.name?.language != (selectedLang$ | async)">
                       <app-no-translation></app-no-translation>
@@ -873,7 +873,7 @@
                       <div>{{'pokemon.stat.initial' | translate}}</div>
                       <div><span>LvL({{pokemon.level ?? 50}})</span></div>
                     </div>
-                    <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;" [ngStyle]="{backgroundColor: theme.getStatColor(stat.identifier)}">
+                    <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;" [ngStyle]="{backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat))}">
                       <div>{{'pokemon.stat.base' | translate}}</div>
                       <div>{{stat.value}}</div>
                       <div>{{calculatedStats.base[i]?.value}}</div>
@@ -928,7 +928,7 @@
               </ng-template>
               <div class="stat">
                 <div class="flex justify-c-c" style="width: 2em;">
-                  {{util.getStatName(stat)}}
+                  {{util.getStatCode(stat)}}
                 </div>
                 <div class="flex justify-c-s w-100" style="height: 0.8em;">
                   <div 
@@ -936,7 +936,7 @@
                   [ngStyle]="
                   {
                     width: getStatSize(calculatedStats.base[i].value),
-                    backgroundColor: theme.getStatColor(stat.identifier),
+                    backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat)),
                     borderRadius: (teamOptions?.showIVs && pokemon.ivs ? (pokemon.ivs[i].value / 4) === 0 ? false : true : false)  ||
                       (teamOptions?.showEVs && pokemon.evs ? (pokemon.evs[i].value / 4) === 0 ? false : true : false) ? ('15px 0 0 15px') : '15px'
                   }"

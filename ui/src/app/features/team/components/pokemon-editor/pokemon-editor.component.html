@@ -178,7 +178,7 @@
                 <div class="pad-s bor-rad-5 pointer text-center no-select" (click)="selectStat(i)"
                 [ngClass]="{selectedStat: selectedStat === i, disabled: !pokemon.name}"
                 >
-                  {{stat.name.content}}
+                  {{util.getStatCode(stat)}}
                 </div>
               </ng-container>
             </div>

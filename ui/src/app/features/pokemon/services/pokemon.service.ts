@@ -302,7 +302,7 @@ export class PokemonService
             content: "Atk",
             language: "en"
           },
-          identifier: "atk",
+          identifier: "attack",
           value: 0
         },
         {
@@ -311,7 +311,7 @@ export class PokemonService
             content: "Def",
             language: "en"
           },
-          identifier: "def",
+          identifier: "defense",
           value: 0
         },
         {
@@ -320,7 +320,7 @@ export class PokemonService
             content: "SpA",
             language: "en"
           },
-          identifier: "spa",
+          identifier: "special-attack",
           value: 0
         },
         {
@@ -329,7 +329,7 @@ export class PokemonService
             content: "SpD",
             language: "en"
           },
-          identifier: "spd",
+          identifier: "special-defense",
           value: 0
         },
         {
@@ -338,7 +338,7 @@ export class PokemonService
             content: "Spe",
             language: "en"
           },
-          identifier: "spe",
+          identifier: "speed",
           value: 0
         }
       ],
@@ -359,7 +359,7 @@ export class PokemonService
             content: "Atk",
             language: "en"
           },
-          identifier: "atk",
+          identifier: "attack",
           value: 0
         },
         {
@@ -368,7 +368,7 @@ export class PokemonService
             content: "Def",
             language: "en"
           },
-          identifier: "def",
+          identifier: "defense",
           value: 0
         },
         {
@@ -377,7 +377,7 @@ export class PokemonService
             content: "SpA",
             language: "en"
           },
-          identifier: "spa",
+          identifier: "special-attack",
           value: 0
         },
         {
@@ -386,7 +386,7 @@ export class PokemonService
             content: "SpD",
             language: "en"
           },
-          identifier: "spd",
+          identifier: "special-defense",
           value: 0
         },
         {
@@ -395,7 +395,7 @@ export class PokemonService
             content: "Spe",
             language: "en"
           },
-          identifier: "spe",
+          identifier: "speed",
           value: 0
         }
       ],
