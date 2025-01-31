@@ -176,6 +176,8 @@
             <div class="flex justify-c-c gap-m" [ngClass]="{'not-allowed': !pokemon.name}">
               <ng-container *ngFor="let stat of pokemon.ivs; index as i">
                 <div class="pad-s bor-rad-5 pointer text-center no-select" (click)="selectStat(i)"
+                style="color: white;"
+                [ngStyle]="{backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat))}"
                 [ngClass]="{selectedStat: selectedStat === i, disabled: !pokemon.name}"
                 >
                   {{util.getStatCode(stat)}}

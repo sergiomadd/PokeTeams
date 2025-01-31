@@ -2,6 +2,7 @@ import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GenderColors, shinyColor } from 'src/app/core/config/models/colors';
+import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { PokemonData } from 'src/app/features/pokemon/models/pokemonData.dto';
@@ -30,6 +31,7 @@ export class PokemonEditorComponent
   teamEditorService = inject(TeamEditorService)
   router = inject(Router);
   window = inject(WindowService);
+  theme = inject(ThemeService);
 
   teamKey: string = "";
   team: Team = <Team>{};

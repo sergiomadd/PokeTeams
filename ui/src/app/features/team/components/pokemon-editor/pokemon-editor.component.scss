@@ -62,8 +62,7 @@
 
 .selectedStat
 {
-  background-color: var(--primary);
-  color: white;
+  outline: 1px solid var(--text-color);
 }
 
 .level
