@@ -81,3 +81,23 @@ button
   min-width: 7em;
   min-height: 3em;
 }
+
+.icon-button
+{
+  padding: 0;
+  padding-block: 0;
+  padding-inline: 0;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: none;
+  background-color: none;
+  width: fit-content;
+  height: fit-content;
+  background-color: var(--bg-color-2);
+  color: var(--text-color);
+
+  &:hover
+  {
+    box-shadow: none;  
+  }
+}
