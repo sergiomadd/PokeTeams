@@ -44,7 +44,7 @@ export class PokemonService
       const naturePromise: Promise<Nature> | undefined = pokePaste.nature ? this.getNatureByName(pokePaste.nature) : undefined;
       const movesPromise: Promise<Move[]> | undefined = pokePaste.moves ? this.getMoves(pokePaste.moves) : undefined;
       const ivsPromise: Promise<Stat[]> | undefined = pokePaste.ivs ? this.getStats(pokePaste.ivs) : undefined;
-      const evsPromise: Promise<Stat[]> | undefined = pokePaste.evs ? this.getStats(pokePaste.evs) : undefined; 
+      const evsPromise: Promise<Stat[]> | undefined = pokePaste.evs ? this.getStats(pokePaste.evs) : undefined;
       
       await Promise.allSettled([pokemonDataPromise, teraTypePromise, itemPromise, abilityPromise, naturePromise, movesPromise, ivsPromise, evsPromise])
       .then(([pokemonData, teraType, itemPromise, abilityPromise, naturePromise, movesPromise, ivsPromise, evsPromise]) => 
@@ -77,6 +77,10 @@ export class PokemonService
     {
       console.log('Generated pokemon: ', pokemon);
     }
+    if(pokemon.dexNumber && pokemon.ability)
+    {
+      pokemon.ability.hidden = await this.isAbilityHidden(pokemon.ability?.identifier, pokemon.dexNumber);
+    }
     //console.log("Time to generate pokemon: ", new Date().getTime() - now);
     return pokemon;
   }
@@ -103,6 +107,15 @@ export class PokemonService
     let url = this.apiUrl + 'ability/name/' + name;
     ability = await lastValueFrom(this.http.get<Ability>(url).pipe(catchError(() => [defaultAbility]), timeout(this.dataTimeout)));
     return ability; 
+  }
+
+  async isAbilityHidden(abilityIdentifier: string, dexNumber: number) : Promise<boolean>
+  {
+    let url = this.apiUrl + 'ability/hidden';
+    const params = new HttpParams()
+      .set('abilityIdentifier', abilityIdentifier)
+      .set('dexNumber', dexNumber);
+    return await lastValueFrom(this.http.get<boolean>(url, {params}).pipe(catchError(() => [false]), timeout(this.dataTimeout)));; 
   }
 
   async getNatureByName(name: string) : Promise<Nature>
