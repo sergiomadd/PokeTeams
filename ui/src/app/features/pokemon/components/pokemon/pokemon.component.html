@@ -703,53 +703,51 @@
                             >
                             </app-poke-tooltip>
                             <ng-template #moveTypeTooltip>
-                              <div class="poke-tooltip-content">
-                                <div class="flex justify-c-c bg2 bor-rad-5">
-                                  <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.superEffective?.length ?? false">
-                                    <div class="type-category">
-                                      <div class="type-category-text">
-                                        <span class="bold">x2</span>
-                                      </div>
-                                      <div class="type-category-icons">
-                                        <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.superEffective">
-                                          <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
-                                        </ng-container>
-                                      </div>
+                              <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
+                                <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.superEffective?.length ?? false">
+                                  <div class="type-category">
+                                    <div class="type-category-text">
+                                      <span class="bold">x2</span>
                                     </div>
+                                    <div class="type-category-icons">
+                                      <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.superEffective">
+                                        <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                  <div class="flex align-i-c">
+                                    <div class="divider"></div>
+                                  </div>                                  
+                                </ng-container>
+                                <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.notVeryEffective?.length ?? false">
+                                  <div class="type-category">
+                                    <div class="type-category-text">
+                                      <span class="bold">x0.5</span>
+                                    </div>
+                                    <div class="type-category-icons">
+                                      <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.notVeryEffective">
+                                        <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                  <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.inmune?.length ?? false">
                                     <div class="flex align-i-c">
                                       <div class="divider"></div>
-                                    </div>                                  
+                                    </div>                                    
                                   </ng-container>
-                                  <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.notVeryEffective?.length ?? false">
-                                    <div class="type-category">
-                                      <div class="type-category-text">
-                                        <span class="bold">x0.5</span>
-                                      </div>
-                                      <div class="type-category-icons">
-                                        <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.notVeryEffective">
-                                          <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
-                                        </ng-container>
-                                      </div>
+                                </ng-container>
+                                <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.inmune?.length ?? false">
+                                  <div class="type-category">
+                                    <div class="type-category-text">
+                                      <span class="bold">x0</span> 
                                     </div>
-                                    <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.inmune?.length ?? false">
-                                      <div class="flex align-i-c">
-                                        <div class="divider"></div>
-                                      </div>                                    
-                                    </ng-container>
-                                  </ng-container>
-                                  <ng-container *ngIf="move?.pokeType?.effectivenessAttack?.inmune?.length ?? false">
-                                    <div class="type-category">
-                                      <div class="type-category-text">
-                                        <span class="bold">x0</span> 
-                                      </div>
-                                      <div class="type-category-icons">
-                                        <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.inmune">
-                                          <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
-                                        </ng-container>
-                                      </div>
+                                    <div class="type-category-icons">
+                                      <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.inmune">
+                                        <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
+                                      </ng-container>
                                     </div>
-                                  </ng-container>
-                                </div>
+                                  </div>
+                                </ng-container>
                               </div>
                             </ng-template>
                             <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name?.content}}" alt="{{move?.pokeType?.name?.content}}" class="icon-m">
@@ -853,7 +851,7 @@
         <ng-container *ngFor="let stat of pokemon.stats; index as i">
           <div class="no-pad section animated-border poke-tooltip-wrapper" (click)="clickSection(i, 'stat')" 
           [ngClass]="{'poke-tooltip-selected': tooltipStats[i]}">
-            <div class="section-content flex justify-c-sb align-i-c gap-s">
+            <div class="section-content">
               <app-poke-tooltip
               [content]="statTooltip"
               [side]="'top'"
@@ -928,67 +926,69 @@
                   </div>
                 </div>
               </ng-template>
-              <div class="flex justify-c-c" style="width: 2em;">
-                {{util.getStatName(stat)}}
-              </div>
-              <div class="flex justify-c-s w-100" style="height: 0.8em;">
-                <div 
-                class="bar"
-                [ngStyle]="
-                {
-                  width: getStatSize(calculatedStats.base[i].value),
-                  backgroundColor: theme.getStatColor(stat.identifier),
-                  borderRadius: (teamOptions?.showIVs && pokemon.ivs ? (pokemon.ivs[i].value / 4) === 0 ? false : true : false)  ||
-                    (teamOptions?.showEVs && pokemon.evs ? (pokemon.evs[i].value / 4) === 0 ? false : true : false) ? ('15px 0 0 15px') : '15px'
-                }"
-                >
+              <div class="stat">
+                <div class="flex justify-c-c" style="width: 2em;">
+                  {{util.getStatName(stat)}}
                 </div>
-                <ng-container *ngIf="teamOptions?.showIVs">
+                <div class="flex justify-c-s w-100" style="height: 0.8em;">
                   <div 
                   class="bar"
                   [ngStyle]="
                   {
-                    width: pokemon.ivs ? getStatSize(calculatedStats.ivs[i].value) : 'none',
-                    backgroundColor: theme.getStatColor('iv'),
-                    borderRadius: teamOptions?.showEVs && (pokemon.evs ? (pokemon.evs[i].value / 4) == 0 ? false : true : false) ? '0' : '0 15px 15px 0'
+                    width: getStatSize(calculatedStats.base[i].value),
+                    backgroundColor: theme.getStatColor(stat.identifier),
+                    borderRadius: (teamOptions?.showIVs && pokemon.ivs ? (pokemon.ivs[i].value / 4) === 0 ? false : true : false)  ||
+                      (teamOptions?.showEVs && pokemon.evs ? (pokemon.evs[i].value / 4) === 0 ? false : true : false) ? ('15px 0 0 15px') : '15px'
                   }"
                   >
                   </div>
-                </ng-container>
-                <ng-container *ngIf="teamOptions?.showEVs">
-                  <div class="bar" style="border-radius: 0 15px 15px 0;" 
-                  [ngStyle]="
-                  {
-                    width: pokemon.evs ? getStatSize(calculatedStats.evs[i].value) : 'none',
-                    backgroundColor: theme.getStatColor('ev'),
-                  }"
-                  [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}"
-                  >
-                  </div>
-                </ng-container>
-                <ng-container *ngIf="teamOptions?.showNature">
-                  <ng-container *ngIf="!(stat.identifier===pokemon.nature?.increasedStat?.identifier
-                  && stat.identifier===pokemon.nature?.decreasedStat?.identifier); else neutral">
-                    <ng-container *ngIf="stat.identifier===pokemon.nature?.increasedStat?.identifier">
-                      <div class="flex justify-c-c align-i-c pointer" style="margin-left: 0.2em;">
-                        <svg class="icon-xs" version="1.0" xmlns="http://www.w3.org/2000/svg" width="64.000000pt" height="64.000000pt" viewBox="0 0 64.000000 64.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)" [attr.fill]="natureColors.up" stroke="none"> <path d="M302 628 c-18 -22 -292 -589 -292 -605 0 -27 28 -23 157 27 73 27 143 50 155 50 13 0 82 -23 153 -50 72 -28 136 -48 142 -45 7 2 13 12 12 22 0 25 -292 607 -305 611 -6 1 -16 -3 -22 -10z"/> </g> </svg>
-                      </div>
-                    </ng-container>
-                    <ng-container *ngIf="stat.identifier===pokemon.nature?.decreasedStat?.identifier">
-                      <div class="flex justify-c-c align-i-c pointer" style="margin-left: 0.2em;">
-                        <svg class="icon-xs" version="1.0" xmlns="http://www.w3.org/2000/svg" width="64.000000pt" height="64.000000pt" viewBox="0 0 64.000000 64.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)" [attr.fill]="natureColors.down" stroke="none"> <path d="M16 621 c-9 -15 287 -606 304 -606 17 0 298 557 299 593 1 12 -5 22 -12 22 -7 0 -71 -22 -142 -50 -71 -27 -136 -50 -145 -50 -9 0 -74 22 -145 50 -136 52 -150 56 -159 41z"/> </g> </svg>
-                      </div>
-                    </ng-container>
-                  </ng-container>
-                  <ng-template #neutral>
-                    <div class="flex justify-c-c align-i-c pointer" style="margin-left: 0.2em;">
-                      <svg class="icon-xs" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M2 8a1 1 0 011-1h10a1 1 0 110 2H3a1 1 0 01-1-1z" fill="var(--text-color-secondary)"></path> </g></svg>
+                  <ng-container *ngIf="teamOptions?.showIVs">
+                    <div 
+                    class="bar"
+                    [ngStyle]="
+                    {
+                      width: pokemon.ivs ? getStatSize(calculatedStats.ivs[i].value) : 'none',
+                      backgroundColor: theme.getStatColor('iv'),
+                      borderRadius: teamOptions?.showEVs && (pokemon.evs ? (pokemon.evs[i].value / 4) == 0 ? false : true : false) ? '0' : '0 15px 15px 0'
+                    }"
+                    >
                     </div>
-                  </ng-template>
-                </ng-container>
-              </div>
-              <div class="flex justify-c-c" style="width: 2em; margin-left: 0.2em;">
-                {{calculatedStats.total[i].value}}
+                  </ng-container>
+                  <ng-container *ngIf="teamOptions?.showEVs">
+                    <div class="bar" style="border-radius: 0 15px 15px 0;" 
+                    [ngStyle]="
+                    {
+                      width: pokemon.evs ? getStatSize(calculatedStats.evs[i].value) : 'none',
+                      backgroundColor: theme.getStatColor('ev'),
+                    }"
+                    [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}"
+                    >
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="teamOptions?.showNature">
+                    <ng-container *ngIf="!(stat.identifier===pokemon.nature?.increasedStat?.identifier
+                    && stat.identifier===pokemon.nature?.decreasedStat?.identifier); else neutral">
+                      <ng-container *ngIf="stat.identifier===pokemon.nature?.increasedStat?.identifier">
+                        <div class="flex justify-c-c align-i-c pointer" style="margin-left: 0.2em;">
+                          <svg class="icon-xs" version="1.0" xmlns="http://www.w3.org/2000/svg" width="64.000000pt" height="64.000000pt" viewBox="0 0 64.000000 64.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)" [attr.fill]="natureColors.up" stroke="none"> <path d="M302 628 c-18 -22 -292 -589 -292 -605 0 -27 28 -23 157 27 73 27 143 50 155 50 13 0 82 -23 153 -50 72 -28 136 -48 142 -45 7 2 13 12 12 22 0 25 -292 607 -305 611 -6 1 -16 -3 -22 -10z"/> </g> </svg>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngIf="stat.identifier===pokemon.nature?.decreasedStat?.identifier">
+                        <div class="flex justify-c-c align-i-c pointer" style="margin-left: 0.2em;">
+                          <svg class="icon-xs" version="1.0" xmlns="http://www.w3.org/2000/svg" width="64.000000pt" height="64.000000pt" viewBox="0 0 64.000000 64.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,64.000000) scale(0.100000,-0.100000)" [attr.fill]="natureColors.down" stroke="none"> <path d="M16 621 c-9 -15 287 -606 304 -606 17 0 298 557 299 593 1 12 -5 22 -12 22 -7 0 -71 -22 -142 -50 -71 -27 -136 -50 -145 -50 -9 0 -74 22 -145 50 -136 52 -150 56 -159 41z"/> </g> </svg>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                    <ng-template #neutral>
+                      <div class="flex justify-c-c align-i-c pointer" style="margin-left: 0.2em;">
+                        <svg class="icon-xs" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M2 8a1 1 0 011-1h10a1 1 0 110 2H3a1 1 0 01-1-1z" fill="var(--text-color-secondary)"></path> </g></svg>
+                      </div>
+                    </ng-template>
+                  </ng-container>
+                </div>
+                <div class="flex justify-c-c" style="width: 2em; margin-left: 0.2em;">
+                  {{calculatedStats.total[i].value}}
+                </div>
               </div>
             </div>
           </div>
