@@ -17,6 +17,7 @@ namespace api.Services
         public Task<AbilityDTO?> GetAbilityByIdentifier(string identifier, int langId);
         public Task<List<TagDTO>> GetAllAbilitiesTags(int langId);
         public Task<List<TagDTO>> GetPokemonAbilites(string id, int langId);
+        public Task<bool> IsAbilityHidden(string abilityIdentifier, int dexNumber);
         public Task<NatureDTO?> GetNatureByName(string name, int langId);
         public Task<NatureDTO?> GetNatureByIdentifier(string identifier, int langId);
         public Task<List<NatureDTO>> GetAllNatures(int langId);

@@ -1,6 +1,7 @@
 ﻿using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Services;
+using api.Util;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 
@@ -85,6 +86,13 @@ namespace api.Controllers
                 return NotFound("Couldn't query abilities");
             }
             return Ok(abilities);
+        }
+
+        [HttpGet, Route("hidden")]
+        public async Task<ActionResult<bool>> IsAbilityHidden(string abilityIdentifier, int dexNumber)
+        {
+            bool hidden = await _pokemonService.IsAbilityHidden(abilityIdentifier, dexNumber);
+            return Ok(hidden);
         }
     }
 }

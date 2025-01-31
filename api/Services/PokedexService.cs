@@ -35,8 +35,8 @@ namespace api.Services
                 await GetMoveByIdentifier(pokemon.Move3Identifier ?? "", langId),
                 await GetMoveByIdentifier(pokemon.Move4Identifier ?? "", langId)
             };
-            
-            return new PokemonDTO
+
+            PokemonDTO pokemonDTO = new PokemonDTO
             {
                 Name = pokemonData.Name,
                 Nickname = pokemon.Nickname,
@@ -58,6 +58,14 @@ namespace api.Services
                 Sprite = pokemonData.Sprite,
                 Notes = pokemon.Notes
             };
+
+            if (pokemonDTO.Ability != null && pokemonDTO.DexNumber != null 
+                && await IsAbilityHidden(pokemonDTO.Ability.Identifier, pokemon.DexNumber ?? 0))
+            {
+                pokemonDTO.Ability.Hidden = true;
+            }
+
+            return pokemonDTO;
         }
 
         public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, int langId)
@@ -367,6 +375,31 @@ namespace api.Services
             }
 
             return abilityDTOs;
+        }
+
+        public async Task<bool> IsAbilityHidden(string abilityIdentifier, int dexNumber)
+        {
+            Abilities? abilities = await _pokedexContext.Abilities.FirstOrDefaultAsync(a => a.identifier.Equals(abilityIdentifier));
+            if(abilities != null)
+            {
+                try
+                {
+                    List<Pokemon_abilities> pokemonAbilitiesList = await _pokedexContext.Pokemon_abilities.Where(p => p.pokemon_id == dexNumber).ToListAsync();
+                    if (pokemonAbilitiesList != null && pokemonAbilitiesList.Count > 0)
+                    {
+                        if (pokemonAbilitiesList.Any(a => a.ability_id == abilities.id))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Printer.Log(ex);
+                }
+            }
+
+            return false;
         }
 
         public async Task<List<NatureDTO>> GetAllNatures(int langId)
@@ -915,8 +948,8 @@ namespace api.Services
                     Types? types = await _pokedexContext.Types.FirstOrDefaultAsync(i => i.id == typeName.type_id);
                     if (types != null)
                     {
-                        string pathStart = teraType ? "https://localhost:7134/images/sprites/types/generation-viii/"
-                        : "https://localhost:7134/images/sprites/teratypes/";
+                        string pathStart = teraType ? "https://localhost:7134/images/sprites/teratypes/"
+                        : "https://localhost:7134/images/sprites/types/generation-viii/";
                         queryResults.Add(new TagDTO(typeName.name, typeName.type_id.ToString(), icon: $"{pathStart}{types.identifier}.png"));
                     }
                     else
