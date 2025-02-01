@@ -1,178 +1,221 @@
-import { inject, Injectable } from '@angular/core';
-import { PokemonService } from '../../features/pokemon/services/pokemon.service';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { map, Observable, timeout } from 'rxjs';
+import { environment } from 'src/environments/environment.development';
 import { Tag } from '../../features/team/models/tag.model';
-import { TeamService } from '../../features/team/services/team.service';
-import { UserService } from '../../features/user/services/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QueryService 
 {
-  pokemonService = inject(PokemonService);
-  userService = inject(UserService);
-  teamService = inject(TeamService);
+  private apiUrl = environment.apiURL;
+  private dataTimeout = 2000;
   
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   //User
-
-  queryUserCallback = async (args: any): Promise<Tag[]> => 
+ 
+  queryUser(key: string): Observable<Tag[]>
   {
-    return (await this.userService.queryUser(args)).map((u): Tag => 
-      ({
-        name: u.username,
-        identifier: u.username,
-        icon: u.picture,
-        type: "username"
-      }));
+    let url = this.apiUrl + "query";
+    let params = new HttpParams().set('key', key);
+    return this.http.get<Tag[]>(url, {params: params, withCredentials: true}).pipe(timeout(this.dataTimeout));
+  }
+  queryUserCallback = (args: any): Observable<Tag[]> => 
+  {
+    return this.queryUser(args);
   }
 
-  queryCountriesCallback = async (args: any): Promise<Tag[]> => 
+  queryCountriesByName(key: string) : Observable<Tag[]>
   {
-    if(args)
-    {
-      return (await this.userService.queryCountriesByName(args));
-    }
-    return [];
+    let url = this.apiUrl + 'countries/query';
+    let params = new HttpParams().set('key', key);
+    return this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
   }
-  countriesAllCallback = async (): Promise<Tag[]> => 
+  queryCountriesCallback = (args: any): Observable<Tag[]> => 
   {
-    return (await this.userService.getAllCountries()).map(n => 
-      ({
-        name: n.name,
-        identifier: n.identifier,
-        icon: n.icon
-      }));
+    return this.queryCountriesByName(args);
+  }
+
+  getAllCountries() : Observable<Tag[]>
+  {
+    let url = this.apiUrl + "countries/all";
+    return this.http.get<Tag[]>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+  }
+  countriesAllCallback = (): Observable<Tag[]> => 
+  {
+    return this.getAllCountries();
   }
 
   //Team
   
-  queryTournamentCallback = async (args: any): Promise<Tag[]> => 
+  queryTournamentsByName(key: string) : Observable<Tag[]>
   {
-    return await this.teamService.queryTournamentsByName(args);
+    let url = this.apiUrl + 'tournament/query';
+    let params = new HttpParams().set('key', key);
+    return this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
+  }
+  queryTournamentCallback = (args: any): Observable<Tag[]> => 
+  {
+    return this.queryTournamentsByName(args);
   }
 
-  queryRegulationCallback = async (args: any): Promise<Tag[]> => 
+  queryRegulation = (args: any): Observable<Tag[]> => 
   {
-    return (await this.teamService.getAllRegulations())
-      .filter(r => 
+    let url = this.apiUrl + 'regulation/query/all';
+    return this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout), 
+    map((tags: Tag[]) => tags.filter(t => 
       {
-        return r.name.toLowerCase().includes(args.toLowerCase())
-      });
+        return t.name.toLowerCase().includes(args.toLowerCase())
+      }))
+    );
   }
-  regulationAllCallback = async (): Promise<Tag[]> => 
+  queryRegulationCallback = (args: any): Observable<Tag[]> => 
   {
-    return await this.teamService.getAllRegulations();
+    return this.queryRegulationCallback(args);
   }
 
-  queryTagCallback = async (args: any): Promise<Tag[]> => 
+  queryAllRegulations() : Observable<Tag[]>
   {
-    return (await this.teamService.getAllTags())
-      .filter(r => 
-      {
-        return r.name.toLowerCase().includes(args.toLowerCase())
-      });
+    let url = this.apiUrl + 'regulation/query/all';
+    return this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout));
   }
-  tagAllCallback = async (): Promise<Tag[]> => 
+  regulationAllCallback = (): Observable<Tag[]> => 
   {
-    return await this.teamService.getAllTags();
+    return this.queryAllRegulations();
+  }
+
+  queryTag = (args: any): Observable<Tag[]> => 
+  {
+    let url = this.apiUrl + 'tag/all';
+    return this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout), 
+    map((tags: Tag[]) => tags.filter(t => 
+      {
+        return t.name.toLowerCase().includes(args.toLowerCase())
+      }))
+    );
+  }
+  queryTagCallback = (args: any): Observable<Tag[]> => 
+  {
+    return this.queryTag(args);
+  }
+
+  getAllTags() : Observable<Tag[]>
+  {
+    let url = this.apiUrl + 'tag/all';
+    return this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout));
+  }
+  tagAllCallback = (): Observable<Tag[]> => 
+  {
+    return this.getAllTags();
   }
 
   //Pokemon
 
-  queryPokemonCallback = async (args: any): Promise<Tag[]> => 
+  queryPokemonsByName(key: string) : Observable<Tag[]>
   {
-    if(args)
-    {
-      return (await this.pokemonService.queryPokemonsByName(args)).map(p => 
-        ({
-          name: p.name,
-          identifier: p.identifier,
-          icon: p.icon,
-          type: p.type
-        }));
-    }
-    return [];
+    let url = this.apiUrl + 'pokemon/query';
+    let params = new HttpParams().set('key', key);
+    return this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
+  }
+  queryPokemonCallback = (args: any): Observable<Tag[]> => 
+  {
+    return this.queryPokemonsByName(args);
   }
 
-  queryMoveCallback = async (args: any): Promise<Tag[]> => 
+  queryItemsByName(key: string) : Observable<Tag[]>
   {
-    if(args)
-    {
-      return (await this.pokemonService.queryMovesByName(args));
-    }
-    return [];
+    let url = this.apiUrl + 'item/query';
+    let params = new HttpParams().set('key', key);
+    return this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
+  }
+  queryItemCallback = (args: any): Observable<Tag[]> => 
+  {
+    return this.queryItemsByName(args);
   }
 
-  queryItemCallback = async (args: any): Promise<Tag[]> => 
+  queryMovesByName(key: string) : Observable<Tag[]>
   {
-    if(args)
-    {
-      return (await this.pokemonService.queryItemsByName(args));
-    }
-    return [];
+    let url = this.apiUrl + 'move/query';
+    let params = new HttpParams().set('key', key);
+    return this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
+  }
+  queryMoveCallback = (args: any): Observable<Tag[]> => 
+  {
+    return this.queryMovesByName(args);
   }
 
-  queryAbilityCallback = async (args: any): Promise<Tag[]> => 
+  queryAbilitiesByName(key: string) : Observable<Tag[]>
   {
-    if(args)
-    {
-      return (await this.pokemonService.queryAbilitiesByName(args));
-    }
-    return [];
+    let url = this.apiUrl + 'ability/query';
+    let params = new HttpParams().set('key', key);
+    return this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
   }
-  abilityAllCallback = async (): Promise<Tag[]> => 
+  queryAbilityCallback = (args: any): Observable<Tag[]> => 
   {
-    return (await this.pokemonService.getAllAbilities());
-
-  }
-  pokemonAbilitiesCallback = async (id): Promise<Tag[]> => 
-  {
-    if(id != undefined)
-    {
-      return (await this.pokemonService.getPokemonAbilities(id)).map(n => 
-        ({
-          name: n.name,
-          identifier: n.name,
-          icon: n.icon
-        }));
-    }
-    return [];
+    return this.queryAbilitiesByName(args);
   }
 
-  queryNatureCallback = async (args: any): Promise<Tag[]> => 
+  queryAllAbilities() : Observable<Tag[]>
   {
-    if(args)
-    {
-      return (await this.pokemonService.queryNaturesByName(args));
-    }
-    return [];
+    let url = this.apiUrl + 'ability/all';
+    return this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout));
   }
-  naturesAllCallback = async (): Promise<Tag[]> => 
+  abilityAllCallback = (): Observable<Tag[]> => 
   {
-    return (await this.pokemonService.getAllNatures()).map(n => 
-      ({
-        name: n.name.content,
-        identifier: n.name.content
-      }));
+    return this.queryAllAbilities();
   }
 
-  queryTeratypeCallback = async (args: any): Promise<Tag[]> => 
+  queryPokemonAbilities(id: number) : Observable<Tag[]>
   {
-    if(args)
-    {
-      return (await this.pokemonService.queryTeraTypesByName(args));
-    }
-    return [];
+    let url = this.apiUrl + 'ability/pokemon/' + id;
+    return this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout));
   }
-  teraTypesAllCallback = async (): Promise<Tag[]> => 
+  pokemonAbilitiesCallback = (args: any): Observable<Tag[]> => 
   {
-    return (await this.pokemonService.getAllTeraTypes()).map(n => 
-      ({
-        name: n.name.content,
-        identifier: n.identifier,
-        icon: n.iconPath
-      }));
+    return this.queryPokemonAbilities(args);
+  }
+  
+  queryNaturesByName(key: string) : Observable<Tag[]>
+  {
+    let url = this.apiUrl + 'nature/query';
+    let params = new HttpParams().set('key', key ?? "");
+    return this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
+  }
+  queryNatureCallback = (args: any): Observable<Tag[]> => 
+  {
+    return this.queryNaturesByName(args);
+  }
+
+  queryAllNatures() : Observable<Tag[]>
+  {
+    let url = this.apiUrl + 'nature/query/all';
+    return this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout));
+  }
+  naturesAllCallback = (): Observable<Tag[]> => 
+  {
+    return this.queryAllNatures();
+  }
+
+  queryTeraTypesByName(key: string) : Observable<Tag[]>
+  {
+    let url = this.apiUrl + 'type/teratype/query';
+    let params = new HttpParams().set('key', key ?? "");
+    return this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
+  }
+  queryTeratypeCallback = (args: any): Observable<Tag[]> => 
+  {
+    return this.queryTeraTypesByName(args);
+  }
+
+  queryAllTeraTypes() : Observable<Tag[]>
+  {
+    let url = this.apiUrl + 'type/teratype/query/all';
+    return this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout));
+  }
+  teraTypesAllCallback = (): Observable<Tag[]> => 
+  {
+    return this.queryAllTeraTypes();
   }
 }

@@ -1,9 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { catchError, lastValueFrom, Observable, timeout } from 'rxjs';
+import { lastValueFrom, Observable, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { UtilService } from '../../../shared/services/util.service';
-import { Tag } from '../../team/models/tag.model';
 import { TeamService } from '../../team/services/team.service';
 import { User } from '../models/user.model';
 
@@ -19,22 +18,6 @@ export class UserService
   private dataTimeout = 2000;
 
   constructor(private http: HttpClient) { }
-
-  async queryUser(key: string): Promise<User[]>
-  {
-    let users: User[] = [];
-    let url = this.apiUrl + "query";
-    users = await lastValueFrom(this.http.get<User[]>(url, 
-      {
-        params: 
-        {
-          key: key
-        },
-        withCredentials: true
-      })
-      .pipe(timeout(this.dataTimeout)));
-    return users;
-  }
 
   getUser(userName: string): Observable<User>
   {
@@ -83,22 +66,5 @@ export class UserService
     const pics$ = this.http.get<string[]>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
     pics = await lastValueFrom(pics$);
     return pics;
-  }
-
-  async queryCountriesByName(key: string) : Promise<Tag[]>
-  {
-    let teraTypes: Tag[] = [];
-    let url = this.apiUrl + 'countries/query';
-    let params = new HttpParams().set('key', key ?? "");
-    teraTypes = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(catchError(() => []), timeout(this.dataTimeout)));
-    return teraTypes; 
-  }
-  async getAllCountries() : Promise<Tag[]>
-  {
-    let tags: Tag[] = [];
-    let url = this.apiUrl + "countries/all";
-    const countries$ = this.http.get<Tag[]>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
-    tags = await lastValueFrom(countries$);
-    return tags;
   }
 }

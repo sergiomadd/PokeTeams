@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { lastValueFrom, Observable, timeout } from 'rxjs';
@@ -109,15 +109,6 @@ export class TeamService
     let url = this.apiUrl + 'Tournament/' + name;
     tournament = await lastValueFrom(this.http.get<Tournament>(url).pipe(timeout(this.dataTimeout)));
     return tournament; 
-  }
-
-  async queryTournamentsByName(key: string) : Promise<Tag[]>
-  {
-    let tournaments: Tag[] = [];
-    let url = this.apiUrl + 'tournament/query';
-    let params = new HttpParams().set('key', key ?? "");
-    tournaments = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
-    return tournaments;
   }
 
   async getAllRegulations() : Promise<Regulation[]>

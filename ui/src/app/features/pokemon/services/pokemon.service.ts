@@ -4,7 +4,6 @@ import { catchError, lastValueFrom, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { UtilService } from '../../../shared/services/util.service';
 import { PokePaste } from '../../team/models/pokePaste.model';
-import { Tag } from '../../team/models/tag.model';
 import { Ability, defaultAbility } from '../models/ability.model';
 import { DefaultItem, Item } from '../models/item.model';
 import { defaultMove, Move } from '../models/move.model';
@@ -12,7 +11,6 @@ import { defaultNature, Nature } from '../models/nature.model';
 import { Pokemon } from '../models/pokemon.model';
 import { defaultPokemonData, PokemonData } from '../models/pokemonData.dto';
 import { Stat } from '../models/stat.model';
-import { Type } from '../models/type.model';
 import { defaultTypeWithEffectiveness, TypeWithEffectiveness } from '../models/typewitheffectiveness.model';
 
 
@@ -185,88 +183,6 @@ export class PokemonService
     let url = this.apiUrl + 'stat/' + identifier;
     statName = await lastValueFrom(this.http.get(url, {responseType: 'text'}).pipe(timeout(this.dataTimeout)));
     return statName;
-  }
-
-  async queryPokemonsByName(key: string) : Promise<Tag[]>
-  {
-    let pokemons: Tag[] = [];
-    let url = this.apiUrl + 'pokemon/query';
-    let params = new HttpParams().set('key', key ?? "");
-    pokemons = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
-    return pokemons; 
-  }
-
-  async queryMovesByName(key: string) : Promise<Tag[]>
-  {
-    let moves: Tag[] = [];
-    let url = this.apiUrl + 'move/query';
-    let params = new HttpParams().set('key', key ?? "");
-    moves = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
-    return moves; 
-  }
-
-  async queryItemsByName(key: string) : Promise<Tag[]>
-  {
-    let items: Tag[] = [];
-    let url = this.apiUrl + 'item/query';
-    let params = new HttpParams().set('key', key ?? "");
-    items = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
-    return items; 
-  }
-
-  async queryAbilitiesByName(key: string) : Promise<Tag[]>
-  {
-    let abilities: Tag[] = [];
-    let url = this.apiUrl + 'ability/query';
-    let params = new HttpParams().set('key', key ?? "");
-    abilities = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
-    return abilities; 
-  }
-  async getAllAbilities() : Promise<Tag[]>
-  {
-    let abilities: Tag[] = [];
-    let url = this.apiUrl + 'ability/all';
-    abilities = await lastValueFrom(this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout)));
-    return abilities; 
-  }
-  async getPokemonAbilities(id: number) : Promise<Tag[]>
-  {
-    let types: Tag[] = [];
-    let url = this.apiUrl + 'ability/pokemon/' + id;
-    types = await lastValueFrom(this.http.get<Tag[]>(url).pipe(timeout(this.dataTimeout)));
-    return types; 
-  }
-
-  async queryNaturesByName(key: string) : Promise<Tag[]>
-  {
-    let natures: Tag[] = [];
-    let url = this.apiUrl + 'nature/query';
-    let params = new HttpParams().set('key', key ?? "");
-    natures = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
-    return natures; 
-  }
-  async getAllNatures() : Promise<Nature[]>
-  {
-    let regulations: Nature[] = [];
-    let url = this.apiUrl + 'nature/all';
-    regulations = await lastValueFrom(this.http.get<Nature[]>(url).pipe(timeout(this.dataTimeout)));
-    return regulations; 
-  }
-
-  async queryTeraTypesByName(key: string) : Promise<Tag[]>
-  {
-    let teraTypes: Tag[] = [];
-    let url = this.apiUrl + 'type/teratype/query';
-    let params = new HttpParams().set('key', key ?? "");
-    teraTypes = await lastValueFrom(this.http.get<Tag[]>(url, {params: params}).pipe(timeout(this.dataTimeout)));
-    return teraTypes; 
-  }
-  async getAllTeraTypes() : Promise<Type[]>
-  {
-    let types: Type[] = [];
-    let url = this.apiUrl + 'type/teratype/all';
-    types = await lastValueFrom(this.http.get<Type[]>(url).pipe(timeout(this.dataTimeout)));
-    return types; 
   }
 
   createEmptyPokemon(): Pokemon
