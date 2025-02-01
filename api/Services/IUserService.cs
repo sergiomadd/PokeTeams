@@ -7,8 +7,8 @@ namespace api.Services
     public interface IUserService
     {
         public Task<UserDTO> BuildUserDTO(User user, bool logged = false);
-        public Task<List<UserQueryDTO>> QueryUsers(string key);
-        public Task<List<UserQueryDTO>> ChunkQueryUsers(string key, int startIndex, int pageSize);
+        public Task<List<TagDTO>> QueryUsers(string key);
+        public Task<List<TagDTO>> ChunkQueryUsers(string key, int startIndex, int pageSize);
         public Task<User> GetUserByUserName(string userName);
         public Task<User> GetUserById(string id);
         public Task<bool> UserNameAvailable(string userName);

@@ -99,5 +99,19 @@ namespace api.Controllers
             }
             return Ok(types);
         }
+
+        [HttpGet("teratype/query/all")]
+        public async Task<ActionResult<List<TagDTO>>> QueryAllTeraTypes()
+        {
+            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+
+            var types = await _pokemonService.QueryAllTeraTypes(langId);
+            if (types == null)
+            {
+                return BadRequest("Type not found.");
+            }
+            return Ok(types);
+        }
     }
 }

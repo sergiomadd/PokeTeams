@@ -927,6 +927,10 @@ namespace api.Services
         {
             List<TagDTO> queryResults = new List<TagDTO>();
             List<Nature_names> natureNames = await _pokedexContext.Nature_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
+            if (natureNames == null)
+            {
+                natureNames = await _pokedexContext.Nature_names.Where(i => i.name.Contains(key) && i.local_language_id == (int)Lang.en).ToListAsync();
+            }
             if (natureNames != null && natureNames.Count > 0)
             {
                 foreach (var natureName in natureNames)
@@ -935,6 +939,25 @@ namespace api.Services
                 }
             }
             return queryResults;
+        }
+
+        public async Task<List<TagDTO>> QueryAllNatures(int langId)
+        {
+            List<TagDTO> natureDTOs = new List<TagDTO>();
+            List<Natures> naturesList = await _pokedexContext.Natures.ToListAsync();
+            if (naturesList != null)
+            {
+                foreach (Natures natures in naturesList)
+                {
+                    Nature_names? natureNames = await _pokedexContext.Nature_names.FirstOrDefaultAsync(n => n.nature_id == natures.id && n.local_language_id == langId);
+                    if (natureNames == null)
+                    {
+                        natureNames = await _pokedexContext.Nature_names.FirstOrDefaultAsync(n => n.nature_id == natures.id && n.local_language_id == (int)Lang.en);
+                    }
+                    natureDTOs.Add(new TagDTO(natureNames.name, natures.identifier));
+                }
+            }
+            return natureDTOs;
         }
 
         public async Task<List<TagDTO>> QueryTypesByName(string key, int langId, bool teraType = false)
@@ -987,6 +1010,22 @@ namespace api.Services
                 if (pokeType != null)
                 {
                     pokeTypes.Add(pokeType);
+                }
+            }
+            return pokeTypes;
+        }
+
+        public async Task<List<TagDTO>> QueryAllTeraTypes(int langId)
+        {
+            List<TagDTO> pokeTypes = new List<TagDTO>();
+            List<Types> types = await _pokedexContext.Types.ToListAsync();
+            //Avoid adding last 2 types -> (unkown, shadow) UNSUPPORTED
+            for (int i = 0; i < types.Count - 2; i++)
+            {
+                PokeTypeDTO? pokeType = await GetTypeById(types[i].id, langId, true);
+                if (pokeType != null)
+                {
+                    pokeTypes.Add(new TagDTO(pokeType.Name.Content, pokeType.Identifier, icon: pokeType.IconPath));
                 }
             }
             return pokeTypes;

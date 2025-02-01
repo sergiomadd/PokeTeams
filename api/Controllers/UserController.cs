@@ -71,9 +71,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("query")]
-        public async Task<ActionResult<List<UserQueryDTO>>> QueryUsers(string key)
+        public async Task<ActionResult<List<TagDTO>>> QueryUsers(string key)
         {
-            List<UserQueryDTO> users = await _userService.QueryUsers(key);
+            List<TagDTO> users = await _userService.QueryUsers(key);
             if (users == null)
             {
                 return NotFound("Couldn't find user");
@@ -82,9 +82,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("chunkquery")]
-        public async Task<ActionResult<List<UserQueryDTO>>> ChunkQueryUsers(string key, int startIndex, int pageSize)
+        public async Task<ActionResult<List<TagDTO>>> ChunkQueryUsers(string key, int startIndex, int pageSize)
         {
-            List<UserQueryDTO> users = await _userService.ChunkQueryUsers(key, startIndex, pageSize);
+            List<TagDTO> users = await _userService.ChunkQueryUsers(key, startIndex, pageSize);
             users.Skip(startIndex).Take(pageSize);
             if (users == null)
             {

@@ -133,42 +133,34 @@ namespace api.Services
             return queryResults;
         }
 
-        public async Task<List<UserQueryDTO>> QueryUsers(string key)
+        public async Task<List<TagDTO>> QueryUsers(string key)
         {
-            List<UserQueryDTO> queriedUsers = new List<UserQueryDTO>();
+            List<TagDTO> queriedUsers = new List<TagDTO>();
             List<User> users = _pokeTeamContext.Users
                 .Where(u => u.UserName.Contains(key)).ToList();
             users.ForEach(user =>
             {
-                queriedUsers.Add(new UserQueryDTO
-                {
-                    Username = user.UserName,
-                    Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png" ?? null,
-                    Country = user.Country == null ? GetCountry(user.Country) : null,
-                });
+                string profilePicPath = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png";
+                queriedUsers.Add(new TagDTO(user.UserName, user.UserName, icon: profilePicPath, type: "user"));
             });
             return queriedUsers;
         }
 
-        public async Task<List<UserQueryDTO>> ChunkQueryUsers(string key, int startIndex, int pageSize)
+        public async Task<List<TagDTO>> ChunkQueryUsers(string key, int startIndex, int pageSize)
         {
-            List<UserQueryDTO> queriedUsers = new List<UserQueryDTO>();
+            List<TagDTO> queriedUsers = new List<TagDTO>();
             List<User> users = _pokeTeamContext.Users
                 .Where(u => u.UserName.Contains(key))
                 .Skip(startIndex).Take(pageSize).ToList();
             users.ForEach(user =>
             {
-                queriedUsers.Add(new UserQueryDTO
-                {
-                    Username = user.UserName,
-                    Picture = user.Picture ?? null,
-                    Country = user.Country == null ? GetCountry(user.Country) : null,
-                });
+                string profilePicPath = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png";
+                queriedUsers.Add(new TagDTO(user.UserName, user.UserName, icon: profilePicPath, type: "user"));
             });
             return queriedUsers;
         }
 
-        //Keep incase countries change
+        //Keep incase countries change IRL
         /*
         public async Task<bool> AddCountry(CountryDTOB countryDTOB)
         {

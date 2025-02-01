@@ -8,6 +8,7 @@ namespace api.Services
         public RegulationDTO BuildRegulationDTO(Regulation regulation);
         public Regulation BreakRegulationDTO(RegulationDTO regulationDTO);
         public List<RegulationDTO> GetAllRegulations();
+        public List<TagDTO> QueryAllRegulations();
         public Task<RegulationDTO> GetRegulationByIdentifier(string identifier);
         public Task<Regulation> SaveRegulation(RegulationDTO regulationDTO);
     }

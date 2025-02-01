@@ -25,6 +25,7 @@ namespace api.Services
         public Task<List<TagDTO>> GetPokemonMoves(string id, int langId);
         public Task<List<PokeTypeDTO>> GetAllTypes(int langId);
         public Task<List<PokeTypeDTO>> GetAllTeraTypes(int langId);
+        public Task<List<TagDTO>> QueryAllTeraTypes(int langId);
         public Task<List<TagDTO>> QueryTypesByName(string key, int langId, bool teraType = false);
         public Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessByIdentifier(string identifier, int langId, bool teraType = false);
         public Task<string?> GetStatNameByIdentifier(string identifier, int langId);
@@ -33,6 +34,7 @@ namespace api.Services
         public Task<List<TagDTO>> QueryItemsByName(string key, int langId);
         public Task<List<TagDTO>> QueryAbilitiesByName(string key, int langId);
         public Task<List<TagDTO>> QueryNaturesByName(string key, int langId);
+        public Task<List<TagDTO>> QueryAllNatures(int langId);
         public Task<int> GetLangId(string lang);
 
     }

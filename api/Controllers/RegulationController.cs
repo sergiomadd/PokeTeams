@@ -28,6 +28,17 @@ namespace api.Controllers
             return Ok(regulationDTOs);
         }
 
+        [HttpGet("query/all")]
+        public ActionResult<List<TagDTO>> QueryAllRegulations()
+        {
+            List<TagDTO> tagDTOs = _regulationService.QueryAllRegulations();
+            if (tagDTOs == null)
+            {
+                return NotFound("Couldn't find regulation");
+            }
+            return Ok(tagDTOs);
+        }
+
         [HttpGet("{identifier}")]
         public async Task<ActionResult<RegulationDTO>> Get(string identifier)
         {

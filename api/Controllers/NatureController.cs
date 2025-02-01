@@ -18,7 +18,7 @@ namespace api.Controllers
             _pokemonService = pokemonService;
         }
 
-        [HttpGet("name/{natureName}", Name = "GetNatureByName")]
+        [HttpGet("name/{natureName}")]
         public async Task<ActionResult<NatureDTO>> GetNatureByName(string natureName)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
@@ -32,7 +32,7 @@ namespace api.Controllers
             return Ok(nature);
         }
 
-        [HttpGet("identifier/{natureIdentifier}", Name = "GetNatureByIdentifier")]
+        [HttpGet("identifier/{natureIdentifier}")]
         public async Task<ActionResult<NatureDTO>> GetNatureByIdentifier(string natureIdentifier)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
@@ -46,13 +46,13 @@ namespace api.Controllers
             return Ok(nature);
         }
 
-        [HttpGet("all", Name = "GetAllNatures")]
-        public async Task<ActionResult<List<NatureDTO>>> GetAllNatures()
+        [HttpGet("query/all")]
+        public async Task<ActionResult<List<TagDTO>>> GetAllNatures()
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<NatureDTO> naures = await _pokemonService.GetAllNatures(langId);
+            List<TagDTO> naures = await _pokemonService.QueryAllNatures(langId);
             if (naures == null)
             {
                 return BadRequest("Natures not found.");

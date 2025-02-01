@@ -56,6 +56,17 @@ namespace api.Services
             return regulationDTOs;
         }
 
+        public List<TagDTO> QueryAllRegulations()
+        {
+            List<TagDTO> tagDTOs = new List<TagDTO>();
+            List<Regulation> regulations = _pokeTeamContext.Regulation.ToList();
+            foreach (Regulation regulation in regulations)
+            {
+                tagDTOs.Add(new TagDTO(regulation.Name, regulation.Identifier));
+            }
+            return tagDTOs;
+        }
+
         public async Task<RegulationDTO> GetRegulationByIdentifier(string identifier)
         {
             RegulationDTO regulationDTO = null;

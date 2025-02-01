@@ -73,7 +73,18 @@ namespace api.Controllers
             }
             return Ok(tournaments);
         }
-
+        /*
+        [HttpGet("query/all")]
+        public ActionResult<List<TagDTO>> QueryAllTournaments()
+        {
+            List<TagDTO> tournamentDTOs = _tournamentService.GetAllTournaments();
+            if (tournamentDTOs == null)
+            {
+                return NotFound("Couldn't find tournament");
+            }
+            return Ok(tournamentDTOs);
+        }
+        */
         [HttpGet, Route("check/{tournamentName}")]
         public async Task<ActionResult<bool>> TournamentAvailable(string tournamentName)
         {
