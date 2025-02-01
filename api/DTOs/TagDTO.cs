@@ -18,7 +18,7 @@ namespace api.DTOs
             Type = type;
             Description = description;
             Color = color;
-            Icon = Checker.CheckIfFileExist(icon) ? icon : null;
+            Icon = icon;
         }
     }
 }

@@ -30,10 +30,10 @@ namespace api.DTOs.PokemonDTOs
             string femaleUrl = urlStart + female + dex + urlEnd;
             string shinyFemaleUrl = urlStart + shinyFemale + dex + urlEnd;
 
-            Base = Checker.CheckIfFileExist(baseUrl) ? baseUrl : null;
-            Shiny = Checker.CheckIfFileExist(shinyUrl) ? shinyUrl : null;
-            Female = Checker.CheckIfFileExist(femaleUrl) ? femaleUrl : null;
-            ShinyFemale = Checker.CheckIfFileExist(shinyFemaleUrl) ? shinyFemaleUrl : null;
+            Base = baseUrl;
+            Shiny = shinyUrl;
+            Female = femaleUrl;
+            ShinyFemale = shinyFemaleUrl;
         }
     }
 }
