@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, inject, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { Tag } from 'src/app/features/team/models/tag.model';
 
 @Component({
@@ -20,8 +21,8 @@ export class SmartInputComponent
   @Input() updateOnChange?: boolean;
   @Input() allowCustom?: boolean;
   @Input() allowNew?: boolean;
-  @Input() getter?: (args: any) => Promise<Tag[]>
-  @Input() allGetter?: (args?: any) => Promise<Tag[]>
+  @Input() getter?: (args: any) => Observable<Tag[]>
+  @Input() allGetter?: (args?: any) => Observable<Tag[]>
   @Input() allGetterIndex?: number;
   @Input() disabled?: boolean;
 
@@ -62,6 +63,7 @@ export class SmartInputComponent
   showOptions: boolean = false;
   activeResult: number = 0;
   position: number = 0;
+  searching: boolean = false;
 
   customQueryResult: Tag = 
   {
@@ -126,17 +128,29 @@ export class SmartInputComponent
   {
     if(this.getter)
     {
+      this.searching = true;
       this.showOptions = true;
-      if(this.allowCustom)
-      {
-        this.customQueryResult.name = key;
-        this.customQueryResult.identifier = "new";
-        this.results = [this.customQueryResult].concat(await this.getter(key));
-      }
-      else
-      {
-        this.results = await this.getter(key);
-      }
+      this.getter(key).subscribe(
+        {
+          next: (response) => 
+          {
+            this.results = response;
+            if(this.allowCustom)
+            {
+              this.customQueryResult.name = key;
+              this.customQueryResult.identifier = "new";
+              this.results = [this.customQueryResult].concat(this.results);
+            }
+            this.searching = false;
+          },
+          error: (error) => 
+          {
+            this.results = [];
+            this.searching = false;
+            console.log("Error searching ", error)
+          }
+        }
+      )
     }
   }
 
@@ -165,18 +179,43 @@ export class SmartInputComponent
     {
       if(this.allGetterIndex)
       {
-        this.results = await this.allGetter(this.allGetterIndex);
+        this.allGetter(this.allGetterIndex).subscribe(
+          {
+            next: (response) => 
+            {
+              this.results = response;
+              this.results = [this.customQueryResult].concat(this.results);
+              this.searching = false;
+            },
+            error: (error) => 
+            {
+              this.results = [];
+              this.searching = false;
+              console.log("Error searching ", error)
+            }
+          }
+        )
       }
       else
       {
-        if(this.allowCustom)
-        {
-          this.results = [this.customQueryResult].concat(await this.allGetter());
-        }
-        else
-        {
-          this.results = await this.allGetter();
-        }
+        this.allGetter().subscribe(
+          {
+            next: (response) => 
+            {
+              this.results = response;
+              if(this.allowCustom)
+              {
+                this.results = [this.customQueryResult].concat(this.results);
+              }
+              this.searching = false;
+            },
+            error: (error) => 
+            {
+              this.results = [];
+              console.log("Error searching ", error)
+            }
+          }
+        )
       }
     }
   }

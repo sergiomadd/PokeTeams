@@ -22,6 +22,7 @@ $optionsMaxHeight: 20em;
   position: absolute;
   top: 100%;
   width: calc(100% - 0.4em);
+  min-height: 4em;
   max-height: 0;
   margin-left: 0.4em;
   padding: 0.2em;
@@ -55,6 +56,31 @@ ul
 {
   max-height: calc($optionHeight * 12);
   visibility: visible !important;
+}
+
+.results-loader
+{
+  position: absolute;
+  top: 2.8em;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.dummy-result
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: round(calc($optionHeight + 0.4em), 1px);
+  padding: 0 0.2em 0 0.2em;
+}
+
+.no-results
+{
+  width: 80%;
+  border-radius: 20px;
+  padding: 0.2em;
+  background-color: var(--bg-color-3);
 }
 
 .result

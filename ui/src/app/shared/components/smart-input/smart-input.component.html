@@ -60,7 +60,11 @@
     <ul
     #resultsDiv
     class="results custom-scrollbar"
-    [ngClass]="{'results-visible': showOptions && results}"
+    [ngClass]="
+    {
+      'results-visible': showOptions && results,
+      searching: searching
+    }"
     >
       <ng-container *ngIf="allowCustom; else all">
         <li 
@@ -92,9 +96,19 @@
         </ng-container>
       </ng-container>
       <ng-template #all>
+        <ng-container *ngIf="searching">
+          <div class="results-loader">
+            <div class="dot-pulse"></div>        
+          </div>
+        </ng-container>
         <div class="count">
           {{'shared.smart_input_results' | translate}}: {{results.length}}
         </div>
+        <ng-container *ngIf="results.length === 0">
+          <div class="dummy-result">
+            <div class="no-results"></div>
+          </div>
+        </ng-container>
         <ng-container *ngFor="let result of results; index as i">
           <li 
           class="result"
