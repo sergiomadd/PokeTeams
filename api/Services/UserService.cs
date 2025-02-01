@@ -105,59 +105,59 @@ namespace api.Services
             return countryDTO;
         }
 
-        public List<TagDTO> GetAllCountries()
+        public List<QueryResultDTO> QueryCountriesByName(string key)
         {
-            List<TagDTO> queryResults = new List<TagDTO>();
-            List<Country> countries = _pokeTeamContext.Country.ToList();
-            if (countries != null && countries.Count > 0)
-            {
-                countries.ForEach(country =>
-                {
-                    queryResults.Add(new TagDTO(country.Name, country.Code, type: "country", icon: $"https://localhost:7134/images/sprites/flags/{country.Code}.svg"));
-                });
-            }
-            return queryResults;
-        }
-
-        public List<TagDTO> QueryCountriesByName(string key)
-        {
-            List<TagDTO> queryResults = new List<TagDTO>();
+            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
             List<Country> countries = _pokeTeamContext.Country.Where(i => i.NormalizedName.Contains(key.ToLower())).ToList();
             if (countries != null && countries.Count > 0)
             {
                 countries.ForEach(country =>
                 {
-                    queryResults.Add(new TagDTO(country.Name, country.Code, type: "country", icon: $"https://localhost:7134/images/sprites/flags/{country.Code}.svg"));
+                    queryResults.Add(new QueryResultDTO(country.Name, country.Code, type: "country", icon: $"https://localhost:7134/images/sprites/flags/{country.Code}.svg"));
                 });
             }
             return queryResults;
         }
 
-        public async Task<List<TagDTO>> QueryUsers(string key)
+        public List<QueryResultDTO> QueryAllCountries()
         {
-            List<TagDTO> queriedUsers = new List<TagDTO>();
+            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
+            List<Country> countries = _pokeTeamContext.Country.ToList();
+            if (countries != null && countries.Count > 0)
+            {
+                countries.ForEach(country =>
+                {
+                    queryResults.Add(new QueryResultDTO(country.Name, country.Code, type: "country", icon: $"https://localhost:7134/images/sprites/flags/{country.Code}.svg"));
+                });
+            }
+            return queryResults;
+        }
+
+        public async Task<List<QueryResultDTO>> QueryUsers(string key)
+        {
+            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
             List<User> users = _pokeTeamContext.Users
                 .Where(u => u.UserName.Contains(key)).ToList();
             users.ForEach(user =>
             {
                 string profilePicPath = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png";
-                queriedUsers.Add(new TagDTO(user.UserName, user.UserName, icon: profilePicPath, type: "user"));
+                queryResults.Add(new QueryResultDTO(user.UserName, user.UserName, icon: profilePicPath, type: "user"));
             });
-            return queriedUsers;
+            return queryResults;
         }
 
-        public async Task<List<TagDTO>> ChunkQueryUsers(string key, int startIndex, int pageSize)
+        public async Task<List<QueryResultDTO>> ChunkQueryUsers(string key, int startIndex, int pageSize)
         {
-            List<TagDTO> queriedUsers = new List<TagDTO>();
+            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
             List<User> users = _pokeTeamContext.Users
                 .Where(u => u.UserName.Contains(key))
                 .Skip(startIndex).Take(pageSize).ToList();
             users.ForEach(user =>
             {
                 string profilePicPath = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png";
-                queriedUsers.Add(new TagDTO(user.UserName, user.UserName, icon: profilePicPath, type: "user"));
+                queryResults.Add(new QueryResultDTO(user.UserName, user.UserName, icon: profilePicPath, type: "user"));
             });
-            return queriedUsers;
+            return queryResults;
         }
 
         //Keep incase countries change IRL

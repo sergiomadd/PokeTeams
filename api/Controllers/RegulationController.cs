@@ -29,9 +29,9 @@ namespace api.Controllers
         }
 
         [HttpGet("query/all")]
-        public ActionResult<List<TagDTO>> QueryAllRegulations()
+        public ActionResult<List<QueryResultDTO>> QueryAllRegulations()
         {
-            List<TagDTO> tagDTOs = _regulationService.QueryAllRegulations();
+            List<QueryResultDTO> tagDTOs = _regulationService.QueryAllRegulations();
             if (tagDTOs == null)
             {
                 return NotFound("Couldn't find regulation");

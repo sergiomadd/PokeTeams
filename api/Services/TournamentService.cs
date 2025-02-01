@@ -80,16 +80,16 @@ namespace api.Services
             return null;
         }
 
-        public List<TagDTO> QueryTournamentsByName(string key)
+        public List<QueryResultDTO> QueryTournamentsByName(string key)
         {
-            List<TagDTO> queryResults = new List<TagDTO>();
+            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
             List<Tournament> tournaments = _pokeTeamContext.Tournament.Where(t => t.NormalizedName.Contains(key.ToLower())).ToList();
             if (tournaments != null && tournaments.Count > 0)
             {
                 tournaments.ForEach(tournament =>
                 {
                     string path = "https://localhost:7134/images/misc/vgc.png";
-                    queryResults.Add(new TagDTO(tournament.Name, tournament.Name, type: "tournament",
+                    queryResults.Add(new QueryResultDTO(tournament.Name, tournament.Name, type: "tournament",
                         icon: tournament.Official ? path : null));
                 });
             }

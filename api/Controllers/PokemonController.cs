@@ -37,12 +37,12 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("query")]
-        public async Task<ActionResult<List<TagDTO>>> QueryPokemonsByName(string key)
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryPokemonsByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> pokemons = await _pokemonService.QueryPokemonsByName(key, langId);
+            List<QueryResultDTO> pokemons = await _pokemonService.QueryPokemonsByName(key, langId);
             if (pokemons == null)
             {
                 return NotFound("Couldn't find pokemons");

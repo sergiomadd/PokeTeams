@@ -2,7 +2,7 @@
 {
     public class TeamSearchQueryDTO
     {
-        public List<TagDTO>? Queries { get; set; }
+        public List<QueryResultDTO>? Queries { get; set; }
         public int? TeamsPerPage { get; set; }
         public int? SelectedPage { get; set; }
         public SortOrder? SortOrder { get; set; }

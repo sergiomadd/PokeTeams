@@ -56,15 +56,15 @@ namespace api.Services
             return regulationDTOs;
         }
 
-        public List<TagDTO> QueryAllRegulations()
+        public List<QueryResultDTO> QueryAllRegulations()
         {
-            List<TagDTO> tagDTOs = new List<TagDTO>();
+            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
             List<Regulation> regulations = _pokeTeamContext.Regulation.ToList();
             foreach (Regulation regulation in regulations)
             {
-                tagDTOs.Add(new TagDTO(regulation.Name, regulation.Identifier));
+                queryResults.Add(new QueryResultDTO(regulation.Name, regulation.Identifier));
             }
-            return tagDTOs;
+            return queryResults;
         }
 
         public async Task<RegulationDTO> GetRegulationByIdentifier(string identifier)

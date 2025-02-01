@@ -47,26 +47,26 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("all")]
-        public async Task<ActionResult<List<TagDTO>>> GetAllAbilities()
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryAllAbilities()
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> abilities = await _pokemonService.GetAllAbilitiesTags(langId);
+            List<QueryResultDTO> abilities = await _pokemonService.QueryAllAbilities(langId);
             if (abilities == null)
             {
-                return NotFound("Couldn't get pokemon abilities");
+                return NotFound("Couldn't get all abilities");
             }
             return Ok(abilities);
         }
 
         [HttpGet, Route("pokemon/{id}")]
-        public async Task<ActionResult<List<TagDTO>>> GetPokemonAbilities(string id)
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryAllPokemonAbilites(string id)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> abilities = await _pokemonService.GetPokemonAbilites(id, langId);
+            List<QueryResultDTO> abilities = await _pokemonService.QueryAllPokemonAbilites(id, langId);
             if (abilities == null)
             {
                 return NotFound("Couldn't get pokemon abilities");
@@ -75,12 +75,12 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("query")]
-        public async Task<ActionResult<List<TagDTO>>> QueryAbilitiesByName(string key)
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryAbilitiesByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> abilities = await _pokemonService.QueryAbilitiesByName(key, langId);
+            List<QueryResultDTO> abilities = await _pokemonService.QueryAbilitiesByName(key, langId);
             if (abilities == null)
             {
                 return NotFound("Couldn't query abilities");

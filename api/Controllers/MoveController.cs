@@ -32,12 +32,12 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("query")]
-        public async Task<ActionResult<List<TagDTO>>> QueryMovesByName(string key)
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryMovesByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> moves = await _pokemonService.QueryMovesByName(key, langId);
+            List<QueryResultDTO> moves = await _pokemonService.QueryMovesByName(key, langId);
             if (moves == null)
             {
                 return NotFound("Couldn't find moves");
@@ -47,12 +47,12 @@ namespace api.Controllers
 
 
         [HttpGet, Route("pokemon/{id}")]
-        public async Task<ActionResult<List<TagDTO>>> GetPokemonMoves(string id)
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryAllPokemonMoves(string id)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> moves = await _pokemonService.GetPokemonMoves(id, langId);
+            List<QueryResultDTO> moves = await _pokemonService.QueryAllPokemonMoves(id, langId);
             if (moves == null)
             {
                 return NotFound("Couldn't get pokemon moves");

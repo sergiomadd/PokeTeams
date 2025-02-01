@@ -64,9 +64,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("query")]
-        public async Task<ActionResult<List<TagDTO>>> QueryTournamentsByName(string key)
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryTournamentsByName(string key)
         {
-            List<TagDTO> tournaments = _tournamentService.QueryTournamentsByName(key);
+            List<QueryResultDTO> tournaments = _tournamentService.QueryTournamentsByName(key);
             if (tournaments == null)
             {
                 return NotFound("Couldn't find tournaments");

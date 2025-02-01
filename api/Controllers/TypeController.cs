@@ -73,12 +73,12 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("query")]
-        public async Task<ActionResult<List<TagDTO>>> QueryTypesByName(string key)
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryTypesByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> types = await _pokemonService.QueryTypesByName(key, langId);
+            List<QueryResultDTO> types = await _pokemonService.QueryTypesByName(key, langId);
             if (types == null)
             {
                 return NotFound("Couldn't query types");
@@ -87,12 +87,12 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("teratype/query")]
-        public async Task<ActionResult<List<TagDTO>>> QueryTeraTypesByName(string key)
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryTeraTypesByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> types = await _pokemonService.QueryTypesByName(key, langId, true);
+            List<QueryResultDTO> types = await _pokemonService.QueryTypesByName(key, langId, true);
             if (types == null)
             {
                 return NotFound("Couldn't query types");
@@ -101,7 +101,7 @@ namespace api.Controllers
         }
 
         [HttpGet("teratype/query/all")]
-        public async Task<ActionResult<List<TagDTO>>> QueryAllTeraTypes()
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryAllTeraTypes()
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());

@@ -71,9 +71,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("query")]
-        public async Task<ActionResult<List<TagDTO>>> QueryUsers(string key)
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryUsers(string key)
         {
-            List<TagDTO> users = await _userService.QueryUsers(key);
+            List<QueryResultDTO> users = await _userService.QueryUsers(key);
             if (users == null)
             {
                 return NotFound("Couldn't find user");
@@ -82,9 +82,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("chunkquery")]
-        public async Task<ActionResult<List<TagDTO>>> ChunkQueryUsers(string key, int startIndex, int pageSize)
+        public async Task<ActionResult<List<QueryResultDTO>>> ChunkQueryUsers(string key, int startIndex, int pageSize)
         {
-            List<TagDTO> users = await _userService.ChunkQueryUsers(key, startIndex, pageSize);
+            List<QueryResultDTO> users = await _userService.ChunkQueryUsers(key, startIndex, pageSize);
             users.Skip(startIndex).Take(pageSize);
             if (users == null)
             {
@@ -105,20 +105,20 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("countries/all")]
-        public ActionResult<List<CountryDTO>> GetAllCountries()
+        public ActionResult<List<QueryResultDTO>> QueryAllCountries()
         {
-            List<TagDTO> countries = _userService.GetAllCountries();
+            List<QueryResultDTO> countries = _userService.QueryAllCountries();
             if (countries == null)
             {
-                return NotFound("Couldn't query countries");
+                return NotFound("Couldn't query all countries");
             }
             return Ok(countries);
         }
 
         [HttpGet, Route("countries/query")]
-        public ActionResult<List<TagDTO>> QueryCountriesByName(string key)
+        public ActionResult<List<QueryResultDTO>> QueryCountriesByName(string key)
         {
-            List<TagDTO> countries = _userService.QueryCountriesByName(key);
+            List<QueryResultDTO> countries = _userService.QueryCountriesByName(key);
             if (countries == null)
             {
                 return NotFound("Couldn't query countries");

@@ -47,12 +47,12 @@ namespace api.Controllers
         }
 
         [HttpGet("query/all")]
-        public async Task<ActionResult<List<TagDTO>>> GetAllNatures()
+        public async Task<ActionResult<List<QueryResultDTO>>> GetAllNatures()
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> naures = await _pokemonService.QueryAllNatures(langId);
+            List<QueryResultDTO> naures = await _pokemonService.QueryAllNatures(langId);
             if (naures == null)
             {
                 return BadRequest("Natures not found.");
@@ -61,12 +61,12 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("query")]
-        public async Task<ActionResult<List<TagDTO>>> QueryNaturesByName(string key)
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryNaturesByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
 
-            List<TagDTO> natures = await _pokemonService.QueryNaturesByName(key, langId);
+            List<QueryResultDTO> natures = await _pokemonService.QueryNaturesByName(key, langId);
             if (natures == null)
             {
                 return NotFound("Couldn't query natures");

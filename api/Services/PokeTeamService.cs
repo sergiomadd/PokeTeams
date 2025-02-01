@@ -555,7 +555,7 @@ namespace api.Services
             List<Team> teams = new List<Team>();
             if(searchQuery.Queries != null && searchQuery.Queries.Count > 0)
             {
-                foreach (TagDTO query in searchQuery.Queries)
+                foreach (QueryResultDTO query in searchQuery.Queries)
                 {
                     if(searchQuery.SetOperation.Equals("union"))
                     {
