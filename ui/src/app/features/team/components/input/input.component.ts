@@ -253,8 +253,8 @@ IVs: 0 Atk
 - Eerie Impulse  
 - Thunder Wave  
 `
-    this.pasteHolder = propaste;
-    this.pasteBoxForm.controls.paste.setValue(propaste);
+    this.pasteHolder = testPaste;
+    this.pasteBoxForm.controls.paste.setValue(this.pasteHolder);
   }
 
 }

@@ -38,7 +38,7 @@ export class SearchService
 
   resetQuery()
   {
-    this.setQueryTags([]);
+    this.setQueryItems([]);
     this.setQueryTeamsPerPage(10);
     this.setQuerySelectedPage(1);
     this.setQuerySortOrder(
@@ -92,7 +92,7 @@ export class SearchService
         type: "username"
       }
     ]
-    this.setQueryTags(tags);
+    this.setQueryItems(tags);
     this.search(this.query$.getValue());
   }
   
@@ -125,7 +125,7 @@ export class SearchService
     this.query$.next(query);
   }
 
-  setQueryTags(tags: Tag[])
+  setQueryItems(tags: Tag[])
   {
     this.query$.next(
       {...this.query$.getValue(), queries: [...tags]}

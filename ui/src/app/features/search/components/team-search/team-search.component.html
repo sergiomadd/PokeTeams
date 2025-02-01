@@ -12,7 +12,7 @@
             [keepSelected]="false"
             [allowCustom]="true"
             [getter]="queryService.queryUserCallback"
-            (selectEvent)="tagSelectEvent($event)"
+            (selectEvent)="queryResultSelectEvent($event)"
             class="col-center item smart-input-wrapper"
             ></app-smart-input>
             <app-smart-input
@@ -21,7 +21,7 @@
             [keepSelected]="false"
             [allowCustom]="true"
             [getter]="queryService.queryTournamentCallback"
-            (selectEvent)="tagSelectEvent($event)"
+            (selectEvent)="queryResultSelectEvent($event)"
             class="col-center item smart-input-wrapper"
             ></app-smart-input>
             <app-smart-input
@@ -30,7 +30,7 @@
             [keepSelected]="false"
             [getter]="queryService.queryRegulationCallback"
             [allGetter]="queryService.regulationAllCallback"
-            (selectEvent)="tagSelectEvent($event)"
+            (selectEvent)="queryResultSelectEvent($event)"
             class="col-center item smart-input-wrapper"
             ></app-smart-input>
             <app-smart-input
@@ -39,7 +39,7 @@
             [keepSelected]="false"
             [getter]="queryService.queryTagCallback"
             [allGetter]="queryService.tagAllCallback"
-            (selectEvent)="tagSelectEvent($event)"
+            (selectEvent)="queryResultSelectEvent($event)"
             class="col-center item smart-input-wrapper"
             ></app-smart-input>
           </div>
@@ -50,7 +50,7 @@
             [label]="'search.team_search.pokemon' | translate"
             [keepSelected]="false"
             [getter]="queryService.queryPokemonCallback"
-            (selectEvent)="tagSelectEvent($event)"
+            (selectEvent)="queryResultSelectEvent($event)"
             class="col-center item smart-input-wrapper"
             ></app-smart-input>
             <app-smart-input
@@ -58,7 +58,7 @@
             [label]="'search.team_search.move' | translate"
             [keepSelected]="false"
             [getter]="queryService.queryMoveCallback"
-            (selectEvent)="tagSelectEvent($event)"
+            (selectEvent)="queryResultSelectEvent($event)"
             class="col-center item smart-input-wrapper"
             ></app-smart-input>
             <app-smart-input
@@ -66,7 +66,7 @@
             [label]="'search.team_search.item' | translate"
             [keepSelected]="false"
             [getter]="queryService.queryItemCallback"
-            (selectEvent)="tagSelectEvent($event)"
+            (selectEvent)="queryResultSelectEvent($event)"
             class="col-center item smart-input-wrapper"
             ></app-smart-input>
           </div>
@@ -80,7 +80,7 @@
           [optionNames]="['intersection', 'union']"
           [tooltipTexts]="['search.team_search.intersection' | translate, 'search.team_search.union' | translate]"
           [selectedIndex]="0"
-          (selectEvent)="tagsSettingsSelectEvent($event)"
+          (selectEvent)="querySettingsSelectEvent($event)"
           ></app-radio>
         </div>
         <div class="storage-buttons flex justify-c-c gap-m">
@@ -91,7 +91,7 @@
             <svg class="icon-m" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M3795 4479 c-128 -30 -196 -167 -150 -299 8 -23 15 -44 15 -47 0 -2 -26 14 -57 35 -207 139 -488 245 -763 288 -139 22 -419 22 -557 1 -419 -66 -777 -245 -1072 -537 -560 -553 -725 -1392 -415 -2117 266 -622 841 -1059 1513 -1148 126 -17 353 -19 471 -5 771 96 1400 625 1621 1363 60 203 97 527 69 611 -16 48 -63 102 -111 127 -70 35 -180 20 -237 -34 -50 -46 -65 -94 -73 -233 -14 -222 -59 -396 -155 -589 -205 -413 -580 -699 -1054 -801 -121 -27 -439 -27 -560 0 -474 102 -849 387 -1054 801 -108 218 -156 422 -156 665 0 709 476 1299 1179 1461 129 30 405 37 542 14 183 -30 344 -86 496 -171 l66 -37 -29 -12 c-75 -31 -131 -128 -122 -209 8 -65 50 -130 106 -163 l47 -28 350 -3 c417 -4 436 -2 505 68 39 38 50 58 61 104 l13 58 -122 367 c-105 317 -127 372 -156 404 -53 58 -135 83 -211 66z"/> </g> </svg>
           </button>
         </div>
-        <app-tag-list [tags]="tags" [removable]="true" (removeEvent)="tagRemoveEvent($event)"></app-tag-list>
+        <app-tag-list [tags]="queryResults" [removable]="true" (removeEvent)="queryResultRemoveEvent()"></app-tag-list>
       </div>
     </div>
   </div>

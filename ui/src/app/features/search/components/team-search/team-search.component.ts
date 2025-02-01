@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
-import { Tag } from 'src/app/features/team/models/tag.model';
+import { QueryResult } from 'src/app/shared/models/queryResult.model';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { QueryService } from '../../../../shared/services/query.service';
 import { SetOperation } from '../../models/setOperation.enum';
@@ -22,7 +22,7 @@ export class TeamSearchComponent
   searchService = inject(SearchService);
   window = inject(WindowService);
 
-  tags: Tag[] = [];
+  queryResults: QueryResult[] = [];
   unionType: SetOperation = SetOperation.intersection;
   unionTypeSettings: SetOperation[] = [SetOperation.intersection, SetOperation.union];
 
@@ -35,30 +35,30 @@ export class TeamSearchComponent
     this.searchService.defaultSearch();
   }
 
-  tagSelectEvent($event: Tag)
+  queryResultSelectEvent($event: QueryResult)
   {
-    if(!this.tags.find(t => t.identifier === $event.identifier)) 
+    if(!this.queryResults.find(t => t.identifier === $event.identifier)) 
     {
-      this.tags?.push($event);
-      this.searchService.setQueryTags(this.tags);
+      this.queryResults?.push($event);
+      this.searchService.setQueryItems(this.queryResults);
     }
     else { console.log("Tag already added") }
   }
 
-  tagRemoveEvent($event: Tag)
+  queryResultRemoveEvent()
   {
-    this.searchService.setQueryTags(this.tags);
+    this.searchService.setQueryItems(this.queryResults);
   }
 
-  tagsSettingsSelectEvent($event)
+  querySettingsSelectEvent($event)
   {
     this.unionType = $event;
   }
 
   reset()
   {
-    this.tags = [];
-    this.searchService.setQueryTags([]);
+    this.queryResults = [];
+    this.searchService.setQueryItems([]);
     this.searchService.defaultSearch();
   }
 }

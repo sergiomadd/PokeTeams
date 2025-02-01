@@ -3,7 +3,7 @@
     <div class="flex justify-c-c align-i-c gap-m"
     [ngClass]="{'grid col-2 col-gap-m': window.isMobile()}">
       <div class="editor-input relative">
-        <ng-container *ngIf="!loggedUserTag">
+        <ng-container *ngIf="!loggedUser">
           <div class="icon-m pointer tooltip-wrapper anon-warning">
             <svg class="feedback" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -23,7 +23,7 @@
         <app-smart-input
         #userInput
         [label]="'team.editor.player_input-label' | translate"
-        [value]="loggedUserTag"
+        [value]="loggedUser"
         [disableRemove]="true"
         [updateOnChange]="true"
         (updateEvent)="playerUpdateEvent($event)"

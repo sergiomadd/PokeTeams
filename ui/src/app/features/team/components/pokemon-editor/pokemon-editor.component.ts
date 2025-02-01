@@ -8,9 +8,9 @@ import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
 import { PokemonData } from 'src/app/features/pokemon/models/pokemonData.dto';
 import { Stat } from 'src/app/features/pokemon/models/stat.model';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
-import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
+import { QueryResult } from 'src/app/shared/models/queryResult.model';
 import { QueryService } from 'src/app/shared/services/query.service';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { PokemonComponent } from '../../../pokemon/components/pokemon/pokemon.component';
@@ -269,7 +269,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async pokemonSelectEvent(event: Tag)
+  async pokemonSelectEvent(event: QueryResult)
   {
     if(this.pokemon)
     {
@@ -314,7 +314,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async itemSelectEvent(event: Tag)
+  async itemSelectEvent(event: QueryResult)
   {
     if(this.pokemon)
     {
@@ -322,7 +322,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async abilitySelectEvent(event: Tag)
+  async abilitySelectEvent(event: QueryResult)
   {
     if(this.pokemon)
     {
@@ -343,7 +343,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async move1SelectEvent(event: Tag)
+  async move1SelectEvent(event: QueryResult)
   {
     if(this.pokemon)
     {
@@ -352,7 +352,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async move2SelectEvent(event: Tag)
+  async move2SelectEvent(event: QueryResult)
   {
     if(this.pokemon)
     {
@@ -361,7 +361,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async move3SelectEvent(event: Tag)
+  async move3SelectEvent(event: QueryResult)
   {
     if(this.pokemon)
     {
@@ -370,7 +370,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async move4SelectEvent(event: Tag)
+  async move4SelectEvent(event: QueryResult)
   {
     if(this.pokemon)
     {
@@ -379,7 +379,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async natureSelectEvent(event: Tag)
+  async natureSelectEvent(event: QueryResult)
   {
     if(this.pokemon)
     {
@@ -387,7 +387,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async teraTypeSelectEvent(event: Tag)
+  async teraTypeSelectEvent(event: QueryResult)
   {
     if(this.pokemon)
     {

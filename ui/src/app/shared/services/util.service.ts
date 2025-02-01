@@ -9,7 +9,7 @@ import { Nature } from '../../features/pokemon/models/nature.model';
 import { Pokemon } from '../../features/pokemon/models/pokemon.model';
 import { Stat } from '../../features/pokemon/models/stat.model';
 import { Type } from '../../features/pokemon/models/type.model';
-import { Tag } from '../../features/team/models/tag.model';
+import { QueryResult } from '../models/queryResult.model';
 
 @Injectable({
   providedIn: 'root'
@@ -223,23 +223,22 @@ export class UtilService
     return nameDict[stat.identifier];
   }
 
-  getPokemonTag(pokemon: Pokemon)
+  getPokemonQueryResult(pokemon: Pokemon)
   {
     if(pokemon.name)
     {
-      let tag: Tag = 
+      let queryResult: QueryResult = 
       {
         name: pokemon.name.content ?? "",
         identifier: pokemon.name.content ?? "",
         icon: pokemon.sprite?.base
       }
-      return tag;
+      return queryResult;
     }
     return undefined;
   }
-  
 
-  getMoveTag(move?: Move): Tag | undefined
+  getMoveQueryResult(move?: Move): QueryResult | undefined
   {
     if(move)
     {
@@ -252,7 +251,7 @@ export class UtilService
     return undefined;
   }
 
-  getItemTag(item?: Item): Tag | undefined
+  getItemQueryResult(item?: Item): QueryResult | undefined
   {
     if(item)
     {
@@ -264,7 +263,7 @@ export class UtilService
     return undefined;
   }
 
-  getAbilityTag(ability?: Ability): Tag | undefined
+  getAbilityQueryResult(ability?: Ability): QueryResult | undefined
   {
     if(ability)
     {
@@ -277,7 +276,7 @@ export class UtilService
     return undefined;
   }
 
-  getNatureTag(nature?: Nature): Tag | undefined
+  getNatureQueryResult(nature?: Nature): QueryResult | undefined
   {
     if(nature)
     {
@@ -289,7 +288,7 @@ export class UtilService
     return undefined;
   }
 
-  getTypeTag(type?: Type): Tag | undefined
+  getTypeQueryResult(type?: Type): QueryResult | undefined
   {
     if(type)
     {
