@@ -26,7 +26,6 @@ export class TeamEditComponent
   {
     this.teamEditorService.selectedTeam$.subscribe((value) => 
     {
-      console.log("TEAM UPDATE", value)
       this.team = value;
     });
   }

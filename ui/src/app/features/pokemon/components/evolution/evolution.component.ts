@@ -41,7 +41,7 @@ export class EvolutionComponent
   {
     if(this.pokemon.sprite)
     {
-      if(this.sourcePokemon.gender && this.pokemon.sprite.female)
+      if(this.sourcePokemon.gender)
       {
         this.pokemonSpritePath = this.sourcePokemon.shiny ? this.pokemon.sprite.shinyFemale : this.pokemon.sprite.female
       }

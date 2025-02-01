@@ -72,6 +72,8 @@ export class TeamEditorService
         pokemons: [...updatedPokemons]
       }
     );
+    //no hay problem con hacer next y spread -> 
+    //el problema es que se reemplaza el pokemon entero?
   }
 
   updatePokemon(pokemon: Pokemon | undefined, index: number)

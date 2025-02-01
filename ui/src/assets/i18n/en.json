@@ -145,7 +145,8 @@
       "nature": "Nature",
       "neutral": "Neutral",
       "total": "Total"
-    }
+    },
+    "hidden_ability": "Hidden Ability"
   },
   "user":
   {

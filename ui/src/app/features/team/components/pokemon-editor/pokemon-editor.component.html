@@ -57,7 +57,7 @@
                 ></app-checkbox>
               </div>
             </div>
-            <ng-container *ngIf="allAbilities; else notAllAbilities">
+            <ng-container *ngIf="allAbilities; else pokemonAbilities">
               <app-smart-input
               [value]="util.getAbilityTag(pokemon.ability)"
               [keepSelected]="true"
@@ -67,7 +67,7 @@
               class="smart-input-wrapper form-item"
               ></app-smart-input>
             </ng-container>
-            <ng-template #notAllAbilities>
+            <ng-template #pokemonAbilities>
               <app-smart-input
               [value]="util.getAbilityTag(pokemon.ability)"
               [keepSelected]="true"
