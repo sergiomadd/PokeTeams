@@ -45,4 +45,9 @@ export class I18nService
     }
     return of(language)
   }
+
+  translatekey(key: string): string
+  {
+    return this.translate.instant(key);
+  }
 }

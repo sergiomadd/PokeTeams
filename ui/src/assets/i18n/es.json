@@ -87,7 +87,8 @@
       "move": "Movimiento",
       "item": "Objecto",
       "intersection": "Equipos que tienen todas",
-      "union": "Equipos que tienen almenos una"
+      "union": "Equipos que tienen almenos una",
+      "duplicate-feedback": "Ya esta añadida"
     },
     "team_table":
     {

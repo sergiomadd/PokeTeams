@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { I18nService } from 'src/app/core/config/services/i18n.service';
 import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
@@ -27,10 +28,12 @@ export class TeamSearchComponent
   window = inject(WindowService);
   teamService = inject(TeamService);
   theme = inject(ThemeService);
+  i18n = inject(I18nService);
 
   chips: Chip[] = [];
   unionType: SetOperation = SetOperation.intersection;
   unionTypeSettings: SetOperation[] = [SetOperation.intersection, SetOperation.union];
+  feedback?: string;
 
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
   selectedThemeName?: string;
@@ -43,6 +46,7 @@ export class TeamSearchComponent
 
   async queryResultSelectEvent($event: QueryItem)
   {
+    this.feedback = undefined;
     if(!this.chips.find(t => t.identifier === $event.identifier)) 
     {
       if($event.type === "tag")
@@ -73,7 +77,7 @@ export class TeamSearchComponent
       }
       this.searchService.setQueryItems(this.chips);
     }
-    else { console.log("Chip already added") }
+    else { this.feedback =  this.i18n.translatekey('search.team_search.duplicate-feedback')}
   }
 
   chipRemoveEvent($event)

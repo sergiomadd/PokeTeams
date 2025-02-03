@@ -99,7 +99,8 @@
       "move": "Move",
       "item": "Item",
       "intersection": "Teams that match all",
-      "union": "Teams that match any"
+      "union": "Teams that match any",
+      "duplicate-feedback": "Item already added"
     },
     "team_table":
     {
