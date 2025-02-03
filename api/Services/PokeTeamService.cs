@@ -82,7 +82,7 @@ namespace api.Services
                         {
                             tag = new Tag()
                             {
-                                Identifier = tagDTO.Identifier,
+                                Identifier = Formatter.NormalizeString(tagDTO.Name),
                                 Name = tagDTO.Name,
                                 Description = tagDTO.Description,
                                 Color = tagDTO.Color,
