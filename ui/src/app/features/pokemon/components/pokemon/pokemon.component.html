@@ -759,8 +759,27 @@
                             <app-no-translation></app-no-translation>
                           </ng-container>
                         </div>
-                        <div class="flex justify-c-c align-i-c bg-2 bor-rad-20">
-                          <img src="{{move?.damageClass?.iconPath}}" alt="" class="icon-m">
+                        <div class="section animated-border poke-tooltip-wrapper"
+                        (click)="clickSection(i, 'rightClass'); $event.stopPropagation()"
+                        [ngClass]="{'poke-tooltip-selected': tooltipRightClass[i]}"
+                        >
+                          <div class="flex justify-c-c align-i-c bg-2 bor-rad-20 section-content">
+                            <img src="{{move?.damageClass?.iconPath}}" alt="" class="icon-m">
+                            <app-poke-tooltip
+                            [content]="moveClassTooltip"
+                            [side]="'top'"
+                            [visible]="tooltipRightClass[i]"
+                            class="tooltip-component"
+                            >
+                            </app-poke-tooltip>
+                            <ng-template #moveClassTooltip>
+                              <div class="one-piece">
+                                <span class="one-line">
+                                  {{move?.damageClass?.name}}
+                                </span>
+                              </div>
+                            </ng-template>
+                          </div>
                         </div>
                       </div>
                       <div class="poke-tooltip-body">

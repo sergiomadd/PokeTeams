@@ -80,6 +80,7 @@ export class PokemonComponent
   tooltipMiddle: boolean[] = [false];
   tooltipRight: boolean[] = [false, false, false, false];
   tooltipRightType: boolean[] = [false, false, false, false];
+  tooltipRightClass: boolean[] = [false, false, false, false];
   showStats: boolean[] = [false]
   showNotes: boolean[] = [false]
   tooltipStats: boolean[] = [false, false, false, false, false, false]
@@ -198,11 +199,14 @@ export class PokemonComponent
       case "rightType":
         list = this.tooltipRightType;
         break;
+      case "rightClass":
+        list = this.tooltipRightClass;
+        break;
       case "stat":
         list = this.tooltipStats;
         break;
     }
-
+    
     //If tooltip visible -> hide it
     if(list[index])
     {
@@ -210,6 +214,10 @@ export class PokemonComponent
       if(type === "right" && this.tooltipRightType[index])
       {
         this.tooltipRightType[index] = false;
+      }
+      if(type === "right" && this.tooltipRightClass[index])
+      {
+        this.tooltipRightClass[index] = false;
       }
       list[index] = false;
     }
