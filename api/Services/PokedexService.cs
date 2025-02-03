@@ -476,7 +476,11 @@ namespace api.Services
                     {
                         typeName = await _pokedexContext.Type_names.FirstOrDefaultAsync(t => t.type_id == moves.type_id && t.local_language_id == (int)Lang.en);
                     }
-                    Move_damage_class_prose? damageClass = await _pokedexContext.Move_damage_class_prose.FirstOrDefaultAsync(d => d.move_damage_class_id == moves.damage_class_id && d.local_language_id == (int)Lang.en);
+                    Move_damage_class_prose? damageClass = await _pokedexContext.Move_damage_class_prose.FirstOrDefaultAsync(d => d.move_damage_class_id == moves.damage_class_id && d.local_language_id == localizedMoveNames.local_language_id);
+                    if (damageClass == null)
+                    {
+                        damageClass = await _pokedexContext.Move_damage_class_prose.FirstOrDefaultAsync(d => d.move_damage_class_id == moves.damage_class_id && d.local_language_id == (int)Lang.en);
+                    }
                     Move_target_prose? target = await _pokedexContext.Move_target_prose.FirstOrDefaultAsync(t => t.move_target_id == moves.target_id && t.local_language_id == localizedMoveNames.local_language_id);
                     if (target == null)
                     {
@@ -513,9 +517,9 @@ namespace api.Services
                             await GetTypeEffectivenessDefense((int)typeName.type_id, typeName.local_language_id)),
                         DamageClass = new MoveDamageClass
                         {
-                            Name = damageClass.name,
+                            Name = Formatter.CapitalizeFirst(damageClass.name),
                             Description = damageClass.description,
-                            IconPath = $"https://localhost:7134/images/sprites/damage-class/{damageClass.name}.png"
+                            IconPath = $"https://localhost:7134/images/sprites/damage-class/{damageClass.move_damage_class_id}.png"
                         },
                         Power = moves.power,
                         Pp = moves.pp,

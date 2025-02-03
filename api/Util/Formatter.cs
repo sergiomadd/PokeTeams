@@ -162,5 +162,12 @@ namespace api.Util
             //return text.Replace(" ", "").ToLower();
             return text.ToLower();
         }
+
+        public static string CapitalizeFirst(string text)
+        {
+            string firstCapitalized = text.Substring(0, 1).ToUpper();
+            string rest = text.Substring(1, text.Length - 1);
+            return firstCapitalized + rest;
+        }
     }
 }
