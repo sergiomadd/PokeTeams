@@ -114,6 +114,7 @@
           class="result"
           [ngClass]="{'result-hovered': activeResult === i}"
           [class.active]="activeResult === i"
+          [ngStyle]="{'background-color': (i == 5) ? 'red' : 'none'}"
           (click)="selectResult(result)"
           >
             <ng-container *ngIf="result.icon">

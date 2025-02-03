@@ -128,6 +128,14 @@ export class TeamService
     return this.util.toCamelCase(regulation); 
   }
 
+  async getTagByIdentifier(identifier: string) : Promise<Tag>
+  {
+    let tag: Tag = <Tag>{};
+    let url = this.apiUrl + 'tag/' + identifier;
+    tag = await lastValueFrom(this.http.get<Tag>(url).pipe(timeout(this.dataTimeout)));
+    return tag; 
+  }
+
   async getAllTags() : Promise<Tag[]>
   {
     let tags: Tag[] = [];

@@ -13,7 +13,7 @@ import { Team } from 'src/app/features/team/models/team.model';
 import { Tournament } from 'src/app/features/team/models/tournament.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
 import { UserService } from 'src/app/features/user/services/user.service';
-import { QueryResult } from 'src/app/shared/models/queryResult.model';
+import { QueryItem } from 'src/app/shared/models/queryResult.model';
 import { QueryService } from 'src/app/shared/services/query.service';
 import { SmartInputComponent } from '../../../../shared/components/smart-input/smart-input.component';
 import { TeamEditorService } from '../../services/team-editor.service';
@@ -41,7 +41,7 @@ export class TeamEditorComponent
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
   accessToken$: Observable<string | null> = this.store.select(selectAccessToken);
-  loggedUser?: QueryResult;
+  loggedUser?: QueryItem;
 
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
   selectedThemeName?: string;
@@ -111,7 +111,7 @@ export class TeamEditorComponent
     }
   }
 
-  async tournamentSelectEvent(event: QueryResult)
+  async tournamentSelectEvent(event: QueryItem)
   {
     this.team.tournament = event ? await this.teamService.getTournamentByName(event.name) : undefined;
     if(!this.team.tournament)
@@ -124,7 +124,7 @@ export class TeamEditorComponent
     }
   }
 
-  async regulationSelectEvent(event: QueryResult)
+  async regulationSelectEvent(event: QueryItem)
   {
     this.team.regulation = event ? await this.teamService.getRegulationByIdentifier(event.identifier) : undefined;
   }

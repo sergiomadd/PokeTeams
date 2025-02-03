@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Tag } from '../../team/models/tag.model';
+import { QueryItem } from 'src/app/shared/models/queryResult.model';
 import { TeamPreviewData } from '../../team/models/teamPreviewData.model';
 import { TeamService } from '../../team/services/team.service';
 import { SearchQueryDTO } from '../models/searchQuery.dto';
@@ -84,7 +84,7 @@ export class SearchService
 
   userOnlySearch(username: string)
   {
-    const tags: Tag[] = 
+    const queryItems: QueryItem[] = 
     [
       {
         name: username,
@@ -92,7 +92,7 @@ export class SearchService
         type: "username"
       }
     ]
-    this.setQueryItems(tags);
+    this.setQueryItems(queryItems);
     this.search(this.query$.getValue());
   }
   
@@ -125,10 +125,10 @@ export class SearchService
     this.query$.next(query);
   }
 
-  setQueryItems(tags: Tag[])
+  setQueryItems(queryItems: QueryItem[])
   {
     this.query$.next(
-      {...this.query$.getValue(), queries: [...tags]}
+      {...this.query$.getValue(), queries: [...queryItems]}
     )
   }
 

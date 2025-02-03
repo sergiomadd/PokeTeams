@@ -10,7 +10,7 @@ import { Stat } from 'src/app/features/pokemon/models/stat.model';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
 import { Team } from 'src/app/features/team/models/team.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
-import { QueryResult } from 'src/app/shared/models/queryResult.model';
+import { QueryItem } from 'src/app/shared/models/queryResult.model';
 import { QueryService } from 'src/app/shared/services/query.service';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { PokemonComponent } from '../../../pokemon/components/pokemon/pokemon.component';
@@ -269,7 +269,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async pokemonSelectEvent(event: QueryResult)
+  async pokemonSelectEvent(event: QueryItem)
   {
     if(this.pokemon)
     {
@@ -314,7 +314,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async itemSelectEvent(event: QueryResult)
+  async itemSelectEvent(event: QueryItem)
   {
     if(this.pokemon)
     {
@@ -322,7 +322,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async abilitySelectEvent(event: QueryResult)
+  async abilitySelectEvent(event: QueryItem)
   {
     if(this.pokemon)
     {
@@ -343,7 +343,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async move1SelectEvent(event: QueryResult)
+  async move1SelectEvent(event: QueryItem)
   {
     if(this.pokemon)
     {
@@ -352,7 +352,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async move2SelectEvent(event: QueryResult)
+  async move2SelectEvent(event: QueryItem)
   {
     if(this.pokemon)
     {
@@ -361,7 +361,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async move3SelectEvent(event: QueryResult)
+  async move3SelectEvent(event: QueryItem)
   {
     if(this.pokemon)
     {
@@ -370,7 +370,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async move4SelectEvent(event: QueryResult)
+  async move4SelectEvent(event: QueryItem)
   {
     if(this.pokemon)
     {
@@ -379,7 +379,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async natureSelectEvent(event: QueryResult)
+  async natureSelectEvent(event: QueryItem)
   {
     if(this.pokemon)
     {
@@ -387,7 +387,7 @@ export class PokemonEditorComponent
     }
   }
 
-  async teraTypeSelectEvent(event: QueryResult)
+  async teraTypeSelectEvent(event: QueryItem)
   {
     if(this.pokemon)
     {

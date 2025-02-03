@@ -1,4 +1,4 @@
-export interface QueryResult
+export interface QueryItem
 {
   name: string, 
   identifier: string,

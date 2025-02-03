@@ -1,10 +1,10 @@
-import { Tag } from "../../team/models/tag.model";
+import { QueryItem } from "src/app/shared/models/queryResult.model";
 import { SetOperation } from "./setOperation.enum";
 import { SortOrder } from "./sortOrder.model";
 
 export interface SearchQueryDTO
 {
-  queries: Tag[],
+  queries: QueryItem[],
   teamsPerPage?: number,
   selectedPage?: number,
   sortOrder?: SortOrder,

@@ -1,9 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
-import { QueryResult } from 'src/app/shared/models/queryResult.model';
+import { Tag } from 'src/app/features/team/models/tag.model';
+import { TeamService } from 'src/app/features/team/services/team.service';
+import { Chip } from 'src/app/shared/models/chip.model';
+import { QueryItem } from 'src/app/shared/models/queryResult.model';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { QueryService } from '../../../../shared/services/query.service';
 import { SetOperation } from '../../models/setOperation.enum';
@@ -21,8 +25,10 @@ export class TeamSearchComponent
   store = inject(Store)
   searchService = inject(SearchService);
   window = inject(WindowService);
+  teamService = inject(TeamService);
+  theme = inject(ThemeService);
 
-  queryResults: QueryResult[] = [];
+  chips: Chip[] = [];
   unionType: SetOperation = SetOperation.intersection;
   unionTypeSettings: SetOperation[] = [SetOperation.intersection, SetOperation.union];
 
@@ -35,19 +41,45 @@ export class TeamSearchComponent
     this.searchService.defaultSearch();
   }
 
-  queryResultSelectEvent($event: QueryResult)
+  async queryResultSelectEvent($event: QueryItem)
   {
-    if(!this.queryResults.find(t => t.identifier === $event.identifier)) 
+    if(!this.chips.find(t => t.identifier === $event.identifier)) 
     {
-      this.queryResults?.push($event);
-      this.searchService.setQueryItems(this.queryResults);
+      if($event.type === "tag")
+      {
+        const tag: Tag = $event as Tag;
+        const chip: Chip = 
+        {
+          name: tag.name,
+          identifier: tag.identifier,
+          iconPath: tag.icon,
+          tooltipText: tag.description,
+          color: tag.color,
+          textColor: tag.color ? this.theme.getTagTextColor(tag.color) : undefined,
+          type: tag.type
+        }
+        this.chips?.push(chip);
+      }
+      else
+      {
+        const chip: Chip = 
+        {
+          name: $event.name,
+          identifier: $event.identifier,
+          iconPath: $event.icon,
+          type: $event.type
+        }
+        this.chips?.push(chip);
+      }
+      this.searchService.setQueryItems(this.chips);
     }
-    else { console.log("Tag already added") }
+    else { console.log("Chip already added") }
   }
 
-  queryResultRemoveEvent()
+  chipRemoveEvent($event)
   {
-    this.searchService.setQueryItems(this.queryResults);
+    this.chips.splice($event, 1);
+    this.searchService.setQueryItems(this.chips);
   }
 
   querySettingsSelectEvent($event)
@@ -57,7 +89,7 @@ export class TeamSearchComponent
 
   reset()
   {
-    this.queryResults = [];
+    this.chips = [];
     this.searchService.setQueryItems([]);
     this.searchService.defaultSearch();
   }

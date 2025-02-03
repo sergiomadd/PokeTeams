@@ -40,7 +40,14 @@
       </div>
       <div class="flex justify-c-sb align-i-c">
         <div class="tag-preview bor-rad-5 no-overflow" style="width: 48%;">
-          <app-tag [tag]="tag" [minWidth]="'100%'"></app-tag>
+          <app-chip 
+          [name]="tag.name"
+          [iconPath]="tag.icon"
+          [tooltipText]="tag.description"
+          [minWidth]="'100%'"
+          [bgColor]="tag.color"
+          [textColor]="tag.color ? theme.getTagTextColor(tag.color) : undefined"
+          ></app-chip>
         </div>
         <div style="width: 48%;">
           <button class="button-tertiary-clear" 

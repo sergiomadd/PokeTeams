@@ -33,8 +33,6 @@ import { InputComponent } from './features/team/components/input/input.component
 import { PokemonEditorComponent } from './features/team/components/pokemon-editor/pokemon-editor.component';
 import { RegulationSelectorComponent } from './features/team/components/regulation-selector/regulation-selector.component';
 import { TagEditorComponent } from './features/team/components/tag-editor/tag-editor.component';
-import { TagListComponent } from './features/team/components/tag-list/tag-list.component';
-import { TagComponent } from './features/team/components/tag/tag.component';
 import { TeamEditorComponent } from './features/team/components/team-editor/team-editor.component';
 import { TeamIconsComponent } from './features/team/components/team-icons/team-icons.component';
 import { TeamPreviewComponent } from './features/team/components/team-preview/team-preview.component';
@@ -48,6 +46,7 @@ import { UserSettingsComponent } from './features/user/components/user-settings/
 import { UserTeamsComponent } from './features/user/components/user-teams/user-teams.component';
 import { UserPageComponent } from './features/user/pages/user-page/user-page.component';
 import { CheckboxComponent } from './shared/components/checkbox/checkbox.component';
+import { ChipComponent } from './shared/components/chip/chip.component';
 import { DialogComponent } from './shared/components/dialog/dialog.component';
 import { DropdownComponent } from './shared/components/dropdown/dropdown.component';
 import { NoTranslationComponent } from './shared/components/no-translation/no-translation.component';
@@ -81,8 +80,6 @@ import { LinkerPipe } from './shared/pipes/linker.pipe';
     CheckboxComponent,
     RadioComponent,
     TagEditorComponent,
-    TagComponent,
-    TagListComponent,
     ColorPickerComponent,
     RegulationSelectorComponent,
     PokemonComponent,
@@ -100,6 +97,7 @@ import { LinkerPipe } from './shared/pipes/linker.pipe';
     EmailConfirmationComponent,
     NoTranslationComponent,
     PokeTooltipComponent,
+    ChipComponent,
   ],
   exports: [],
   imports: [

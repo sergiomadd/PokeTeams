@@ -2,6 +2,7 @@ import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChange
 import { Store } from '@ngrx/store';
 import { forkJoin, Observable } from 'rxjs';
 import { FeedbackColors } from 'src/app/core/config/models/colors';
+import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { Pokemon } from 'src/app/features/pokemon/models/pokemon.model';
@@ -25,6 +26,7 @@ export class TeamPreviewComponent
   util = inject(UtilService);
   store = inject(Store);
   window = inject(WindowService);
+  theme = inject(ThemeService);
 
   @Input() team?: TeamPreviewData;
   @Input() pokemons?: PokemonPreview[] | null = undefined;

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, inject, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { QueryResult } from '../../models/queryResult.model';
+import { QueryItem } from '../../models/queryResult.model';
 
 @Component({
   selector: 'app-smart-input',
@@ -14,19 +14,19 @@ export class SmartInputComponent
 {
   formBuilder = inject(FormBuilder);
 
-  @Input() value?: QueryResult;
+  @Input() value?: QueryItem;
   @Input() label?: string;
   @Input() keepSelected?: boolean = false;
   @Input() disableRemove?: boolean = false;
   @Input() updateOnChange?: boolean;
   @Input() allowCustom?: boolean;
   @Input() allowNew?: boolean;
-  @Input() getter?: (args: any) => Observable<QueryResult[]>
-  @Input() allGetter?: (args?: any) => Observable<QueryResult[]>
+  @Input() getter?: (args: any) => Observable<QueryItem[]>
+  @Input() allGetter?: (args?: any) => Observable<QueryItem[]>
   @Input() allGetterIndex?: number;
   @Input() disabled?: boolean;
 
-  @Output() selectEvent = new EventEmitter<QueryResult>();
+  @Output() selectEvent = new EventEmitter<QueryItem>();
   @Output() newEvent = new EventEmitter();
   @Output() updateEvent = new EventEmitter<string>();
 
@@ -58,14 +58,14 @@ export class SmartInputComponent
     key: [''],
   });
 
-  selected?: QueryResult | undefined;
-  results: QueryResult[] = [];
+  selected?: QueryItem | undefined;
+  results: QueryItem[] = [];
   showOptions: boolean = false;
   activeResult: number = 0;
   position: number = 0;
   searching: boolean = false;
 
-  customQueryResult: QueryResult = 
+  customQueryResult: QueryItem = 
   {
     name: "",
     identifier: ""
@@ -154,7 +154,7 @@ export class SmartInputComponent
     }
   }
 
-  selectResult(selectedResult: QueryResult)
+  selectResult(selectedResult: QueryItem)
   {
     if(this.keepSelected)
     {

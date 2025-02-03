@@ -50,7 +50,13 @@
       </ng-container>
       <ng-container *ngIf="team?.tags && team?.tags!.length > 0">
         <ng-container *ngFor="let tag of team?.tags">
-          <app-tag [tag]="tag"></app-tag>
+          <app-chip 
+          [name]="tag.name"
+          [iconPath]="tag.icon"
+          [tooltipText]="tag.description"
+          [bgColor]="tag.color"
+          [textColor]="tag.color ? theme.getTagTextColor(tag.color) : undefined"
+          ></app-chip>
         </ng-container>
       </ng-container>
     </div>

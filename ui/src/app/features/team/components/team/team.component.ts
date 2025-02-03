@@ -1,4 +1,5 @@
 import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Team } from 'src/app/features/team/models/team.model';
@@ -18,6 +19,7 @@ export class TeamComponent
   parser = inject(ParserService);
   util = inject(UtilService);
   window = inject(WindowService);
+  theme = inject(ThemeService);
 
   @Input() team?: Team;
   @Input() removableTags?: boolean = false;

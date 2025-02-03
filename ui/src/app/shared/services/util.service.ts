@@ -3,13 +3,14 @@ import { inject, Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { Item } from 'src/app/features/pokemon/models/item.model';
+import { Tag } from 'src/app/features/team/models/tag.model';
 import { Ability } from '../../features/pokemon/models/ability.model';
 import { Move } from '../../features/pokemon/models/move.model';
 import { Nature } from '../../features/pokemon/models/nature.model';
 import { Pokemon } from '../../features/pokemon/models/pokemon.model';
 import { Stat } from '../../features/pokemon/models/stat.model';
 import { Type } from '../../features/pokemon/models/type.model';
-import { QueryResult } from '../models/queryResult.model';
+import { QueryItem } from '../models/queryResult.model';
 
 @Injectable({
   providedIn: 'root'
@@ -227,7 +228,7 @@ export class UtilService
   {
     if(pokemon.name)
     {
-      let queryResult: QueryResult = 
+      let queryResult: QueryItem = 
       {
         name: pokemon.name.content ?? "",
         identifier: pokemon.name.content ?? "",
@@ -238,7 +239,7 @@ export class UtilService
     return undefined;
   }
 
-  getMoveQueryResult(move?: Move): QueryResult | undefined
+  getMoveQueryResult(move?: Move): QueryItem | undefined
   {
     if(move)
     {
@@ -251,7 +252,7 @@ export class UtilService
     return undefined;
   }
 
-  getItemQueryResult(item?: Item): QueryResult | undefined
+  getItemQueryResult(item?: Item): QueryItem | undefined
   {
     if(item)
     {
@@ -263,7 +264,7 @@ export class UtilService
     return undefined;
   }
 
-  getAbilityQueryResult(ability?: Ability): QueryResult | undefined
+  getAbilityQueryResult(ability?: Ability): QueryItem | undefined
   {
     if(ability)
     {
@@ -276,7 +277,7 @@ export class UtilService
     return undefined;
   }
 
-  getNatureQueryResult(nature?: Nature): QueryResult | undefined
+  getNatureQueryResult(nature?: Nature): QueryItem | undefined
   {
     if(nature)
     {
@@ -288,7 +289,7 @@ export class UtilService
     return undefined;
   }
 
-  getTypeQueryResult(type?: Type): QueryResult | undefined
+  getTypeQueryResult(type?: Type): QueryItem | undefined
   {
     if(type)
     {
@@ -339,5 +340,14 @@ export class UtilService
     }
     formated = formated + letter;
     return formated;
+  }
+
+  tagToChip(tag: Tag): QueryItem
+  {
+    return {
+      name: tag.name,
+      identifier: tag.identifier,
+      type: tag.type
+    }
   }
 }

@@ -19,6 +19,7 @@ export class TagEditorComponent
   teamService = inject(TeamService);
   util = inject(UtilService);
   window = inject(WindowService);
+  theme = inject(ThemeService);
 
   @Input() visible: boolean = false;
   @Output() addEvent = new EventEmitter<Tag>();
@@ -57,7 +58,6 @@ export class TagEditorComponent
 
     this.form.controls.name.valueChanges.subscribe(async value => 
       {
-        console.log("name ", name)
         this.tag.name = value ?? "";
         this.tag.identifier = value ?? "";
         if(value && !await this.teamService.checkTagAvailable(value))
