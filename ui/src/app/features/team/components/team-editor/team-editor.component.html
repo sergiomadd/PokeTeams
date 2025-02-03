@@ -1,83 +1,100 @@
 <div class="flex-col align-i-c gap-m">
   <div class="flex-col gap-l">
-    <div class="flex justify-c-c align-i-c gap-m"
-    [ngClass]="{'grid col-2 col-gap-m': window.isMobile()}">
-      <div class="editor-input relative">
-        <ng-container *ngIf="!loggedUser">
-          <div class="icon-m pointer tooltip-wrapper anon-warning">
-            <svg class="feedback" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier"> 
-                <path fill="var(--bg-color-3)" d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"></path> 
-                <path fill="var(--text-color)" d="M12 6.25C12.4142 6.25 12.75 6.58579 12.75 7V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V7C11.25 6.58579 11.5858 6.25 12 6.25Z"></path> 
-                <path fill="var(--text-color)" d="M12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z"></path> 
-              </g>
-            </svg>
-            <app-tooltip
-            [text]="'team.editor.not_logged-warning' | translate"
-            [side]="window.isMobile() ? 'top' : 'left'"
-            ></app-tooltip>
+    <div class="flex-col justify-c-c align-i-c gap-m">
+      <div class="flex justify-c-c align-i-c gap-m"
+      [ngClass]="{'grid col-2 col-gap-m': window.isMobile()}"
+      >
+        <div class="editor-input relative">
+          <ng-container *ngIf="!loggedUser">
+            <div class="icon-m pointer tooltip-wrapper anon-warning">
+              <svg class="feedback" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_iconCarrier"> 
+                  <path fill="var(--bg-color-3)" d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"></path> 
+                  <path fill="var(--text-color)" d="M12 6.25C12.4142 6.25 12.75 6.58579 12.75 7V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V7C11.25 6.58579 11.5858 6.25 12 6.25Z"></path> 
+                  <path fill="var(--text-color)" d="M12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z"></path> 
+                </g>
+              </svg>
+              <app-tooltip
+              [text]="'team.editor.not_logged-warning' | translate"
+              [side]="window.isMobile() ? 'top' : 'left'"
+              ></app-tooltip>
+            </div>
+          </ng-container>
+          <app-smart-input
+          #userInput
+          [label]="'team.editor.player_input-label' | translate"
+          [value]="loggedUser"
+          [disableRemove]="true"
+          [updateOnChange]="true"
+          (updateEvent)="playerUpdateEvent($event)"
+          class="smart-input-wrapper input-m"
+          ></app-smart-input>
+        </div>
+        <div class="editor-input relative">
+          <app-smart-input
+          #tournamentInput
+          [label]="'team.editor.tournament_input-label' | translate"
+          [keepSelected]="true"
+          [getter]="queryService.queryTournamentCallback"
+          (selectEvent)="tournamentSelectEvent($event)"
+          class="smart-input-wrapper input-m"
+          ></app-smart-input>
+        </div>
+        <div class="editor-input relative">
+          <app-smart-input
+          #regulationInput
+          [label]="'team.editor.regulation_input-label' | translate"
+          [keepSelected]="true"
+          [getter]="queryService.queryRegulationCallback"
+          [allGetter]="queryService.regulationAllCallback"
+          (selectEvent)="regulationSelectEvent($event)"
+          class="smart-input-wrapper input-m"
+          ></app-smart-input>
+        </div>
+        <ng-container *ngIf="window.isMobile()">
+          <div class="editor-input relative">
+            <app-smart-input
+            [label]="'team.editor.rental_code-label' | translate"
+            [updateOnChange]="true"
+            (updateEvent)="rentalCodeSelectEvent($event)"
+            class="smart-input-wrapper input-m"
+            ></app-smart-input>      
           </div>
         </ng-container>
-        <app-smart-input
-        #userInput
-        [label]="'team.editor.player_input-label' | translate"
-        [value]="loggedUser"
-        [disableRemove]="true"
-        [updateOnChange]="true"
-        (updateEvent)="playerUpdateEvent($event)"
-        class="smart-input-wrapper input-m"
-        ></app-smart-input>
       </div>
-      <div class="editor-input relative">
-        <app-smart-input
-        #tournamentInput
-        [label]="'team.editor.tournament_input-label' | translate"
-        [keepSelected]="true"
-        [getter]="queryService.queryTournamentCallback"
-        (selectEvent)="tournamentSelectEvent($event)"
-        class="smart-input-wrapper input-m"
-        ></app-smart-input>
-      </div>
-      <div class="editor-input relative">
-        <app-smart-input
-        #regulationInput
-        [label]="'team.editor.regulation_input-label' | translate"
-        [keepSelected]="true"
-        [getter]="queryService.queryRegulationCallback"
-        [allGetter]="queryService.regulationAllCallback"
-        (selectEvent)="regulationSelectEvent($event)"
-        class="smart-input-wrapper input-m"
-        ></app-smart-input>
-      </div>
-      <div class="editor-input relative">
-        <app-smart-input
-        #tagInput
-        (disabled)="team?.tags ? team?.tags!.length > 2 : false"
-        [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
-        [allowNew]="true"
-        [getter]="queryService.queryTagCallback"
-        [allGetter]="queryService.tagAllCallback"
-        (selectEvent)="tagSelectEvent($event)"
-        (newEvent)="toggleTagEditor()"
-        class="smart-input-wrapper input-m"
-        ></app-smart-input>
-        <div class="tag-editor-wrapper">
-          <app-tag-editor 
-          [visible]="showTagEditor"
-          (addEvent)="tagSelectEvent($event)"
-          (closeEvent)="tagEditorCloseEvent()"
-          ></app-tag-editor>
+      <div class="flex justify-c-c align-i-c gap-m">
+        <ng-container *ngIf="!window.isMobile()">
+          <div class="editor-input relative">
+            <app-smart-input
+            [label]="'team.editor.rental_code-label' | translate"
+            [updateOnChange]="true"
+            (updateEvent)="rentalCodeSelectEvent($event)"
+            class="smart-input-wrapper input-m"
+            ></app-smart-input>      
+          </div>
+        </ng-container>
+        <div class="editor-input relative">
+          <app-smart-input
+          #tagInput
+          (disabled)="team?.tags ? team?.tags!.length > 2 : false"
+          [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
+          [allowNew]="true"
+          [getter]="queryService.queryTagCallback"
+          [allGetter]="queryService.tagAllCallback"
+          (selectEvent)="tagSelectEvent($event)"
+          (newEvent)="toggleTagEditor()"
+          class="smart-input-wrapper input-m"
+          ></app-smart-input>
+          <div class="tag-editor-wrapper">
+            <app-tag-editor 
+            [visible]="showTagEditor"
+            (addEvent)="tagSelectEvent($event)"
+            (closeEvent)="tagEditorCloseEvent()"
+            ></app-tag-editor>
+          </div>
         </div>
-      </div>
-      <div class="editor-input relative" style="grid-column: span 2; justify-self: center;">
-        <app-smart-input
-        [label]="'team.editor.rental_code-label' | translate"
-        [updateOnChange]="true"
-        (updateEvent)="rentalCodeSelectEvent($event)"
-        class="smart-input-wrapper input-m"
-        ></app-smart-input>      
       </div>
     </div>
     <div class="flex justify-c-c gap-s">
