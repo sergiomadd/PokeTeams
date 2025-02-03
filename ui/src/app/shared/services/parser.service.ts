@@ -192,19 +192,19 @@ export class ParserService {
     {
       pokePaste.name = this.formatValue(profile, {whiteSpace: true});
     }
-    //Case 2: Species + nickname 'Pickle (Mamoswine)' (only 1 '(')
+    //Case 2: Species + nickname 'Pickle (Mamoswine)' {only 1 '('}
     else if(profile.includes("(") && profile.split("(").length === 2)
     {
       pokePaste.nickname = this.formatValue(profile.split("(")[0]);
       pokePaste.name = this.formatValue(profile.split("(")[1], {rightParen: true, whiteSpace: true});
     }
-    //Case 3: Species + nickname + gender 'Pickle (Mamoswine) (F)'  (2 '(')
+    //Case 3: Species + nickname + gender 'Pickle (Mamoswine) (F)'  {2 '('}
     else if(profile.includes("(") && profile.split("(").length === 3)
     {
       pokePaste.nickname = this.formatValue(profile.split("(")[0]);
       pokePaste.name = this.formatValue(profile.split("(")[1], {rightParen: true, whiteSpace: true});
       let genderString = this.formatValue(profile.split("(")[2], {rightParen: true});
-      if(genderString === "female")
+      if(genderString === "female" || genderString === "Female" || genderString === "f" || genderString === "F")
       {
         pokePaste.gender = true;
       }
