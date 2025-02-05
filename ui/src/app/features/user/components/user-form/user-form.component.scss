@@ -5,7 +5,7 @@
   border-radius: 10px 10px 0 0;
   border: 1px solid black;
   border-width: 1px 1px 0 1px;
-  width: 100%;
+  width: 95%;
 }
 
 .tab-left
@@ -40,15 +40,16 @@
   gap: 0.2em;
   overflow: hidden;
   padding: 0.2em;
-  width: 9em;
+  width: 100%;
+  box-sizing: border-box;
 
   label
   {
     font-weight: 500;
   }
-
+  
   input
   {
-    width: 8.5em;
+    width: 100%;
   }
 }

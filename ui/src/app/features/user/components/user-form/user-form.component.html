@@ -1,13 +1,14 @@
 <ng-container *ngIf="data$ | async as data">
   <div class="m-auto flex-col justify-c-c align-i-c pad-s no-overflow relative" style="width: 10em;">
     <div class="nav">
-      <div class="pad-m flex justify-c-c align-i-c pointer bg-2 text-center tab-left" 
+      <div class="pad-m flex justify-c-c align-i-c pointer bg-2 text-center tab-left"
       (click)="showLogInForm()"
       [ngClass]="{'tab-selected': login}"
       >
         {{'user.form.login' | translate}}
       </div>
-      <div class="pad-m flex justify-c-c align-i-c pointer bg-2 text-center tab-right" 
+      <div class="pad-m flex justify-c-c align-i-c pointer bg-2 text-center tab-right"
+      style="word-break: break-all;" 
       (click)="showSignUpForm()"
       [ngClass]="{'tab-selected': signup}"
       >
