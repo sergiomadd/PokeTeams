@@ -8,7 +8,7 @@
           [ngClass]="
           {
             section: pokemon.dexNumber !== -1,
-            'animated-border': pokemon.dexNumber !== -1,
+            'animated-border': pokemon.dexNumber !== -1 && !window.isMobile(),
             'poke-tooltip-selected': tooltipEvol[0],
             'poke-tooltip-wrapper': !window.isMobile()
           }"
@@ -77,7 +77,7 @@
           [ngClass]="
           {
             section: pokemon.item?.identifier !== 'error',
-            'animated-border': pokemon.item?.identifier !== 'error',
+            'animated-border': pokemon.item?.identifier !== 'error' && !window.isMobile(),
             'poke-tooltip-selected': tooltipLeft[0],
             'poke-tooltip-wrapper': !window.isMobile()
           }"
@@ -88,7 +88,7 @@
                 [content]="itemTooltip"
                 [side]="'left'"
                 [visible]="tooltipLeft[0]"
-                [mobileChanged]="true"
+                [mobileChanged]="window.isMobile()"
                 class="tooltip-component"
                 >
                 </app-poke-tooltip>
@@ -137,7 +137,7 @@
           [ngClass]="
           {
             section: pokemon.ability?.identifier !== 'error',
-            'animated-border': pokemon.ability?.identifier !== 'error',
+            'animated-border': pokemon.ability?.identifier !== 'error' && !window.isMobile(),
             'poke-tooltip-selected': tooltipLeft[1],
             'poke-tooltip-wrapper': !window.isMobile()
           }"
@@ -148,7 +148,7 @@
                 [content]="abilityTooltip"
                 [side]="'left'"
                 [visible]="tooltipLeft[1]"
-                [mobileChanged]="true"
+                [mobileChanged]="window.isMobile()"
                 class="tooltip-component"
                 >
                 </app-poke-tooltip>
@@ -240,7 +240,7 @@
               'poke-tooltip-selected': pokemon.stats.length > 0 && showStats[0],
               'poke-tooltip-wrapper': !window.isMobile(),
               'option-disabled': pokemon.stats.length <= 0,
-              'animated-border': pokemon.stats.length > 0
+              'animated-border': pokemon.stats.length > 0 && !window.isMobile()
             }"
             >
               <div class="section-content option">
@@ -275,7 +275,7 @@
               'poke-tooltip-selected': showNotes[0],
               'poke-tooltip-wrapper': !window.isMobile(),
               'option-disabled': !pokemon.notes && !editorPreview,
-              'animated-border': pokemon.notes || editorPreview
+              'animated-border': pokemon.notes || editorPreview && !window.isMobile()
             }"
             >
               <div class="section-content option">
@@ -649,7 +649,7 @@
               [ngClass]="
               {
                 section: move?.identifier !== 'error',
-                'animated-border': move?.identifier !== 'error',
+                'animated-border': move?.identifier !== 'error' && !window.isMobile(),
                 'poke-tooltip-selected': tooltipRight[i],
                 'poke-tooltip-wrapper': !window.isMobile()
               }"
@@ -680,7 +680,7 @@
                     [content]="moveTooltip"
                     [side]="'right'"
                     [visible]="tooltipRight[i]"
-                    [mobileChanged]="true"
+                    [mobileChanged]="window.isMobile()"
                     class="tooltip-component"
                     >
                     </app-poke-tooltip>

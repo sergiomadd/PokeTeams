@@ -18,8 +18,8 @@ export class PokeTooltipComponent
   @ViewChild("pokeTooltip") pokeTooltip?: ElementRef;
 
   ngOnChanges(changes)
-  {    
-    if(changes['visible'])
+  {
+    if(this.mobileChanged && changes['visible'])
     {
       if(changes['visible'].currentValue)
       {
