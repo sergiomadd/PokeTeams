@@ -45,20 +45,20 @@ $arrowSize: 10px;
   transform: translate(round(calc($arrowSize * 1.5), 1px), round(calc(-50%), 1px));
 }
 
-.bottom
-{
-  position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translate(round(calc(-50%), 1px), round(calc($arrowSize * 1.5), 1px));
-}
-
 .left
 {
   position: absolute;
   right: 100%;
   top: 50%;
   transform: translate(round(calc($arrowSize * -1.5), 1px), round(calc(-50%), 1px));
+}
+
+.bottom
+{
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translate(round(calc(-50%), 1px), round(calc($arrowSize * 1.5), 1px));
 }
 
 .mobile
