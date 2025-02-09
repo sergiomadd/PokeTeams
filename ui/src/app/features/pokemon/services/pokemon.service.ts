@@ -22,7 +22,7 @@ export class PokemonService
   util = inject(UtilService);
 
   private apiUrl = environment.apiURL;
-  private dataTimeout = 2000;
+  private dataTimeout = 5000;
 
   constructor(private http: HttpClient) 
   {
