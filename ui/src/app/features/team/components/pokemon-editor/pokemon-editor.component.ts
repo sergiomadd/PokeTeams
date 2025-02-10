@@ -222,6 +222,7 @@ export class PokemonEditorComponent
     {
       this.selectedPokemonIndex = index;
       this.pokemon = this.team.pokemons[this.selectedPokemonIndex] ?? undefined;
+      this.resetStatPicker();
     }
   }
 
@@ -240,13 +241,16 @@ export class PokemonEditorComponent
 
   calcIVSliderBackground(currentValue, min, max)
   {
-    var value = (currentValue-min)/(max-min)*100
+    var value = Math.ceil((currentValue-min)/(max-min) * 100);
+    //hide edges
+    if(value > 70) {value -= 2}
     this.ivSliders[this.selectedStat] = 'linear-gradient(to right, lightblue 0%, lightblue ' + value + '%, var(--bg-color-2) ' + value + '%, var(--bg-color-2) 100%)'
   }
 
   calcEVSliderBackground(currentValue, min, max)
   {
-    var value = (currentValue-min)/(max-min)*100
+    var value = Math.ceil((currentValue-min)/(max-min) * 100);
+    if(value > 70) {value -= 2}
     this.evSliders[this.selectedStat] = 'linear-gradient(to right, gold 0%, gold ' + value + '%, var(--bg-color-2) ' + value + '%, var(--bg-color-2) 100%)'
   }
 
@@ -307,6 +311,16 @@ export class PokemonEditorComponent
       }
       this.calcIVSliderBackground(this.pokemon.ivs[index].value, 0, 31);
       this.calcEVSliderBackground(this.pokemon.evs[index].value, 0, this.maxEVs);
+    }
+  }
+
+  resetStatPicker()
+  {
+    if(this.pokemon)
+    {
+      this.selectedStat = 0;
+      this.calcIVSliderBackground(this.pokemon.ivs[0].value, 0, 31);
+      this.calcEVSliderBackground(this.pokemon.evs[0].value, 0, this.maxEVs);
     }
   }
 
