@@ -17,12 +17,13 @@
   border: 1px solid black;
 }
 
-.form
+.form-inputs
 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: repeat(3, 1fr);
-  justify-content: end;
+  justify-content: center;
+  align-items: end;
 }
 
 .form-item
@@ -40,7 +41,7 @@
   position: absolute;
   top: 0.2em;
   right: 0.2em;
-  z-index: 4;
+  z-index: 2;
 }
 
 .stat-col
@@ -80,10 +81,10 @@
   display: grid;
   align-items: center;
   justify-content: center;
-  grid-template-columns: 10% 70% 10%;
+  grid-template-columns: 7% 81% 7%;
   column-gap: 1%;
-  width: 90%;
-  gap: 0.2vw;
+  width: 95%;
+  gap: 0.2em;
 }
 
 .notes-editor
@@ -111,14 +112,13 @@
 {
   .form-item
   {
-    width: 8em;
+    width: 7.8em;
   }
 
   .form
   {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 8em));
+    grid-template-columns: repeat(3, minmax(0, 8.2em));
     grid-template-rows: repeat(3, 1fr);
-    justify-content: end;
   }
 }

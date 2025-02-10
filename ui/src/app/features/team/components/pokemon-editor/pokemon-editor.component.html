@@ -20,116 +20,175 @@
   </div>
   <ng-container *ngIf="pokemon">
     <div class="flex align-i-c gap-l" [ngClass]="{'flex-col': window.isMobile()}">
-      <form class="gap-l form" [formGroup]="pokemonForm" 
+      <form class="flex-col gap-l" [formGroup]="pokemonForm" 
       [ngClass]="
       {
         'gap-m': window.currentDevice === window.DeviceType.smallMobile,
         'gap-l': window.currentDevice !== window.DeviceType.smallMobile
       }">
-        <app-smart-input
-        #pokemonInput 
-        [value]="util.getPokemonQueryResult(pokemon)"
-        [label]="'team.pokemon_editor.pokemon' | translate"
-        [keepSelected]="true"
-        [getter]="queryService.queryPokemonCallback"
-        (selectEvent)="pokemonSelectEvent($event)"
-        class="smart-input-wrapper form-item"
-        ></app-smart-input>
-        <app-smart-input
-        [value]="util.getItemQueryResult(pokemon.item)"
-        [label]="'team.pokemon_editor.item' | translate"
-        [keepSelected]="true"
-        [getter]="queryService.queryItemCallback"
-        (selectEvent)="itemSelectEvent($event)"
-        class="smart-input-wrapper form-item"
-        ></app-smart-input>
-        <div class="flex-col justify-c-e align-i-c w-100 relative">
-          <div class="smart-input-wrapper">
-            <div class="smart-input-top">
-              <div class="smart-input-label">
-                {{'team.pokemon_editor.ability' | translate}}
+        <div class="form-inputs gap-m">
+          <app-smart-input
+          #pokemonInput 
+          [value]="util.getPokemonQueryResult(pokemon)"
+          [label]="'team.pokemon_editor.pokemon' | translate"
+          [keepSelected]="true"
+          [getter]="queryService.queryPokemonCallback"
+          (selectEvent)="pokemonSelectEvent($event)"
+          class="smart-input-wrapper form-item"
+          ></app-smart-input>
+          <app-smart-input
+          [value]="util.getItemQueryResult(pokemon.item)"
+          [label]="'team.pokemon_editor.item' | translate"
+          [keepSelected]="true"
+          [getter]="queryService.queryItemCallback"
+          (selectEvent)="itemSelectEvent($event)"
+          class="smart-input-wrapper form-item"
+          ></app-smart-input>
+          <div class="flex-col justify-c-e align-i-c w-100 relative">
+            <div class="smart-input-wrapper">
+              <div class="smart-input-top">
+                <div class="smart-input-label">
+                  {{'team.pokemon_editor.ability' | translate}}
+                </div>
+                <div class="font-s">
+                  <app-checkbox
+                  [checked]="allAbilities"
+                  [label]="'team.pokemon_editor.show_all' | translate"
+                  (checkEvent)="allAbilitiesSwitch()"
+                  ></app-checkbox>
+                </div>
               </div>
-              <div class="font-s">
-                <app-checkbox
-                [checked]="allAbilities"
-                [label]="'team.pokemon_editor.show_all' | translate"
-                (checkEvent)="allAbilitiesSwitch()"
-                ></app-checkbox>
-              </div>
+              <ng-container *ngIf="allAbilities; else pokemonAbilities">
+                <app-smart-input
+                [value]="util.getAbilityQueryResult(pokemon.ability)"
+                [keepSelected]="true"
+                [getter]="queryService.queryAbilityCallback"
+                [allGetter]="queryService.abilityAllCallback"
+                (selectEvent)="abilitySelectEvent($event)"
+                class="smart-input-wrapper form-item"
+                ></app-smart-input>
+              </ng-container>
+              <ng-template #pokemonAbilities>
+                <app-smart-input
+                [value]="util.getAbilityQueryResult(pokemon.ability)"
+                [keepSelected]="true"
+                [allGetter]="queryService.pokemonAbilitiesCallback"
+                [allGetterIndex]="this.pokemon?.dexNumber"
+                (selectEvent)="abilitySelectEvent($event)"
+                class="smart-input-wrapper form-item"
+                ></app-smart-input>
+              </ng-template>
             </div>
-            <ng-container *ngIf="allAbilities; else pokemonAbilities">
-              <app-smart-input
-              [value]="util.getAbilityQueryResult(pokemon.ability)"
-              [keepSelected]="true"
-              [getter]="queryService.queryAbilityCallback"
-              [allGetter]="queryService.abilityAllCallback"
-              (selectEvent)="abilitySelectEvent($event)"
-              class="smart-input-wrapper form-item"
-              ></app-smart-input>
-            </ng-container>
-            <ng-template #pokemonAbilities>
-              <app-smart-input
-              [value]="util.getAbilityQueryResult(pokemon.ability)"
-              [keepSelected]="true"
-              [allGetter]="queryService.pokemonAbilitiesCallback"
-              [allGetterIndex]="this.pokemon?.dexNumber"
-              (selectEvent)="abilitySelectEvent($event)"
-              class="smart-input-wrapper form-item"
-              ></app-smart-input>
-            </ng-template>
           </div>
+          <app-smart-input
+          [value]="util.getMoveQueryResult(pokemon.moves ? pokemon.moves[0] : undefined)"
+          [label]="'team.pokemon_editor.move' | translate:{'index':1}"
+          [keepSelected]="true"
+          [getter]="queryService.queryMoveCallback"
+          (selectEvent)="move1SelectEvent($event)"
+          class="smart-input-wrapper form-item"
+          ></app-smart-input>
+          <app-smart-input
+          [value]="util.getMoveQueryResult(pokemon.moves ? pokemon.moves[1] : undefined)"
+          [label]="'team.pokemon_editor.move' | translate:{'index':2}"
+          [keepSelected]="true"
+          [getter]="queryService.queryMoveCallback"
+          (selectEvent)="move2SelectEvent($event)"
+          class="smart-input-wrapper form-item"
+          ></app-smart-input>
+          <app-smart-input
+          [value]="util.getNatureQueryResult(pokemon.nature)"
+          [label]="'team.pokemon_editor.nature' | translate"
+          [keepSelected]="true"
+          [getter]="queryService.queryNatureCallback"
+          [allGetter]="queryService.naturesAllCallback"
+          (selectEvent)="natureSelectEvent($event)"
+          class="smart-input-wrapper form-item"
+          ></app-smart-input>
+          <app-smart-input
+          [value]="util.getMoveQueryResult(pokemon.moves ? pokemon.moves[2] : undefined)"
+          [label]="'team.pokemon_editor.move' | translate:{'index':3}"
+          [keepSelected]="true"
+          [getter]="queryService.queryMoveCallback"
+          (selectEvent)="move3SelectEvent($event)"
+          class="smart-input-wrapper form-item"
+          ></app-smart-input>
+          <app-smart-input
+          [value]="util.getMoveQueryResult(pokemon.moves ? pokemon.moves[3] : undefined)"
+          [label]="'team.pokemon_editor.move' | translate:{'index':4}"
+          [keepSelected]="true"
+          [getter]="queryService.queryMoveCallback"
+          (selectEvent)="move4SelectEvent($event)"
+          class="smart-input-wrapper form-item"
+          ></app-smart-input>
+          <app-smart-input
+          [value]="util.getTypeQueryResult(pokemon.teraType)"
+          [label]="'team.pokemon_editor.teratype' | translate"
+          [keepSelected]="true"
+          [getter]="queryService.queryTeratypeCallback"
+          [allGetter]="queryService.teraTypesAllCallback"
+          (selectEvent)="teraTypeSelectEvent($event)"
+          class="smart-input-wrapper form-item"
+          ></app-smart-input>
         </div>
-        <app-smart-input
-        [value]="util.getMoveQueryResult(pokemon.moves ? pokemon.moves[0] : undefined)"
-        [label]="'team.pokemon_editor.move' | translate:{'index':1}"
-        [keepSelected]="true"
-        [getter]="queryService.queryMoveCallback"
-        (selectEvent)="move1SelectEvent($event)"
-        class="smart-input-wrapper form-item"
-        ></app-smart-input>
-        <app-smart-input
-        [value]="util.getMoveQueryResult(pokemon.moves ? pokemon.moves[1] : undefined)"
-        [label]="'team.pokemon_editor.move' | translate:{'index':2}"
-        [keepSelected]="true"
-        [getter]="queryService.queryMoveCallback"
-        (selectEvent)="move2SelectEvent($event)"
-        class="smart-input-wrapper form-item"
-        ></app-smart-input>
-        <app-smart-input
-        [value]="util.getNatureQueryResult(pokemon.nature)"
-        [label]="'team.pokemon_editor.nature' | translate"
-        [keepSelected]="true"
-        [getter]="queryService.queryNatureCallback"
-        [allGetter]="queryService.naturesAllCallback"
-        (selectEvent)="natureSelectEvent($event)"
-        class="smart-input-wrapper form-item"
-        ></app-smart-input>
-        <app-smart-input
-        [value]="util.getMoveQueryResult(pokemon.moves ? pokemon.moves[2] : undefined)"
-        [label]="'team.pokemon_editor.move' | translate:{'index':3}"
-        [keepSelected]="true"
-        [getter]="queryService.queryMoveCallback"
-        (selectEvent)="move3SelectEvent($event)"
-        class="smart-input-wrapper form-item"
-        ></app-smart-input>
-        <app-smart-input
-        [value]="util.getMoveQueryResult(pokemon.moves ? pokemon.moves[3] : undefined)"
-        [label]="'team.pokemon_editor.move' | translate:{'index':4}"
-        [keepSelected]="true"
-        [getter]="queryService.queryMoveCallback"
-        (selectEvent)="move4SelectEvent($event)"
-        class="smart-input-wrapper form-item"
-        ></app-smart-input>
-        <app-smart-input
-        [value]="util.getTypeQueryResult(pokemon.teraType)"
-        [label]="'team.pokemon_editor.teratype' | translate"
-        [keepSelected]="true"
-        [getter]="queryService.queryTeratypeCallback"
-        [allGetter]="queryService.teraTypesAllCallback"
-        (selectEvent)="teraTypeSelectEvent($event)"
-        class="smart-input-wrapper form-item"
-        ></app-smart-input>
-          <div class="flex-col align-i-c gap-m">
+        <div class="flex-col gap-s w-100">
+          <div class="flex-col justify-c-c align-i-c gap-m w-100">
+            <div class="flex justify-c-c gap-m">
+              <ng-container *ngFor="let stat of pokemon.ivs; index as i">
+                <div class="pad-s bor-rad-5 pointer text-center no-select" (click)="selectStat(i)"
+                style="color: white;"
+                [ngStyle]="{backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat))}"
+                [ngClass]="{selectedStat: selectedStat === i}"
+                >
+                  <div class="flex-col justify-c-sb gap-s">
+                    <div>{{util.getStatCode(stat)}}</div>
+                    <div class="flex justify-c-c align-i-c w-100" style="min-width: 3.2em;">
+                      <div class="w-50">
+                        {{this.pokemon.ivs ? this.pokemon.ivs[i].value : '0'}}
+                      </div>
+                      <div class="w-50">
+                        {{this.pokemon.evs ? this.pokemon.evs[i].value : '0'}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <ng-container *ngIf="!pokemon.name">
+              <div class="formFeedbackError text-center">
+                {{"team.pokemon_editor.no_pokemon_stats-error" | translate}}
+              </div>
+            </ng-container>
+            <div class="range">
+              <label for="" class="text-center">IV</label>
+              <input type="range" min="0" max="31" 
+              value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat].value : ''}}" 
+              class="slider" id="myRange" formControlName="ivs"
+              [ngStyle]="{background: ivSliders[this.selectedStat]}">
+              <input 
+              type="text" 
+              class="level text-center"
+              formControlName="ivs"
+              value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat].value : ''}}">
+            </div>
+            <div class="range" [ngClass]="{'not-allowed': !pokemon.name}">
+              <label for="" class="text-center">EV</label>
+              <input #evSlider type="range" min="0" max="252" 
+              value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat].value : ''}}" 
+              class="slider" id="myRange" formControlName="evs"
+              [ngStyle]="{background: evSliders[this.selectedStat]}">
+              <input 
+              type="text" 
+              class="level text-center"  
+              value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat].value : ''}}"
+              [ngClass]="{'not-allowed': !pokemon.name}"
+              formControlName="evs">
+            </div>
+            <div class="text-center">
+              {{"team.pokemon_editor.remaining_evs" | translate}} {{remainingEVs[selectedPokemonIndex]}}
+            </div>
+          </div>
+          <div class="flex justify-c-c align-i-c gap-l w-100">
             <div class="flex-col">
               <div class="flex justify-c-c align-i-c gap-s" [ngClass]="{'flex-col': window.currentDevice === window.DeviceType.smallMobile}">
                 <label for="">{{"team.pokemon_editor.nickname" | translate}}</label>
@@ -143,7 +202,7 @@
             </div>
             <div class="flex justify-c-c align-i-c gap-s">
               <div class="flex-col">
-                <div class="flex justify-c-c align-i-c gap-s">
+                <div class="flex justify-c-c align-i-c gap-s" [ngClass]="{'flex-col': window.currentDevice === window.DeviceType.smallMobile}">
                   <label for="">{{"team.pokemon_editor.level" | translate}}</label>
                   <input 
                   type="text" 
@@ -156,7 +215,7 @@
                 <span *ngIf="isInvalid('level')" class="formFeedbackError text-center">{{getError('level')}}</span>
               </div>
             </div>
-            <div class="flex justify-c-c align-i-c gap-s" [ngClass]="{'flex-col': window.currentDevice === window.DeviceType.smallMobile}">
+            <div class="flex justify-c-c align-i-c gap-s">
               <app-radio
               [options]="[false, true]"
               [optionNames]="['Male', 'Female']"
@@ -172,59 +231,7 @@
               ></app-checkbox>
             </div>
           </div>
-          <div class="flex-col align-i-c gap-m stat-col">
-            <div class="flex justify-c-c gap-m" [ngClass]="{'not-allowed': !pokemon.name}">
-              <ng-container *ngFor="let stat of pokemon.ivs; index as i">
-                <div class="pad-s bor-rad-5 pointer text-center no-select" (click)="selectStat(i)"
-                style="color: white;"
-                [ngStyle]="{backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat))}"
-                [ngClass]="{selectedStat: selectedStat === i, disabled: !pokemon.name}"
-                >
-                  {{util.getStatCode(stat)}}
-                </div>
-              </ng-container>
-            </div>
-            <ng-container *ngIf="!pokemon.name">
-              <div class="formFeedbackError row-center form-item">
-                {{"team.pokemon_editor.no_pokemon_stats-error" | translate}}
-              </div>
-            </ng-container>
-            <div class="range" [ngClass]="{'not-allowed': !pokemon.name}">
-              <label for="" class="text-center">IV</label>
-              <div class="range-slider">
-                <input type="range" min="0" max="31" 
-                value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat].value : ''}}" 
-                class="slider" id="myRange" formControlName="ivs"
-                [ngClass]="{'not-allowed': !pokemon.name}" 
-                [ngStyle]="{background: ivSliders[this.selectedStat]}">
-              </div>
-              <input 
-              type="text" 
-              class="level text-center"
-              formControlName="ivs"
-              [ngClass]="{'not-allowed': !pokemon.name}"
-              value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat].value : ''}}">
-            </div>
-            <div class="range" [ngClass]="{'not-allowed': !pokemon.name}">
-              <label for="" class="text-center">EV</label>
-              <div class="range-slider">
-                <input #evSlider type="range" min="0" max="252" 
-                value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat].value : ''}}" 
-                class="slider" id="myRange" formControlName="evs"
-                [ngClass]="{'not-allowed': !pokemon.name}"
-                [ngStyle]="{background: evSliders[this.selectedStat]}">
-              </div>
-              <input 
-              type="text" 
-              class="level text-center"  
-              value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat].value : ''}}"
-              [ngClass]="{'not-allowed': !pokemon.name}"
-              formControlName="evs">
-            </div>
-            <div class="text-center">
-              {{"team.pokemon_editor.remaining_evs" | translate}} {{remainingEVs[selectedPokemonIndex]}}
-            </div>
-          </div>
+        </div>
       </form>
       <div class="preview w-fit flex-col justify-c-s gap-s relative">
         <div class="delete">
