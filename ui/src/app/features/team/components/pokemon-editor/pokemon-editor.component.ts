@@ -1,4 +1,4 @@
-import { Component, inject, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, SimpleChanges, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GenderColors, shinyColor } from 'src/app/core/config/models/colors';
@@ -64,14 +64,15 @@ export class PokemonEditorComponent
     identifier: "",
     value: 0
   };
+
+  @ViewChild('evSlider') evSlider!: ElementRef;
+
   selectedStat: number = 0;
   currentIVs: number = 0;
   currentEVs: number = 0;
-  currentMaxEVs: number = 252;
-  evsMax: number = 510;
-  usedEVs: number = 0;
-  ivs: boolean = false;
-  remainingEVs: number = 510;
+  readonly maxEVs: number = 252;
+  readonly maxEVsTotal: number = 510;
+  remainingEVs: number[] = [510, 510, 510, 510, 510, 510];
   ivSliders: string[] = [];
   evSliders: string[] = [];
 
@@ -89,7 +90,7 @@ export class PokemonEditorComponent
       if(this.pokemon.evs![this.selectedStat].value != this.pokemonForm.controls.evs.value)
       {
         this.pokemonForm.controls.evs.setValue(this.pokemon.evs[0].value);
-        this.calcEVSliderBackground(this.pokemon.evs[0].value, 0, this.currentMaxEVs);
+        this.calcEVSliderBackground(this.pokemon.evs[0].value, 0, this.maxEVs);
       }
     }
   }
@@ -190,16 +191,18 @@ export class PokemonEditorComponent
     {
       if(this.pokemon && value)
       {
-        this.currentEVs = value;
-        let evs = this.pokemon.evs;
-        evs[this.selectedStat].value = value;
-        this.pokemon = 
-        { 
-          ...this.pokemon,
-          evs: evs
+        if(this.calculateAvailableEVs(value))
+        {
+          let evs = this.pokemon.evs;
+          evs[this.selectedStat].value = this.currentEVs;
+          this.pokemon = 
+          { 
+            ...this.pokemon,
+            evs: evs
+          }
+          this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+          this.calcEVSliderBackground(this.currentEVs, 0, this.maxEVs);
         }
-        this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-        this.calcEVSliderBackground(value, 0, this.currentMaxEVs);
       }
     });
 
@@ -256,16 +259,54 @@ export class PokemonEditorComponent
     }
   }
 
-  calculateAvailableEVs()
+  calculateAvailableEVs(newEVs: number) : boolean
   {
-    this.remainingEVs -= this.currentEVs;
-    if(this.remainingEVs > 252) 
+    //Selected more EVs than available
+    if(this.remainingEVs[this.selectedPokemonIndex] == 0 && newEVs >= this.currentEVs)
     {
-      this.currentMaxEVs = 252;
+      this.evSlider.nativeElement.value = this.currentEVs;
+      return false;
     }
+    
+    const previousEVs = this.pokemon!.evs[this.selectedStat].value;
+    const evDiff = previousEVs - newEVs;
+    //If after diff has remaining evs
+    if(this.remainingEVs[this.selectedPokemonIndex] + evDiff >= 0)
+    {
+      this.remainingEVs[this.selectedPokemonIndex] = this.remainingEVs[this.selectedPokemonIndex] + evDiff;
+      this.currentEVs = newEVs;
+    }
+    //If no remaining evs after diff -> add all remaining to current
     else
     {
-      this.currentMaxEVs = this.remainingEVs;
+      this.currentEVs = this.currentEVs + this.remainingEVs[this.selectedPokemonIndex];
+      this.remainingEVs[this.selectedPokemonIndex] = 0;
+    }
+    this.evSlider.nativeElement.value = this.currentEVs;
+    return true;
+  }
+
+  selectStat(index: number)
+  {
+    if(this.pokemon)
+    {
+      if(this.selectedStat === index)
+      {
+        return;
+      }
+      else
+      {
+        this.selectedStat = index;
+        this.currentIVs = this.pokemon.ivs[index].value;
+        this.currentEVs = this.pokemon.evs[index].value;
+        this.evSlider.nativeElement.value = this.currentEVs;
+        if(this.pokemonPreviewComponent)
+        {
+          this.pokemonPreviewComponent.showStats[0] = true;
+        }
+      }
+      this.calcIVSliderBackground(this.pokemon.ivs[index].value, 0, 31);
+      this.calcEVSliderBackground(this.pokemon.evs[index].value, 0, this.maxEVs);
     }
   }
 
@@ -418,31 +459,6 @@ export class PokemonEditorComponent
         gender: event
       }
       this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-    }
-  }
-
-  selectStat(index: number)
-  {
-    if(this.pokemon)
-    {
-      if(this.selectedStat === index)
-      {
-        this.selectedStat = 0;
-      }
-      else
-      {
-        this.selectedStat = index;
-        this.pokemonForm.controls.ivs.setValue(this.pokemon.ivs![index].value);
-        this.currentIVs = 0;
-        this.pokemonForm.controls.evs.setValue(this.pokemon.evs![index].value);
-        this.currentEVs = 0;
-        if(this.pokemonPreviewComponent)
-        {
-          this.pokemonPreviewComponent.showStats[0] = true;
-        }
-      }
-      this.calcIVSliderBackground(this.pokemon.ivs[index].value, 0, 31);
-      this.calcEVSliderBackground(this.pokemon.evs[index].value, 0, this.currentMaxEVs);
     }
   }
 
