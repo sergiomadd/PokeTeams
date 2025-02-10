@@ -71,8 +71,8 @@ export class PokemonEditorComponent
   currentIVs: number = 0;
   currentEVs: number = 0;
   readonly maxEVs: number = 252;
-  readonly maxEVsTotal: number = 510;
-  remainingEVs: number[] = [510, 510, 510, 510, 510, 510];
+  readonly maxEVsTotal: number = 508;
+  remainingEVs: number[] = [this.maxEVsTotal, this.maxEVsTotal, this.maxEVsTotal, this.maxEVsTotal, this.maxEVsTotal, this.maxEVsTotal];
   ivSliders: string[] = [];
   evSliders: string[] = [];
 
