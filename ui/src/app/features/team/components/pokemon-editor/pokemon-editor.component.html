@@ -154,11 +154,15 @@
                 </div>
               </ng-container>
             </div>
-            <ng-container *ngIf="!pokemon.name">
-              <div class="formFeedbackError text-center">
-                {{"team.pokemon_editor.no_pokemon_stats-error" | translate}}
-              </div>
-            </ng-container>
+            <div class="flex-col justify-c-c align-i-c gap-s">
+              <ng-container *ngIf="!pokemon.name">
+                <div class="formFeedbackError text-center">
+                  {{"team.pokemon_editor.no_pokemon_stats-error" | translate}}
+                </div>
+              </ng-container>
+              <span *ngIf="isInvalid('ivs')" class="formFeedbackError text-center">{{getError('ivs')}}</span>
+              <span *ngIf="isInvalid('evs')" class="formFeedbackError text-center">{{getError('evs')}}</span>
+            </div>
             <div class="range">
               <label for="" class="text-center">IV</label>
               <input type="range" min="0" max="31" 
@@ -169,7 +173,8 @@
               type="text" 
               class="level text-center"
               formControlName="ivs"
-              value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat].value : ''}}">
+              value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat].value : ''}}"
+              [ngClass]="{controlInvalid: isInvalid('ivs')}">
             </div>
             <div class="range" [ngClass]="{'not-allowed': !pokemon.name}">
               <label for="" class="text-center">EV</label>
@@ -180,9 +185,9 @@
               <input 
               type="text" 
               class="level text-center"  
+              formControlName="evs"
               value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat].value : ''}}"
-              [ngClass]="{'not-allowed': !pokemon.name}"
-              formControlName="evs">
+              [ngClass]="{controlInvalid: isInvalid('evs')}">
             </div>
             <div class="text-center">
               {{"team.pokemon_editor.remaining_evs" | translate}} {{remainingEVs[selectedPokemonIndex]}}

@@ -49,8 +49,8 @@ export class PokemonEditorComponent
       nickname: ["", [Validators.minLength(1), Validators.maxLength(16)]],
       gender: [false],
       level: [50, [Validators.min(1), Validators.max(100)]],
-      ivs: [0],
-      evs: [0],
+      ivs: [0, [Validators.min(0), Validators.max(31)]],
+      evs: [0, [Validators.min(0), Validators.max(252)]],
       notes: [""]
     });
 
@@ -175,33 +175,119 @@ export class PokemonEditorComponent
     {
       if(this.pokemon && value && value != this.pokemon.ivs![this.selectedStat].value)
       {
-        this.currentIVs = value;
-        let ivs = this.pokemon.ivs;
-        ivs[this.selectedStat].value = value;
-        this.pokemon = 
-        { 
-          ...this.pokemon,
-          ivs: ivs
+        if(!this.util.isNaN(value))
+        {
+          if(this.pokemonForm.controls.ivs.valid)
+          {
+            this.currentIVs = Number(value);
+            let ivs = this.pokemon.ivs;
+            ivs[this.selectedStat].value = this.currentIVs;
+            this.pokemon = 
+            { 
+              ...this.pokemon,
+              ivs: ivs
+            }
+            this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+            this.calcIVSliderBackground(this.currentIVs, 0, 31);
+          }
+          else
+          {
+            if(value > 31) 
+            {
+              value = 31;
+              this.currentIVs = value;
+              let ivs = this.pokemon.ivs;
+              ivs[this.selectedStat].value = value;
+              this.pokemon = 
+              { 
+                ...this.pokemon,
+                ivs: ivs
+              }
+              this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+              this.calcIVSliderBackground(value, 0, 31);
+            }
+            else if(value < 0) 
+            {
+              value = 0;
+              this.currentIVs = value;
+              let ivs = this.pokemon.ivs;
+              ivs[this.selectedStat].value = value;
+              this.pokemon = 
+              { 
+                ...this.pokemon,
+                ivs: ivs
+              }
+              this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+              this.calcIVSliderBackground(value, 0, 31);
+            }
+          }
         }
-        this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-        this.calcIVSliderBackground(value, 0, 31);
+        else
+        {
+          this.pokemonForm.controls.ivs.setErrors({ "nan": true });
+        }
       }
     });
     this.pokemonForm.controls.evs.valueChanges.subscribe(async (value) => 
     {
       if(this.pokemon && value)
       {
-        if(this.calculateAvailableEVs(value))
+        if(!this.util.isNaN(value))
         {
-          let evs = this.pokemon.evs;
-          evs[this.selectedStat].value = this.currentEVs;
-          this.pokemon = 
-          { 
-            ...this.pokemon,
-            evs: evs
+          if(this.pokemonForm.controls.evs.valid)
+          {
+            if(this.calculateAvailableEVs(Number(value)))
+            {
+              let evs = this.pokemon.evs;
+              evs[this.selectedStat].value = this.currentEVs;
+              this.pokemon = 
+              { 
+                ...this.pokemon,
+                evs: evs
+              }
+              this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+              this.calcEVSliderBackground(this.currentEVs, 0, this.maxEVs);
+            }
           }
-          this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-          this.calcEVSliderBackground(this.currentEVs, 0, this.maxEVs);
+          else
+          {
+            if(value > 252) 
+            {
+              value = 252;
+              if(this.calculateAvailableEVs(value))
+              {
+                let evs = this.pokemon.evs;
+                evs[this.selectedStat].value = this.currentEVs;
+                this.pokemon = 
+                { 
+                  ...this.pokemon,
+                  evs: evs
+                }
+                this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+                this.calcEVSliderBackground(this.currentEVs, 0, this.maxEVs);
+              }
+            }
+            else if(value < 0) 
+            {
+              value = 0;
+              if(this.calculateAvailableEVs(value))
+              {
+                let evs = this.pokemon.evs;
+                evs[this.selectedStat].value = this.currentEVs;
+                this.pokemon = 
+                { 
+                  ...this.pokemon,
+                  evs: evs
+                }
+                this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+                this.calcEVSliderBackground(this.currentEVs, 0, this.maxEVs);
+              }
+            }
+          }
+        }
+        else
+        {
+          this.pokemonForm.controls.evs.setErrors({ "nan": true });
         }
       }
     });
@@ -302,7 +388,9 @@ export class PokemonEditorComponent
       {
         this.selectedStat = index;
         this.currentIVs = this.pokemon.ivs[index].value;
+        this.pokemonForm.controls.ivs.setValue(this.currentIVs);
         this.currentEVs = this.pokemon.evs[index].value;
+        this.pokemonForm.controls.evs.setValue(this.currentEVs);
         this.evSlider.nativeElement.value = this.currentEVs;
         if(this.pokemonPreviewComponent)
         {
@@ -321,6 +409,11 @@ export class PokemonEditorComponent
       this.selectedStat = 0;
       this.calcIVSliderBackground(this.pokemon.ivs[0].value, 0, 31);
       this.calcEVSliderBackground(this.pokemon.evs[0].value, 0, this.maxEVs);
+      this.currentIVs = this.pokemon.ivs[0].value;
+      this.pokemonForm.controls.ivs.setValue(this.currentIVs);
+      this.currentEVs = this.pokemon.evs[0].value;
+      this.pokemonForm.controls.evs.setValue(this.currentEVs);
+      this.evSlider.nativeElement.value = this.currentEVs;
     }
   }
 
