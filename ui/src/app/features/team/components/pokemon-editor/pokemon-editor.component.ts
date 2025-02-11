@@ -173,12 +173,13 @@ export class PokemonEditorComponent
     
     this.pokemonForm.controls.ivs.valueChanges.subscribe(async (value) => 
     {
-      if(this.pokemon && value && value != this.pokemon.ivs![this.selectedStat].value)
+      if(this.pokemon && value != undefined && value != this.pokemon.ivs![this.selectedStat].value)
       {
         if(!this.util.isNaN(value))
         {
           if(this.pokemonForm.controls.ivs.valid)
           {
+            console.log("good")
             this.currentIVs = Number(value);
             let ivs = this.pokemon.ivs;
             ivs[this.selectedStat].value = this.currentIVs;
@@ -230,7 +231,7 @@ export class PokemonEditorComponent
     });
     this.pokemonForm.controls.evs.valueChanges.subscribe(async (value) => 
     {
-      if(this.pokemon && value)
+      if(this.pokemon && value != undefined && value != this.pokemon.evs![this.selectedStat].value)
       {
         if(!this.util.isNaN(value))
         {
