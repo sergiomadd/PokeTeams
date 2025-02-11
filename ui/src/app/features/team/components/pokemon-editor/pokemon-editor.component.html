@@ -192,7 +192,7 @@
             <div class="flex align-i-c gap-l">
               <button 
               class="button"
-              style="background-color: #add8e6;"
+              [ngStyle]="{'background-color': theme.getStatColor('iv')}"
               (click)="resetIVs()"
               >
                 <svg class="icon-s" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> 
@@ -206,7 +206,7 @@
               </div>
               <button 
               class="button"
-              style="background-color: gold;"
+              [ngStyle]="{'background-color': theme.getStatColor('ev')}"
               (click)="resetEVs()"
               >
                 <svg class="icon-s" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> 
@@ -231,11 +231,11 @@
             </div>
             <div class="flex justify-c-c align-i-c gap-s">
               <div class="flex-col">
-                <div class="flex justify-c-c align-i-c gap-s" [ngClass]="{'flex-col': window.currentDevice === window.DeviceType.smallMobile}">
+                <div class="flex justify-c-c align-i-c gap-m" [ngClass]="{'flex-col': window.currentDevice === window.DeviceType.smallMobile}">
                   <label for="">{{"team.pokemon_editor.level" | translate}}</label>
                   <input 
                   type="text" 
-                  class="level text-center" 
+                  class="level text-center input-s" 
                   formControlName="level" 
                   value="pokemon.level ?? 0"
                   [ngClass]="{controlInvalid: isInvalid('level')}"
