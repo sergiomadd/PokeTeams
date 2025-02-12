@@ -119,7 +119,7 @@ export enum StatColor
     spd = "hsl(100, 52%, 55%)",
     spe = "hsl(342, 92%, 66%)",
     iv = "hsl(195, 53%, 79%)", 
-    ev = "hsl(239, 58%, 74%)"
+    ev = "hsl(51, 100%, 50%)"
 }
 
 export enum StatColorDark
@@ -131,7 +131,7 @@ export enum StatColorDark
     spd = "hsl(100, 52%, 45%)",
     spe = "hsl(342, 92%, 56%)",
     iv = "hsl(195, 53%, 59%)",
-    ev = "hsl(239, 58%, 64%)"
+    ev = "hsl(51, 100%, 50%)"
 }
 
 export enum GenderColors
