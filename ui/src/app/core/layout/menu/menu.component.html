@@ -5,9 +5,20 @@
       <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
       <g id="SVGRepo_iconCarrier"> 
         <path fill="var(--bg-color-3)" d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
-        <path d="M13.2602 15.5302L9.74023 12.0002L13.2602 8.47021" stroke="var(--text-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+        <path d="M13.2602 15.5302L9.74023 12.0002L13.2602 8.47021" stroke="var(--text-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
+      </g></svg>
   </div>
-  <div class="flex-col align-i-s gap-l no-overflow h-80">
+  <div class="flex-col align-i-s gap-l no-overflow h-80" style="margin-top: 0.4em;">
+    <a 
+    class="tab no-hover"
+    [ngClass]="{'open-tab': menuOpen}"
+    >
+      <img src="assets/img/logo.png" alt="" class="icon-l">
+      <div class="title main-title">
+        POKETEAMS
+      </div>
+    </a>
+    <span class="x-divider"></span>
     <a 
     class="tab"
     [ngClass]="{'open-tab': menuOpen}"
@@ -24,7 +35,7 @@
       </div>
     </a>
     <a 
-    class="tab row-start"
+    class="tab"
     [ngClass]="{'open-tab': menuOpen}"
     [routerLink]="['/search']"
     >
@@ -36,7 +47,7 @@
       </div>
     </a>
     <div 
-    class="tab row-start"
+    class="tab"
     [ngClass]="{'open-tab': menuOpen}"
     (click)="toggleTheme()"
     >
@@ -53,7 +64,7 @@
       </div>
     </div>
     <div 
-    class="tab row-start"
+    class="tab"
     [ngClass]="{'open-tab': menuOpen}"
     >
       <div class="w-100 relative">
@@ -68,7 +79,7 @@
     <span class="x-divider"></span>
     <ng-container *ngIf="loggedUser; else anon">
       <a 
-      class="tab row-start"
+      class="tab no-hover"
       [ngClass]="{'open-tab': menuOpen}"
       [routerLink]="['/', '@' + loggedUser?.username]"
       >
@@ -82,8 +93,8 @@
     </ng-container>
     <ng-template #anon>
       <a 
-      class="tab last row-start"
-      [ngClass]="{'open-tab': menuOpen}"
+      class="tab last"
+      [ngClass]="{'open-tab': menuOpen, 'no-hover': menuOpen}"
       (click)="toggleMenu()"
       >
         <div class="icon">
@@ -98,5 +109,6 @@
       </ng-container>
     </ng-template>
   </div>
+
 </div>
 

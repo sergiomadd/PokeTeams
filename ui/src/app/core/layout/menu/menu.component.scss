@@ -1,5 +1,8 @@
 @use "/src/app/shared/styles/variables.scss" as *;
 
+$closedWidth: 2.6em;
+$openWidth: 11em;
+
 .menu
 {
   height: 100%;
@@ -11,18 +14,17 @@
   top: 0;
   border-right: 1px solid var(--bg-color-3);
   z-index: 3;
+  padding: 0.2em 0.6em 0.2em 0.6em;
 }
 
 .opened
 {
-  width: 11em;
-  padding: 0.2em 0.6em 0.2em 0.6em;
+  width: $openWidth;
 }
 
 .closed
 {
-  width: 2.6em;
-  padding: 0.2em 0.6em 0.2em 0.6em;
+  width: $closedWidth;
 }
 
 .tab
@@ -47,6 +49,12 @@
     font-size: 1.3em;
   }
 
+  .main-title
+  {
+    font-family: 'falconpunch';
+    font-size: 1.1em; 
+  }
+
   &:hover
   {
     background-color: var(--bg-color-3);
@@ -68,9 +76,19 @@
   }
 }
 
+.no-hover
+{
+  cursor: auto;
+
+  &:hover
+  {
+    background-color: var(--bg-color-1);
+  }
+}
+
 .open-tab
 {
-  width: calc(11em - 0.5em);
+  width: calc($openWidth - 0.5em);
 }
 
 .icon
