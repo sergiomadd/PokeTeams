@@ -34,7 +34,7 @@ $teamWidth: calc($pokemonCardWidth * 2 + 0.8em);
 
 .active
 {
-  background-color: var(--bg-color-3);
+  outline: 1px solid var(--text-color);
 }
 
 .unregisteredPlayer
