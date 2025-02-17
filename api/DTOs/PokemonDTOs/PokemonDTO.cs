@@ -16,8 +16,8 @@ namespace api.DTOs.PokemonDTOs
         public NatureDTO? Nature { get; set; }
         public List<MoveDTO>? Moves { get; set; }
         public List<StatDTO?> Stats { get; set; }
-        public List<StatDTO?> ivs { get; set; }
-        public List<StatDTO?> evs { get; set; }
+        public List<StatDTO?>? ivs { get; set; }
+        public List<StatDTO?>? evs { get; set; }
         public int? Level { get; set; }
         public bool? Shiny { get; set; }
         public bool? Gender { get; set; }

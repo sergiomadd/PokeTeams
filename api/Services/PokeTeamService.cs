@@ -389,12 +389,22 @@ namespace api.Services
                 Move2Identifier = pokemonDTO.Moves[1]?.Identifier,
                 Move3Identifier = pokemonDTO.Moves[2]?.Identifier,
                 Move4Identifier = pokemonDTO.Moves[3]?.Identifier,
-                ivs = serializedIVs,
-                evs = serializedEVs,
                 Level = pokemonDTO.Level,
                 Shiny = pokemonDTO.Shiny,
                 Gender = pokemonDTO.Gender,
                 Notes = pokemonDTO.Notes,
+                IV_hp = pokemonDTO.ivs?[0]?.Value,
+                IV_atk = pokemonDTO.ivs?[1]?.Value,
+                IV_def = pokemonDTO.ivs?[2]?.Value,
+                IV_spa = pokemonDTO.ivs?[3]?.Value,
+                IV_spd = pokemonDTO.ivs?[4]?.Value,
+                IV_spe = pokemonDTO.ivs?[5]?.Value,
+                EV_hp = pokemonDTO.evs?[0]?.Value,
+                EV_atk = pokemonDTO.evs?[1]?.Value,
+                EV_def = pokemonDTO.evs?[2]?.Value,
+                EV_spa = pokemonDTO.evs?[3]?.Value,
+                EV_spd = pokemonDTO.evs?[4]?.Value,
+                EV_spe = pokemonDTO.evs?[5]?.Value
             };
         }
 

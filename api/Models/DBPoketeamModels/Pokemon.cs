@@ -49,12 +49,6 @@ namespace api.Models.DBPoketeamModels
         [MaxLength(128, ErrorMessage = "Move4Identifier is too long")]
         public string? Move4Identifier { get; set; }
 
-        [MaxLength(2048, ErrorMessage = "IVs are too long")]
-        public string? ivs { get; set; }
-
-        [MaxLength(2048, ErrorMessage = "EVs are too long")]
-        public string? evs { get; set; }
-
         [Range(1, 100, ErrorMessage = "Level is too long")]
         public int? Level { get; set; }
 
@@ -64,5 +58,41 @@ namespace api.Models.DBPoketeamModels
 
         [StringLength(2048, ErrorMessage = "Notes are too long")]
         public string? Notes { get; set; }
+
+        [Range(0, 31, ErrorMessage = "IV_hp is too long")]
+        public int? IV_hp { get; set; }
+
+        [Range(0, 31, ErrorMessage = "IV_atk is too long")]
+        public int? IV_atk { get; set; }
+
+        [Range(0, 31, ErrorMessage = "IV_def is too long")]
+        public int? IV_def { get; set; }
+
+        [Range(0, 31, ErrorMessage = "IV_spa is too long")]
+        public int? IV_spa { get; set; }
+
+        [Range(0, 31, ErrorMessage = "IV_spd is too long")]
+        public int? IV_spd { get; set; }
+
+        [Range(0, 31, ErrorMessage = "IV_spe is too long")]
+        public int? IV_spe { get; set; }
+
+        [Range(0, 252, ErrorMessage = "EV_hp is too long")]
+        public int? EV_hp { get; set; }
+
+        [Range(0, 252, ErrorMessage = "EV_atk is too long")]
+        public int? EV_atk { get; set; }
+
+        [Range(0, 252, ErrorMessage = "EV_def is too long")]
+        public int? EV_def { get; set; }
+
+        [Range(0, 252, ErrorMessage = "EV_spa is too long")]
+        public int? EV_spa { get; set; }
+
+        [Range(0, 252, ErrorMessage = "EV_spd is too long")]
+        public int? EV_spd { get; set; }
+
+        [Range(0, 252, ErrorMessage = "EV_spe is too long")]
+        public int? EV_spe { get; set; }
     }
 }

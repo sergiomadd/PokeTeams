@@ -1,6 +1,7 @@
 ﻿using api.Data;
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
+using api.Migrations;
 using api.Models;
 using api.Models.DBModels;
 using api.Models.DBPokedexModels;
@@ -51,8 +52,8 @@ namespace api.Services
                 Nature = options != null && options.NaturesVisibility ? await GetNatureByIdentifier(pokemon.NatureIdentifier ?? "", langId) : null,
                 Moves = moves,
                 Stats = pokemonData.Stats,
-                ivs = options != null && options.IvsVisibility ? pokemon.ivs != null ? JsonSerializer.Deserialize<List<StatDTO?>>(pokemon.ivs, new JsonSerializerOptions { IncludeFields = true }) : null : null,
-                evs = options != null && options.EvsVisibility ? pokemon.evs != null ? JsonSerializer.Deserialize<List<StatDTO?>>(pokemon.evs, new JsonSerializerOptions { IncludeFields = true }) : null : null,
+                ivs = BuildPokemonIVs(pokemon, options),
+                evs = BuildPokemonEVs(pokemon, options),
                 Level = pokemon.Level,
                 Shiny = pokemon.Shiny,
                 Gender = pokemon.Gender,
@@ -67,6 +68,38 @@ namespace api.Services
             }
 
             return pokemonDTO;
+        }
+
+        public List<StatDTO?>? BuildPokemonIVs(Pokemon pokemon, TeamOptionsDTO? options)
+        {
+            List<StatDTO?> ivs = new List<StatDTO?>();
+            if (options == null || !options.IvsVisibility)
+            {
+                return null;
+            }
+            ivs.Add(new StatDTO("hp", null, pokemon.IV_hp));
+            ivs.Add(new StatDTO("atk", null, pokemon.IV_atk));
+            ivs.Add(new StatDTO("def", null, pokemon.IV_def));
+            ivs.Add(new StatDTO("spa", null, pokemon.IV_spa));
+            ivs.Add(new StatDTO("spd", null, pokemon.IV_spd));
+            ivs.Add(new StatDTO("spe", null, pokemon.IV_spe));
+            return ivs;
+        }
+
+        public List<StatDTO?>? BuildPokemonEVs(Pokemon pokemon, TeamOptionsDTO? options)
+        {
+            List<StatDTO?> evs = new List<StatDTO?>();
+            if (options == null || !options.IvsVisibility)
+            {
+                return null;
+            }
+            evs.Add(new StatDTO("hp", null, pokemon.EV_hp));
+            evs.Add(new StatDTO("atk", null, pokemon.EV_atk));
+            evs.Add(new StatDTO("def", null, pokemon.EV_def));
+            evs.Add(new StatDTO("spa", null, pokemon.EV_spa));
+            evs.Add(new StatDTO("spd", null, pokemon.EV_spd));
+            evs.Add(new StatDTO("spe", null, pokemon.EV_spe));
+            return evs;
         }
 
         public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, int langId)
