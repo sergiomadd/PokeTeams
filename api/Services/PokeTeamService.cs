@@ -64,6 +64,10 @@ namespace api.Services
                 List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
                 List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
                 TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(team.IVsVisibility, team.EVsVisibility, team.NaturesVisibility);
+                if (team.PlayerId != null && team.PlayerId == _identityService.GetUserID())
+                {
+                    teamOptionsDTO.Logged();
+                }
 
                 foreach (Pokemon pokemon in pokemons)
                 {
@@ -187,6 +191,11 @@ namespace api.Services
             {
                 List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
                 TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(team.IVsVisibility, team.EVsVisibility, team.NaturesVisibility);
+                var test = _identityService.GetUserID();
+                if (team.PlayerId != null && team.PlayerId == _identityService.GetUserID())
+                {
+                    teamOptionsDTO.Logged();
+                }
                 teamDataDTO = new TeamDataDTO(
                     team.Id,
                     pokemons.Select(p => p.Id).ToList(),
@@ -342,8 +351,8 @@ namespace api.Services
                     viewCount: inputTeam.ViewCount,
                     dateCreated: inputTeam.Date != null && inputTeam.Date != "" ? DateTime.Parse(inputTeam.Date) : DateTime.Now,
                     visibility: inputTeam.Visibility,
-                    ivsVisibilty: inputTeam.Options != null ? inputTeam.Options.IVsVisibility : false,
-                    evsVisibilty: inputTeam.Options != null ? inputTeam.Options.EVsVisibility : false,
+                    ivsVisibilty: inputTeam.Options != null ? inputTeam.Options.IvsVisibility : false,
+                    evsVisibilty: inputTeam.Options != null ? inputTeam.Options.EvsVisibility : false,
                     naturesVisibilty: inputTeam.Options != null ? inputTeam.Options.NaturesVisibility : false
                     );
             }

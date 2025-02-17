@@ -28,7 +28,7 @@ namespace api.Controllers
             _teamService = teamService;
             _pokemonService = pokemonService;
         }
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<TeamDTO>> Get(string id)
         {
@@ -43,6 +43,8 @@ namespace api.Controllers
             return Ok(team);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AllowAnonymous]
         [HttpGet("data/{id}")]
         public async Task<ActionResult<TeamDataDTO>> GetTeamData(string id)
         {
@@ -74,6 +76,8 @@ namespace api.Controllers
             return Ok(pokemonDTO);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AllowAnonymous]
         [HttpGet("pokemon/nolang/{pokemonId}")]
         public async Task<ActionResult<PokemonDTO>> GetPokemonByIdNoLang(int pokemonId)
         {
