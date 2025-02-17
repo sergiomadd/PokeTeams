@@ -17,10 +17,12 @@ builder.Services.AddMvc();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<PokedexContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPokedex")), ServiceLifetime.Scoped);
 builder.Services.AddDbContext<PokeTeamContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPoketeam")), ServiceLifetime.Scoped);
 
+builder.Services.AddTransient<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPokedexContext, PokedexContext>();
 builder.Services.AddScoped<IPokedexService, PokedexService>();
