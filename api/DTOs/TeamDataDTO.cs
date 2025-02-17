@@ -8,7 +8,6 @@ namespace api.DTOs
     {
         public string ID { get; set; }
         public List<int> PokemonIDs { get; set; }
-        public TeamOptionsDTO Options { get; set; }
         public UserPreviewDTO Player { get; set; }
         public TournamentDTO Tournament { get; set; }
         public RegulationDTO Regulation { get; set; }
@@ -17,12 +16,24 @@ namespace api.DTOs
         public string Date { get; set; }
         public bool Visibility { get; set; }
         public List<TagDTO> Tags { get; set; }
+        public TeamOptionsDTO? Options { get; set; }
 
-        public TeamDataDTO(string id, List<int> pokemonIDs, string options, UserPreviewDTO player, TournamentDTO tournament, RegulationDTO regulation, string rentalCode, int viewCount, string date, bool visibility, List<TagDTO> tags)
+
+        public TeamDataDTO(
+            string id, 
+            List<int> pokemonIDs, 
+            UserPreviewDTO player, 
+            TournamentDTO tournament, 
+            RegulationDTO regulation, 
+            string rentalCode, 
+            int viewCount, 
+            string date, 
+            bool visibility, 
+            List<TagDTO> tags,
+            TeamOptionsDTO? options = null)
         {
             ID = id;
             PokemonIDs = pokemonIDs;
-            Options = JsonSerializer.Deserialize<TeamOptionsDTO>(options, new JsonSerializerOptions { IncludeFields = false });
             Player = player;
             Tournament = tournament;
             Regulation = regulation;
@@ -31,6 +42,7 @@ namespace api.DTOs
             Date = date;
             Visibility = visibility;
             Tags = tags;
+            Options = options;
         }
     }
 }

@@ -24,7 +24,8 @@ namespace api.Services
         {
             _pokedexContext = pokedexContext;
         }
-        public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon, int langId)
+
+        public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon, int langId, TeamOptionsDTO? options = null)
         {
             PokemonDataDTO? pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1, langId);
             
@@ -47,11 +48,11 @@ namespace api.Services
                 TeraType = await GetTypeWithEffectivenessByIdentifier(pokemon.TeraTypeIdentifier ?? "", langId, true),
                 Item = await GetItemByIdentifier(pokemon.ItemIdentifier ?? "", langId),
                 Ability = await GetAbilityByIdentifier(pokemon.AbilityIdentifier ?? "", langId),
-                Nature = await GetNatureByIdentifier(pokemon.NatureIdentifier ?? "", langId),
+                Nature = options != null && options.NaturesVisibility ? await GetNatureByIdentifier(pokemon.NatureIdentifier ?? "", langId) : null,
                 Moves = moves,
                 Stats = pokemonData.Stats,
-                ivs = pokemon.ivs != null ? JsonSerializer.Deserialize<List<StatDTO?>>(pokemon.ivs, new JsonSerializerOptions { IncludeFields = true }) : null,
-                evs = pokemon.evs != null ? JsonSerializer.Deserialize<List<StatDTO?>>(pokemon.evs, new JsonSerializerOptions { IncludeFields = true }) : null,
+                ivs = options != null && options.IVsVisibility ? pokemon.ivs != null ? JsonSerializer.Deserialize<List<StatDTO?>>(pokemon.ivs, new JsonSerializerOptions { IncludeFields = true }) : null : null,
+                evs = options != null && options.EVsVisibility ? pokemon.evs != null ? JsonSerializer.Deserialize<List<StatDTO?>>(pokemon.evs, new JsonSerializerOptions { IncludeFields = true }) : null : null,
                 Level = pokemon.Level,
                 Shiny = pokemon.Shiny,
                 Gender = pokemon.Gender,

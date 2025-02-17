@@ -28,6 +28,7 @@ namespace api.Services
         private readonly IUserService _userService;
         private readonly ITournamentService _tournamentService;
         private readonly IRegulationService _regulationService;
+        private readonly IIdentityService _identityService;
 
         private readonly UserManager<User> _userManager;
 
@@ -41,7 +42,8 @@ namespace api.Services
                 IUserService userService,
                 ITournamentService tournamentService,
                 IRegulationService regulationService,
-                UserManager<User> userManager
+                UserManager<User> userManager,
+                IIdentityService identityService
             )
         {
             _pokeTeamContext = dataContext;
@@ -50,75 +52,8 @@ namespace api.Services
             _tournamentService = tournamentService;
             _regulationService = regulationService;
             _userManager = userManager;
+            _identityService = identityService;
 
-        }
-
-        public async Task<Team?> BreakTeamDTO(TeamDTO inputTeam, string newTeamId, string loggedUserName)
-        {
-            Team newTeam = null;
-            if (inputTeam != null)
-            {
-                List<Pokemon> pokemons = new List<Pokemon>();
-                foreach (PokemonDTO pokemonDTO in inputTeam.Pokemons)
-                {
-                    pokemons.Add(BreakPokemonDTO(pokemonDTO, newTeamId));
-                }
-
-                JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
-                string optionsString = JsonSerializer.Serialize(inputTeam.Options, options);
-                User player = null;
-                if (inputTeam.Player != null && inputTeam.Player.Username != null && loggedUserName == inputTeam.Player.Username)
-                {
-                    player = await _userService.GetUserByUserName(inputTeam.Player.Username);
-                }
-
-                List<Tag> tags = new List<Tag>();
-                if (inputTeam.Tags != null && inputTeam.Tags.Count > 0)
-                {
-                    foreach (TagDTO tagDTO in inputTeam.Tags)
-                    {
-                        Tag? tag = await _pokeTeamContext.Tag.FindAsync(tagDTO.Identifier);
-                        if (tag == null)
-                        {
-                            tag = new Tag()
-                            {
-                                Identifier = Formatter.NormalizeString(tagDTO.Name),
-                                Name = tagDTO.Name,
-                                Description = tagDTO.Description,
-                                Color = tagDTO.Color,
-                            };
-                        }
-                        tags.Add(tag);
-                    }
-                }
-
-                Tournament? tournament = null;
-                if (inputTeam.Tournament != null && inputTeam.Tournament.Name != null)
-                {
-                    tournament = await _pokeTeamContext.Tournament.FindAsync(Formatter.NormalizeString(inputTeam.Tournament.Name));
-                    if (tournament == null)
-                    {
-                        tournament = new Tournament(inputTeam.Tournament);
-                    }
-                }
-
-                newTeam = new Team(
-                    id: newTeamId,
-                    pokemons: pokemons,
-                    options: optionsString,
-                    playerId: player != null ? player.Id : null,
-                    anonPlayer: (player == null && inputTeam.Player != null) ? inputTeam.Player.Username : null,
-                    tournamentNormalizedName: tournament != null ? tournament.NormalizedName : null,
-                    tournament: tournament,
-                    regulation: inputTeam.Regulation != null ? inputTeam.Regulation.Identifier : null,
-                    tags: tags,
-                    rentalCode: inputTeam.RentalCode,
-                    viewCount: inputTeam.ViewCount,
-                    dateCreated: inputTeam.Date != null && inputTeam.Date != "" ? DateTime.Parse(inputTeam.Date) : DateTime.Now,
-                    visibility: inputTeam.Visibility
-                    );
-            }
-            return newTeam;
         }
 
         public async Task<TeamDTO?> BuildTeamDTO(Team team, int langId)
@@ -128,16 +63,16 @@ namespace api.Services
             {
                 List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
                 List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
+                TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(team.IVsVisibility, team.EVsVisibility, team.NaturesVisibility);
 
                 foreach (Pokemon pokemon in pokemons)
                 {
-                    pokemonDTOs.Add(await _pokedexService.BuildPokemonDTO(pokemon, langId));
+                    pokemonDTOs.Add(await _pokedexService.BuildPokemonDTO(pokemon, langId, teamOptionsDTO));
                 }
 
                 teamDTO = new TeamDTO(
                     team.Id,
                     pokemonDTOs,
-                    team.Options,
                     await GetTeamPlayer(team),
                     await _tournamentService.GetTournamentByName(team.TournamentNormalizedName),
                     await _regulationService.GetRegulationByIdentifier(team.Regulation),
@@ -145,7 +80,8 @@ namespace api.Services
                     team.ViewCount,
                     team.DateCreated.ToString("yyyy-MM-dd"),
                     team.Visibility,
-                    await GetTeamTags(team)
+                    await GetTeamTags(team),
+                    options: teamOptionsDTO
                     );
             }
             return teamDTO;
@@ -157,8 +93,6 @@ namespace api.Services
             List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
             List<int> pokemonPreviewIDs = new List<int>();
 
-            TeamOptionsDTO editorOptions = JsonSerializer.Deserialize<TeamOptionsDTO?>(team.Options, new JsonSerializerOptions { IncludeFields = false });
-
             foreach (Pokemon pokemon in pokemons)
             {
                 pokemonPreviewIDs.Add(pokemon.Id);
@@ -168,7 +102,6 @@ namespace api.Services
             {
                 ID = team.Id,
                 PokemonIDs = pokemonPreviewIDs,
-                Options = JsonSerializer.Deserialize<TeamOptionsDTO>(team.Options, new JsonSerializerOptions { IncludeFields = false }),
                 Player = await GetTeamPlayer(team),
                 Tournament = await _tournamentService.GetTournamentByName(team.TournamentNormalizedName),
                 Regulation = await _regulationService.GetRegulationByIdentifier(team.Regulation),
@@ -253,10 +186,10 @@ namespace api.Services
             if (team != null)
             {
                 List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
+                TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(team.IVsVisibility, team.EVsVisibility, team.NaturesVisibility);
                 teamDataDTO = new TeamDataDTO(
                     team.Id,
                     pokemons.Select(p => p.Id).ToList(),
-                    team.Options,
                     await GetTeamPlayer(team),
                     await _tournamentService.GetTournamentByName(team.TournamentNormalizedName),
                     await _regulationService.GetRegulationByIdentifier(team.Regulation),
@@ -264,17 +197,24 @@ namespace api.Services
                     team.ViewCount,
                     team.DateCreated.ToString("yyyy-MM-dd"),
                     team.Visibility,
-                    await GetTeamTags(team));
+                    await GetTeamTags(team),
+                    teamOptionsDTO
+                    );
             }
             return teamDataDTO;
         }
 
         public async Task<PokemonDTO?> GetPokemonById(int id, int langId)
         {
-            Pokemon? pokemon = _pokeTeamContext.Pokemon.FirstOrDefault(t => t.Id == id);
+            Pokemon? pokemon = _pokeTeamContext.Pokemon.Include(p => p.Team).FirstOrDefault(p => p.Id == id);
             if (pokemon != null)
             {
-                return await _pokedexService.BuildPokemonDTO(pokemon, langId);
+                TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(pokemon.Team.IVsVisibility, pokemon.Team.EVsVisibility, pokemon.Team.NaturesVisibility);
+                if (pokemon.Team.PlayerId != null && pokemon.Team.PlayerId == _identityService.GetUserID())
+                {
+                    teamOptionsDTO.Logged();
+                }
+                return await _pokedexService.BuildPokemonDTO(pokemon, langId, teamOptionsDTO);
             }
             return null;
         }
@@ -338,6 +278,74 @@ namespace api.Services
             {
                 Printer.Log("Exception in team upload", ex);
                 return null;
+            }
+            return newTeam;
+        }
+
+        public async Task<Team?> BreakTeamDTO(TeamDTO inputTeam, string newTeamId, string loggedUserName)
+        {
+            Team newTeam = null;
+            if (inputTeam != null)
+            {
+                List<Pokemon> pokemons = new List<Pokemon>();
+                foreach (PokemonDTO pokemonDTO in inputTeam.Pokemons)
+                {
+                    pokemons.Add(BreakPokemonDTO(pokemonDTO, newTeamId));
+                }
+
+                User player = null;
+                if (inputTeam.Player != null && inputTeam.Player.Username != null && loggedUserName == inputTeam.Player.Username)
+                {
+                    player = await _userService.GetUserByUserName(inputTeam.Player.Username);
+                }
+
+                List<Tag> tags = new List<Tag>();
+                if (inputTeam.Tags != null && inputTeam.Tags.Count > 0)
+                {
+                    foreach (TagDTO tagDTO in inputTeam.Tags)
+                    {
+                        Tag? tag = await _pokeTeamContext.Tag.FindAsync(tagDTO.Identifier);
+                        if (tag == null)
+                        {
+                            tag = new Tag()
+                            {
+                                Identifier = Formatter.NormalizeString(tagDTO.Name),
+                                Name = tagDTO.Name,
+                                Description = tagDTO.Description,
+                                Color = tagDTO.Color,
+                            };
+                        }
+                        tags.Add(tag);
+                    }
+                }
+
+                Tournament? tournament = null;
+                if (inputTeam.Tournament != null && inputTeam.Tournament.Name != null)
+                {
+                    tournament = await _pokeTeamContext.Tournament.FindAsync(Formatter.NormalizeString(inputTeam.Tournament.Name));
+                    if (tournament == null)
+                    {
+                        tournament = new Tournament(inputTeam.Tournament);
+                    }
+                }
+
+                newTeam = new Team(
+                    id: newTeamId,
+                    pokemons: pokemons,
+                    playerId: player != null ? player.Id : null,
+                    anonPlayer: (player == null && inputTeam.Player != null) ? inputTeam.Player.Username : null,
+                    tournamentNormalizedName: tournament != null ? tournament.NormalizedName : null,
+                    tournament: tournament,
+                    regulation: inputTeam.Regulation != null ? inputTeam.Regulation.Identifier : null,
+                    tags: tags,
+                    rentalCode: inputTeam.RentalCode,
+                    viewCount: inputTeam.ViewCount,
+                    dateCreated: inputTeam.Date != null && inputTeam.Date != "" ? DateTime.Parse(inputTeam.Date) : DateTime.Now,
+                    visibility: inputTeam.Visibility,
+                    ivsVisibilty: inputTeam.Options != null ? inputTeam.Options.IVsVisibility : false,
+                    evsVisibilty: inputTeam.Options != null ? inputTeam.Options.EVsVisibility : false,
+                    naturesVisibilty: inputTeam.Options != null ? inputTeam.Options.NaturesVisibility : false
+                    );
             }
             return newTeam;
         }
@@ -408,7 +416,6 @@ namespace api.Services
             {
                 currentTeam.Id = newTeam.Id;
                 currentTeam.Pokemons = newTeam.Pokemons;
-                currentTeam.Options = newTeam.Options;
                 currentTeam.PlayerId = newTeam.PlayerId;
                 currentTeam.AnonPlayer = newTeam.AnonPlayer;
                 currentTeam.TournamentNormalizedName = newTeam.TournamentNormalizedName;

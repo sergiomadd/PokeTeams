@@ -42,8 +42,7 @@ namespace api.Controllers
             {
                 return NotFound("Couldn't find user");
             }
-            UserDTO userDTO = await _userService.BuildUserDTO(user, 
-                User.Identity.Name != null ? User.Identity.Name == user.UserName : false);
+            UserDTO userDTO = await _userService.BuildUserDTO(user, User.Identity.Name != null ? User.Identity.Name == user.UserName : false);
             return Ok(userDTO);
         }
 

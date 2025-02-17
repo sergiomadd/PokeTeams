@@ -12,6 +12,7 @@ using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using api.DTOs.PokemonDTOs;
+using System.Security.Claims;
 
 namespace api.Controllers
 {
@@ -56,6 +57,8 @@ namespace api.Controllers
             return Ok(team);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AllowAnonymous]
         [HttpGet("pokemon/{pokemonId}")]
         public async Task<ActionResult<PokemonDTO>> GetPokemonById(int pokemonId)
         {

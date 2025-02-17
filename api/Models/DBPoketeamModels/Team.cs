@@ -10,7 +10,6 @@ namespace api.Models.DBPoketeamModels
         [Required(ErrorMessage = "Team id is required")]
         public string Id { get; set; }
         public virtual ICollection<Pokemon> Pokemons { get; set; }
-        public string? Options { get; set; }
         [StringLength(450, ErrorMessage = "Team player id is not the correct length")]
         public string? PlayerId { get; set; }
         public virtual User? Player { get; set; }
@@ -28,6 +27,9 @@ namespace api.Models.DBPoketeamModels
         public DateTime DateCreated { get; set; }
         [Required(ErrorMessage = "Team visibility is required")]
         public bool Visibility { get; set; }
+        public bool IVsVisibility { get; set; }
+        public bool EVsVisibility { get; set; }
+        public bool NaturesVisibility { get; set; }
 
         public Team()
         {
@@ -37,7 +39,6 @@ namespace api.Models.DBPoketeamModels
         public Team(
             string id, 
             ICollection<Pokemon> pokemons, 
-            string? options,
             string? playerId,
             string? anonPlayer,
             string? tournamentNormalizedName,
@@ -47,12 +48,14 @@ namespace api.Models.DBPoketeamModels
             string? rentalCode,
             int viewCount,
             DateTime dateCreated,
-            bool visibility
+            bool visibility,
+            bool ivsVisibilty = false,
+            bool evsVisibilty = false,
+            bool naturesVisibilty = false
             )
         {
             Id = id;
             Pokemons = pokemons;
-            Options = options;
             PlayerId = playerId;
             AnonPlayer = anonPlayer;
             TournamentNormalizedName = tournamentNormalizedName;
@@ -63,6 +66,9 @@ namespace api.Models.DBPoketeamModels
             ViewCount = viewCount;
             DateCreated = dateCreated;
             Visibility = visibility;
+            IVsVisibility = ivsVisibilty;
+            EVsVisibility = evsVisibilty;
+            NaturesVisibility = naturesVisibilty;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using api.DTOs.PokemonDTOs;
-using System.Text.Json;
 
 namespace api.DTOs
 {
@@ -7,7 +6,6 @@ namespace api.DTOs
     {
         public string ID { get; set; }
         public List<PokemonDTO?>? Pokemons { get; set; }
-        public TeamOptionsDTO? Options { get; set; }
         public UserPreviewDTO? Player { get; set; }
         public TournamentDTO? Tournament { get; set; }
         public RegulationDTO? Regulation { get; set; }
@@ -16,6 +14,7 @@ namespace api.DTOs
         public string? Date { get; set; }
         public bool Visibility { get; set; }
         public List<TagDTO>? Tags { get; set; }
+        public TeamOptionsDTO? Options { get; set; }
 
 
         public TeamDTO()
@@ -26,7 +25,6 @@ namespace api.DTOs
         public TeamDTO(
             string id,
             List<PokemonDTO> pokemons,
-            string options,
             UserPreviewDTO player,
             TournamentDTO tournament,
             RegulationDTO regulation,
@@ -34,12 +32,13 @@ namespace api.DTOs
             int viewCount,
             string date,
             bool visibility,
-            List<TagDTO> tags
+            List<TagDTO> tags,
+            TeamOptionsDTO? options = null
             )
         {
             ID = id;
             Pokemons = pokemons;
-            Options = JsonSerializer.Deserialize<TeamOptionsDTO>(options, new JsonSerializerOptions { IncludeFields = false });
+            Options = options;
             Player = player;
             Tournament = tournament;
             Regulation = regulation;
