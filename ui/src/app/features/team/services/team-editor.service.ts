@@ -140,6 +140,9 @@ export class TeamEditorService
     */
     const options: TeamOptions =     
     {
+      ivsVisibility: true,
+      evsVisibility: true,
+      naturesVisibility: true,
       showIVs: true,
       showEVs: true,
       showNature: true,

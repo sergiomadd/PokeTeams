@@ -42,6 +42,12 @@ $teamWidth: calc($pokemonCardWidth * 2 + 0.8em);
   color: var(--text-color-secondary);
 }
 
+.left-button
+{
+  width: 1.5em;
+  text-align: center;
+}
+
 @media (max-width: $mobileBreakpoint) 
 {
   .full

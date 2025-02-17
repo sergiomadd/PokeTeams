@@ -63,7 +63,13 @@
       "show_all_stats-tooltip": "Show all stats",
       "show_all_notes-tooltip": "Show all notes",
       "close_all_tooltips-tooltip": "Close all tooltips",
-      "rental_code-tooltip": "Rental Code"
+      "rental_code-tooltip": "Rental Code",
+      "ivs-tooltip": "Show IV bars",
+      "ivs_disabled-tooltip": "IVs are private",
+      "evs-tooltip": "Show EV bars",
+      "evs_disabled-tooltip": "EVs are private",
+      "natures-tooltip": "Show nature icons",
+      "natures_disabled-tooltip": "Natures are private"
     },
     "preview":
     {

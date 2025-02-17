@@ -80,17 +80,57 @@
   <div class="flex justify-c-c align-i-s gap-m">
     <ng-container *ngIf="team?.pokemons && team?.pokemons!.length > 0">
       <ng-container *ngIf="!(window.currentDevice === window.DeviceType.smallMobile)">
-        <div class="mar-y-s">
-          <div 
-          class="detail tooltip-wrapper"
-          (click)="clickOptions(0)"
-          [ngClass]="{active: showAllStats}"
-          >
-            <app-tooltip
-            [text]="'team.team.show_all_stats-tooltip' | translate"
-            [side]="'right'"
-            ></app-tooltip>
-            <svg class="icon-s" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M755 4031 c-72 -32 -115 -104 -115 -191 0 -87 43 -159 115 -191 38 -18 114 -19 1805 -19 1691 0 1767 1 1805 19 154 69 154 313 0 382 -38 18 -114 19 -1805 19 -1691 0 -1767 -1 -1805 -19z"/> <path d="M755 2751 c-154 -69 -154 -313 0 -382 38 -18 95 -19 1165 -19 1070 0 1127 1 1165 19 154 69 154 313 0 382 -38 18 -95 19 -1165 19 -1070 0 -1127 -1 -1165 -19z"/> <path d="M755 1471 c-72 -32 -115 -104 -115 -191 0 -87 43 -159 115 -191 38 -18 108 -19 1593 -19 1507 0 1554 1 1590 19 75 39 112 101 112 191 0 66 -16 107 -59 153 -56 61 47 57 -1645 57 -1483 0 -1553 -1 -1591 -19z"/> </g> </svg> 
+        <div class="flex-col gap-s align-i-e">
+          <div class="mar-y-s">
+            <div 
+            class="detail tooltip-wrapper no-select left-button"
+            (click)="team?.options?.ivsVisibility ? toggleIVs() : false"
+            [ngClass]="
+            {
+              active: team?.options?.showIVs,
+              disabled: !team?.options?.ivsVisibility
+            }"
+            >
+              <app-tooltip
+              [text]="team?.options?.ivsVisibility ? ('team.team.ivs-tooltip' | translate) : ('team.team.ivs_disabled-tooltip' | translate)"
+              [side]="'left'"
+              ></app-tooltip>
+              IV
+            </div>
+          </div>
+          <div class="mar-y-s">
+            <div 
+            class="detail tooltip-wrapper no-select left-button"
+            (click)="team?.options?.evsVisibility ? toggleEVs() : false"
+            [ngClass]="
+            {
+              active: team?.options?.showEVs,
+              disabled: !team?.options?.evsVisibility
+            }"
+            >
+              <app-tooltip
+              [text]="team?.options?.evsVisibility ? ('team.team.evs-tooltip' | translate) : ('team.team.evs_disabled-tooltip' | translate)"
+              [side]="'left'"
+              ></app-tooltip>
+              EV
+            </div>
+          </div>
+          <div class="mar-y-s">
+            <div 
+            class="detail tooltip-wrapper no-select left-button"
+            (click)="team?.options?.naturesVisibility ? toggleNatures() : false"
+            [ngClass]="
+            {
+              active: team?.options?.showNature,
+              disabled: !team?.options?.naturesVisibility
+            }"
+            >
+              <app-tooltip
+              [text]="team?.options?.naturesVisibility ? ('team.team.natures-tooltip' | translate) : ('team.team.natures_disabled-tooltip' | translate)"
+              [side]="'left'"
+              ></app-tooltip>
+              NA
+            </div>
           </div>
         </div>
       </ng-container>

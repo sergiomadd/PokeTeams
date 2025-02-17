@@ -113,4 +113,28 @@ export class TeamComponent
       }, 1000);
     }
   }
+
+  toggleIVs()
+  {
+    if(this.team?.options)
+    {
+      this.team.options.showIVs = !this.team.options.showIVs
+    }
+  }
+
+  toggleEVs()
+  {
+    if(this.team?.options)
+    {
+      this.team.options.showEVs = !this.team.options.showEVs
+    }
+  }
+
+  toggleNatures()
+  {
+    if(this.team?.options)
+    {
+      this.team.options.showNature = !this.team.options.showNature
+    }
+  }
 }

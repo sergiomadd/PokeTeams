@@ -101,24 +101,19 @@
     </div>
     <div class="flex justify-c-c gap-s">
       <app-checkbox
-      [checked]="team.options.showEVs"
-      [label]="'EVs'"
-      (checkEvent)="showEVsCheckEvent($event)"
-      ></app-checkbox>
-      <app-checkbox
-      [checked]="team.options.showIVs"
+      [checked]="team.options.ivsVisibility"
       [label]="'IVs'"
       (checkEvent)="showIVsCheckEvent($event)"
       ></app-checkbox>
       <app-checkbox
-      [checked]="team.options.showNature"
-      [label]="'Nature'"
-      (checkEvent)="showNatureCheckEvent($event)"
+      [checked]="team.options.evsVisibility"
+      [label]="'EVs'"
+      (checkEvent)="showEVsCheckEvent($event)"
       ></app-checkbox>
       <app-checkbox
-      [checked]="team.options.showNickname"
-      [label]="'Nickname'"
-      (checkEvent)="showNicknameCheckEvent($event)"
+      [checked]="team.options.naturesVisibility"
+      [label]="'Nature'"
+      (checkEvent)="showNatureCheckEvent($event)"
       ></app-checkbox>
     </div>
     <div class="feedback">

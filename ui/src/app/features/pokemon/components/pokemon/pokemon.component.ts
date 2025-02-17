@@ -359,9 +359,9 @@ export class PokemonComponent
           value: this.calculateStat(
             stat.value, 
             this.pokemon?.level ? this.pokemon.level : 50,
-            this.teamOptions?.showIVs ? this.pokemon?.ivs ? this.pokemon.ivs[index].value : 0 : 0,
-            this.teamOptions?.showEVs ? this.pokemon?.evs ? this.pokemon.evs[index].value : 0 : 0, 
-            this.teamOptions?.showNature ? this.pokemon?.nature ? this.calculatedStats.natures[index].value : 1 : 1,
+            this.teamOptions?.ivsVisibility ? this.pokemon?.ivs ? this.pokemon.ivs[index].value : 0 : 0,
+            this.teamOptions?.evsVisibility ? this.pokemon?.evs ? this.pokemon.evs[index].value : 0 : 0, 
+            this.teamOptions?.naturesVisibility ? this.pokemon?.nature ? this.calculatedStats.natures[index].value : 1 : 1,
             stat.identifier === "hp" ? true : false)
         }
       });
@@ -381,9 +381,9 @@ export class PokemonComponent
           value: this.calculateStat(
             stat.value, 
             this.pokemon?.level ? this.pokemon.level : 50,
-            this.teamOptions?.showIVs ? this.pokemon?.ivs ? this.pokemon.ivs[index].value : 0 : 0,
-            this.teamOptions?.showEVs ? this.pokemon?.evs ? this.pokemon.evs[index].value : 0 : 0, 
-            this.teamOptions?.showNature ? this.pokemon?.nature ? this.calculatedStats.natures[index].value : 1 : 1,
+            this.teamOptions?.ivsVisibility ? this.pokemon?.ivs ? this.pokemon.ivs[index].value : 0 : 0,
+            this.teamOptions?.evsVisibility ? this.pokemon?.evs ? this.pokemon.evs[index].value : 0 : 0, 
+            this.teamOptions?.naturesVisibility ? this.pokemon?.nature ? this.calculatedStats.natures[index].value : 1 : 1,
             stat.identifier === "hp" ? true : false)
         }
       });

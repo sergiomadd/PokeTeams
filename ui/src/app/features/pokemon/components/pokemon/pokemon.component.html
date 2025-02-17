@@ -899,22 +899,22 @@
                     </div>
                     <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;" [ngStyle]="{backgroundColor: theme.getStatColor('iv')}">
                       <div>IVs</div>
-                      <div>{{teamOptions?.showIVs ? pokemon.ivs ? pokemon.ivs[i].value : "??" : "??"}}</div>
-                      <div>{{teamOptions?.showIVs ? pokemon.ivs ? calculatedStats.ivs[i].value : "??" : "??"}}</div>
+                      <div>{{teamOptions?.ivsVisibility ? pokemon.ivs ? pokemon.ivs[i].value : "??" : "??"}}</div>
+                      <div>{{teamOptions?.ivsVisibility ? pokemon.ivs ? calculatedStats.ivs[i].value : "??" : "??"}}</div>
                     </div>
                     <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;"
                     [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}"
                     [ngStyle]="{backgroundColor: theme.getStatColor('ev')}"
                     >
                       <div>EVs</div>
-                      <div>{{teamOptions?.showEVs ? pokemon.evs ? pokemon.evs[i].value : "??" : "??"}}</div>
-                      <div>{{teamOptions?.showEVs ? pokemon.evs ? calculatedStats.evs[i].value : '??' : "??"}}</div>
+                      <div>{{teamOptions?.evsVisibility ? pokemon.evs ? pokemon.evs[i].value : "??" : "??"}}</div>
+                      <div>{{teamOptions?.evsVisibility ? pokemon.evs ? calculatedStats.evs[i].value : '??' : "??"}}</div>
                     </div>
                     <div class="flex-col bor-rad-5 pad-s"  style="min-width: 2em;">
                       <div>{{'pokemon.stat.nature' | translate}}</div>
-                      <div>{{teamOptions?.showNature ? pokemon.nature ? pokemon.nature.name?.content : '---' : "??"}}</div>
+                      <div>{{teamOptions?.naturesVisibility ? pokemon.nature ? pokemon.nature.name?.content : '---' : "??"}}</div>
                       <div>
-                        <ng-container *ngIf="teamOptions?.showNature; else notNature">
+                        <ng-container *ngIf="teamOptions?.naturesVisibility; else notNature">
                           <ng-container *ngIf="!(stat.identifier===pokemon.nature?.increasedStat?.identifier
                           && stat.identifier===pokemon.nature?.decreasedStat?.identifier); else neutral">
                             <ng-container *ngIf="stat.identifier===pokemon.nature?.increasedStat?.identifier">
@@ -961,7 +961,7 @@
                   }"
                   >
                   </div>
-                  <ng-container *ngIf="teamOptions?.showIVs">
+                  <ng-container *ngIf="teamOptions?.showIVs && teamOptions?.ivsVisibility">
                     <div 
                     class="bar"
                     [ngStyle]="
@@ -973,7 +973,7 @@
                     >
                     </div>
                   </ng-container>
-                  <ng-container *ngIf="teamOptions?.showEVs">
+                  <ng-container *ngIf="teamOptions?.showEVs && teamOptions?.evsVisibility">
                     <div class="bar" style="border-radius: 0 15px 15px 0;" 
                     [ngStyle]="
                     {
@@ -984,7 +984,7 @@
                     >
                     </div>
                   </ng-container>
-                  <ng-container *ngIf="teamOptions?.showNature">
+                  <ng-container *ngIf="teamOptions?.showNature && teamOptions?.naturesVisibility">
                     <ng-container *ngIf="!(stat.identifier===pokemon.nature?.increasedStat?.identifier
                     && stat.identifier===pokemon.nature?.decreasedStat?.identifier); else neutral">
                       <ng-container *ngIf="stat.identifier===pokemon.nature?.increasedStat?.identifier">

@@ -73,6 +73,7 @@ export class TeamViewComponent
               visibility: this.teamData.visibility,
               tags: this.teamData.tags,
             };
+            this.initOptions();
             this.loadPokemonPlaceholders(this.teamData.pokemonIDs)
             this.loadPokemons(this.teamData.pokemonIDs);
           }
@@ -111,6 +112,7 @@ export class TeamViewComponent
               if(this.team && response) 
               { 
                 this.team.pokemons[index] = response;
+                console.log(response)
               }
             },
             error: () =>
@@ -169,5 +171,16 @@ export class TeamViewComponent
     {
       this.linkCopied = false;
     }, 1000);
+  }
+
+  initOptions()
+  {
+    if(this.team)
+    {
+
+      this.team.options.showIVs = true;
+      this.team.options.showEVs = true;
+      this.team.options.showNature = true;
+    }
   }
 }
