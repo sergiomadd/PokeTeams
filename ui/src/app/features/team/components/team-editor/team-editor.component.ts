@@ -225,15 +225,18 @@ export class TeamEditorComponent
   showIVsCheckEvent($event: boolean)
   {
     this.team.options.ivsVisibility = $event;
+    this.team = {...this.team}
   }
 
   showEVsCheckEvent($event: boolean)
   {
     this.team.options.evsVisibility = $event;
+    this.team = {...this.team}
   }
 
   showNatureCheckEvent($event: boolean)
   {
     this.team.options.naturesVisibility = $event; 
+    this.team = {...this.team}
   }
 }

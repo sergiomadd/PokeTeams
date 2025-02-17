@@ -36,12 +36,22 @@ export class TeamComponent
     if(changes['team'])
     {
       this.team = changes['team'].currentValue;
+      this.updateOptions();
+    }
+  }
+
+  updateOptions()
+  {
+    if(this.team)
+    {
+      this.team.options.showIVs = this.team?.options.ivsVisibility;
+      this.team.options.showEVs = this.team?.options.evsVisibility;
+      this.team.options.showNature = this.team?.options.naturesVisibility;
     }
   }
   
   forceChange(options: TeamOptions)
   {
-    console.log("changing", options)
     this.team!.options = structuredClone(options);
   }
 
