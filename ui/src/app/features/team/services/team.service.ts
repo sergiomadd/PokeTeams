@@ -36,39 +36,39 @@ export class TeamService
   getTeam(id: string) : Observable<Team>
   {
     let url = this.apiUrl + 'team/' + id;
-    return this.http.get<Team>(url);
+    return this.http.get<Team>(url).pipe(timeout(this.dataTimeout));
   }
 
   getTeamData(id: string) : Observable<TeamData>
   {
     let url = this.apiUrl + 'team/data/' + id;
-    return this.http.get<TeamData>(url);
+    return this.http.get<TeamData>(url).pipe(timeout(this.dataTimeout));
   }
 
   getPokemonById(id: number) : Observable<Pokemon>
   {
     let url = this.apiUrl + 'team/pokemon/' + id;
-    return this.http.get<Pokemon>(url);
+    return this.http.get<Pokemon>(url).pipe(timeout(this.dataTimeout));
   }
 
   getPokemonByIdNoLang(id: number) : Observable<Pokemon>
   {
     let url = this.apiUrl + 'team/pokemon/nolang/' + id;
-    return this.http.get<Pokemon>(url);
+    return this.http.get<Pokemon>(url).pipe(timeout(this.dataTimeout));
   }
 
   async getPokemonPreviewById(id: number) : Promise<PokemonPreview>
   {
     let pokemonPreview: PokemonPreview = <PokemonPreview>{}
     let url = this.apiUrl + 'team/pokemon/preview/' + id;
-    pokemonPreview = await lastValueFrom(this.http.get<PokemonPreview>(url));
+    pokemonPreview = await lastValueFrom(this.http.get<PokemonPreview>(url).pipe(timeout(this.dataTimeout)));
     return pokemonPreview;
   }
   
   getTeamPokemonPreviews(teamID: string) : Observable<PokemonPreview[]>
   {
     let url = this.apiUrl + 'team/pokemon-previews/' + teamID;
-    return this.http.get<PokemonPreview[]>(url);
+    return this.http.get<PokemonPreview[]>(url).pipe(timeout(this.dataTimeout));
   }
 
   saveTeam(team: Team): Observable<TeamSaveResponse>
