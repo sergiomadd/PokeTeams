@@ -64,7 +64,7 @@ namespace api.Controllers
             }
             var username = principal.Identity.Name;
             var user = await _userManager.FindByNameAsync(username);
-            if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            if (user is null || !user.RefreshToken.Equals(refreshToken) || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
                 return BadRequest("Invalid client request");
             }
@@ -84,7 +84,7 @@ namespace api.Controllers
             {
                 if (User.Identity?.Name != null)
                 {
-                    var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                    User? user = await _userManager.FindByNameAsync(User.Identity.Name);
                     if (user != null)
                     {
                         userDTO = await _userService.BuildUserDTO(await _userService.GetUserByUserName(user.UserName));
@@ -105,6 +105,42 @@ namespace api.Controllers
                 return BadRequest("Getting user error, exception");
             }
             return Ok(userDTO);
+        }
+
+        [HttpGet, Route("email")]
+        public async Task<ActionResult> GetLoggedUserEmail()
+        {
+            Printer.Log("Trying to get logged user email...");
+            EmailDTO emailDTO;
+            try
+            {
+                if (User.Identity?.Name != null)
+                {
+                    User? user = await _userManager.FindByNameAsync(User.Identity.Name);
+                    if (user != null)
+                    {
+                        emailDTO = new EmailDTO
+                        {
+                            Email = user.Email,
+                            EmailConfirmed = user.EmailConfirmed
+                        };
+                    }
+                    else
+                    {
+                        return Unauthorized("Logged user not found");
+                    }
+                }
+                else
+                {
+                    return NotFound("No user logged");
+                }
+            }
+            catch (Exception ex)
+            {
+                Printer.Log(ex.Message);
+                return BadRequest("Getting user error, exception");
+            }
+            return Ok(emailDTO);
         }
 
         [AllowAnonymous]

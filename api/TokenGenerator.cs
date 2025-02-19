@@ -23,12 +23,9 @@ namespace api
                 //Claim = {type: value}
                 Subject = new ClaimsIdentity(
                     [
-                        //Only necessary logged user data, not all user dto data
-                        new Claim(JwtRegisteredClaimNames.Jti, user.Id.ToString()), //JsonTokenId
-                        new Claim(JwtRegisteredClaimNames.Sub, user.UserName.ToString()),//Subject (username)
-                        new Claim(ClaimTypes.Name, user.UserName.ToString()),
-                        new Claim(JwtRegisteredClaimNames.Email, user.Email.ToString()),
-                        new Claim("email_verified", user.EmailConfirmed.ToString())
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), //JsonTokenId
+                        new Claim(JwtRegisteredClaimNames.Sub, user.Id), //Subject (username)
+                        new Claim(ClaimTypes.Name, user.UserName.ToString())
                     ]),
                 Expires = DateTime.UtcNow.AddMinutes(60),
                 SigningCredentials = credentials,
@@ -49,15 +46,11 @@ namespace api
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                //Claim = {type: value}
                 Subject = new ClaimsIdentity(
                     [
-                        //Only necessary logged user data, not all user dto data
-                        new Claim(JwtRegisteredClaimNames.Jti, user.Id.ToString()), //JsonTokenId
-                        new Claim(JwtRegisteredClaimNames.Sub, user.UserName.ToString()),//Subject (username)
-                        new Claim(ClaimTypes.Name, user.UserName.ToString()),
-                        new Claim(JwtRegisteredClaimNames.Email, user.Email.ToString()),
-                        new Claim("email_verified", user.EmailConfirmed.ToString())
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                        new Claim(ClaimTypes.Name, user.UserName.ToString())
                     ]),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = credentials,
