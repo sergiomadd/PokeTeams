@@ -35,22 +35,22 @@ export class ErrorInterceptorService
               break;
             case 400:
               //Bad Request
-              //Error message provided by backend in HttpErrorResponse
               error.message = HttpError.error ?? "Server error"
               break;
             case 401:
               //Unauthorized -> not authenticated
-              //Error message provided by backend in HttpErrorResponse
-              error.message = HttpError.error ?? "Unauthorized"
+              //Check if not token refresh request
+              if(error.message && !error.message.includes("NoTokenProvided"))
+              {
+                error.message = HttpError.error ?? "Unauthorized"
+              }
               break;
             case 403:
               //Forbidden -> authenticated but insufficient role
-              //Error message provided by backend in HttpErrorResponse
               error.message = HttpError.error ?? "Forbidden"
               break;
             case 404:
               //Not Found
-              //Error message provided by backend in HttpErrorResponse
               error.message = HttpError.error ?? "Not Found"
               break;
             case 408:

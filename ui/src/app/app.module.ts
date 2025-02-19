@@ -12,6 +12,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthModule } from './core/auth/auth.module';
+import { AuthInterceptorService } from './core/auth/services/auth-interceptor.service';
 import { AuthService } from './core/auth/services/auth.service';
 import { ConfigModule } from './core/config/config.module';
 import { FooterComponent } from './core/layout/footer/footer.component';
@@ -128,6 +129,11 @@ import { LinkerPipe } from './shared/pipes/linker.pipe';
     ],
   providers: [
     AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptorService,

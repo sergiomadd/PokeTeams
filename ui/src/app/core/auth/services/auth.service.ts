@@ -18,7 +18,7 @@ export class AuthService
   refreshTokens() : Observable<void>
   {
     let url = this.apiUrl + 'refresh';
-    return this.http.post<void>(url, {withCredentials: true});
+    return this.http.post<void>(url, {}, {withCredentials: true});
   }
 
   getLoggedUser() : Observable<User>
