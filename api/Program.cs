@@ -9,6 +9,8 @@ using api;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using api.Util;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,16 +55,28 @@ builder.Services.AddAuthentication(option =>
         };
 
         options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = ctx =>
+        { 
+            OnMessageReceived = context =>
             {
-                ctx.Request.Cookies.TryGetValue("accessToken", out var accessToken);
+                context.Request.Cookies.TryGetValue("accessToken", out var accessToken);
                 if(!string.IsNullOrEmpty(accessToken))
                 {
-                    ctx.Token = accessToken;
+                    context.Token = accessToken;
                 }
                 return Task.CompletedTask;
+            },
+            OnChallenge = async context =>
+            {
+                //Suppress the default challenge response
+                context.HandleResponse();
+                if (string.IsNullOrEmpty(context.Request.Headers["Authorization"]))
+                {                    
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsync("NoTokenProvided");
+                }
             }
+            
         };
     });
 builder.Services.AddAuthorization();
