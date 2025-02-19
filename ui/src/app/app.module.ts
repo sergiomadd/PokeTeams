@@ -18,7 +18,6 @@ import { FooterComponent } from './core/layout/footer/footer.component';
 import { MenuComponent } from './core/layout/menu/menu.component';
 import { ErrorInterceptorService } from './core/services/error-interceptor.service';
 import { LangInterceptorService } from './core/services/lang-interceptor.service';
-import { TokenInterceptorService } from './core/services/token-interceptor.service';
 import { metaReducers } from './core/store/app.state';
 import { HydrationEffects } from './core/store/hydration/hydration.effects';
 import { EvolutionComponent } from './features/pokemon/components/evolution/evolution.component';
@@ -97,7 +96,7 @@ import { LinkerPipe } from './shared/pipes/linker.pipe';
     EmailConfirmationComponent,
     NoTranslationComponent,
     PokeTooltipComponent,
-    ChipComponent,
+    ChipComponent
   ],
   exports: [],
   imports: [
@@ -129,11 +128,6 @@ import { LinkerPipe } from './shared/pipes/linker.pipe';
     ],
   providers: [
     AuthService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptorService,
-      multi: true
-    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptorService,

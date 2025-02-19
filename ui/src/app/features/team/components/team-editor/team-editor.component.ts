@@ -3,8 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { LoggedUserService } from 'src/app/core/auth/services/logged-user.service';
-import { selectAccessToken } from 'src/app/core/auth/store/auth.selectors';
+import { selectLoggedUser } from 'src/app/core/auth/store/auth.selectors';
 import { FeedbackColors } from 'src/app/core/config/models/colors';
 import { selectTheme } from 'src/app/core/config/store/config.selectors';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
@@ -34,13 +33,12 @@ export class TeamEditorComponent
   router = inject(Router);
   queryService = inject(QueryService);
   teamEditorService = inject(TeamEditorService);
-  loggedUserService = inject(LoggedUserService);
   translateSergice = inject(TranslateService);
   window = inject(WindowService);
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
-  accessToken$: Observable<string | null> = this.store.select(selectAccessToken);
+  loggedUser$ = this.store.select(selectLoggedUser);
   loggedUser?: QueryItem;
 
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
@@ -59,7 +57,7 @@ export class TeamEditorComponent
     {
       this.team = value;
     });
-    this.loggedUserService.loggedUser.subscribe(async value => 
+    this.loggedUser$.subscribe(async value => 
       {
         if(value)
         {

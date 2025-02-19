@@ -3,14 +3,13 @@ import { AuthResponseDTO } from "src/app/core/auth/types/authResponse.dto";
 import { LogInDTO } from "src/app/features/user/models/login.dto";
 import { SignUpDTO } from "src/app/features/user/models/signup.dto";
 import { UserUpdateDTO } from "src/app/features/user/models/userUpdate.dto";
-import { JWTResponse } from "../types/jwtResponse.dto";
 
 export const authActions = createActionGroup(
   {
     source: "Auth",
     events:
     {
-      refresh: props<{request: JWTResponse}>(),
+      refresh: emptyProps(),
       "refresh success": props<{authResponse: AuthResponseDTO}>(),
       "refresh failure": props<{error: string}>(),
       logIn: props<{request: LogInDTO}>(),

@@ -1,8 +1,8 @@
+import { User } from "src/app/features/user/models/user.model"
 
 export interface AuthResponseDTO
 {
-  accessToken: string | null,
-  refreshToken: string | null,
+  loggedUser: User | null
   success: boolean,
   error: string | null
 }

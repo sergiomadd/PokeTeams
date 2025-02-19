@@ -3,10 +3,9 @@ import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators
 import { Store } from '@ngrx/store';
 import { AuthService } from 'src/app/core/auth/services/auth.service';
 import { authActions } from 'src/app/core/auth/store/auth.actions';
-import { selectAccessToken, selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/auth/store/auth.selectors';
+import { selectError, selectIsSubmitting, selectLoggedUser, selectSuccess } from 'src/app/core/auth/store/auth.selectors';
 import { FeedbackColors } from 'src/app/core/config/models/colors';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
-import { JwtTokenService } from 'src/app/core/services/jwttoken.service';
 import { Country } from 'src/app/features/user/models/country.dto';
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
 import { QueryService } from 'src/app/shared/services/query.service';
@@ -29,10 +28,9 @@ export class UserSettingsComponent
   util = inject(UtilService);
   userPageService = inject(UserPageService);
   queryService = inject(QueryService);
-  jwtTokenService = inject(JwtTokenService);
   window = inject(WindowService);
 
-  accessToken$ = this.store.select(selectAccessToken);
+  loggedUser$ = this.store.select(selectLoggedUser);
   isSubmitting$ = this.store.select(selectIsSubmitting);
   backendError$ = this.store.select(selectError);
   success$ = this.store.select(selectSuccess);
@@ -86,12 +84,12 @@ export class UserSettingsComponent
 
   async ngOnInit()
   {
-    this.accessToken$.subscribe(value => 
+    this.loggedUser$.subscribe(value => 
       {
         if(value)
         {
-          this.email = this.jwtTokenService.getTokenEmail(value);
-          this.emailConfirmed = this.util.stringToBoolean(this.jwtTokenService.getTokenEmailConfirmed(value));
+          this.email = value.email;
+          this.emailConfirmed = value.emailConfirmed;
         }
       })
     

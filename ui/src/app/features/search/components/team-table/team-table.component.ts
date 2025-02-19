@@ -2,7 +2,7 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { LoggedUserService } from 'src/app/core/auth/services/logged-user.service';
+import { selectLoggedUser } from 'src/app/core/auth/store/auth.selectors';
 import { configActions } from 'src/app/core/config/store/config.actions';
 import { selectLang, selectTeamsPerPage, selectTheme } from 'src/app/core/config/store/config.selectors';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
@@ -24,11 +24,11 @@ export class TeamTableComponent
   util = inject(UtilService);
   searchService = inject(SearchService);
   store = inject(Store);
-  loggedUserService = inject(LoggedUserService);
   window = inject(WindowService);
 
   teams: TeamPreviewData[] = [];
   searched: boolean = false;
+  loggedUser$ = this.store.select(selectLoggedUser);
   logged?: User;
 
   sortTypeIds: string[] = ["date", "views"];
@@ -88,9 +88,9 @@ export class TeamTableComponent
         }
       }
     )
-    this.loggedUserService.loggedUser.subscribe(value =>
+    this.loggedUser$.subscribe(value =>
       {
-        this.logged = value;
+        this.logged = value ?? undefined;
       })
     this.store.select(selectTeamsPerPage).subscribe(value => 
       {

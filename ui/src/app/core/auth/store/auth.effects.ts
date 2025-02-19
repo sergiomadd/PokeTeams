@@ -1,14 +1,13 @@
 import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, of, switchMap, tap } from "rxjs";
+import { catchError, lastValueFrom, map, of, switchMap, tap } from "rxjs";
 import { AuthService } from "src/app/core/auth/services/auth.service";
-import { JwtTokenService } from "src/app/core/services/jwttoken.service";
+import { User } from "src/app/features/user/models/user.model";
 import { UserService } from "src/app/features/user/services/user.service";
 import { CustomError } from "src/app/shared/models/customError.model";
 import { LocalStorageService } from "../../services/local-storage.service";
 import { AuthResponseDTO } from "../types/authResponse.dto";
-import { JWTResponse } from "../types/jwtResponse.dto";
 import { authActions } from "./auth.actions";
 
 
@@ -20,21 +19,20 @@ export class AuthEffects
   userService = inject(UserService);
   router = inject(Router);
   localStorage = inject(LocalStorageService);
-  jwtTokenService = inject(JwtTokenService);
 
   refresh$ = createEffect(() =>
   {
     return this.actions$.pipe(
       ofType(authActions.refresh),
-      switchMap(({request}) =>
+      switchMap(() =>
       {
-        return this.authService.refreshTokens(request).pipe(
-          switchMap(async (response: JWTResponse) =>
+        return this.authService.refreshTokens().pipe(
+          switchMap(async () =>
           {
+            const loggedUser: User | null = await lastValueFrom(this.authService.getLoggedUser())
             const authResponse: AuthResponseDTO = 
             {
-              accessToken: response.accessToken,
-              refreshToken: response.refreshToken,
+              loggedUser: loggedUser,
               success: true,
               error: null
             }
@@ -60,12 +58,12 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.logIn(request).pipe(
-          switchMap(async (response: JWTResponse) =>
+          switchMap(async () =>
           {
+            const loggedUser: User | null = await lastValueFrom(this.authService.getLoggedUser())
             const authResponse: AuthResponseDTO = 
             {
-              accessToken: response.accessToken,
-              refreshToken: response.refreshToken,
+              loggedUser: loggedUser,
               success: true,
               error: null
             }
@@ -92,12 +90,12 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.signUp(request).pipe(
-          switchMap(async (response: JWTResponse) =>
+          switchMap(async () =>
           {
+            const loggedUser: User | null = await lastValueFrom(this.authService.getLoggedUser())
             const authResponse: AuthResponseDTO = 
             {
-              accessToken: response.accessToken,
-              refreshToken: response.refreshToken,
+              loggedUser: loggedUser,
               success: true,
               error: null
             }
@@ -194,12 +192,12 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.changeName(request).pipe(
-          switchMap(async (response: JWTResponse) =>
+          switchMap(async () =>
           {
+            const loggedUser: User | null = await lastValueFrom(this.authService.getLoggedUser())
             const authResponse: AuthResponseDTO = 
             {
-              accessToken: response.accessToken,
-              refreshToken: null,
+              loggedUser: loggedUser,
               success: true,
               error: null
             }
@@ -225,12 +223,12 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.changeUserName(request).pipe(
-          switchMap(async (response: JWTResponse) =>
+          switchMap(async () =>
           {
+            const loggedUser: User | null = await lastValueFrom(this.authService.getLoggedUser())
             const authResponse: AuthResponseDTO = 
             {
-              accessToken: response.accessToken,
-              refreshToken: null,
+              loggedUser: loggedUser,
               success: true,
               error: null
             }
@@ -255,7 +253,7 @@ export class AuthEffects
       ofType(authActions.changeUserNameSuccess),
       tap((response) => 
       {
-        const newUsername = this.jwtTokenService.getTokenUsername(response.authResponse.accessToken ?? "");
+        const newUsername = response.authResponse.loggedUser?.username;
         if(newUsername)
         {
           this.router.navigate(['/@' + newUsername]);
@@ -271,12 +269,12 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.changeEmail(request).pipe(
-          switchMap(async (response: JWTResponse) =>
+          switchMap(async () =>
           {
+            const loggedUser: User | null = await lastValueFrom(this.authService.getLoggedUser())
             const authResponse: AuthResponseDTO = 
             {
-              accessToken: response.accessToken,
-              refreshToken: null,
+              loggedUser: loggedUser,
               success: true,
               error: null
             }
@@ -302,12 +300,12 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.changePassword(request).pipe(
-          switchMap(async (response: JWTResponse) =>
+          switchMap(async () =>
           {
+            const loggedUser: User | null = await lastValueFrom(this.authService.getLoggedUser())
             const authResponse: AuthResponseDTO = 
             {
-              accessToken: response.accessToken,
-              refreshToken: null,
+              loggedUser: loggedUser,
               success: true,
               error: null
             }
@@ -333,12 +331,12 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.changePicture(request).pipe(
-          switchMap(async (response: JWTResponse) =>
+          switchMap(async () =>
           {
+            const loggedUser: User | null = await lastValueFrom(this.authService.getLoggedUser())
             const authResponse: AuthResponseDTO = 
             {
-              accessToken: response.accessToken,
-              refreshToken: null,
+              loggedUser: loggedUser,
               success: true,
               error: null
             }
@@ -364,12 +362,12 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.changeCountry(request).pipe(
-          switchMap(async (response: JWTResponse) =>
+          switchMap(async () =>
           {
+            const loggedUser: User | null = await lastValueFrom(this.authService.getLoggedUser())
             const authResponse: AuthResponseDTO = 
             {
-              accessToken: response.accessToken,
-              refreshToken: null,
+              loggedUser: loggedUser,
               success: true,
               error: null
             }
@@ -395,12 +393,12 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.changeVisibility(request).pipe(
-          switchMap(async (response: JWTResponse) =>
+          switchMap(async () =>
           {
+            const loggedUser: User | null = await lastValueFrom(this.authService.getLoggedUser())
             const authResponse: AuthResponseDTO = 
             {
-              accessToken: response.accessToken,
-              refreshToken: null,
+              loggedUser: loggedUser,
               success: true,
               error: null
             }
@@ -450,12 +448,12 @@ export class AuthEffects
       switchMap(({request}) =>
       {
         return this.authService.confirmEmail(request).pipe(
-          switchMap(async (response: JWTResponse) =>
+          switchMap(async () =>
           {
+            const loggedUser: User | null = await lastValueFrom(this.authService.getLoggedUser())
             const authResponse: AuthResponseDTO = 
             {
-              accessToken: response.accessToken,
-              refreshToken: null,
+              loggedUser: loggedUser,
               success: true,
               error: null
             }

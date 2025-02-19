@@ -1,8 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { LoggedUserService } from 'src/app/core/auth/services/logged-user.service';
-import { selectAccessToken } from 'src/app/core/auth/store/auth.selectors';
+import { selectLoggedUser } from 'src/app/core/auth/store/auth.selectors';
 import { SearchService } from 'src/app/features/search/services/search.service';
 import { TeamPreviewData } from 'src/app/features/team/models/teamPreviewData.model';
 import { User } from '../../models/user.model';
@@ -21,7 +20,6 @@ export class UserPageComponent
   store = inject(Store);
   searchService = inject(SearchService);
   route = inject(ActivatedRoute);
-  loggedUserService = inject(LoggedUserService);
 
   @Input() username?: string;
 
@@ -33,12 +31,12 @@ export class UserPageComponent
   country?: string;
   userPrivate: boolean = false;
 
-  accessToken$ = this.store.select(selectAccessToken);
+  loggedUser$ = this.store.select(selectLoggedUser);
   loggedUsername?: string;
 
   ngOnInit()
   {
-    this.loggedUserService.loggedUser.subscribe(value =>
+    this.loggedUser$.subscribe(value =>
       {
         if(value) 
         {

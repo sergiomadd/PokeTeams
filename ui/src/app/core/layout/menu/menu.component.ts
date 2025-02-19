@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { ThemeService } from 'src/app/core/config/services/theme.service';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { User } from 'src/app/features/user/models/user.model';
-import { LoggedUserService } from '../../auth/services/logged-user.service';
+import { selectLoggedUser } from '../../auth/store/auth.selectors';
 import { flags, Lang, langs } from '../../config/models/lang.enum';
 import { I18nService } from '../../config/services/i18n.service';
 import { configActions } from '../../config/store/config.actions';
@@ -24,7 +24,6 @@ export class MenuComponent
   store = inject(Store);
   themes = inject(ThemeService);
   themeService = inject(ThemeService);
-  loggedUserService = inject(LoggedUserService);
   i18n = inject(I18nService);
   lang = Lang;
   langs = langs;
@@ -34,6 +33,7 @@ export class MenuComponent
   @Output() toggleEvent = new EventEmitter();
 
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
+  loggedUser$: Observable<User | null> = this.store.select(selectLoggedUser);
   loggedUser?: User;
   selectedLang$: Observable<string> = this.store.select(selectLang);
   selectedLang?: string;
@@ -42,9 +42,9 @@ export class MenuComponent
 
   ngOnInit()
   { 
-    this.loggedUserService.loggedUser.subscribe(value =>
+    this.loggedUser$.subscribe(value =>
       {
-        this.loggedUser = value;
+        this.loggedUser = value ?? undefined;
       });
     this.selectedLang$.subscribe(value => 
       {
