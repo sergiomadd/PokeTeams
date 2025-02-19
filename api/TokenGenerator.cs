@@ -6,6 +6,7 @@ using System.Text;
 using api.Models.DBPoketeamModels;
 using System.Security.Cryptography;
 using api.Util;
+using api.DTOs;
 
 namespace api
 {
@@ -40,19 +41,36 @@ namespace api
             return tokenHandler.WriteToken(token);
         }
 
-        public string GenerateRefreshToken()
+        public string GenerateRefreshToken(User user)
         {
-            var randomNumber = new byte[64];
+            var key = configuration["Jwt:Secret"]!;
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
-            using (var numberGenerator = RandomNumberGenerator.Create())
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                numberGenerator.GetBytes(randomNumber);
-            }
+                //Claim = {type: value}
+                Subject = new ClaimsIdentity(
+                    [
+                        //Only necessary logged user data, not all user dto data
+                        new Claim(JwtRegisteredClaimNames.Jti, user.Id.ToString()), //JsonTokenId
+                        new Claim(JwtRegisteredClaimNames.Sub, user.UserName.ToString()),//Subject (username)
+                        new Claim(ClaimTypes.Name, user.UserName.ToString()),
+                        new Claim(JwtRegisteredClaimNames.Email, user.Email.ToString()),
+                        new Claim("email_verified", user.EmailConfirmed.ToString())
+                    ]),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = credentials,
+                Issuer = configuration["JwtSettings:Issuer"],
+                Audience = configuration["JwtSettings:Audience"],
+            };
 
-            return Convert.ToBase64String(randomNumber);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
-        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        public ClaimsPrincipal? GetPrincipalFromRefreshToken(string token)
         {
             try
             {
@@ -81,6 +99,33 @@ namespace api
                 Printer.Log(ex);
             }
             return null;
+        }
+
+        public void SetTokensInsideCookie(JwtResponseDTO tokens, HttpContext context)
+        {
+            if(string.IsNullOrEmpty(tokens.AccessToken) || string.IsNullOrEmpty(tokens.RefreshToken))
+            {
+                return;
+            }
+            context.Response.Cookies.Append("accessToken", tokens.AccessToken,
+                new CookieOptions
+                {
+                    Expires = DateTime.UtcNow.AddMinutes(1), //should be 60
+                    HttpOnly = true,
+                    IsEssential = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None
+                });
+
+            context.Response.Cookies.Append("refreshToken", tokens.RefreshToken,
+                new CookieOptions
+                {
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    HttpOnly = true,
+                    IsEssential = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.None
+                });
         }
     }
 }

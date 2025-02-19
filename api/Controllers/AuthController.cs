@@ -14,6 +14,7 @@ using NuGet.Common;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using Humanizer;
+using api.Migrations;
 
 namespace api.Controllers
 {
@@ -47,15 +48,16 @@ namespace api.Controllers
 
         [AllowAnonymous]
         [HttpPost("Refresh")]
-        public async Task<ActionResult> RefreshToken(RefreshTokenDTO token)
+        public async Task<ActionResult> RefreshToken()
         {
-            if (token is null)
+            HttpContext.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
+
+            if (refreshToken == null)
             {
                 return BadRequest("Invalid client request");
             }
-            string accessToken = token.AccessToken;
-            string refreshToken = token.RefreshToken;
-            var principal = _tokenGenerator.GetPrincipalFromExpiredToken(accessToken);
+
+            var principal = _tokenGenerator.GetPrincipalFromRefreshToken(refreshToken);
             if (principal == null)
             {
                 return BadRequest("Invalid client request");
@@ -67,8 +69,10 @@ namespace api.Controllers
                 return BadRequest("Invalid client request");
             }
             var newAccessToken = _tokenGenerator.GenerateAccessToken(user);
+            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = newAccessToken, RefreshToken = refreshToken };
+            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
 
-            return Ok(new JwtResponseDTO { AccessToken = newAccessToken, RefreshToken = refreshToken });
+            return Ok();
         }
 
         [HttpGet, Route("logged")]
@@ -157,13 +161,16 @@ namespace api.Controllers
                 return Unauthorized("You account is locked");
             }
             string token = _tokenGenerator.GenerateAccessToken(user);
-            string refreshToken = _tokenGenerator.GenerateRefreshToken();
+            string refreshToken = _tokenGenerator.GenerateRefreshToken(user);
 
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(90);
             await _userManager.UpdateAsync(user);
 
-            return Ok(new JwtResponseDTO { AccessToken = token, RefreshToken = refreshToken });
+            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token, RefreshToken = refreshToken };
+            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+            return Ok();
         }
 
         [AllowAnonymous]
@@ -204,13 +211,16 @@ namespace api.Controllers
                 return BadRequest("Signup error, exception, Model not valid");
             }
             string token = _tokenGenerator.GenerateAccessToken(user);
-            string refreshToken = _tokenGenerator.GenerateRefreshToken();
+            string refreshToken = _tokenGenerator.GenerateRefreshToken(user);
 
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(90);
             await _userManager.UpdateAsync(user);
 
-            return Ok(new JwtResponseDTO { AccessToken = token, RefreshToken = refreshToken });
+            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token, RefreshToken = refreshToken };
+            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+            return Ok();
         }
 
         [HttpGet, Route("logout")]
@@ -254,7 +264,11 @@ namespace api.Controllers
                 //await RefreshLoggedUser(user);
                 User updatedUser = await _userService.GetUserByUserName(updateData.NewUserName);
                 var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-                return Ok(new JwtResponseDTO { AccessToken = token });
+
+                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+                return Ok();
             }
             return BadRequest("Wrong data");
         }
@@ -291,7 +305,11 @@ namespace api.Controllers
                 await _userManager.UpdateAsync(user);
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-                return Ok(new JwtResponseDTO { AccessToken = token });
+
+                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+                return Ok();
             }
             return BadRequest("Wrong data");
         }
@@ -345,7 +363,11 @@ namespace api.Controllers
             }
             User updatedUser = await _userService.GetUserByUserName(user.UserName);
             var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-            return Ok(new JwtResponseDTO { AccessToken = token });
+
+            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+            return Ok();
         }
 
         [HttpPost, Route("update/password")]
@@ -369,7 +391,11 @@ namespace api.Controllers
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-                return Ok(new JwtResponseDTO { AccessToken = token });
+
+                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+                return Ok();
             }
             return BadRequest("Wrong data");
         }
@@ -394,7 +420,11 @@ namespace api.Controllers
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-                return Ok(new JwtResponseDTO { AccessToken = token });
+
+                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+                return Ok();
             }
             return BadRequest("Wrong data");
         }
@@ -419,7 +449,11 @@ namespace api.Controllers
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-                return Ok(new JwtResponseDTO { AccessToken = token });
+
+                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+                return Ok();
             }
             return BadRequest("Wrong data");
         }
@@ -444,7 +478,11 @@ namespace api.Controllers
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-                return Ok(new JwtResponseDTO { AccessToken = token });
+
+                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+                return Ok();
             }
             return BadRequest("Wrong data");
         }
@@ -470,7 +508,11 @@ namespace api.Controllers
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-                return Ok(new JwtResponseDTO { AccessToken = token });
+
+                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+                return Ok();
             }
             return BadRequest("Wrong data");
         }
