@@ -24,7 +24,7 @@ export const authReducers = createReducer(
     {
       ...state,
       isSubmitting: false,
-      username: null,
+      loggedUser: null,
       error: action.error
     })),
   on(authActions.logIn, (state) => (
@@ -79,7 +79,7 @@ export const authReducers = createReducer(
   on(authActions.logOutSuccess, (state) => (
     {
       ...state,
-      username: null,
+      loggedUser: null,
       isAuthenticated: false,
       isSubmitting: false,
       success: true
@@ -100,7 +100,7 @@ export const authReducers = createReducer(
   on(authActions.deleteAccountSuccess, (state) => (
     {
       ...state,
-      username: null,
+      loggedUser: null,
       isAuthenticated: false,
       isSubmitting: false,
       success: true
