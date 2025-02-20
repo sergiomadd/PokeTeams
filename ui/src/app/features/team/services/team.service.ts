@@ -36,25 +36,25 @@ export class TeamService
   getTeam(id: string) : Observable<Team>
   {
     let url = this.apiUrl + 'team/' + id;
-    return this.http.get<Team>(url).pipe(timeout(this.dataTimeout));
+    return this.http.get<Team>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
 
   getTeamData(id: string) : Observable<TeamData>
   {
     let url = this.apiUrl + 'team/data/' + id;
-    return this.http.get<TeamData>(url).pipe(timeout(this.dataTimeout));
+    return this.http.get<TeamData>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
 
   getPokemonById(id: number) : Observable<Pokemon>
   {
     let url = this.apiUrl + 'team/pokemon/' + id;
-    return this.http.get<Pokemon>(url).pipe(timeout(this.dataTimeout));
+    return this.http.get<Pokemon>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
 
   getPokemonByIdNoLang(id: number) : Observable<Pokemon>
   {
     let url = this.apiUrl + 'team/pokemon/nolang/' + id;
-    return this.http.get<Pokemon>(url).pipe(timeout(this.dataTimeout));
+    return this.http.get<Pokemon>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
 
   async getPokemonPreviewById(id: number) : Promise<PokemonPreview>
@@ -94,13 +94,13 @@ export class TeamService
   {
     let url = this.apiUrl + 'team/delete';
     const data: TeamId = {id: teamKey}
-    return this.http.post<string>(url, data).pipe(timeout(this.dataTimeout));
+    return this.http.post<string>(url, data, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
 
   searchTeams(searchQuery: SearchQueryDTO) : Observable<SearchQueryResponseDTO> | undefined
   {
     let url = this.apiUrl + 'team/query';
-    return this.http.post<SearchQueryResponseDTO>(url, searchQuery);
+    return this.http.post<SearchQueryResponseDTO>(url, searchQuery, {withCredentials: true});
   }
 
   async getTournamentByName(name: string) : Promise<Tournament>

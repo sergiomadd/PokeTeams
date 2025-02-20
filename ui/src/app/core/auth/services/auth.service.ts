@@ -104,7 +104,7 @@ export class AuthService
   getEmailConfirmationCode() : Observable<void>
   {
     let url = this.apiUrl + 'code';
-    return this.http.get<void>(url);
+    return this.http.get<void>(url, {withCredentials: true});
   }
 
   confirmEmail(updateDTO: UserUpdateDTO) : Observable<void>
