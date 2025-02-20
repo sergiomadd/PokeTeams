@@ -18,7 +18,7 @@ export class QueryService
  
   queryUser(key: string): Observable<QueryItem[]>
   {
-    let url = this.apiUrl + "query";
+    let url = this.apiUrl + "user/query";
     let params = new HttpParams().set('key', key);
     return this.http.get<QueryItem[]>(url, {params: params, withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
@@ -29,7 +29,7 @@ export class QueryService
 
   queryCountriesByName(key: string) : Observable<QueryItem[]>
   {
-    let url = this.apiUrl + 'countries/query';
+    let url = this.apiUrl + 'user/countries/query';
     let params = new HttpParams().set('key', key);
     return this.http.get<QueryItem[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
   }
@@ -40,7 +40,7 @@ export class QueryService
 
   getAllCountries() : Observable<QueryItem[]>
   {
-    let url = this.apiUrl + "countries/all";
+    let url = this.apiUrl + "user/countries/all";
     return this.http.get<QueryItem[]>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
   countriesAllCallback = (): Observable<QueryItem[]> => 
