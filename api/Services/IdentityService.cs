@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using api.Util;
 
 namespace api.Services
 {
@@ -21,10 +22,10 @@ namespace api.Services
 
         public string? GetUserName()
         {
-            ClaimsPrincipal? user = accessor?.HttpContext?.User;
-            if(user?.Identity != null) 
+            ClaimsPrincipal? claimsPrincipal = accessor?.HttpContext?.User;
+            if(claimsPrincipal != null && claimsPrincipal.Identity != null && claimsPrincipal.Identity.IsAuthenticated) 
             {
-                return user.Identity.Name;
+                return claimsPrincipal.Identity.Name;
             }
             return null;
         }
@@ -32,9 +33,9 @@ namespace api.Services
         public string? GetUserID()
         {
             ClaimsPrincipal? claimsPrincipal = accessor?.HttpContext?.User;
-            if (claimsPrincipal?.Identity != null)
+            if (claimsPrincipal != null && claimsPrincipal.Identity != null && claimsPrincipal.Identity.IsAuthenticated)
             {
-                Claim? claim = claimsPrincipal.FindFirst(JwtRegisteredClaimNames.Jti);
+                Claim? claim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
                 return  claim?.Value;
             }
             return null;
