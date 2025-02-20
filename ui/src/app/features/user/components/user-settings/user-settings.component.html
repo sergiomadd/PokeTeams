@@ -173,9 +173,9 @@
       </div>
       <div class="flex gap-s">
         <div class="subtitle">
-          {{email}}
+          {{userPageService.loggedUserEmail?.email}}
         </div>
-        <ng-container *ngIf="emailConfirmed">
+        <ng-container *ngIf="userPageService.loggedUserEmail?.emailConfirmed">
           <div class="tooltip-wrapper">
             <svg class="big-icon selectable" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -192,7 +192,7 @@
           </div>
         </ng-container>
       </div>
-      <ng-container *ngIf="!emailConfirmed">
+      <ng-container *ngIf="!userPageService.loggedUserEmail?.emailConfirmed">
         <div class="formFeedbackError">
           {{'user.settings.email_not_verified-feedback' | translate}}
         </div>
@@ -220,7 +220,7 @@
           </ng-container>
         </div>
       </form>
-      <ng-container *ngIf="!emailConfirmed">
+      <ng-container *ngIf="!userPageService.loggedUserEmail?.emailConfirmed">
         <div class="flex justify-c-e gap-s relative">
           <ng-container *ngIf="sendEmailVerificationCodeSubmitted">
             <ng-container *ngIf="(backendError$ | async) as error">

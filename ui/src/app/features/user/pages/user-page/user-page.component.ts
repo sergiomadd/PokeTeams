@@ -44,6 +44,7 @@ export class UserPageComponent
           if(this.username && this.loggedUsername && this.username === this.loggedUsername)
           {
             this.updateUser(this.username)
+            this.userPageService.getloggedUserEmail(value)
           }
         }
         else
@@ -72,6 +73,7 @@ export class UserPageComponent
 
   updateUser(username: string)
   {
+    //Esto innecesario si ya esta logeado, por que en store tengo ya el user obj
     this.userService.getUser(username).subscribe(
       {
         next: (response) =>

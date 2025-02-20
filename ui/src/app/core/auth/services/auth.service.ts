@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { EmailDTO } from 'src/app/features/user/models/email.dto';
 import { User } from 'src/app/features/user/models/user.model';
 import { LogInDTO } from '../../../features/user/models/login.dto';
 import { SignUpDTO } from '../../../features/user/models/signup.dto';
@@ -25,6 +26,12 @@ export class AuthService
   {
     let url = this.apiUrl + 'logged';
     return this.http.get<User>(url, {withCredentials: true});
+  }
+
+  getLoggedUserEmail() : Observable<EmailDTO>
+  {
+    let url = this.apiUrl + 'email';
+    return this.http.get<EmailDTO>(url, {withCredentials: true});
   }
 
   logIn(form: LogInDTO) : Observable<void>

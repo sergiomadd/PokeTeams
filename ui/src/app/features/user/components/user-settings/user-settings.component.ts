@@ -36,8 +36,6 @@ export class UserSettingsComponent
   success$ = this.store.select(selectSuccess);
 
   user?: User;
-  email?: string;
-  emailConfirmed?: boolean
   deleteDialog: boolean = false;
   
   readonly feedbackColors = FeedbackColors;
@@ -84,15 +82,6 @@ export class UserSettingsComponent
 
   async ngOnInit()
   {
-    this.loggedUser$.subscribe(value => 
-      {
-        if(value)
-        {
-          this.email = value.email;
-          this.emailConfirmed = value.emailConfirmed;
-        }
-      })
-    
     this.userPageService.user.subscribe((value) => 
     {
       this.user = value;
