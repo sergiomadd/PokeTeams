@@ -1,10 +1,11 @@
-﻿using System.Security.Claims;
+﻿using api.Models.DBPoketeamModels;
+using System.Security.Claims;
 
 namespace api.Services
 {
     public interface IIdentityService
     {
-        public ClaimsPrincipal? GetUser();
+        public Task<User?> GetUser();
         public string? GetUserName();
         public string? GetUserID();
     }

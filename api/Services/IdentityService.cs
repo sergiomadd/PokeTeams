@@ -3,26 +3,34 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using api.Util;
+using api.Models.DBPoketeamModels;
 
 namespace api.Services
 {
     public class IdentityService : IIdentityService
     {
-        private readonly IHttpContextAccessor accessor;
+        private readonly IHttpContextAccessor _accessor;
+        private readonly IUserService _userService;
 
-        public IdentityService(IHttpContextAccessor accessor)
+        public IdentityService(IHttpContextAccessor accessor, IUserService userService)
         {
-            this.accessor = accessor;
+            _accessor = accessor;
+            _userService = userService;
         }
 
-        public ClaimsPrincipal? GetUser()
+        public async Task<User?> GetUser()
         {
-            return accessor?.HttpContext?.User;
+            string? username = GetUserName();
+            if(username != null)
+            {
+                return await _userService.GetUserByUserName(username);
+            }
+            return null;
         }
 
         public string? GetUserName()
         {
-            ClaimsPrincipal? claimsPrincipal = accessor?.HttpContext?.User;
+            ClaimsPrincipal? claimsPrincipal = _accessor?.HttpContext?.User;
             if(claimsPrincipal != null && claimsPrincipal.Identity != null && claimsPrincipal.Identity.IsAuthenticated) 
             {
                 return claimsPrincipal.Identity.Name;
@@ -32,7 +40,7 @@ namespace api.Services
 
         public string? GetUserID()
         {
-            ClaimsPrincipal? claimsPrincipal = accessor?.HttpContext?.User;
+            ClaimsPrincipal? claimsPrincipal = _accessor?.HttpContext?.User;
             if (claimsPrincipal != null && claimsPrincipal.Identity != null && claimsPrincipal.Identity.IsAuthenticated)
             {
                 Claim? claim = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier);
