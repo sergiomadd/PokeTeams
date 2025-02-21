@@ -71,8 +71,15 @@ namespace api.Controllers
             {
                 return BadRequest("Invalid client request");
             }
+
+            string newRefreshToken = _tokenGenerator.GenerateRefreshToken(user);
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+            await _userManager.UpdateAsync(user);
+
             var newAccessToken = _tokenGenerator.GenerateAccessToken(user);
-            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = newAccessToken, RefreshToken = refreshToken };
+            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = newAccessToken, RefreshToken = newRefreshToken };
             _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
 
             return Ok();
