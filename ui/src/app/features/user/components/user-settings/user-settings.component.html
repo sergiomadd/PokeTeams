@@ -235,7 +235,7 @@
       </ng-container>
     </div>
   </div>
-  <div class="section ">
+  <div class="section">
     <div class="col s-gap">
       <div class="title">
         {{'user.settings.password-title' | translate}}
@@ -245,7 +245,7 @@
       </div>
     </div>
     <form class="flex justify-c-e align-i-c gap-m relative"
-      [ngClass]="{'flex-col align-i-c': window.isMobile()}"
+      [ngClass]="{'flex-col': window.isMobile()}"
       [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
       <ng-container *ngIf="changePasswordSubmitted">
         <ng-container *ngIf="(backendError$ | async) as error">

@@ -156,15 +156,18 @@ export class UserSettingsComponent
 
   changePicture(path: string)
   {
-    this.changePictureSubmitted = true;
-    const key: string = this.getPictureKey(path);
-    let updateDTO: UserUpdateDTO = 
+    if(path !== this.user?.picture)
     {
-      currentUserName: this.user?.username,
-      newPictureKey: key
+      this.changePictureSubmitted = true;
+      const key: string = this.getPictureKey(path);
+      let updateDTO: UserUpdateDTO = 
+      {
+        currentUserName: this.user?.username,
+        newPictureKey: key
+      }
+      this.store.dispatch(authActions.changePicture({request: updateDTO}));
+      this.clickPictureSelector();
     }
-    this.store.dispatch(authActions.changePicture({request: updateDTO}));
-    this.clickPictureSelector();
   }
 
   changeCountry($event)
