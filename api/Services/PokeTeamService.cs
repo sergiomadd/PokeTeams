@@ -18,6 +18,9 @@ using api.Models;
 using System.Collections.Generic;
 using NuGet.Packaging.Signing;
 using Microsoft.AspNetCore.Components.Forms;
+using System.Linq.Expressions;
+using System.Reflection;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace api.Services
 {
@@ -579,7 +582,26 @@ namespace api.Services
         {
             List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
             List<Team> teams = new List<Team>();
-            if(searchQuery.Queries != null && searchQuery.Queries.Count > 0)
+            teams = _pokeTeamContext.Team
+                .Include(t => t.Pokemons)
+                .Include(t => t.Player)
+                .Include(t => t.Tournament)
+                .Include(t => t.Tags)
+                .ToList();
+
+            User? loggedUser = await _identityService.GetUser();
+            if (loggedUser != null)
+            {
+                teams = teams.Where(t => ((t.Player == null || t.Player.Visibility) && t.Visibility) 
+                    || (t.PlayerId != null && t.PlayerId == loggedUser.Id)).ToList();
+            }
+            else
+            {
+                //Only cut teams where player is private or team is private
+                teams = teams.Where(t => (t.Player == null || t.Player.Visibility) && t.Visibility).ToList();
+            }
+
+            if (searchQuery.Queries != null && searchQuery.Queries.Count > 0)
             {
                 foreach (QueryResultDTO query in searchQuery.Queries)
                 {
@@ -588,7 +610,7 @@ namespace api.Services
                         //Union -> all teams that match any
                         switch (query.Type)
                         {
-                            case "username":
+                            case "user":
                                 teams.AddRange(await FilterTeamsByPlayer(teams, query.Name));
                                 break;
                             case "tournament":
@@ -617,7 +639,7 @@ namespace api.Services
                         //Intersection -> only teams that match all
                         switch (query.Type)
                         {
-                            case "username":
+                            case "user":
                                 teams = await FilterTeamsByPlayer(teams, query.Name);
                                 break;
                             case "tournament":
@@ -642,12 +664,10 @@ namespace api.Services
                     }
                 }
             }
-            else
-            {
-                teams = _pokeTeamContext.Team.ToList();
-            }
 
-            return await BuildTeamSearchQueryResponse(searchQuery, teams.Distinct().ToList(), langId);
+            teams = teams.Distinct().ToList();
+
+            return await BuildTeamSearchQueryResponse(searchQuery, teams, langId);
         }
 
         public List<Team> SortTeams(List<Team> teams , SortOrder? order)
@@ -696,33 +716,13 @@ namespace api.Services
             User user = await _userService.GetUserByUserName(username);
             try
             {
-                if (inteams.Count == 0)
+                if (user != null)
                 {
-                    if (user != null)
-                    {
-                        inteams = _pokeTeamContext.Team
-                            .Include(t => t.Pokemons)
-                            .Include(t => t.Tags)
-                            .Where(t => t.PlayerId == user.Id).ToList();
-                    }
-                    else
-                    {
-                        inteams = _pokeTeamContext.Team
-                            .Include(t => t.Pokemons)
-                            .Include(t => t.Tags)
-                            .Where(t => t.AnonPlayer.Contains(username)).ToList();
-                    }
+                    inteams = inteams.Where(t => t.PlayerId == user.Id).ToList();
                 }
                 else
                 {
-                    if (user != null)
-                    {
-                        inteams = inteams.Where(t => t.PlayerId == user.Id).ToList();
-                    }
-                    else
-                    {
-                        inteams = inteams.Where(t => t.AnonPlayer.Contains(username)).ToList();
-                    }
+                    inteams = inteams.Where(t => t.AnonPlayer.Contains(username)).ToList();
                 }
             }
             catch (Exception ex)
@@ -736,18 +736,7 @@ namespace api.Services
         {
             try
             {
-                if (inteams.Count == 0)
-                {
-                    inteams = _pokeTeamContext.Team
-                        .Include(t => t.Pokemons)
-                        .Include(t => t.Tags)
-                        .Include(t => t.Tournament)
-                        .Where(t => t.Tournament.Name == tournamentName).ToList();
-                }
-                else
-                {
-                    inteams = inteams.Where(t => t.Tournament.Name == tournamentName).ToList();
-                }
+                inteams = inteams.Where(t => t.Tournament.Name == tournamentName).ToList();
             }
             catch (Exception ex)
             {
@@ -760,18 +749,7 @@ namespace api.Services
         {
             try
             {
-                if (inteams.Count == 0)
-                {
-                    inteams = _pokeTeamContext.Team
-                        .Include(t => t.Pokemons)
-                        .Include(t => t.Tags)
-                        .Include(t => t.Tournament)
-                        .Where(t => t.Regulation == regulationIdentifier).ToList();
-                }
-                else
-                {
-                    inteams = inteams.Where(t => t.Regulation == regulationIdentifier).ToList();
-                }
+                inteams = inteams.Where(t => t.Regulation == regulationIdentifier).ToList();
             }
             catch (Exception ex)
             {
@@ -784,18 +762,7 @@ namespace api.Services
         {
             try
             {
-                if (inteams.Count == 0)
-                {
-                    inteams = _pokeTeamContext.Team
-                        .Include(t => t.Pokemons)
-                        .Include(t => t.Tags)
-                        .Include(t => t.Tournament)
-                        .Where(t => t.Tags.Any(t => t.Name == tagName)).ToList();
-                }
-                else
-                {
-                    inteams = inteams.Where(t => t.Tags.Any(t => t.Name == tagName)).ToList();
-                }
+                inteams = inteams.Where(t => t.Tags.Any(t => t.Name == tagName)).ToList();
             }
             catch (Exception ex)
             {
@@ -808,17 +775,7 @@ namespace api.Services
         {
             try
             {
-                if (inteams.Count == 0)
-                {
-                    inteams = _pokeTeamContext.Team
-                        .Include(t => t.Pokemons)
-                        .Include(t => t.Tags)
-                        .Where(t => t.Pokemons.Any(p => p.DexNumber == int.Parse(dexNumber))).ToList();
-                }
-                else
-                {
-                    inteams = inteams.Where(t => t.Pokemons.Any(p => p.DexNumber == int.Parse(dexNumber))).ToList();
-                }
+                inteams = inteams.Where(t => t.Pokemons.Any(p => p.DexNumber == int.Parse(dexNumber))).ToList();
             }
             catch (Exception ex)
             {
@@ -831,23 +788,10 @@ namespace api.Services
         {
             try
             {
-                if (inteams.Count == 0)
-                {
-                    inteams = _pokeTeamContext.Team
-                        .Include(t => t.Pokemons)
-                        .Include(t => t.Tags)
-                        .Where(t => t.Pokemons.Any(p => p.Move1Identifier == moveIdentifier
-                        || p.Move2Identifier == moveIdentifier
-                        || p.Move3Identifier == moveIdentifier
-                        || p.Move4Identifier == moveIdentifier)).ToList();
-                }
-                else
-                {
-                    inteams = inteams.Where(t => t.Pokemons.Any(p => p.Move1Identifier == moveIdentifier
-                        || p.Move2Identifier == moveIdentifier
-                        || p.Move3Identifier == moveIdentifier
-                        || p.Move4Identifier == moveIdentifier)).ToList();
-                }
+                inteams = inteams.Where(t => t.Pokemons.Any(p => p.Move1Identifier == moveIdentifier
+                    || p.Move2Identifier == moveIdentifier
+                    || p.Move3Identifier == moveIdentifier
+                    || p.Move4Identifier == moveIdentifier)).ToList();
             }
             catch (Exception ex)
             {
@@ -860,17 +804,7 @@ namespace api.Services
         {
             try
             {
-                if (inteams.Count == 0)
-                {
-                    inteams = _pokeTeamContext.Team
-                        .Include(t => t.Pokemons)
-                        .Include(t => t.Tags)
-                        .Where(t => t.Pokemons.Any(p => p.ItemIdentifier == itemIdentifier)).ToList();
-                }
-                else
-                {
-                    inteams = inteams.Where(t => t.Pokemons.Any(p => p.ItemIdentifier == itemIdentifier)).ToList();
-                }
+                inteams = inteams.Where(t => t.Pokemons.Any(p => p.ItemIdentifier == itemIdentifier)).ToList();
             }
             catch (Exception ex)
             {
@@ -878,6 +812,5 @@ namespace api.Services
             }
             return inteams;
         }
-
     }
 }
