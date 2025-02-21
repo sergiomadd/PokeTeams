@@ -69,14 +69,29 @@ builder.Services.AddAuthentication(option =>
             {
                 //Suppress the default challenge response
                 context.HandleResponse();
-                if (string.IsNullOrEmpty(context.Request.Headers["Authorization"]))
-                {                    
+
+                context.Request.Cookies.TryGetValue("accessToken", out var accessToken);
+                context.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
+                if (string.IsNullOrEmpty(accessToken) && string.IsNullOrEmpty(refreshToken))
+                {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     context.Response.ContentType = "application/json";
-                    await context.Response.WriteAsync("NoTokenProvided");
+                    await context.Response.WriteAsync("NoTokensProvided");
+                }
+                else if (string.IsNullOrEmpty(refreshToken))
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsync("NoRefreshTokenProvided");
+                }
+                else
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsync("NoAccessTokenProvided");
                 }
             }
-            
+
         };
     });
 builder.Services.AddAuthorization();

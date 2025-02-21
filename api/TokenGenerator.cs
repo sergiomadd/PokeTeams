@@ -103,7 +103,7 @@ namespace api
             context.Response.Cookies.Append("accessToken", tokens.AccessToken,
                 new CookieOptions
                 {
-                    Expires = DateTime.UtcNow.AddMinutes(1), //should be 60
+                    Expires = DateTime.UtcNow.AddMinutes(60),
                     HttpOnly = true,
                     IsEssential = true,
                     Secure = true,
