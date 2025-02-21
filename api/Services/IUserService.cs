@@ -12,6 +12,7 @@ namespace api.Services
         public Task<bool> UserNameAvailable(string userName);
         public Task<bool> ChangeName(User user, string newName);
         public Task<bool> UpdatePicture(User user, string newPictureKey);
+        public Task<bool> DeleteRefreshToken(User user);
         public Task<List<QueryResultDTO>> QueryUsers(string key);
         public Task<List<QueryResultDTO>> ChunkQueryUsers(string key, int startIndex, int pageSize);
         public CountryDTO? GetCountry(string code);

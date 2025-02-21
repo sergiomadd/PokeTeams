@@ -94,6 +94,21 @@ namespace api.Services
             }
         }
 
+        public async Task<bool> DeleteRefreshToken(User user)
+        {
+            try
+            {
+                user.RefreshToken = null;
+                _pokeTeamContext.User.Update(user);
+                await _pokeTeamContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public CountryDTO? GetCountry(string code)
         {
             CountryDTO? countryDTO = null;

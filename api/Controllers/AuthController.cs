@@ -29,13 +29,15 @@ namespace api.Controllers
         private readonly IUserService _userService;
         private readonly IPokeTeamService _pokeTeamService;
         private readonly IEmailService _emailService;
+        private readonly IIdentityService _identityService;
 
         public AuthController(UserManager<User> userManager,
             SignInManager<User> signInManager,
             TokenGenerator tokenGenerator,
             IUserService userService,
             IPokeTeamService teamService,
-            IEmailService emailService
+            IEmailService emailService,
+            IIdentityService identityService
             )
         {
             _userManager = userManager;
@@ -44,6 +46,7 @@ namespace api.Controllers
             _userService = userService;
             _pokeTeamService = teamService;
             _emailService = emailService;
+            _identityService = identityService;
         }
 
         [AllowAnonymous]
@@ -64,7 +67,7 @@ namespace api.Controllers
             }
             var username = principal.Identity.Name;
             var user = await _userManager.FindByNameAsync(username);
-            if (user is null || !user.RefreshToken.Equals(refreshToken) || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            if (user is null || user.RefreshToken == null || !user.RefreshToken.Equals(refreshToken) || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
                 return BadRequest("Invalid client request");
             }
@@ -200,7 +203,7 @@ namespace api.Controllers
             string refreshToken = _tokenGenerator.GenerateRefreshToken(user);
 
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(90);
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
             await _userManager.UpdateAsync(user);
 
             JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token, RefreshToken = refreshToken };
@@ -265,6 +268,11 @@ namespace api.Controllers
             Printer.Log("User logged out");
             try
             {
+                User? user = await _userManager.FindByNameAsync(_identityService.GetUserName());
+                if(user != null)
+                {
+                    await _userService.DeleteRefreshToken(user);
+                }
                 await _signInManager.SignOutAsync();
             }
             catch (Exception ex)
