@@ -99,23 +99,35 @@
         </div>
       </div>
     </div>
-    <div class="flex justify-c-c gap-s">
-      <app-checkbox
-      [checked]="team.options.ivsVisibility"
-      [label]="'IVs'"
-      (checkEvent)="showIVsCheckEvent($event)"
-      ></app-checkbox>
-      <app-checkbox
-      [checked]="team.options.evsVisibility"
-      [label]="'EVs'"
-      (checkEvent)="showEVsCheckEvent($event)"
-      ></app-checkbox>
-      <app-checkbox
-      [checked]="team.options.naturesVisibility"
-      [label]="'Nature'"
-      (checkEvent)="showNatureCheckEvent($event)"
-      ></app-checkbox>
-    </div>
+    <ng-container *ngIf="loggedUser">
+      <div class="flex-col justify-c-c  align-i-c gap-s">
+        <div>
+          {{'team.editor.visibility-label' | translate}}
+        </div>
+        <div class="flex justify-c-c gap-s">
+          <app-checkbox
+          [checked]="team.options.ivsVisibility"
+          [label]="'IVs'"
+          (checkEvent)="showIVsCheckEvent($event)"
+          ></app-checkbox>
+          <app-checkbox
+          [checked]="team.options.evsVisibility"
+          [label]="'EVs'"
+          (checkEvent)="showEVsCheckEvent($event)"
+          ></app-checkbox>
+          <app-checkbox
+          [checked]="team.options.naturesVisibility"
+          [label]="'Nature'"
+          (checkEvent)="showNatureCheckEvent($event)"
+          ></app-checkbox>
+          <app-checkbox
+          [checked]="team.visibility"
+          [label]="'Team'"
+          (checkEvent)="teamVisibiltyCheckEvent($event)"
+          ></app-checkbox>
+        </div>
+      </div>
+    </ng-container>
     <div class="feedback">
       <span class="formFeedbackError text-center">
         {{feedback}}

@@ -23,14 +23,8 @@
   font-size: inherit;
 }
 
-.checked-background
-{
-  background-color: var(--primary);
-  color: white;
-  opacity: 1;
-}
-
 .checked-border
 {
   border: 1px solid var(--text-color);
+  opacity: 1;
 }

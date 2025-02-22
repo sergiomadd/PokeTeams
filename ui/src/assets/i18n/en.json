@@ -34,7 +34,8 @@
       "regulation_input-label": "Regulation",
       "tag_input-label": "Tags ({{currentTags}}/{{maxTags}})",
       "tag_input-feedback": "Tag already added",
-      "rental_code-label": "Rental Code"
+      "rental_code-label": "Rental Code",
+      "visibility-label": "Visibility"
     },
     "input":
     {

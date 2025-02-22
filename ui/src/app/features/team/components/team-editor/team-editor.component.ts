@@ -237,4 +237,16 @@ export class TeamEditorComponent
     this.team.options.naturesVisibility = $event; 
     this.team = {...this.team}
   }
+
+  teamVisibiltyCheckEvent($event: boolean)
+  {
+    this.team.visibility = $event; 
+    if(!this.team.visibility)
+    {
+      this.team.options.ivsVisibility = false;
+      this.team.options.evsVisibility = false;
+      this.team.options.naturesVisibility = false; 
+    }
+    this.team = {...this.team}
+  }
 }

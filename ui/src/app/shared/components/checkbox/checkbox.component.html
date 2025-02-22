@@ -1,7 +1,7 @@
 <div 
 class="checkbox tooltip-wrapper"
 (click)="clickEvent()"
-[ngClass]="{'checked-border': (icon || svg) && checked, 'checked-background': !(icon || svg) && checked}"
+[ngClass]="{'checked-border': checked}"
 >
   <ng-container *ngIf="icon">
     <img src="{{icon}}" alt="{{label}}" class="big-icon">
