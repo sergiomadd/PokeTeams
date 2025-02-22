@@ -353,10 +353,10 @@ namespace api.Services
                     rentalCode: inputTeam.RentalCode,
                     viewCount: inputTeam.ViewCount,
                     dateCreated: inputTeam.Date != null && inputTeam.Date != "" ? DateTime.Parse(inputTeam.Date) : DateTime.Now,
-                    visibility: inputTeam.Visibility,
-                    ivsVisibilty: inputTeam.Options != null ? inputTeam.Options.IvsVisibility : false,
-                    evsVisibilty: inputTeam.Options != null ? inputTeam.Options.EvsVisibility : false,
-                    naturesVisibilty: inputTeam.Options != null ? inputTeam.Options.NaturesVisibility : false
+                    visibility: player == null ? true : inputTeam.Visibility,
+                    ivsVisibilty: player == null ? true : inputTeam.Options != null ? inputTeam.Options.IvsVisibility : false,
+                    evsVisibilty: player == null ? true : inputTeam.Options != null ? inputTeam.Options.EvsVisibility : false,
+                    naturesVisibilty: player == null ? true : inputTeam.Options != null ? inputTeam.Options.NaturesVisibility : false
                     );
             }
             return newTeam;
