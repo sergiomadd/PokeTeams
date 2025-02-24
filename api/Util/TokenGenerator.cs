@@ -5,10 +5,10 @@ using System.Security.Claims;
 using System.Text;
 using api.Models.DBPoketeamModels;
 using System.Security.Cryptography;
-using api.Util;
 using api.DTOs;
+using System.Net;
 
-namespace api
+namespace api.Util
 {
     public class TokenGenerator(IConfiguration configuration)
     {
@@ -96,7 +96,7 @@ namespace api
 
         public void SetTokensInsideCookie(JwtResponseDTO tokens, HttpContext context)
         {
-            if(string.IsNullOrEmpty(tokens.AccessToken) || string.IsNullOrEmpty(tokens.RefreshToken))
+            if (string.IsNullOrEmpty(tokens.AccessToken) || string.IsNullOrEmpty(tokens.RefreshToken))
             {
                 return;
             }
@@ -119,6 +119,36 @@ namespace api
                     Secure = true,
                     SameSite = SameSiteMode.None
                 });
+        }
+
+        public void RemoveTokensFromCookie(HttpContext context)
+        {
+            context.Request.Cookies.TryGetValue("accessToken", out var accessToken);
+            if (accessToken != null)
+            {
+                context.Response.Cookies.Append("accessToken", accessToken,
+                    new CookieOptions
+                    {
+                        Expires = DateTime.Now.AddDays(-1),
+                        HttpOnly = true,
+                        IsEssential = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.None
+                    });
+            }
+            context.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
+            if (refreshToken != null)
+            {
+                context.Response.Cookies.Append("refreshToken", refreshToken,
+                    new CookieOptions
+                    {
+                        Expires = DateTime.Now.AddDays(-1),
+                        HttpOnly = true,
+                        IsEssential = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.None
+                    });
+            }
         }
     }
 }

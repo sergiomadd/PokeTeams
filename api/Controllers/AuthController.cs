@@ -281,6 +281,7 @@ namespace api.Controllers
                     await _userService.DeleteRefreshToken(user);
                 }
                 await _signInManager.SignOutAsync();
+                _tokenGenerator.RemoveTokensFromCookie(HttpContext);
             }
             catch (Exception ex)
             {
