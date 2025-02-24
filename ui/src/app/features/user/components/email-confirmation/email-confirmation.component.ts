@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { authActions } from 'src/app/core/auth/store/auth.actions';
 import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/auth/store/auth.selectors';
+import { FeedbackColors } from 'src/app/core/config/models/colors';
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
 
 @Component({
@@ -18,6 +19,8 @@ export class EmailConfirmationComponent
   isSubmitting$ = this.store.select(selectIsSubmitting);
   backendError$ = this.store.select(selectError);
   success$ = this.store.select(selectSuccess);
+
+  readonly feedbackColors = FeedbackColors;
 
   email?: string;
   token?: string;
