@@ -35,7 +35,8 @@
       "tag_input-label": "Tags ({{currentTags}}/{{maxTags}})",
       "tag_input-feedback": "Tag already added",
       "rental_code-label": "Rental Code",
-      "visibility-label": "Visibility"
+      "visibility-label": "Privacy",
+      "visibility_false-feedback": "Team is private. Check team to select others."
     },
     "input":
     {

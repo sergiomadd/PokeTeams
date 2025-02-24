@@ -108,16 +108,19 @@
           <app-checkbox
           [checked]="team.options.ivsVisibility"
           [label]="'IVs'"
+          [lock]="!this.team.visibility"
           (checkEvent)="showIVsCheckEvent($event)"
           ></app-checkbox>
           <app-checkbox
           [checked]="team.options.evsVisibility"
           [label]="'EVs'"
+          [lock]="!this.team.visibility"
           (checkEvent)="showEVsCheckEvent($event)"
           ></app-checkbox>
           <app-checkbox
           [checked]="team.options.naturesVisibility"
           [label]="'Nature'"
+          [lock]="!this.team.visibility"
           (checkEvent)="showNatureCheckEvent($event)"
           ></app-checkbox>
           <app-checkbox
@@ -126,6 +129,13 @@
           (checkEvent)="teamVisibiltyCheckEvent($event)"
           ></app-checkbox>
         </div>
+        <ng-container *ngIf="teamPrivateFeedback">
+          <div class="feedback">
+            <span class="formFeedbackError text-center">
+              {{'team.editor.visibility_false-feedback' | translate}}
+            </span>
+          </div>
+        </ng-container>
       </div>
     </ng-container>
     <div class="feedback">

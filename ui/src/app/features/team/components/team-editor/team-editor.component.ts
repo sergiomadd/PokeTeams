@@ -49,6 +49,7 @@ export class TeamEditorComponent
   showTagEditor: boolean = false;
   tagAlreadyAdded: boolean = false;
   feedback?: string;
+  teamPrivateFeedback: boolean = false;
   readonly feedbackColors = FeedbackColors;
 
   async ngOnInit() 
@@ -222,20 +223,41 @@ export class TeamEditorComponent
 
   showIVsCheckEvent($event: boolean)
   {
-    this.team.options.ivsVisibility = $event;
-    this.team = {...this.team}
+    if(this.team.visibility)
+    {
+      this.team.options.ivsVisibility = $event;
+      this.team = {...this.team}
+    }
+    else
+    {
+      this.teamPrivateFeedback = true;
+    }
   }
 
   showEVsCheckEvent($event: boolean)
   {
-    this.team.options.evsVisibility = $event;
-    this.team = {...this.team}
+    if(this.team.visibility)
+    {
+      this.team.options.evsVisibility = $event;
+      this.team = {...this.team}
+    }
+    else
+    {
+      this.teamPrivateFeedback = true;
+    }
   }
 
   showNatureCheckEvent($event: boolean)
   {
-    this.team.options.naturesVisibility = $event; 
-    this.team = {...this.team}
+    if(this.team.visibility)
+    {
+      this.team.options.naturesVisibility = $event; 
+      this.team = {...this.team}
+    }
+    else
+    {
+      this.teamPrivateFeedback = true;
+    }
   }
 
   teamVisibiltyCheckEvent($event: boolean)
@@ -246,6 +268,10 @@ export class TeamEditorComponent
       this.team.options.ivsVisibility = false;
       this.team.options.evsVisibility = false;
       this.team.options.naturesVisibility = false; 
+    }
+    else
+    {
+      this.teamPrivateFeedback = false;
     }
     this.team = {...this.team}
   }
