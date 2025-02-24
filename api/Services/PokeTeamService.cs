@@ -21,6 +21,23 @@ using Microsoft.AspNetCore.Components.Forms;
 using System.Linq.Expressions;
 using System.Reflection;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System;
+using System.Reflection.Metadata;
+using System.Data.Common;
+using static NuGet.Packaging.PackagingConstants;
+using System.Collections.ObjectModel;
+using System.IO;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.VisualBasic;
+using Newtonsoft.Json.Linq;
+using static System.Net.WebRequestMethods;
+using System.Xml.Linq;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using LinqKit;
+using System.Data.Entity.Core.Common.CommandTrees;
+using System.Composition;
+using System.Security.Cryptography.Xml;
+using System.Xml.Serialization;
 
 namespace api.Services
 {
@@ -508,7 +525,7 @@ namespace api.Services
             const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
             return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
-        
+
         public async Task<bool> DeleteUserTeams(User user)
         {
             Printer.Log("Deleting teams of: ", user.UserName);
@@ -531,7 +548,7 @@ namespace api.Services
             }
             return false;
         }
-        
+
         public async Task<string> IncrementTeamViewCount(string teamKey)
         {
             try
@@ -552,7 +569,7 @@ namespace api.Services
 
         private async Task<TeamSearchQueryResponseDTO> BuildTeamSearchQueryResponse(TeamSearchQueryDTO searchQuery, List<Team> teams, int langId)
         {
-            List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
+            List<TeamPreviewDTO?> teamsPreviews = new List<TeamPreviewDTO?>();
             List<Task<TeamPreviewDTO>> teamsPreviewBuilds = new List<Task<TeamPreviewDTO>>();
 
             int totalTeams = teams.Count;
@@ -578,108 +595,16 @@ namespace api.Services
             };
         }
 
-        public async Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery, int langId)
-        {
-            List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
-            List<Team> teams = new List<Team>();
-            teams = _pokeTeamContext.Team
-                .Include(t => t.Pokemons)
-                .Include(t => t.Player)
-                .Include(t => t.Tournament)
-                .Include(t => t.Tags)
-                .ToList();
-
-            User? loggedUser = await _identityService.GetUser();
-            if (loggedUser != null)
-            {
-                teams = teams.Where(t => ((t.Player == null || t.Player.Visibility) && t.Visibility) 
-                    || (t.PlayerId != null && t.PlayerId == loggedUser.Id)).ToList();
-            }
-            else
-            {
-                //Only cut teams where player is private or team is private
-                teams = teams.Where(t => (t.Player == null || t.Player.Visibility) && t.Visibility).ToList();
-            }
-
-            if (searchQuery.Queries != null && searchQuery.Queries.Count > 0)
-            {
-                foreach (QueryResultDTO query in searchQuery.Queries)
-                {
-                    if(searchQuery.SetOperation.Equals("union"))
-                    {
-                        //Union -> all teams that match any
-                        switch (query.Type)
-                        {
-                            case "user":
-                                teams.AddRange(await FilterTeamsByPlayer(teams, query.Name));
-                                break;
-                            case "tournament":
-                                teams.AddRange(FilterTeamsByTournament(teams, query.Name));
-                                break;
-                            case "regulation":
-                                teams.AddRange(FilterTeamsByRegulation(teams, query.Name));
-                                break;
-                            case "tag":
-                                teams.AddRange(FilterTeamsByTag(teams, query.Name));
-                                break;
-                            case "pokemon":
-                                teams.AddRange(FilterTeamsByPokemons(teams, query.Identifier));
-                                break;
-                            case "move":
-                                teams.AddRange(FilterTeamsByMoves(teams, query.Identifier));
-                                break;
-                            case "item":
-                                teams.AddRange(FilterTeamsByItems(teams, query.Identifier));
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        //Default option
-                        //Intersection -> only teams that match all
-                        switch (query.Type)
-                        {
-                            case "user":
-                                teams = await FilterTeamsByPlayer(teams, query.Name);
-                                break;
-                            case "tournament":
-                                teams = FilterTeamsByTournament(teams, query.Name);
-                                break;
-                            case "regulation":
-                                teams = FilterTeamsByRegulation(teams, query.Name);
-                                break;
-                            case "tag":
-                                teams = FilterTeamsByTag(teams, query.Name);
-                                break;
-                            case "pokemon":
-                                teams = FilterTeamsByPokemons(teams, query.Identifier);
-                                break;
-                            case "move":
-                                teams = FilterTeamsByMoves(teams, query.Identifier);
-                                break;
-                            case "item":
-                                teams = FilterTeamsByItems(teams, query.Identifier);
-                                break;
-                        }
-                    }
-                }
-            }
-
-            teams = teams.Distinct().ToList();
-
-            return await BuildTeamSearchQueryResponse(searchQuery, teams, langId);
-        }
-
-        public List<Team> SortTeams(List<Team> teams , SortOrder? order)
+        public List<Team> SortTeams(List<Team> teams, SortOrder? order)
         {
             List<Team> sortedTeams = teams.ToList();
-            if(order.Type == SortType.Date)
+            if (order.Type == SortType.Date)
             {
-                if(order.Way == SortWay.Ascending)
+                if (order.Way == SortWay.Ascending)
                 {
                     sortedTeams = teams.OrderBy(t => t.DateCreated).ToList();
                 }
-                else if(order.Way == SortWay.Descending)
+                else if (order.Way == SortWay.Descending)
                 {
                     sortedTeams = teams.OrderByDescending(t => t.DateCreated).ToList();
                 }
@@ -711,106 +636,138 @@ namespace api.Services
             }
         }
 
-        public async Task<List<Team>> FilterTeamsByPlayer(List<Team> inteams, string username)
+        public async Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery, int langId)
         {
-            User user = await _userService.GetUserByUserName(username);
+            List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
+            List<Team> teams = new List<Team>();
             try
             {
-                if (user != null)
+                teams = _pokeTeamContext.Team
+                    .Include(t => t.Pokemons)
+                    .Include(t => t.Player)
+                    .Include(t => t.Tournament)
+                    .Include(t => t.Tags)
+                    .ToList();
+
+                User? loggedUser = await _identityService.GetUser();
+                if (loggedUser != null)
                 {
-                    inteams = inteams.Where(t => t.PlayerId == user.Id).ToList();
+                    teams = teams.Where(t => ((t.Player == null || t.Player.Visibility) && t.Visibility)
+                        || (t.PlayerId != null && t.PlayerId == loggedUser.Id)).ToList();
                 }
                 else
                 {
-                    inteams = inteams.Where(t => t.AnonPlayer.Contains(username)).ToList();
+                    //Only cut teams where player is private or team is private
+                    teams = teams.Where(t => (t.Player == null || t.Player.Visibility) && t.Visibility).ToList();
+                }
+
+                if (searchQuery.Queries != null && searchQuery.Queries.Count > 0)
+                {
+                    ParameterExpression parameter = Expression.Parameter(typeof(Team), "t");
+                    List<Expression<Func<Team, bool>>> expressions = await GetExpressions(searchQuery);
+
+                    Expression<Func<Team, bool>>? joinedExpressions = null;
+                    //Union -> all teams that match any
+                    if (searchQuery.SetOperation.Equals("union"))
+                    {
+                        joinedExpressions = JoinExpressionsOr(expressions);
+                    }
+                    //Default option
+                    //Intersection -> only teams that match all
+                    else
+                    {
+                        joinedExpressions = JoinExpressionsAnd(expressions);
+                    }
+
+                    if (joinedExpressions != null)
+                    {
+                        teams = teams.AsQueryable().Where(joinedExpressions).ToList();
+                    }
+                }
+
+                teams = teams.Distinct().ToList();
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Error querying teams ", ex);
+                return await BuildTeamSearchQueryResponse(searchQuery, [], langId);
+            }
+
+            return await BuildTeamSearchQueryResponse(searchQuery, teams, langId);
+        }
+
+        public async Task<List<Expression<Func<Team, bool>>>> GetExpressions(TeamSearchQueryDTO searchQuery)
+        {
+            List<Expression<Func<Team, bool>>> expressions = new List<Expression<Func<Team, bool>>>();
+
+            if (searchQuery.Queries != null && searchQuery.Queries.Count > 0)
+            {
+                foreach (QueryResultDTO query in searchQuery.Queries)
+                {
+                    switch (query.Type)
+                    {
+                        case "user":
+                            User user = await _userService.GetUserByUserName(query.Name);
+                            if (user != null)
+                            {
+                                expressions.Add(t => t.PlayerId == user.Id);
+                            }
+                            else
+                            {
+                                expressions.Add(t => t.AnonPlayer != null && t.AnonPlayer.Contains(query.Name));
+                            }
+                            break;
+                        case "tournament":
+                            expressions.Add(t => t.Tournament != null && t.Tournament.Name == query.Name);
+                            break;
+                        case "regulation":
+                            expressions.Add(t => t.Regulation == query.Name);
+                            break;
+                        case "tag":
+                            expressions.Add(t => t.Tags.Any(t => t.Name == query.Name));
+                            break;
+                        case "pokemon":
+                            expressions.Add(t => t.Pokemons.Any(p => p.DexNumber == int.Parse(query.Identifier)));
+                            break;
+                        case "move":
+                            expressions.Add(t => t.Pokemons.Any(p => p.Move1Identifier == query.Identifier
+                                || p.Move2Identifier == query.Identifier
+                                || p.Move3Identifier == query.Identifier
+                                || p.Move4Identifier == query.Identifier));
+                            break;
+                        case "item":
+                            expressions.Add(t => t.Pokemons.Any(p => p.ItemIdentifier == query.Identifier));
+                            break;
+                    }
                 }
             }
-            catch (Exception ex)
-            {
-                Printer.Log(ex.ToString());
-            }
-            return inteams;
+            return expressions;
         }
 
-        public List<Team> FilterTeamsByTournament(List<Team> inteams, string tournamentName)
+        public Expression<Func<Team, bool>>? JoinExpressionsAnd(List<Expression<Func<Team, bool>>> expressions)
         {
-            try
+            Expression<Func<Team, bool>>? joinedExpressions = null;
+            foreach (var expression in expressions)
             {
-                inteams = inteams.Where(t => t.Tournament.Name == tournamentName).ToList();
+                if (expression != null)
+                {
+                    joinedExpressions = joinedExpressions == null ? expression : PredicateBuilder.And(joinedExpressions, expression);
+                }
             }
-            catch (Exception ex)
-            {
-                Printer.Log(ex.ToString());
-            }
-            return inteams;
+            return joinedExpressions;
         }
 
-        public List<Team> FilterTeamsByRegulation(List<Team> inteams, string regulationIdentifier)
+        public Expression<Func<Team, bool>>? JoinExpressionsOr(List<Expression<Func<Team, bool>>> expressions)
         {
-            try
+            Expression<Func<Team, bool>>? joinedExpressions = null;
+            foreach (var expression in expressions)
             {
-                inteams = inteams.Where(t => t.Regulation == regulationIdentifier).ToList();
+                if (expression != null)
+                {
+                    joinedExpressions = joinedExpressions == null ? expression : PredicateBuilder.Or(joinedExpressions, expression);
+                }
             }
-            catch (Exception ex)
-            {
-                Printer.Log(ex.ToString());
-            }
-            return inteams;
-        }
-
-        public List<Team> FilterTeamsByTag(List<Team> inteams, string tagName)
-        {
-            try
-            {
-                inteams = inteams.Where(t => t.Tags.Any(t => t.Name == tagName)).ToList();
-            }
-            catch (Exception ex)
-            {
-                Printer.Log(ex.ToString());
-            }
-            return inteams;
-        }
-
-        public List<Team> FilterTeamsByPokemons(List<Team> inteams, string dexNumber)
-        {
-            try
-            {
-                inteams = inteams.Where(t => t.Pokemons.Any(p => p.DexNumber == int.Parse(dexNumber))).ToList();
-            }
-            catch (Exception ex)
-            {
-                Printer.Log(ex.ToString());
-            }
-            return inteams;
-        }
-
-        public List<Team> FilterTeamsByMoves(List<Team> inteams, string moveIdentifier)
-        {
-            try
-            {
-                inteams = inteams.Where(t => t.Pokemons.Any(p => p.Move1Identifier == moveIdentifier
-                    || p.Move2Identifier == moveIdentifier
-                    || p.Move3Identifier == moveIdentifier
-                    || p.Move4Identifier == moveIdentifier)).ToList();
-            }
-            catch (Exception ex)
-            {
-                Printer.Log(ex.ToString());
-            }
-            return inteams;
-        }
-
-        public List<Team> FilterTeamsByItems(List<Team> inteams, string itemIdentifier)
-        {
-            try
-            {
-                inteams = inteams.Where(t => t.Pokemons.Any(p => p.ItemIdentifier == itemIdentifier)).ToList();
-            }
-            catch (Exception ex)
-            {
-                Printer.Log(ex.ToString());
-            }
-            return inteams;
+            return joinedExpressions;
         }
     }
 }
