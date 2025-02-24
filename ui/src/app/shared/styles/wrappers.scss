@@ -20,6 +20,14 @@
   }
 }
 
+.spinner-wrapper
+{
+  width: 4em;
+  height: 4em;
+  margin: auto;
+  margin-top: 3em;
+}
+
 $tooltipColor: var(--bg-color-tooltip);
 $arrowSize: 0.4em;
 

@@ -89,7 +89,7 @@ export class SearchService
       {
         name: username,
         identifier: username,
-        type: "username"
+        type: "user"
       }
     ]
     this.setQueryItems(queryItems);

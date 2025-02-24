@@ -8,7 +8,7 @@
         <path d="M13.2602 15.5302L9.74023 12.0002L13.2602 8.47021" stroke="var(--text-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> 
       </g></svg>
   </div>
-  <div class="flex-col align-i-s gap-l no-overflow h-80" style="margin-top: 0.4em;">
+  <div class="flex-col align-i-s gap-l no-overflow h-90" style="margin-top: 0.4em;">
     <a 
     class="tab no-hover"
     [ngClass]="{'open-tab': menuOpen}"
@@ -79,7 +79,7 @@
     <span class="x-divider"></span>
     <ng-container *ngIf="loggedUser; else anon">
       <a 
-      class="tab no-hover"
+      class="tab"
       [ngClass]="{'open-tab': menuOpen}"
       [routerLink]="['/', '@' + loggedUser?.username]"
       >
@@ -109,6 +109,5 @@
       </ng-container>
     </ng-template>
   </div>
-
 </div>
 

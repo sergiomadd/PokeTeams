@@ -1,11 +1,11 @@
 <ng-container *ngIf="loading; else loaded">
-  <div class="icon-xl mar-auto">
+  <div class="spinner-wrapper">
     <div class="pokemon-spinner"></div>
   </div>
 </ng-container>
 <ng-template #loaded>
   <ng-container *ngIf="user; else notFound">
-    <div class="mar-auto w-80 flex-col justify-c-c align-i-c">
+    <div class="mar-auto flex-col justify-c-c align-i-c">
       <ng-container *ngIf="!userPrivate; else private">
         <div class="flex justify-c-c align-i-c gap-m bor-rad-10 bg-2 pad-m" style="margin-top: 2em;">
           <img src="{{user?.picture}}" alt="" class="icon-xl">
@@ -34,7 +34,9 @@
           </div>
         </div>
         <ng-container *ngIf="tabs[0]">
-          <app-user-teams></app-user-teams>
+          <div class="w-100">
+            <app-user-teams></app-user-teams>
+          </div>
         </ng-container>
         <ng-container *ngIf="loggedUsername === user?.username">
           <ng-container *ngIf="tabs[1]">

@@ -52,14 +52,14 @@ export class UserSettingsComponent
   changeNameSubmitted: boolean = false;
   changeNameForm = this.formBuilder.group(
   {
-    newName: ['', [Validators.required, Validators.maxLength(256)]],
+    newName: ['', [Validators.required, Validators.maxLength(32)]],
   }, { updateOn: "submit" });
 
   changeUserNameButtonClicked: boolean = false;
   changeUserNameSubmitted: boolean = false;
   changeUserNameForm = this.formBuilder.group(
   {
-    newUserName: ['', [Validators.required, Validators.maxLength(256)]],
+    newUserName: ['', [Validators.required, Validators.maxLength(32)]],
   }, { updateOn: "submit" });
 
   changeEmailButtonClicked: boolean = false;

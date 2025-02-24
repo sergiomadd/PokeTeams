@@ -27,7 +27,7 @@ export class UserPageComponent
   userTeams: TeamPreviewData[] = [];
   loading: boolean = false;
 
-  tabs: boolean[] = [false, true]
+  tabs: boolean[] = [true, false]
   country?: string;
   userPrivate: boolean = false;
 
@@ -61,13 +61,16 @@ export class UserPageComponent
           this.updateUser(this.username);
           this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
           {
+            console.log(this.userTeams)
             this.userTeams = value;
           })
         }
         this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
         {
+          console.log(this.userTeams)
           this.userTeams = value;
         })
+
       })
   }
 
