@@ -89,6 +89,7 @@ export class TeamSearchComponent
   querySettingsSelectEvent($event)
   {
     this.unionType = $event;
+    this.searchService.setQuerySetOperation(this.unionType);
   }
 
   reset()
