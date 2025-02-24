@@ -85,6 +85,7 @@ namespace api.Controllers
             return Ok();
         }
 
+        
         [HttpGet, Route("logged")]
         public async Task<ActionResult> GetLoggedUser()
         {
@@ -120,7 +121,6 @@ namespace api.Controllers
         [HttpGet, Route("email")]
         public async Task<ActionResult> GetLoggedUserEmail()
         {
-            Printer.Log("Trying to get logged user email...");
             EmailDTO emailDTO;
             try
             {
@@ -299,7 +299,7 @@ namespace api.Controllers
                 User newUser = await _userService.GetUserByUserName(updateData.NewUserName);
                 if (newUser != null)
                 {
-                    return BadRequest("UserName already claimed");
+                    return BadRequest("Username already claimed");
                 }
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
@@ -315,9 +315,16 @@ namespace api.Controllers
                 }
                 //await RefreshLoggedUser(user);
                 User updatedUser = await _userService.GetUserByUserName(updateData.NewUserName);
-                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
 
-                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+                string token = _tokenGenerator.GenerateAccessToken(user);
+                string refreshToken = _tokenGenerator.GenerateRefreshToken(user);
+
+                user.RefreshToken = refreshToken;
+                user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+                await _userManager.UpdateAsync(user);
+
+                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token, RefreshToken = refreshToken };
+                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
                 _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
 
                 return Ok();
@@ -437,9 +444,8 @@ namespace api.Controllers
                 IdentityResult result = await _userManager.ChangePasswordAsync(user, updateData.CurrentPassword, updateData.NewPassword);
                 if (!result.Succeeded)
                 {
-                    //var errors = signUpResult.Errors.Select(e => e.Description);
-                    //Printer log Identity errors: 
-                    return BadRequest("Server error");
+                    var errors = result.Errors.Select(e => e.Description);
+                    return BadRequest(errors.ToList()[0]);
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateAccessToken(updatedUser);
@@ -602,8 +608,8 @@ namespace api.Controllers
             return Ok();
         }
 
-        //Make so only admin\
-        /*
+        //Make so only admin -> remove for production
+        
         [HttpPost, Route("delete/{userName}")]
         public async Task<ActionResult<UserDTO>> DeleteUserByUserName(string userName)
         {
@@ -624,6 +630,6 @@ namespace api.Controllers
             }
             return Ok();
         }
-        */
+        
     }
 }
