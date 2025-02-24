@@ -55,7 +55,6 @@ export class UserSettingsComponent
     newName: ['', [Validators.required, Validators.maxLength(256)]],
   }, { updateOn: "submit" });
 
-  userNameAvailable: boolean = false;
   changeUserNameButtonClicked: boolean = false;
   changeUserNameSubmitted: boolean = false;
   changeUserNameForm = this.formBuilder.group(
@@ -87,14 +86,6 @@ export class UserSettingsComponent
       this.user = value;
     });
 
-    this.changeUserNameForm.controls.newUserName.valueChanges.subscribe(async (value) => 
-    {
-      if(this.changeUserNameForm.controls.newUserName.valid)
-      {
-        this.userNameAvailable = value ? await this.userService.checkUserNameAvailable(value) : false;
-        if(!this.userNameAvailable) { this.changeUserNameForm.controls.newUserName.setErrors({ "usernameTaken": true }); }
-      }
-    });
     this.pictures = await this.userService.getAllProfilePics();
 
     this.success$.subscribe(value => 

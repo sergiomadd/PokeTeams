@@ -216,6 +216,7 @@ export class AuthEffects
       })
     )
   });
+  
   changeUserNameEffect = createEffect(() =>
   {
     return this.actions$.pipe(

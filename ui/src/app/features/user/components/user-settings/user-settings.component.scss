@@ -146,8 +146,9 @@ input[type='checkbox']
   position: absolute;
   bottom: -1.5em;
   left: 50%;
-  transform: translateX(-50%);
-  width: 10em;
+  top: 100%;
+  transform: translate(-50%, 0.5em);
+  width: 100%;
   text-align: center;
 }
 

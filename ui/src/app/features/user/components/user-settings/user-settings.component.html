@@ -143,8 +143,7 @@
     </div>
     <form [formGroup]="changeUserNameForm" (ngSubmit)="changeUserName()">
       <div class="col">
-        <div class="flex justify-c-e align-i-c gap-m">
-          <span *ngIf="userNameAvailable" class="formFeedbackSuccess">{{'user.settings.username_available-feedback' | translate}}</span>
+        <div class="flex justify-c-e align-i-c gap-m relative">
           <span *ngIf="isInvalid('newUserName', 'changeUserNameForm')" class="formFeedbackError">{{getError('newUserName', 'changeUserNameForm')}}</span>
           <ng-container *ngIf="changeUserNameSubmitted">
             <ng-container *ngIf="(backendError$ | async) as error">
@@ -167,17 +166,17 @@
     </form>
   </div>
   <div class="section">
-    <div class="flex-col gap-s no-overflow">
+    <div class="flex-col gap-s">
       <div class="title">
         {{'user.settings.email-title' | translate}}
       </div>
-      <div class="flex gap-s">
+      <div class="flex align-i-c gap-s">
         <div class="subtitle">
           {{userPageService.loggedUserEmail?.email}}
         </div>
         <ng-container *ngIf="userPageService.loggedUserEmail?.emailConfirmed">
-          <div class="tooltip-wrapper">
-            <svg class="big-icon selectable" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div class="tooltip-wrapper icon-m pointer">
+            <svg viewBox="0 0 24 24" fill="red" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
               <g id="SVGRepo_iconCarrier"> 
@@ -200,7 +199,7 @@
     </div>
     <div class="flex-col gap-m">
       <form [formGroup]="changeEmailForm" (ngSubmit)="changeEmail()">
-        <div class="flex align-i-c justify-c-e align-i-c gap-m">
+        <div class="flex align-i-c justify-c-e align-i-c gap-m relative">
           <span *ngIf="isInvalid('newEmail', 'changeEmailForm')" class="formFeedbackError">{{getError('newEmail', 'changeEmailForm')}}</span>
           <ng-container *ngIf="changeEmailSubmitted">
             <ng-container *ngIf="(backendError$ | async) as error">
@@ -252,7 +251,7 @@
           <span class="formFeedbackError backendErrors">{{error}}</span>
         </ng-container>
       </ng-container>
-      <div class="flex-col relative">
+      <div class="flex-col align-i-c relative">
         <input 
         type="password" 
         class="input-m"
@@ -262,7 +261,7 @@
         >
         <div *ngIf="isInvalid('currentPassword', 'changePasswordForm')" class="formFeedbackError passwordFeedback">{{getError('currentPassword', 'changePasswordForm')}}</div>
       </div>
-      <div class="flex-col relative">
+      <div class="flex-col align-i-c relative">
         <input 
         type="password" 
         class="input-m"
@@ -272,7 +271,7 @@
         >
         <div *ngIf="isInvalid('password', 'changePasswordForm')" class="formFeedbackError passwordFeedback">{{getError('password', 'changePasswordForm')}}</div>
       </div>
-      <div class="flex-col relative">
+      <div class="flex-col align-i-c relative">
         <input 
         type="password" 
         class="input-m"
