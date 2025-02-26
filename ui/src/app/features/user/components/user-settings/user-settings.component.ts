@@ -147,6 +147,7 @@ export class UserSettingsComponent
 
   changePicture(path: string)
   {
+    this.resetSubmitted();
     if(path !== this.user?.picture)
     {
       this.changePictureSubmitted = true;
@@ -163,6 +164,7 @@ export class UserSettingsComponent
 
   changeCountry($event)
   {
+    this.resetSubmitted();
     this.changeCountrySubmitted = true;
     let updateDTO: UserUpdateDTO = 
     {
@@ -174,6 +176,7 @@ export class UserSettingsComponent
 
   changeVisibility($event)
   {
+    this.resetSubmitted();
     this.changeVisibilitySubmitted = true;
     let updateDTO: UserUpdateDTO = 
     {
@@ -185,6 +188,7 @@ export class UserSettingsComponent
 
   changeName()
   {
+    this.resetSubmitted();
     this.changeNameButtonClicked = true;
     if(this.changeNameForm.valid && this.changeNameForm.controls.newName.value != null)
     {
@@ -200,6 +204,7 @@ export class UserSettingsComponent
 
   changeUserName()
   {
+    this.resetSubmitted();
     this.changeUserNameButtonClicked = true;
     if(this.changeUserNameForm.valid && this.changeUserNameForm.controls.newUserName.value != null)
     {
@@ -215,6 +220,7 @@ export class UserSettingsComponent
 
   changeEmail()
   {
+    this.resetSubmitted();
     this.changeEmailButtonClicked = true;
     if(this.changeEmailForm.valid && this.changeEmailForm.controls.newEmail.value != null)
     {
@@ -230,6 +236,7 @@ export class UserSettingsComponent
 
   changePassword()
   {
+    this.resetSubmitted();
     this.changePasswordButtonClicked = true;
     if(this.changePasswordForm.valid
       && this.changePasswordForm.controls.currentPassword.value != null
@@ -347,5 +354,17 @@ export class UserSettingsComponent
         return null;
       }
     };
+  }
+
+  resetSubmitted()
+  {
+    this.changePictureSubmitted = false;
+    this.changeCountrySubmitted = false;
+    this.changeVisibilitySubmitted = false;
+    this.sendEmailVerificationCodeSubmitted = false;
+    this.changeNameSubmitted = false;
+    this.changeUserNameSubmitted = false;
+    this.changeEmailSubmitted = false;
+    this.changePasswordSubmitted = false;
   }
 }

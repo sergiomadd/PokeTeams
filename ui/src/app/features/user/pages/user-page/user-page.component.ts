@@ -61,13 +61,11 @@ export class UserPageComponent
           this.updateUser(this.username);
           this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
           {
-            console.log(this.userTeams)
             this.userTeams = value;
           })
         }
         this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
         {
-          console.log(this.userTeams)
           this.userTeams = value;
         })
 
