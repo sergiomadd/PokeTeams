@@ -112,7 +112,6 @@ export class TeamViewComponent
               if(this.team && response) 
               { 
                 this.team.pokemons[index] = response;
-                console.log(response)
               }
             },
             error: () =>

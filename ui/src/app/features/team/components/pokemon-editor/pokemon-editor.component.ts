@@ -85,7 +85,6 @@ export class PokemonEditorComponent
         this.remainingEVs-= ev.value;  
       }
     }
-
   }
 
   async ngOnInit()
@@ -96,6 +95,7 @@ export class PokemonEditorComponent
       this.pokemon = this.team.pokemons[this.selectedPokemonIndex] ?? undefined
       if(this.pokemon)
       {
+        this.selectPokemon(this.selectedPokemonIndex);
         this.pokemonForm.controls.nickname.setValue(this.pokemon.nickname ?? "", {emitEvent:false});
         this.pokemonForm.controls.level.setValue(this.pokemon.level ?? 0, {emitEvent:false});
         if(this.pokemon.ivs![this.selectedStat].value != this.pokemonForm.controls.ivs.value)
@@ -189,7 +189,6 @@ export class PokemonEditorComponent
         {
           if(this.pokemonForm.controls.ivs.valid)
           {
-            console.log("good")
             this.currentIVs = Number(value);
             let ivs = this.pokemon.ivs;
             ivs[this.selectedStat].value = this.currentIVs;
@@ -328,6 +327,7 @@ export class PokemonEditorComponent
 
   selectPokemon(index: number)
   {
+    console.log(this.pokemon)
     if(index != this.selectedPokemonIndex)
     {
       this.selectedPokemonIndex = index;
@@ -382,6 +382,7 @@ export class PokemonEditorComponent
 
   calculateAvailableEVs(newEVs: number) : boolean
   {
+    console.log(this.remainingEVs)
     //Selected more EVs than available
     if(this.remainingEVs == 0 && newEVs >= this.currentEVs)
     {
@@ -405,6 +406,20 @@ export class PokemonEditorComponent
     }
     this.evSlider.nativeElement.value = this.currentEVs;
     return true;
+  }
+
+  calcAllEVs()
+  {
+    for (const pokemon of this.team.pokemons) 
+    {
+      if(pokemon)
+      {
+        for (const ev of pokemon?.evs) 
+        {
+          this.remainingEVs -= ev.value;
+        }
+      }
+    }
   }
 
   selectStat(index: number)

@@ -1,8 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { selectLang } from 'src/app/core/config/store/config.selectors';
 import { TeamEditorService } from 'src/app/features/team/services/team-editor.service';
 import { CustomError } from 'src/app/shared/models/customError.model';
 import { Team } from '../../models/team.model';
+import { TeamData } from '../../models/teamData.model';
 import { TeamSaveResponse } from '../../models/teamSaveResponse.model';
 import { TeamService } from '../../services/team.service';
 
@@ -16,35 +20,28 @@ export class TeamEditComponent
   teamService = inject(TeamService);
   router = inject(Router);
   teamEditorService = inject(TeamEditorService)
+  store = inject(Store);
+
+  selectedLang$: Observable<string> = this.store.select(selectLang);
 
   teamKey: string = "";
   team: Team = <Team>{};
+  teamData?: TeamData;
   feedback?: string;
   teamSubmitted: boolean = false;
+  loading: boolean = false;
 
-  async ngOnInit() 
+  async ngOnInit()
   {
+    this.teamKey = this.router.url.slice(6);
     this.teamEditorService.selectedTeam$.subscribe((value) => 
     {
       this.team = value;
     });
-  }
-
-  ngAfterContentInit()
-  {
-    this.teamKey = this.router.url.slice(6);
-    this.teamService.getTeam(this.teamKey).subscribe(
+    this.selectedLang$.subscribe(value =>
       {
-        next: (response) => 
-        {
-          this.teamEditorService.setTeam(response);
-        },
-        error: (error) =>
-        {
-          console.log("error getting team editor", error)
-        }
-      }
-    );
+        this.loadTeam();
+      });
   }
 
   saveTeam()
@@ -76,6 +73,99 @@ export class TeamEditComponent
           }
         )
       }
+    }
+  }
+
+  loadTeam()
+  {
+    this.loading = true;
+    this.teamService.getTeamData(this.teamKey).subscribe(
+      {
+        next: (response) => 
+        {
+          this.teamData = response;
+          if(this.teamData)
+          {
+            console.log(response)
+            this.team = 
+            {
+              ...this.team,
+              pokemons: [],
+              id: this.teamData.id,
+              options: this.teamData.options,
+              player: this.teamData.player,
+              tournament: this.teamData.tournament,
+              regulation: this.teamData.regulation,
+              rentalCode: this.teamData.rentalCode,
+              viewCount: this.teamData.viewCount,
+              date: this.teamData.date,
+              visibility: this.teamData.visibility,
+              tags: this.teamData.tags,
+            };
+            this.initOptions();
+            this.loadPokemonPlaceholders(this.teamData.pokemonIDs)
+            this.loadPokemons(this.teamData.pokemonIDs);
+            this.teamEditorService.setTeam(this.team);
+          }
+        },
+        error: (error) =>
+        {
+          console.log("Error getting team data", error)
+          this.loading = false;
+        },
+        complete: () => 
+        {
+          this.loading = false;
+        }
+      }
+    );
+  }
+
+  loadPokemonPlaceholders(pokemonIDs: number[])
+  {
+    for (const pokemonID in pokemonIDs) 
+    {
+      this.team?.pokemons.push(undefined);
+    }
+  }
+
+  async loadPokemons(pokemonIDs: number[])
+  {
+    if(this.team)
+    {
+      pokemonIDs.map(async (pokemonID, index) => 
+      {
+        this.teamService.getPokemonById(pokemonID).subscribe(
+          {
+            next: (response) =>
+            {
+              if(this.team && response) 
+              { 
+                this.team.pokemons[index] = response;
+                this.teamEditorService.setTeam(this.team);
+              }
+            },
+            error: () =>
+            {
+              if(this.team) 
+              { 
+                this.team.pokemons[index] = null;
+              }            
+            }
+          }
+        );
+      })
+    }
+  }
+
+  initOptions()
+  {
+    if(this.team)
+    {
+
+      this.team.options.showIVs = true;
+      this.team.options.showEVs = true;
+      this.team.options.showNature = true;
     }
   }
 }
