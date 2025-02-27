@@ -78,11 +78,11 @@ namespace api.Services
                 return null;
             }
             ivs.Add(new StatDTO("hp", null, pokemon.IV_hp));
-            ivs.Add(new StatDTO("atk", null, pokemon.IV_atk));
-            ivs.Add(new StatDTO("def", null, pokemon.IV_def));
-            ivs.Add(new StatDTO("spa", null, pokemon.IV_spa));
-            ivs.Add(new StatDTO("spd", null, pokemon.IV_spd));
-            ivs.Add(new StatDTO("spe", null, pokemon.IV_spe));
+            ivs.Add(new StatDTO("attack", null, pokemon.IV_atk));
+            ivs.Add(new StatDTO("defense", null, pokemon.IV_def));
+            ivs.Add(new StatDTO("special-attack", null, pokemon.IV_spa));
+            ivs.Add(new StatDTO("special-defense", null, pokemon.IV_spd));
+            ivs.Add(new StatDTO("speed", null, pokemon.IV_spe));
             return ivs;
         }
 
@@ -94,11 +94,11 @@ namespace api.Services
                 return null;
             }
             evs.Add(new StatDTO("hp", null, pokemon.EV_hp));
-            evs.Add(new StatDTO("atk", null, pokemon.EV_atk));
-            evs.Add(new StatDTO("def", null, pokemon.EV_def));
-            evs.Add(new StatDTO("spa", null, pokemon.EV_spa));
-            evs.Add(new StatDTO("spd", null, pokemon.EV_spd));
-            evs.Add(new StatDTO("spe", null, pokemon.EV_spe));
+            evs.Add(new StatDTO("attack", null, pokemon.EV_atk));
+            evs.Add(new StatDTO("defense", null, pokemon.EV_def));
+            evs.Add(new StatDTO("special-attack", null, pokemon.EV_spa));
+            evs.Add(new StatDTO("special-defense", null, pokemon.EV_spd));
+            evs.Add(new StatDTO("speed", null, pokemon.EV_spe));
             return evs;
         }
 
