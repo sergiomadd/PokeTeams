@@ -30,6 +30,7 @@ export class SmartInputComponent
   @Output() newEvent = new EventEmitter();
   @Output() updateEvent = new EventEmitter<string>();
 
+  @ViewChild('smartInput') smartInput!: ElementRef;
   @ViewChild('input') input!: ElementRef;
   @ViewChild('resultsDiv') resultsDiv!: ElementRef;
 
@@ -50,6 +51,16 @@ export class SmartInputComponent
       && this.showOptions)
     {
       this.hoverDown();
+    }
+  }
+
+  @HostListener('document:click', ['$event', '$event.target'])
+  onDocumentClicked(event: MouseEvent, targetElement: HTMLElement) 
+  {
+    if (targetElement && document.body.contains(targetElement) 
+      && !this.smartInput.nativeElement.contains(targetElement)) 
+    {
+      this.showOptions = false;
     }
   }
 
@@ -236,11 +247,6 @@ export class SmartInputComponent
     }
   }
 
-  onBlur()
-  {
-    this.showOptions = false;
-  }
-
   newClick()
   {
     this.newEvent.emit();
@@ -276,5 +282,10 @@ export class SmartInputComponent
     {
       this.resultsDiv.nativeElement.scrollBy(0, 38);
     }
+  }
+
+  onClickOutside()
+  {
+    console.log("OUTSIDE")
   }
 }
