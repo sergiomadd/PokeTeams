@@ -20,8 +20,17 @@
           [instant]="!window.isMobile()"
           ></app-tooltip>
         </button>
+        <ng-container *ngIf="loggedUser?.username && team.player?.username === loggedUser?.username">
+          <button
+          class="button relative"
+          (click)="editTeam()"
+          [routerLink]="['/edit/', teamKey]"
+          >
+            Edit Team
+          </button>
+        </ng-container>
         <button
-        class="button-tertiary relative"
+        class="button relative"
         (click)="copyLink()"
         >
           {{"team.view.copy_link-button" | translate}}

@@ -2,10 +2,12 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { selectLoggedUser } from 'src/app/core/auth/store/auth.selectors';
 import { selectLang } from 'src/app/core/config/store/config.selectors';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { Team } from 'src/app/features/team/models/team.model';
 import { TeamService } from 'src/app/features/team/services/team.service';
+import { User } from 'src/app/features/user/models/user.model';
 import { ParserService } from 'src/app/shared/services/parser.service';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { TeamData } from '../../models/teamData.model';
@@ -25,6 +27,8 @@ export class TeamViewComponent
   store = inject(Store);
   window = inject(WindowService);
   
+  loggedUser$: Observable<User | null> = this.store.select(selectLoggedUser);
+  loggedUser?: User;
   selectedLang$: Observable<string> = this.store.select(selectLang);
 
   teamKey: string = "";
@@ -39,6 +43,10 @@ export class TeamViewComponent
   async ngOnInit()
   {
     this.teamKey = this.router.url.slice(1);
+    this.loggedUser$.subscribe(value =>
+      {
+        this.loggedUser = value ?? undefined;
+      });
     this.selectedLang$.subscribe(value =>
       {
         this.loadTeam();
@@ -170,6 +178,11 @@ export class TeamViewComponent
     {
       this.linkCopied = false;
     }, 1000);
+  }
+
+  editTeam()
+  {
+    
   }
 
   initOptions()
