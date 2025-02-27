@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, UrlSegment } from '@angular/router';
+import { authGuard } from './core/auth/services/auth.guard';
 import { SearchPageComponent } from './features/search/pages/search-page/search-page.component';
 import { TeamEditComponent } from './features/team/pages/team-edit/team-edit.component';
 import { TeamViewComponent } from './features/team/pages/team-view/team-view.component';
@@ -24,7 +25,7 @@ const routes: Routes = [
     },
     component: UserPageComponent
   },
-  { path: 'edit/:id', component: TeamEditComponent },
+  { path: 'edit/:id', component: TeamEditComponent, canActivate: [authGuard]  },
   { path: ':id', component: TeamViewComponent },
   {path: '**', component: NotFoundComponent}
 ];
