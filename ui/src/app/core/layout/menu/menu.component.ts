@@ -78,14 +78,12 @@ export class MenuComponent
     this.rotationAngle += this.menuOpen ? 180 : 180;
   }
 
-  navigate(pageName:string)
+  clickNavigate()
   {
-    this.router.navigate([`${pageName}`]);
-  }
-
-  navigateLoggedUser(username)
-  {
-    this.router.navigate([`/@${username}`]);
+    if(this.window.isMobile() && this.menuOpen)
+    {
+      this.toggleMenu();
+    }
   }
 
   toggleTheme()
@@ -112,5 +110,13 @@ export class MenuComponent
       )
     }
     return tags;
+  }
+
+  onClickOutside()
+  {
+    if(this.window.isMobile() && this.menuOpen)
+    {
+      this.toggleMenu();
+    }
   }
 }
