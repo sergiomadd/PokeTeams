@@ -67,7 +67,7 @@ namespace api.Controllers
             }
             var username = principal.Identity.Name;
             var user = await _userManager.FindByNameAsync(username);
-            if (user is null || user.RefreshToken == null || !user.RefreshToken.Equals(refreshToken) || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            if (user is null || user.RefreshToken == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
                 return BadRequest("Invalid client request");
             }
@@ -608,8 +608,31 @@ namespace api.Controllers
             return Ok();
         }
 
+        [HttpGet, Route("own/{teamID}")]
+        public async Task<ActionResult> DoesLoggedUserOwnTeam(string teamID)
+        {
+            if(string.IsNullOrEmpty(teamID))
+            {
+                return BadRequest("No team");
+            }
+
+            User? loggedUser = await _identityService.GetUser();
+            if (loggedUser == null)
+            {
+                return Unauthorized("Unauthorized");
+            }
+
+            Team? team = await _pokeTeamService.GetTeamModel(teamID);
+            if(team == null || team.PlayerId == null || team.PlayerId != loggedUser.Id)
+            {
+                return Unauthorized("Unauthorized");
+            }
+
+            return Ok();
+        }
+
         //Make so only admin -> remove for production
-        
+
         [HttpPost, Route("delete/{userName}")]
         public async Task<ActionResult<UserDTO>> DeleteUserByUserName(string userName)
         {
