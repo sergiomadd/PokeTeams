@@ -56,6 +56,7 @@ import { RadioComponent } from './shared/components/radio/radio.component';
 import { SmartInputComponent } from './shared/components/smart-input/smart-input.component';
 import { SwitchComponent } from './shared/components/switch/switch.component';
 import { TooltipComponent } from './shared/components/tooltip/tooltip.component';
+import { ClickOutsideDirective } from './shared/directives/click-outside.directive';
 import { LinkerPipe } from './shared/pipes/linker.pipe';
 @NgModule({
   declarations: [
@@ -126,6 +127,7 @@ import { LinkerPipe } from './shared/pipes/linker.pipe';
           deps: [HttpClient]
         }
       }),
+    ClickOutsideDirective
     ],
   providers: [
     AuthService,
