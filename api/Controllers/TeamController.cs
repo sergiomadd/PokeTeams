@@ -22,11 +22,13 @@ namespace api.Controllers
     {
         private readonly IPokeTeamService _teamService;
         private readonly IPokedexService _pokemonService;
+        private readonly IIdentityService _identityService;
 
-        public TeamController(IPokeTeamService teamService, IPokedexService pokemonService)
+        public TeamController(IPokeTeamService teamService, IPokedexService pokemonService, IIdentityService identityService)
         {
             _teamService = teamService;
             _pokemonService = pokemonService;
+            _identityService = identityService;
         }
 
         [HttpGet("{id}")]
@@ -134,21 +136,16 @@ namespace api.Controllers
         [HttpPost, Route("update")]
         public async Task<ActionResult<string>> Update([FromBody] TeamDTO teamDTO)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return Unauthorized("Unauthorized");
-            }
-            /*
             Team? currentTeam = await _teamService.GetTeamModel(teamDTO.ID);
             if (currentTeam == null || currentTeam.Player == null)
             {
                 return Unauthorized("Unauthorized");
             }
-            if (User.Identity.Name != currentTeam.Player.UserName)
+            User? loggedUser = await _identityService.GetUser();
+            if (loggedUser.Id == null || loggedUser.Id != currentTeam.Player.Id)
             {
                 return Unauthorized("Unauthorized");
             }
-            */
             Team? newTeam = await _teamService.UpdateTeam(teamDTO, teamDTO.ID, User.Identity.Name);
             if (newTeam == null)
             {
