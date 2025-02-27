@@ -71,10 +71,9 @@ namespace api.Controllers
             {
                 return BadRequest("Invalid client request");
             }
-
             string newRefreshToken = _tokenGenerator.GenerateRefreshToken(user);
 
-            user.RefreshToken = refreshToken;
+            user.RefreshToken = newRefreshToken;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
             await _userManager.UpdateAsync(user);
 
@@ -260,7 +259,7 @@ namespace api.Controllers
             string refreshToken = _tokenGenerator.GenerateRefreshToken(user);
 
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(90);
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
             await _userManager.UpdateAsync(user);
 
             JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token, RefreshToken = refreshToken };
@@ -628,7 +627,7 @@ namespace api.Controllers
                 return Unauthorized("Unauthorized");
             }
 
-            return Ok();
+            return Ok(true);
         }
 
         //Make so only admin -> remove for production
