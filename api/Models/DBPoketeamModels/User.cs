@@ -5,7 +5,7 @@ namespace api.Models.DBPoketeamModels
 {
     public class User : IdentityUser
     {
-        [StringLength(64, ErrorMessage = "User name is too long")]
+        [StringLength(32, ErrorMessage = "Name is too long")]
         public string? Name { get; set; }
 
         [StringLength(2, ErrorMessage = "User country is too long")]
