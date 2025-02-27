@@ -114,9 +114,9 @@ export class AuthService
     return this.http.post<void>(url, updateDTO, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
 
-  doesLoggedUserOwnTeam(teamID: string) : Observable<void>
+  doesLoggedUserOwnTeam(teamID: string) : Observable<boolean>
   {
     let url = this.apiUrl + 'own/' + teamID;
-    return this.http.get<void>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+    return this.http.get<boolean>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
 }
