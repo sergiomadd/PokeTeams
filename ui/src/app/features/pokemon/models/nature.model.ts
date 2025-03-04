@@ -1,11 +1,10 @@
 import { LocalizedText } from "src/app/shared/models/localizedText.model";
-import { defaultStat, Stat } from "./stat.model";
 
 export interface Nature
 {
   name: LocalizedText,
-  increasedStat: Stat,
-  decreasedStat: Stat
+  increasedStatIdentifier: string,
+  decreasedStatIdentifier: string
 }
 
 export const defaultNature: Nature = 
@@ -15,6 +14,6 @@ export const defaultNature: Nature =
     content: "Not Found",
     language: "en"
   },
-  increasedStat: defaultStat,
-  decreasedStat: defaultStat
+  increasedStatIdentifier: "",
+  decreasedStatIdentifier: ""
 }

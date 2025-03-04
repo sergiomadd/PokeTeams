@@ -428,15 +428,15 @@ export class PokemonComponent
     let natureValue: number;
     if(baseStat)
     {
-      if(nature ? nature.increasedStat.identifier === baseStat.identifier && nature.decreasedStat.identifier === baseStat.identifier : false)
+      if(nature ? nature.increasedStatIdentifier === baseStat.identifier && nature.decreasedStatIdentifier === baseStat.identifier : false)
       {
         natureValue = 1;
       }
-      else if(nature ? nature.increasedStat.identifier === baseStat.identifier : false)
+      else if(nature ? nature.increasedStatIdentifier === baseStat.identifier : false)
       {
         natureValue = 1.1;
       }
-      else if(nature ? nature.decreasedStat.identifier === baseStat.identifier : false)
+      else if(nature ? nature.decreasedStatIdentifier === baseStat.identifier : false)
       {
         natureValue = 0.9;
       }
