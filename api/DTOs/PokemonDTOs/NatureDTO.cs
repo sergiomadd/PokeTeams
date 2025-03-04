@@ -4,15 +4,15 @@
     {
         public LocalizedText Name { get; set; }
         public string Identifier { get; set; }
-        public StatDTO IncreasedStat { get; set; }
-        public StatDTO DecreasedStat { get; set; }
+        public string IncreasedStatIdentifier { get; set; }
+        public string DecreasedStatIdentifier { get; set; }
 
-        public NatureDTO(LocalizedText name, string identifier, StatDTO increasedStat, StatDTO decreasedStat)
+        public NatureDTO(LocalizedText name, string identifier, string increasedStat, string decreasedStat)
         {
             Name = name;
             Identifier = identifier;
-            IncreasedStat = increasedStat;
-            DecreasedStat = decreasedStat;
+            IncreasedStatIdentifier = increasedStat;
+            DecreasedStatIdentifier = decreasedStat;
         }
     }
 }

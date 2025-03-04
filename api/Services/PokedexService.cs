@@ -400,8 +400,8 @@ namespace api.Services
                         natureDTOs.Add(new NatureDTO(
                             new LocalizedText(natureNames?.name ?? "", natureNames?.local_language_id ?? 9),
                             natures.identifier,
-                            new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName?.name ?? "", increasedStatName?.local_language_id ?? (int)Lang.en), 0),
-                            new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, decreasedStatName.local_language_id), 0)));
+                            increasedStatIdentifier.identifier,
+                            decreasedStatIdentifier.identifier));
                     }
                 }
             }
@@ -433,8 +433,8 @@ namespace api.Services
                             nature = new NatureDTO(
                                 new LocalizedText(localizedNatureNames.name, localizedNatureNames.local_language_id),
                                 natures.identifier,
-                                new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName.name, increasedStatName.local_language_id), 0),
-                                new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, decreasedStatName.local_language_id), 0));
+                                increasedStatIdentifier.identifier,
+                                decreasedStatIdentifier.identifier);
                         }
                     }
                 }
@@ -464,8 +464,8 @@ namespace api.Services
                         nature = new NatureDTO(
                             new LocalizedText(natureNames.name, natureNames.local_language_id),
                             natures.identifier,
-                            new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName.name, increasedStatName.local_language_id), 0),
-                            new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, decreasedStatName.local_language_id), 0));
+                            increasedStatIdentifier.identifier,
+                            decreasedStatIdentifier.identifier);
                     }
                 }
             }
