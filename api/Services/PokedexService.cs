@@ -873,15 +873,15 @@ namespace api.Services
             {
                 foreach (var itemName in itemNames)
                 {
-                    Items? items = await _pokedexContext.Items.FirstOrDefaultAsync(i => i.Id == itemName.item_id);
+                    Items? items = await _pokedexContext.Items.FirstOrDefaultAsync(i => i.id == itemName.item_id);
                     if (items != null)
                     {
                         string pathStart = "https://localhost:7134/images/sprites/items/";
-                        queryResults.Add(new QueryResultDTO(itemName.name, items.Identifier, type: "item", icon: $"{pathStart}{items.Identifier}.png"));
+                        queryResults.Add(new QueryResultDTO(itemName.name, items.identifier, type: "item", icon: $"{pathStart}{items.identifier}.png"));
                     }
                     else
                     {
-                        queryResults.Add(new QueryResultDTO(itemName.name, items.Identifier, type: "item"));
+                        queryResults.Add(new QueryResultDTO(itemName.name, items.identifier, type: "item"));
                     }
                 }
             }

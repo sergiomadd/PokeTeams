@@ -1,16 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace api.Models.DBModels
 {
-    [Keyless]
     public class Items
     {
-        public int Id { get; set; }
-        public string Identifier { get; set; }
+        [Key]
+        public int id { get; set; }
+        public string identifier { get; set; }
         public Items(int id, string identifier)
         {
-            Id = id;
-            Identifier = identifier;
+            this.id = id;
+            this.identifier = identifier;
         }
     }
 }
