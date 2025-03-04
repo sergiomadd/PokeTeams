@@ -35,9 +35,9 @@ namespace api.Controllers
         public async Task<ActionResult<TeamDTO>> Get(string id)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var team = await _teamService.GetTeam(id, langId);
+            var team = await _teamService.GetTeam(id, langId ?? 9);
             if (team == null)
             {
                 return BadRequest("Team not found.");
@@ -51,9 +51,9 @@ namespace api.Controllers
         public async Task<ActionResult<TeamDataDTO>> GetTeamData(string id)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var team = await _teamService.GetTeamData(id, langId);
+            var team = await _teamService.GetTeamData(id, langId ?? 9);
             if (team == null)
             {
                 return BadRequest("Team data not found.");
@@ -67,9 +67,9 @@ namespace api.Controllers
         public async Task<ActionResult<PokemonDTO>> GetPokemonById(int pokemonId)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var pokemonDTO = await _teamService.GetPokemonById(pokemonId, langId);
+            var pokemonDTO = await _teamService.GetPokemonById(pokemonId, langId ?? 9);
 
             if (pokemonDTO == null)
             {
@@ -101,9 +101,9 @@ namespace api.Controllers
             }
 
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var pokemonDTO = await _teamService.GetTeamPreviewPokemons(teamId, langId);
+            var pokemonDTO = await _teamService.GetTeamPreviewPokemons(teamId, langId ?? 9);
 
             if (pokemonDTO == null)
             {
@@ -203,9 +203,9 @@ namespace api.Controllers
         public async Task<ActionResult<TeamSearchQueryResponseDTO>> QueryTeams(TeamSearchQueryDTO key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            TeamSearchQueryResponseDTO teams = await _teamService.QueryTeams(key, langId);
+            TeamSearchQueryResponseDTO teams = await _teamService.QueryTeams(key, langId ?? 9);
             if (teams == null)
             {
                 return NotFound("Couldn't find teams");

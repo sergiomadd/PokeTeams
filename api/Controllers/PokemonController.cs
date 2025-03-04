@@ -26,9 +26,9 @@ namespace api.Controllers
         public async Task<ActionResult<PokemonDataDTO>> GetPokemonByName(string pokemonName) 
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var pokemon = await _pokemonService.GetPokemonByName(pokemonName, langId);
+            var pokemon = await _pokemonService.GetPokemonByName(pokemonName, langId ?? 9);
             if(pokemon == null)
             {
                 return NotFound("Pokemon not found.");
@@ -40,9 +40,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<QueryResultDTO>>> QueryPokemonsByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            List<QueryResultDTO> pokemons = await _pokemonService.QueryPokemonsByName(key, langId);
+            List<QueryResultDTO> pokemons = await _pokemonService.QueryPokemonsByName(key, langId ?? 9);
             if (pokemons == null)
             {
                 return NotFound("Couldn't find pokemons");

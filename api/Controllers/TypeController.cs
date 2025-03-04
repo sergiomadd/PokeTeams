@@ -1,6 +1,7 @@
 ﻿using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Services;
+using api.Util;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 
@@ -20,9 +21,9 @@ namespace api.Controllers
         public async Task<ActionResult<PokeTypeWithEffectivenessDTO>> GetTypeByIdentifier(string typeName)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var type = await _pokemonService.GetTypeWithEffectivenessByIdentifier(typeName, langId);
+            var type = await _pokemonService.GetTypeWithEffectivenessByIdentifier(typeName, langId ?? 9);
             if (type == null)
             {
                 return BadRequest("Type not found.");
@@ -34,9 +35,9 @@ namespace api.Controllers
         public async Task<ActionResult<PokeTypeWithEffectivenessDTO>> GetTeraTypeByIdentifier(string typeName)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var type = await _pokemonService.GetTypeWithEffectivenessByIdentifier(typeName, langId, true);
+            var type = await _pokemonService.GetTypeWithEffectivenessByIdentifier(typeName, langId ?? 9, true);
             if (type == null)
             {
                 return BadRequest("Type not found.");
@@ -48,9 +49,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<PokeTypeDTO>>> GetAllTypes()
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var types = await _pokemonService.GetAllTypes(langId);
+            var types = await _pokemonService.GetAllTypes(langId ?? 9);
             if (types == null)
             {
                 return BadRequest("Type not found.");
@@ -62,9 +63,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<PokeTypeDTO>>> GetAllTeraTypes()
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var types = await _pokemonService.GetAllTeraTypes(langId);
+            var types = await _pokemonService.GetAllTeraTypes(langId ?? 9);
             if (types == null)
             {
                 return BadRequest("Type not found.");
@@ -76,9 +77,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<QueryResultDTO>>> QueryTypesByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            List<QueryResultDTO> types = await _pokemonService.QueryTypesByName(key, langId);
+            List<QueryResultDTO> types = await _pokemonService.QueryTypesByName(key, langId ?? 9);
             if (types == null)
             {
                 return NotFound("Couldn't query types");
@@ -90,9 +91,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<QueryResultDTO>>> QueryTeraTypesByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            List<QueryResultDTO> types = await _pokemonService.QueryTypesByName(key, langId, true);
+            List<QueryResultDTO> types = await _pokemonService.QueryTypesByName(key, langId ?? 9, true);
             if (types == null)
             {
                 return NotFound("Couldn't query types");
@@ -104,9 +105,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<QueryResultDTO>>> QueryAllTeraTypes()
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var types = await _pokemonService.QueryAllTeraTypes(langId);
+            var types = await _pokemonService.QueryAllTeraTypes(langId ?? 9);
             if (types == null)
             {
                 return BadRequest("Type not found.");

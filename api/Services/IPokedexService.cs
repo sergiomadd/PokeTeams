@@ -35,7 +35,6 @@ namespace api.Services
         public Task<List<QueryResultDTO>> QueryAllPokemonAbilites(string id, int langId);
         public Task<List<QueryResultDTO>> QueryNaturesByName(string key, int langId);
         public Task<List<QueryResultDTO>> QueryAllNatures(int langId);
-        public Task<int> GetLangId(string lang);
 
     }
 }

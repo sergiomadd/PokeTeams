@@ -142,7 +142,7 @@ namespace api.Services
                 {
                     movePreview = new MovePreviewDTO(
                         moves.identifier,
-                        new LocalizedText(moveNames.name, await GetLangIdentifier(moveNames.local_language_id)),
+                        new LocalizedText(moveNames.name, moveNames.local_language_id),
                         await GetTypeById(moves.type_id, langId));
                 }
             }
@@ -181,7 +181,7 @@ namespace api.Services
             }
             if (pokemonSpeciesNames != null)
             {
-                return new LocalizedText(pokemonSpeciesNames.name, await GetLangIdentifier(pokemonSpeciesNames.local_language_id));
+                return new LocalizedText(pokemonSpeciesNames.name, pokemonSpeciesNames.local_language_id);
             }
             return null;
         }
@@ -200,7 +200,7 @@ namespace api.Services
                 Stats? stats = await _pokedexContext.Stats.FirstOrDefaultAsync(s => s.id == i);
                 if (pokemonStats != null && statNames != null && stats != null)
                 {
-                    pokeStats.Add(new StatDTO(stats.identifier, new LocalizedText(statNames.name, await GetLangIdentifier(statNames.local_language_id)), pokemonStats.base_stat));
+                    pokeStats.Add(new StatDTO(stats.identifier, new LocalizedText(statNames.name, statNames.local_language_id), pokemonStats.base_stat));
                 }
             }
             return pokeStats;
@@ -262,12 +262,12 @@ namespace api.Services
                 {
                     itemProse = await _pokedexContext.Item_prose.FirstOrDefaultAsync(i => i.item_id == itemNames.item_id && i.local_language_id == (int)Lang.en);
                 }
-                Items? items = await _pokedexContext.Items.FirstOrDefaultAsync(i => i.Id == localizedItemNames.item_id);
+                Items? items = await _pokedexContext.Items.FirstOrDefaultAsync(i => i.id == localizedItemNames.item_id);
                 if (itemProse != null && items != null)
                 {
-                    item = new ItemDTO(items.Identifier,
-                        new LocalizedText(localizedItemNames?.name ?? "", await GetLangIdentifier(localizedItemNames.local_language_id)),
-                        new LocalizedText(Formatter.FormatProse(itemProse?.effect), await GetLangIdentifier(itemProse.local_language_id)));
+                    item = new ItemDTO(items.identifier,
+                        new LocalizedText(localizedItemNames?.name ?? "", localizedItemNames.local_language_id),
+                        new LocalizedText(Formatter.FormatProse(itemProse?.effect), itemProse.local_language_id));
                 }
             }
             return item;
@@ -398,10 +398,10 @@ namespace api.Services
                     if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
                     {
                         natureDTOs.Add(new NatureDTO(
-                            new LocalizedText(natureNames?.name ?? "", await GetLangIdentifier(natureNames?.local_language_id ?? 9)),
+                            new LocalizedText(natureNames?.name ?? "", natureNames?.local_language_id ?? 9),
                             natures.identifier,
-                            new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName?.name ?? "", await GetLangIdentifier(increasedStatName?.local_language_id ?? (int)Lang.en)), 0),
-                            new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, await GetLangIdentifier(decreasedStatName.local_language_id)), 0)));
+                            new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName?.name ?? "", increasedStatName?.local_language_id ?? (int)Lang.en), 0),
+                            new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, decreasedStatName.local_language_id), 0)));
                     }
                 }
             }
@@ -431,10 +431,10 @@ namespace api.Services
                         if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
                         {
                             nature = new NatureDTO(
-                                new LocalizedText(localizedNatureNames.name, await GetLangIdentifier(localizedNatureNames.local_language_id)),
+                                new LocalizedText(localizedNatureNames.name, localizedNatureNames.local_language_id),
                                 natures.identifier,
-                                new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName.name, await GetLangIdentifier(increasedStatName.local_language_id)), 0),
-                                new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, await GetLangIdentifier(decreasedStatName.local_language_id)), 0));
+                                new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName.name, increasedStatName.local_language_id), 0),
+                                new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, decreasedStatName.local_language_id), 0));
                         }
                     }
                 }
@@ -462,10 +462,10 @@ namespace api.Services
                     if (increasedStatIdentifier != null && decreasedStatIdentifier != null && decreasedStatName != null && decreasedStatName != null)
                     {
                         nature = new NatureDTO(
-                            new LocalizedText(natureNames.name, await GetLangIdentifier(natureNames.local_language_id)),
+                            new LocalizedText(natureNames.name, natureNames.local_language_id),
                             natures.identifier,
-                            new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName.name, await GetLangIdentifier(increasedStatName.local_language_id)), 0),
-                            new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, await GetLangIdentifier(decreasedStatName.local_language_id)), 0));
+                            new StatDTO(increasedStatIdentifier.identifier, new LocalizedText(increasedStatName.name, increasedStatName.local_language_id), 0),
+                            new StatDTO(decreasedStatIdentifier.identifier, new LocalizedText(decreasedStatName.name, decreasedStatName.local_language_id), 0));
                     }
                 }
             }
@@ -534,7 +534,7 @@ namespace api.Services
                         Stats? metaStat = await _pokedexContext.Stats.FirstOrDefaultAsync(s => s.id == metaStatChange.stat_id);
                         statChange = new StatChange
                         {
-                            Stat = new StatDTO(metaStat.identifier, new LocalizedText(metaStatName.name, await GetLangIdentifier(metaStatName.local_language_id)), null),
+                            Stat = new StatDTO(metaStat.identifier, new LocalizedText(metaStatName.name, metaStatName.local_language_id), null),
                             Change = metaStatChange.change,
                             ChangeChance = meta.stat_chance
                         };
@@ -543,10 +543,10 @@ namespace api.Services
                     move = new MoveDTO
                     {
                         Identifier = moves.identifier,
-                        Name = new LocalizedText(localizedMoveNames.name, await GetLangIdentifier(localizedMoveNames.local_language_id)),
+                        Name = new LocalizedText(localizedMoveNames.name, localizedMoveNames.local_language_id),
                         PokeType = new PokeTypeWithEffectivenessDTO(
                             type.identifier,
-                            new LocalizedText(typeName.name, await GetLangIdentifier(typeName.local_language_id)),
+                            new LocalizedText(typeName.name, typeName.local_language_id),
                             await GetTypeEffectivenessAttack((int)typeName.type_id, typeName.local_language_id),
                             await GetTypeEffectivenessDefense((int)typeName.type_id, typeName.local_language_id)),
                         DamageClass = new MoveDamageClass
@@ -562,12 +562,12 @@ namespace api.Services
                         Target = target != null ? new MoveTarget
                         {
                             Name = target.name,
-                            Description = new LocalizedText(Formatter.FormatProse(target.description), await GetLangIdentifier(target.local_language_id))
+                            Description = new LocalizedText(Formatter.FormatProse(target.description), target.local_language_id)
                         } : null,
                         Effect = effect != null ? new MoveEffect
                         {
-                            Short = new LocalizedText(Formatter.FormatProse(effect.short_effect, new string[] { moves.effect_chance.ToString() }), await GetLangIdentifier(effect.local_language_id)),
-                            Long = new LocalizedText(Formatter.FormatProse(effect.effect, new string[] { moves.effect_chance.ToString() }), await GetLangIdentifier(effect.local_language_id)),
+                            Short = new LocalizedText(Formatter.FormatProse(effect.short_effect, new string[] { moves.effect_chance.ToString() }), effect.local_language_id),
+                            Long = new LocalizedText(Formatter.FormatProse(effect.effect, new string[] { moves.effect_chance.ToString() }), effect.local_language_id),
                             Chance = moves.effect_chance
                         } : null,
                         Meta = new Metadata
@@ -638,7 +638,7 @@ namespace api.Services
                 }
                 if (targetTypeName != null)
                 {
-                    pokeType = new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, await GetLangIdentifier(targetTypeName.local_language_id)), teraType);
+                    pokeType = new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, targetTypeName.local_language_id), teraType);
                 }
             }
             return pokeType;
@@ -657,7 +657,7 @@ namespace api.Services
                 }
                 if (targetTypeName != null)
                 {
-                    pokeType = new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, await GetLangIdentifier(targetTypeName.local_language_id)), teraType);
+                    pokeType = new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, targetTypeName.local_language_id), teraType);
                 }
             }
             return pokeType;
@@ -696,7 +696,7 @@ namespace api.Services
                 {
                     pokeType = new PokeTypeWithEffectivenessDTO(
                         targetType.identifier, 
-                        new LocalizedText(targetTypeName.name, await GetLangIdentifier(targetTypeName.local_language_id)),
+                        new LocalizedText(targetTypeName.name, targetTypeName.local_language_id),
                         GetTypeEffectivenessAttack(targetType.id, langId).Result,
                         GetTypeEffectivenessDefense(targetType.id, langId).Result);
                 }
@@ -720,7 +720,7 @@ namespace api.Services
                 {
                     pokeType = new PokeTypeWithEffectivenessDTO(
                         targetType.identifier,
-                        new LocalizedText(targetTypeName.name, await GetLangIdentifier(targetTypeName.local_language_id)),
+                        new LocalizedText(targetTypeName.name, targetTypeName.local_language_id),
                         await GetTypeEffectivenessAttack(targetType.id, langId),
                         await GetTypeEffectivenessDefense(targetType.id, langId), teraType);
                 }
@@ -745,7 +745,7 @@ namespace api.Services
                     }
                     if (targetType != null && targetTypeName != null)
                     {
-                        allValues.Add(new (new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, await GetLangIdentifier(targetTypeName.local_language_id))),
+                        allValues.Add(new (new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, targetTypeName.local_language_id)),
                             typeEfficacy.damage_factor / (double)100));
                     }
                 }
@@ -771,7 +771,7 @@ namespace api.Services
                     }
                     if (targetType != null && targetTypeName != null)
                     {
-                        allValues.Add(new(new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, await GetLangIdentifier(targetTypeName.local_language_id))),
+                        allValues.Add(new(new PokeTypeDTO(targetType.identifier, new LocalizedText(targetTypeName.name, targetTypeName.local_language_id)),
                             typeEfficacy.damage_factor / (double)100));
                     }
                 }

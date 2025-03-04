@@ -3,13 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using api.Util;
 using Microsoft.AspNetCore.Authorization;
 using api.Models.DBPoketeamModels;
-using System.Text.Json;
 using api.DTOs;
 using api.Services;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Azure;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace api.Controllers

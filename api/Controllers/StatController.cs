@@ -1,4 +1,5 @@
 ﻿using api.Services;
+using api.Util;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 
@@ -18,9 +19,9 @@ namespace api.Controllers
         public async Task<ActionResult<string>> GetStatNameByIdentifier(string identifier)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = _pokemonService.GetLangId(langs[0].Value.ToString()).Result;
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var statName = await _pokemonService.GetStatNameByIdentifier(identifier, langId);
+            var statName = await _pokemonService.GetStatNameByIdentifier(identifier, langId ?? 9);
             if (statName == null)
             {
                 return BadRequest("Stat name not found.");

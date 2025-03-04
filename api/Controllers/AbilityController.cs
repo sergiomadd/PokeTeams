@@ -22,9 +22,9 @@ namespace api.Controllers
         public async Task<ActionResult<AbilityDTO>> GetAbilityByName(string abilityName)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var ability = await _pokemonService.GetAbilityByName(abilityName, langId);
+            var ability = await _pokemonService.GetAbilityByName(abilityName, langId ?? 9);
             if (ability == null)
             {
                 return BadRequest("Ability not found.");
@@ -36,9 +36,9 @@ namespace api.Controllers
         public async Task<ActionResult<AbilityDTO>> GetAbilityByIdentifier(string abilityIdentifier)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var ability = await _pokemonService.GetAbilityByIdentifier(abilityIdentifier, langId);
+            var ability = await _pokemonService.GetAbilityByIdentifier(abilityIdentifier, langId ?? 9);
             if (ability == null)
             {
                 return BadRequest("Ability not found.");
@@ -50,9 +50,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<QueryResultDTO>>> QueryAllAbilities()
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            List<QueryResultDTO> abilities = await _pokemonService.QueryAllAbilities(langId);
+            List<QueryResultDTO> abilities = await _pokemonService.QueryAllAbilities(langId ?? 9);
             if (abilities == null)
             {
                 return NotFound("Couldn't get all abilities");
@@ -64,9 +64,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<QueryResultDTO>>> QueryAllPokemonAbilites(string id)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            List<QueryResultDTO> abilities = await _pokemonService.QueryAllPokemonAbilites(id, langId);
+            List<QueryResultDTO> abilities = await _pokemonService.QueryAllPokemonAbilites(id, langId ?? 9);
             if (abilities == null)
             {
                 return NotFound("Couldn't get pokemon abilities");
@@ -78,9 +78,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<QueryResultDTO>>> QueryAbilitiesByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            List<QueryResultDTO> abilities = await _pokemonService.QueryAbilitiesByName(key, langId);
+            List<QueryResultDTO> abilities = await _pokemonService.QueryAbilitiesByName(key, langId ?? 9);
             if (abilities == null)
             {
                 return NotFound("Couldn't query abilities");

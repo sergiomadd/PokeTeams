@@ -21,9 +21,9 @@ namespace api.Controllers
         public async Task<ActionResult<MoveDTO>> GetMoveByName(string moveName)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var move = await _pokemonService.GetMoveByName(moveName, langId);
+            var move = await _pokemonService.GetMoveByName(moveName, langId ?? 9);
             if (move == null)
             {
                 return BadRequest("Move not found.");
@@ -35,9 +35,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<QueryResultDTO>>> QueryMovesByName(string key)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            List<QueryResultDTO> moves = await _pokemonService.QueryMovesByName(key, langId);
+            List<QueryResultDTO> moves = await _pokemonService.QueryMovesByName(key, langId ?? 9);
             if (moves == null)
             {
                 return NotFound("Couldn't find moves");
@@ -50,9 +50,9 @@ namespace api.Controllers
         public async Task<ActionResult<List<QueryResultDTO>>> QueryAllPokemonMoves(string id)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int langId = await _pokemonService.GetLangId(langs[0].Value.ToString());
+            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            List<QueryResultDTO> moves = await _pokemonService.QueryAllPokemonMoves(id, langId);
+            List<QueryResultDTO> moves = await _pokemonService.QueryAllPokemonMoves(id, langId ?? 9);
             if (moves == null)
             {
                 return NotFound("Couldn't get pokemon moves");
