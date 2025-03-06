@@ -6,6 +6,7 @@ namespace api.DTOs
     public class TournamentDTO
     {
         public string Name { get; set; }
+        public string ShortName { get; set; }
         public string? City { get; set; }
         public string? CountryCode { get; set; }
         public bool Official { get; set; }

@@ -25,6 +25,7 @@ namespace api.Services
                 tournamentDTO = new TournamentDTO
                 {
                     Name = tournament.Name,
+                    ShortName = tournament.ShortName,
                     City = tournament.City,
                     CountryCode = tournament.CountryCode,
                     Official = tournament.Official,

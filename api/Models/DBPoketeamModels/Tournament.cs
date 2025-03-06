@@ -7,14 +7,18 @@ namespace api.Models.DBPoketeamModels
 {
     public class Tournament
     {
-        [Required(ErrorMessage = "Tournament name is required")]
-        [StringLength(256, ErrorMessage = "Tournament name is too long")]
-        public string Name { get; set; }
-
         [Key]
         [Required(ErrorMessage = "Tournament normalized name is required")]
         [StringLength(256, ErrorMessage = "Tournament normalized name is too long")]
         public string NormalizedName { get; set; }
+
+        [Required(ErrorMessage = "Tournament name is required")]
+        [StringLength(256, ErrorMessage = "Tournament name is too long")]
+        public string Name { get; set; }
+
+        [Required(ErrorMessage = "Tournament short name is required")]
+        [StringLength(256, ErrorMessage = "Tournament short name is too long")]
+        public string ShortName { get; set; }
 
         [StringLength(32, ErrorMessage = "Tournament cityu is too long")]
         public string? City { get; set; }
