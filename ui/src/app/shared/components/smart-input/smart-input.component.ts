@@ -235,7 +235,7 @@ export class SmartInputComponent
   {
     if(!this.disabled)
     {
-      if(this.results.length > 0)
+      if(this.results.length > 0 && (this.allowCustom && this.results.length > 1))
       {
         this.showOptions = true;
       }
