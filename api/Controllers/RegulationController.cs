@@ -31,12 +31,12 @@ namespace api.Controllers
         [HttpGet("query/all")]
         public ActionResult<List<QueryResultDTO>> QueryAllRegulations()
         {
-            List<QueryResultDTO> tagDTOs = _regulationService.QueryAllRegulations();
-            if (tagDTOs == null)
+            List<QueryResultDTO> results = _regulationService.QueryAllRegulations();
+            if (results == null)
             {
                 return NotFound("Couldn't find regulation");
             }
-            return Ok(tagDTOs);
+            return Ok(results);
         }
 
         [HttpGet("{identifier}")]
