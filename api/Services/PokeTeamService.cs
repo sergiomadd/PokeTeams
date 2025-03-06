@@ -718,10 +718,10 @@ namespace api.Services
                             }
                             break;
                         case "tournament":
-                            expressions.Add(t => t.Tournament != null && t.Tournament.Name == query.Name);
+                            expressions.Add(t => t.Tournament != null && t.Tournament.NormalizedName == query.Name.ToUpper());
                             break;
                         case "regulation":
-                            expressions.Add(t => t.Regulation == query.Name);
+                            expressions.Add(t => t.Regulation == query.Identifier);
                             break;
                         case "tag":
                             expressions.Add(t => t.Tags.Any(t => t.Name == query.Name));
