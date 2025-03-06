@@ -13,12 +13,13 @@ namespace api.Models.DBPoketeamModels
         [StringLength(2, ErrorMessage = "Regulation identifier is too long")]
         public string Identifier { get; set; }
 
-        [Required(ErrorMessage = "Regulation start date is required")]
-        public DateOnly StartDate { get; set; }
+        public DateOnly? StartDate { get; set; }
 
-        [Required(ErrorMessage = "Regulation end date is required")]
-        public DateOnly EndDate { get; set; }
+        public DateOnly? EndDate { get; set; }
 
-        public virtual ICollection<Tournament> Tournaments { get; set; }
+        public Regulation()
+        {
+
+        }
     }
 }

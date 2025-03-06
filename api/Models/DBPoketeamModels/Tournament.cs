@@ -25,13 +25,13 @@ namespace api.Models.DBPoketeamModels
         [Required(ErrorMessage = "Tournament official is required")]
         public bool Official { get; set; }
 
-        public string? RegulationIdentifier { get; set; } 
+        [StringLength(32, ErrorMessage = "Tournament category is too long")]
+        public string? Category { get; set; }
 
-        public virtual Regulation? Regulation { get; set; }
+        public DateOnly? StartDate { get; set; }
+        public DateOnly? EndDate { get; set; }
 
-        public DateOnly? Date { get; set; }
-
-        public virtual ICollection<Team> Teams { get; set; }
+        public virtual ICollection<Team>? Teams { get; set; }
 
 
         public Tournament()
@@ -46,8 +46,9 @@ namespace api.Models.DBPoketeamModels
             City = tournamentDTO.City;
             CountryCode = tournamentDTO.CountryCode;
             Official = tournamentDTO.Official;
-            RegulationIdentifier = tournamentDTO.Regulation != null ? tournamentDTO.Regulation.Identifier : null;
-            Date = tournamentDTO.Date;
+            Category = tournamentDTO.Category;
+            StartDate = tournamentDTO.StartDate;
+            EndDate = tournamentDTO.EndDate;
         }
     }
 }

@@ -48,7 +48,7 @@ namespace api.Services
         public List<RegulationDTO> GetAllRegulations()
         {
             List<RegulationDTO> regulationDTOs = new List<RegulationDTO>();
-            List<Regulation> regulations = _pokeTeamContext.Regulation.ToList();
+            List<Regulation> regulations = _pokeTeamContext.Regulation.Where(r => r.StartDate != null).OrderBy(r => r.StartDate).ToList();
             foreach (Regulation regulation in regulations)
             {
                 regulationDTOs.Add(BuildRegulationDTO(regulation));
@@ -59,10 +59,10 @@ namespace api.Services
         public List<QueryResultDTO> QueryAllRegulations()
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Regulation> regulations = _pokeTeamContext.Regulation.ToList();
+            List<Regulation> regulations = _pokeTeamContext.Regulation.Where(r => r.StartDate != null).OrderBy(r => r.StartDate).ToList();
             foreach (Regulation regulation in regulations)
             {
-                queryResults.Add(new QueryResultDTO(regulation.Name, regulation.Identifier));
+                queryResults.Add(new QueryResultDTO(regulation.Name, regulation.Identifier, type: "regulation"));
             }
             return queryResults;
         }

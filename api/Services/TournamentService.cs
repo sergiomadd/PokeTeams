@@ -28,8 +28,9 @@ namespace api.Services
                     City = tournament.City,
                     CountryCode = tournament.CountryCode,
                     Official = tournament.Official,
-                    Regulation = _regulationService.BuildRegulationDTO(tournament.Regulation),
-                    Date = tournament.Date
+                    Category = tournament.Category,
+                    StartDate = tournament.StartDate,
+                    EndDate = tournament.EndDate
                 };
             }
             return tournamentDTO;

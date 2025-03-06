@@ -25,12 +25,6 @@ namespace api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Regulation>()
-                .HasMany(r => r.Tournaments)
-                .WithOne(t => t.Regulation)
-                .HasForeignKey(t => t.RegulationIdentifier)
-                .IsRequired(false);
             
             modelBuilder.Entity<Tournament>()
                 .HasMany(t => t.Teams)

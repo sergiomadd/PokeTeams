@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -11,9 +12,11 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(PokeTeamContext))]
-    partial class PokeTeamContextModelSnapshot : ModelSnapshot
+    [Migration("20250306122844_Dates")]
+    partial class Dates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -432,10 +435,15 @@ namespace api.Migrations
                     b.Property<bool>("Official")
                         .HasColumnType("bit");
 
+                    b.Property<string>("RegulationIdentifier")
+                        .HasColumnType("nvarchar(2)");
+
                     b.Property<DateOnly?>("StartDate")
                         .HasColumnType("date");
 
                     b.HasKey("NormalizedName");
+
+                    b.HasIndex("RegulationIdentifier");
 
                     b.ToTable("Tournament");
                 });
@@ -621,6 +629,20 @@ namespace api.Migrations
                         .HasForeignKey("TeamsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("api.Models.DBPoketeamModels.Tournament", b =>
+                {
+                    b.HasOne("api.Models.DBPoketeamModels.Regulation", "Regulation")
+                        .WithMany("Tournaments")
+                        .HasForeignKey("RegulationIdentifier");
+
+                    b.Navigation("Regulation");
+                });
+
+            modelBuilder.Entity("api.Models.DBPoketeamModels.Regulation", b =>
+                {
+                    b.Navigation("Tournaments");
                 });
 
             modelBuilder.Entity("api.Models.DBPoketeamModels.Team", b =>

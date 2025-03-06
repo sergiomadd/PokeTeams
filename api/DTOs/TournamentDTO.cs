@@ -9,7 +9,8 @@ namespace api.DTOs
         public string? City { get; set; }
         public string? CountryCode { get; set; }
         public bool Official { get; set; }
-        public RegulationDTO? Regulation { get; set; }
-        public DateOnly? Date { get; set; }
+        public string? Category { get; set; }
+        public DateOnly? StartDate { get; set; }
+        public DateOnly? EndDate { get; set; }
     }
 }
