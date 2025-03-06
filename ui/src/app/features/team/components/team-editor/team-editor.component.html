@@ -40,6 +40,7 @@
           [label]="'team.editor.tournament_input-label' | translate"
           [keepSelected]="true"
           [getter]="queryService.queryTournamentCallback"
+          [allGetter]="queryService.tournamentAllCallback"
           (selectEvent)="tournamentSelectEvent($event)"
           class="smart-input-wrapper input-m"
           ></app-smart-input>

@@ -198,6 +198,7 @@ export class UtilService
 
   getStatCode(stat: Stat)
   {
+
     const nameDict = 
     {
       "hp": "HP",

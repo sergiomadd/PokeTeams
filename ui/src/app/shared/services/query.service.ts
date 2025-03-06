@@ -50,6 +50,16 @@ export class QueryService
 
   //Team
   
+  queryAllTournaments() : Observable<QueryItem[]>
+  {
+    let url = this.apiUrl + 'tournament/query/all';
+    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout));
+  }
+  tournamentAllCallback = (): Observable<QueryItem[]> => 
+  {
+    return this.queryAllTournaments();
+  }
+
   queryTournamentsByName(key: string) : Observable<QueryItem[]>
   {
     let url = this.apiUrl + 'tournament/query';
