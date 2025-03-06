@@ -2,6 +2,8 @@
 using api.DTOs;
 using api.Models.DBPoketeamModels;
 using api.Util;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.IO;
 
 namespace api.Services
 {
@@ -82,10 +84,40 @@ namespace api.Services
             return null;
         }
 
+        public List<QueryResultDTO> QueryAllTournaments()
+        {
+            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
+            List<Tournament> tournaments = _pokeTeamContext.Tournament.OrderByDescending(t => t.StartDate).ToList();
+            foreach (Tournament tournament in tournaments)
+            {
+                string? path = null;
+                switch (tournament.Category)
+                {
+                    case "regional":
+                        path = "https://localhost:7134/images/vgc/regionals.png";
+                        break;
+                    case "special":
+                        path = "https://localhost:7134/images/vgc/regionals.png";
+                        break;
+                    case "international":
+                        path = "https://localhost:7134/images/vgc/internationals.png";
+                        break;
+                    case "world":
+                        path = "https://localhost:7134/images/vgc/worlds.png";
+                        break;
+                    default:
+                        path = null;
+                        break;
+                }
+                queryResults.Add(new QueryResultDTO(tournament.ShortName, tournament.NormalizedName, type: "tournament", icon: path));
+            }
+            return queryResults;
+        }
+
         public List<QueryResultDTO> QueryTournamentsByName(string key)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Tournament> tournaments = _pokeTeamContext.Tournament.Where(t => t.NormalizedName.Contains(key.ToLower())).ToList();
+            List<Tournament> tournaments = _pokeTeamContext.Tournament.Where(t => t.NormalizedName.Contains(key.ToLower())).OrderByDescending(t => t.StartDate).ToList();
             if (tournaments != null && tournaments.Count > 0)
             {
                 tournaments.ForEach(tournament =>

@@ -63,6 +63,17 @@ namespace api.Controllers
             }
         }
 
+        [HttpGet("query/all")]
+        public ActionResult<List<QueryResultDTO>> QueryAllRegulations()
+        {
+            List<QueryResultDTO> results = _tournamentService.QueryAllTournaments();
+            if (results == null)
+            {
+                return NotFound("Couldn't find regulation");
+            }
+            return Ok(results);
+        }
+
         [HttpGet, Route("query")]
         public async Task<ActionResult<List<QueryResultDTO>>> QueryTournamentsByName(string key)
         {
