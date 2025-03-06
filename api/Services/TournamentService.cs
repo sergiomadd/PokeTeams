@@ -90,9 +90,26 @@ namespace api.Services
             {
                 tournaments.ForEach(tournament =>
                 {
-                    string path = "https://localhost:7134/images/misc/vgc.png";
-                    queryResults.Add(new QueryResultDTO(tournament.Name, tournament.Name, type: "tournament",
-                        icon: tournament.Official ? path : null));
+                    string? path = null;
+                    switch(tournament.Category)
+                    {
+                        case "regional":
+                            path = "https://localhost:7134/images/vgc/regionals.png";
+                            break;
+                        case "special":
+                            path = "https://localhost:7134/images/vgc/regionals.png";
+                            break;
+                        case "international":
+                            path = "https://localhost:7134/images/vgc/internationals.png";
+                            break;
+                        case "world":
+                            path = "https://localhost:7134/images/vgc/worlds.png";
+                            break;
+                        default:
+                            path = null;
+                            break;
+                    }
+                    queryResults.Add(new QueryResultDTO(tournament.ShortName, tournament.NormalizedName, type: "tournament", icon: path));
                 });
             }
             return queryResults;
