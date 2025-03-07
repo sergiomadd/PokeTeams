@@ -1,10 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
 import { authActions } from 'src/app/core/auth/store/auth.actions';
 import { selectError, selectIsSubmitting } from 'src/app/core/auth/store/auth.selectors';
-import { AuthResponseDTO } from 'src/app/core/auth/types/authResponse.dto';
 import { LogInDTO } from 'src/app/features/user/models/login.dto';
 import { SignUpDTO } from 'src/app/features/user/models/signup.dto';
 import { UserService } from 'src/app/features/user/services/user.service';
@@ -26,7 +25,6 @@ export class UserFormComponent
 
   data$ = combineLatest(
     {
-      //loggedUser: this.store.select(selectLoggedUser),
       isSubmitting: this.store.select(selectIsSubmitting),
       backendError: this.store.select(selectError)
     }
@@ -47,11 +45,19 @@ export class UserFormComponent
   signUpFormSubmitted: boolean = false;
   signUpForm = this.formBuilder.group(
     {
-      username: ['', [Validators.required, Validators.maxLength(32)]],
-      email: ['', [Validators.required, Validators.email, Validators.maxLength(256)]],
+      username: new FormControl('', 
+      {
+        validators: [Validators.required, Validators.maxLength(32)],
+        updateOn: 'blur'
+      }),
+      email: new FormControl('', 
+      {
+        validators: [Validators.required, Validators.email, Validators.maxLength(256)],
+        updateOn: 'blur'
+      }),
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
-    }, { updateOn: "blur" });
+    });
   
   async ngOnInit()
   {
@@ -61,6 +67,7 @@ export class UserFormComponent
       {
         this.userNameAvailable = value ? await this.userService.checkUserNameAvailable(value) : false;
         if(!this.userNameAvailable) { this.signUpForm.controls.username.setErrors({ "usernameTaken": true }); }
+        console.log(this.signUpForm.controls.username.errors);
       }
     });
 
@@ -72,18 +79,6 @@ export class UserFormComponent
         if(!this.emailAvailable) { this.signUpForm.controls.email.setErrors({ "emailTaken": true }); }
       }
     });
-  }
-
-  async temp(response: AuthResponseDTO)
-  {
-    if(response)
-    {
-      return response.success;
-    }
-    else
-    {
-      return true;
-    }
   }
 
   async logIn()
@@ -103,7 +98,13 @@ export class UserFormComponent
 
   async signUp()
   {
+    console.log("signup")
     this.signUpFormSubmitted = true;
+    console.log(this.signUpForm);
+    console.log(this.signUpForm.valid);
+    console.log(this.signUpForm.errors);
+    console.log("confirm ", this.signUpForm.controls.confirmPassword.valid);
+    console.log(this.signUpForm.controls.confirmPassword.errors);
     if(this.signUpForm.valid)
     {
       let signupdto: SignUpDTO = 

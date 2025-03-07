@@ -76,7 +76,7 @@ export class UtilService
     {
       return this.translate.instant('shared.errors.samePassword');
     }
-    if(control?.hasError('userTaken'))
+    if(control?.hasError('usernameTaken'))
     {
       return this.translate.instant('shared.errors.usernameTaken');
     }

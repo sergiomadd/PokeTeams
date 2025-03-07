@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { lastValueFrom, Observable, timeout } from 'rxjs';
+import { catchError, lastValueFrom, Observable, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { UtilService } from '../../../shared/services/util.service';
 import { TeamService } from '../../team/services/team.service';
@@ -29,18 +29,11 @@ export class UserService
       );
   }
   
-  checkUserNameAvailable(userName: string) : boolean
+  async checkUserNameAvailable(userName: string) : Promise<boolean>
   {
     let available: boolean = true;
-    let url = this.apiUrl + 'check/' + 'email/' + userName;
-    try
-    {
-      this.http.get(url).subscribe();
-    }
-    catch(error)
-    {
-      available = false;
-    }
+    let url = this.apiUrl + 'check/' + 'username/' + userName;
+    await lastValueFrom(this.http.get(url).pipe(catchError(() => [available = false])));
     return available;
   }
 
@@ -48,14 +41,7 @@ export class UserService
   {
     let available: boolean = true;
     let url = this.apiUrl + 'check/' + 'email/' + email;
-    try
-    {
-      this.http.get(url).subscribe();
-    }
-    catch(error)
-    {
-      available = false;
-    }
+    await lastValueFrom(this.http.get(url).pipe(catchError(() => [available = false])));
     return available;
   }
 
