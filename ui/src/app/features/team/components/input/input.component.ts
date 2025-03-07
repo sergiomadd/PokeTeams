@@ -184,9 +184,22 @@ export class InputComponent
     - Sunny Day
     `
 
+    const one = 
+    `
+Zacian @ Banda Focus 
+Ability: Intrepid Sword  
+Level: 50  
+Shiny: Yes  
+EVs: 236 HP / 76 Atk / 4 Def / 4 SpD / 188 Spe  
+Adamant Nature  
+- Behemoth Blade  
+- Play Rough  
+- Sacred Sword  
+- Protect  `
+
     const propaste = 
     `
-Zacian @ Rusted Sword  
+Zacian @ Banda Focus 
 Ability: Intrepid Sword  
 Level: 50  
 Shiny: Yes  
@@ -253,7 +266,7 @@ IVs: 0 Atk
 - Eerie Impulse  
 - Thunder Wave  
 `
-    this.pasteHolder = testPaste;
+    this.pasteHolder = propaste;
     this.pasteBoxForm.controls.paste.setValue(this.pasteHolder);
   }
 

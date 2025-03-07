@@ -15,7 +15,7 @@
   {
     "upload":
     {
-      "generate-button": "Generate Team"
+      "save-button": "Save Team"
     },
     "view":
     {
