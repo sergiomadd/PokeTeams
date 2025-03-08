@@ -21,6 +21,7 @@ export class SmartInputComponent
   @Input() updateOnChange?: boolean;
   @Input() allowCustom?: boolean;
   @Input() allowNew?: boolean;
+  @Input() error?: boolean = false;
   @Input() getter?: (args: any) => Observable<QueryItem[]>
   @Input() allGetter?: (args?: any) => Observable<QueryItem[]>
   @Input() allGetterIndex?: number;

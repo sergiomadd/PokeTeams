@@ -15,7 +15,7 @@
       (keyup.enter)="selectResult(results[activeResult])"
       [attr.disabled]="disabled ? '' : null"
       [readonly]="disabled"
-      [ngClass]="{disabled: disabled}"
+      [ngClass]="{disabled: disabled, controlInvalid: error}"
       >
     </ng-container>
     <ng-template #keep>
