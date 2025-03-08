@@ -1,0 +1,22 @@
+
+.search
+{
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 1s ease;
+}
+
+.search-visible
+{
+  max-height: 25em;
+}
+
+.search-button
+{
+  font-size: 1em;
+}
+
+.button-selected
+{
+  outline: 1px solid var(--text-color);
+}

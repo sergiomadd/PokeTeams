@@ -81,8 +81,6 @@ export class TeamTableComponent
           }
           if(this.paginationForm.controls.teamsPerPage.valid)
           {
-            this.searchService.setQueryTeamsPerPage(value);
-            this.searchService.defaultSearch();
             this.store.dispatch(configActions.changeTeamsPerPage({request: value}))
           }
         }
@@ -94,13 +92,15 @@ export class TeamTableComponent
       })
     this.store.select(selectTeamsPerPage).subscribe(value => 
       {
+        console.log("teasms per page")
         this.searchService.setQueryTeamsPerPage(value);
-        this.searchService.defaultSearch();
+        //this.searchService.defaultSearch();
         this.paginationForm.controls.teamsPerPage.setValue(value);
       })
     this.store.select(selectLang).subscribe(() => 
       {
-        this.searchService.defaultSearch();
+        console.log("teasms per page")
+        //this.searchService.defaultSearch();
       })
   }
 

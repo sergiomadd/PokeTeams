@@ -7,5 +7,10 @@ import { Component } from '@angular/core';
 })
 export class UserTeamsComponent 
 {
+  searchVisible: boolean = false;
 
+  toggleSearch()
+  {
+    this.searchVisible = !this.searchVisible;
+  }
 }

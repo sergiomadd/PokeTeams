@@ -108,7 +108,8 @@
       "item": "Item",
       "intersection": "Teams that match all",
       "union": "Teams that match any",
-      "duplicate-feedback": "Item already added"
+      "duplicate-feedback": "Item already added",
+      "search": "Search"
     },
     "team_table":
     {
