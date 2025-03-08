@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { I18nService } from 'src/app/core/config/services/i18n.service';
@@ -29,6 +29,8 @@ export class TeamSearchComponent
   teamService = inject(TeamService);
   theme = inject(ThemeService);
   i18n = inject(I18nService);
+
+  @Input() userSearch: boolean = false;
 
   chips: Chip[] = [];
   unionType: SetOperation = SetOperation.intersection;

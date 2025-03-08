@@ -6,23 +6,26 @@
         <div class="m-auto w-fit">
           <div class="flex gap-m justify-c-c" 
             [ngClass]="{'grid col-2 col-gap-m': window.isMobile()}">
-            <app-smart-input
-            #userInput
-            [label]="'search.team_search.player' | translate"
-            [keepSelected]="false"
-            [allowCustom]="true"
-            [getter]="queryService.queryUserCallback"
-            (selectEvent)="queryResultSelectEvent($event)"
-            class="col-center item smart-input-wrapper"
-            ></app-smart-input>
+            <ng-container *ngIf="!userSearch">
+              <app-smart-input
+              #userInput
+              [label]="'search.team_search.player' | translate"
+              [keepSelected]="false"
+              [allowCustom]="true"
+              [getter]="queryService.queryUserCallback"
+              (selectEvent)="queryResultSelectEvent($event)"
+              class="item smart-input-wrapper"
+              ></app-smart-input>
+            </ng-container>
             <app-smart-input
             #tournamentInput
             [label]="'search.team_search.tournament' | translate"
             [keepSelected]="false"
             [allowCustom]="true"
             [getter]="queryService.queryTournamentCallback"
+            [allGetter]="queryService.tournamentAllCallback"
             (selectEvent)="queryResultSelectEvent($event)"
-            class="col-center item smart-input-wrapper"
+            class="item smart-input-wrapper"
             ></app-smart-input>
             <app-smart-input
             #regulationInput
@@ -31,7 +34,7 @@
             [getter]="queryService.queryRegulationCallback"
             [allGetter]="queryService.regulationAllCallback"
             (selectEvent)="queryResultSelectEvent($event)"
-            class="col-center item smart-input-wrapper"
+            class="item smart-input-wrapper"
             ></app-smart-input>
             <app-smart-input
             #tagInput
@@ -40,7 +43,7 @@
             [getter]="queryService.queryTagCallback"
             [allGetter]="queryService.tagAllCallback"
             (selectEvent)="queryResultSelectEvent($event)"
-            class="col-center item smart-input-wrapper"
+            class="item smart-input-wrapper"
             ></app-smart-input>
           </div>
           <div class="flex gap-m justify-c-c" 
@@ -51,7 +54,7 @@
             [keepSelected]="false"
             [getter]="queryService.queryPokemonCallback"
             (selectEvent)="queryResultSelectEvent($event)"
-            class="col-center item smart-input-wrapper"
+            class="item smart-input-wrapper"
             ></app-smart-input>
             <app-smart-input
             #moveInput
@@ -59,7 +62,7 @@
             [keepSelected]="false"
             [getter]="queryService.queryMoveCallback"
             (selectEvent)="queryResultSelectEvent($event)"
-            class="col-center item smart-input-wrapper"
+            class="item smart-input-wrapper"
             ></app-smart-input>
             <app-smart-input
             #itemInput
@@ -67,7 +70,7 @@
             [keepSelected]="false"
             [getter]="queryService.queryItemCallback"
             (selectEvent)="queryResultSelectEvent($event)"
-            class="col-center item smart-input-wrapper"
+            class="item smart-input-wrapper"
             ></app-smart-input>
           </div>
         </div>
