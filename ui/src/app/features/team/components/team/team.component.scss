@@ -27,11 +27,6 @@ $teamWidth: calc($pokemonCardWidth * 2 + 0.8em);
   cursor: pointer;
 }
 
-.detail-text
-{
-  overflow: hidden;
-}
-
 .active
 {
   outline: 1px solid var(--text-color);

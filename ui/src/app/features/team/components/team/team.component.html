@@ -25,7 +25,7 @@
             <ng-container *ngIf="team?.player?.picture">
               <img src="{{team?.player?.picture}}" alt="" class="icon">
             </ng-container>
-            {{team?.player?.username}}
+            <span class="no-overflow">{{team?.player?.username}}</span>
           </div>
         </ng-container>
         <ng-template #unregistered>
@@ -33,7 +33,7 @@
             <div class=" flex justify-c-s">
               <svg class="icon" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color-secondary)" stroke="none"> <path d="M2386 4790 c-140 -22 -309 -82 -425 -149 -106 -63 -183 -125 -278 -225 -144 -153 -232 -314 -290 -534 -24 -88 -26 -115 -27 -282 0 -169 3 -194 26 -282 37 -134 88 -255 150 -356 60 -96 209 -258 291 -317 31 -22 56 -42 57 -45 0 -4 -17 -12 -37 -19 -21 -8 -86 -37 -144 -66 -488 -242 -855 -693 -992 -1220 -48 -184 -58 -273 -64 -565 -5 -273 -4 -275 19 -320 15 -29 37 -53 63 -67 l40 -23 1785 0 1785 0 39 23 c22 12 49 38 60 57 20 33 21 51 21 295 0 286 -10 395 -55 572 -115 456 -382 843 -770 1115 -85 60 -246 148 -337 184 -40 16 -73 31 -73 34 0 3 15 14 32 25 47 28 202 179 254 249 99 132 164 268 212 445 23 87 25 114 25 281 0 167 -2 194 -25 281 -68 253 -169 423 -352 596 -157 147 -334 242 -546 293 -107 25 -341 36 -444 20z m352 -326 c151 -30 301 -109 419 -218 174 -162 269 -365 280 -601 20 -422 -248 -785 -662 -898 -66 -18 -106 -22 -225 -21 -127 1 -156 4 -233 27 -151 46 -256 107 -366 211 -188 180 -282 419 -268 684 20 402 301 729 702 817 84 19 260 18 353 -1z m125 -2094 c481 -94 896 -409 1112 -845 124 -250 174 -472 175 -777 l0 -108 -1590 0 -1590 0 0 113 c1 299 51 523 175 772 239 481 706 803 1265 869 87 10 349 -3 453 -24z"/> </g> </svg>
             </div>
-            {{team?.player?.username}}
+            <span class="no-overflow">{{team?.player?.username}}</span>
           </div>
         </ng-template>
       </ng-container>
@@ -55,9 +55,7 @@
           <ng-container *ngIf="team?.tournament?.official">
             <img src="assets/img/regionals.png" alt="" class="icon">
           </ng-container>
-          <div class="detail-text">
-            {{team?.tournament?.name}}
-          </div>
+          <span class="no-overflow">{{team?.tournament?.name}}</span>
         </div>
       </ng-container>
       <ng-container *ngIf="team?.regulation">
@@ -168,9 +166,7 @@
     <div class="half flex justify-c-s gap-s">
       <ng-container *ngIf="team?.rentalCode">
         <div class="detail tooltip-wrapper" (click)="copyRentalCode()">
-          <div class="detail-text">
-            #{{team?.rentalCode}}
-          </div>
+          <span class="no-overflow">#{{team?.rentalCode}}</span>
           <app-tooltip
           [text]="rentalCodeCopied ? ('shared.copySuccess' | translate) : ('team.team.rental_code-tooltip' | translate)"
           [side]="'top'"
@@ -181,12 +177,12 @@
     <div class="half flex justify-c-e gap-s">
       <ng-container *ngIf="team?.viewCount">
         <div class="detail">
-          {{team?.viewCount}}
+          <span class="no-overflow">{{team?.viewCount}}</span>
         </div>
       </ng-container>
       <ng-container *ngIf="team?.date">
         <div class="detail">
-          {{util.customFormatDate(team?.date!)}} 
+          <span class="no-overflow">{{util.customFormatDate(team?.date!)}} </span>
         </div>
       </ng-container>
     </div>
