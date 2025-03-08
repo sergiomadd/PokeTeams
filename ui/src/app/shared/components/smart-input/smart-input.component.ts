@@ -20,6 +20,7 @@ export class SmartInputComponent
   @Input() disableRemove?: boolean = false;
   @Input() updateOnChange?: boolean;
   @Input() allowCustom?: boolean;
+  @Input() customType?: string;
   @Input() allowNew?: boolean;
   @Input() error?: boolean = false;
   @Input() getter?: (args: any) => Observable<QueryItem[]>
@@ -77,21 +78,23 @@ export class SmartInputComponent
   position: number = 0;
   searching: boolean = false;
 
-  customQueryResult: QueryItem = 
-  {
-    name: "",
-    identifier: ""
-  }
+  customQueryResult!: QueryItem
 
   async ngOnInit()
   {
+    this.customQueryResult = 
+    {
+      name: "",
+      identifier: "",
+      type: this.customType ?? "new"
+    }
     if(this.allowCustom)
     {
       this.results[0] = 
       {
         name: "",
         identifier: "new",
-        type: "New"
+        type: this.customType ?? "new"
       }
     }
     this.searchForm.controls.key.valueChanges.subscribe(async (value) => 
@@ -150,7 +153,6 @@ export class SmartInputComponent
             if(this.allowCustom)
             {
               this.customQueryResult.name = key;
-              this.customQueryResult.identifier = "new";
               this.results = [this.customQueryResult].concat(this.results);
             }
             this.searching = false;
