@@ -38,13 +38,13 @@ class="team-table flex-col align-i-c w-80"
     </div>
   </div>
   <div class="relative flex-col align-i-c gap-l m-auto w-100">
-    <ng-container *ngIf="searched">
-      <div class="loader-wrapper">
-        <div class="pokemon-spinner"></div>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="teams && teams.length > 0">
-      <div class="w-100 flex wrap align-i-c justify-c-sb gap-l">
+    <div class="w-100 flex wrap justify-c-c align-i-s gap-l"  style="min-height: 60vh;">
+      <ng-container *ngIf="searched">
+        <div class="loader-wrapper">
+          <div class="pokemon-spinner"></div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="teams && teams.length > 0; else noteams">
         <ng-container *ngFor="let team of teams">
           <div class="w-100 record">
             <app-team-preview 
@@ -54,8 +54,14 @@ class="team-table flex-col align-i-c w-80"
             ></app-team-preview>
           </div>
         </ng-container>
-      </div>
-    </ng-container>
+      </ng-container>
+      <ng-template #noteams>
+        <div class="flex align-i-c w-fit b-2 text-c bor-rad-5 pad-l" 
+        style="border: 1px solid var(--bg-color-3); margin-top: 2em;">
+          {{'search.team_table.no_teams' | translate}}
+        </div>
+      </ng-template>
+    </div>
     <div class="pagination">
       <div></div>
       <app-pagination

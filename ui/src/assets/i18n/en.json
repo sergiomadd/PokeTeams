@@ -115,7 +115,8 @@
       "sort_date": "Date",
       "sort_views": "Views",
       "total_teams": " teams",
-      "teams_per_page": "Teams per page: "
+      "teams_per_page": "Teams per page: ",
+      "no_teams": "No results"
     }
   },
   "pokemon": 

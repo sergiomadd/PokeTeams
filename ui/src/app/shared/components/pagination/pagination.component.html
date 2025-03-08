@@ -1,6 +1,6 @@
 
 <div class="m-auto w-fit flex align-i-c gap-m">
-  <ng-container *ngIf="totalItems > 0; else empty">
+  <ng-container *ngIf="totalItems > 0">
     <button 
     (click)="changePage(1)" 
     [disabled]="currentPage === 1"
@@ -85,10 +85,5 @@
     class="page"
     > >> </button>
   </ng-container>
-  <ng-template #empty>
-    <div class="flex align-i-c w-fit b-2 text-c bor-1-b bor-rad-5 pad-l">
-      No results!
-    </div>
-  </ng-template>
 </div>
 
