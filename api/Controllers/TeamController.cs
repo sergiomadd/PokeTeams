@@ -113,11 +113,39 @@ namespace api.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<ActionResult<string>> Post([FromBody] TeamDTO team)
+        [HttpPost, Route("save")]
+        public async Task<ActionResult<string>> SaveTeam([FromBody] TeamDTO team)
         {
-            Team newTeam = await _teamService.SaveTeam(team, User.Identity.Name);
+            string? validation = _teamService.ValidateTeamDTO(team);
+            if(validation != null)
+            {
+                return BadRequest(validation);
+            }
+            Team? newTeam = await _teamService.SaveTeam(team);
+            if (newTeam == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                object response = new
+                {
+                    content = newTeam.Id
+                };
+                return Ok(response);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost, Route("save/anon")]
+        public async Task<ActionResult<string>> SaveTeamAnon([FromBody] TeamDTO team)
+        {
+            string? validation = _teamService.ValidateTeamDTO(team);
+            if (validation != null)
+            {
+                return BadRequest(validation);
+            }
+            Team? newTeam = await _teamService.SaveTeam(team);
             if (newTeam == null)
             {
                 return BadRequest();
@@ -146,7 +174,7 @@ namespace api.Controllers
             {
                 return Unauthorized("Unauthorized");
             }
-            Team? newTeam = await _teamService.UpdateTeam(teamDTO, teamDTO.ID, User.Identity.Name);
+            Team? newTeam = await _teamService.UpdateTeam(teamDTO, teamDTO.ID);
             if (newTeam == null)
             {
                 return BadRequest("Could not update team");

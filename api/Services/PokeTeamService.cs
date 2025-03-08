@@ -38,6 +38,7 @@ using System.Data.Entity.Core.Common.CommandTrees;
 using System.Composition;
 using System.Security.Cryptography.Xml;
 using System.Xml.Serialization;
+using Microsoft.IdentityModel.Tokens;
 
 namespace api.Services
 {
@@ -281,13 +282,64 @@ namespace api.Services
             return pokemonPreviewDTOs;
         }
 
-        public async Task<Team?> SaveTeam(TeamDTO inputTeam, string? loggedUserName)
+        public string? ValidateTeamDTO(TeamDTO inputTeam)
         {
-            Team newTeam = null;
+            if (inputTeam == null)
+            {
+                return "Error uploading team";
+            }
+            if(inputTeam.Player != null && inputTeam.Player.Username != null
+                && inputTeam.Player.Username.Length > 32)
+            {
+                return "Player name must be shorter than 32 characters";
+            }
+            if (inputTeam.RentalCode != null
+                && inputTeam.RentalCode.Length > 32)
+            {
+                return "Rental code must be shorter than 32 characters";
+            }
+            if(!inputTeam.Tags.IsNullOrEmpty())
+            {
+                foreach(TagDTO tag in inputTeam.Tags)
+                {
+                    return ValidateTagDTO(tag);
+                }
+            }
+            return null;
+        }
+
+        public string? ValidateTagDTO(TagDTO tag)
+        {
+            if (tag != null)
+            {
+                if (tag.Name.Length > 16)
+                {
+                    return "Tag name must be shorter than 16 characters";
+                }
+                if (tag.Identifier.Length > 16)
+                {
+                    return "Tag name must be shorter than 16 characters";
+                }
+                if (tag.Description != null && tag.Description.Length > 256)
+                {
+                    return "Tag description must be shorter than 256 characters";
+                }
+                if (tag.Color != null && tag.Color.Length > 8)
+                {
+                    return "Tag color must be shorter than 8 characters";
+                }
+            }
+            return null;
+        }
+
+        public async Task<Team?> SaveTeam(TeamDTO inputTeam)
+        {
+            Team? newTeam = null;
+
             try
             {
                 string teamId = GenerateId(10);
-                Team team = await _pokeTeamContext.Team.FindAsync(teamId);
+                Team? team = await _pokeTeamContext.Team.FindAsync(teamId);
                 //loop maybe too ineficent? seek another way to get unused ids?
                 //is there a way for sql server to auto generate custom ids?
                 while (team != null)
@@ -296,7 +348,7 @@ namespace api.Services
                     team = await _pokeTeamContext.Team.FindAsync(teamId);
                 }
 
-                newTeam = await BreakTeamDTO(inputTeam, teamId, loggedUserName);
+                newTeam = await BreakTeamDTO(inputTeam, teamId);
                 if (newTeam != null)
                 {
                     await _pokeTeamContext.Team.AddAsync(newTeam);
@@ -311,7 +363,7 @@ namespace api.Services
             return newTeam;
         }
 
-        public async Task<Team?> BreakTeamDTO(TeamDTO inputTeam, string newTeamId, string loggedUserName)
+        public async Task<Team?> BreakTeamDTO(TeamDTO inputTeam, string newTeamId)
         {
             Team newTeam = null;
             if (inputTeam != null)
@@ -322,10 +374,11 @@ namespace api.Services
                     pokemons.Add(BreakPokemonDTO(pokemonDTO, newTeamId));
                 }
 
-                User player = null;
-                if (inputTeam.Player != null && inputTeam.Player.Username != null && loggedUserName == inputTeam.Player.Username)
+                User? loggedUser = await _identityService.GetUser();
+                User? player = null;
+                if (inputTeam.Player != null && inputTeam.Player.Username != null && loggedUser != null && loggedUser.UserName == inputTeam.Player.Username)
                 {
-                    player = await _userService.GetUserByUserName(inputTeam.Player.Username);
+                    player = loggedUser;
                 }
 
                 List<Tag> tags = new List<Tag>();
@@ -428,12 +481,12 @@ namespace api.Services
             };
         }
 
-        public async Task<Team?> UpdateTeam(TeamDTO inputTeam, string currentTeamID, string? loggedUserName)
+        public async Task<Team?> UpdateTeam(TeamDTO inputTeam, string currentTeamID)
         {
             Team? newTeam = null;
             try
             {
-                newTeam = await BreakTeamDTO(inputTeam, currentTeamID, loggedUserName);
+                newTeam = await BreakTeamDTO(inputTeam, currentTeamID);
                 if (newTeam != null)
                 {
                     Team? currentTeam = await GetTeamModel(currentTeamID);
@@ -663,12 +716,10 @@ namespace api.Services
 
                 if (searchQuery.Queries != null && searchQuery.Queries.Count > 0)
                 {
-                    ParameterExpression parameter = Expression.Parameter(typeof(Team), "t");
                     List<Expression<Func<Team, bool>>> expressions = await GetExpressions(searchQuery);
-
                     Expression<Func<Team, bool>>? joinedExpressions = null;
                     //Union -> all teams that match any
-                    if (searchQuery.SetOperation.Equals("union"))
+                    if (searchQuery.SetOperation != null && searchQuery.SetOperation.Equals("union"))
                     {
                         joinedExpressions = JoinExpressionsOr(expressions);
                     }
