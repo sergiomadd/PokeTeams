@@ -50,12 +50,12 @@ namespace api.Services
             return tournamentDTOs;
         }
 
-        public async Task<TournamentDTO> GetTournamentByName(string name)
+        public async Task<TournamentDTO> GetTournamentByNormalizedName(string normalizedName)
         {
             TournamentDTO tournamentDTO = null;
-            if (name != null)
+            if (normalizedName != null)
             {
-                Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(name.ToLower());
+                Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(normalizedName);
                 if (tournament != null)
                 {
                     tournamentDTO = BuildTournamentDTO(tournament);
@@ -114,10 +114,10 @@ namespace api.Services
             return queryResults;
         }
 
-        public List<QueryResultDTO> QueryTournamentsByName(string key)
+        public List<QueryResultDTO> QueryTournamentsByNormalizedName(string normalizedName)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Tournament> tournaments = _pokeTeamContext.Tournament.Where(t => t.NormalizedName.Contains(key.ToLower())).OrderByDescending(t => t.StartDate).ToList();
+            List<Tournament> tournaments = _pokeTeamContext.Tournament.Where(t => t.NormalizedName.Contains(normalizedName.ToUpper())).OrderByDescending(t => t.StartDate).ToList();
             if (tournaments != null && tournaments.Count > 0)
             {
                 tournaments.ForEach(tournament =>

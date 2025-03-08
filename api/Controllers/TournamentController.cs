@@ -30,10 +30,10 @@ namespace api.Controllers
             return Ok(tournamentDTOs);
         }
 
-        [HttpGet("{name}")]
-        public async Task<ActionResult<TournamentDTO>> Get(string name)
+        [HttpGet("{normalizedName}")]
+        public async Task<ActionResult<TournamentDTO>> Get(string normalizedName)
         {
-            TournamentDTO tournamentDTO = await _tournamentService.GetTournamentByName(name);
+            TournamentDTO tournamentDTO = await _tournamentService.GetTournamentByNormalizedName(normalizedName);
             if (tournamentDTO == null)
             {
                 return NotFound("Couldn't find tournament");
@@ -75,9 +75,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("query")]
-        public async Task<ActionResult<List<QueryResultDTO>>> QueryTournamentsByName(string key)
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryTournamentsByNormalizedName(string key)
         {
-            List<QueryResultDTO> tournaments = _tournamentService.QueryTournamentsByName(key);
+            List<QueryResultDTO> tournaments = _tournamentService.QueryTournamentsByNormalizedName(key);
             if (tournaments == null)
             {
                 return NotFound("Couldn't find tournaments");
