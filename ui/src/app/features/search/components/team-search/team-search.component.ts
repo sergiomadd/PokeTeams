@@ -46,14 +46,24 @@ export class TeamSearchComponent
     this.searchService.defaultSearch();
   }
 
-  async queryResultSelectEvent($event: QueryItem)
+  async queryResultSelectEvent(event: QueryItem)
   {
     this.feedback = undefined;
-    if(!this.chips.find(t => t.identifier === $event.identifier)) 
+    if(event.type === "user")
     {
-      if($event.type === "tag")
+      this.feedback = this.validatePlayer(event.name);
+      return;
+    }
+    if(event.type === "tournament")
+    {
+      this.feedback = this.validateTournament(event.name);
+      return;
+    }
+    if(!this.chips.find(t => t.identifier === event.identifier)) 
+    {
+      if(event.type === "tag")
       {
-        const tag: Tag = $event as Tag;
+        const tag: Tag = event as Tag;
         const chip: Chip = 
         {
           name: tag.name,
@@ -70,10 +80,10 @@ export class TeamSearchComponent
       {
         const chip: Chip = 
         {
-          name: $event.name,
-          identifier: $event.identifier,
-          iconPath: $event.icon,
-          type: $event.type
+          name: event.name,
+          identifier: event.identifier,
+          iconPath: event.icon,
+          type: event.type
         }
         this.chips?.push(chip);
       }
@@ -99,5 +109,23 @@ export class TeamSearchComponent
     this.chips = [];
     this.searchService.setQueryItems([]);
     this.searchService.defaultSearch();
+  }
+
+  validatePlayer(player: string): string | undefined
+  {
+    if(player.length > 32)
+    {
+      return "Player name must be shorter than 32 characters";
+    }
+    return undefined;
+  }
+
+  validateTournament(tournament: string): string | undefined
+  {
+    if(tournament.length > 256)
+    {
+      return "Tournament name must be shorter than 256 characters";
+    }
+    return undefined;
   }
 }
