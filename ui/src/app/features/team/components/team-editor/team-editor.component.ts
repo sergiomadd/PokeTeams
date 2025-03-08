@@ -1,4 +1,5 @@
 import { Component, inject, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
@@ -35,6 +36,7 @@ export class TeamEditorComponent
   teamEditorService = inject(TeamEditorService);
   translateSergice = inject(TranslateService);
   window = inject(WindowService);
+  formBuilder = inject(FormBuilder);
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
@@ -51,6 +53,8 @@ export class TeamEditorComponent
   feedback?: string;
   teamPrivateFeedback: boolean = false;
   readonly feedbackColors = FeedbackColors;
+  playerError?: string;
+  rentalCodeError?: string;
 
   async ngOnInit() 
   {
@@ -91,10 +95,11 @@ export class TeamEditorComponent
   reset()
   {
     this.teamEditorService.setEmptyTeam();
-  }
+  }  
 
   playerUpdateEvent(event: string)
   {
+    this.playerError = this.teamEditorService.validatePlayer(event);
     if(event)
     {
       this.team.player = 
@@ -102,11 +107,7 @@ export class TeamEditorComponent
         username: event,
         picture: undefined,
         registered: false
-      };
-    }
-    else
-    {
-      this.team.player = undefined;
+      };        
     }
   }
 
@@ -128,9 +129,13 @@ export class TeamEditorComponent
     this.team.regulation = event ? await this.teamService.getRegulationByIdentifier(event.identifier) : undefined;
   }
 
-  async rentalCodeSelectEvent(event: string)
+  rentalCodeSelectEvent(event: string)
   {
-    this.team.rentalCode = event ?? undefined;
+    this.rentalCodeError = this.teamEditorService.validateRentalCode(event);
+    if(event)
+    {
+      this.team.rentalCode = event 
+    }
   }
 
   @ViewChild(TagEditorComponent) tagEditorComponent!: TagEditorComponent;

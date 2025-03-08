@@ -165,7 +165,7 @@
   <div class="flex full">
     <div class="half flex justify-c-s gap-s">
       <ng-container *ngIf="team?.rentalCode">
-        <div class="detail tooltip-wrapper" (click)="copyRentalCode()">
+        <div class="detail tooltip-wrapper flex" (click)="copyRentalCode()">
           <span class="no-overflow">#{{team?.rentalCode}}</span>
           <app-tooltip
           [text]="rentalCodeCopied ? ('shared.copySuccess' | translate) : ('team.team.rental_code-tooltip' | translate)"

@@ -85,28 +85,45 @@ export class TeamEditorService
 
   validateTeam(team: Team): string | undefined
   {
-    if(team.pokemons.length > 0 
-      && team.pokemons.length <= 6 
-      && team.pokemons.some(p => p && p.dexNumber)) //If dexNumber is undefined -> empty pokemon
-    {
-      return undefined;
-    }
-    else if(team.pokemons.length <= 0)
+    if(team.pokemons.length <= 0)
     {
       return "No pokemons loaded";
     }
-    else if(team.pokemons.length > 6)
+    if(team.pokemons.length > 6)
     {
       return "Too many pokemons, max is 6";
     }
-    else if(team.pokemons.some(p => p && !p.dexNumber))
+    if(team.pokemons.some(p => p && !p.dexNumber))
     {
       return "There are empty pokemons";
     }
-    else
+    if(team.player?.username && this.validatePlayer(team.player?.username))
     {
-      return "Error uploading team";
+      return "Player name must be shorter than 32 characters"; 
     }
+    if(team.rentalCode && this.validatePlayer(team.rentalCode))
+    {
+      return "Rental code must be shorter than 32 characters";
+    }
+    return undefined;
+  }
+
+  validatePlayer(player: string): string | undefined
+  {
+    if(player.length > 32)
+    {
+      return "Player name must be shorter than 32 characters";
+    }
+    return undefined;
+  }
+
+  validateRentalCode(rentalCode: string): string | undefined
+  {
+    if(rentalCode.length > 32)
+    {
+      return "Rental code must be shorter than 32 characters";
+    }
+    return undefined;
   }
 
   setEmptyTeam()

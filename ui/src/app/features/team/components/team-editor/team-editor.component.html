@@ -30,6 +30,7 @@
           [value]="loggedUser"
           [disableRemove]="true"
           [updateOnChange]="true"
+          [error]="playerError ? true : false"
           (updateEvent)="playerUpdateEvent($event)"
           class="smart-input-wrapper input-m"
           ></app-smart-input>
@@ -73,6 +74,7 @@
             <app-smart-input
             [label]="'team.editor.rental_code-label' | translate"
             [updateOnChange]="true"
+            [error]="rentalCodeError ? true : false"
             (updateEvent)="rentalCodeSelectEvent($event)"
             class="smart-input-wrapper input-m"
             ></app-smart-input>      
@@ -131,7 +133,7 @@
           ></app-checkbox>
         </div>
         <ng-container *ngIf="teamPrivateFeedback">
-          <div class="feedback">
+          <div class="text-center">
             <span class="formFeedbackError text-center">
               {{'team.editor.visibility_false-feedback' | translate}}
             </span>
@@ -139,10 +141,10 @@
         </ng-container>
       </div>
     </ng-container>
-    <div class="feedback">
-      <span class="formFeedbackError text-center">
-        {{feedback}}
-      </span>
+    <div class="flex flex-col gap-s justify-c-c align-i-c text-center">
+      <span class="formFeedbackError">{{feedback}}</span>
+      <span class="formFeedbackError">{{playerError}}</span>
+      <span class="formFeedbackError">{{rentalCodeError}}</span>
     </div>
   </div>
   <div class="team-holder">
