@@ -116,6 +116,7 @@
       "sort_date": "Date",
       "sort_views": "Views",
       "total_teams": " teams",
+      "total_teams_single": " team",
       "teams_per_page": "Teams per page: ",
       "no_teams": "No results"
     }
