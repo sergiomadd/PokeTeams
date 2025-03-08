@@ -689,6 +689,27 @@ namespace api.Services
             }
         }
 
+        public string? ValidateTeamSearchQueryDTO(TeamSearchQueryDTO searchQuery)
+        {
+            if(searchQuery == null)
+            {
+                return "Query not found";
+            }
+            if (searchQuery.TeamsPerPage == null || searchQuery.TeamsPerPage < 0 || searchQuery.TeamsPerPage > 100)
+            {
+                return "Wrong teams per page";
+            }
+            if (!searchQuery.Queries.IsNullOrEmpty() && searchQuery.Queries.Any(q => q.Type == "user" && q.Name.Length > 32))
+            {
+                return "Player name must be shorter than 32 characters";
+            }
+            if (!searchQuery.Queries.IsNullOrEmpty() && searchQuery.Queries.Any(q => q.Type == "tournament" && q.Name.Length > 256))
+            {
+                return "Tournament name must be shorter than 32 characters";
+            }
+            return null;
+        }
+
         public async Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery, int langId)
         {
             List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();

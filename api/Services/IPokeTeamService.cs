@@ -21,6 +21,7 @@ namespace api.Services
         public Task<bool> DeleteTeamById(string teamId);
         public Task<bool> DeleteUserTeams(User user);
         public Task<string> IncrementTeamViewCount(string teamKey);
+        public string? ValidateTeamSearchQueryDTO(TeamSearchQueryDTO searchQuery);
         public Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery, int langId);
     }
 }

@@ -230,6 +230,12 @@ namespace api.Controllers
         [HttpPost, Route("query")]
         public async Task<ActionResult<TeamSearchQueryResponseDTO>> QueryTeams(TeamSearchQueryDTO key)
         {
+            string? validation = _teamService.ValidateTeamSearchQueryDTO(key);
+            if (validation != null)
+            {
+                return NotFound(validation);
+            }
+
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
