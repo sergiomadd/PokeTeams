@@ -89,7 +89,7 @@ export class TeamSearchComponent
       }
       this.searchService.setQueryItems(this.chips);
     }
-    else { this.feedback =  this.i18n.translatekey('search.team_search.duplicate-feedback')}
+    else { this.feedback =  this.i18n.translateKey('search.team_search.duplicate-feedback')}
   }
 
   chipRemoveEvent($event)
@@ -115,7 +115,7 @@ export class TeamSearchComponent
   {
     if(player.length > 32)
     {
-      return "Player name must be shorter than 32 characters";
+      return this.i18n.translateKeyWithParameters('team.editor.errors.player', { maxlength: 32 });
     }
     return undefined;
   }
@@ -124,7 +124,7 @@ export class TeamSearchComponent
   {
     if(tournament.length > 256)
     {
-      return "Tournament name must be shorter than 256 characters";
+      return this.i18n.translateKeyWithParameters('team.editor.errors.tournament', { maxlength: 256 });
     }
     return undefined;
   }

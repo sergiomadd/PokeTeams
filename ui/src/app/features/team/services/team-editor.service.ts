@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { I18nService } from 'src/app/core/config/services/i18n.service';
 import { Pokemon } from '../../pokemon/models/pokemon.model';
 import { PokemonService } from '../../pokemon/services/pokemon.service';
 import { Team } from '../models/team.model';
@@ -11,6 +12,7 @@ import { TeamOptions } from '../models/teamOptions.model';
 export class TeamEditorService 
 {
   pokemonService = inject(PokemonService);
+  i18n = inject(I18nService);
 
   private team$: BehaviorSubject<Team> = new BehaviorSubject<Team>(<Team>{});
   selectedTeam$ = this.team$.asObservable();
@@ -87,23 +89,23 @@ export class TeamEditorService
   {
     if(team.pokemons.length <= 0)
     {
-      return "No pokemons loaded";
+      return this.i18n.translateKey('team.editor.errors.no_pokemons');
     }
     if(team.pokemons.length > 6)
     {
-      return "Too many pokemons, max is 6";
+      return this.i18n.translateKeyWithParameters('team.editor.errors.too_many_pokemons', { max: 6 });
     }
     if(team.pokemons.some(p => p && !p.dexNumber))
     {
-      return "There are empty pokemons";
+      return this.i18n.translateKey('team.editor.errors.empty_pokemons');
     }
     if(team.player?.username && this.validatePlayer(team.player?.username))
     {
-      return "Player name must be shorter than 32 characters"; 
+      return this.i18n.translateKeyWithParameters('team.editor.errors.player', { maxlength: 32 });
     }
     if(team.rentalCode && this.validatePlayer(team.rentalCode))
     {
-      return "Rental code must be shorter than 32 characters";
+      return this.i18n.translateKeyWithParameters('team.editor.errors.rental_Code', { maxlength: 32 });
     }
     return undefined;
   }
@@ -112,7 +114,7 @@ export class TeamEditorService
   {
     if(player.length > 32)
     {
-      return "Player name must be shorter than 32 characters";
+      return this.i18n.translateKeyWithParameters('team.editor.errors.player', { maxlength: 32 });
     }
     return undefined;
   }
@@ -121,7 +123,7 @@ export class TeamEditorService
   {
     if(rentalCode.length > 32)
     {
-      return "Rental code must be shorter than 32 characters";
+      return this.i18n.translateKeyWithParameters('team.editor.errors.rental_Code', { maxlength: 32 });
     }
     return undefined;
   }

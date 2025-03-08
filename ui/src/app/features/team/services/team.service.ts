@@ -61,14 +61,14 @@ export class TeamService
   {
     let pokemonPreview: PokemonPreview = <PokemonPreview>{}
     let url = this.apiUrl + 'team/pokemon/preview/' + id;
-    pokemonPreview = await lastValueFrom(this.http.get<PokemonPreview>(url));
+    pokemonPreview = await lastValueFrom(this.http.get<PokemonPreview>(url).pipe(timeout(this.dataTimeout * 2)));
     return pokemonPreview;
   }
   
   getTeamPokemonPreviews(teamID: string) : Observable<PokemonPreview[]>
   {
     let url = this.apiUrl + 'team/pokemon-previews/' + teamID;
-    return this.http.get<PokemonPreview[]>(url);
+    return this.http.get<PokemonPreview[]>(url).pipe(timeout(this.dataTimeout * 2));
   }
 
   saveTeam(team: Team): Observable<TeamSaveResponse>

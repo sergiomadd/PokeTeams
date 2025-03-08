@@ -1,7 +1,7 @@
 
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { I18nService } from 'src/app/core/config/services/i18n.service';
 import { Item } from 'src/app/features/pokemon/models/item.model';
 import { Tag } from 'src/app/features/team/models/tag.model';
 import { Ability } from '../../features/pokemon/models/ability.model';
@@ -17,7 +17,7 @@ import { QueryItem } from '../models/queryResult.model';
 })
 export class UtilService 
 {
-  translate = inject(TranslateService);
+  i18n = inject(I18nService);
 
   constructor() 
   {
@@ -54,59 +54,59 @@ export class UtilService
   {
     if(control?.hasError('required'))
     {
-      return this.translate.instant('shared.errors.required');
+      return this.i18n.translateKey('shared.errors.required');
     }
     if(control?.hasError('minlength'))
     {
-      return this.translate.instant('shared.errors.minlength', {"minlength": control?.getError('minlength')['requiredLength']});
+      return this.i18n.translateKeyWithParameters('shared.errors.minlength', {"minlength": control?.getError('minlength')['requiredLength']});
     }
     if(control?.hasError('maxlength'))
     {
-      return this.translate.instant('shared.errors.maxlength', {"maxlength": control.getError('maxlength')['requiredLength']});
+      return this.i18n.translateKeyWithParameters('shared.errors.maxlength', {"maxlength": control.getError('maxlength')['requiredLength']});
     }
     if(control?.hasError('email'))
     {
-      return this.translate.instant('shared.errors.email');
+      return this.i18n.translateKey('shared.errors.email');
     }
     if(control?.hasError('passwordMismatch'))
     {
-      return this.translate.instant('shared.errors.passwordMismatch');
+      return this.i18n.translateKey('shared.errors.passwordMismatch');
     }
     if(control?.hasError('samePassword'))
     {
-      return this.translate.instant('shared.errors.samePassword');
+      return this.i18n.translateKey('shared.errors.samePassword');
     }
     if(control?.hasError('usernameTaken'))
     {
-      return this.translate.instant('shared.errors.usernameTaken');
+      return this.i18n.translateKey('shared.errors.usernameTaken');
     }
     if(control?.hasError('emailTaken'))
     {
-      return this.translate.instant('shared.errors.emailTaken');
+      return this.i18n.translateKey('shared.errors.emailTaken');
     }
     if(control?.hasError('tournamentTaken'))
     {
-      return this.translate.instant('shared.errors.tournamentTaken');
+      return this.i18n.translateKey('shared.errors.tournamentTaken');
     }
     if(control?.hasError('tagTaken'))
     {
-      return this.translate.instant('shared.errors.tagTaken');
+      return this.i18n.translateKey('shared.errors.tagTaken');
     }
     if(control?.hasError('notLoggedUserName'))
     {
-      return this.translate.instant('shared.errors.notLoggedUserName');
+      return this.i18n.translateKey('shared.errors.notLoggedUserName');
     }
     if(control?.hasError('min'))
     {
-      return this.translate.instant('shared.errors.min', {"min": control.getError('min')['min']});
+      return this.i18n.translateKeyWithParameters('shared.errors.min', {"min": control.getError('min')['min']});
     }
     if(control?.hasError('max'))
     {
-      return this.translate.instant('shared.errors.max', {"max": control.getError('max')['max']});
+      return this.i18n.translateKeyWithParameters('shared.errors.max', {"max": control.getError('max')['max']});
     }
     if(control?.hasError('nan'))
     {
-      return this.translate.instant('shared.errors.nan');
+      return this.i18n.translateKey('shared.errors.nan');
     }
     return "error";
   }

@@ -46,8 +46,13 @@ export class I18nService
     return of(language)
   }
 
-  translatekey(key: string): string
+  translateKey(key: string): string
   {
     return this.translate.instant(key);
+  }
+
+  translateKeyWithParameters(key: string, parameters: object): string
+  {
+    return this.translate.instant(key, parameters);
   }
 }

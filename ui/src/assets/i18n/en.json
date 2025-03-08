@@ -36,7 +36,16 @@
       "tag_input-feedback": "Tag already added",
       "rental_code-label": "Rental Code",
       "visibility-label": "Privacy",
-      "visibility_false-feedback": "Team is private. Check team to select others."
+      "visibility_false-feedback": "Team is private. Check team to select others.",
+      "errors": 
+      {
+        "no_pokemons": "No pokemons loaded",
+        "too_many_pokemons": "Too many pokemons, max is {{max}}",
+        "empty_pokemons": "There are empty pokemons",
+        "player": "Player name must be shorter than {{maxlength}} characters",
+        "tournament": "Tournament name must be shorter than {{maxlength}} characters",
+        "rental_Code": "Rental code must be shorter than {{maxlength}} characters"
+      }
     },
     "input":
     {
