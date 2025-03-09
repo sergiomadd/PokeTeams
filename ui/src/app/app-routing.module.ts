@@ -11,7 +11,7 @@ import { NotFoundComponent } from './shared/components/not-found/not-found.compo
 
 
 const routes: Routes = [
-  { path: '', component: UploadComponent},
+  { path: '', component: UploadComponent, pathMatch: 'full'},
   { path: 'search', component: SearchPageComponent},
   { path: 'emailconfirmation', component: EmailConfirmationComponent },
   {
