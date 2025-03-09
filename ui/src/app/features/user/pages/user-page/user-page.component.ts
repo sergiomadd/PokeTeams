@@ -1,7 +1,9 @@
 import { Component, inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { selectLoggedUser } from 'src/app/core/auth/store/auth.selectors';
+import { selectLang } from 'src/app/core/config/store/config.selectors';
 import { SearchService } from 'src/app/features/search/services/search.service';
 import { TeamPreviewData } from 'src/app/features/team/models/teamPreviewData.model';
 import { User } from '../../models/user.model';
@@ -20,6 +22,8 @@ export class UserPageComponent
   store = inject(Store);
   searchService = inject(SearchService);
   route = inject(ActivatedRoute);
+
+  selectedLang$: Observable<string> = this.store.select(selectLang);
 
   @Input() username?: string;
 
@@ -68,8 +72,11 @@ export class UserPageComponent
         {
           this.userTeams = value;
         })
-
       })
+    this.selectedLang$.subscribe(value =>
+      {
+        this.load();
+      });
   }
 
   updateUser(username: string)

@@ -1,5 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { selectLang } from 'src/app/core/config/store/config.selectors';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { PokemonService } from 'src/app/features/pokemon/services/pokemon.service';
 import { Team } from 'src/app/features/team/models/team.model';
@@ -20,6 +23,9 @@ export class InputComponent
   formBuilder = inject(FormBuilder);
   util = inject(UtilService);
   window = inject(WindowService);
+  store = inject(Store);
+
+  selectedLang$: Observable<string> = this.store.select(selectLang);
 
   pasteBoxFormSubmitted: boolean = false;
   pasteBoxForm = this.formBuilder.group(
@@ -50,6 +56,13 @@ export class InputComponent
           this.pasteBoxFormSubmitted = false;
         }
       })
+    this.selectedLang$.subscribe(value =>
+      {
+        if(this.pasteBoxForm.controls.paste.value)
+        {
+          this.load();
+        }
+      });
   }
 
   async load()
