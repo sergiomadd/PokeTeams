@@ -504,6 +504,7 @@ namespace api.Services
                 currentTeam.ViewCount = newTeam.ViewCount;
                 currentTeam.DateCreated = newTeam.DateCreated;
                 currentTeam.Visibility = newTeam.Visibility;
+                currentTeam.RentalCode = newTeam.RentalCode;
                 return true;
             }
             catch (Exception ex)
