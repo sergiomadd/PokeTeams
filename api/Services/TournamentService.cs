@@ -32,6 +32,7 @@ namespace api.Services
                     CountryCode = tournament.CountryCode,
                     Official = tournament.Official,
                     Category = tournament.Category,
+                    Icon = GetTournamentIcon(tournament.Category),
                     StartDate = tournament.StartDate,
                     EndDate = tournament.EndDate
                 };
@@ -90,26 +91,7 @@ namespace api.Services
             List<Tournament> tournaments = _pokeTeamContext.Tournament.OrderByDescending(t => t.StartDate).ToList();
             foreach (Tournament tournament in tournaments)
             {
-                string? path = null;
-                switch (tournament.Category)
-                {
-                    case "regional":
-                        path = "https://localhost:7134/images/vgc/regionals.png";
-                        break;
-                    case "special":
-                        path = "https://localhost:7134/images/vgc/regionals.png";
-                        break;
-                    case "international":
-                        path = "https://localhost:7134/images/vgc/internationals.png";
-                        break;
-                    case "world":
-                        path = "https://localhost:7134/images/vgc/worlds.png";
-                        break;
-                    default:
-                        path = null;
-                        break;
-                }
-                queryResults.Add(new QueryResultDTO(tournament.ShortName, tournament.NormalizedName, type: "tournament", icon: path));
+                queryResults.Add(new QueryResultDTO(tournament.ShortName, tournament.NormalizedName, type: "tournament", icon: GetTournamentIcon(tournament.Category)));
             }
             return queryResults;
         }
@@ -122,26 +104,8 @@ namespace api.Services
             {
                 tournaments.ForEach(tournament =>
                 {
-                    string? path = null;
-                    switch(tournament.Category)
-                    {
-                        case "regional":
-                            path = "https://localhost:7134/images/vgc/regionals.png";
-                            break;
-                        case "special":
-                            path = "https://localhost:7134/images/vgc/regionals.png";
-                            break;
-                        case "international":
-                            path = "https://localhost:7134/images/vgc/internationals.png";
-                            break;
-                        case "world":
-                            path = "https://localhost:7134/images/vgc/worlds.png";
-                            break;
-                        default:
-                            path = null;
-                            break;
-                    }
-                    queryResults.Add(new QueryResultDTO(tournament.ShortName, tournament.NormalizedName, type: "tournament", icon: path));
+
+                    queryResults.Add(new QueryResultDTO(tournament.ShortName, tournament.NormalizedName, type: "tournament", icon: GetTournamentIcon(tournament.Category)));
                 });
             }
             return queryResults;
@@ -155,6 +119,30 @@ namespace api.Services
                 return false;
             }
             return true;
+        }
+
+        public string? GetTournamentIcon(string? category)
+        {
+            string? path = null;
+            switch (category)
+            {
+                case "regional":
+                    path = "https://localhost:7134/images/vgc/regionals.png";
+                    break;
+                case "special":
+                    path = "https://localhost:7134/images/vgc/regionals.png";
+                    break;
+                case "international":
+                    path = "https://localhost:7134/images/vgc/internationals.png";
+                    break;
+                case "world":
+                    path = "https://localhost:7134/images/vgc/worlds.png";
+                    break;
+                default:
+                    path = null;
+                    break;
+            }
+            return path;
         }
     }
 }

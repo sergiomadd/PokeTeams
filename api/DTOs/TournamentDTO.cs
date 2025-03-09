@@ -11,6 +11,7 @@ namespace api.DTOs
         public string? CountryCode { get; set; }
         public bool Official { get; set; }
         public string? Category { get; set; }
+        public string? Icon { get; set; }
         public DateOnly? StartDate { get; set; }
         public DateOnly? EndDate { get; set; }
     }
