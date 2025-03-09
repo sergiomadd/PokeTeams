@@ -295,6 +295,10 @@ namespace api.Controllers
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewUserName != null)
             {
+                if (updateData == null || !ModelState.IsValid)
+                {
+                    return BadRequest("Form invalid");
+                }
                 User newUser = await _userService.GetUserByUserName(updateData.NewUserName);
                 if (newUser != null)
                 {
@@ -343,6 +347,10 @@ namespace api.Controllers
             Printer.Log($"Updating email of {updateData.CurrentUserName}");
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewEmail != null)
             {
+                if (updateData == null || !ModelState.IsValid)
+                {
+                    return BadRequest("Form invalid");
+                }
                 User newUser = await _userManager.FindByEmailAsync(updateData.NewEmail);
                 if (newUser != null)
                 {
@@ -435,6 +443,10 @@ namespace api.Controllers
             if (updateData != null && updateData.CurrentUserName != null
                 && updateData.CurrentPassword != null && updateData.NewPassword != null)
             {
+                if (updateData == null || !ModelState.IsValid)
+                {
+                    return BadRequest("Form invalid");
+                }
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
@@ -463,6 +475,10 @@ namespace api.Controllers
             Printer.Log("Trying to change name of ", updateData.CurrentUserName);
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewName != null)
             {
+                if (updateData == null || !ModelState.IsValid)
+                {
+                    return BadRequest("Form invalid");
+                }
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
@@ -491,6 +507,10 @@ namespace api.Controllers
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewPictureKey != null)
             {
+                if (updateData == null || !ModelState.IsValid)
+                {
+                    return BadRequest("Form invalid");
+                }
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
@@ -520,6 +540,10 @@ namespace api.Controllers
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewCountryCode != null)
             {
+                if (updateData == null || !ModelState.IsValid)
+                {
+                    return BadRequest("Form invalid");
+                }
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
@@ -631,7 +655,7 @@ namespace api.Controllers
         }
 
         //Make so only admin -> remove for production
-
+        /*
         [HttpPost, Route("delete/{userName}")]
         public async Task<ActionResult<UserDTO>> DeleteUserByUserName(string userName)
         {
@@ -652,6 +676,6 @@ namespace api.Controllers
             }
             return Ok();
         }
-        
+        */
     }
 }
