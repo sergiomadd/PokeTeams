@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Tag } from 'src/app/features/team/models/tag.model';
+import { Chip } from '../../models/chip.model';
 
 
 @Component({
@@ -9,12 +9,12 @@ import { Tag } from 'src/app/features/team/models/tag.model';
 })
 export class DropdownComponent 
 {
-  @Input() options?: Tag[];
-  @Input() selectedOption?: Tag;
+  @Input() options?: Chip[];
+  @Input() selectedOption?: Chip;
   @Input() onlyIcon?: boolean;
   @Input() disable?: boolean;
   
-  @Output() selectEvent = new EventEmitter<Tag>();
+  @Output() selectEvent = new EventEmitter<Chip>();
 
   showOptions?: boolean = false;
 

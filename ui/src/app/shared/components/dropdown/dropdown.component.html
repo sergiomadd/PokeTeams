@@ -13,8 +13,8 @@ class="dropdown"
     <div
     class="option selected"
     >
-      <ng-container *ngIf="selectedOption?.icon">
-        <img [attr.src]="selectedOption?.icon" alt="selectedOption?.name" class="icon" fill>
+      <ng-container *ngIf="selectedOption?.iconPath">
+        <img [attr.src]="selectedOption?.iconPath" alt="selectedOption?.name" class="icon" fill>
       </ng-container>
       {{selectedOption ? (selectedOption.name | translate) : ''}}
     </div>
@@ -40,8 +40,8 @@ class="dropdown"
       [ngClass]="{'only-icon-option': onlyIcon}"
       (click)="onSelect(option)"
       >
-        <ng-container *ngIf="option.icon">
-          <img [attr.src]="option.icon" alt="" class="icon-small" fill>
+        <ng-container *ngIf="option.iconPath">
+          <img [attr.src]="option.iconPath" alt="" class="icon-small" fill>
         </ng-container>
         <ng-container *ngIf="!onlyIcon">
           {{option.name | translate}}
