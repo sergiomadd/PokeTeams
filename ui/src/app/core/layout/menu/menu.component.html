@@ -71,8 +71,8 @@
     >
       <div class="w-100 relative">
         <app-dropdown
-        [options]="getLangsTags()"
-        [selectedOption]="selectedLangTag"
+        [options]="langChips"
+        [selectedOption]="selectedLangChip"
         [onlyIcon]="!menuOpen"
         (selectEvent)="selectLang($event)"
         ></app-dropdown>

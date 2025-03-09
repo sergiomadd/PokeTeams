@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { ThemeService } from 'src/app/core/config/services/theme.service';
-import { Tag } from 'src/app/features/team/models/tag.model';
 import { User } from 'src/app/features/user/models/user.model';
+import { Chip } from 'src/app/shared/models/chip.model';
 import { selectLoggedUser } from '../../auth/store/auth.selectors';
 import { flags, Lang, langs } from '../../config/models/lang.enum';
 import { I18nService } from '../../config/services/i18n.service';
@@ -25,8 +25,6 @@ export class MenuComponent
   themes = inject(ThemeService);
   themeService = inject(ThemeService);
   i18n = inject(I18nService);
-  lang = Lang;
-  langs = langs;
   window = inject(WindowService);
 
   @Input() menuOpen: boolean = true;
@@ -37,11 +35,16 @@ export class MenuComponent
   loggedUser?: User;
   selectedLang$: Observable<string> = this.store.select(selectLang);
   selectedLang?: string;
-  selectedLangTag?: Tag;
+  selectedLangChip?: Chip;
   rotationAngle: number = 0;
+
+  lang = Lang;
+  langs = langs;
+  langChips: Chip[] = []
 
   ngOnInit()
   { 
+    this.loadLangsTags();
     this.loggedUser$.subscribe(value =>
       {
         this.loggedUser = value ?? undefined;
@@ -51,11 +54,11 @@ export class MenuComponent
         this.selectedLang = value;
         if(value)
         {
-          this.selectedLangTag = 
+          this.selectedLangChip = 
           {
             name: `lang.${value}`,
             identifier: value,
-            icon: `https://localhost:7134/images/sprites/flags/${flags[langs.indexOf(value)]}.svg`
+            iconPath: `https://localhost:7134/images/sprites/flags/${flags[langs.indexOf(value)]}.svg`
           }
         }
       })
@@ -96,20 +99,18 @@ export class MenuComponent
     this.store.dispatch(configActions.changeLang({request: event.identifier}))
   }
   
-  getLangsTags(): Tag[]
+  loadLangsTags()
   {
-    let tags: Tag[] = [];
     for(let i = 0; i < langs.length; i++)
     {
-      tags.push(
+      this.langChips.push(
         {
           name: `lang.${langs[i]}`,
           identifier: langs[i],
-          icon: `https://localhost:7134/images/sprites/flags/${flags[i]}.svg`
+          iconPath: `https://localhost:7134/images/sprites/flags/${flags[i]}.svg`
         }
       )
     }
-    return tags;
   }
 
   onClickOutside()
