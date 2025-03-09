@@ -52,12 +52,12 @@ export class TeamSearchComponent
     if(event.type === "user")
     {
       this.feedback = this.validatePlayer(event.name);
-      return;
+      if(this.feedback) { return; }
     }
     if(event.type === "tournament")
     {
       this.feedback = this.validateTournament(event.name);
-      return;
+      if(this.feedback) { return; }
     }
     if(!this.chips.find(t => t.identifier === event.identifier)) 
     {
