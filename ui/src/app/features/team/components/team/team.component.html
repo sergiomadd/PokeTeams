@@ -52,8 +52,8 @@
       </ng-template>
       <ng-container *ngIf="team?.tournament">
         <div class="detail flex align-i-c">
-          <ng-container *ngIf="team?.tournament?.official">
-            <img src="assets/img/regionals.png" alt="" class="icon">
+          <ng-container *ngIf="team?.tournament?.icon">
+            <img src="{{team?.tournament?.icon}}" alt="{{team?.tournament?.name}}" class="icon-m">
           </ng-container>
           <span class="no-overflow">{{team?.tournament?.name}}</span>
         </div>

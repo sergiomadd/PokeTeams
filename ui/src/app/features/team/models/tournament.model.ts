@@ -5,6 +5,7 @@ export interface Tournament
   countryCode?: string,
   official: boolean,
   category?: string,
+  icon?: string,
   startDate?: string,
   endDate?: string
 }
