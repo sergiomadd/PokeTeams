@@ -109,10 +109,10 @@ export class TeamService
     return this.http.post<SearchQueryResponseDTO>(url, searchQuery, {withCredentials: true});
   }
 
-  async getTournamentByName(name: string) : Promise<Tournament>
+  async getTournamentByIdentifier(identifier: string) : Promise<Tournament>
   {
     let tournament: Tournament = <Tournament>{}
-    let url = this.apiUrl + 'Tournament/' + name;
+    let url = this.apiUrl + 'tournament/' + identifier;
     tournament = await lastValueFrom(this.http.get<Tournament>(url).pipe(timeout(this.dataTimeout)));
     return tournament; 
   }
@@ -128,7 +128,7 @@ export class TeamService
   async getRegulationByIdentifier(identifier: string) : Promise<Regulation>
   {
     let regulation: Regulation = <Regulation>{}
-    let url = this.apiUrl + 'Regulation/' + identifier;
+    let url = this.apiUrl + 'regulation/' + identifier;
     regulation = await lastValueFrom(this.http.get<Regulation>(url).pipe(timeout(this.dataTimeout)));
 
     return this.util.toCamelCase(regulation); 
