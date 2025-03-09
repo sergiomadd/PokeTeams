@@ -39,6 +39,7 @@ using System.Composition;
 using System.Security.Cryptography.Xml;
 using System.Xml.Serialization;
 using Microsoft.IdentityModel.Tokens;
+using Azure;
 
 namespace api.Services
 {
@@ -288,7 +289,7 @@ namespace api.Services
             {
                 return "Error uploading team";
             }
-            if(inputTeam.Player != null && inputTeam.Player.Username != null
+            if (inputTeam.Player != null && inputTeam.Player.Username != null
                 && inputTeam.Player.Username.Length > 32)
             {
                 return "Player name must be shorter than 32 characters";
@@ -298,36 +299,22 @@ namespace api.Services
             {
                 return "Rental code must be shorter than 32 characters";
             }
-            if(!inputTeam.Tags.IsNullOrEmpty())
+            if (!inputTeam.Tags.IsNullOrEmpty()
+                && inputTeam.Tags.Any(t => t != null
+                && (t.Name.Length > 16
+                || t.Identifier.Length > 16
+                || (t.Description != null && t.Description.Length > 256)
+                || (t.Color != null && t.Color.Length > 8))))
             {
-                foreach(TagDTO tag in inputTeam.Tags)
-                {
-                    return ValidateTagDTO(tag);
-                }
+                return "Tag validation error";
             }
-            return null;
-        }
-
-        public string? ValidateTagDTO(TagDTO tag)
-        {
-            if (tag != null)
+            if (!inputTeam.Pokemons.IsNullOrEmpty()
+                && inputTeam.Pokemons.Any(p => p != null 
+                && ((p.Nickname != null && p.Nickname.Length > 16) 
+                || (p.Notes != null && p.Notes.Length > 2048)
+                || (p.Level != null && (p.Level < 1 || p.Level > 100)))))
             {
-                if (tag.Name.Length > 16)
-                {
-                    return "Tag name must be shorter than 16 characters";
-                }
-                if (tag.Identifier.Length > 16)
-                {
-                    return "Tag name must be shorter than 16 characters";
-                }
-                if (tag.Description != null && tag.Description.Length > 256)
-                {
-                    return "Tag description must be shorter than 256 characters";
-                }
-                if (tag.Color != null && tag.Color.Length > 8)
-                {
-                    return "Tag color must be shorter than 8 characters";
-                }
+                return "Pokemon validation error";
             }
             return null;
         }
