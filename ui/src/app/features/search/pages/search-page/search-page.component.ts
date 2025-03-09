@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, skip } from 'rxjs';
 import { selectLang } from 'src/app/core/config/store/config.selectors';
 import { SearchService } from '../../services/search.service';
 
@@ -18,7 +18,7 @@ export class SearchPageComponent
 
   ngOnInit()
   {
-    this.selectedLang$.subscribe(value =>
+    this.selectedLang$.pipe(skip(1)).subscribe(value =>
       {
         this.searchService.resetDefaultSearch();
       });

@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { selectLoggedUser } from 'src/app/core/auth/store/auth.selectors';
 import { configActions } from 'src/app/core/config/store/config.actions';
-import { selectLang, selectTeamsPerPage, selectTheme } from 'src/app/core/config/store/config.selectors';
+import { selectTeamsPerPage, selectTheme } from 'src/app/core/config/store/config.selectors';
 import { WindowService } from 'src/app/core/layout/mobile/window.service';
 import { TeamPreviewData } from 'src/app/features/team/models/teamPreviewData.model';
 import { User } from 'src/app/features/user/models/user.model';
@@ -92,15 +92,9 @@ export class TeamTableComponent
       })
     this.store.select(selectTeamsPerPage).subscribe(value => 
       {
-        console.log("teasms per page")
         this.searchService.setQueryTeamsPerPage(value);
-        //this.searchService.defaultSearch();
+        this.searchService.defaultSearch();
         this.paginationForm.controls.teamsPerPage.setValue(value);
-      })
-    this.store.select(selectLang).subscribe(() => 
-      {
-        console.log("teasms per page")
-        //this.searchService.defaultSearch();
       })
   }
 
