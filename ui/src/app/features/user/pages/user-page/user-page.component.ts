@@ -24,6 +24,8 @@ export class UserPageComponent
   route = inject(ActivatedRoute);
 
   selectedLang$: Observable<string> = this.store.select(selectLang);
+  loggedUser$ = this.store.select(selectLoggedUser);
+  loggedUsername?: string;
 
   @Input() username?: string;
 
@@ -34,9 +36,6 @@ export class UserPageComponent
   tabs: boolean[] = [true, false]
   country?: string;
   userPrivate: boolean = false;
-
-  loggedUser$ = this.store.select(selectLoggedUser);
-  loggedUsername?: string;
 
   ngOnInit()
   {

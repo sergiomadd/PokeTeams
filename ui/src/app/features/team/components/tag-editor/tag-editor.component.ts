@@ -47,11 +47,6 @@ export class TagEditorComponent
   colorPickerOpen: boolean = false;
   tagBackgroundColors = tagBackgroundColors;
 
-  ngOnInit()
-  {
-
-  }
-
   async ngAfterContentInit()
   {
     this.resetEditor();
