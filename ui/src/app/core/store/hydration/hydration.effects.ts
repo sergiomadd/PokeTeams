@@ -2,7 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, OnInitEffects } from "@ngrx/effects";
 import { Action, Store } from "@ngrx/store";
 import { distinctUntilChanged, map, switchMap, tap } from "rxjs";
-import { ThemeService } from "../../config/services/theme.service";
+import { ThemeService } from "../../helpers/theme.service";
 import { AppState } from "../app.state";
 import { hydrateActions } from "./hydration.actions";
 

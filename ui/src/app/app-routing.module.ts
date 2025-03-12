@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, UrlSegment } from '@angular/router';
-import { authGuard } from './core/auth/services/auth.guard';
-import { SearchPageComponent } from './features/search/pages/search-page/search-page.component';
-import { TeamEditComponent } from './features/team/pages/team-edit/team-edit.component';
-import { TeamViewComponent } from './features/team/pages/team-view/team-view.component';
-import { UploadComponent } from './features/team/pages/upload/upload.component';
-import { EmailConfirmationComponent } from './features/user/components/email-confirmation/email-confirmation.component';
-import { UserPageComponent } from './features/user/pages/user-page/user-page.component';
-import { NotFoundComponent } from './shared/components/not-found/not-found.component';
+import { authGuard } from './core/guards/auth.guard';
 
+import { NotFoundComponent } from './shared/components/dumb/not-found/not-found.component';
 
-const routes: Routes = [
-  { path: '', component: UploadComponent, pathMatch: 'full'},
-  { path: 'search', component: SearchPageComponent},
-  { path: 'emailconfirmation', component: EmailConfirmationComponent },
+const routes: Routes = 
+[
+  { 
+    path: '',
+    loadChildren: () => import('./features/upload/upload.module').then((m) => m.UploadModule),
+    pathMatch: 'full'
+  },
+  { 
+    path: 'search',
+    loadChildren: () => import('./features/search/search.module').then((m) => m.SearchModule),
+  },
   {
     matcher: (url) => 
     {
@@ -23,15 +24,27 @@ const routes: Routes = [
       }
       return null;
     },
-    component: UserPageComponent
+    loadChildren: () => import('./features/user/user.module').then((m) => m.UserModule),
   },
-  { path: 'edit/:id', component: TeamEditComponent, canActivate: [authGuard]  },
-  { path: ':id', component: TeamViewComponent },
-  {path: '**', component: NotFoundComponent}
+  { 
+    path: 'edit/:id',
+    loadChildren: () => import('./features/team-edit/team-edit.module').then((m) => m.TeamEditModule),
+    canActivate: [authGuard]  
+  },
+  { 
+    path: ':id',
+    loadChildren: () => import('./features/team-view/team-view.module').then((m) => m.TeamViewModule),
+  },
+  {
+    path: '**', component: NotFoundComponent
+  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { bindToComponentInputs: true })],
+  imports: 
+  [
+    RouterModule.forRoot(routes, { bindToComponentInputs: true })
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

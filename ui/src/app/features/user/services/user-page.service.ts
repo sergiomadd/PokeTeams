@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AuthService } from 'src/app/core/auth/services/auth.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { EmailDTO } from '../models/email.dto';
 import { User } from '../models/user.model';
 

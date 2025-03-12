@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { QueryItem } from 'src/app/shared/models/queryResult.model';
-import { TeamPreviewData } from '../../team/models/teamPreviewData.model';
-import { TeamService } from '../../team/services/team.service';
+import { QueryItem } from 'src/app/core/models/misc/queryResult.model';
+import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
+import { TeamService } from 'src/app/core/services/team.service';
 import { SearchQueryDTO } from '../models/searchQuery.dto';
 import { SearchQueryResponseDTO } from '../models/searchQueryResponse.dto';
 import { SetOperation } from '../models/setOperation.enum';
@@ -15,20 +15,16 @@ export class SearchService
 {
   teamService = inject(TeamService);
 
-  private query$: BehaviorSubject<SearchQueryDTO>
-    = new BehaviorSubject<SearchQueryDTO>(<SearchQueryDTO>{});
+  private query$: BehaviorSubject<SearchQueryDTO> = new BehaviorSubject<SearchQueryDTO>(<SearchQueryDTO>{});
   query = this.query$.asObservable();
 
-  private teams$: BehaviorSubject<TeamPreviewData[]>
-    = new BehaviorSubject<TeamPreviewData[]>([]);
+  private teams$: BehaviorSubject<TeamPreviewData[]> = new BehaviorSubject<TeamPreviewData[]>([]);
   teams = this.teams$.asObservable();
 
-  private totalTeams$: BehaviorSubject<number>
-    = new BehaviorSubject<number>(0);
+  private totalTeams$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   totalTeams = this.totalTeams$.asObservable();
 
-  private searched$: BehaviorSubject<boolean>
-    = new BehaviorSubject<boolean>(false);
+  private searched$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   searched = this.searched$.asObservable();
 
   constructor() 

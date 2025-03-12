@@ -1,0 +1,124 @@
+@use "/src/app/core/styles/variables.scss" as *;
+
+
+.sorter-text
+{
+  padding: 0.4em 0 0.4em 0.4em;
+}
+
+.bar
+{
+  height: 2em;
+}
+
+.way
+{
+  width: 16px;
+  margin-right: 0.2em;
+}
+
+.up-arrow
+{
+  top: 2px;
+}
+
+.down-arrow
+{
+  bottom: 2px;
+}
+
+.column-drawing
+{
+  border: 1px solid var(--text-color);
+  border-bottom: none;
+  width: 1fr;
+  min-width: 0.5em;
+  height: 1em;
+  background-color: var(--bg-color-1);
+  display: flex;
+  flex-direction: column;
+}
+
+.row-drawing
+{
+  height: 32%;
+  border-bottom: 1px solid var(--text-color);
+  background-color: var(--bg-color-2);
+}
+
+.selected
+{
+  background-color: var(--bg-color-2);
+  border-color: var(--text-color);
+  color: var(--bg-color-1);
+
+  &.row-drawing
+  {
+    background-color: var(--bg-color-2);
+  }
+}
+
+.team-table
+{
+  margin-bottom: 5em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.single
+{
+
+  .record
+  {
+    width: 100%;
+    //transition: width ease 0.5s;
+  }
+}
+
+.double
+{
+
+  .record
+  {
+    width: 49%;
+    //transition: width ease 0.5s;
+  }
+}
+
+.teams-per-page
+{
+  width: 2em;
+  text-align: center;
+}
+
+.pagination
+{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 15% 1fr 15%;
+  justify-content: space-between;
+  align-items: center;
+  justify-items: center;
+  align-self: flex-end;
+  
+}
+
+.loader-wrapper
+{
+  position: absolute;
+  top: 0;
+  left: calc(50% - 2.5vw);
+  margin: 1vw auto 1vw auto;
+  width: 5vw;
+  height: 5vw;
+  margin: auto;
+  z-index: 7;
+}
+
+@media (max-width: $mobileBreakpoint) 
+{
+  .team-table
+  {
+    width: 95vw;
+  }
+}

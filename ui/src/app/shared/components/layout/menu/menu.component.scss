@@ -1,0 +1,142 @@
+@use "/src/app/core/styles/variables.scss" as *;
+
+$closedWidth: 2.6em;
+$openWidth: 11em;
+
+.menu
+{
+  height: 100%;
+  background-color: var(--bg-color-1);
+  color: var(--text-color);
+  transition: 0.5s width;
+  position: fixed;
+  left: 0;
+  top: 0;
+  border-right: 1px solid var(--bg-color-3);
+  z-index: 3;
+  padding: 0.2em 0.6em 0.2em 0.6em;
+}
+
+.opened
+{
+  width: $openWidth;
+}
+
+.closed
+{
+  width: $closedWidth;
+}
+
+.tab
+{
+  gap: 0.4em;
+  border-radius: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  padding: 0.2em;
+  color: var(--text-color);
+  white-space: nowrap;
+  width: calc(2.6em - 0.6em);
+  height: 2em;
+  transition: 0.5s width;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+
+  .title
+  {
+    text-decoration: none;
+    font-size: 1.3em;
+  }
+
+  .main-title
+  {
+    font-family: 'falconpunch';
+    font-size: 1.1em; 
+  }
+
+  &:hover
+  {
+    background-color: var(--bg-color-3);
+    text-decoration: none;
+  }
+
+  &:link 
+  {
+    text-decoration: none;
+  }
+  
+  &:visited 
+  {
+    text-decoration: none;
+  }
+  &:active 
+  {
+    text-decoration: none;
+  }
+}
+
+.no-hover
+{
+  cursor: auto;
+
+  &:hover
+  {
+    background-color: var(--bg-color-1);
+  }
+}
+
+.open-tab
+{
+  width: calc($openWidth - 0.5em);
+}
+
+.icon
+{
+  width: 1.4em;
+  height: 1.4em;
+  padding: 0.2em 0.3em 0.2em 0.3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggler
+{
+  width: 1.5em;
+  height: 1.5em;
+  position: absolute;
+  right: round(-0.75em, 1px);
+  top: round(2.3em, 1px);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: transform ease-in-out 0.6s;
+}
+
+@media (max-width: $mobileBreakpoint) 
+{
+  .closed
+  {
+    width: 0;
+    padding: 0;
+  }
+
+  .menu
+  {
+    border-right: none;
+    border-left: 1px solid var(--bg-color-3);
+    left: auto;
+    right: 0;
+  }
+
+  .toggler
+  {
+    left: round(-1.1em, 1px);
+    right: auto;
+  }
+
+  .togglerOpen
+  {
+    left: -0.75em;
+  }
+}

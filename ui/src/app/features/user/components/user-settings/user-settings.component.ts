@@ -1,18 +1,18 @@
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { AuthService } from 'src/app/core/auth/services/auth.service';
-import { authActions } from 'src/app/core/auth/store/auth.actions';
-import { selectError, selectIsSubmitting, selectLoggedUser, selectSuccess } from 'src/app/core/auth/store/auth.selectors';
-import { FeedbackColors } from 'src/app/core/config/models/colors';
-import { WindowService } from 'src/app/core/layout/mobile/window.service';
+import { UtilService } from 'src/app/core/helpers/util.service';
+import { WindowService } from 'src/app/core/helpers/window.service';
+import { FeedbackColors } from 'src/app/core/models/misc/colors';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { QueryService } from 'src/app/core/services/query.service';
+import { authActions } from 'src/app/core/store/auth/auth.actions';
+import { selectError, selectIsSubmitting, selectLoggedUser, selectSuccess } from 'src/app/core/store/auth/auth.selectors';
 import { Country } from 'src/app/features/user/models/country.dto';
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
-import { QueryService } from 'src/app/shared/services/query.service';
-import { UtilService } from 'src/app/shared/services/util.service';
+import { UserService } from '../../../../core/services/user.service';
 import { User } from '../../models/user.model';
 import { UserPageService } from '../../services/user-page.service';
-import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user-settings',

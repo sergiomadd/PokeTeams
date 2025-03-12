@@ -1,0 +1,132 @@
+import { Component, inject, Input } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { I18nService } from 'src/app/core/helpers/i18n.service';
+import { ThemeService } from 'src/app/core/helpers/theme.service';
+import { UtilService } from 'src/app/core/helpers/util.service';
+import { WindowService } from 'src/app/core/helpers/window.service';
+import { Chip } from 'src/app/core/models/misc/chip.model';
+import { QueryItem } from 'src/app/core/models/misc/queryResult.model';
+import { Tag } from 'src/app/core/models/team/tag.model';
+import { QueryService } from 'src/app/core/services/query.service';
+import { TeamService } from 'src/app/core/services/team.service';
+import { selectTheme } from 'src/app/core/store/config/config.selectors';
+import { SetOperation } from 'src/app/features/search/models/setOperation.enum';
+import { SearchService } from 'src/app/features/search/services/search.service';
+
+
+@Component({
+  selector: 'app-team-search',
+  templateUrl: './team-search.component.html',
+  styleUrl: './team-search.component.scss'
+})
+export class TeamSearchComponent 
+{
+  queryService = inject(QueryService);
+  util = inject(UtilService);
+  store = inject(Store)
+  searchService = inject(SearchService);
+  window = inject(WindowService);
+  teamService = inject(TeamService);
+  theme = inject(ThemeService);
+  i18n = inject(I18nService);
+
+  @Input() userSearch: boolean = false;
+
+  chips: Chip[] = [];
+  unionType: SetOperation = SetOperation.intersection;
+  unionTypeSettings: SetOperation[] = [SetOperation.intersection, SetOperation.union];
+  feedback?: string;
+
+  selectedTheme$: Observable<string> = this.store.select(selectTheme);
+  selectedThemeName?: string;
+
+  search()
+  {
+    this.searchService.setQuerySelectedPage(1);
+    this.searchService.defaultSearch();
+  }
+
+  async queryResultSelectEvent(event: QueryItem)
+  {
+    this.feedback = undefined;
+    if(event.type === "user")
+    {
+      this.feedback = this.validatePlayer(event.name);
+      if(this.feedback) { return; }
+    }
+    if(event.type === "tournament")
+    {
+      this.feedback = this.validateTournament(event.name);
+      if(this.feedback) { return; }
+    }
+    if(!this.chips.find(t => t.identifier === event.identifier)) 
+    {
+      if(event.type === "tag")
+      {
+        const tag: Tag = event as Tag;
+        const chip: Chip = 
+        {
+          name: tag.name,
+          identifier: tag.identifier,
+          iconPath: tag.icon,
+          tooltipText: tag.description,
+          color: tag.color,
+          textColor: tag.color ? this.theme.getTagTextColor(tag.color) : undefined,
+          type: tag.type
+        }
+        this.chips?.push(chip);
+      }
+      else
+      {
+        const chip: Chip = 
+        {
+          name: event.name,
+          identifier: event.identifier,
+          iconPath: event.icon,
+          type: event.type
+        }
+        this.chips?.push(chip);
+      }
+      this.searchService.setQueryItems(this.chips);
+    }
+    else { this.feedback =  this.i18n.translateKey('search.team_search.duplicate-feedback')}
+  }
+
+  chipRemoveEvent($event)
+  {
+    this.chips.splice($event, 1);
+    this.searchService.setQueryItems(this.chips);
+  }
+
+  querySettingsSelectEvent($event)
+  {
+    this.unionType = $event;
+    this.searchService.setQuerySetOperation(this.unionType);
+  }
+
+  reset()
+  {
+    this.chips = [];
+    this.searchService.setQueryItems([]);
+    this.searchService.defaultSearch();
+  }
+
+  validatePlayer(player: string): string | undefined
+  {
+    if(player.length > 32)
+    {
+      return this.i18n.translateKeyWithParameters('team.editor.errors.player', { maxlength: 32 });
+    }
+    return undefined;
+  }
+
+  validateTournament(tournament: string): string | undefined
+  {
+    if(tournament.length > 256)
+    {
+      return this.i18n.translateKeyWithParameters('team.editor.errors.tournament', { maxlength: 256 });
+    }
+    return undefined;
+  }
+}

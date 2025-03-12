@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { I18nService } from 'src/app/core/config/services/i18n.service';
-import { Pokemon } from '../../pokemon/models/pokemon.model';
-import { PokemonService } from '../../pokemon/services/pokemon.service';
-import { Team } from '../models/team.model';
-import { TeamOptions } from '../models/teamOptions.model';
+import { I18nService } from 'src/app/core/helpers/i18n.service';
+import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
+import { Team } from 'src/app/core/models/team/team.model';
+import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
+import { PokemonService } from '../../../core/services/pokemon.service';
 
 @Injectable({
   providedIn: 'root'
@@ -147,16 +147,6 @@ export class TeamEditorService
 
   getEmptyOptions(): TeamOptions
   {
-        /*
-    this.teamOptions = 
-    {
-      showIVs: false,
-      showEVs: false,
-      showNature: false,
-      showNickname: false,
-      maxLevel: 0
-    }
-    */
     const options: TeamOptions =     
     {
       ivsVisibility: true,

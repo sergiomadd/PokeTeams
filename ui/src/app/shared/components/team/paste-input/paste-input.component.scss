@@ -1,0 +1,42 @@
+@use "/src/app/core/styles/variables.scss" as *;
+
+.tabs
+{
+  border-bottom: 1px solid var(--bg-color-3);
+  width: 10em;
+}
+
+.pasteBox
+{
+  width: 30em;
+  height: 20em;
+  background-color: var(--bg-color-1);
+  outline: 1px solid var(--text-color); 
+}
+
+.example
+{
+  position: absolute;
+  top: 0;
+  right: -2.8em;
+}
+
+@media (max-width: $smallMobileBreakpoint) 
+{
+  .pasteBox
+  {
+    width: 90vw;
+  }
+
+  .tabs
+  {
+    width: 60vw;
+  }
+
+  .example
+  {
+    position: absolute;
+    top: -4em;
+    right: 0;
+  }
+}

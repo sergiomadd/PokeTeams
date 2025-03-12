@@ -1,0 +1,20 @@
+@use "/src/app/core/styles/variables.scss" as *;
+
+.buttons
+{
+  gap: 3em;
+
+  button
+  {
+    width: 6em;
+  }
+}
+
+@media (max-width: $mobileBreakpoint) 
+{
+  .buttons
+  {
+    margin: 1em 0 1em 0;
+    gap: 3em;
+  }
+}

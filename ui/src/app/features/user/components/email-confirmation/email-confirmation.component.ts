@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { authActions } from 'src/app/core/auth/store/auth.actions';
-import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/auth/store/auth.selectors';
-import { FeedbackColors } from 'src/app/core/config/models/colors';
+import { FeedbackColors } from 'src/app/core/models/misc/colors';
+import { authActions } from 'src/app/core/store/auth/auth.actions';
+import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/store/auth/auth.selectors';
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
 
 @Component({

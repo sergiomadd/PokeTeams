@@ -1,0 +1,125 @@
+import { Component, inject, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
+import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
+import { selectLang } from 'src/app/core/store/config/config.selectors';
+import { SearchService } from 'src/app/features/search/services/search.service';
+import { UserService } from '../../../core/services/user.service';
+import { User } from '../models/user.model';
+import { UserPageService } from '../services/user-page.service';
+
+@Component({
+  selector: 'app-user-page',
+  templateUrl: './user-page.component.html',
+  styleUrl: './user-page.component.scss'
+})
+export class UserPageComponent 
+{
+  userService = inject(UserService);
+  userPageService = inject(UserPageService);
+  store = inject(Store);
+  searchService = inject(SearchService);
+  route = inject(ActivatedRoute);
+
+  selectedLang$: Observable<string> = this.store.select(selectLang);
+  loggedUser$ = this.store.select(selectLoggedUser);
+  loggedUsername?: string;
+
+  @Input() username?: string;
+
+  user?: User;
+  userTeams: TeamPreviewData[] = [];
+  loading: boolean = false;
+
+  tabs: boolean[] = [true, false]
+  country?: string;
+  userPrivate: boolean = false;
+
+  ngOnInit()
+  {
+    this.loggedUser$.subscribe(value =>
+      {
+        if(value) 
+        {
+          this.loggedUsername = value?.username;
+          if(this.username && this.loggedUsername && this.username === this.loggedUsername)
+          {
+            this.updateUser(this.username)
+            this.userPageService.getloggedUserEmail(value)
+          }
+        }
+        else
+        {
+          this.loggedUsername = undefined;
+        }
+      })
+    this.route.params.subscribe(params =>
+      {
+        this.username = params["username"];
+        if(this.username)
+        {
+          this.loading = true;
+          this.updateUser(this.username);
+          this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
+          {
+            this.userTeams = value;
+          })
+        }
+        this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
+        {
+          this.userTeams = value;
+        })
+      })
+    this.selectedLang$.subscribe(value =>
+      {
+        this.load();
+      });
+  }
+
+  updateUser(username: string)
+  {
+    //Esto innecesario si ya esta logeado, por que en store tengo ya el user obj
+    this.userService.getUser(username).subscribe(
+      {
+        next: (response) =>
+        {
+          this.user = response;
+          this.userPageService.setUser(this.user);
+          this.load();
+        },
+        error: () => 
+        {
+          this.loading = false;
+        },
+        complete: () => 
+        {
+          this.loading = false;
+        }
+      }
+    )
+  }
+
+  load()
+  {
+    if(!this.user?.visibility && !(this.loggedUsername === this.user?.username))
+    {
+      this.userPrivate = true;
+    }
+    else
+    {
+      this.userPrivate = false;
+      if(this.user) { this.searchService.userOnlySearch(this.user.username);}
+    }
+  }
+
+  changeTab(index: number)
+  {
+    for (let i=0; i<this.tabs.length; i++) 
+    {
+      this.tabs[i] = false;
+    }
+    this.tabs[index] = true;
+  }
+}

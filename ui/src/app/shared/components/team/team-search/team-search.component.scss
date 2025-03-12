@@ -1,0 +1,49 @@
+@use "/src/app/core/styles/variables.scss" as *;
+
+.item
+{
+  width: 15em;
+  max-height: 10vh;
+  max-width: 12em;
+}
+
+.top
+{
+  width: 75%;
+  margin: 5vh auto auto auto;
+}  
+
+.storages
+{
+  position: relative;
+  min-height: 4em;
+  width: 70%;
+}
+
+.storage-settings
+{
+  position: absolute;
+  top: -2.6em;
+  left: 0;
+}
+
+.storage-buttons
+{
+  position: absolute;
+  top: -2.2em;
+  right: 0.2em;
+}
+
+@media (max-width: $mobileBreakpoint) 
+{
+  .storages
+  {
+    width: 90%;
+  }
+
+  .top
+  {
+    width: 100%;
+    margin: 2em auto auto auto;
+  }  
+}
