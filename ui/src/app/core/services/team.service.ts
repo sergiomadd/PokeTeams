@@ -78,12 +78,6 @@ export class TeamService
     return this.http.post<TeamSaveResponse>(url, team, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
 
-  saveTeamAnon(team: Team): Observable<TeamSaveResponse>
-  {
-    let url = this.apiUrl + 'team/save/anon';
-    return this.http.post<TeamSaveResponse>(url, team).pipe(timeout(this.dataTimeout));
-  }
-
   updateTeam(team: Team): Observable<TeamSaveResponse>
   {
     let url = this.apiUrl + 'team/update';

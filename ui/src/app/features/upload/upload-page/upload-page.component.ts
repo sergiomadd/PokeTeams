@@ -47,50 +47,25 @@ export class UploadPageComponent
     {
       console.log("Saving team: ", this.team);
       this.teamSubmitted = true;
-      if(this.loggedUser)
-      {
-        this.teamService.saveTeam(this.team).subscribe(
+      this.teamService.saveTeam(this.team).subscribe(
+        {
+          next: (response: TeamSaveResponse) =>
           {
-            next: (response: TeamSaveResponse) =>
+            this.teamSubmitted = false;
+            console.log("Team response: ", response)
+            if(response && response.content)
             {
-              this.teamSubmitted = false;
-              console.log("Team response: ", response)
-              if(response && response.content)
-              {
-                this.router.navigate(['/', response.content])
-              }
-              this.feedback = undefined;
-            },
-            error: (error: CustomError) => 
-            {
-              this.teamSubmitted = false;
-              this.feedback = error.message;
+              this.router.navigate(['/', response.content])
             }
-          }
-        )
-      }
-      else
-      {
-        this.teamService.saveTeamAnon(this.team).subscribe(
+            this.feedback = undefined;
+          },
+          error: (error: CustomError) => 
           {
-            next: (response: TeamSaveResponse) =>
-            {
-              this.teamSubmitted = false;
-              console.log("Team response: ", response)
-              if(response && response.content)
-              {
-                this.router.navigate(['/', response.content])
-              }
-              this.feedback = undefined;
-            },
-            error: (error: CustomError) => 
-            {
-              this.teamSubmitted = false;
-              this.feedback = error.message;
-            }
+            this.teamSubmitted = false;
+            this.feedback = error.message;
           }
-        )
-      }
+        }
+      )
     }
   }
 }
