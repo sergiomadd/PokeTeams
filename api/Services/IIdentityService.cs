@@ -8,5 +8,6 @@ namespace api.Services
         public Task<User?> GetUser();
         public string? GetUserName();
         public string? GetUserID();
+        public bool CheckForRefresh(HttpRequest request);
     }
 }

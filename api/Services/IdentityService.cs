@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using api.Util;
 using api.Models.DBPoketeamModels;
+using Azure.Core;
 
 namespace api.Services
 {
@@ -47,6 +48,19 @@ namespace api.Services
                 return  claim?.Value;
             }
             return null;
+        }
+
+        //Replaces JWT middleware challenge for AllowAnonymous & Authorized endpoints
+        //Refreshes access token if user is logged in
+        public bool CheckForRefresh(HttpRequest request)
+        {
+            request.Cookies.TryGetValue("accessToken", out var accessToken);
+            request.Cookies.TryGetValue("refreshToken", out var refreshToken);
+            if (string.IsNullOrEmpty(accessToken) && !string.IsNullOrEmpty(refreshToken))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

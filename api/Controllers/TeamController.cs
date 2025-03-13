@@ -24,25 +24,38 @@ namespace api.Controllers
         private readonly IPokedexService _pokemonService;
         private readonly IIdentityService _identityService;
 
-        public TeamController(IPokeTeamService teamService, IPokedexService pokemonService, IIdentityService identityService)
+        public TeamController(
+            IPokeTeamService teamService,
+            IPokedexService pokemonService,
+            IIdentityService identityService)
         {
             _teamService = teamService;
             _pokemonService = pokemonService;
             _identityService = identityService;
         }
 
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<TeamDTO>> Get(string id)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
-            var team = await _teamService.GetTeam(id, langId ?? 9);
-            if (team == null)
+            if (_identityService.CheckForRefresh(Request))
             {
-                return BadRequest("Team not found.");
+                return Unauthorized("NoAccessTokenProvided");
             }
-            return Ok(team);
+            else
+            {
+                var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+                int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
+
+                var team = await _teamService.GetTeam(id, langId ?? 9);
+                if (team == null)
+                {
+                    return BadRequest("Team not found.");
+                }
+                return Ok(team);
+            }
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -50,15 +63,22 @@ namespace api.Controllers
         [HttpGet("data/{id}")]
         public async Task<ActionResult<TeamDataDTO>> GetTeamData(string id)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
-            var team = await _teamService.GetTeamData(id, langId ?? 9);
-            if (team == null)
+            if (_identityService.CheckForRefresh(Request))
             {
-                return BadRequest("Team data not found.");
+                return Unauthorized("NoAccessTokenProvided");
             }
-            return Ok(team);
+            else
+            {
+                var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+                int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
+
+                var team = await _teamService.GetTeamData(id, langId ?? 9);
+                if (team == null)
+                {
+                    return BadRequest("Team data not found.");
+                }
+                return Ok(team);
+            }
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -66,16 +86,23 @@ namespace api.Controllers
         [HttpGet("pokemon/{pokemonId}")]
         public async Task<ActionResult<PokemonDTO>> GetPokemonById(int pokemonId)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
-            var pokemonDTO = await _teamService.GetPokemonById(pokemonId, langId ?? 9);
-
-            if (pokemonDTO == null)
+            if (_identityService.CheckForRefresh(Request))
             {
-                return NotFound("Pokemon not found.");
+                return Unauthorized("NoAccessTokenProvided");
             }
-            return Ok(pokemonDTO);
+            else
+            {
+                var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+                int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
+
+                var pokemonDTO = await _teamService.GetPokemonById(pokemonId, langId ?? 9);
+
+                if (pokemonDTO == null)
+                {
+                    return NotFound("Pokemon not found.");
+                }
+                return Ok(pokemonDTO);
+            }
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -83,13 +110,20 @@ namespace api.Controllers
         [HttpGet("pokemon/nolang/{pokemonId}")]
         public async Task<ActionResult<PokemonDTO>> GetPokemonByIdNoLang(int pokemonId)
         {
-            var pokemonDTO = await _teamService.GetPokemonById(pokemonId, (int)Lang.en);
-
-            if (pokemonDTO == null)
+            if (_identityService.CheckForRefresh(Request))
             {
-                return NotFound("Pokemon not found.");
+                return Unauthorized("NoAccessTokenProvided");
             }
-            return Ok(pokemonDTO);
+            else
+            {
+                var pokemonDTO = await _teamService.GetPokemonById(pokemonId, (int)Lang.en);
+
+                if (pokemonDTO == null)
+                {
+                    return NotFound("Pokemon not found.");
+                }
+                return Ok(pokemonDTO);
+            }
         }
 
         [HttpGet("pokemon-previews/{teamId}")]
@@ -113,50 +147,34 @@ namespace api.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AllowAnonymous]
         [HttpPost, Route("save")]
         public async Task<ActionResult<string>> SaveTeam([FromBody] TeamDTO team)
         {
-            string? validation = _teamService.ValidateTeamDTO(team);
-            if(validation != null)
+            if (_identityService.CheckForRefresh(Request))
             {
-                return BadRequest(validation);
-            }
-            Team? newTeam = await _teamService.SaveTeam(team);
-            if (newTeam == null)
-            {
-                return BadRequest();
+                return Unauthorized("NoAccessTokenProvided");
             }
             else
             {
-                object response = new
+                string? validation = _teamService.ValidateTeamDTO(team);
+                if (validation != null)
                 {
-                    content = newTeam.Id
-                };
-                return Ok(response);
-            }
-        }
-
-        [AllowAnonymous]
-        [HttpPost, Route("save/anon")]
-        public async Task<ActionResult<string>> SaveTeamAnon([FromBody] TeamDTO team)
-        {
-            string? validation = _teamService.ValidateTeamDTO(team);
-            if (validation != null)
-            {
-                return BadRequest(validation);
-            }
-            Team? newTeam = await _teamService.SaveTeam(team);
-            if (newTeam == null)
-            {
-                return BadRequest();
-            }
-            else
-            {
-                object response = new
+                    return BadRequest(validation);
+                }
+                Team? newTeam = await _teamService.SaveTeam(team);
+                if (newTeam == null)
                 {
-                    content = newTeam.Id
-                };
-                return Ok(response);
+                    return BadRequest();
+                }
+                else
+                {
+                    object response = new
+                    {
+                        content = newTeam.Id
+                    };
+                    return Ok(response);
+                }
             }
         }
 
@@ -230,21 +248,28 @@ namespace api.Controllers
         [HttpPost, Route("query")]
         public async Task<ActionResult<TeamSearchQueryResponseDTO>> QueryTeams(TeamSearchQueryDTO key)
         {
-            string? validation = _teamService.ValidateTeamSearchQueryDTO(key);
-            if (validation != null)
+            if (_identityService.CheckForRefresh(Request))
             {
-                return NotFound(validation);
+                return Unauthorized("NoAccessTokenProvided");
             }
-
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
-            TeamSearchQueryResponseDTO teams = await _teamService.QueryTeams(key, langId ?? 9);
-            if (teams == null)
+            else
             {
-                return NotFound("Couldn't find teams");
+                string? validation = _teamService.ValidateTeamSearchQueryDTO(key);
+                if (validation != null)
+                {
+                    return NotFound(validation);
+                }
+
+                var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+                int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
+
+                TeamSearchQueryResponseDTO teams = await _teamService.QueryTeams(key, langId ?? 9);
+                if (teams == null)
+                {
+                    return NotFound("Couldn't find teams");
+                }
+                return Ok(teams);
             }
-            return Ok(teams);
         }
     }
 }

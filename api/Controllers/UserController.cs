@@ -16,15 +16,18 @@ namespace api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IPokeTeamService _pokeTeamService;
         private readonly IUserService _userService;
+        private readonly IIdentityService _identityService;
 
         public UserController(UserManager<User> userManager,
             IPokeTeamService teamService,
-            IUserService userService
+            IUserService userService,
+            IIdentityService identityService
             )
         {
             _userManager = userManager;
             _pokeTeamService = teamService;
             _userService = userService;
+            _identityService = identityService;
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -32,13 +35,20 @@ namespace api.Controllers
         [HttpGet, Route("{userName}")]
         public async Task<ActionResult<UserDTO>> GetUserByUserName(string userName)
         {
-            User user = await _userService.GetUserByUserName(userName);
-            if (user == null)
+            if (_identityService.CheckForRefresh(Request))
             {
-                return NotFound("Couldn't find user");
+                return Unauthorized("NoAccessTokenProvided");
             }
-            UserDTO userDTO = await _userService.BuildUserDTO(user, User.Identity.Name != null ? User.Identity.Name == user.UserName : false);
-            return Ok(userDTO);
+            else
+            {
+                User user = await _userService.GetUserByUserName(userName);
+                if (user == null)
+                {
+                    return NotFound("Couldn't find user");
+                }
+                UserDTO userDTO = await _userService.BuildUserDTO(user, User.Identity.Name != null ? User.Identity.Name == user.UserName : false);
+                return Ok(userDTO);
+            }
         }
 
         [HttpGet, Route("check/username/{userName}")]
@@ -56,7 +66,7 @@ namespace api.Controllers
         [HttpGet, Route("check/email/{email}")]
         public async Task<ActionResult> EmailAvailable(string email)
         {
-            User user = await _userManager.FindByEmailAsync(email);
+            User? user = await _userManager.FindByEmailAsync(email);
             if (user != null)
             {
                 return BadRequest("Email already taken.");
