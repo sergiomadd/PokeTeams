@@ -6,11 +6,11 @@ namespace api.Models.DBPoketeamModels
     {
         [Key]
         [Required(ErrorMessage = "Tag identifier is required")]
-        [StringLength(32, ErrorMessage = "Tag identifier is too long")]
+        [StringLength(16, ErrorMessage = "Tag identifier is too long")]
         public string Identifier { get; set; }
 
         [Required(ErrorMessage = "Tag name is required")]
-        [StringLength(32, ErrorMessage = "Tag name is too long")]
+        [StringLength(16, ErrorMessage = "Tag name is too long")]
         public string Name { get; set; }
 
         [StringLength(256, ErrorMessage = "Tag description is too long")]

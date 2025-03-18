@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using Humanizer;
 using api.Migrations;
+using api.Data;
 
 namespace api.Controllers
 {
@@ -30,6 +31,7 @@ namespace api.Controllers
         private readonly IPokeTeamService _pokeTeamService;
         private readonly IEmailService _emailService;
         private readonly IIdentityService _identityService;
+        private readonly PokeTeamContext _pokeTeamContext;
 
         public AuthController(UserManager<User> userManager,
             SignInManager<User> signInManager,
@@ -37,7 +39,8 @@ namespace api.Controllers
             IUserService userService,
             IPokeTeamService teamService,
             IEmailService emailService,
-            IIdentityService identityService
+            IIdentityService identityService,
+            PokeTeamContext pokeTeamContext
             )
         {
             _userManager = userManager;
@@ -47,41 +50,62 @@ namespace api.Controllers
             _pokeTeamService = teamService;
             _emailService = emailService;
             _identityService = identityService;
+            _pokeTeamContext = pokeTeamContext;
         }
 
         [AllowAnonymous]
         [HttpPost("Refresh")]
         public async Task<ActionResult> RefreshToken()
         {
-            HttpContext.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
-
-            if (refreshToken == null)
+            using (var transaction = await _pokeTeamContext.Database.BeginTransactionAsync())
             {
-                return BadRequest("Invalid client request");
+                try
+                {
+                    HttpContext.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
+                    if (refreshToken == null)
+                    {
+                        return BadRequest("Refresh Error");
+                    }
+
+                    var principal = _tokenGenerator.GetPrincipalFromRefreshToken(refreshToken);
+                    if (principal == null)
+                    {
+                        return BadRequest("Refresh Error");
+                    }
+
+                    var username = principal.Identity.Name;
+                    var user = await _userManager.FindByNameAsync(username);
+                    if (user is null || user.RefreshToken == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+                    {
+                        return BadRequest("Refresh Error");
+                    }
+
+                    string newRefreshToken = _tokenGenerator.GenerateRefreshToken(user);
+                    user.RefreshToken = newRefreshToken;
+                    user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+
+                    var result = await _userManager.UpdateAsync(user);
+                    if (!result.Succeeded)
+                    {
+                        await transaction.RollbackAsync();
+                        return Conflict("Refresh Conflict");
+                    }
+
+                    await transaction.CommitAsync();
+
+                    var newAccessToken = _tokenGenerator.GenerateAccessToken(user);
+                    JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = newAccessToken, RefreshToken = newRefreshToken };
+                    _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    Printer.Log("Error in refresh: ", ex);
+                    await transaction.RollbackAsync();
+                    return StatusCode(500, "Internal server error");
+                }
             }
-
-            var principal = _tokenGenerator.GetPrincipalFromRefreshToken(refreshToken);
-            if (principal == null)
-            {
-                return BadRequest("Invalid client request");
-            }
-            var username = principal.Identity.Name;
-            var user = await _userManager.FindByNameAsync(username);
-            if (user is null || user.RefreshToken == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
-            {
-                return BadRequest("Invalid client request");
-            }
-            string newRefreshToken = _tokenGenerator.GenerateRefreshToken(user);
-
-            user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
-            await _userManager.UpdateAsync(user);
-
-            var newAccessToken = _tokenGenerator.GenerateAccessToken(user);
-            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = newAccessToken, RefreshToken = newRefreshToken };
-            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
-
-            return Ok();
         }
 
         
@@ -157,6 +181,7 @@ namespace api.Controllers
         public async Task<ActionResult> LogIn(LogInDTO model)
         {
             Printer.Log("Trying to log in user...");
+
             try
             {
                 if (model == null || !ModelState.IsValid)

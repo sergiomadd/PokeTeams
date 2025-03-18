@@ -11,6 +11,7 @@ namespace api.Models.DBPoketeamModels
         [StringLength(2, ErrorMessage = "User country is too long")]
         public string? Country { get; set; }
 
+        [StringLength(32, ErrorMessage = "Picture is too long")]
         public string? Picture { get; set; }
 
         [DataType(DataType.Date)]
@@ -21,5 +22,8 @@ namespace api.Models.DBPoketeamModels
         public virtual ICollection<Team> Teams { get; set;}
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
+
+        [Timestamp]
+        public byte[]? RowVersion { get; set; }
     }
 }
