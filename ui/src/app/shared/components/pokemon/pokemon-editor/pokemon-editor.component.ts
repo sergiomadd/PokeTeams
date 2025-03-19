@@ -327,7 +327,6 @@ export class PokemonEditorComponent
 
   selectPokemon(index: number)
   {
-    console.log(this.pokemon)
     if(index != this.selectedPokemonIndex)
     {
       this.selectedPokemonIndex = index;

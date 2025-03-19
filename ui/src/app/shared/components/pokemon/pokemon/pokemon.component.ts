@@ -249,6 +249,11 @@ export class PokemonComponent
     {
       if(this.showStats[0]) { this.tooltipStats = this.tooltipStats.fill(false); }
       this.showStats[0] = !this.showStats[0];
+      if(this.editorPreview && this.showNotes[0] ) 
+      {
+        this.showNotes[0] = false; 
+        this.triggerNotesEvent.emit(this.showNotes[0]);
+      }
     }
   }
 
@@ -258,6 +263,7 @@ export class PokemonComponent
     {
       this.showNotes[0] = !this.showNotes[0];
       this.triggerNotesEvent.emit(this.showNotes[0]);
+      if(this.editorPreview && this.showStats[0] ) { this.showStats[0] = false; }
     }
   }
 
