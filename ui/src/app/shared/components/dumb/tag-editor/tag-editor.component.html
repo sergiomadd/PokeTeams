@@ -5,6 +5,13 @@
   'tag-editor-right': !window.isMobile(),
   'tag-editor-top': window.isMobile()
 }">
+  <div class="color-picker-wrapper">
+    <app-color-picker 
+    [colors]="tagBackgroundColors" 
+    [visible]="colorPickerOpen"
+    (chooseEvent)="chooseColor($event)"
+    ></app-color-picker>
+  </div>
   <div class="tag-editor-content">
     <button (click)="close()" class="close icon-button icon-m">
       <svg viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg">
@@ -50,7 +57,7 @@
           ></app-chip>
         </div>
         <div style="width: 48%;">
-          <button class="button-tertiary-clear" 
+          <button class="button-secondary" 
           (click)="toggleColorPicker()"
           >{{"team.tag_editor.show_colors" | translate}}</button>
         </div>
@@ -59,13 +66,6 @@
         <button class="button-primary w-60" (click)="add()">{{"team.tag_editor.add" | translate}}</button>
       </div>
     </form>
-  </div>
-  <div class="color-picker-wrapper">
-    <app-color-picker 
-    [colors]="tagBackgroundColors" 
-    [visible]="colorPickerOpen"
-    (chooseEvent)="chooseColor($event)"
-    ></app-color-picker>
   </div>
 </div>
 

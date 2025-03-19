@@ -9,16 +9,18 @@
 {
   position: absolute;
   left: 11.8em;
-  bottom: 0.6em;
+  top: 0.2em;
+  transform: translate(0, 0.2em);
   border-radius: 0 5px 5px 0;
   border: 1px solid black;
+  transition: transform 0.5s ease-in, max-width 0.5s ease-in;
 }
 
 .color-picker-left
 {
   position: absolute;
-  left: -1em;
-  bottom: 0.6em;
+  left: 0;
+  bottom: 0.4em;
   border-radius: 5px 0 0 5px;
   border: 1px solid black;
   transform: translateX(0);
@@ -38,13 +40,12 @@
   max-width: 20em;
   width: fit-content;
   z-index: 2;
-  transition: max-width 0.5s ease-in;
 }
 
 .color-picker-visible.color-picker-left
 {
-  transform: translateX(-23.2em);
-  transition: transform 0.5s ease-in, max-width 0.5s ease-in;
+  transform: translateX(-12em);
+  transition: transform 0.5s ease-in;
 }
 
 .colors
@@ -53,7 +54,7 @@
   grid-template-columns: repeat(4, 2.5em);
   justify-content: start;
   justify-items: center;
-  gap: 0.5em;
+  gap: 0.4em;
   margin: auto;
 }
 
