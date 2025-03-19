@@ -107,7 +107,6 @@ namespace api.Controllers
                 }
             }
         }
-
         
         [HttpGet, Route("logged")]
         public async Task<ActionResult> GetLoggedUser()
@@ -121,7 +120,7 @@ namespace api.Controllers
                     User? user = await _userManager.FindByNameAsync(User.Identity.Name);
                     if (user != null)
                     {
-                        userDTO = await _userService.BuildUserDTO(await _userService.GetUserByUserName(user.UserName));
+                        userDTO = await _userService.BuildUserDTO(user, true);
                     }
                     else
                     {
