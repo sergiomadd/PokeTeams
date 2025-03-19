@@ -75,11 +75,11 @@
       "show_all_notes-tooltip": "Show all notes",
       "close_all_tooltips-tooltip": "Close all tooltips",
       "rental_code-tooltip": "Rental Code",
-      "ivs-tooltip": "Show IV bars",
+      "ivs-tooltip": "Show IVs",
       "ivs_disabled-tooltip": "IVs are private",
-      "evs-tooltip": "Show EV bars",
+      "evs-tooltip": "Show EVs",
       "evs_disabled-tooltip": "EVs are private",
-      "natures-tooltip": "Show nature icons",
+      "natures-tooltip": "Show natures",
       "natures_disabled-tooltip": "Natures are private"
     },
     "preview":
@@ -247,7 +247,7 @@
     "no_translation": "No translation",
     "copyLoading": "Copying",
     "copySuccess": "Copied!",
-    "copyError": "Error copying team",
+    "copyError": "Error copying",
     "yes": "Yes",
     "no": "No"
   }

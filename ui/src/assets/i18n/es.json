@@ -32,7 +32,19 @@
       "player_input-label": "Jugador",
       "tournament_input-label": "Torneo",
       "tag_input-label": "Tags ({{currentTags}}/{{maxTags}})",
-      "tag_input-feedback": "Tag ya añadida"
+      "tag_input-feedback": "Tag ya añadida",
+      "rental_code-label": "Codigo rental",
+      "visibility-label": "Privacidad",
+      "visibility_false-feedback": "El equipo es privado. Activa 'equipo' para seleccionar las demas",
+      "errors": 
+      {
+        "no_pokemons": "No hay pokemons",
+        "too_many_pokemons": "Demasiados pokemons, el maximo es {{max}}",
+        "empty_pokemons": "Hay pokemons vacios",
+        "player": "El nombre del jugador debe ser menor que {{maxlength}}",
+        "tournament": "El nombre del torneo debe ser menor que {{maxlength}}",
+        "rental_Code": "El codigo rental debe ser menor que {{maxlength}}"
+      }
     },
     "input":
     {
@@ -60,7 +72,23 @@
       "no_player-tooltip": "Jugador desconocido", 
       "show_all_stats-tooltip": "Mostrar todas las estadísticas",
       "show_all_notes-tooltip": "Mostrar todas las notas",
-      "close_all_tooltips-tooltip": "Cerrar todas las tooltips"
+      "close_all_tooltips-tooltip": "Cerrar todas las tooltips",
+      "rental_code-tooltip": "Codigo Rental",
+      "ivs-tooltip": "Mostrar IVs",
+      "ivs_disabled-tooltip": "Los IVs son privados",
+      "evs-tooltip": "Mostrar EVs",
+      "evs_disabled-tooltip": "Los EVs son privados",
+      "natures-tooltip": "Mostrar naturalezas",
+      "natures_disabled-tooltip": "Las naturalezas son privadas"
+    },
+    "preview":
+    {
+      "copyTeam": "Copiar equipo",
+      "copyLink": "Copiar enlace",
+      "openTeam": "Abrir equipo",
+      "editTeam": "Editar equipo",
+      "deleteTeam": "Delete equipo",
+      "deleteTeamDialog": "Estas seguido que quieres eliminar este equipo?"
     },
     "tag_editor":
     {
@@ -88,14 +116,16 @@
       "item": "Objecto",
       "intersection": "Equipos que tienen todas",
       "union": "Equipos que tienen almenos una",
-      "duplicate-feedback": "Ya esta añadida"
+      "duplicate-feedback": "Ya esta añadida",
+      "search": "Buscar"
     },
     "team_table":
     {
       "sort_date": "Fecha",
       "sort_views": "Visitas",
       "total_teams": " equipos",
-      "teams_per_page": "Equipos por página: "
+      "teams_per_page": "Equipos por página: ",
+      "no_teams": "No hay resultados"
     }
   },
   "pokemon": 
@@ -210,6 +240,12 @@
       "min": "Debe ser mayor que {{min}}",
       "max": "Debe ser menor que {{max}}",
       "nan": "Debe ser un numero"
-    }
+    },
+    "no_translation": "Sin traducción",
+    "copyLoading": "Copiando",
+    "copySuccess": "Copiado!",
+    "copyError": "Error copiando",
+    "yes": "Si",
+    "no": "No"
   }
 }
