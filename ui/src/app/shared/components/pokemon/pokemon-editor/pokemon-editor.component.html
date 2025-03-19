@@ -271,13 +271,13 @@
             </svg>
           </button>
         </div>
-        <app-pokemon
+        <app-pokemon-card
         [pokemon]="pokemon" 
         [teamOptions]="team?.options" 
         [showStatsStart]="true"
         [editorPreview] = "true"
         (triggerNotesEvent)="triggerNotes($event)"
-        ></app-pokemon>
+        ></app-pokemon-card>
         <ng-container *ngIf="showNotes">
           <form [formGroup]="pokemonForm" class="notes-editor">
             <textarea

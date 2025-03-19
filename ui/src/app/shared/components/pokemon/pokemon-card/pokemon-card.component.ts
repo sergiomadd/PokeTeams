@@ -25,12 +25,11 @@ interface CalculatedStats
 } 
 
 @Component({
-  selector: 'app-pokemon',
-  templateUrl: './pokemon.component.html',
-  styleUrls: ["./pokemon.component.scss"],
+  selector: 'app-pokemon-card',
+  templateUrl: './pokemon-card.component.html',
+  styleUrl: './pokemon-card.component.scss'
 })
-
-export class PokemonComponent 
+export class PokemonCardComponent 
 {
   parser = inject(ParserService);
   util = inject(UtilService);

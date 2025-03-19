@@ -6,7 +6,7 @@ import { WindowService } from 'src/app/core/helpers/window.service';
 import { Tag } from 'src/app/core/models/team/tag.model';
 import { Team } from 'src/app/core/models/team/team.model';
 import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
-import { PokemonComponent } from '../../pokemon/pokemon/pokemon.component';
+import { PokemonCardComponent } from '../../pokemon/pokemon-card/pokemon-card.component';
 
 
 @Component({
@@ -24,7 +24,7 @@ export class TeamComponent
   @Input() team?: Team;
   @Input() removableTags?: boolean = false;
 
-  @ViewChildren(PokemonComponent) pokemonComponents!:QueryList<PokemonComponent>;
+  @ViewChildren(PokemonCardComponent) pokemonComponents!:QueryList<PokemonCardComponent>;
 
   showAllStats: boolean = false;
   showAllNotes: boolean = false;

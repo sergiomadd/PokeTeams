@@ -21,9 +21,9 @@ import { MenuComponent } from './components/layout/menu/menu.component';
 import { UserFormComponent } from './components/layout/user-form/user-form.component';
 import { EvolutionComponent } from './components/pokemon/evolution/evolution.component';
 import { PokeTooltipComponent } from './components/pokemon/poke-tooltip/poke-tooltip.component';
+import { PokemonCardComponent } from './components/pokemon/pokemon-card/pokemon-card.component';
 import { PokemonEditorComponent } from './components/pokemon/pokemon-editor/pokemon-editor.component';
 import { PokemonPreviewComponent } from './components/pokemon/pokemon-preview/pokemon-preview.component';
-import { PokemonComponent } from './components/pokemon/pokemon/pokemon.component';
 import { SmartInputComponent } from './components/smart-input/smart-input.component';
 import { PasteInputComponent } from './components/team/paste-input/paste-input.component';
 import { TeamEditorComponent } from './components/team/team-editor/team-editor.component';
@@ -43,7 +43,7 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
     FooterComponent,
 
     //pokemon
-    PokemonComponent,
+    PokemonCardComponent,
     EvolutionComponent,
     PokeTooltipComponent,
     PokemonPreviewComponent,
@@ -68,7 +68,8 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
     RadioComponent,
     SwitchComponent,
     TagEditorComponent,
-    TooltipComponent
+    TooltipComponent,
+    PokemonCardComponent
   ],
   imports: 
   [
@@ -97,7 +98,7 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
     FooterComponent,
 
     //pokemon
-    PokemonComponent,
+    PokemonCardComponent,
     EvolutionComponent,
     PokeTooltipComponent,
     PokemonPreviewComponent,

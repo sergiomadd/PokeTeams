@@ -14,7 +14,7 @@ import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { QueryService } from 'src/app/core/services/query.service';
 import { TeamService } from 'src/app/core/services/team.service';
 import { TeamEditorService } from 'src/app/shared/services/team-editor.service';
-import { PokemonComponent } from '../pokemon/pokemon.component';
+import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 
 @Component({
   selector: 'app-pokemon-editor',
@@ -40,7 +40,7 @@ export class PokemonEditorComponent
   readonly genderColors = GenderColors;
   readonly shinyColor = shinyColor;
 
-  @ViewChild(PokemonComponent) pokemonPreviewComponent?: PokemonComponent;
+  @ViewChild(PokemonCardComponent) pokemonPreviewComponent?: PokemonCardComponent;
   allAbilities: boolean = false;
   showNotes: boolean = false;
   pokemonFormSubmitted: boolean = false;
