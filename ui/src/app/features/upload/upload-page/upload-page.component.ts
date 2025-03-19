@@ -6,7 +6,7 @@ import { Team } from 'src/app/core/models/team/team.model';
 import { TeamSaveResponse } from 'src/app/core/models/team/teamSaveResponse.model';
 import { TeamService } from 'src/app/core/services/team.service';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
-import { TeamEditorService } from '../../team/services/team-editor.service';
+import { TeamEditorService } from '../../../shared/services/team-editor.service';
 import { User } from '../../user/models/user.model';
 
 @Component({

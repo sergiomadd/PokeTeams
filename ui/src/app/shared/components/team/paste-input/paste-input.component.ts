@@ -8,7 +8,7 @@ import { WindowService } from 'src/app/core/helpers/window.service';
 import { Team } from 'src/app/core/models/team/team.model';
 import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { selectLang } from 'src/app/core/store/config/config.selectors';
-import { TeamEditorService } from 'src/app/features/team/services/team-editor.service';
+import { TeamEditorService } from 'src/app/shared/services/team-editor.service';
 
 @Component({
   selector: 'app-paste-input',

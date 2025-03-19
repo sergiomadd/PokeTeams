@@ -4,14 +4,14 @@ import { Store } from '@ngrx/store';
 import { Observable, skip, take } from 'rxjs';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
+import { SortOrder, SortType, SortWay } from 'src/app/core/models/search/sortOrder.model';
 import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { configActions } from 'src/app/core/store/config/config.actions';
 import { selectTeamsPerPage, selectTheme } from 'src/app/core/store/config/config.selectors';
 import { User } from 'src/app/features/user/models/user.model';
 import { PaginationComponent } from 'src/app/shared/components/dumb/pagination/pagination.component';
-import { SortOrder, SortType, SortWay } from '../../../../features/search/models/sortOrder.model';
-import { SearchService } from '../../../../features/search/services/search.service';
+import { SearchService } from '../../../services/search.service';
 
 @Component({
   selector: 'app-team-table',

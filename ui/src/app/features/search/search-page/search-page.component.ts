@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { Observable, skip } from 'rxjs';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { selectLang } from 'src/app/core/store/config/config.selectors';
+import { SearchService } from '../../../shared/services/search.service';
 import { User } from '../../user/models/user.model';
-import { SearchService } from '../services/search.service';
 
 @Component({
   selector: 'app-search-page',

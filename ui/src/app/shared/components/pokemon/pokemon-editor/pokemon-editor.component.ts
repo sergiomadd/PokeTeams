@@ -13,7 +13,7 @@ import { Team } from 'src/app/core/models/team/team.model';
 import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { QueryService } from 'src/app/core/services/query.service';
 import { TeamService } from 'src/app/core/services/team.service';
-import { TeamEditorService } from 'src/app/features/team/services/team-editor.service';
+import { TeamEditorService } from 'src/app/shared/services/team-editor.service';
 import { PokemonComponent } from '../pokemon/pokemon.component';
 
 @Component({

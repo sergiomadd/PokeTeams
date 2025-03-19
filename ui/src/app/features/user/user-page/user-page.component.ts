@@ -5,7 +5,7 @@ import { Observable, skip } from 'rxjs';
 import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { selectLang } from 'src/app/core/store/config/config.selectors';
-import { SearchService } from 'src/app/features/search/services/search.service';
+import { SearchService } from 'src/app/shared/services/search.service';
 import { UserService } from '../../../core/services/user.service';
 import { User } from '../models/user.model';
 import { UserPageService } from '../services/user-page.service';

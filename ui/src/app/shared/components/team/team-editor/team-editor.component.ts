@@ -15,7 +15,7 @@ import { TeamService } from 'src/app/core/services/team.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { selectTheme } from 'src/app/core/store/config/config.selectors';
-import { TeamEditorService } from 'src/app/features/team/services/team-editor.service';
+import { TeamEditorService } from 'src/app/shared/services/team-editor.service';
 import { TagEditorComponent } from '../../dumb/tag-editor/tag-editor.component';
 import { SmartInputComponent } from '../../smart-input/smart-input.component';
 import { TeamComponent } from '../team/team.component';

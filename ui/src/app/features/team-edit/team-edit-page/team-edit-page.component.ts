@@ -8,7 +8,7 @@ import { TeamData } from 'src/app/core/models/team/teamData.model';
 import { TeamSaveResponse } from 'src/app/core/models/team/teamSaveResponse.model';
 import { TeamService } from 'src/app/core/services/team.service';
 import { selectLang } from 'src/app/core/store/config/config.selectors';
-import { TeamEditorService } from '../../team/services/team-editor.service';
+import { TeamEditorService } from '../../../shared/services/team-editor.service';
 
 @Component({
   selector: 'app-team-edit-page',

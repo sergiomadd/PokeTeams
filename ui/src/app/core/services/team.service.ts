@@ -2,12 +2,12 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Observable, lastValueFrom, timeout } from "rxjs";
-import { SearchQueryDTO } from "src/app/features/search/models/searchQuery.dto";
-import { SearchQueryResponseDTO } from "src/app/features/search/models/searchQueryResponse.dto";
+import { SearchQueryDTO } from "src/app/core/models/search/searchQuery.dto";
 import { environment } from "src/environments/environment.development";
 import { UtilService } from "../helpers/util.service";
 import { Pokemon } from "../models/pokemon/pokemon.model";
 import { PokemonPreview } from "../models/pokemon/pokemonPreview.model";
+import { SearchQueryResponseDTO } from "../models/search/searchQueryResponse.dto";
 import { Regulation } from "../models/team/regulation.model";
 import { Tag } from "../models/team/tag.model";
 import { Team } from "../models/team/team.model";
@@ -15,7 +15,6 @@ import { TeamData } from "../models/team/teamData.model";
 import { TeamId } from "../models/team/teamId.dto";
 import { TeamSaveResponse } from "../models/team/teamSaveResponse.model";
 import { Tournament } from "../models/team/tournament.model";
-
 
 @Injectable({
   providedIn: 'root'

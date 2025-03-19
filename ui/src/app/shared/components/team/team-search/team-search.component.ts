@@ -7,12 +7,12 @@ import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
 import { Chip } from 'src/app/core/models/misc/chip.model';
 import { QueryItem } from 'src/app/core/models/misc/queryResult.model';
+import { SetOperation } from 'src/app/core/models/search/setOperation.enum';
 import { Tag } from 'src/app/core/models/team/tag.model';
 import { QueryService } from 'src/app/core/services/query.service';
 import { TeamService } from 'src/app/core/services/team.service';
 import { selectTheme } from 'src/app/core/store/config/config.selectors';
-import { SetOperation } from 'src/app/features/search/models/setOperation.enum';
-import { SearchService } from 'src/app/features/search/services/search.service';
+import { SearchService } from 'src/app/shared/services/search.service';
 
 
 @Component({
