@@ -19,27 +19,40 @@ export class AuthInterceptorService
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> 
   {
     return next.handle(request).pipe(catchError((HttpError: HttpErrorResponse) => 
+    {
+      let error: CustomError =
       {
-        let error: CustomError =
-        {
-          status: HttpError.status,
-          message: HttpError.message
-        };
-        if(error.status === 401 && error.message && error.message.includes("NoTokensProvided"))
-        {
-          this.store.dispatch(authActions.logOutSuccess());
-        }
-        else if(error.status === 401 && error.message && error.message.includes("NoAccessTokenProvided"))
-        {
-          return this.authService.refreshTokens().pipe(
-            switchMap(() => 
+        status: HttpError.status,
+        message: HttpError.message
+      };
+      
+      if((error.status === 401 && error.message && error.message.includes("NoTokensProvided")))
+      {
+        this.store.dispatch(authActions.logOutSuccess());
+      }
+      else if(error.status === 401 && error.message && error.message.includes("NoAccessTokenProvided"))
+      {
+        return this.authService.refreshTokens().pipe(
+          switchMap(() => 
+          {
+            //Retry original request after token refresh
+            return next.handle(request);
+          }),
+          catchError((refreshError) =>  
+          {
+            //Retry original request after token refresh conflict
+            if(refreshError.status === 409 && refreshError.message && refreshError.message.includes("Refresh Conflict"))
             {
-              //Retry original request after token refresh
               return next.handle(request);
-            })
-          );
-        }
-        return throwError(() => error);
-     }))
+            }
+            
+            this.store.dispatch(authActions.logOutSuccess());
+            return throwError(() => error);
+          })
+        );
+      }
+
+      return throwError(() => error);
+    }))
   }
 }

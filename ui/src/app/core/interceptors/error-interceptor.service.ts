@@ -57,6 +57,10 @@ export class ErrorInterceptorService
               //Request Timeout
               error.message = "Server busym try again later";
               break;
+            case 409:
+              //Conflict
+              error.message = HttpError.error ?? "Conflict Found";
+              break;
             case 429:
               //Too Many Requests -> rate limiting
               error.message = "Too many requests, try again later";
