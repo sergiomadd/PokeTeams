@@ -60,11 +60,23 @@
         <ng-container *ngIf="window.isMobile()">
           <div class="editor-input relative">
             <app-smart-input
-            [label]="'team.editor.rental_code-label' | translate"
-            [updateOnChange]="true"
-            (updateEvent)="rentalCodeSelectEvent($event)"
+            #tagInput
+            (disabled)="team?.tags ? team?.tags!.length > 2 : false"
+            [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
+            [allowNew]="true"
+            [getter]="queryService.queryTagCallback"
+            [allGetter]="queryService.tagAllCallback"
+            (selectEvent)="tagSelectEvent($event)"
+            (newEvent)="toggleTagEditor()"
             class="smart-input-wrapper input-m"
-            ></app-smart-input>      
+            ></app-smart-input>
+            <div class="tag-editor-wrapper">
+              <app-tag-editor 
+              [visible]="showTagEditor"
+              (addEvent)="tagSelectEvent($event)"
+              (closeEvent)="tagEditorCloseEvent()"
+              ></app-tag-editor>
+            </div>
           </div>
         </ng-container>
       </div>
@@ -80,26 +92,39 @@
             ></app-smart-input>      
           </div>
         </ng-container>
-        <div class="editor-input relative">
-          <app-smart-input
-          #tagInput
-          (disabled)="team?.tags ? team?.tags!.length > 2 : false"
-          [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
-          [allowNew]="true"
-          [getter]="queryService.queryTagCallback"
-          [allGetter]="queryService.tagAllCallback"
-          (selectEvent)="tagSelectEvent($event)"
-          (newEvent)="toggleTagEditor()"
-          class="smart-input-wrapper input-m"
-          ></app-smart-input>
-          <div class="tag-editor-wrapper">
-            <app-tag-editor 
-            [visible]="showTagEditor"
-            (addEvent)="tagSelectEvent($event)"
-            (closeEvent)="tagEditorCloseEvent()"
-            ></app-tag-editor>
+        <ng-container *ngIf="!window.isMobile()">
+          <div class="editor-input relative">
+            <app-smart-input
+            #tagInput
+            (disabled)="team?.tags ? team?.tags!.length > 2 : false"
+            [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
+            [allowNew]="true"
+            [getter]="queryService.queryTagCallback"
+            [allGetter]="queryService.tagAllCallback"
+            (selectEvent)="tagSelectEvent($event)"
+            (newEvent)="toggleTagEditor()"
+            class="smart-input-wrapper input-m"
+            ></app-smart-input>
+            <div class="tag-editor-wrapper">
+              <app-tag-editor 
+              [visible]="showTagEditor"
+              (addEvent)="tagSelectEvent($event)"
+              (closeEvent)="tagEditorCloseEvent()"
+              ></app-tag-editor>
+            </div>
           </div>
-        </div>
+        </ng-container>
+        <ng-container *ngIf="window.isMobile()">
+          <div class="editor-input relative">
+            <app-smart-input
+            [label]="'team.editor.rental_code-label' | translate"
+            [updateOnChange]="true"
+            [error]="rentalCodeError ? true : false"
+            (updateEvent)="rentalCodeSelectEvent($event)"
+            class="smart-input-wrapper input-m"
+            ></app-smart-input>      
+          </div>
+        </ng-container>
       </div>
     </div>
     <ng-container *ngIf="loggedUser">

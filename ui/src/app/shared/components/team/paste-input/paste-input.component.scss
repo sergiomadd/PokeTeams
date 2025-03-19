@@ -36,7 +36,8 @@
   .example
   {
     position: absolute;
-    top: -4em;
-    right: 0;
+    top: unset;
+    bottom: 0.4em;
+    right: 3em;
   }
 }
