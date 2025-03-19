@@ -45,7 +45,24 @@ export class UserPageComponent
       if(this.username)
       {
         this.loading = true;
-        this.updateUser(this.username);
+        this.userService.getUser(this.username).subscribe(
+          {
+            next: (response) =>
+            {
+              this.user = response;
+              this.userPageService.setUser(response);
+              this.load();
+            },
+            error: () => 
+            {
+              this.loading = false;
+            },
+            complete: () => 
+            {
+              this.loading = false;
+            }
+          }
+        )
       }
     })
     this.loggedUser$.subscribe(value =>
@@ -56,6 +73,8 @@ export class UserPageComponent
         if(this.username && this.loggedUsername && this.username === this.loggedUsername)
         {
           this.userPageService.getloggedUserEmail(value)
+          this.user = value;
+          this.userPageService.setUser(value);
         }
       }
       else
@@ -63,6 +82,22 @@ export class UserPageComponent
         this.loggedUsername = undefined;
       }
     })
+
+    //needed to not repeat same query twice
+    this.loggedUser$.pipe(skip(1)).subscribe(value =>
+      {
+        if(value) 
+        {
+          if(this.username && this.loggedUsername && this.username === this.loggedUsername)
+          {
+            this.load();
+          }
+        }
+        else
+        {
+          this.loggedUsername = undefined;
+        }
+      })
     this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
     {
       this.userTeams = value;
@@ -76,29 +111,6 @@ export class UserPageComponent
   ngOnDestroy()
   {
     this.searchService.resetTeams();
-  }
-
-  updateUser(username: string)
-  {
-    //Esto innecesario si ya esta logeado, por que en store tengo ya el user obj
-    this.userService.getUser(username).subscribe(
-      {
-        next: (response) =>
-        {
-          this.user = response;
-          this.userPageService.setUser(this.user);
-          this.load();
-        },
-        error: () => 
-        {
-          this.loading = false;
-        },
-        complete: () => 
-        {
-          this.loading = false;
-        }
-      }
-    )
   }
 
   load()
