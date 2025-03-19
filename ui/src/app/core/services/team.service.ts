@@ -124,8 +124,7 @@ export class TeamService
     let regulation: Regulation = <Regulation>{}
     let url = this.apiUrl + 'regulation/' + identifier;
     regulation = await lastValueFrom(this.http.get<Regulation>(url).pipe(timeout(this.dataTimeout)));
-
-    return this.util.toCamelCase(regulation); 
+    return regulation; 
   }
 
   async getTagByIdentifier(identifier: string) : Promise<Tag>
