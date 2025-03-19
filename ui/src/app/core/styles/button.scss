@@ -25,55 +25,23 @@ button
 .button-primary
 {
   background-color: var(--primary);
-  color: white;
+  color: var(--white);
 }
 
 .button-primary-clear
 {
-  color: var(--primary-dark);
   border: 1px solid var(--primary);
-}
-
-.button-primary-shadow
-{
-  background-color: var(--primary-light);
-  color: var(--primary-dark);
 }
 
 .button-secondary
 {
   background-color: var(--secondary);
-  color: var(--secondary-dark);
+  color: var(--white);
 }
 
 .button-secondary-clear
 {
-  color: var(--secondary-dark);
   border: 1px solid var(--secondary);
-}
-
-.button-secondary-shadow
-{
-  background-color: var(--secondary-light);
-  color: var(--secondary-dark);
-}
-
-.button-tertiary
-{
-  background-color: var(--tertiary);
-  color: white;
-}
-
-.button-tertiary-clear
-{
-  color: var(--tertiary-dark);
-  border: 1px solid var(--tertiary);
-}
-
-.button-tertiary-shadow
-{
-  background-color: var(--tertiary-light);
-  color: var(--tertiary-dark);
 }
 
 .button-m
