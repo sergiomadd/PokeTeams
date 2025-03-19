@@ -1,7 +1,7 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, skip, take } from 'rxjs';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
 import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
@@ -87,15 +87,23 @@ export class TeamTableComponent
       }
     )
     this.loggedUser$.subscribe(value =>
-      {
-        this.logged = value ?? undefined;
-      })
-    this.store.select(selectTeamsPerPage).subscribe(value => 
-      {
-        this.searchService.setQueryTeamsPerPage(value);
-        this.searchService.defaultSearch();
-        this.paginationForm.controls.teamsPerPage.setValue(value);
-      })
+    {
+      this.logged = value ?? undefined;
+    })
+    
+    //Only search when value changes after first load
+    this.store.select(selectTeamsPerPage).pipe(skip(1)).subscribe(value => 
+    {
+      this.searchService.setQueryTeamsPerPage(value); // Set query on every change
+      this.searchService.defaultSearch(); // Perform default search on value change
+    });
+    
+    //Set the query on the first load
+    this.store.select(selectTeamsPerPage).pipe(take(1)).subscribe(value => 
+    {
+      this.searchService.setQueryTeamsPerPage(value); // Set query on first load
+      this.paginationForm.controls.teamsPerPage.setValue(value); // Set form control on first load
+    });
   }
 
   deleteTeam()

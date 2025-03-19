@@ -32,6 +32,11 @@ export class SearchService
     this.resetQuery();
   }
 
+  resetTeams()
+  {
+    this.teams$.next([]);
+  }
+
   resetQuery()
   {
     this.setQueryItems([]);

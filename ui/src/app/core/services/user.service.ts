@@ -20,11 +20,7 @@ export class UserService
   getUser(userName: string): Observable<User>
   {
     let url = this.apiUrl + userName;
-    return this.http.get<User>(url, {withCredentials: true})
-      .pipe
-      (
-        timeout(this.dataTimeout)
-      );
+    return this.http.get<User>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
   
   async checkUserNameAvailable(userName: string) : Promise<boolean>

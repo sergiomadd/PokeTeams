@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, skip } from 'rxjs';
 import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { selectLang } from 'src/app/core/store/config/config.selectors';
@@ -39,43 +39,43 @@ export class UserPageComponent
 
   ngOnInit()
   {
-    this.loggedUser$.subscribe(value =>
-      {
-        if(value) 
-        {
-          this.loggedUsername = value?.username;
-          if(this.username && this.loggedUsername && this.username === this.loggedUsername)
-          {
-            this.updateUser(this.username)
-            this.userPageService.getloggedUserEmail(value)
-          }
-        }
-        else
-        {
-          this.loggedUsername = undefined;
-        }
-      })
     this.route.params.subscribe(params =>
+    {
+      this.username = params["username"];
+      if(this.username)
       {
-        this.username = params["username"];
-        if(this.username)
+        this.loading = true;
+        this.updateUser(this.username);
+      }
+    })
+    this.loggedUser$.subscribe(value =>
+    {
+      if(value) 
+      {
+        this.loggedUsername = value?.username;
+        if(this.username && this.loggedUsername && this.username === this.loggedUsername)
         {
-          this.loading = true;
-          this.updateUser(this.username);
-          this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
-          {
-            this.userTeams = value;
-          })
+          this.userPageService.getloggedUserEmail(value)
         }
-        this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
-        {
-          this.userTeams = value;
-        })
-      })
-    this.selectedLang$.subscribe(value =>
+      }
+      else
       {
-        this.load();
-      });
+        this.loggedUsername = undefined;
+      }
+    })
+    this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
+    {
+      this.userTeams = value;
+    })
+    this.selectedLang$.pipe(skip(1)).subscribe(value =>
+    {
+      this.load();
+    });
+  }
+
+  ngOnDestroy()
+  {
+    this.searchService.resetTeams();
   }
 
   updateUser(username: string)
@@ -103,14 +103,17 @@ export class UserPageComponent
 
   load()
   {
-    if(!this.user?.visibility && !(this.loggedUsername === this.user?.username))
-    {
-      this.userPrivate = true;
-    }
-    else
-    {
-      this.userPrivate = false;
-      if(this.user) { this.searchService.userOnlySearch(this.user.username);}
+    if(this.user) 
+    { 
+      if(!this.user.visibility && !(this.loggedUsername === this.user.username))
+      {
+        this.userPrivate = true;
+      }
+      else
+      {
+        this.userPrivate = false;
+        this.searchService.userOnlySearch(this.user.username);
+      }    
     }
   }
 

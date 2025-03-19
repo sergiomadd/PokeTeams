@@ -55,7 +55,6 @@ export class TeamPreviewComponent
         this.selectedThemeName = value;
       }
     })
-
   }
 
   ngOnChanges(changes: SimpleChanges)
