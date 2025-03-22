@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using api.Util;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -158,6 +159,14 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
     });
 });
 */
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API Name", Version = "v1" });
+
+    // Register the operation filter to add Accept-Language header
+    c.OperationFilter<AcceptLanguageHeaderParameter>();
+});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
