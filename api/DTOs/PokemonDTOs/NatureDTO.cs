@@ -7,6 +7,11 @@
         public string IncreasedStatIdentifier { get; set; }
         public string DecreasedStatIdentifier { get; set; }
 
+        public NatureDTO()
+        {
+
+        }
+
         public NatureDTO(LocalizedText name, string identifier, string increasedStat, string decreasedStat)
         {
             Name = name;

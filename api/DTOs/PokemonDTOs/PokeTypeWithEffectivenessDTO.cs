@@ -10,7 +10,7 @@
         public bool Teratype { get; set; }
 
 
-        public PokeTypeWithEffectivenessDTO(string identifier, LocalizedText name, EffectivenessDTO effectivenessAttack = null, EffectivenessDTO effectivenessDefense = null, bool teraType = false)
+        public PokeTypeWithEffectivenessDTO(string identifier, LocalizedText name, EffectivenessDTO? effectivenessAttack = null, EffectivenessDTO? effectivenessDefense = null, bool teraType = false)
         {
             Identifier = identifier;
             Name = name;

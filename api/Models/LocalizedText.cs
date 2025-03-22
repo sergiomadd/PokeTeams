@@ -7,6 +7,12 @@ namespace api.Models
         public string? Content { get; set; }
         public string Language { get; set; }
 
+
+        public LocalizedText()
+        {
+
+        }
+
         public LocalizedText(string? content, string? language = "en") 
         {
             Content = content;

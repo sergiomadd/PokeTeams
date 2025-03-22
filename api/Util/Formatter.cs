@@ -7,32 +7,34 @@ namespace api.Util
 {
     public static class Formatter
     {
-        public static string FormatProse(string value, string[]? args = null)
+        public static string? FormatProse(string? value, string[]? args = null)
         {
-            string formated = value;
-            //Regex example: [paralyzed]{mechanic:paralysis}
-            string linkRegex = new Regex(@"(\[.+?})").ToString();
-            if (Regex.IsMatch(value, linkRegex))
+            string? formated = value;
+            if(formated != null)
             {
-                Match match = Regex.Match(value, linkRegex);
-                while (match.Success)
+                //Regex example: [paralyzed]{mechanic:paralysis}
+                string linkRegex = new Regex(@"(\[.+?})").ToString();
+                if (Regex.IsMatch(value, linkRegex))
                 {
-                    formated = formated.Replace(match.Groups[1].Value, InsertLink(match.Groups[1].Value));
-                    match = match.NextMatch();
-                }
-            }
-
-            if (args != null && args.Count() > 0)
-            {
-                //Regex example: $effect_chance% 
-                string effectChanceRegex = new Regex(@"(\$.*?%)").ToString();
-                if (Regex.IsMatch(value, effectChanceRegex))
-                {
-                    Match match = Regex.Match(value, effectChanceRegex);
+                    Match match = Regex.Match(value, linkRegex);
                     while (match.Success)
                     {
-                        formated = formated.Replace(match.Groups[1].Value, args[0] + '%');
+                        formated = formated.Replace(match.Groups[1].Value, InsertLink(match.Groups[1].Value));
                         match = match.NextMatch();
+                    }
+                }
+                if (args != null && args.Count() > 0)
+                {
+                    //Regex example: $effect_chance% 
+                    string effectChanceRegex = new Regex(@"(\$.*?%)").ToString();
+                    if (Regex.IsMatch(value, effectChanceRegex))
+                    {
+                        Match match = Regex.Match(value, effectChanceRegex);
+                        while (match.Success)
+                        {
+                            formated = formated.Replace(match.Groups[1].Value, args[0] + '%');
+                            match = match.NextMatch();
+                        }
                     }
                 }
             }
