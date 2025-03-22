@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Models.DBModels
 {
-    [Keyless]
     public class Type_names
     {
+        [Key]
         public int type_id { get; set; }
         public int local_language_id { get; set; }
         public string name { get; set; }
