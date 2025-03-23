@@ -1,6 +1,7 @@
 ﻿using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Services;
+using api.Services.PokedexServices;
 using api.Util;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
@@ -12,10 +13,10 @@ namespace api.Controllers
     [ApiController]
     public class AbilityController : ControllerBase
     {
-        private readonly IPokedexService _pokemonService;
-        public AbilityController(IPokedexService pokemonService)
+        private readonly IAbilityService _abilityService;
+        public AbilityController(IAbilityService abilityService)
         {
-            _pokemonService = pokemonService;
+            _abilityService = abilityService;
         }
 
         [HttpGet("name/{abilityName}", Name = "GetAbilityByName")]
@@ -24,7 +25,7 @@ namespace api.Controllers
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var ability = await _pokemonService.GetAbilityByName(abilityName, langId ?? 9);
+            var ability = await _abilityService.GetAbilityByName(abilityName, langId ?? 9);
             if (ability == null)
             {
                 return BadRequest("Ability not found.");
@@ -38,7 +39,7 @@ namespace api.Controllers
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var ability = await _pokemonService.GetAbilityByIdentifier(abilityIdentifier, langId ?? 9);
+            var ability = await _abilityService.GetAbilityByIdentifier(abilityIdentifier, langId ?? 9);
             if (ability == null)
             {
                 return BadRequest("Ability not found.");
@@ -52,7 +53,7 @@ namespace api.Controllers
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            List<QueryResultDTO> abilities = await _pokemonService.QueryAllAbilities(langId ?? 9);
+            List<QueryResultDTO> abilities = await _abilityService.QueryAllAbilities(langId ?? 9);
             if (abilities == null)
             {
                 return NotFound("Couldn't get all abilities");
@@ -66,7 +67,7 @@ namespace api.Controllers
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            List<QueryResultDTO> abilities = await _pokemonService.QueryAllPokemonAbilites(id, langId ?? 9);
+            List<QueryResultDTO> abilities = await _abilityService.QueryAllPokemonAbilites(id, langId ?? 9);
             if (abilities == null)
             {
                 return NotFound("Couldn't get pokemon abilities");
@@ -80,7 +81,7 @@ namespace api.Controllers
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            List<QueryResultDTO> abilities = await _pokemonService.QueryAbilitiesByName(key, langId ?? 9);
+            List<QueryResultDTO> abilities = await _abilityService.QueryAbilitiesByName(key, langId ?? 9);
             if (abilities == null)
             {
                 return NotFound("Couldn't query abilities");
@@ -91,7 +92,7 @@ namespace api.Controllers
         [HttpGet, Route("hidden")]
         public async Task<ActionResult<bool>> IsAbilityHidden(string abilityIdentifier, int dexNumber)
         {
-            bool hidden = await _pokemonService.IsAbilityHidden(abilityIdentifier, dexNumber);
+            bool hidden = await _abilityService.IsAbilityHidden(abilityIdentifier, dexNumber);
             return Ok(hidden);
         }
     }

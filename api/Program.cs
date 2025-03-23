@@ -11,6 +11,7 @@ using System.Text;
 using api.Util;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
+using api.Services.PokedexServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,13 +24,20 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<PokedexContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPokedex")), ServiceLifetime.Scoped);
 builder.Services.AddDbContext<PokeTeamContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPoketeam")), ServiceLifetime.Scoped);
+builder.Services.AddScoped<IPokedexContext, PokedexContext>();
 
 builder.Services.AddTransient<IIdentityService, IdentityService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<IPokedexContext, PokedexContext>();
-builder.Services.AddScoped<IPokedexService, PokedexService>();
-builder.Services.AddScoped<IPokeTeamService, PokeTeamService>();
+
+builder.Services.AddScoped<IPokemonService, PokemonService>();
+builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<IAbilityService, AbilityService>();
+builder.Services.AddScoped<IMoveService, MoveService>();
+builder.Services.AddScoped<INatureService, NatureService>();
+builder.Services.AddScoped<ITypeService, TypeService>();
+
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IPokeTeamService, PokeTeamService>();
 builder.Services.AddScoped<ITournamentService, TournamentService>();
 builder.Services.AddScoped<IRegulationService, RegulationService>();
 builder.Services.AddScoped<ITagService, TagService>();

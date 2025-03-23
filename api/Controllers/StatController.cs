@@ -1,4 +1,5 @@
 ﻿using api.Services;
+using api.Services.PokedexServices;
 using api.Util;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
@@ -9,8 +10,8 @@ namespace api.Controllers
     [ApiController]
     public class StatController : ControllerBase
     {
-        private readonly IPokedexService _pokemonService;
-        public StatController(IPokedexService pokemonService)
+        private readonly IPokemonService _pokemonService;
+        public StatController(IPokemonService pokemonService)
         {
             _pokemonService = pokemonService;
         }

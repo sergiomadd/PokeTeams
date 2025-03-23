@@ -1,6 +1,7 @@
 ﻿using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Services;
+using api.Services.PokedexServices;
 using api.Util;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
@@ -11,10 +12,10 @@ namespace api.Controllers
     [ApiController]
     public class MoveController : ControllerBase
     {
-        private readonly IPokedexService _pokemonService;
-        public MoveController(IPokedexService pokemonService)
+        private readonly IMoveService _moveService;
+        public MoveController(IMoveService moveService)
         {
-            _pokemonService = pokemonService;
+            _moveService = moveService;
         }
 
         [HttpGet("{moveName}", Name = "GetMoveByName")]
@@ -23,7 +24,7 @@ namespace api.Controllers
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var move = await _pokemonService.GetMoveByName(moveName, langId ?? 9);
+            var move = await _moveService.GetMoveByName(moveName, langId ?? 9);
             if (move == null)
             {
                 return BadRequest("Move not found.");
@@ -37,25 +38,10 @@ namespace api.Controllers
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            List<QueryResultDTO> moves = await _pokemonService.QueryMovesByName(key, langId ?? 9);
+            List<QueryResultDTO> moves = await _moveService.QueryMovesByName(key, langId ?? 9);
             if (moves == null)
             {
                 return NotFound("Couldn't find moves");
-            }
-            return Ok(moves);
-        }
-
-
-        [HttpGet, Route("pokemon/{id}")]
-        public async Task<ActionResult<List<QueryResultDTO>>> QueryAllPokemonMoves(string id)
-        {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
-            List<QueryResultDTO> moves = await _pokemonService.QueryAllPokemonMoves(id, langId ?? 9);
-            if (moves == null)
-            {
-                return NotFound("Couldn't get pokemon moves");
             }
             return Ok(moves);
         }

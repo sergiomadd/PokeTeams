@@ -2,6 +2,7 @@
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Services;
+using api.Services.PokedexServices;
 using api.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,19 +14,19 @@ namespace api.Controllers
     [ApiController]
     public class ItemController : ControllerBase
     {
-        private readonly IPokedexService _pokemonService;
-        public ItemController(IPokedexService pokemonService)
+        private readonly IItemService _itemService;
+        public ItemController(IItemService itemService)
         {
-            _pokemonService = pokemonService;
+            _itemService = itemService;
         }
 
         [HttpGet("name/{itemName}", Name = "GetItemByName")]
-        public async Task<ActionResult<ItemDTO>> GetItemByName(string itemName)
+        public async Task<ActionResult<ItemDTO?>> GetItemByName(string itemName)
         {
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var item = await _pokemonService.GetItemByName2(itemName, langId ?? 9);
+            ItemDTO? item = await _itemService.GetItemByName(itemName, langId ?? 9);
             if (item == null)
             {
                 return BadRequest("Item not found.");
@@ -39,7 +40,7 @@ namespace api.Controllers
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            var item = await _pokemonService.GetItemByIdentifier2(itemIdentifier, langId ?? 9);
+            var item = await _itemService.GetItemByIdentifier(itemIdentifier, langId ?? 9);
             if (item == null)
             {
                 return BadRequest("Item not found.");
@@ -53,7 +54,7 @@ namespace api.Controllers
             var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
             int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
 
-            List<QueryResultDTO> items = await _pokemonService.QueryItemsByName(key, langId ?? 9);
+            List<QueryResultDTO> items = await _itemService.QueryItemsByName(key, langId ?? 9);
             if (items == null)
             {
                 return NotFound("Couldn't find items");

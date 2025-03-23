@@ -21,16 +21,13 @@ namespace api.Controllers
     public class TeamController : ControllerBase
     {
         private readonly IPokeTeamService _teamService;
-        private readonly IPokedexService _pokemonService;
         private readonly IIdentityService _identityService;
 
         public TeamController(
             IPokeTeamService teamService,
-            IPokedexService pokemonService,
             IIdentityService identityService)
         {
             _teamService = teamService;
-            _pokemonService = pokemonService;
             _identityService = identityService;
         }
 

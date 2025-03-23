@@ -1,0 +1,300 @@
+﻿using api.Data;
+using api.DTOs;
+using api.DTOs.PokemonDTOs;
+using api.Models.DBModels;
+using Microsoft.EntityFrameworkCore;
+
+
+namespace api.Services.PokedexServices
+{
+    public class TypeService : ITypeService
+    {
+        private readonly IPokedexContext _pokedexContext;
+
+        public TypeService(IPokedexContext pokedexContext)
+        {
+            _pokedexContext = pokedexContext;
+        }
+
+
+        public async Task<PokeTypesDTO> GetPokemonTypes(int id, int langId)
+        {
+            PokeTypeDTO? type1 = null;
+            Pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 1);
+            if (pokemonType1 != null)
+            {
+                type1 = GetTypeById(pokemonType1.type_id, langId).Result;
+            }
+            PokeTypeDTO? type2 = null;
+            Pokemon_types? pokemonType2 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 2);
+            if (pokemonType2 != null)
+            {
+                type2 = GetTypeById(pokemonType2.type_id, langId).Result;
+            }
+            PokeTypesDTO pokeTypes = new PokeTypesDTO
+            {
+                Type1 = type1,
+                Type2 = type2
+            };
+            return pokeTypes;
+        }
+
+        public async Task<PokeTypeDTO?> GetTypeById(int id, int langId, bool teraType = false)
+        {
+            PokeTypeDTO? pokeType = null;
+
+            var query =
+                from types in _pokedexContext.Types.Where(t => t.id == id)
+
+                join typeNames in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = langId } equals new { Key1 = typeNames.type_id, Key2 = typeNames.local_language_id } into typeNamesJoin
+                from typeNames in typeNamesJoin.DefaultIfEmpty()
+
+                join typeNamesDefault in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
+                from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
+
+                select new PokeTypeDTO(
+                    types.identifier,
+                    typeNames != null ?
+                        new LocalizedText(typeNames.name, typeNames.local_language_id) :
+                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                    teraType);
+
+            pokeType = await query.FirstOrDefaultAsync();
+
+            return pokeType;
+        }
+
+
+        public async Task<PokeTypeDTO?> GetTypeByIdentifier(string identifier, bool teraType, int langId)
+        {
+            PokeTypeDTO? pokeType = null;
+
+            var query =
+                from types in _pokedexContext.Types.Where(t => t.identifier == identifier)
+
+                join typeNames in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = langId } equals new { Key1 = typeNames.type_id, Key2 = typeNames.local_language_id } into typeNamesJoin
+                from typeNames in typeNamesJoin.DefaultIfEmpty()
+
+                join typeNamesDefault in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
+                from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
+
+                select new PokeTypeDTO(
+                    types.identifier,
+                    typeNames != null ?
+                        new LocalizedText(typeNames.name, typeNames.local_language_id) :
+                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                    teraType);
+
+            pokeType = await query.FirstOrDefaultAsync();
+
+            return pokeType;
+        }
+
+        public async Task<PokeTypesWithEffectivenessDTO?> GetPokemonTypesWithEffectiveness(int id, int langId)
+        {
+            PokeTypesWithEffectivenessDTO? pokeTypes = null;
+
+            PokeTypeWithEffectivenessDTO? type1 = null;
+            Pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 1);
+            if (pokemonType1 != null)
+            {
+                type1 = await GetTypeWithEffectivenessById(pokemonType1.type_id, langId);
+            }
+            PokeTypeWithEffectivenessDTO? type2 = null;
+            Pokemon_types? pokemonType2 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 2);
+            if (pokemonType2 != null)
+            {
+                type2 = await GetTypeWithEffectivenessById(pokemonType2.type_id, langId);
+            }
+            pokeTypes = new PokeTypesWithEffectivenessDTO(type1, type2);
+            return pokeTypes;
+        }
+
+        public async Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessById(int id, int langId)
+        {
+            PokeTypeWithEffectivenessDTO? pokeType = null;
+
+            var query =
+                from types in _pokedexContext.Types.Where(t => t.id == id)
+
+                join typeNames in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = langId } equals new { Key1 = typeNames.type_id, Key2 = typeNames.local_language_id } into typeNamesJoin
+                from typeNames in typeNamesJoin.DefaultIfEmpty()
+
+                join typeNamesDefault in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
+                from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
+
+                select new PokeTypeWithEffectivenessDTO(
+                    types.identifier,
+                    typeNames != null ?
+                        new LocalizedText(typeNames.name, typeNames.local_language_id) :
+                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                    null,
+                    null,
+                    false);
+
+            pokeType = await query.FirstOrDefaultAsync();
+
+            if (pokeType != null)
+            {
+                pokeType.EffectivenessAttack = await GetTypeEffectivenessAttack(id, langId);
+                pokeType.EffectivenessDefense = await GetTypeEffectivenessDefense(id, langId);
+            }
+
+            return pokeType;
+        }
+
+        public async Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessByIdentifier(string identifier, int langId, bool teraType = false)
+        {
+            PokeTypeWithEffectivenessDTO? pokeType = null;
+
+            var query =
+                from types in _pokedexContext.Types.Where(t => t.identifier == identifier)
+
+                join typeNames in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = langId } equals new { Key1 = typeNames.type_id, Key2 = typeNames.local_language_id } into typeNamesJoin
+                from typeNames in typeNamesJoin.DefaultIfEmpty()
+
+                join typeNamesDefault in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
+                from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
+
+                select new PokeTypeWithEffectivenessDTO(
+                    types.identifier,
+                    typeNames != null ?
+                        new LocalizedText(typeNames.name, typeNames.local_language_id) :
+                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                    null,
+                    null,
+                    false);
+
+            pokeType = await query.FirstOrDefaultAsync();
+
+            int? id = _pokedexContext.Types.Where(t => t.identifier == identifier).FirstOrDefaultAsync().Result?.id;
+
+            if (pokeType != null && id != null)
+            {
+                pokeType.EffectivenessAttack = await GetTypeEffectivenessAttack((int)id, langId);
+                pokeType.EffectivenessAttack = await GetTypeEffectivenessDefense((int)id, langId);
+            }
+
+            return pokeType;
+        }
+
+        public async Task<EffectivenessDTO?> GetTypeEffectivenessAttack(int id, int langId)
+        {
+            EffectivenessDTO? effectiveness = null;
+            List<Tuple<PokeTypeDTO, double>> allValues = new List<Tuple<PokeTypeDTO, double>>();
+            List<Type_efficacy> typeEfficacyList = await _pokedexContext.Type_efficacy.Where(t => t.damage_type_id == id && t.damage_factor != 100).ToListAsync();
+            if (typeEfficacyList != null)
+            {
+                foreach (var typeEfficacy in typeEfficacyList)
+                {
+                    PokeTypeDTO? type = await GetTypeById(typeEfficacy.damage_type_id, langId);
+                    if (type != null)
+                    {
+                        allValues.Add(new(type, typeEfficacy.damage_factor / (double)100));
+                    }
+                }
+                effectiveness = new EffectivenessDTO(allValues);
+            }
+            return effectiveness;
+        }
+
+        public async Task<EffectivenessDTO?> GetTypeEffectivenessDefense(int id, int langId)
+        {
+            EffectivenessDTO? effectiveness = null;
+            List<Tuple<PokeTypeDTO, double>> allValues = new List<Tuple<PokeTypeDTO, double>>(); ;
+            List<Type_efficacy> typeEfficacyList = await _pokedexContext.Type_efficacy.Where(t => t.target_type_id == id && t.damage_factor != 100).ToListAsync();
+            if (typeEfficacyList != null)
+            {
+                foreach (var typeEfficacy in typeEfficacyList)
+                {
+                    PokeTypeDTO? type = await GetTypeById(typeEfficacy.damage_type_id, langId);
+                    if (type != null)
+                    {
+                        allValues.Add(new(type, typeEfficacy.damage_factor / (double)100));
+                    }
+                }
+                effectiveness = new EffectivenessDTO(allValues);
+            }
+            return effectiveness;
+        }
+
+        public async Task<List<QueryResultDTO>> QueryTypesByName(string key, int langId, bool teraType = false)
+        {
+            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
+            List<Type_names> typeNames = await _pokedexContext.Type_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
+            if (typeNames != null && typeNames.Count > 0)
+            {
+                foreach (var typeName in typeNames)
+                {
+                    Types? types = await _pokedexContext.Types.FirstOrDefaultAsync(i => i.id == typeName.type_id);
+                    if (types != null)
+                    {
+                        string pathStart = teraType ? "https://localhost:7134/images/sprites/teratypes/"
+                        : "https://localhost:7134/images/sprites/types/generation-viii/";
+                        queryResults.Add(new QueryResultDTO(typeName.name, typeName.type_id.ToString(), icon: $"{pathStart}{types.identifier}.png"));
+                    }
+                    else
+                    {
+                        queryResults.Add(new QueryResultDTO(typeName.name, typeName.type_id.ToString()));
+                    }
+                }
+            }
+            return queryResults;
+        }
+
+        public async Task<List<PokeTypeDTO>> GetAllTypes(int langId)
+        {
+            List<PokeTypeDTO> pokeTypes = new List<PokeTypeDTO>();
+            List<Types> types = await _pokedexContext.Types.ToListAsync();
+            foreach (Types type in types)
+            {
+                PokeTypeDTO? pokeType = await GetTypeById(type.id, langId);
+                if (pokeType != null)
+                {
+                    pokeTypes.Add(pokeType);
+                }
+            }
+            return pokeTypes;
+        }
+
+        public async Task<List<PokeTypeDTO>> GetAllTeraTypes(int langId)
+        {
+            List<PokeTypeDTO> pokeTypes = new List<PokeTypeDTO>();
+            List<Types> types = await _pokedexContext.Types.ToListAsync();
+            //Avoid adding last 2 types -> (unkown, shadow) UNSUPPORTED
+            for (int i = 0; i < types.Count - 2; i++)
+            {
+                PokeTypeDTO? pokeType = await GetTypeById(types[i].id, langId, true);
+                if (pokeType != null)
+                {
+                    pokeTypes.Add(pokeType);
+                }
+            }
+            return pokeTypes;
+        }
+
+        public async Task<List<QueryResultDTO>> QueryAllTeraTypes(int langId)
+        {
+            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
+            List<Types> types = await _pokedexContext.Types.ToListAsync();
+            //Avoid adding last 2 types -> (unkown, shadow) UNSUPPORTED
+            for (int i = 0; i < types.Count - 2; i++)
+            {
+                PokeTypeDTO? pokeType = await GetTypeById(types[i].id, langId, true);
+                if (pokeType != null)
+                {
+                    queryResults.Add(new QueryResultDTO(pokeType.Name.Content, pokeType.Identifier, icon: pokeType.IconPath));
+                }
+            }
+            return queryResults;
+        }
+    }
+}

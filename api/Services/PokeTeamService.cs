@@ -40,42 +40,40 @@ using System.Security.Cryptography.Xml;
 using System.Xml.Serialization;
 using Microsoft.IdentityModel.Tokens;
 using Azure;
+using api.Services.PokedexServices;
 
 namespace api.Services
 {
     public class PokeTeamService : IPokeTeamService
     {
         private readonly PokeTeamContext _pokeTeamContext;
-        private readonly IPokedexService _pokedexService;
+        private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
+        private readonly IIdentityService _identityService;
         private readonly ITournamentService _tournamentService;
         private readonly IRegulationService _regulationService;
-        private readonly IIdentityService _identityService;
-
-        private readonly UserManager<User> _userManager;
-
+        private readonly IPokemonService _pokemonService;
 
         private static Random random = new Random();
 
         public PokeTeamService
             (
                 PokeTeamContext dataContext,
-                IPokedexService pokedexService,
+                UserManager<User> userManager,
                 IUserService userService,
+                IIdentityService identityService,
                 ITournamentService tournamentService,
                 IRegulationService regulationService,
-                UserManager<User> userManager,
-                IIdentityService identityService
+                IPokemonService pokemonService
             )
         {
             _pokeTeamContext = dataContext;
-            _pokedexService = pokedexService;
+            _userManager = userManager;
             _userService = userService;
+            _identityService = identityService;
             _tournamentService = tournamentService;
             _regulationService = regulationService;
-            _userManager = userManager;
-            _identityService = identityService;
-
+            _pokemonService = pokemonService;
         }
 
         public async Task<TeamDTO?> BuildTeamDTO(Team team, int langId)
@@ -93,7 +91,7 @@ namespace api.Services
 
                 foreach (Pokemon pokemon in pokemons)
                 {
-                    pokemonDTOs.Add(await _pokedexService.BuildPokemonDTO(pokemon, langId, teamOptionsDTO));
+                    pokemonDTOs.Add(await _pokemonService.BuildPokemonDTO(pokemon, langId, teamOptionsDTO));
                 }
 
                 teamDTO = new TeamDTO(
@@ -245,7 +243,7 @@ namespace api.Services
                 {
                     teamOptionsDTO.Logged();
                 }
-                return await _pokedexService.BuildPokemonDTO(pokemon, langId, teamOptionsDTO);
+                return await _pokemonService.BuildPokemonDTO(pokemon, langId, teamOptionsDTO);
             }
             return null;
         }
@@ -255,7 +253,7 @@ namespace api.Services
             Pokemon? pokemon = _pokeTeamContext.Pokemon.FirstOrDefault(t => t.Id == id);
             if (pokemon != null)
             {
-                return await _pokedexService.BuildPokemonPreviewDTO(pokemon, langId);
+                return await _pokemonService.BuildPokemonPreviewDTO(pokemon, langId);
             }
             return null;
         }
