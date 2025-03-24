@@ -40,9 +40,9 @@ namespace api.Controllers
         }
 
         [HttpGet("all")]
-        public ActionResult<List<TagDTO>> GetAllRegulations()
+        public async Task<ActionResult<List<TagDTO>>> GetAllRegulations()
         {
-            List<TagDTO> tagDTOs = _tagService.GetAllTags();
+            List<TagDTO> tagDTOs = await _tagService.GetAllTags();
             if (tagDTOs == null)
             {
                 return NotFound("Couldn't get all tags");

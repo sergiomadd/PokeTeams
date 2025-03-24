@@ -109,9 +109,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("countries/all")]
-        public ActionResult<List<QueryResultDTO>> QueryAllCountries()
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryAllCountries()
         {
-            List<QueryResultDTO> countries = _userService.QueryAllCountries();
+            List<QueryResultDTO> countries = await _userService.QueryAllCountries();
             if (countries == null)
             {
                 return NotFound("Couldn't query all countries");
@@ -120,9 +120,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("countries/query")]
-        public ActionResult<List<QueryResultDTO>> QueryCountriesByName(string key)
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryCountriesByName(string key)
         {
-            List<QueryResultDTO> countries = _userService.QueryCountriesByName(key);
+            List<QueryResultDTO> countries = await _userService.QueryCountriesByName(key);
             if (countries == null)
             {
                 return NotFound("Couldn't query countries");

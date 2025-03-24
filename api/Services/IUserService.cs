@@ -16,8 +16,8 @@ namespace api.Services
         public Task<List<QueryResultDTO>> QueryUsers(string key);
         public Task<List<QueryResultDTO>> ChunkQueryUsers(string key, int startIndex, int pageSize);
         public CountryDTO? GetCountry(string code);
-        public List<QueryResultDTO> QueryCountriesByName(string key);
-        public List<QueryResultDTO> QueryAllCountries();
+        public Task<List<QueryResultDTO>> QueryCountriesByName(string key);
+        public Task<List<QueryResultDTO>> QueryAllCountries();
 
         //public Task<bool> AddCountry(CountryDTOB countryDTOB);
     }

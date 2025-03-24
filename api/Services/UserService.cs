@@ -3,6 +3,9 @@ using api.DTOs;
 using api.Models.DBModels;
 using api.Models.DBPoketeamModels;
 using api.Util;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Diagnostics.Metrics;
 using System.Text.Json;
 
 namespace api.Services
@@ -120,58 +123,59 @@ namespace api.Services
             return countryDTO;
         }
 
-        public List<QueryResultDTO> QueryCountriesByName(string key)
+        public async Task<List<QueryResultDTO>> QueryCountriesByName(string key)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Country> countries = _pokeTeamContext.Country.Where(i => i.NormalizedName.Contains(key.ToLower())).ToList();
-            if (countries != null && countries.Count > 0)
-            {
-                countries.ForEach(country =>
-                {
-                    queryResults.Add(new QueryResultDTO(country.Name, country.Code, type: "country", icon: $"https://localhost:7134/images/sprites/flags/{country.Code}.svg"));
-                });
-            }
+
+            var query =
+                from country in _pokeTeamContext.Country.Where(i => i.NormalizedName.Contains(key.ToLower()))
+
+            select new QueryResultDTO(country.Name, country.Code, $"https://localhost:7134/images/sprites/flags/{country.Code}.svg", "country");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
 
-        public List<QueryResultDTO> QueryAllCountries()
+        public async Task<List<QueryResultDTO>> QueryAllCountries()
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Country> countries = _pokeTeamContext.Country.ToList();
-            if (countries != null && countries.Count > 0)
-            {
-                countries.ForEach(country =>
-                {
-                    queryResults.Add(new QueryResultDTO(country.Name, country.Code, type: "country", icon: $"https://localhost:7134/images/sprites/flags/{country.Code}.svg"));
-                });
-            }
+
+            var query =
+                from country in _pokeTeamContext.Country
+
+                select new QueryResultDTO(country.Name, country.Code, $"https://localhost:7134/images/sprites/flags/{country.Code}.svg", "country");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
 
         public async Task<List<QueryResultDTO>> QueryUsers(string key)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<User> users = _pokeTeamContext.Users
-                .Where(u => u.UserName.Contains(key)).ToList();
-            users.ForEach(user =>
-            {
-                string profilePicPath = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png";
-                queryResults.Add(new QueryResultDTO(user.UserName, user.UserName, icon: profilePicPath, type: "user"));
-            });
+
+            var query =
+                from user in _pokeTeamContext.Users.Where(u => u.UserName.Contains(key))
+
+                select new QueryResultDTO(user.UserName, user.UserName, $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png", "user");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
 
         public async Task<List<QueryResultDTO>> ChunkQueryUsers(string key, int startIndex, int pageSize)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<User> users = _pokeTeamContext.Users
-                .Where(u => u.UserName.Contains(key))
-                .Skip(startIndex).Take(pageSize).ToList();
-            users.ForEach(user =>
-            {
-                string profilePicPath = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png";
-                queryResults.Add(new QueryResultDTO(user.UserName, user.UserName, icon: profilePicPath, type: "user"));
-            });
+
+            var query =
+                from user in _pokeTeamContext.Users.Where(u => u.UserName.Contains(key)).Skip(startIndex).Take(pageSize)
+
+                select new QueryResultDTO(user.UserName, user.UserName, "https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png", "user");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
 

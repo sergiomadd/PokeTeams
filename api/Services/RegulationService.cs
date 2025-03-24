@@ -1,7 +1,9 @@
 ﻿using api.Data;
 using api.DTOs;
+using api.Models;
 using api.Models.DBPoketeamModels;
 using api.Util;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Services
 {
@@ -45,25 +47,37 @@ namespace api.Services
             return regulation;
         }
 
-        public List<RegulationDTO> GetAllRegulations()
+        public async Task<List<RegulationDTO>> GetAllRegulations()
         {
             List<RegulationDTO> regulationDTOs = new List<RegulationDTO>();
-            List<Regulation> regulations = _pokeTeamContext.Regulation.Where(r => r.StartDate != null).OrderByDescending(r => r.StartDate).ToList();
-            foreach (Regulation regulation in regulations)
-            {
-                regulationDTOs.Add(BuildRegulationDTO(regulation));
-            }
+
+            var query =
+                from regulation in _pokeTeamContext.Regulation.Where(r => r.StartDate != null).OrderByDescending(r => r.StartDate)
+
+                select new RegulationDTO
+                {
+                    Identifier = regulation.Identifier,
+                    Name = regulation.Name,
+                    StartDate = regulation.StartDate,
+                    EndDate = regulation.EndDate
+                };
+
+            regulationDTOs = await query.ToListAsync();
+
             return regulationDTOs;
         }
 
-        public List<QueryResultDTO> QueryAllRegulations()
+        public async Task<List<QueryResultDTO>> QueryAllRegulations()
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Regulation> regulations = _pokeTeamContext.Regulation.Where(r => r.StartDate != null).OrderByDescending(r => r.StartDate).ToList();
-            foreach (Regulation regulation in regulations)
-            {
-                queryResults.Add(new QueryResultDTO(regulation.Name, regulation.Identifier, type: "regulation"));
-            }
+
+            var query =
+                from regulation in _pokeTeamContext.Regulation.Where(r => r.StartDate != null).OrderByDescending(r => r.StartDate)
+
+                select new QueryResultDTO(regulation.Name, regulation.Identifier, null, "regulation");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
 

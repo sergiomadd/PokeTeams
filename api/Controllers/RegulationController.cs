@@ -18,9 +18,9 @@ namespace api.Controllers
         }
 
         [HttpGet("all")]
-        public ActionResult<List<RegulationDTO>> GetAllRegulations()
+        public async Task<ActionResult<List<RegulationDTO>>> GetAllRegulations()
         {
-            List<RegulationDTO> regulationDTOs = _regulationService.GetAllRegulations();
+            List<RegulationDTO> regulationDTOs = await _regulationService.GetAllRegulations();
             if (regulationDTOs == null)
             {
                 return NotFound("Couldn't find regulation");
@@ -29,9 +29,9 @@ namespace api.Controllers
         }
 
         [HttpGet("query/all")]
-        public ActionResult<List<QueryResultDTO>> QueryAllRegulations()
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryAllRegulations()
         {
-            List<QueryResultDTO> results = _regulationService.QueryAllRegulations();
+            List<QueryResultDTO> results = await _regulationService.QueryAllRegulations();
             if (results == null)
             {
                 return NotFound("Couldn't find regulation");

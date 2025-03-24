@@ -2,8 +2,7 @@
 using api.DTOs;
 using api.Models.DBPoketeamModels;
 using api.Util;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Services
 {
@@ -40,14 +39,28 @@ namespace api.Services
             return tournamentDTO;
         }
 
-        public List<TournamentDTO> GetAllTournaments()
+        public async Task<List<TournamentDTO>> GetAllTournaments()
         {
             List<TournamentDTO> tournamentDTOs = new List<TournamentDTO>();
-            List<Tournament> tournaments = _pokeTeamContext.Tournament.ToList();
-            foreach (Tournament tournament in tournaments)
-            {
-                tournamentDTOs.Add(BuildTournamentDTO(tournament));
-            }
+
+            var query =
+                from tournament in _pokeTeamContext.Tournament.OrderByDescending(t => t.StartDate)
+
+                select new TournamentDTO
+                {
+                    Name = tournament.Name,
+                    ShortName = tournament.ShortName,
+                    City = tournament.City,
+                    CountryCode = tournament.CountryCode,
+                    Official = tournament.Official,
+                    Category = tournament.Category,
+                    Icon = GetTournamentIcon(tournament.Category),
+                    StartDate = tournament.StartDate,
+                    EndDate = tournament.EndDate
+                };
+
+            tournamentDTOs = await query.ToListAsync();
+
             return tournamentDTOs;
         }
 
@@ -85,29 +98,30 @@ namespace api.Services
             return null;
         }
 
-        public List<QueryResultDTO> QueryAllTournaments()
+        public async Task<List<QueryResultDTO>> QueryAllTournaments()
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Tournament> tournaments = _pokeTeamContext.Tournament.OrderByDescending(t => t.StartDate).ToList();
-            foreach (Tournament tournament in tournaments)
-            {
-                queryResults.Add(new QueryResultDTO(tournament.ShortName, tournament.NormalizedName, type: "tournament", icon: GetTournamentIcon(tournament.Category)));
-            }
+
+            var query =
+                from tournament in _pokeTeamContext.Tournament.OrderByDescending(t => t.StartDate)
+
+                select new QueryResultDTO(tournament.ShortName, tournament.NormalizedName, GetTournamentIcon(tournament.Category), "tournament");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
 
-        public List<QueryResultDTO> QueryTournamentsByNormalizedName(string normalizedName)
+        public async Task<List<QueryResultDTO>> QueryTournamentsByNormalizedName(string normalizedName)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Tournament> tournaments = _pokeTeamContext.Tournament.Where(t => t.NormalizedName.Contains(normalizedName.ToUpper())).OrderByDescending(t => t.StartDate).ToList();
-            if (tournaments != null && tournaments.Count > 0)
-            {
-                tournaments.ForEach(tournament =>
-                {
 
-                    queryResults.Add(new QueryResultDTO(tournament.ShortName, tournament.NormalizedName, type: "tournament", icon: GetTournamentIcon(tournament.Category)));
-                });
-            }
+            var query =
+                from tournament in _pokeTeamContext.Tournament.Where(t => t.NormalizedName.Contains(normalizedName.ToUpper())).OrderByDescending(t => t.StartDate)
+
+                select new QueryResultDTO(tournament.ShortName, tournament.NormalizedName, GetTournamentIcon(tournament.Category), "tournament");
+
+            queryResults = await query.ToListAsync();
             return queryResults;
         }
 
@@ -121,7 +135,7 @@ namespace api.Services
             return true;
         }
 
-        public string? GetTournamentIcon(string? category)
+        public static string? GetTournamentIcon(string? category)
         {
             string? path = null;
             switch (category)

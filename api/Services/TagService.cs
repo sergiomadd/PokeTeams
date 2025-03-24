@@ -2,6 +2,8 @@
 using api.DTOs;
 using api.Models.DBPoketeamModels;
 using api.Util;
+using Azure;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Services
 {
@@ -37,20 +39,24 @@ namespace api.Services
             return true;
         }
 
-        public List<TagDTO> GetAllTags()
+        public async Task<List<TagDTO>> GetAllTags()
         {
             List<TagDTO> tagDTOs = new List<TagDTO>();
-            List<Tag> tags = _pokeTeamContext.Tag.ToList();
-            foreach (Tag tag in tags)
-            {
-                tagDTOs.Add(new TagDTO(
-                    tag.Name, 
-                    tag.Identifier, 
-                    description: tag.Description,
-                    color: tag.Color,
-                    type: "tag"
-                    ));
-            }
+
+            var query =
+                from tag in _pokeTeamContext.Tag
+
+                select new TagDTO(
+                    tag.Name,
+                    tag.Identifier,
+                    null,
+                    tag.Description,
+                    tag.Color,
+                    null
+                    );
+
+            tagDTOs = await query.ToListAsync();
+
             return tagDTOs;
         }
 

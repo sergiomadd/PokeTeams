@@ -20,9 +20,9 @@ namespace api.Controllers
         }
 
         [HttpGet("all")]
-        public ActionResult<List<TournamentDTO>> GetAllTournaments()
+        public async Task<ActionResult<List<TournamentDTO>>> GetAllTournaments()
         {
-            List<TournamentDTO> tournamentDTOs = _tournamentService.GetAllTournaments();
+            List<TournamentDTO> tournamentDTOs = await _tournamentService.GetAllTournaments();
             if (tournamentDTOs == null)
             {
                 return NotFound("Couldn't find tournament");
@@ -64,9 +64,9 @@ namespace api.Controllers
         }
 
         [HttpGet("query/all")]
-        public ActionResult<List<QueryResultDTO>> QueryAllRegulations()
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryAllRegulations()
         {
-            List<QueryResultDTO> results = _tournamentService.QueryAllTournaments();
+            List<QueryResultDTO> results = await _tournamentService.QueryAllTournaments();
             if (results == null)
             {
                 return NotFound("Couldn't find regulation");
@@ -77,7 +77,7 @@ namespace api.Controllers
         [HttpGet, Route("query")]
         public async Task<ActionResult<List<QueryResultDTO>>> QueryTournamentsByNormalizedName(string key)
         {
-            List<QueryResultDTO> tournaments = _tournamentService.QueryTournamentsByNormalizedName(key);
+            List<QueryResultDTO> tournaments = await _tournamentService.QueryTournamentsByNormalizedName(key);
             if (tournaments == null)
             {
                 return NotFound("Couldn't find tournaments");

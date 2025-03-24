@@ -7,7 +7,7 @@ namespace api.Services
     {
         public Task<Tag> GetTag(string identifier);
         public Task<bool> SaveTag(Tag tag);
-        public List<TagDTO> GetAllTags();
+        public Task<List<TagDTO>> GetAllTags();
         public bool TagAvailable(string tagName);
     }
 }
