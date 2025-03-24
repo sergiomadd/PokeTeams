@@ -5,6 +5,7 @@ using api.Models.DBModels;
 using static api.DTOs.PokemonDTOs.MoveDTO;
 using Microsoft.EntityFrameworkCore;
 using api.Util;
+using api.Models;
 
 namespace api.Services.PokedexServices
 {
@@ -198,31 +199,24 @@ namespace api.Services.PokedexServices
         public async Task<List<QueryResultDTO>> QueryMovesByName(string key, int langId)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Move_names> moveNames = await _pokedexContext.Move_names.Where(m => m.name.Contains(key) && m.local_language_id == langId).ToListAsync();
-            if (moveNames != null && moveNames.Count > 0)
-            {
-                foreach (var moveName in moveNames)
-                {
-                    Moves? moves = await _pokedexContext.Moves.FirstOrDefaultAsync(m => m.id == moveName.move_id);
-                    if (moves != null)
-                    {
-                        Types? targetType = await _pokedexContext.Types.FirstOrDefaultAsync(t => t.id == moves.type_id);
-                        if (targetType != null)
-                        {
-                            var pathStart = "https://localhost:7134/images/sprites/types/generation-ix/";
-                            queryResults.Add(new QueryResultDTO(moveName.name, moves.identifier, type: "move", icon: $"{pathStart}{targetType.identifier}.png"));
-                        }
-                        else
-                        {
-                            queryResults.Add(new QueryResultDTO(moveName.name, moves.identifier, type: "move"));
-                        }
-                    }
-                    else
-                    {
-                        queryResults.Add(new QueryResultDTO(moveName.name, moves.identifier, type: "move"));
-                    }
-                }
-            }
+
+            var pathStart = "https://localhost:7134/images/sprites/types/generation-ix/";
+
+            var query =
+                from moveNames in _pokedexContext.Move_names.Where(i => i.name.Contains(key) && i.local_language_id == langId)
+
+                join moves in _pokedexContext.Moves
+                on new { Key1 = moveNames.move_id } equals new { Key1 = moves.id } into movesJoin
+                from moves in movesJoin.DefaultIfEmpty()
+
+                join types in _pokedexContext.Types
+                on new { Key1 = moves.type_id } equals new { Key1 = types.id } into typesJoin
+                from types in typesJoin.DefaultIfEmpty()
+
+                select new QueryResultDTO(moveNames.name, moves.identifier, $"{pathStart}{types.identifier}.png", "move");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
 

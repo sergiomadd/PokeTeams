@@ -133,37 +133,46 @@ namespace api.Services.PokedexServices
         public async Task<List<QueryResultDTO>> QueryNaturesByName(string key, int langId)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Nature_names> natureNames = await _pokedexContext.Nature_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
-            if (natureNames == null)
-            {
-                natureNames = await _pokedexContext.Nature_names.Where(i => i.name.Contains(key) && i.local_language_id == (int)Lang.en).ToListAsync();
-            }
-            if (natureNames != null && natureNames.Count > 0)
-            {
-                foreach (var natureName in natureNames)
-                {
-                    queryResults.Add(new QueryResultDTO(natureName.name, natureName.nature_id.ToString()));
-                }
-            }
+
+            var query =
+                from natureNames in _pokedexContext.Nature_names.Where(i => i.name.Contains(key) && i.local_language_id == langId)
+
+                join natures in _pokedexContext.Natures
+                on new { Key1 = natureNames.nature_id } equals new { Key1 = natures.id } into naturesJoin
+                from natures in naturesJoin.DefaultIfEmpty()
+
+                join natureNamesDefault in _pokedexContext.Nature_names
+                on new { Key1 = natureNames.nature_id, Key2 = (int)Lang.en } equals new { Key1 = natureNamesDefault.nature_id, Key2 = natureNamesDefault.local_language_id } into natureNamesDefaultJoin
+                from natureNamesDefault in natureNamesDefaultJoin.DefaultIfEmpty()
+
+                select natureNames != null ? new QueryResultDTO(natureNames.name, natures.identifier, null, "nature") :
+                    new QueryResultDTO(natureNamesDefault.name, natures.identifier, null, "nature");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
 
         public async Task<List<QueryResultDTO>> QueryAllNatures(int langId)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Natures> naturesList = await _pokedexContext.Natures.ToListAsync();
-            if (naturesList != null)
-            {
-                foreach (Natures natures in naturesList)
-                {
-                    Nature_names? natureNames = await _pokedexContext.Nature_names.FirstOrDefaultAsync(n => n.nature_id == natures.id && n.local_language_id == langId);
-                    if (natureNames == null)
-                    {
-                        natureNames = await _pokedexContext.Nature_names.FirstOrDefaultAsync(n => n.nature_id == natures.id && n.local_language_id == (int)Lang.en);
-                    }
-                    queryResults.Add(new QueryResultDTO(natureNames.name, natures.identifier));
-                }
-            }
+
+            var query =
+                from natures in _pokedexContext.Natures
+
+                join natureNames in _pokedexContext.Nature_names
+                on new { Key1 = natures.id, Key2 = langId } equals new { Key1 = natureNames.nature_id, Key2 = natureNames.local_language_id } into natureNamesJoin
+                from natureNames in natureNamesJoin.DefaultIfEmpty()
+
+                join natureNamesDefault in _pokedexContext.Nature_names
+                on new { Key1 = natures.id, Key2 = (int)Lang.en } equals new { Key1 = natureNamesDefault.nature_id, Key2 = natureNamesDefault.local_language_id } into natureNamesDefaultJoin
+                from natureNamesDefault in natureNamesDefaultJoin.DefaultIfEmpty()
+
+                select natureNames != null ? new QueryResultDTO(natureNames.name, natures.identifier, null, "nature") :
+                    new QueryResultDTO(natureNamesDefault.name, natures.identifier, null, "nature");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
 

@@ -3,6 +3,7 @@ using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Models.DBModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 
 namespace api.Services.PokedexServices
@@ -15,7 +16,6 @@ namespace api.Services.PokedexServices
         {
             _pokedexContext = pokedexContext;
         }
-
 
         public async Task<PokeTypesDTO> GetPokemonTypes(int id, int langId)
         {
@@ -65,7 +65,6 @@ namespace api.Services.PokedexServices
 
             return pokeType;
         }
-
 
         public async Task<PokeTypeDTO?> GetTypeByIdentifier(string identifier, bool teraType, int langId)
         {
@@ -229,71 +228,105 @@ namespace api.Services.PokedexServices
         public async Task<List<QueryResultDTO>> QueryTypesByName(string key, int langId, bool teraType = false)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Type_names> typeNames = await _pokedexContext.Type_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
-            if (typeNames != null && typeNames.Count > 0)
-            {
-                foreach (var typeName in typeNames)
-                {
-                    Types? types = await _pokedexContext.Types.FirstOrDefaultAsync(i => i.id == typeName.type_id);
-                    if (types != null)
-                    {
-                        string pathStart = teraType ? "https://localhost:7134/images/sprites/teratypes/"
-                        : "https://localhost:7134/images/sprites/types/generation-viii/";
-                        queryResults.Add(new QueryResultDTO(typeName.name, typeName.type_id.ToString(), icon: $"{pathStart}{types.identifier}.png"));
-                    }
-                    else
-                    {
-                        queryResults.Add(new QueryResultDTO(typeName.name, typeName.type_id.ToString()));
-                    }
-                }
-            }
+
+            string pathStart = teraType ? "https://localhost:7134/images/sprites/teratypes/"
+                : "https://localhost:7134/images/sprites/types/generation-viii/";
+
+            var query =
+                from typeNames in _pokedexContext.Type_names.Where(i => i.name.Contains(key) && i.local_language_id == langId)
+
+                join types in _pokedexContext.Types
+                on new { Key1 = typeNames.type_id} equals new { Key1 = types.id } into typesJoin
+                from types in typesJoin.DefaultIfEmpty()
+
+                join typeNamesDefault in _pokedexContext.Type_names
+                on new { Key1 = typeNames.type_id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
+                from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
+
+                select typeNames != null ? new QueryResultDTO(typeNames.name, types.identifier, $"{pathStart}{types.identifier}.png", "type") :
+                    new QueryResultDTO(typeNamesDefault.name, types.identifier, $"{pathStart}{types.identifier}.png", "type");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
 
         public async Task<List<PokeTypeDTO>> GetAllTypes(int langId)
         {
             List<PokeTypeDTO> pokeTypes = new List<PokeTypeDTO>();
-            List<Types> types = await _pokedexContext.Types.ToListAsync();
-            foreach (Types type in types)
-            {
-                PokeTypeDTO? pokeType = await GetTypeById(type.id, langId);
-                if (pokeType != null)
-                {
-                    pokeTypes.Add(pokeType);
-                }
-            }
+
+            var query =
+                from types in _pokedexContext.Types
+
+                join typeNames in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = langId } equals new { Key1 = typeNames.type_id, Key2 = typeNames.local_language_id } into typeNamesJoin
+                from typeNames in typeNamesJoin.DefaultIfEmpty()
+
+                join typeNamesDefault in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
+                from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
+
+                select new PokeTypeDTO(
+                    types.identifier,
+                    typeNames != null ?
+                        new LocalizedText(typeNames.name, typeNames.local_language_id) :
+                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                    false);
+
+            pokeTypes = await query.ToListAsync();
+
             return pokeTypes;
         }
 
         public async Task<List<PokeTypeDTO>> GetAllTeraTypes(int langId)
         {
             List<PokeTypeDTO> pokeTypes = new List<PokeTypeDTO>();
-            List<Types> types = await _pokedexContext.Types.ToListAsync();
-            //Avoid adding last 2 types -> (unkown, shadow) UNSUPPORTED
-            for (int i = 0; i < types.Count - 2; i++)
-            {
-                PokeTypeDTO? pokeType = await GetTypeById(types[i].id, langId, true);
-                if (pokeType != null)
-                {
-                    pokeTypes.Add(pokeType);
-                }
-            }
+
+            var query =
+                from types in _pokedexContext.Types
+
+                join typeNames in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = langId } equals new { Key1 = typeNames.type_id, Key2 = typeNames.local_language_id } into typeNamesJoin
+                from typeNames in typeNamesJoin.DefaultIfEmpty()
+
+                join typeNamesDefault in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
+                from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
+
+                select new PokeTypeDTO(
+                    types.identifier,
+                    typeNames != null ?
+                        new LocalizedText(typeNames.name, typeNames.local_language_id) :
+                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                    true);
+
+            pokeTypes = await query.ToListAsync();
+
             return pokeTypes;
         }
 
         public async Task<List<QueryResultDTO>> QueryAllTeraTypes(int langId)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Types> types = await _pokedexContext.Types.ToListAsync();
-            //Avoid adding last 2 types -> (unkown, shadow) UNSUPPORTED
-            for (int i = 0; i < types.Count - 2; i++)
-            {
-                PokeTypeDTO? pokeType = await GetTypeById(types[i].id, langId, true);
-                if (pokeType != null)
-                {
-                    queryResults.Add(new QueryResultDTO(pokeType.Name.Content, pokeType.Identifier, icon: pokeType.IconPath));
-                }
-            }
+
+            string pathStart = "https://localhost:7134/images/sprites/teratypes/";
+
+            var query =
+                from types in _pokedexContext.Types
+
+                join typeNames in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = langId } equals new { Key1 = typeNames.type_id, Key2 = typeNames.local_language_id } into typeNamesJoin
+                from typeNames in typeNamesJoin.DefaultIfEmpty()
+
+                join typeNamesDefault in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
+                from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
+
+                select typeNames != null ? new QueryResultDTO(typeNames.name, types.identifier, $"{pathStart}{types.identifier}.png", "type") :
+                    new QueryResultDTO(typeNamesDefault.name, types.identifier, $"{pathStart}{types.identifier}.png", "type");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
     }

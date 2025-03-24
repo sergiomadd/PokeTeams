@@ -1,10 +1,12 @@
 ﻿using api.Data;
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
+using api.Models;
 using api.Models.DBModels;
 using api.Models.DBPokedexModels;
 using api.Util;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace api.Services.PokedexServices
 {
@@ -101,100 +103,101 @@ namespace api.Services.PokedexServices
             return ability;
         }
 
-        public async Task<bool> IsAbilityHidden(string abilityIdentifier, int dexNumber)
+        //Check if the given ability is part of pokemon's hidden ability
+        public async Task<bool> IsAbilityPokemonHiddenAbility(string abilityIdentifier, int dexNumber)
         {
-            Abilities? abilities = await _pokedexContext.Abilities.FirstOrDefaultAsync(a => a.identifier.Equals(abilityIdentifier));
-            if (abilities != null)
-            {
-                try
-                {
-                    List<Pokemon_abilities> pokemonAbilitiesList = await _pokedexContext.Pokemon_abilities.Where(p => p.pokemon_id == dexNumber).ToListAsync();
-                    if (pokemonAbilitiesList != null && pokemonAbilitiesList.Count > 0)
-                    {
-                        if (pokemonAbilitiesList.Any(a => a.ability_id == abilities.id))
-                        {
-                            return true;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Printer.Log(ex);
-                }
-            }
+            var query =
+                from pokemonAbilities in _pokedexContext.Pokemon_abilities.Where(p => p.pokemon_id == dexNumber && p.is_hidden)
 
+                join abilities in _pokedexContext.Abilities
+                on new { Key1 = pokemonAbilities.ability_id } equals new { Key1 = abilities.id } into abilitiesJoin
+                from abilities in abilitiesJoin.DefaultIfEmpty()
+
+                select abilities.identifier;
+
+            string? hiddenAbility = await query.FirstOrDefaultAsync();
+            if(hiddenAbility != null && hiddenAbility == abilityIdentifier)
+            {
+                return true;
+            }
             return false;
         }
 
         public async Task<List<QueryResultDTO>> QueryAllPokemonAbilites(string id, int langId)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
+
             try
             {
                 if (Int32.TryParse(id, out _))
                 {
-                    List<Pokemon_abilities> pokemonAbilitiesList = await _pokedexContext.Pokemon_abilities.Where(p => p.pokemon_id == Int32.Parse(id)).ToListAsync();
-                    if (pokemonAbilitiesList != null && pokemonAbilitiesList.Count > 0)
-                    {
-                        foreach (Pokemon_abilities pokemonAbilities in pokemonAbilitiesList)
-                        {
-                            Abilities? abilities = await _pokedexContext.Abilities.FirstOrDefaultAsync(a => a.id == pokemonAbilities.ability_id);
-                            if (abilities != null)
-                            {
-                                Ability_names? abilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(a => a.ability_id == abilities.id && a.local_language_id == langId);
-                                if (abilityNames == null)
-                                {
-                                    abilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(a => a.ability_id == abilities.id && a.local_language_id == (int)Lang.en);
-                                }
-                                if (abilityNames != null)
-                                {
-                                    queryResults.Add(new QueryResultDTO(abilityNames.name, abilities.identifier, icon: pokemonAbilities.is_hidden ? "hidden" : null));
-                                }
-                            }
-                        }
-                    }
+                    var query =
+                        from pokemonAbilities in _pokedexContext.Pokemon_abilities.Where(p => p.pokemon_id == Int32.Parse(id))
+
+                        join abilities in _pokedexContext.Abilities
+                        on new { Key1 = pokemonAbilities.ability_id } equals new { Key1 = abilities.id } into abilitiesJoin
+                        from abilities in abilitiesJoin.DefaultIfEmpty()
+
+                        join abilityNames in _pokedexContext.Ability_names
+                        on new { Key1 = pokemonAbilities.ability_id, Key2 = langId } equals new { Key1 = abilityNames.ability_id, Key2 = abilityNames.local_language_id } into abilityNamesJoin
+                        from abilityNames in abilityNamesJoin.DefaultIfEmpty()
+
+                        join abilityNamesDefault in _pokedexContext.Ability_names
+                        on new { Key1 = pokemonAbilities.ability_id, Key2 = (int)Lang.en } equals new { Key1 = abilityNamesDefault.ability_id, Key2 = abilityNamesDefault.local_language_id } into abilityNamesDefaultJoin
+                        from abilityNamesDefault in abilityNamesDefaultJoin.DefaultIfEmpty()
+
+                        select abilityNames != null ? new QueryResultDTO(abilityNames.name, abilities.identifier, pokemonAbilities.is_hidden ? "hidden" : null, "ability") :
+                            new QueryResultDTO(abilityNamesDefault.name, abilities.identifier, pokemonAbilities.is_hidden ? "hidden" : null, "ability");
+
+                    queryResults = await query.ToListAsync();
                 }
             }
             catch (Exception ex)
             {
                 Printer.Log(ex);
             }
+
             return queryResults;
         }
 
         public async Task<List<QueryResultDTO>> QueryAbilitiesByName(string key, int langId)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Ability_names> abilityNames = await _pokedexContext.Ability_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
-            if (abilityNames != null && abilityNames.Count > 0)
-            {
-                foreach (var abilityName in abilityNames)
-                {
-                    queryResults.Add(new QueryResultDTO(abilityName.name, abilityName.ability_id.ToString()));
-                }
-            }
+
+            var query =
+                from abilityNames in _pokedexContext.Ability_names.Where(i => i.name.Contains(key) && i.local_language_id == langId)
+
+                join abilities in _pokedexContext.Abilities
+                on new { Key1 = abilityNames.ability_id } equals new { Key1 = abilities.id } into abilitiesJoin
+                from abilities in abilitiesJoin.DefaultIfEmpty()
+
+                select new QueryResultDTO(abilityNames.name, abilities.identifier, null, "ability");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
 
         public async Task<List<QueryResultDTO>> QueryAllAbilities(int langId)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Abilities> abilitiesList = await _pokedexContext.Abilities.ToListAsync();
-            if (abilitiesList != null)
-            {
-                foreach (Abilities abilities in abilitiesList)
-                {
-                    Ability_names? abilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(a => a.ability_id == abilities.id && a.local_language_id == langId);
-                    if (abilityNames == null)
-                    {
-                        abilityNames = await _pokedexContext.Ability_names.FirstOrDefaultAsync(a => a.ability_id == abilities.id && a.local_language_id == (int)Lang.en);
-                    }
-                    if (abilityNames != null)
-                    {
-                        queryResults.Add(new QueryResultDTO(abilityNames.name, abilityNames.ability_id.ToString()));
-                    }
-                }
-            }
+
+            var query =
+                from abilities in _pokedexContext.Abilities
+
+                join abilityNames in _pokedexContext.Ability_names
+                on new { Key1 = abilities.id, Key2 = langId } equals new { Key1 = abilityNames.ability_id, Key2 = abilityNames.local_language_id } into abilityNamesJoin
+                from abilityNames in abilityNamesJoin.DefaultIfEmpty()
+
+                join abilityNamesDefault in _pokedexContext.Ability_names
+                on new { Key1 = abilities.id, Key2 = (int)Lang.en } equals new { Key1 = abilityNamesDefault.ability_id, Key2 = abilityNamesDefault.local_language_id } into abilityNamesDefaultJoin
+                from abilityNamesDefault in abilityNamesDefaultJoin.DefaultIfEmpty()
+
+                select abilityNames != null ? new QueryResultDTO(abilityNames.name, abilities.identifier, null, "ability") :
+                    new QueryResultDTO(abilityNamesDefault.name, abilities.identifier, null, "ability");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
     }

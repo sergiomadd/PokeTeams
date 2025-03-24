@@ -1,8 +1,10 @@
 ﻿using api.Data;
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
+using api.Models;
 using api.Models.DBModels;
 using api.Util;
+using MethodTimer;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -101,23 +103,19 @@ namespace api.Services.PokedexServices
         public async Task<List<QueryResultDTO>> QueryItemsByName(string key, int langId)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            List<Item_names> itemNames = await _pokedexContext.Item_names.Where(i => i.name.Contains(key) && i.local_language_id == langId).ToListAsync();
-            if (itemNames != null && itemNames.Count > 0)
-            {
-                foreach (var itemName in itemNames)
-                {
-                    Items? items = await _pokedexContext.Items.FirstOrDefaultAsync(i => i.id == itemName.item_id);
-                    if (items != null)
-                    {
-                        string pathStart = "https://localhost:7134/images/sprites/items/";
-                        queryResults.Add(new QueryResultDTO(itemName.name, items.identifier, type: "item", icon: $"{pathStart}{items.identifier}.png"));
-                    }
-                    else
-                    {
-                        queryResults.Add(new QueryResultDTO(itemName.name, items.identifier, type: "item"));
-                    }
-                }
-            }
+            string pathStart = "https://localhost:7134/images/sprites/items/";
+
+            var query =
+                from itemNames in _pokedexContext.Item_names.Where(i => i.name.Contains(key) && i.local_language_id == langId)
+
+                join items in _pokedexContext.Items
+                on new { Key1 = itemNames.item_id } equals new { Key1 = items.id } into itemsJoin
+                from items in itemsJoin.DefaultIfEmpty()
+
+                select new QueryResultDTO(itemNames.name, items.identifier, $"{pathStart}{items.identifier}.png", "item");
+
+            queryResults = await query.ToListAsync();
+
             return queryResults;
         }
     }

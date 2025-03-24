@@ -12,6 +12,5 @@ namespace api.Services.PokedexServices
         public Task<PokemonDataDTO?> GetPokemonById(int id, int langId);
         public Task<string?> GetStatNameByIdentifier(string identifier, int langId);
         public Task<List<QueryResultDTO>> QueryPokemonsByName(string key, int langId);
-        public Task<List<QueryResultDTO>> QueryAllPokemonMoves(string id, int langId);
     }
 }

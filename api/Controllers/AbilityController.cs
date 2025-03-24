@@ -90,9 +90,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("hidden")]
-        public async Task<ActionResult<bool>> IsAbilityHidden(string abilityIdentifier, int dexNumber)
+        public async Task<ActionResult<bool>> IsAbility_PokemonHiddenAbility(string abilityIdentifier, int dexNumber)
         {
-            bool hidden = await _abilityService.IsAbilityHidden(abilityIdentifier, dexNumber);
+            bool hidden = await _abilityService.IsAbilityPokemonHiddenAbility(abilityIdentifier, dexNumber);
             return Ok(hidden);
         }
     }
