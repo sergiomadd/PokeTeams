@@ -125,16 +125,6 @@ namespace api.Services
             return queryResults;
         }
 
-        public bool TournamentAvailable(string tournamentName)
-        {
-            Tournament? tournament = _pokeTeamContext.Tournament.FirstOrDefault(u => u.NormalizedName == Formatter.NormalizeString(tournamentName));
-            if (tournament != null)
-            {
-                return false;
-            }
-            return true;
-        }
-
         public static string? GetTournamentIcon(string? category)
         {
             string? path = null;
