@@ -49,10 +49,8 @@ namespace api.Services
                 select new TagDTO(
                     tag.Name,
                     tag.Identifier,
-                    null,
                     tag.Description,
-                    tag.Color,
-                    null
+                    tag.Color
                     );
 
             tagDTOs = await query.ToListAsync();
