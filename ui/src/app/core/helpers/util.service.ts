@@ -321,7 +321,7 @@ export class UtilService
     return {
       name: tag.name,
       identifier: tag.identifier,
-      type: tag.type
+      type: "tag"
     }
   }
 }

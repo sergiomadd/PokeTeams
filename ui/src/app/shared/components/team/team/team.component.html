@@ -69,7 +69,6 @@
         <ng-container *ngFor="let tag of team?.tags">
           <app-chip 
           [name]="tag.name"
-          [iconPath]="tag.icon"
           [tooltipText]="tag.description"
           [bgColor]="tag.color"
           [textColor]="tag.color ? theme.getTagTextColor(tag.color) : undefined"

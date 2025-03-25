@@ -69,11 +69,9 @@ export class TeamSearchComponent
         {
           name: tag.name,
           identifier: tag.identifier,
-          iconPath: tag.icon,
           tooltipText: tag.description,
           color: tag.color,
           textColor: tag.color ? this.theme.getTagTextColor(tag.color) : undefined,
-          type: tag.type
         }
         this.chips?.push(chip);
       }
