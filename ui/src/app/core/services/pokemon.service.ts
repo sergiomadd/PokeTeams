@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError, lastValueFrom, timeout } from "rxjs";
+import { Observable, catchError, lastValueFrom, timeout } from "rxjs";
 import { environment } from "src/environments/environment.development";
 import { Ability, defaultAbility } from "../models/pokemon/ability.model";
 import { DefaultItem, Item } from "../models/pokemon/item.model";
@@ -8,6 +8,7 @@ import { Move, defaultMove } from "../models/pokemon/move.model";
 import { Nature, defaultNature } from "../models/pokemon/nature.model";
 import { Pokemon } from "../models/pokemon/pokemon.model";
 import { PokemonData, defaultPokemonData } from "../models/pokemon/pokemonData.dto";
+import { PokemonPreview } from "../models/pokemon/pokemonPreview.model";
 import { Stat } from "../models/pokemon/stat.model";
 import { TypeWithEffectiveness, defaultTypeWithEffectiveness } from "../models/pokemon/typewitheffectiveness.model";
 import { PokePaste } from "../models/team/pokePaste.model";
@@ -31,7 +32,7 @@ export class PokemonService
     let pokemon: Pokemon = <Pokemon>{};
     try 
     {
-      const pokemonDataPromise: Promise<PokemonData> | undefined = pokePaste.name ? this.getPokemonData(pokePaste.name) : undefined;
+      const pokemonDataPromise: Promise<PokemonData> | undefined = pokePaste.name ? this.getPokemonDataByName(pokePaste.name) : undefined;
       const teraTypePromise: Promise<TypeWithEffectiveness> | undefined = pokePaste.teratype ? this.getType(pokePaste.teratype, true) : undefined;
       const itemPromise: Promise<Item> | undefined = pokePaste.item ? this.getItemByName(pokePaste.item) : undefined;
       const abilityPromise: Promise<Ability> | undefined = pokePaste.ability ? this.getAbilityByName(pokePaste.ability) : undefined;
@@ -79,10 +80,36 @@ export class PokemonService
     return pokemon;
   }
 
-  async getPokemonData(name: string) : Promise<PokemonData>
+  getPokemonById(id: number) : Observable<Pokemon>
+  {
+    let url = this.apiUrl + 'pokemon/' + id;
+    return this.http.get<Pokemon>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+  }
+
+  getPokemonByIdNoLang(id: number) : Observable<Pokemon>
+  {
+    let url = this.apiUrl + 'pokemon/nolang/' + id;
+    return this.http.get<Pokemon>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+  }
+
+  async getPokemonPreviewById(id: number) : Promise<PokemonPreview>
+  {
+    let pokemonPreview: PokemonPreview = <PokemonPreview>{}
+    let url = this.apiUrl + 'pokemon/preview/' + id;
+    pokemonPreview = await lastValueFrom(this.http.get<PokemonPreview>(url).pipe(timeout(this.dataTimeout * 2)));
+    return pokemonPreview;
+  }
+  
+  getTeamPokemonPreviews(teamID: string) : Observable<PokemonPreview[]>
+  {
+    let url = this.apiUrl + 'pokemon/pokemon-previews/' + teamID;
+    return this.http.get<PokemonPreview[]>(url).pipe(timeout(this.dataTimeout * 2));
+  }
+
+  async getPokemonDataByName(name: string) : Promise<PokemonData>
   {
     let pokemonData: PokemonData = <PokemonData>{}
-    let url = this.apiUrl + 'pokemon/' + name;
+    let url = this.apiUrl + 'pokemon/name/' + name;
     pokemonData = await lastValueFrom(this.http.get<PokemonData>(url).pipe(catchError(() => [defaultPokemonData]), timeout(this.dataTimeout)));
     return pokemonData;
   }

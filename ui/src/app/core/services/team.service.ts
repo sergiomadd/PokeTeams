@@ -5,8 +5,6 @@ import { Observable, lastValueFrom, timeout } from "rxjs";
 import { SearchQueryDTO } from "src/app/core/models/search/searchQuery.dto";
 import { environment } from "src/environments/environment.development";
 import { UtilService } from "../helpers/util.service";
-import { Pokemon } from "../models/pokemon/pokemon.model";
-import { PokemonPreview } from "../models/pokemon/pokemonPreview.model";
 import { SearchQueryResponseDTO } from "../models/search/searchQueryResponse.dto";
 import { Regulation } from "../models/team/regulation.model";
 import { Tag } from "../models/team/tag.model";
@@ -43,32 +41,6 @@ export class TeamService
   {
     let url = this.apiUrl + 'team/data/' + id;
     return this.http.get<TeamData>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
-  }
-
-  getPokemonById(id: number) : Observable<Pokemon>
-  {
-    let url = this.apiUrl + 'team/pokemon/' + id;
-    return this.http.get<Pokemon>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
-  }
-
-  getPokemonByIdNoLang(id: number) : Observable<Pokemon>
-  {
-    let url = this.apiUrl + 'team/pokemon/nolang/' + id;
-    return this.http.get<Pokemon>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
-  }
-
-  async getPokemonPreviewById(id: number) : Promise<PokemonPreview>
-  {
-    let pokemonPreview: PokemonPreview = <PokemonPreview>{}
-    let url = this.apiUrl + 'team/pokemon/preview/' + id;
-    pokemonPreview = await lastValueFrom(this.http.get<PokemonPreview>(url).pipe(timeout(this.dataTimeout * 2)));
-    return pokemonPreview;
-  }
-  
-  getTeamPokemonPreviews(teamID: string) : Observable<PokemonPreview[]>
-  {
-    let url = this.apiUrl + 'team/pokemon-previews/' + teamID;
-    return this.http.get<PokemonPreview[]>(url).pipe(timeout(this.dataTimeout * 2));
   }
 
   saveTeam(team: Team): Observable<TeamSaveResponse>

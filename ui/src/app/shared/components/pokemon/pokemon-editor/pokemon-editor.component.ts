@@ -507,7 +507,7 @@ export class PokemonEditorComponent
     {
       if(event)
       {
-        const data: PokemonData = await this.pokemonService.getPokemonData(event.name);
+        const data: PokemonData = await this.pokemonService.getPokemonDataByName(event.name);
         this.pokemon = 
         { 
           ...this.pokemon,

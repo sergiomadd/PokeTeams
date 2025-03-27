@@ -6,6 +6,7 @@ import { CustomError } from 'src/app/core/models/misc/customError.model';
 import { Team } from 'src/app/core/models/team/team.model';
 import { TeamData } from 'src/app/core/models/team/teamData.model';
 import { TeamSaveResponse } from 'src/app/core/models/team/teamSaveResponse.model';
+import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { TeamService } from 'src/app/core/services/team.service';
 import { selectLang } from 'src/app/core/store/config/config.selectors';
 import { TeamEditorService } from '../../../shared/services/team-editor.service';
@@ -18,6 +19,7 @@ import { TeamEditorService } from '../../../shared/services/team-editor.service'
 export class TeamEditPageComponent 
 {
   teamService = inject(TeamService);
+  pokemonService = inject(PokemonService);
   router = inject(Router);
   teamEditorService = inject(TeamEditorService)
   store = inject(Store);
@@ -135,7 +137,7 @@ export class TeamEditPageComponent
     {
       pokemonIDs.map(async (pokemonID, index) => 
       {
-        this.teamService.getPokemonById(pokemonID).subscribe(
+        this.pokemonService.getPokemonById(pokemonID).subscribe(
           {
             next: (response) =>
             {

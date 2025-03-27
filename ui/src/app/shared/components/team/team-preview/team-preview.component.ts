@@ -9,6 +9,7 @@ import { FeedbackColors } from 'src/app/core/models/misc/colors';
 import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
 import { PokemonPreview } from 'src/app/core/models/pokemon/pokemonPreview.model';
 import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
+import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { TeamService } from 'src/app/core/services/team.service';
 import { selectTheme } from 'src/app/core/store/config/config.selectors';
 import { User } from 'src/app/features/user/models/user.model';
@@ -23,6 +24,7 @@ import { PokemonPreviewComponent } from '../../pokemon/pokemon-preview/pokemon-p
 export class TeamPreviewComponent 
 {
   teamService = inject(TeamService);
+  pokemonService = inject(PokemonService);
   parser = inject(ParserService);
   util = inject(UtilService);
   store = inject(Store);
@@ -70,7 +72,7 @@ export class TeamPreviewComponent
 
   loadPokemons(teamId: string)
   {
-    this.teamService.getTeamPokemonPreviews(teamId).subscribe(
+    this.pokemonService.getTeamPokemonPreviews(teamId).subscribe(
       {
         next: (response) =>
         {
@@ -104,7 +106,7 @@ export class TeamPreviewComponent
       let pokemonObservables: Observable<Pokemon>[] = [];
       for (const id of this.team?.pokemonIDs) 
       {
-        pokemonObservables.push(this.teamService.getPokemonByIdNoLang(id));
+        pokemonObservables.push(this.pokemonService.getPokemonByIdNoLang(id));
       }
       forkJoin(pokemonObservables).subscribe(
         {

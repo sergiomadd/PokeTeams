@@ -7,6 +7,7 @@ import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
 import { Team } from 'src/app/core/models/team/team.model';
 import { TeamData } from 'src/app/core/models/team/teamData.model';
+import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { TeamService } from 'src/app/core/services/team.service';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { selectLang } from 'src/app/core/store/config/config.selectors';
@@ -20,6 +21,7 @@ import { User } from '../../user/models/user.model';
 export class TeamViewPageComponent 
 {
   teamService = inject(TeamService);
+  pokemonService = inject(PokemonService);
   router = inject(Router);
   util = inject(UtilService);
   parser = inject(ParserService);
@@ -112,7 +114,7 @@ export class TeamViewPageComponent
     {
       pokemonIDs.map(async (pokemonID, index) => 
       {
-        this.teamService.getPokemonById(pokemonID).subscribe(
+        this.pokemonService.getPokemonById(pokemonID).subscribe(
           {
             next: (response) =>
             {
