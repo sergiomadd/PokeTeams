@@ -24,21 +24,6 @@ namespace api.Services
             return null;
         }
 
-        public async Task<bool> SaveTag(Tag tag)
-        {
-            try
-            {
-                await _pokeTeamContext.Tag.AddAsync(tag);
-                await _pokeTeamContext.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Printer.Log(e);
-                return false;
-            }
-            return true;
-        }
-
         public async Task<List<TagDTO>> GetAllTags()
         {
             List<TagDTO> tagDTOs = new List<TagDTO>();
@@ -56,6 +41,21 @@ namespace api.Services
             tagDTOs = await query.ToListAsync();
 
             return tagDTOs;
+        }
+
+        public async Task<bool> SaveTag(Tag tag)
+        {
+            try
+            {
+                await _pokeTeamContext.Tag.AddAsync(tag);
+                await _pokeTeamContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Printer.Log(e);
+                return false;
+            }
+            return true;
         }
 
         public bool TagAvailable(string tagName)

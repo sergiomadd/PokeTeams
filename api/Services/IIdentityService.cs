@@ -5,9 +5,9 @@ namespace api.Services
 {
     public interface IIdentityService
     {
-        public Task<User?> GetUser();
-        public string? GetUserName();
-        public string? GetUserID();
+        public Task<User?> GetLoggedUser();
+        public string? GetLoggedUserName();
+        public string? GetLoggedUserID();
         public bool CheckForRefresh(HttpRequest request);
     }
 }

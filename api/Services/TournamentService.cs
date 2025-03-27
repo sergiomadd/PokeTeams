@@ -39,6 +39,20 @@ namespace api.Services
             return tournamentDTO;
         }
 
+        public async Task<TournamentDTO> GetTournamentByNormalizedName(string normalizedName)
+        {
+            TournamentDTO tournamentDTO = null;
+            if (normalizedName != null)
+            {
+                Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(normalizedName);
+                if (tournament != null)
+                {
+                    tournamentDTO = BuildTournamentDTO(tournament);
+                }
+            }
+            return tournamentDTO;
+        }
+
         public async Task<List<TournamentDTO>> GetAllTournaments()
         {
             List<TournamentDTO> tournamentDTOs = new List<TournamentDTO>();
@@ -62,20 +76,6 @@ namespace api.Services
             tournamentDTOs = await query.ToListAsync();
 
             return tournamentDTOs;
-        }
-
-        public async Task<TournamentDTO> GetTournamentByNormalizedName(string normalizedName)
-        {
-            TournamentDTO tournamentDTO = null;
-            if (normalizedName != null)
-            {
-                Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(normalizedName);
-                if (tournament != null)
-                {
-                    tournamentDTO = BuildTournamentDTO(tournament);
-                }
-            }
-            return tournamentDTO;
         }
 
         public async Task<Tournament> SaveTournament(TournamentDTO tournamentDTO)
@@ -125,7 +125,7 @@ namespace api.Services
             return queryResults;
         }
 
-        public static string? GetTournamentIcon(string? category)
+        private static string? GetTournamentIcon(string? category)
         {
             string? path = null;
             switch (category)

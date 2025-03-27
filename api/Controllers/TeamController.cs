@@ -20,11 +20,11 @@ namespace api.Controllers
     [ApiController]
     public class TeamController : ControllerBase
     {
-        private readonly IPokeTeamService _teamService;
+        private readonly ITeamService _teamService;
         private readonly IIdentityService _identityService;
 
         public TeamController(
-            IPokeTeamService teamService,
+            ITeamService teamService,
             IIdentityService identityService)
         {
             _teamService = teamService;
@@ -80,71 +80,6 @@ namespace api.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
-        [HttpGet("pokemon/{pokemonId}")]
-        public async Task<ActionResult<PokemonDTO>> GetPokemonById(int pokemonId)
-        {
-            if (_identityService.CheckForRefresh(Request))
-            {
-                return Unauthorized("NoAccessTokenProvided");
-            }
-            else
-            {
-                var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-                int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
-                var pokemonDTO = await _teamService.GetPokemonById(pokemonId, langId ?? 9);
-
-                if (pokemonDTO == null)
-                {
-                    return NotFound("Pokemon not found.");
-                }
-                return Ok(pokemonDTO);
-            }
-        }
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [AllowAnonymous]
-        [HttpGet("pokemon/nolang/{pokemonId}")]
-        public async Task<ActionResult<PokemonDTO>> GetPokemonByIdNoLang(int pokemonId)
-        {
-            if (_identityService.CheckForRefresh(Request))
-            {
-                return Unauthorized("NoAccessTokenProvided");
-            }
-            else
-            {
-                var pokemonDTO = await _teamService.GetPokemonById(pokemonId, (int)Lang.en);
-
-                if (pokemonDTO == null)
-                {
-                    return NotFound("Pokemon not found.");
-                }
-                return Ok(pokemonDTO);
-            }
-        }
-
-        [HttpGet("pokemon-previews/{teamId}")]
-        public async Task<ActionResult<List<PokemonPreviewDTO>>> GetTeamPreviewPokemons(string teamId)
-        {
-            if(teamId == null)
-            {
-                return BadRequest("Team id is null");
-            }
-
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
-            var pokemonDTO = await _teamService.GetTeamPreviewPokemons(teamId, langId ?? 9);
-
-            if (pokemonDTO == null)
-            {
-                return NotFound("Pokemon not found.");
-            }
-            return Ok(pokemonDTO);
-        }
-
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [AllowAnonymous]
         [HttpPost, Route("save")]
         public async Task<ActionResult<string>> SaveTeam([FromBody] TeamDTO team)
         {
@@ -184,7 +119,7 @@ namespace api.Controllers
             {
                 return Unauthorized("Unauthorized");
             }
-            User? loggedUser = await _identityService.GetUser();
+            User? loggedUser = await _identityService.GetLoggedUser();
             if (loggedUser.Id == null || loggedUser.Id != currentTeam.Player.Id)
             {
                 return Unauthorized("Unauthorized");

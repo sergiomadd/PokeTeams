@@ -28,7 +28,7 @@ namespace api.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly TokenGenerator _tokenGenerator;
         private readonly IUserService _userService;
-        private readonly IPokeTeamService _pokeTeamService;
+        private readonly ITeamService _pokeTeamService;
         private readonly IEmailService _emailService;
         private readonly IIdentityService _identityService;
         private readonly PokeTeamContext _pokeTeamContext;
@@ -37,7 +37,7 @@ namespace api.Controllers
             SignInManager<User> signInManager,
             TokenGenerator tokenGenerator,
             IUserService userService,
-            IPokeTeamService teamService,
+            ITeamService teamService,
             IEmailService emailService,
             IIdentityService identityService,
             PokeTeamContext pokeTeamContext
@@ -298,7 +298,7 @@ namespace api.Controllers
             Printer.Log("User logged out");
             try
             {
-                User? user = await _userManager.FindByNameAsync(_identityService.GetUserName());
+                User? user = await _userManager.FindByNameAsync(_identityService.GetLoggedUserName());
                 if(user != null)
                 {
                     await _userService.DeleteRefreshToken(user);
@@ -664,7 +664,7 @@ namespace api.Controllers
                 return BadRequest("No team");
             }
 
-            User? loggedUser = await _identityService.GetUser();
+            User? loggedUser = await _identityService.GetLoggedUser();
             if (loggedUser == null)
             {
                 return Unauthorized("Unauthorized");

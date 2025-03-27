@@ -40,14 +40,12 @@ using System.Security.Cryptography.Xml;
 using System.Xml.Serialization;
 using Microsoft.IdentityModel.Tokens;
 using Azure;
-using api.Services.PokedexServices;
 
 namespace api.Services
 {
-    public class PokeTeamService : IPokeTeamService
+    public class TeamService : ITeamService
     {
         private readonly PokeTeamContext _pokeTeamContext;
-        private readonly UserManager<User> _userManager;
         private readonly IUserService _userService;
         private readonly IIdentityService _identityService;
         private readonly ITournamentService _tournamentService;
@@ -56,7 +54,7 @@ namespace api.Services
 
         private static Random random = new Random();
 
-        public PokeTeamService
+        public TeamService
             (
                 PokeTeamContext dataContext,
                 UserManager<User> userManager,
@@ -68,7 +66,6 @@ namespace api.Services
             )
         {
             _pokeTeamContext = dataContext;
-            _userManager = userManager;
             _userService = userService;
             _identityService = identityService;
             _tournamentService = tournamentService;
@@ -84,7 +81,7 @@ namespace api.Services
                 List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
                 List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
                 TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(team.IVsVisibility, team.EVsVisibility, team.NaturesVisibility);
-                if (team.PlayerId != null && team.PlayerId == _identityService.GetUserID())
+                if (team.PlayerId != null && team.PlayerId == _identityService.GetLoggedUserID())
                 {
                     teamOptionsDTO.Logged();
                 }
@@ -137,217 +134,6 @@ namespace api.Services
             return teamPreviewDTO;
         }
 
-        private async Task<UserPreviewDTO?> GetTeamPlayer(Team team)
-        {
-            if (team.PlayerId != null)
-            {
-                User player = await _userService.GetUserById(team.PlayerId);
-                string? picture = player.Picture != null ? $"https://localhost:7134/images/sprites/profile-pics/{player.Picture}.png" : null;
-                return new UserPreviewDTO(player.UserName, picture, true);
-            }
-            else if (team.AnonPlayer != null)
-            {
-                return new UserPreviewDTO(team.AnonPlayer);
-            }
-            return null;
-        }
-
-        private async Task<List<TagDTO>> GetTeamTags(Team team)
-        {
-            List<TagDTO> tags = new List<TagDTO>();
-            List<TeamTag> teamTags = _pokeTeamContext.TeamTag.Where(t => t.TeamsId == team.Id).ToList();
-
-            foreach (TeamTag teamTag in teamTags)
-            {
-                Tag tag = _pokeTeamContext.Tag.FirstOrDefault(t => t.Identifier == teamTag.TagsIdentifier);
-                if (tag != null)
-                {
-                    TagDTO tagDTO = new TagDTO(tag.Name, tag.Identifier, description: tag.Description, color: tag.Color);
-                    tags.Add(tagDTO);
-                }
-            }
-            return tags;
-        }
-
-        public async Task<TeamDTO?> GetTeam(string id, int langId)
-        {
-            TeamDTO teamDTO = null;
-            try
-            {
-                Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
-                teamDTO = await BuildTeamDTO(team, langId);
-            }
-            catch (Exception ex)
-            {
-                Printer.Log(ex.Message);
-                return null;
-            }
-            return teamDTO;
-        }
-
-        public async Task<Team?> GetTeamModel(string id)
-        {
-            try
-            {
-                Team? team = await _pokeTeamContext.Team
-                    .Include(t => t.Player)
-                    .Include(t => t.Pokemons)
-                    .Include(t => t.Tags)
-                    .FirstOrDefaultAsync(t => t.Id == id);
-                return team;
-            }
-            catch (Exception ex)
-            {
-                Printer.Log(ex.Message);
-                return null;
-            }
-        }
-
-        public async Task<TeamDataDTO?> GetTeamData(string id, int langId)
-        {
-            TeamDataDTO teamDataDTO = null;
-            Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
-            if (team != null)
-            {
-                List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
-                TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(team.IVsVisibility, team.EVsVisibility, team.NaturesVisibility);
-                var test = _identityService.GetUserID();
-                if (team.PlayerId != null && team.PlayerId == _identityService.GetUserID())
-                {
-                    teamOptionsDTO.Logged();
-                }
-                teamDataDTO = new TeamDataDTO(
-                    team.Id,
-                    pokemons.Select(p => p.Id).ToList(),
-                    await GetTeamPlayer(team),
-                    await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName),
-                    await _regulationService.GetRegulationByIdentifier(team.Regulation),
-                    team.RentalCode,
-                    team.ViewCount,
-                    team.DateCreated.ToString("yyyy-MM-dd"),
-                    team.Visibility,
-                    await GetTeamTags(team),
-                    teamOptionsDTO
-                    );
-            }
-            return teamDataDTO;
-        }
-
-        public async Task<PokemonDTO?> GetPokemonById(int id, int langId)
-        {
-            Pokemon? pokemon = _pokeTeamContext.Pokemon.Include(p => p.Team).FirstOrDefault(p => p.Id == id);
-            if (pokemon != null)
-            {
-                TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(pokemon.Team.IVsVisibility, pokemon.Team.EVsVisibility, pokemon.Team.NaturesVisibility);
-                if (pokemon.Team.PlayerId != null && pokemon.Team.PlayerId == _identityService.GetUserID())
-                {
-                    teamOptionsDTO.Logged();
-                }
-                return await _pokemonService.BuildPokemonDTO(pokemon, langId, teamOptionsDTO);
-            }
-            return null;
-        }
-
-        public async Task<PokemonPreviewDTO?> GetPokemonPreviewById(int id, int langId)
-        {
-            Pokemon? pokemon = _pokeTeamContext.Pokemon.FirstOrDefault(t => t.Id == id);
-            if (pokemon != null)
-            {
-                return await _pokemonService.BuildPokemonPreviewDTO(pokemon, langId);
-            }
-            return null;
-        }
-
-        public async Task<List<PokemonPreviewDTO>> GetTeamPreviewPokemons(string id, int langId)
-        {
-            List<PokemonPreviewDTO> pokemonPreviewDTOs = new List<PokemonPreviewDTO>();
-
-            Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
-            if (team != null)
-            {
-                List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
-                List<int> pokemonIds = pokemons.Select(p => p.Id).ToList();
-
-                foreach (int pokemonId in pokemonIds)
-                {
-                    PokemonPreviewDTO pokemonPreviewDTO = await GetPokemonPreviewById(pokemonId, langId);
-                    if (pokemonPreviewDTO != null)
-                    {
-                        pokemonPreviewDTOs.Add(pokemonPreviewDTO);
-                    }
-                }
-            }
-
-            return pokemonPreviewDTOs;
-        }
-
-        public string? ValidateTeamDTO(TeamDTO inputTeam)
-        {
-            if (inputTeam == null)
-            {
-                return "Error uploading team";
-            }
-            if (inputTeam.Player != null && inputTeam.Player.Username != null
-                && inputTeam.Player.Username.Length > 32)
-            {
-                return "Player name must be shorter than 32 characters";
-            }
-            if (inputTeam.RentalCode != null
-                && inputTeam.RentalCode.Length > 32)
-            {
-                return "Rental code must be shorter than 32 characters";
-            }
-            if (!inputTeam.Tags.IsNullOrEmpty()
-                && inputTeam.Tags.Any(t => t != null
-                && (t.Name.Length > 16
-                || t.Identifier.Length > 16
-                || (t.Description != null && t.Description.Length > 256)
-                || (t.Color != null && t.Color.Length > 8))))
-            {
-                return "Tag validation error";
-            }
-            if (!inputTeam.Pokemons.IsNullOrEmpty()
-                && inputTeam.Pokemons.Any(p => p != null 
-                && ((p.Nickname != null && p.Nickname.Length > 16) 
-                || (p.Notes != null && p.Notes.Length > 2048)
-                || (p.Level != null && (p.Level < 1 || p.Level > 100)))))
-            {
-                return "Pokemon validation error";
-            }
-            return null;
-        }
-
-        public async Task<Team?> SaveTeam(TeamDTO inputTeam)
-        {
-            Team? newTeam = null;
-
-            try
-            {
-                string teamId = GenerateId(10);
-                Team? team = await _pokeTeamContext.Team.FindAsync(teamId);
-                //loop maybe too ineficent? seek another way to get unused ids?
-                //is there a way for sql server to auto generate custom ids?
-                while (team != null)
-                {
-                    teamId = GenerateId(10);
-                    team = await _pokeTeamContext.Team.FindAsync(teamId);
-                }
-
-                newTeam = await BreakTeamDTO(inputTeam, teamId);
-                if (newTeam != null)
-                {
-                    await _pokeTeamContext.Team.AddAsync(newTeam);
-                    await _pokeTeamContext.SaveChangesAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                Printer.Log("Exception in team upload", ex);
-                return null;
-            }
-            return newTeam;
-        }
-
         public async Task<Team?> BreakTeamDTO(TeamDTO inputTeam, string newTeamId)
         {
             Team newTeam = null;
@@ -356,10 +142,10 @@ namespace api.Services
                 List<Pokemon> pokemons = new List<Pokemon>();
                 foreach (PokemonDTO pokemonDTO in inputTeam.Pokemons)
                 {
-                    pokemons.Add(BreakPokemonDTO(pokemonDTO, newTeamId));
+                    pokemons.Add(_pokemonService.BreakPokemonDTO(pokemonDTO, newTeamId));
                 }
 
-                User? loggedUser = await _identityService.GetUser();
+                User? loggedUser = await _identityService.GetLoggedUser();
                 User? player = null;
                 if (inputTeam.Player != null && inputTeam.Player.Username != null && loggedUser != null && loggedUser.UserName == inputTeam.Player.Username)
                 {
@@ -417,53 +203,131 @@ namespace api.Services
             return newTeam;
         }
 
-        public Pokemon BreakPokemonDTO(PokemonDTO pokemonDTO, string teamId)
+        public async Task<Team?> GetTeamModel(string id)
         {
-            JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
-
-            string? serializedIVs = null;
-            string? serializedEVs = null;
             try
             {
-                serializedIVs = pokemonDTO.ivs != null ? JsonSerializer.Serialize(pokemonDTO.ivs, options) : null;
-                serializedEVs = pokemonDTO.evs != null ? JsonSerializer.Serialize(pokemonDTO.evs, options) : null;
+                Team? team = await _pokeTeamContext.Team
+                    .Include(t => t.Player)
+                    .Include(t => t.Pokemons)
+                    .Include(t => t.Tags)
+                    .FirstOrDefaultAsync(t => t.Id == id);
+                return team;
             }
             catch (Exception ex)
             {
-                Printer.Log("Error serializing ivs/evs on team upload ", ex);
+                Printer.Log(ex.Message);
+                return null;
             }
-            return new Pokemon
+        }
+
+        public async Task<TeamDTO?> GetTeam(string id, int langId)
+        {
+            TeamDTO teamDTO = null;
+            try
             {
-                TeamId = teamId,
-                DexNumber = pokemonDTO.DexNumber,
-                Nickname = pokemonDTO.Nickname,
-                Type1Identifier = pokemonDTO.Types.Type1?.Identifier,
-                Type2Identifier = pokemonDTO.Types.Type2?.Identifier,
-                TeraTypeIdentifier = pokemonDTO.TeraType?.Identifier,
-                ItemIdentifier = pokemonDTO.Item?.Identifier,
-                AbilityIdentifier = pokemonDTO.Ability?.Identifier,
-                NatureIdentifier = pokemonDTO.Nature?.Identifier,
-                Move1Identifier = pokemonDTO.Moves[0]?.Identifier,
-                Move2Identifier = pokemonDTO.Moves[1]?.Identifier,
-                Move3Identifier = pokemonDTO.Moves[2]?.Identifier,
-                Move4Identifier = pokemonDTO.Moves[3]?.Identifier,
-                Level = pokemonDTO.Level,
-                Shiny = pokemonDTO.Shiny,
-                Gender = pokemonDTO.Gender,
-                Notes = pokemonDTO.Notes,
-                IV_hp = pokemonDTO.ivs?[0]?.Value,
-                IV_atk = pokemonDTO.ivs?[1]?.Value,
-                IV_def = pokemonDTO.ivs?[2]?.Value,
-                IV_spa = pokemonDTO.ivs?[3]?.Value,
-                IV_spd = pokemonDTO.ivs?[4]?.Value,
-                IV_spe = pokemonDTO.ivs?[5]?.Value,
-                EV_hp = pokemonDTO.evs?[0]?.Value,
-                EV_atk = pokemonDTO.evs?[1]?.Value,
-                EV_def = pokemonDTO.evs?[2]?.Value,
-                EV_spa = pokemonDTO.evs?[3]?.Value,
-                EV_spd = pokemonDTO.evs?[4]?.Value,
-                EV_spe = pokemonDTO.evs?[5]?.Value
-            };
+                Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
+                teamDTO = await BuildTeamDTO(team, langId);
+            }
+            catch (Exception ex)
+            {
+                Printer.Log(ex.Message);
+                return null;
+            }
+            return teamDTO;
+        }
+
+        public async Task<TeamDataDTO?> GetTeamData(string id, int langId)
+        {
+            TeamDataDTO teamDataDTO = null;
+            Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
+            if (team != null)
+            {
+                List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
+                TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(team.IVsVisibility, team.EVsVisibility, team.NaturesVisibility);
+                var test = _identityService.GetLoggedUserID();
+                if (team.PlayerId != null && team.PlayerId == _identityService.GetLoggedUserID())
+                {
+                    teamOptionsDTO.Logged();
+                }
+                teamDataDTO = new TeamDataDTO(
+                    team.Id,
+                    pokemons.Select(p => p.Id).ToList(),
+                    await GetTeamPlayer(team),
+                    await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName),
+                    await _regulationService.GetRegulationByIdentifier(team.Regulation),
+                    team.RentalCode,
+                    team.ViewCount,
+                    team.DateCreated.ToString("yyyy-MM-dd"),
+                    team.Visibility,
+                    await GetTeamTags(team),
+                    teamOptionsDTO
+                    );
+            }
+            return teamDataDTO;
+        }
+
+        private async Task<UserPreviewDTO?> GetTeamPlayer(Team team)
+        {
+            if (team.PlayerId != null)
+            {
+                User player = await _userService.GetUserById(team.PlayerId);
+                string? picture = player.Picture != null ? $"https://localhost:7134/images/sprites/profile-pics/{player.Picture}.png" : null;
+                return new UserPreviewDTO(player.UserName, picture, true);
+            }
+            else if (team.AnonPlayer != null)
+            {
+                return new UserPreviewDTO(team.AnonPlayer);
+            }
+            return null;
+        }
+
+        private async Task<List<TagDTO>> GetTeamTags(Team team)
+        {
+            List<TagDTO> tags = new List<TagDTO>();
+            List<TeamTag> teamTags = _pokeTeamContext.TeamTag.Where(t => t.TeamsId == team.Id).ToList();
+
+            foreach (TeamTag teamTag in teamTags)
+            {
+                Tag tag = _pokeTeamContext.Tag.FirstOrDefault(t => t.Identifier == teamTag.TagsIdentifier);
+                if (tag != null)
+                {
+                    TagDTO tagDTO = new TagDTO(tag.Name, tag.Identifier, description: tag.Description, color: tag.Color);
+                    tags.Add(tagDTO);
+                }
+            }
+            return tags;
+        }
+
+        public async Task<Team?> SaveTeam(TeamDTO inputTeam)
+        {
+            Team? newTeam = null;
+
+            try
+            {
+                string teamId = GenerateId(10);
+                Team? team = await _pokeTeamContext.Team.FindAsync(teamId);
+                //loop maybe too ineficent? seek another way to get unused ids?
+                //is there a way for sql server to auto generate custom ids?
+                while (team != null)
+                {
+                    teamId = GenerateId(10);
+                    team = await _pokeTeamContext.Team.FindAsync(teamId);
+                }
+
+                newTeam = await BreakTeamDTO(inputTeam, teamId);
+                if (newTeam != null)
+                {
+                    await _pokeTeamContext.Team.AddAsync(newTeam);
+                    await _pokeTeamContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Exception in team upload", ex);
+                return null;
+            }
+            return newTeam;
         }
 
         public async Task<Team?> UpdateTeam(TeamDTO inputTeam, string currentTeamID)
@@ -487,7 +351,7 @@ namespace api.Services
             return newTeam;
         }
 
-        public bool UpdateTeamProperties(Team currentTeam, Team newTeam)
+        private bool UpdateTeamProperties(Team currentTeam, Team newTeam)
         {
             try
             {
@@ -559,12 +423,6 @@ namespace api.Services
             return true;
         }
 
-        public string GenerateId(int length)
-        {
-            const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
-        }
-
         public async Task<bool> DeleteUserTeams(User user)
         {
             Printer.Log("Deleting teams of: ", user.UserName);
@@ -634,68 +492,6 @@ namespace api.Services
             };
         }
 
-        public List<Team> SortTeams(List<Team> teams, SortOrder? order)
-        {
-            List<Team> sortedTeams = teams.ToList();
-            if (order.Type == SortType.Date)
-            {
-                if (order.Way == SortWay.Ascending)
-                {
-                    sortedTeams = teams.OrderBy(t => t.DateCreated).ToList();
-                }
-                else if (order.Way == SortWay.Descending)
-                {
-                    sortedTeams = teams.OrderByDescending(t => t.DateCreated).ToList();
-                }
-            }
-            else if (order.Type == SortType.Views)
-            {
-                if (order.Way == SortWay.Ascending)
-                {
-                    sortedTeams = teams.OrderBy(t => t.ViewCount).ToList();
-                }
-                else if (order.Way == SortWay.Descending)
-                {
-                    sortedTeams = teams.OrderByDescending(t => t.ViewCount).ToList();
-                }
-            }
-            return sortedTeams;
-        }
-
-        public List<Team> ChunkTeams(List<Team> inteams, int teamsPerPage, int selectedPage)
-        {
-            try
-            {
-                return inteams.Chunk(teamsPerPage).ToArray()[selectedPage - 1].ToList();
-            }
-            catch (Exception ex)
-            {
-                Printer.Log($"Error chunking teams: teamsperpage {teamsPerPage}, selectedpage {selectedPage}", ex);
-                return inteams.Chunk(teamsPerPage).ToArray()[0].ToList();
-            }
-        }
-
-        public string? ValidateTeamSearchQueryDTO(TeamSearchQueryDTO searchQuery)
-        {
-            if(searchQuery == null)
-            {
-                return "Query not found";
-            }
-            if (searchQuery.TeamsPerPage == null || searchQuery.TeamsPerPage < 0 || searchQuery.TeamsPerPage > 100)
-            {
-                return "Wrong teams per page";
-            }
-            if (!searchQuery.Queries.IsNullOrEmpty() && searchQuery.Queries.Any(q => q.Type == "user" && q.Name.Length > 32))
-            {
-                return "Player name must be shorter than 32 characters";
-            }
-            if (!searchQuery.Queries.IsNullOrEmpty() && searchQuery.Queries.Any(q => q.Type == "tournament" && q.Name.Length > 256))
-            {
-                return "Tournament name must be shorter than 32 characters";
-            }
-            return null;
-        }
-
         public async Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery, int langId)
         {
             List<TeamPreviewDTO> teamsPreviews = new List<TeamPreviewDTO>();
@@ -709,7 +505,7 @@ namespace api.Services
                     .Include(t => t.Tags)
                     .ToList();
 
-                User? loggedUser = await _identityService.GetUser();
+                User? loggedUser = await _identityService.GetLoggedUser();
                 if (loggedUser != null)
                 {
                     teams = teams.Where(t => ((t.Player == null || t.Player.Visibility) && t.Visibility)
@@ -754,7 +550,7 @@ namespace api.Services
             return await BuildTeamSearchQueryResponse(searchQuery, teams, langId);
         }
 
-        public async Task<List<Expression<Func<Team, bool>>>> GetExpressions(TeamSearchQueryDTO searchQuery)
+        private async Task<List<Expression<Func<Team, bool>>>> GetExpressions(TeamSearchQueryDTO searchQuery)
         {
             List<Expression<Func<Team, bool>>> expressions = new List<Expression<Func<Team, bool>>>();
 
@@ -802,7 +598,7 @@ namespace api.Services
             return expressions;
         }
 
-        public Expression<Func<Team, bool>>? JoinExpressionsAnd(List<Expression<Func<Team, bool>>> expressions)
+        private Expression<Func<Team, bool>>? JoinExpressionsAnd(List<Expression<Func<Team, bool>>> expressions)
         {
             Expression<Func<Team, bool>>? joinedExpressions = null;
             foreach (var expression in expressions)
@@ -815,7 +611,7 @@ namespace api.Services
             return joinedExpressions;
         }
 
-        public Expression<Func<Team, bool>>? JoinExpressionsOr(List<Expression<Func<Team, bool>>> expressions)
+        private Expression<Func<Team, bool>>? JoinExpressionsOr(List<Expression<Func<Team, bool>>> expressions)
         {
             Expression<Func<Team, bool>>? joinedExpressions = null;
             foreach (var expression in expressions)
@@ -826,6 +622,110 @@ namespace api.Services
                 }
             }
             return joinedExpressions;
+        }
+
+        private List<Team> SortTeams(List<Team> teams, SortOrder? order)
+        {
+            List<Team> sortedTeams = teams.ToList();
+            if (order.Type == SortType.Date)
+            {
+                if (order.Way == SortWay.Ascending)
+                {
+                    sortedTeams = teams.OrderBy(t => t.DateCreated).ToList();
+                }
+                else if (order.Way == SortWay.Descending)
+                {
+                    sortedTeams = teams.OrderByDescending(t => t.DateCreated).ToList();
+                }
+            }
+            else if (order.Type == SortType.Views)
+            {
+                if (order.Way == SortWay.Ascending)
+                {
+                    sortedTeams = teams.OrderBy(t => t.ViewCount).ToList();
+                }
+                else if (order.Way == SortWay.Descending)
+                {
+                    sortedTeams = teams.OrderByDescending(t => t.ViewCount).ToList();
+                }
+            }
+            return sortedTeams;
+        }
+
+        private List<Team> ChunkTeams(List<Team> inteams, int teamsPerPage, int selectedPage)
+        {
+            try
+            {
+                return inteams.Chunk(teamsPerPage).ToArray()[selectedPage - 1].ToList();
+            }
+            catch (Exception ex)
+            {
+                Printer.Log($"Error chunking teams: teamsperpage {teamsPerPage}, selectedpage {selectedPage}", ex);
+                return inteams.Chunk(teamsPerPage).ToArray()[0].ToList();
+            }
+        }
+
+        private string GenerateId(int length)
+        {
+            const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        public string? ValidateTeamDTO(TeamDTO inputTeam)
+        {
+            if (inputTeam == null)
+            {
+                return "Error uploading team";
+            }
+            if (inputTeam.Player != null && inputTeam.Player.Username != null
+                && inputTeam.Player.Username.Length > 32)
+            {
+                return "Player name must be shorter than 32 characters";
+            }
+            if (inputTeam.RentalCode != null
+                && inputTeam.RentalCode.Length > 32)
+            {
+                return "Rental code must be shorter than 32 characters";
+            }
+            if (!inputTeam.Tags.IsNullOrEmpty()
+                && inputTeam.Tags.Any(t => t != null
+                && (t.Name.Length > 16
+                || t.Identifier.Length > 16
+                || (t.Description != null && t.Description.Length > 256)
+                || (t.Color != null && t.Color.Length > 8))))
+            {
+                return "Tag validation error";
+            }
+            if (!inputTeam.Pokemons.IsNullOrEmpty()
+                && inputTeam.Pokemons.Any(p => p != null
+                && ((p.Nickname != null && p.Nickname.Length > 16)
+                || (p.Notes != null && p.Notes.Length > 2048)
+                || (p.Level != null && (p.Level < 1 || p.Level > 100)))))
+            {
+                return "Pokemon validation error";
+            }
+            return null;
+        }
+
+        public string? ValidateTeamSearchQueryDTO(TeamSearchQueryDTO searchQuery)
+        {
+            if (searchQuery == null)
+            {
+                return "Query not found";
+            }
+            if (searchQuery.TeamsPerPage == null || searchQuery.TeamsPerPage < 0 || searchQuery.TeamsPerPage > 100)
+            {
+                return "Wrong teams per page";
+            }
+            if (!searchQuery.Queries.IsNullOrEmpty() && searchQuery.Queries.Any(q => q.Type == "user" && q.Name.Length > 32))
+            {
+                return "Player name must be shorter than 32 characters";
+            }
+            if (!searchQuery.Queries.IsNullOrEmpty() && searchQuery.Queries.Any(q => q.Type == "tournament" && q.Name.Length > 256))
+            {
+                return "Tournament name must be shorter than 32 characters";
+            }
+            return null;
         }
     }
 }

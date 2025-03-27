@@ -6,41 +6,48 @@ using api.Models.DBPokedexModels;
 using api.Models.DBPoketeamModels;
 using MethodTimer;
 using Microsoft.EntityFrameworkCore;
+using api.Util;
+using System.Text.Json;
+using api.Services.PokedexServices;
 
-
-namespace api.Services.PokedexServices
+namespace api.Services
 {
     public class PokemonService : IPokemonService
     {
         private readonly IPokedexContext _pokedexContext;
+        private readonly PokeTeamContext _pokeTeamContext;
         private readonly IItemService _itemService;
         private readonly IAbilityService _abilityService;
         private readonly IMoveService _moveService;
         private readonly INatureService _natureService;
         private readonly ITypeService _typeService;
+        private readonly IIdentityService _identityService;
 
         public PokemonService
             (
                 IPokedexContext pokedexContext,
+                PokeTeamContext pokeTeamContext,
                 IItemService itemService,
                 IAbilityService abilityService,
                 IMoveService moveService,
                 INatureService natureService,
-                ITypeService typeService
+                ITypeService typeService,
+                IIdentityService identityService
             )
         {
             _pokedexContext = pokedexContext;
+            _pokeTeamContext = pokeTeamContext;
             _itemService = itemService;
             _abilityService = abilityService;
             _moveService = moveService;
             _natureService = natureService;
             _typeService = typeService;
+            _identityService = identityService;
         }
 
-        [Time]
         public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon, int langId, TeamOptionsDTO? options = null)
         {
-            PokemonDataDTO? pokemonData = await GetPokemonById(pokemon.DexNumber ?? 1, langId);
+            PokemonDataDTO? pokemonData = await GetPokemonDataById(pokemon.DexNumber ?? 1, langId);
 
             List<MoveDTO?> moves = new List<MoveDTO?>
             {
@@ -81,7 +88,7 @@ namespace api.Services.PokedexServices
             return pokemonDTO;
         }
 
-        public List<StatDTO?>? BuildPokemonIVs(Pokemon pokemon, TeamOptionsDTO? options)
+        private List<StatDTO?>? BuildPokemonIVs(Pokemon pokemon, TeamOptionsDTO? options)
         {
             List<StatDTO?> ivs = new List<StatDTO?>();
             if (options == null || !options.IvsVisibility)
@@ -97,7 +104,7 @@ namespace api.Services.PokedexServices
             return ivs;
         }
 
-        public List<StatDTO?>? BuildPokemonEVs(Pokemon pokemon, TeamOptionsDTO? options)
+        private List<StatDTO?>? BuildPokemonEVs(Pokemon pokemon, TeamOptionsDTO? options)
         {
             List<StatDTO?> evs = new List<StatDTO?>();
             if (options == null || !options.IvsVisibility)
@@ -119,10 +126,10 @@ namespace api.Services.PokedexServices
 
             List<MovePreviewDTO?> moves = new List<MovePreviewDTO?>()
             {
-                await BuildMovePreview(pokemon.Move1Identifier ?? "", langId),
-                await BuildMovePreview(pokemon.Move2Identifier ?? "", langId),
-                await BuildMovePreview(pokemon.Move3Identifier ?? "", langId),
-                await BuildMovePreview(pokemon.Move4Identifier ?? "", langId)
+                await _moveService.GetMovePreviewByIdentifier(pokemon.Move1Identifier ?? "", langId),
+                await _moveService.GetMovePreviewByIdentifier(pokemon.Move2Identifier ?? "", langId),
+                await _moveService.GetMovePreviewByIdentifier(pokemon.Move3Identifier ?? "", langId),
+                await _moveService.GetMovePreviewByIdentifier(pokemon.Move4Identifier ?? "", langId)
             };
 
             return new PokemonPreviewDTO
@@ -139,49 +146,71 @@ namespace api.Services.PokedexServices
             };
         }
 
-        public async Task<MovePreviewDTO?> BuildMovePreview(string identifier, int langId)
+        public Pokemon BreakPokemonDTO(PokemonDTO pokemonDTO, string teamId)
         {
-            MovePreviewDTO? movePreview = null;
+            JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
 
-            var query =
-                from moves in _pokedexContext.Moves.Where(m => m.identifier == identifier)
-
-                join moveNames in _pokedexContext.Move_names
-                on new { Key1 = moves.id, Key2 = langId } equals new { Key1 = moveNames.move_id, Key2 = moveNames.local_language_id } into moveNamesJoin
-                from moveNames in moveNamesJoin.DefaultIfEmpty()
-
-                join moveNamesDefault in _pokedexContext.Move_names
-                on new { Key1 = moves.id, Key2 = (int)Lang.en } equals new { Key1 = moveNamesDefault.move_id, Key2 = moveNamesDefault.local_language_id } into moveNamesDefaultJoin
-                from moveNamesDefault in moveNamesDefaultJoin.DefaultIfEmpty()
-
-                join types in _pokedexContext.Types
-                on new { Key1 = moves.type_id } equals new { Key1 = types.id } into typesJoin
-                from types in typesJoin.DefaultIfEmpty()
-
-                join typeNames in _pokedexContext.Type_names
-                on new { Key1 = types.id, Key2 = langId } equals new { Key1 = typeNames.type_id, Key2 = typeNames.local_language_id } into typeNamesJoin
-                from typeNames in typeNamesJoin.DefaultIfEmpty()
-
-                join typeNamesDefault in _pokedexContext.Type_names
-                on new { Key1 = types.id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
-                from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
-
-                select new MovePreviewDTO(
-                    moves.identifier,
-                    moveNames != null ? new LocalizedText(moveNames.name, moveNames.local_language_id) : new LocalizedText(moveNamesDefault.name, moveNamesDefault.local_language_id),
-                    new PokeTypeDTO(
-                        types.identifier,
-                        typeNames != null ?
-                            new LocalizedText(typeNames.name, typeNames.local_language_id) :
-                            new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
-                        false));
-
-            movePreview = await query.FirstOrDefaultAsync();
-
-            return movePreview;
+            string? serializedIVs = null;
+            string? serializedEVs = null;
+            try
+            {
+                serializedIVs = pokemonDTO.ivs != null ? JsonSerializer.Serialize(pokemonDTO.ivs, options) : null;
+                serializedEVs = pokemonDTO.evs != null ? JsonSerializer.Serialize(pokemonDTO.evs, options) : null;
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Error serializing ivs/evs on team upload ", ex);
+            }
+            return new Pokemon
+            {
+                TeamId = teamId,
+                DexNumber = pokemonDTO.DexNumber,
+                Nickname = pokemonDTO.Nickname,
+                Type1Identifier = pokemonDTO.Types.Type1?.Identifier,
+                Type2Identifier = pokemonDTO.Types.Type2?.Identifier,
+                TeraTypeIdentifier = pokemonDTO.TeraType?.Identifier,
+                ItemIdentifier = pokemonDTO.Item?.Identifier,
+                AbilityIdentifier = pokemonDTO.Ability?.Identifier,
+                NatureIdentifier = pokemonDTO.Nature?.Identifier,
+                Move1Identifier = pokemonDTO.Moves[0]?.Identifier,
+                Move2Identifier = pokemonDTO.Moves[1]?.Identifier,
+                Move3Identifier = pokemonDTO.Moves[2]?.Identifier,
+                Move4Identifier = pokemonDTO.Moves[3]?.Identifier,
+                Level = pokemonDTO.Level,
+                Shiny = pokemonDTO.Shiny,
+                Gender = pokemonDTO.Gender,
+                Notes = pokemonDTO.Notes,
+                IV_hp = pokemonDTO.ivs?[0]?.Value,
+                IV_atk = pokemonDTO.ivs?[1]?.Value,
+                IV_def = pokemonDTO.ivs?[2]?.Value,
+                IV_spa = pokemonDTO.ivs?[3]?.Value,
+                IV_spd = pokemonDTO.ivs?[4]?.Value,
+                IV_spe = pokemonDTO.ivs?[5]?.Value,
+                EV_hp = pokemonDTO.evs?[0]?.Value,
+                EV_atk = pokemonDTO.evs?[1]?.Value,
+                EV_def = pokemonDTO.evs?[2]?.Value,
+                EV_spa = pokemonDTO.evs?[3]?.Value,
+                EV_spd = pokemonDTO.evs?[4]?.Value,
+                EV_spe = pokemonDTO.evs?[5]?.Value
+            };
         }
 
-        public async Task<PokemonDataDTO?> GetPokemonById(int id, int langId)
+        public async Task<PokemonDTO?> GetPokemonById(int id, int langId)
+        {
+            Pokemon? pokemon = _pokeTeamContext.Pokemon.Include(p => p.Team).FirstOrDefault(p => p.Id == id);
+            if (pokemon != null)
+            {
+                TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(pokemon.Team.IVsVisibility, pokemon.Team.EVsVisibility, pokemon.Team.NaturesVisibility);
+                if (pokemon.Team.PlayerId != null && pokemon.Team.PlayerId == _identityService.GetLoggedUserID())
+                {
+                    teamOptionsDTO.Logged();
+                }
+                return await BuildPokemonDTO(pokemon, langId, teamOptionsDTO);
+            }
+            return null;
+        }
+
+        public async Task<PokemonDataDTO?> GetPokemonDataById(int id, int langId)
         {
             PokemonDataDTO pokemonData = new PokemonDataDTO(
                 await GetPokemonName(id, langId),
@@ -194,14 +223,47 @@ namespace api.Services.PokedexServices
             return pokemonData;
         }
 
-        public async Task<PokemonDataDTO?> GetPokemonByName(string name, int langId)
+        public async Task<PokemonDataDTO?> GetPokemonDataByName(string name, int langId)
         {
             Pokemon_species_names? pokemonName = await _pokedexContext.Pokemon_species_names.FirstOrDefaultAsync(p => p.name == name);
             if (pokemonName != null)
             {
-                return await GetPokemonById(pokemonName.pokemon_species_id, langId);
+                return await GetPokemonDataById(pokemonName.pokemon_species_id, langId);
             }
             return null;
+        }
+
+        public async Task<PokemonPreviewDTO?> GetPokemonPreviewById(int id, int langId)
+        {
+            Pokemon? pokemon = _pokeTeamContext.Pokemon.FirstOrDefault(t => t.Id == id);
+            if (pokemon != null)
+            {
+                return await BuildPokemonPreviewDTO(pokemon, langId);
+            }
+            return null;
+        }
+
+        public async Task<List<PokemonPreviewDTO>> GetTeamPokemonPreviews(string id, int langId)
+        {
+            List<PokemonPreviewDTO> pokemonPreviewDTOs = new List<PokemonPreviewDTO>();
+
+            Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
+            if (team != null)
+            {
+                List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
+                List<int> pokemonIds = pokemons.Select(p => p.Id).ToList();
+
+                foreach (int pokemonId in pokemonIds)
+                {
+                    PokemonPreviewDTO pokemonPreviewDTO = await GetPokemonPreviewById(pokemonId, langId);
+                    if (pokemonPreviewDTO != null)
+                    {
+                        pokemonPreviewDTOs.Add(pokemonPreviewDTO);
+                    }
+                }
+            }
+
+            return pokemonPreviewDTOs;
         }
 
         private async Task<LocalizedText?> GetPokemonName(int id, int langId)

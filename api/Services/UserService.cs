@@ -45,26 +45,16 @@ namespace api.Services
             return null;
         }
 
-        public async Task<User> GetUserByUserName(string userName)
-        {
-            User user = _pokeTeamContext.Users.FirstOrDefault(u => u.UserName == userName);
-            return user;
-        }
-
         public async Task<User> GetUserById(string id)
         {
             User user = await _pokeTeamContext.Users.FindAsync(id);
             return user;
         }
 
-        public async Task<bool> UserNameAvailable(string userName)
+        public async Task<User> GetUserByUserName(string userName)
         {
             User user = _pokeTeamContext.Users.FirstOrDefault(u => u.UserName == userName);
-            if (user != null)
-            {
-                return false;
-            }
-            return true;
+            return user;
         }
 
         public async Task<bool> ChangeName(User user, string newName)
@@ -110,6 +100,16 @@ namespace api.Services
             {
                 return false;
             }
+        }
+
+        public async Task<bool> UserNameAvailable(string userName)
+        {
+            User user = _pokeTeamContext.Users.FirstOrDefault(u => u.UserName == userName);
+            if (user != null)
+            {
+                return false;
+            }
+            return true;
         }
 
         public CountryDTO? GetCountry(string code)

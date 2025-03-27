@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using api.Models.DBPoketeamModels;
 using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-using api.Util;
-using api.Models.DBPoketeamModels;
-using Azure.Core;
 
 namespace api.Services
 {
@@ -19,9 +14,9 @@ namespace api.Services
             _userService = userService;
         }
 
-        public async Task<User?> GetUser()
+        public async Task<User?> GetLoggedUser()
         {
-            string? username = GetUserName();
+            string? username = GetLoggedUserName();
             if(username != null)
             {
                 return await _userService.GetUserByUserName(username);
@@ -29,7 +24,7 @@ namespace api.Services
             return null;
         }
 
-        public string? GetUserName()
+        public string? GetLoggedUserName()
         {
             ClaimsPrincipal? claimsPrincipal = _accessor?.HttpContext?.User;
             if(claimsPrincipal != null && claimsPrincipal.Identity != null && claimsPrincipal.Identity.IsAuthenticated) 
@@ -39,7 +34,7 @@ namespace api.Services
             return null;
         }
 
-        public string? GetUserID()
+        public string? GetLoggedUserID()
         {
             ClaimsPrincipal? claimsPrincipal = _accessor?.HttpContext?.User;
             if (claimsPrincipal != null && claimsPrincipal.Identity != null && claimsPrincipal.Identity.IsAuthenticated)

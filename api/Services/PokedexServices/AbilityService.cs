@@ -19,6 +19,45 @@ namespace api.Services.PokedexServices
             _pokedexContext = pokedexContext;
         }
 
+        public async Task<AbilityDTO?> GetAbilityByIdentifier(string identifier, int langId)
+        {
+            AbilityDTO? ability = null;
+
+            var query =
+                from abilities in _pokedexContext.Abilities.Where(i => i.identifier == identifier)
+
+                join abilityNames in _pokedexContext.Ability_names
+                on new { Key1 = abilities.id, Key2 = langId } equals new { Key1 = abilityNames.ability_id, Key2 = abilityNames.local_language_id } into abilityNamesJoin
+                from abilityNames in abilityNamesJoin.DefaultIfEmpty()
+
+                join abilityNamesDefault in _pokedexContext.Ability_names
+                on new { Key1 = abilities.id, Key2 = (int)Lang.en } equals new { Key1 = abilityNamesDefault.ability_id, Key2 = abilityNamesDefault.local_language_id } into abilityNamesDefaultJoin
+                from abilityNamesDefault in abilityNamesDefaultJoin.DefaultIfEmpty()
+
+                join abilityProses in _pokedexContext.Ability_prose
+                on new { Key1 = abilities.id, Key2 = langId } equals new { Key1 = abilityProses.ability_id, Key2 = abilityProses.local_language_id } into abilityProsesJoin
+                from abilityProses in abilityProsesJoin.DefaultIfEmpty()
+
+                join abilityProsesDefault in _pokedexContext.Ability_prose
+                on new { Key1 = abilities.id, Key2 = (int)Lang.en } equals new { Key1 = abilityProsesDefault.ability_id, Key2 = abilityProsesDefault.local_language_id } into abilityProsesDefaultJoin
+                from abilityProsesDefault in abilityProsesDefaultJoin.DefaultIfEmpty()
+
+                select new AbilityDTO(
+                    abilities.identifier,
+
+                    new LocalizedText(abilityNames != null ? abilityNames.name : abilityNamesDefault.name,
+                        abilityNames != null ? abilityNames.local_language_id : abilityNamesDefault.local_language_id),
+
+                    new LocalizedText(Formatter.FormatProse(abilityProses != null ? abilityProses.effect : abilityProsesDefault.effect, null),
+                        abilityProses != null ? abilityProses.local_language_id : abilityProsesDefault.local_language_id),
+
+                    false);
+
+            ability = await query.FirstOrDefaultAsync();
+
+            return ability;
+        }
+
         public async Task<AbilityDTO?> GetAbilityByName(string name, int langId)
         {
             AbilityDTO? ability = null;
@@ -56,45 +95,6 @@ namespace api.Services.PokedexServices
                     abilityProses != null || abilityProsesDefault != null ?
                         new LocalizedText(Formatter.FormatProse(abilityProses != null && abilityProses.local_language_id == langId ? abilityProses.effect : abilityProsesDefault.effect, null),
                         abilityProses != null && abilityProses.local_language_id == langId ? abilityProses.local_language_id : abilityProsesDefault.local_language_id) : null,
-
-                    false);
-
-            ability = await query.FirstOrDefaultAsync();
-
-            return ability;
-        }
-
-        public async Task<AbilityDTO?> GetAbilityByIdentifier(string identifier, int langId)
-        {
-            AbilityDTO? ability = null;
-
-            var query =
-                from abilities in _pokedexContext.Abilities.Where(i => i.identifier == identifier)
-
-                join abilityNames in _pokedexContext.Ability_names
-                on new { Key1 = abilities.id, Key2 = langId } equals new { Key1 = abilityNames.ability_id, Key2 = abilityNames.local_language_id } into abilityNamesJoin
-                from abilityNames in abilityNamesJoin.DefaultIfEmpty()
-
-                join abilityNamesDefault in _pokedexContext.Ability_names
-                on new { Key1 = abilities.id, Key2 = (int)Lang.en } equals new { Key1 = abilityNamesDefault.ability_id, Key2 = abilityNamesDefault.local_language_id } into abilityNamesDefaultJoin
-                from abilityNamesDefault in abilityNamesDefaultJoin.DefaultIfEmpty()
-
-                join abilityProses in _pokedexContext.Ability_prose
-                on new { Key1 = abilities.id, Key2 = langId } equals new { Key1 = abilityProses.ability_id, Key2 = abilityProses.local_language_id } into abilityProsesJoin
-                from abilityProses in abilityProsesJoin.DefaultIfEmpty()
-
-                join abilityProsesDefault in _pokedexContext.Ability_prose
-                on new { Key1 = abilities.id, Key2 = (int)Lang.en } equals new { Key1 = abilityProsesDefault.ability_id, Key2 = abilityProsesDefault.local_language_id } into abilityProsesDefaultJoin
-                from abilityProsesDefault in abilityProsesDefaultJoin.DefaultIfEmpty()
-
-                select new AbilityDTO(
-                    abilities.identifier,
-
-                    new LocalizedText(abilityNames != null ? abilityNames.name : abilityNamesDefault.name,
-                        abilityNames != null ? abilityNames.local_language_id : abilityNamesDefault.local_language_id),
-
-                    new LocalizedText(Formatter.FormatProse(abilityProses != null ? abilityProses.effect : abilityProsesDefault.effect, null),
-                        abilityProses != null ? abilityProses.local_language_id : abilityProsesDefault.local_language_id),
 
                     false);
 

@@ -196,6 +196,48 @@ namespace api.Services.PokedexServices
             return move;
         }
 
+        public async Task<MovePreviewDTO?> GetMovePreviewByIdentifier(string identifier, int langId)
+        {
+            MovePreviewDTO? movePreview = null;
+
+            var query =
+                from moves in _pokedexContext.Moves.Where(m => m.identifier == identifier)
+
+                join moveNames in _pokedexContext.Move_names
+                on new { Key1 = moves.id, Key2 = langId } equals new { Key1 = moveNames.move_id, Key2 = moveNames.local_language_id } into moveNamesJoin
+                from moveNames in moveNamesJoin.DefaultIfEmpty()
+
+                join moveNamesDefault in _pokedexContext.Move_names
+                on new { Key1 = moves.id, Key2 = (int)Lang.en } equals new { Key1 = moveNamesDefault.move_id, Key2 = moveNamesDefault.local_language_id } into moveNamesDefaultJoin
+                from moveNamesDefault in moveNamesDefaultJoin.DefaultIfEmpty()
+
+                join types in _pokedexContext.Types
+                on new { Key1 = moves.type_id } equals new { Key1 = types.id } into typesJoin
+                from types in typesJoin.DefaultIfEmpty()
+
+                join typeNames in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = langId } equals new { Key1 = typeNames.type_id, Key2 = typeNames.local_language_id } into typeNamesJoin
+                from typeNames in typeNamesJoin.DefaultIfEmpty()
+
+                join typeNamesDefault in _pokedexContext.Type_names
+                on new { Key1 = types.id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
+                from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
+
+                select new MovePreviewDTO(
+                    moves.identifier,
+                    moveNames != null ? new LocalizedText(moveNames.name, moveNames.local_language_id) : new LocalizedText(moveNamesDefault.name, moveNamesDefault.local_language_id),
+                    new PokeTypeDTO(
+                        types.identifier,
+                        typeNames != null ?
+                            new LocalizedText(typeNames.name, typeNames.local_language_id) :
+                            new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                        false));
+
+            movePreview = await query.FirstOrDefaultAsync();
+
+            return movePreview;
+        }
+
         public async Task<List<QueryResultDTO>> QueryMovesByName(string key, int langId)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();

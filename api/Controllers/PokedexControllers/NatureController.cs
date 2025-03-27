@@ -7,7 +7,7 @@ using api.Util;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 
-namespace api.Controllers
+namespace api.Controllers.PokedexControllers
 {
     [Route("api/[controller]")]
     [ApiController]

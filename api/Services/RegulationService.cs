@@ -47,6 +47,21 @@ namespace api.Services
             return regulation;
         }
 
+        public async Task<RegulationDTO> GetRegulationByIdentifier(string identifier)
+        {
+            RegulationDTO regulationDTO = null;
+            if (identifier != null)
+            {
+                Regulation regulation = await _pokeTeamContext.Regulation.FindAsync(identifier);
+                if (regulation != null)
+                {
+                    regulationDTO = BuildRegulationDTO(regulation);
+                }
+            }
+            return regulationDTO;
+        }
+
+
         public async Task<List<RegulationDTO>> GetAllRegulations()
         {
             List<RegulationDTO> regulationDTOs = new List<RegulationDTO>();
@@ -65,34 +80,6 @@ namespace api.Services
             regulationDTOs = await query.ToListAsync();
 
             return regulationDTOs;
-        }
-
-        public async Task<List<QueryResultDTO>> QueryAllRegulations()
-        {
-            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-
-            var query =
-                from regulation in _pokeTeamContext.Regulation.Where(r => r.StartDate != null).OrderByDescending(r => r.StartDate)
-
-                select new QueryResultDTO(regulation.Name, regulation.Identifier, null, "regulation");
-
-            queryResults = await query.ToListAsync();
-
-            return queryResults;
-        }
-
-        public async Task<RegulationDTO> GetRegulationByIdentifier(string identifier)
-        {
-            RegulationDTO regulationDTO = null;
-            if (identifier != null)
-            {
-                Regulation regulation = await _pokeTeamContext.Regulation.FindAsync(identifier);
-                if (regulation != null)
-                {
-                    regulationDTO = BuildRegulationDTO(regulation);
-                }
-            }
-            return regulationDTO;
         }
 
         public async Task<Regulation> SaveRegulation(RegulationDTO regulationDTO)
@@ -115,5 +102,18 @@ namespace api.Services
             return null;
         }
 
+        public async Task<List<QueryResultDTO>> QueryAllRegulations()
+        {
+            List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
+
+            var query =
+                from regulation in _pokeTeamContext.Regulation.Where(r => r.StartDate != null).OrderByDescending(r => r.StartDate)
+
+                select new QueryResultDTO(regulation.Name, regulation.Identifier, null, "regulation");
+
+            queryResults = await query.ToListAsync();
+
+            return queryResults;
+        }
     }
 }

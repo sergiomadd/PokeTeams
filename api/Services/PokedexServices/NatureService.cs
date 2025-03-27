@@ -15,16 +15,12 @@ namespace api.Services.PokedexServices
             _pokedexContext = pokedexContext;
         }
 
-        public async Task<NatureDTO?> GetNatureByName(string name, int langId)
+        public async Task<NatureDTO?> GetNatureByIdentifier(string identifier, int langId)
         {
             NatureDTO? nature = null;
 
             var query =
-                from natureNamesInput in _pokedexContext.Nature_names.Where(n => n.name == name)
-
-                join natures in _pokedexContext.Natures
-                on new { Key1 = natureNamesInput.nature_id } equals new { Key1 = natures.id } into naturesJoin
-                from natures in naturesJoin.DefaultIfEmpty()
+                from natures in _pokedexContext.Natures.Where(i => i.identifier == identifier)
 
                 join natureNames in _pokedexContext.Nature_names
                 on new { Key1 = natures.id, Key2 = langId } equals new { Key1 = natureNames.nature_id, Key2 = natureNames.local_language_id } into natureNamesJoin
@@ -53,13 +49,16 @@ namespace api.Services.PokedexServices
 
             return nature;
         }
-
-        public async Task<NatureDTO?> GetNatureByIdentifier(string identifier, int langId)
+        public async Task<NatureDTO?> GetNatureByName(string name, int langId)
         {
             NatureDTO? nature = null;
 
             var query =
-                from natures in _pokedexContext.Natures.Where(i => i.identifier == identifier)
+                from natureNamesInput in _pokedexContext.Nature_names.Where(n => n.name == name)
+
+                join natures in _pokedexContext.Natures
+                on new { Key1 = natureNamesInput.nature_id } equals new { Key1 = natures.id } into naturesJoin
+                from natures in naturesJoin.DefaultIfEmpty()
 
                 join natureNames in _pokedexContext.Nature_names
                 on new { Key1 = natures.id, Key2 = langId } equals new { Key1 = natureNames.nature_id, Key2 = natureNames.local_language_id } into natureNamesJoin

@@ -14,12 +14,12 @@ namespace api.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
-        private readonly IPokeTeamService _pokeTeamService;
+        private readonly ITeamService _pokeTeamService;
         private readonly IUserService _userService;
         private readonly IIdentityService _identityService;
 
         public UserController(UserManager<User> userManager,
-            IPokeTeamService teamService,
+            ITeamService teamService,
             IUserService userService,
             IIdentityService identityService
             )

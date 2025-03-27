@@ -7,6 +7,7 @@ namespace api.Services.PokedexServices
     {
         public Task<MoveDTO?> GetMoveByIdentifier(string identifier, int langId);
         public Task<MoveDTO?> GetMoveByName(string name, int langId);
+        public Task<MovePreviewDTO?> GetMovePreviewByIdentifier(string identifier, int langId);
         public Task<List<QueryResultDTO>> QueryMovesByName(string key, int langId);
     }
 }
