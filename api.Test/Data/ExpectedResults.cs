@@ -30,24 +30,41 @@ namespace api.Test.Data
 
         public static ItemDTO? GetTestItem(int langId, PokedexExpectedResults expected)
         {
-            switch (langId)
+            try
             {
-                case (int)Lang.es:
-                    return expected.es.itemCases.DTO1.result.ToObject<ItemDTO>();
-                default:
-                    return expected.en.itemCases.DTO1.result.ToObject<ItemDTO>();
+                switch (langId)
+                {
+                    case (int)Lang.es:
+                        return expected.es.itemCases.DTO1.result.ToObject<ItemDTO>();
+                    default:
+                        return expected.en.itemCases.DTO1.result.ToObject<ItemDTO>();
+                }
             }
+            catch (Exception e)
+            {
+                Printer.Log("Exception in test data getter: ", e);
+            }
+            return null;
+
         }
 
         public static List<QueryResultDTO>? GetTestItemQuery(int langId, PokedexExpectedResults expected)
         {
-            switch (langId)
+            try
             {
-                case (int)Lang.es:
-                    return expected.es.itemCases.query1.queryResult.ToObject<List<QueryResultDTO>>();
-                default:
-                    return expected.en.itemCases.query1.queryResult.ToObject<List<QueryResultDTO>>();
+                switch (langId)
+                {
+                    case (int)Lang.es:
+                        return expected.es.itemCases.query1.queryResult.ToObject<List<QueryResultDTO>>();
+                    default:
+                        return expected.en.itemCases.query1.queryResult.ToObject<List<QueryResultDTO>>();
+                }
             }
+            catch (Exception e)
+            {
+                Printer.Log("Exception in test data getter: ", e);
+            }
+            return null;
         }
 
         public static AbilityDTO? GetTestAbility(int langId, PokedexExpectedResults expected)
@@ -64,42 +81,66 @@ namespace api.Test.Data
             }
             catch (Exception e)
             {
-                Printer.Log("Exeption in GetTestAbility: ", e);
+                Printer.Log("Exception in test data getter: ", e);
             }
             return null;
         }
 
         public static MoveDTO? GetTestMove(int langId, PokedexExpectedResults expected)
         {
-            switch (langId)
+            try
             {
-                case (int)Lang.es:
-                    return expected.es.moveCases.DTO1.result.ToObject<MoveDTO>();
-                default:
-                    return expected.en.moveCases.DTO1.result.ToObject<MoveDTO>();
+                switch (langId)
+                {
+                    case (int)Lang.es:
+                        return expected.es.moveCases.DTO1.result.ToObject<MoveDTO>();
+                    default:
+                        return expected.en.moveCases.DTO1.result.ToObject<MoveDTO>();
+                }
             }
+            catch (Exception e)
+            {
+                Printer.Log("Exception in test data getter: ", e);
+            }
+            return null;
         }
 
         public static NatureDTO? GetTestNature(int langId, PokedexExpectedResults expected)
         {
-            switch (langId)
+            try
             {
-                case (int)Lang.es:
-                    return expected.es.natureCases.DTO1.result.ToObject<NatureDTO>();
-                default:
-                    return expected.en.natureCases.DTO1.result.ToObject<NatureDTO>();
+                switch (langId)
+                {
+                    case (int)Lang.es:
+                        return expected.es.natureCases.DTO1.result.ToObject<NatureDTO>();
+                    default:
+                        return expected.en.natureCases.DTO1.result.ToObject<NatureDTO>();
+                }
             }
+            catch (Exception e)
+            {
+                Printer.Log("Exception in test data getter: ", e);
+            }
+            return null;
         }
 
         public static PokeTypeDTO? GetTestType(int langId, PokedexExpectedResults expected)
         {
-            switch (langId)
+            try
             {
-                case (int)Lang.es:
-                    return expected.es.typeCases.DTO1.result.ToObject<PokeTypeDTO>();
-                default:
-                    return expected.en.typeCases.DTO1.result.ToObject<PokeTypeDTO>();
+                switch (langId)
+                {
+                    case (int)Lang.es:
+                        return expected.es.typeCases.DTO1.result.ToObject<PokeTypeDTO>();
+                    default:
+                        return expected.en.typeCases.DTO1.result.ToObject<PokeTypeDTO>();
+                }
             }
+            catch (Exception e)
+            {
+                Printer.Log("Exception in test data getter: ", e);
+            }
+            return null;
         }
     }
 }
