@@ -106,7 +106,7 @@ namespace api.Services.PokedexServices
             string pathStart = "https://localhost:7134/images/sprites/items/";
 
             var query =
-                from itemNames in _pokedexContext.Item_names.Where(i => i.name.Contains(key) && i.local_language_id == langId)
+                from itemNames in _pokedexContext.Item_names.Where(i => i.name.StartsWith(key) && i.local_language_id == langId)
 
                 join items in _pokedexContext.Items
                 on new { Key1 = itemNames.item_id } equals new { Key1 = items.id } into itemsJoin

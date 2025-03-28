@@ -292,7 +292,7 @@ namespace api.Services.PokedexServices
                 : "https://localhost:7134/images/sprites/types/generation-viii/";
 
             var query =
-                from typeNames in _pokedexContext.Type_names.Where(i => i.name.Contains(key) && i.local_language_id == langId)
+                from typeNames in _pokedexContext.Type_names.Where(i => i.name.StartsWith(key) && i.local_language_id == langId)
 
                 join types in _pokedexContext.Types
                 on new { Key1 = typeNames.type_id } equals new { Key1 = types.id } into typesJoin

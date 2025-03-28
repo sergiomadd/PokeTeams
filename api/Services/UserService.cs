@@ -128,7 +128,7 @@ namespace api.Services
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from country in _pokeTeamContext.Country.Where(i => i.NormalizedName.Contains(key.ToLower()))
+                from country in _pokeTeamContext.Country.Where(i => i.NormalizedName.StartsWith(key.ToLower()))
 
             select new QueryResultDTO(country.Name, country.Code, $"https://localhost:7134/images/sprites/flags/{country.Code}.svg", "country");
 
@@ -156,7 +156,7 @@ namespace api.Services
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from user in _pokeTeamContext.Users.Where(u => u.UserName.Contains(key))
+                from user in _pokeTeamContext.Users.Where(u => u.UserName.StartsWith(key))
 
                 select new QueryResultDTO(user.UserName, user.UserName, $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png", "user");
 
