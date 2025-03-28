@@ -1,0 +1,1027 @@
+{
+  "en":
+  {
+    "itemCases":
+    {
+      "DTO1":
+      {
+        "identifier": "awakening",
+        "result":
+        {
+          "identifier": "awakening",
+          "name":
+          {
+            "content": "Awakening",
+            "language": "en"
+          },
+          "prose":
+          {
+            "content": "Used on a party Pokémon\r\n:   Cures [sleep](https://bulbapedia.bulbagarden.net/wiki/Sleep_(status_condition)){mechanic}.",
+            "language": "en"
+          },
+          "iconPath": "https://localhost:7134/images/sprites/items/awakening.png"
+        }
+      },
+      "query1":
+      {
+        "identifier": "te",
+        "result":
+        [
+          {
+            "name": "Roto Catch",
+            "identifier": "roto-catch",
+            "icon": "https://localhost:7134/images/sprites/items/roto-catch.png",
+            "type": "item"
+          },
+          {
+            "name": "Catching Pocket",
+            "identifier": "catching-pocket",
+            "icon": "https://localhost:7134/images/sprites/items/catching-pocket.png",
+            "type": "item"
+          },
+          {
+            "name": "Caterpie Candy",
+            "identifier": "caterpie-candy",
+            "icon": "https://localhost:7134/images/sprites/items/caterpie-candy.png",
+            "type": "item"
+          },
+          {
+            "name": "Catching Charm",
+            "identifier": "catching-charm",
+            "icon": "https://localhost:7134/images/sprites/items/catching-charm.png",
+            "type": "item"
+          },
+          {
+            "name": "Rotom Catalog",
+            "identifier": "rotom-catalog",
+            "icon": "https://localhost:7134/images/sprites/items/rotom-catalog.png",
+            "type": "item"
+          },
+          {
+            "name": "Scatterbug Powder",
+            "identifier": "scatterbug-powder",
+            "icon": "https://localhost:7134/images/sprites/items/scatterbug-powder.png",
+            "type": "item"
+          }
+        ]
+      }
+    },
+    "abilityCases":
+    {
+      "DTO1":
+      {
+        "identifier": "awakening",
+        "result":
+        {
+          "identifier": "stench",
+          "name":
+          {
+            "content": "Stench",
+            "language": "en"
+          },
+          "prose":
+          {
+            "content": "This Pokémon's damaging moves have a 10% chance to make the target [flinch](https://bulbapedia.bulbagarden.net/wiki/Flinch_(status_condition)){mechanic} with each hit if they do not already cause flinching as a secondary effect.\r\n\r\nThis ability does not stack with a held item.\r\n\r\nOverworld: The wild encounter rate is halved while this Pokémon is first in the party.",
+            "language": "en"
+          },
+          "hidden": false
+        }
+      },
+      "query1":
+      {
+        "identifier": "te",
+        "result":
+        [
+        ]
+      }
+    },
+    "moveCases":
+    {
+      "DTO1":
+      {
+        "identifier": "aerial-ace",
+        "result":
+        {
+          "identifier": "aerial-ace",
+          "name":
+          {
+            "content": "Aerial Ace",
+            "language": "en"
+          },
+          "pokeType":
+          {
+            "identifier": "flying",
+            "name":
+            {
+              "content": "Flying",
+              "language": "en"
+            },
+            "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+            "effectivenessAttack":
+            {
+              "allValues":
+              [
+                {
+                  "item1":
+                  {
+                    "identifier": "flying",
+                    "name":
+                    {
+                      "content": "Flying",
+                      "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                    "teratype": false
+                  },
+                  "item2": 2
+                },
+                {
+                  "item1":
+                  {
+                    "identifier": "flying",
+                    "name":
+                    {
+                      "content": "Flying",
+                      "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                    "teratype": false
+                  },
+                  "item2": 0.5
+                },
+                {
+                  "item1":
+                  {
+                    "identifier": "flying",
+                    "name":
+                    {
+                      "content": "Flying",
+                      "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                    "teratype": false
+                  },
+                  "item2": 2
+                },
+                {
+                  "item1":
+                  {
+                    "identifier": "flying",
+                    "name":
+                    {
+                      "content": "Flying",
+                      "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                    "teratype": false
+                  },
+                  "item2": 0.5
+                },
+                {
+                  "item1":
+                  {
+                    "identifier": "flying",
+                    "name":
+                    {
+                      "content": "Flying",
+                      "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                    "teratype": false
+                  },
+                  "item2": 2
+                },
+                {
+                  "item1":
+                  {
+                    "identifier": "flying",
+                    "name":
+                    {
+                      "content": "Flying",
+                      "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                    "teratype": false
+                  },
+                  "item2": 0.5
+                }
+              ],
+              "doubleSuperEffective":
+              [
+              ],
+              "superEffective":
+              [
+                {
+                  "identifier": "flying",
+                  "name":
+                  {
+                    "content": "Flying",
+                    "language": "en"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "flying",
+                  "name":
+                  {
+                    "content": "Flying",
+                    "language": "en"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "flying",
+                  "name":
+                  {
+                    "content": "Flying",
+                    "language": "en"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                  "teratype": false
+                }
+              ],
+              "notVeryEffective":
+              [
+                {
+                  "identifier": "flying",
+                  "name":
+                  {
+                    "content": "Flying",
+                    "language": "en"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "flying",
+                  "name":
+                  {
+                    "content": "Flying",
+                    "language": "en"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "flying",
+                  "name":
+                  {
+                    "content": "Flying",
+                    "language": "en"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                  "teratype": false
+                }
+              ],
+              "doubleNotVeryEffective":
+              [
+              ],
+              "inmune":
+              [
+              ]
+            },
+            "effectivenessDefense":
+            {
+              "allValues":
+              [
+                {
+                  "item1":
+                  {
+                    "identifier": "fighting",
+                    "name":
+                    {
+                      "content": "Fighting",
+                      "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
+                    "teratype": false
+                  },
+                  "item2": 0.5
+                },
+                {
+                  "item1":
+                  {
+                    "identifier": "ground",
+                    "name":
+                    {
+                      "content": "Ground",
+                      "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ground.png",
+                    "teratype": false
+                  },
+                  "item2": 0
+                },
+                {
+                  "item1":
+                  {
+                    "identifier": "rock",
+                    "name":
+                    {
+                      "content": "Rock",
+                      "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
+                    "teratype": false
+                  },
+                  "item2": 2
+                },
+                {
+                  "item1":
+                  {
+                    "identifier": "bug",
+                    "name":
+                    {
+                      "content": "Bug",
+                      "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
+                    "teratype": false
+                  },
+                  "item2": 0.5
+                },
+                {
+                  "item1":
+                  {
+                    "identifier": "grass",
+                    "name":
+                    {
+                      "content": "Grass",
+                      "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
+                    "teratype": false
+                  },
+                  "item2": 0.5
+                },
+                {
+                  "item1":
+                  {
+                    "identifier": "electric",
+                    "name":
+                    {
+                      "content": "Electric",
+                      "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
+                    "teratype": false
+                  },
+                  "item2": 2
+                },
+                {
+                  "item1":
+                  {
+                    "identifier": "ice",
+                    "name":
+                    {
+                      "content": "Ice",
+                      "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ice.png",
+                    "teratype": false
+                  },
+                  "item2": 2
+                }
+              ],
+              "doubleSuperEffective":
+              [
+              ],
+              "superEffective":
+              [
+                {
+                  "identifier": "rock",
+                  "name":
+                  {
+                    "content": "Rock",
+                    "language": "en"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "electric",
+                  "name":
+                  {
+                    "content": "Electric",
+                    "language": "en"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "ice",
+                  "name":
+                  {
+                    "content": "Ice",
+                    "language": "en"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ice.png",
+                  "teratype": false
+                }
+              ],
+              "notVeryEffective":
+              [
+                {
+                  "identifier": "fighting",
+                  "name":
+                  {
+                    "content": "Fighting",
+                    "language": "en"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "bug",
+                  "name":
+                  {
+                    "content": "Bug",
+                    "language": "en"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "grass",
+                  "name":
+                  {
+                    "content": "Grass",
+                    "language": "en"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
+                  "teratype": false
+                }
+              ],
+              "doubleNotVeryEffective":
+              [
+              ],
+              "inmune":
+              [
+                {
+                  "identifier": "ground",
+                  "name":
+                  {
+                    "content": "Ground",
+                    "language": "en"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ground.png",
+                  "teratype": false
+                }
+              ]
+            },
+            "teratype": false
+          },
+          "damageClass":
+          {
+            "name": "Physical",
+            "description": "Physical damage, controlled by Attack and Defense",
+            "iconPath": "https://localhost:7134/images/sprites/damage-class/2.png"
+          },
+          "power": 60,
+          "pp": 20,
+          "accuracy": null,
+          "priority": 0,
+          "target":
+          {
+            "name": "Selected Pokémon",
+            "description":
+            {
+              "content": "One other Pokémon on the field, selected by the trainer.",
+              "language": "en"
+            }
+          },
+          "effect":
+          {
+            "short":
+            {
+              "content": "Never misses.",
+              "language": "en"
+            },
+            "long":
+            {
+              "content": "Inflicts [regular damage](https://bulbapedia.bulbagarden.net/wiki/Type#Type_effectiveness){mechanic}.  Ignores [accuracy](https://bulbapedia.bulbagarden.net/wiki/Accuracy){mechanic} and [evasion](https://bulbapedia.bulbagarden.net/wiki/Stat#Evasion){mechanic} modifiers.",
+              "language": "en"
+            },
+            "chance": null
+          },
+          "meta":
+          {
+            "minHits": 2,
+            "maxHits": 5,
+            "minTurns": null,
+            "maxTurns": null,
+            "drain": 0,
+            "healing": 0,
+            "critRate": 0,
+            "statusChance": 0,
+            "flinchChance": 0,
+            "statChange":
+            {
+              "stat":
+              {
+                "identifier": null,
+                "name":
+                {
+                  "content": null,
+                  "language": "en"
+                },
+                "value": null
+              },
+              "change": null,
+              "changeChance": 0
+            }
+          }
+        }
+      }
+    },
+    "natureCases":
+    {
+      "DTO1":
+      {
+        "identifier": "bold",
+        "result":
+        {
+          "name":
+          {
+            "content": "Bold",
+            "language": "en"
+          },
+          "identifier": "bold",
+          "increasedStatIdentifier": "defense",
+          "decreasedStatIdentifier": "attack"
+        }
+      }
+    },
+    "typeCases":
+    {
+      "DTO1":
+      {
+        "identifier": "awakening",
+        "result":
+        {
+
+        }
+      }
+    }
+  },
+  "es":
+  {
+    "itemCases":
+    {
+      "DTO1":
+      {
+        "identifier": "awakening",
+        "result":
+        {
+          "identifier": "awakening",
+          "name":
+          {
+            "content": "Despertar",
+            "language": "es"
+          },
+          "prose":
+          {
+            "content": "Used on a party Pokémon\r\n:   Cures [sleep](https://bulbapedia.bulbagarden.net/wiki/Sleep_(status_condition)){mechanic}.",
+            "language": "en"
+          },
+          "iconPath": "https://localhost:7134/images/sprites/items/awakening.png"
+        }
+      },
+      "query1":
+      {
+        "identifier": "te",
+        "result":
+        [
+        ]
+      }
+    },
+    "abilityCases":
+    {
+      "DTO1":
+      {
+        "identifier": "stench",
+        "result":
+        {
+          "identifier": "stench",
+          "name":
+          {
+            "content": "Hedor",
+            "language": "es"
+          },
+          "prose":
+          {
+            "content": "This Pokémon's damaging moves have a 10% chance to make the target [flinch](https://bulbapedia.bulbagarden.net/wiki/Flinch_(status_condition)){mechanic} with each hit if they do not already cause flinching as a secondary effect.\r\n\r\nThis ability does not stack with a held item.\r\n\r\nOverworld: The wild encounter rate is halved while this Pokémon is first in the party.",
+            "language": "en"
+          },
+          "hidden": false
+        }
+      },
+      "query1":
+      {
+        "identifier": "te",
+        "result":[]
+      }
+    },
+    "moveCases":
+    {
+      "DTO1":
+      {
+        "identifier": "aerial-ace",
+        "result":
+        {
+          "identifier": "aerial-ace",
+          "name": {
+            "content": "Golpe Aéreo",
+            "language": "es"
+          },
+          "pokeType": {
+            "identifier": "flying",
+            "name": {
+              "content": "Volador",
+              "language": "es"
+            },
+            "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+            "effectivenessAttack": {
+              "allValues": [
+                {
+                  "item1": {
+                    "identifier": "flying",
+                    "name": {
+                      "content": "Volador",
+                      "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                    "teratype": false
+                  },
+                  "item2": 2
+                },
+                {
+                  "item1": {
+                    "identifier": "flying",
+                    "name": {
+                      "content": "Volador",
+                      "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                    "teratype": false
+                  },
+                  "item2": 0.5
+                },
+                {
+                  "item1": {
+                    "identifier": "flying",
+                    "name": {
+                      "content": "Volador",
+                      "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                    "teratype": false
+                  },
+                  "item2": 2
+                },
+                {
+                  "item1": {
+                    "identifier": "flying",
+                    "name": {
+                      "content": "Volador",
+                      "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                    "teratype": false
+                  },
+                  "item2": 0.5
+                },
+                {
+                  "item1": {
+                    "identifier": "flying",
+                    "name": {
+                      "content": "Volador",
+                      "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                    "teratype": false
+                  },
+                  "item2": 2
+                },
+                {
+                  "item1": {
+                    "identifier": "flying",
+                    "name": {
+                      "content": "Volador",
+                      "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                    "teratype": false
+                  },
+                  "item2": 0.5
+                }
+              ],
+              "doubleSuperEffective": [],
+              "superEffective": [
+                {
+                  "identifier": "flying",
+                  "name": {
+                    "content": "Volador",
+                    "language": "es"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "flying",
+                  "name": {
+                    "content": "Volador",
+                    "language": "es"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "flying",
+                  "name": {
+                    "content": "Volador",
+                    "language": "es"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                  "teratype": false
+                }
+              ],
+              "notVeryEffective": [
+                {
+                  "identifier": "flying",
+                  "name": {
+                    "content": "Volador",
+                    "language": "es"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "flying",
+                  "name": {
+                    "content": "Volador",
+                    "language": "es"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "flying",
+                  "name": {
+                    "content": "Volador",
+                    "language": "es"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
+                  "teratype": false
+                }
+              ],
+              "doubleNotVeryEffective": [],
+              "inmune": []
+            },
+            "effectivenessDefense": {
+              "allValues": [
+                {
+                  "item1": {
+                    "identifier": "fighting",
+                    "name": {
+                      "content": "Lucha",
+                      "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
+                    "teratype": false
+                  },
+                  "item2": 0.5
+                },
+                {
+                  "item1": {
+                    "identifier": "ground",
+                    "name": {
+                      "content": "Tierra",
+                      "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ground.png",
+                    "teratype": false
+                  },
+                  "item2": 0
+                },
+                {
+                  "item1": {
+                    "identifier": "rock",
+                    "name": {
+                      "content": "Roca",
+                      "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
+                    "teratype": false
+                  },
+                  "item2": 2
+                },
+                {
+                  "item1": {
+                    "identifier": "bug",
+                    "name": {
+                      "content": "Bicho",
+                      "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
+                    "teratype": false
+                  },
+                  "item2": 0.5
+                },
+                {
+                  "item1": {
+                    "identifier": "grass",
+                    "name": {
+                      "content": "Planta",
+                      "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
+                    "teratype": false
+                  },
+                  "item2": 0.5
+                },
+                {
+                  "item1": {
+                    "identifier": "electric",
+                    "name": {
+                      "content": "Eléctrico",
+                      "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
+                    "teratype": false
+                  },
+                  "item2": 2
+                },
+                {
+                  "item1": {
+                    "identifier": "ice",
+                    "name": {
+                      "content": "Hielo",
+                      "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ice.png",
+                    "teratype": false
+                  },
+                  "item2": 2
+                }
+              ],
+              "doubleSuperEffective": [],
+              "superEffective": [
+                {
+                  "identifier": "rock",
+                  "name": {
+                    "content": "Roca",
+                    "language": "es"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "electric",
+                  "name": {
+                    "content": "Eléctrico",
+                    "language": "es"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "ice",
+                  "name": {
+                    "content": "Hielo",
+                    "language": "es"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ice.png",
+                  "teratype": false
+                }
+              ],
+              "notVeryEffective": [
+                {
+                  "identifier": "fighting",
+                  "name": {
+                    "content": "Lucha",
+                    "language": "es"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "bug",
+                  "name": {
+                    "content": "Bicho",
+                    "language": "es"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
+                  "teratype": false
+                },
+                {
+                  "identifier": "grass",
+                  "name": {
+                    "content": "Planta",
+                    "language": "es"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
+                  "teratype": false
+                }
+              ],
+              "doubleNotVeryEffective": [],
+              "inmune": [
+                {
+                  "identifier": "ground",
+                  "name": {
+                    "content": "Tierra",
+                    "language": "es"
+                  },
+                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ground.png",
+                  "teratype": false
+                }
+              ]
+            },
+            "teratype": false
+          },
+          "damageClass": {
+            "name": "Físico",
+            "description": "Daño Físico, controlado por el Ataque y Defensa",
+            "iconPath": "https://localhost:7134/images/sprites/damage-class/2.png"
+          },
+          "power": 60,
+          "pp": 20,
+          "accuracy": null,
+          "priority": 0,
+          "target": {
+            "name": "Selected Pokémon",
+            "description": {
+              "content": "One other Pokémon on the field, selected by the trainer.",
+              "language": "en"
+            }
+          },
+          "effect": {
+            "short": {
+              "content": "Never misses.",
+              "language": "en"
+            },
+            "long": {
+              "content": "Inflicts [regular damage](https://bulbapedia.bulbagarden.net/wiki/Type#Type_effectiveness){mechanic}.  Ignores [accuracy](https://bulbapedia.bulbagarden.net/wiki/Accuracy){mechanic} and [evasion](https://bulbapedia.bulbagarden.net/wiki/Stat#Evasion){mechanic} modifiers.",
+              "language": "en"
+            },
+            "chance": null
+          },
+          "meta": {
+            "minHits": 2,
+            "maxHits": 5,
+            "minTurns": null,
+            "maxTurns": null,
+            "drain": 0,
+            "healing": 0,
+            "critRate": 0,
+            "statusChance": 0,
+            "flinchChance": 0,
+            "statChange": {
+              "stat": {
+                "identifier": null,
+                "name": {
+                  "content": null,
+                  "language": "en"
+                },
+                "value": null
+              },
+              "change": null,
+              "changeChance": 0
+            }
+          }
+        }
+      }
+    },
+    "natureCases":
+    {
+      "DTO1":
+      {
+        "identifier": "bold",
+        "result":
+        {
+          "name":
+          {
+            "content": "Osada",
+            "language": "es"
+          },
+          "identifier": "bold",
+          "increasedStatIdentifier": "defense",
+          "decreasedStatIdentifier": "attack"
+        }
+      }
+    },
+    "typeCases":
+    {
+      "DTO1":
+      {
+        "identifier": "awakening",
+        "result":
+        {
+
+        }
+      }
+    }
+  }
+}
