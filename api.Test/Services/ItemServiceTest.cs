@@ -15,7 +15,7 @@ namespace api.Test.Services
     {
         private readonly IConfiguration _configuration;
         private readonly PokedexContext _dbContext;
-        private readonly PokedexExpectedResults _expectedResults;
+        private readonly PokedexExpectedResults? _expectedResults;
         private readonly IItemService _service;
 
         public ItemServiceTest() 
@@ -29,8 +29,6 @@ namespace api.Test.Services
             var connectionString = _configuration.GetConnectionString("SQLServerPokedex");
             var options = new DbContextOptionsBuilder<PokedexContext>().UseSqlServer(connectionString).Options;
             _dbContext = new PokedexContext(options);
-
-            //Expected results igual mejor sin que sea static, pero deberia ser singleton de alguna manera
 
             PokedexExpectedResults? input = ExpectedResults.TryGetPokedexExpectedResults();
             if (input != null)
