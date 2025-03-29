@@ -2,8 +2,10 @@
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Models;
+using api.Models.DBModels;
 using api.Services.PokedexServices;
 using api.Test.Data;
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -52,6 +54,7 @@ namespace api.Test.Services
             var result = await _service.GetItemByIdentifier(identifier, langId);
 
             //Assert
+            Assert.NotNull(expectedItem);
             Assert.NotNull(result);
             Assert.NotNull(result.Name);
             Assert.Equal(expectedItem.Name.Content, result.Name.Content);
@@ -78,15 +81,16 @@ namespace api.Test.Services
         public async Task GetItemByName_ReturnsItemDTO(string name, int langId)
         {
             //Arrange
-            ItemDTO item = ExpectedResults.GetTestItem(langId, _expectedResults);
+            ItemDTO? expectedItem = ExpectedResults.GetTestItem(langId, _expectedResults);
 
             //Act
             var result = await _service.GetItemByName(name, langId);
 
             //Assert
+            Assert.NotNull(expectedItem);
             Assert.NotNull(result);
             Assert.NotNull(result.Name);
-            Assert.Equal(item.Name.Content, result.Name.Content);
+            Assert.Equal(expectedItem.Name.Content, result.Name.Content);
         }
 
         [Theory]
@@ -104,23 +108,27 @@ namespace api.Test.Services
         }
 
         [Theory]
-        [InlineData("Awaketui", (int)Lang.en)]
-        [InlineData("Despeertyr", (int)Lang.es)]
+        [InlineData("pu", (int)Lang.en)]
+        [InlineData("mu", (int)Lang.es)]
         public async Task QueryItemsByName_ReturnsQueryResultList(string key, int langId)
         {
             //Arrange
+            List<QueryResultDTO>? expectedQueryResult = ExpectedResults.GetTestItemQuery(langId, _expectedResults);
 
             //Act
             var result = await _service.QueryItemsByName(key, langId);
 
             //Assert
+            Assert.NotNull(expectedQueryResult);
+            Assert.NotEmpty(expectedQueryResult);
             Assert.NotNull(result);
-            Assert.Empty(result);
+            Assert.NotEmpty(result);
+            result.Should().BeEquivalentTo(expectedQueryResult);
         }
 
         [Theory]
-        [InlineData("Awaketui", (int)Lang.en)]
-        [InlineData("Despeertyr", (int)Lang.es)]
+        [InlineData("purt", (int)Lang.en)]
+        [InlineData("mumyue", (int)Lang.es)]
         public async Task QueryItemsByName_ReturnsEmptyList(string key, int langId)
         {
             //Arrange

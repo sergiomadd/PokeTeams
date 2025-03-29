@@ -24,43 +24,37 @@
       },
       "query1":
       {
-        "identifier": "te",
-        "result":
+        "identifier": "pu",
+        "queryResult":
         [
           {
-            "name": "Roto Catch",
-            "identifier": "roto-catch",
-            "icon": "https://localhost:7134/images/sprites/items/roto-catch.png",
+            "name": "Pure Incense",
+            "identifier": "pure-incense",
+            "icon": "https://localhost:7134/images/sprites/items/pure-incense.png",
             "type": "item"
           },
           {
-            "name": "Catching Pocket",
-            "identifier": "catching-pocket",
-            "icon": "https://localhost:7134/images/sprites/items/catching-pocket.png",
+            "name": "Purple Nectar",
+            "identifier": "purple-nectar",
+            "icon": "https://localhost:7134/images/sprites/items/purple-nectar.png",
             "type": "item"
           },
           {
-            "name": "Caterpie Candy",
-            "identifier": "caterpie-candy",
-            "icon": "https://localhost:7134/images/sprites/items/caterpie-candy.png",
+            "name": "Purple Petal",
+            "identifier": "purple-petal",
+            "icon": "https://localhost:7134/images/sprites/items/purple-petal.png",
             "type": "item"
           },
           {
-            "name": "Catching Charm",
-            "identifier": "catching-charm",
-            "icon": "https://localhost:7134/images/sprites/items/catching-charm.png",
+            "name": "Pungent Root",
+            "identifier": "pungent-root",
+            "icon": "https://localhost:7134/images/sprites/items/pungent-root.png",
             "type": "item"
           },
           {
-            "name": "Rotom Catalog",
-            "identifier": "rotom-catalog",
-            "icon": "https://localhost:7134/images/sprites/items/rotom-catalog.png",
-            "type": "item"
-          },
-          {
-            "name": "Scatterbug Powder",
-            "identifier": "scatterbug-powder",
-            "icon": "https://localhost:7134/images/sprites/items/scatterbug-powder.png",
+            "name": "Punching Glove",
+            "identifier": "punching-glove",
+            "icon": "https://localhost:7134/images/sprites/items/punching-glove.png",
             "type": "item"
           }
         ]
@@ -89,9 +83,46 @@
       },
       "query1":
       {
-        "identifier": "te",
-        "result":
+        "identifier": "pu",
+        "queryResult":
         [
+          {
+            "name": "Pure Power",
+            "identifier": "pure-power",
+            "icon": null,
+            "type": "ability"
+          },
+          {
+            "name": "Punk Rock",
+            "identifier": "punk-rock",
+            "icon": null,
+            "type": "ability"
+          },
+          {
+            "name": "Purifying Salt",
+            "identifier": "purifying-salt",
+            "icon": null,
+            "type": "ability"
+          }
+        ]
+      },
+      "query2":
+      {
+        "identifier": "1",
+        "queryResult":
+        [
+          {
+            "name": "Overgrow",
+            "identifier": "overgrow",
+            "icon": null,
+            "type": "ability"
+          },
+          {
+            "name": "Chlorophyll",
+            "identifier": "chlorophyll",
+            "icon": "hidden",
+            "type": "ability"
+          }
         ]
       }
     },
@@ -591,9 +622,27 @@
       },
       "query1":
       {
-        "identifier": "te",
-        "result":
+        "identifier": "mu",
+        "queryResult":
         [
+          {
+            "name": "Muda Concha",
+            "identifier": "shed-shell",
+            "icon": "https://localhost:7134/images/sprites/items/shed-shell.png",
+            "type": "item"
+          },
+          {
+            "name": "Musgo Brillante",
+            "identifier": "luminous-moss",
+            "icon": "https://localhost:7134/images/sprites/items/luminous-moss.png",
+            "type": "item"
+          },
+          {
+            "name": "Muelle Estirado",
+            "identifier": "stretchy-spring",
+            "icon": "https://localhost:7134/images/sprites/items/stretchy-spring.png",
+            "type": "item"
+          }
         ]
       }
     },
@@ -620,8 +669,59 @@
       },
       "query1":
       {
-        "identifier": "te",
-        "result":[]
+        "identifier": "pu",
+        "queryResult":
+        [
+          {
+            "name": "Punto Tóxico",
+            "identifier": "poison-point",
+            "icon": null,
+            "type": "ability"
+          },
+          {
+            "name": "Puño Férreo",
+            "identifier": "iron-fist",
+            "icon": null,
+            "type": "ability"
+          },
+          {
+            "name": "Punta Acero",
+            "identifier": "iron-barbs",
+            "icon": null,
+            "type": "ability"
+          },
+          {
+            "name": "Punk Rock",
+            "identifier": "punk-rock",
+            "icon": null,
+            "type": "ability"
+          },
+          {
+            "name": "Puño Invisible",
+            "identifier": "unseen-fist",
+            "icon": null,
+            "type": "ability"
+          }
+        ]
+      },
+      "query2":
+      {
+        "identifier": "1",
+        "queryResult":
+        [
+          {
+            "name": "Espesura",
+            "identifier": "overgrow",
+            "icon": null,
+            "type": "ability"
+          },
+          {
+            "name": "Clorofila",
+            "identifier": "chlorophyll",
+            "icon": "hidden",
+            "type": "ability"
+          }
+        ]
       }
     },
     "moveCases":
