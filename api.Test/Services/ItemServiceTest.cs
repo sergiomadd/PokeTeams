@@ -54,10 +54,9 @@ namespace api.Test.Services
             var result = await _service.GetItemByIdentifier(identifier, langId);
 
             //Assert
-            Assert.NotNull(expectedItem);
-            Assert.NotNull(result);
-            Assert.NotNull(result.Name);
-            Assert.Equal(expectedItem.Name.Content, result.Name.Content);
+            expectedItem.Should().NotBeNull();
+            result.Should().NotBeNull();
+            result.Should().BeEquivalentTo(expectedItem);
         }
 
         [Theory]
@@ -70,7 +69,7 @@ namespace api.Test.Services
             var result = await _service.GetItemByIdentifier(identifier, langId);
 
             //Assert
-            Assert.Null(result);
+            result.Should().BeNull();
         }
 
         [Theory]
@@ -87,10 +86,9 @@ namespace api.Test.Services
             var result = await _service.GetItemByName(name, langId);
 
             //Assert
-            Assert.NotNull(expectedItem);
-            Assert.NotNull(result);
-            Assert.NotNull(result.Name);
-            Assert.Equal(expectedItem.Name.Content, result.Name.Content);
+            expectedItem.Should().NotBeNull();
+            result.Should().NotBeNull();
+            result.Should().BeEquivalentTo(expectedItem);
         }
 
         [Theory]
@@ -104,7 +102,7 @@ namespace api.Test.Services
             var result = await _service.GetItemByName(identifier, langId);
 
             //Assert
-            Assert.Null(result);
+            result.Should().BeNull();
         }
 
         [Theory]
@@ -119,10 +117,8 @@ namespace api.Test.Services
             var result = await _service.QueryItemsByName(key, langId);
 
             //Assert
-            Assert.NotNull(expectedQueryResult);
-            Assert.NotEmpty(expectedQueryResult);
-            Assert.NotNull(result);
-            Assert.NotEmpty(result);
+            expectedQueryResult.Should().NotBeNullOrEmpty();
+            result.Should().NotBeNullOrEmpty();
             result.Should().BeEquivalentTo(expectedQueryResult);
         }
 
@@ -137,8 +133,8 @@ namespace api.Test.Services
             var result = await _service.QueryItemsByName(key, langId);
 
             //Assert
-            Assert.NotNull(result);
-            Assert.Empty(result);
+            result.Should().NotBeNull();
+            result.Should().BeEmpty();
         }
     }
 }
