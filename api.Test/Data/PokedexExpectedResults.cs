@@ -28,7 +28,13 @@ namespace api.Test.Data
     public class CaseCategory
     {
         public Case DTO1 { get; set; }
-        public QueryCase query1 { get; set; }
+        public Case? DTO2 { get; set; }
+        public Case? DTO3 { get; set; }
+        public Case? DTO4 { get; set; }
+        public QueryCase? query1 { get; set; }
+        public QueryCase? query2 { get; set; }
+        public QueryCase? query3 { get; set; }
+        public QueryCase? query4 { get; set; }
     }
 
     public class Case
