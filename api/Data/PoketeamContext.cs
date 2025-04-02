@@ -7,12 +7,18 @@ using System.Reflection.Metadata;
 
 namespace api.Data
 {
-    public class PokeTeamContext : IdentityDbContext<User, IdentityRole, string>
+    public class PokeTeamContext : IdentityDbContext<User, IdentityRole, string>, IPokeTeamContext
     {
+        public PokeTeamContext() : base()
+        {
+
+        }
+
         public PokeTeamContext(DbContextOptions<PokeTeamContext> option) : base(option)
         {
 
         }
+
         public DbSet<Team> Team { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Tag> Tag { get; set; }

@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
 using api.Services.PokedexServices;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMvc();
@@ -25,6 +27,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<PokedexContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPokedex")), ServiceLifetime.Scoped);
 builder.Services.AddDbContext<PokeTeamContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServerPoketeam")), ServiceLifetime.Scoped);
 builder.Services.AddScoped<IPokedexContext, PokedexContext>();
+builder.Services.AddScoped<IPokeTeamContext, PokeTeamContext>();
 
 builder.Services.AddTransient<IIdentityService, IdentityService>();
 
@@ -195,3 +198,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+//For test reference
+public partial class Program { };
