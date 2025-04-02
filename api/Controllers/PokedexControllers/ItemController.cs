@@ -23,9 +23,7 @@ namespace api.Controllers.PokedexControllers
         [HttpGet("name/{itemName}", Name = "GetItemByName")]
         public async Task<ActionResult<ItemDTO?>> GetItemByName(string itemName)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             ItemDTO? item = await _itemService.GetItemByName(itemName, langId ?? 9);
             if (item == null)
             {
@@ -37,9 +35,7 @@ namespace api.Controllers.PokedexControllers
         [HttpGet("identifier/{itemIdentifier}", Name = "GetItemByIdentifier")]
         public async Task<ActionResult<ItemDTO>> GetItemByIdentifier(string itemIdentifier)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             var item = await _itemService.GetItemByIdentifier(itemIdentifier, langId ?? 9);
             if (item == null)
             {
@@ -51,9 +47,7 @@ namespace api.Controllers.PokedexControllers
         [HttpGet, Route("query")]
         public async Task<ActionResult<List<QueryResultDTO>>> QueryItemsByName(string key)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             List<QueryResultDTO> items = await _itemService.QueryItemsByName(key, langId ?? 9);
             if (items == null)
             {

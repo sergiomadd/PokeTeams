@@ -22,9 +22,7 @@ namespace api.Controllers.PokedexControllers
         [HttpGet("name/{natureName}")]
         public async Task<ActionResult<NatureDTO>> GetNatureByName(string natureName)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             var nature = await _natureService.GetNatureByName(natureName, langId ?? 9);
             if (nature == null)
             {
@@ -36,9 +34,7 @@ namespace api.Controllers.PokedexControllers
         [HttpGet("identifier/{natureIdentifier}")]
         public async Task<ActionResult<NatureDTO>> GetNatureByIdentifier(string natureIdentifier)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             var nature = await _natureService.GetNatureByIdentifier(natureIdentifier, langId ?? 9);
             if (nature == null)
             {
@@ -50,9 +46,7 @@ namespace api.Controllers.PokedexControllers
         [HttpGet("all")]
         public async Task<ActionResult<List<NatureDTO>>> GetAllNatures()
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             List<NatureDTO> naures = await _natureService.GetAllNatures(langId ?? 9);
             if (naures == null)
             {
@@ -64,9 +58,7 @@ namespace api.Controllers.PokedexControllers
         [HttpGet("query/all")]
         public async Task<ActionResult<List<QueryResultDTO>>> GetAllNaturesQuery()
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             List<QueryResultDTO> naures = await _natureService.QueryAllNatures(langId ?? 9);
             if (naures == null)
             {
@@ -78,9 +70,7 @@ namespace api.Controllers.PokedexControllers
         [HttpGet, Route("query")]
         public async Task<ActionResult<List<QueryResultDTO>>> QueryNaturesByName(string key)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             List<QueryResultDTO> natures = await _natureService.QueryNaturesByName(key, langId ?? 9);
             if (natures == null)
             {

@@ -21,9 +21,7 @@ namespace api.Controllers
         [HttpGet("{typeName}", Name = "GetTypeByIdentifier")]
         public async Task<ActionResult<PokeTypeWithEffectivenessDTO>> GetTypeByIdentifier(string typeName)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             var type = await _typeService.GetTypeWithEffectivenessByIdentifier(typeName, langId ?? 9);
             if (type == null)
             {
@@ -35,9 +33,7 @@ namespace api.Controllers
         [HttpGet("teratype/{typeName}", Name = "GetTeraTypeByIdentifier")]
         public async Task<ActionResult<PokeTypeWithEffectivenessDTO>> GetTeraTypeByIdentifier(string typeName)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             var type = await _typeService.GetTypeWithEffectivenessByIdentifier(typeName, langId ?? 9, true);
             if (type == null)
             {
@@ -49,9 +45,7 @@ namespace api.Controllers
         [HttpGet("all", Name = "GetAllTypes")]
         public async Task<ActionResult<List<PokeTypeDTO>>> GetAllTypes()
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             var types = await _typeService.GetAllTypes(langId ?? 9);
             if (types == null)
             {
@@ -63,9 +57,7 @@ namespace api.Controllers
         [HttpGet("teratype/all", Name = "GetAllTeraTypes")]
         public async Task<ActionResult<List<PokeTypeDTO>>> GetAllTeraTypes()
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             var types = await _typeService.GetAllTeraTypes(langId ?? 9);
             if (types == null)
             {
@@ -77,9 +69,7 @@ namespace api.Controllers
         [HttpGet, Route("query")]
         public async Task<ActionResult<List<QueryResultDTO>>> QueryTypesByName(string key)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             List<QueryResultDTO> types = await _typeService.QueryTypesByName(key, langId ?? 9);
             if (types == null)
             {
@@ -91,9 +81,7 @@ namespace api.Controllers
         [HttpGet, Route("teratype/query")]
         public async Task<ActionResult<List<QueryResultDTO>>> QueryTeraTypesByName(string key)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             List<QueryResultDTO> types = await _typeService.QueryTypesByName(key, langId ?? 9, true);
             if (types == null)
             {
@@ -105,9 +93,7 @@ namespace api.Controllers
         [HttpGet("teratype/query/all")]
         public async Task<ActionResult<List<QueryResultDTO>>> QueryAllTeraTypes()
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             var types = await _typeService.QueryAllTeraTypes(langId ?? 9);
             if (types == null)
             {

@@ -39,11 +39,8 @@ namespace api.Controllers
             }
             else
             {
-                var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-                int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+                int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
                 var pokemonDTO = await _pokemonService.GetPokemonById(pokemonId, langId ?? 9);
-
                 if (pokemonDTO == null)
                 {
                     return NotFound("Pokemon not found.");
@@ -76,9 +73,7 @@ namespace api.Controllers
         [HttpGet("name/{pokemonName}", Name = "GetPokemonDataByName")]
         public async Task<ActionResult<PokemonDataDTO>> GetPokemonDataByName(string pokemonName) 
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             var pokemon = await _pokemonService.GetPokemonDataByName(pokemonName, langId ?? 9);
             if(pokemon == null)
             {
@@ -94,10 +89,7 @@ namespace api.Controllers
             {
                 return BadRequest("Team id is null");
             }
-
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             var pokemonDTO = await _pokemonService.GetTeamPokemonPreviews(teamId, langId ?? 9);
 
             if (pokemonDTO == null)
@@ -110,9 +102,7 @@ namespace api.Controllers
         [HttpGet, Route("query")]
         public async Task<ActionResult<List<QueryResultDTO>>> QueryPokemonsByName(string key)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             List<QueryResultDTO> pokemons = await _pokemonService.QueryPokemonsByName(key, langId ?? 9);
             if (pokemons == null)
             {

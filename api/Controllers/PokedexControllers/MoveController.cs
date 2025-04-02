@@ -21,9 +21,7 @@ namespace api.Controllers.PokedexControllers
         [HttpGet("{moveName}", Name = "GetMoveByName")]
         public async Task<ActionResult<MoveDTO>> GetMoveByName(string moveName)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             var move = await _moveService.GetMoveByName(moveName, langId ?? 9);
             if (move == null)
             {
@@ -35,9 +33,7 @@ namespace api.Controllers.PokedexControllers
         [HttpGet, Route("query")]
         public async Task<ActionResult<List<QueryResultDTO>>> QueryMovesByName(string key)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             List<QueryResultDTO> moves = await _moveService.QueryMovesByName(key, langId ?? 9);
             if (moves == null)
             {

@@ -18,9 +18,7 @@ namespace api.Controllers.PokedexControllers
         [HttpGet("{identifier}", Name = "GetStatNameByIdentifier")]
         public async Task<ActionResult<string>> GetStatNameByIdentifier(string identifier)
         {
-            var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-            int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
             var statName = await _pokemonService.GetStatNameByIdentifier(identifier, langId ?? 9);
             if (statName == null)
             {

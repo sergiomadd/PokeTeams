@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using api.DTOs.PokemonDTOs;
 using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 
 namespace api.Controllers
 {
@@ -35,7 +36,7 @@ namespace api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<ActionResult<TeamDTO>> Get(string id)
+        public async Task<ActionResult<TeamDTO>> GetTeamDTO(string id)
         {
             if (_identityService.CheckForRefresh(Request))
             {
@@ -43,9 +44,7 @@ namespace api.Controllers
             }
             else
             {
-                var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-                int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+                int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
                 var team = await _teamService.GetTeam(id, langId ?? 9);
                 if (team == null)
                 {
@@ -66,9 +65,7 @@ namespace api.Controllers
             }
             else
             {
-                var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-                int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+                int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
                 var team = await _teamService.GetTeamData(id, langId ?? 9);
                 if (team == null)
                 {
@@ -81,7 +78,7 @@ namespace api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
         [HttpPost, Route("save")]
-        public async Task<ActionResult<string>> SaveTeam([FromBody] TeamDTO team)
+        public async Task<ActionResult> SaveTeam([FromBody] TeamDTO team)
         {
             if (_identityService.CheckForRefresh(Request))
             {
@@ -97,7 +94,7 @@ namespace api.Controllers
                 Team? newTeam = await _teamService.SaveTeam(team);
                 if (newTeam == null)
                 {
-                    return BadRequest();
+                    return BadRequest("Error saving team");
                 }
                 else
                 {
@@ -191,10 +188,7 @@ namespace api.Controllers
                 {
                     return NotFound(validation);
                 }
-
-                var langs = HttpContext.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
-                int? langId = Converter.GetLangIDFromCode(langs[0].Value.ToString());
-
+                int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
                 TeamSearchQueryResponseDTO teams = await _teamService.QueryTeams(key, langId ?? 9);
                 if (teams == null)
                 {
