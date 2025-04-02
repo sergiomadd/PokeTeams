@@ -378,7 +378,7 @@ namespace api.Services
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from pokemonNames in _pokedexContext.Pokemon_species_names.Where(p => p.name.Contains(key) && p.local_language_id == langId)
+                from pokemonNames in _pokedexContext.Pokemon_species_names.Where(p => p.name.StartsWith(key) && p.local_language_id == langId)
 
                 join pokemonNamesDefault in _pokedexContext.Pokemon_species_names
                 on new { Key1 = pokemonNames.pokemon_species_id, Key2 = (int)Lang.en } equals new { Key1 = pokemonNamesDefault.pokemon_species_id, Key2 = pokemonNamesDefault.local_language_id } into pokemonNamesDefaultJoin
