@@ -4,6 +4,7 @@ using api.DTOs.PokemonDTOs;
 using api.Models.DBModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 
 
@@ -138,7 +139,7 @@ namespace api.Services.PokedexServices
             if (pokeType != null && id != null)
             {
                 pokeType.EffectivenessAttack = await GetTypeEffectivenessAttack((int)id, langId);
-                pokeType.EffectivenessAttack = await GetTypeEffectivenessDefense((int)id, langId);
+                pokeType.EffectivenessDefense = await GetTypeEffectivenessDefense((int)id, langId);
             }
 
             return pokeType;
@@ -153,13 +154,17 @@ namespace api.Services.PokedexServices
             {
                 foreach (var typeEfficacy in typeEfficacyList)
                 {
-                    PokeTypeDTO? type = await GetTypeById(typeEfficacy.damage_type_id, langId);
+                    PokeTypeDTO? type = await GetTypeById(typeEfficacy.target_type_id, langId);
                     if (type != null)
                     {
                         allValues.Add(new(type, typeEfficacy.damage_factor / (double)100));
                     }
                 }
                 effectiveness = new EffectivenessDTO(allValues);
+            }
+            if(effectiveness != null && effectiveness.AllValues.IsNullOrEmpty())
+            {
+                effectiveness = null;
             }
             return effectiveness;
         }
@@ -181,10 +186,14 @@ namespace api.Services.PokedexServices
                 }
                 effectiveness = new EffectivenessDTO(allValues);
             }
+            if (effectiveness != null && effectiveness.AllValues.IsNullOrEmpty())
+            {
+                effectiveness = null;
+            }
             return effectiveness;
         }
 
-        public async Task<PokeTypesDTO> GetPokemonTypes(int id, int langId)
+        public async Task<PokeTypesDTO?> GetPokemonTypes(int id, int langId)
         {
             PokeTypeDTO? type1 = null;
             Pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 1);
@@ -198,6 +207,7 @@ namespace api.Services.PokedexServices
             {
                 type2 = GetTypeById(pokemonType2.type_id, langId).Result;
             }
+            if (type1 == null) { return null; }
             PokeTypesDTO pokeTypes = new PokeTypesDTO
             {
                 Type1 = type1,
@@ -222,6 +232,7 @@ namespace api.Services.PokedexServices
             {
                 type2 = await GetTypeWithEffectivenessById(pokemonType2.type_id, langId);
             }
+            if (type1 == null) { return null; }
             pokeTypes = new PokeTypesWithEffectivenessDTO(type1, type2);
             return pokeTypes;
         }
@@ -250,6 +261,13 @@ namespace api.Services.PokedexServices
 
             pokeTypes = await query.ToListAsync();
 
+            //Avoid adding last 2 types -> (unkown, shadow) UNSUPPORTED
+            if(pokeTypes.Count > 2)
+            {
+                pokeTypes.RemoveAt(pokeTypes.Count - 1);
+                pokeTypes.RemoveAt(pokeTypes.Count - 1);
+            }
+
             return pokeTypes;
         }
 
@@ -277,9 +295,11 @@ namespace api.Services.PokedexServices
 
             pokeTypes = await query.ToListAsync();
 
-            //Avoid adding last 2 types -> (unkown, shadow) UNSUPPORTED
-            pokeTypes.RemoveAt(pokeTypes.Count - 1);
-            pokeTypes.RemoveAt(pokeTypes.Count - 1);
+            if (pokeTypes.Count > 2)
+            {
+                pokeTypes.RemoveAt(pokeTypes.Count - 1);
+                pokeTypes.RemoveAt(pokeTypes.Count - 1);
+            }
 
             return pokeTypes;
         }
@@ -331,6 +351,12 @@ namespace api.Services.PokedexServices
                     new QueryResultDTO(typeNamesDefault.name, types.identifier, $"{pathStart}{types.identifier}.png", "type");
 
             queryResults = await query.ToListAsync();
+
+            if (queryResults.Count > 2)
+            {
+                queryResults.RemoveAt(queryResults.Count - 1);
+                queryResults.RemoveAt(queryResults.Count - 1);
+            }
 
             return queryResults;
         }
