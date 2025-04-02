@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Linq;
 
 namespace api.Util
 {
@@ -36,6 +37,22 @@ namespace api.Util
             12 zh = ??
             13 pt = portuguese //not used
         */
+
+        public static int? GetLangIDFromHttpContext(HttpContext context)
+        {
+            if(context.Request.GetTypedHeaders().AcceptLanguage.IsNullOrEmpty())
+            {
+                return null;
+            }
+            var requestLangs = context.Request.GetTypedHeaders().AcceptLanguage.OrderByDescending(x => x.Quality ?? 1).ToList();
+            string code = requestLangs[0].Value.ToString();
+
+            if (langs.ContainsValue(code))
+            {
+                return langs.FirstOrDefault(x => x.Value == code).Key;
+            }
+            return null;
+        }
 
         public static string? GetLangCodeFromID(int id)
         {
