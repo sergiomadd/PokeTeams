@@ -1,6 +1,4 @@
 ﻿using Microsoft.OpenApi.Models;
-using NSwag.Generation.Processors;
-using NSwag.Generation.Processors.Contexts;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace api.Util
