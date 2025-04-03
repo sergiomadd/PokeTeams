@@ -4,6 +4,7 @@ using api.DTOs.PokemonDTOs;
 using api.Models;
 using api.Services.PokedexServices;
 using api.Test.Data;
+using api.Test.Integration;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,12 +26,8 @@ namespace api.Test.Services
         public NatureServiceTest()
         {
             //dependencies
-            _configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .Build();
-
-            var connectionString = _configuration.GetConnectionString("SQLServerPokedex");
+            _configuration = new ConfigurationBuilder().AddUserSecrets<AppInstance>().Build();
+            var connectionString = _configuration["ConnectionStrings:SQLServerPokedex"];
             var options = new DbContextOptionsBuilder<PokedexContext>().UseSqlServer(connectionString).Options;
             _dbContext = new PokedexContext(options);
 
