@@ -26,5 +26,8 @@
   <ItemGroup>
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
+<ItemGroup>
+	<InternalsVisibleTo Include="api.Test" />
+</ItemGroup>
 
 </Project>
