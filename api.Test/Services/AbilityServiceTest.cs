@@ -5,9 +5,10 @@ using api.Models;
 using api.Services.PokedexServices;
 using api.Test.Data;
 using api.Test.Integration;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace api.Test.Services
 {
@@ -21,7 +22,7 @@ namespace api.Test.Services
         public AbilityServiceTest()
         {
             //dependencies
-            _configuration = new ConfigurationBuilder().AddUserSecrets<AppInstance>().Build();
+            _configuration = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
             var connectionString = _configuration["ConnectionStrings:SQLServerPokedex"];
             var options = new DbContextOptionsBuilder<PokedexContext>().UseSqlServer(connectionString).Options;
             _dbContext = new PokedexContext(options);
@@ -48,9 +49,11 @@ namespace api.Test.Services
             var result = await _service.GetAbilityByIdentifier(identifier, langId);
 
             //Assert
-            expectedAbility.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedAbility);
+            Assert.NotNull(expectedAbility);
+            Assert.NotNull(result);
+            var obj1Str = ExpectedResults.GetSerializedObject(expectedAbility);
+            var obj2Str = ExpectedResults.GetSerializedObject(result);
+            Assert.Equal(obj1Str, obj2Str);
         }
 
         [Theory]
@@ -63,7 +66,7 @@ namespace api.Test.Services
             var result = await _service.GetAbilityByIdentifier(identifier, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -80,9 +83,11 @@ namespace api.Test.Services
             var result = await _service.GetAbilityByName(identifier, langId);
 
             //Assert
-            expectedAbility.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedAbility);
+            Assert.NotNull(expectedAbility);
+            Assert.NotNull(result);
+            var obj1Str = ExpectedResults.GetSerializedObject(expectedAbility);
+            var obj2Str = ExpectedResults.GetSerializedObject(result);
+            Assert.Equal(obj1Str, obj2Str);
         }
 
         [Theory]
@@ -96,7 +101,7 @@ namespace api.Test.Services
             var result = await _service.GetAbilityByName(identifier, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -110,7 +115,7 @@ namespace api.Test.Services
             var result = await _service.IsAbilityPokemonHiddenAbility(abilityIdentifier, dexNumber);
 
             //Assert
-            result.Should().BeTrue();
+            Assert.True(result);
         }
 
         [Theory]
@@ -126,7 +131,7 @@ namespace api.Test.Services
             var result = await _service.IsAbilityPokemonHiddenAbility(abilityIdentifier, dexNumber);
 
             //Assert
-            result.Should().BeFalse();
+            Assert.False(result);
         }
 
         [Theory]
@@ -141,9 +146,11 @@ namespace api.Test.Services
             var result = await _service.QueryAbilitiesByName(key, langId);
 
             //Assert
-            expectedQueryResult.Should().NotBeNullOrEmpty();
-            result.Should().NotBeNullOrEmpty();
-            result.Should().BeEquivalentTo(expectedQueryResult);
+            Assert.NotNull(expectedQueryResult);
+            Assert.NotEmpty(expectedQueryResult);
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            Assert.Equivalent(expectedQueryResult, result);
         }
 
         [Theory]
@@ -157,13 +164,13 @@ namespace api.Test.Services
             var result = await _service.QueryAbilitiesByName(key, langId);
 
             //Assert
-            result.Should().NotBeNull();
-            result.Should().BeEmpty();
+            Assert.NotNull(result);
+            Assert.Empty(result);
         }
 
         [Theory]
-        [InlineData((int)Lang.en, 363)]
-        [InlineData((int)Lang.es, 363)]
+        [InlineData((int)Lang.en, 367)]
+        [InlineData((int)Lang.es, 367)]
         public async Task QueryAllAbilities_ReturnsCount(int langId, int count)
         {
             //Arrange
@@ -172,9 +179,10 @@ namespace api.Test.Services
             var result = await _service.QueryAllAbilities(langId);
 
             //Assert
-            result.Should().NotBeNullOrEmpty();
-            result.Should().HaveCount(count);
-            result.Should().AllBeOfType<QueryResultDTO>();
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            Assert.Equal(count, result.Count);
+            Assert.True(result.All(i => i is QueryResultDTO));
         }
 
         [Theory]
@@ -189,9 +197,11 @@ namespace api.Test.Services
             var result = await _service.QueryAllPokemonAbilites(id, langId);
 
             //Assert
-            expectedQueryResult.Should().NotBeNullOrEmpty();
-            result.Should().NotBeNullOrEmpty();
-            result.Should().BeEquivalentTo(expectedQueryResult);
+            Assert.NotNull(expectedQueryResult);
+            Assert.NotEmpty(expectedQueryResult);
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            Assert.Equivalent(expectedQueryResult, result);
         }
 
         [Theory]
@@ -205,8 +215,8 @@ namespace api.Test.Services
             var result = await _service.QueryAllPokemonAbilites(id, langId);
 
             //Assert
-            result.Should().NotBeNull();
-            result.Should().BeEmpty();
+            Assert.NotNull(result);
+            Assert.Empty(result);
         }
     }
 }

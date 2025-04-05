@@ -3,11 +3,12 @@ using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Models.DBPoketeamModels;
 using api.Test.Integration;
-using FluentAssertions;
+using Azure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.ContentModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http;
@@ -47,7 +48,7 @@ namespace api.Test.Controllers
             var response = await client.GetAsync(uri);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
         [Fact]
@@ -63,7 +64,8 @@ namespace api.Test.Controllers
             var response = await client.GetAsync(uri);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
         }
 
         [Fact]
@@ -91,9 +93,9 @@ namespace api.Test.Controllers
             //Assert
             response.EnsureSuccessStatusCode();
             var teamResponse = await response.Content.ReadFromJsonAsync<TeamDTO>();
-            teamResponse.Should().NotBeNull();
-            teamResponse.ID.Should().NotBeNull();
-            teamResponse.ID.Should().BeEquivalentTo(teamID);
+            Assert.NotNull(teamResponse);
+            Assert.NotNull(teamResponse.ID);
+            Assert.Equal(teamID, teamResponse.ID);
         }
 
         //GetTeamData
@@ -114,7 +116,7 @@ namespace api.Test.Controllers
             var response = await client.GetAsync(uri);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
         [Fact]
@@ -131,7 +133,7 @@ namespace api.Test.Controllers
             var response = await client.GetAsync(uri);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
@@ -160,9 +162,9 @@ namespace api.Test.Controllers
             //Assert
             response.EnsureSuccessStatusCode();
             var teamResponse = await response.Content.ReadFromJsonAsync<TeamDTO>();
-            teamResponse.Should().NotBeNull();
-            teamResponse.ID.Should().NotBeNull();
-            teamResponse.ID.Should().BeEquivalentTo(teamID);
+            Assert.NotNull(teamResponse);
+            Assert.NotNull(teamResponse.ID);
+            Assert.Equal(teamID, teamResponse.ID);
         }
 
         //Save team
@@ -184,7 +186,7 @@ namespace api.Test.Controllers
             var response = await client.PostAsJsonAsync(uri, body);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
         [Fact]
@@ -202,9 +204,9 @@ namespace api.Test.Controllers
             var response = await client.PostAsJsonAsync(uri, body);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             var responseString = await response.Content.ReadAsStringAsync();
-            responseString.Should().Be("Error uploading team");
+            Assert.Equal("Error uploading team", responseString);
         }
 
         [Fact]
@@ -230,9 +232,9 @@ namespace api.Test.Controllers
             var response = await client.PostAsJsonAsync(uri, body);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             var responseString = await response.Content.ReadAsAsync<string>();
-            responseString.Should().Be("Error saving team");
+            Assert.Equal("Error saving team", responseString);
         }
 
         [Fact]
@@ -265,14 +267,14 @@ namespace api.Test.Controllers
             response.EnsureSuccessStatusCode();
             var teamResponse = await response.Content.ReadAsAsync<OkResultDTO>();
             var savedTeamId = (string)teamResponse.content;
-            savedTeamId.Should().NotBeNull();
+            Assert.NotNull(savedTeamId);
 
             using (var scope = _instance.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<PokeTeamContext>();
                 var team = await context.Team.FirstOrDefaultAsync(t => t.Id == savedTeamId);
-                team.Should().NotBeNull();
-                team.Id.Should().Be(savedTeamId);
+                Assert.NotNull(team);
+                Assert.Equal(savedTeamId, team.Id);
             }
         }
 
@@ -283,11 +285,11 @@ namespace api.Test.Controllers
         {
             //Arrange
             var uri = "update";
+            User user = _instance.GetTestLoggedUser();
             TeamDTO? teamDTOTeamNull = new TeamDTO("testError", [], null, null, null, null, 0, null, false, [], null);
             TeamDTO? teamDTOPlayerNull = new TeamDTO("noOwn", [], null, null, null, null, 0, null, false, [], null);
             var bodyTeamNull = teamDTOTeamNull;
             var bodyPlayerNull = teamDTOPlayerNull;
-
 
             using (var scope = _instance.Services.CreateScope())
             {
@@ -306,7 +308,7 @@ namespace api.Test.Controllers
             var client = _instance.CreateClient();
             client.BaseAddress = _baseAddres;
 
-            var validJwtToken = _instance.GenerateValidJwtToken();
+            var validJwtToken = _instance.GenerateValidJwtToken(user);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", validJwtToken);
             var accessCookie = new CookieHeaderValue("accessToken", validJwtToken);
@@ -317,8 +319,8 @@ namespace api.Test.Controllers
             var responsePlayerNull = await client.PostAsJsonAsync(uri, bodyPlayerNull);
 
             //Assert
-            responseTeamNull.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-            responsePlayerNull.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            Assert.Equal(HttpStatusCode.Unauthorized, responseTeamNull.StatusCode);
+            Assert.Equal(HttpStatusCode.Unauthorized, responsePlayerNull.StatusCode);
         }
 
         [Fact]
@@ -351,7 +353,7 @@ namespace api.Test.Controllers
             client.BaseAddress = _baseAddres;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var validJwtToken = _instance.GenerateValidJwtToken();
+            var validJwtToken = _instance.GenerateValidJwtToken(user);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", validJwtToken);
             var accessCookie = new CookieHeaderValue("accessToken", validJwtToken);
@@ -361,7 +363,7 @@ namespace api.Test.Controllers
             var response = await client.PostAsJsonAsync(uri, body);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
         [Fact]
@@ -370,7 +372,7 @@ namespace api.Test.Controllers
             //Arrange
             var uri = "update";
             var teamId = "testUpdErr";
-            var player = _instance.GetTestLoggedUser();
+            var user = _instance.GetTestLoggedUser();
 
             //New team will return bad request because no pokemons error
             TeamDTO? teamDTO = new TeamDTO(teamId, [], null, null, null, null, 0, null, false, [], null);
@@ -384,7 +386,7 @@ namespace api.Test.Controllers
                 var team = await context.Team.FirstOrDefaultAsync(t => t.Id == teamId);
                 if (team == null)
                 {
-                    var entity = new Team { Id = teamId, PlayerId = player.Id };
+                    var entity = new Team { Id = teamId, PlayerId = user.Id };
                     context.Team.Add(entity);
                     await context.SaveChangesAsync();
                 }
@@ -394,7 +396,7 @@ namespace api.Test.Controllers
             client.BaseAddress = _baseAddres;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var validJwtToken = _instance.GenerateValidJwtToken();
+            var validJwtToken = _instance.GenerateValidJwtToken(user);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", validJwtToken);
             var accessCookie = new CookieHeaderValue("accessToken", validJwtToken);
@@ -404,9 +406,10 @@ namespace api.Test.Controllers
             var response = await client.PostAsJsonAsync(uri, body);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             var responseString = await response.Content.ReadAsAsync<string>();
-            responseString.Should().Be("Could not update team");
+            Assert.Equal("Could not update team", responseString);
+
         }
 
         [Fact]
@@ -415,7 +418,7 @@ namespace api.Test.Controllers
             //Arrange
             var uri = "update";
             var teamId = "testUpdate";
-            var player = _instance.GetTestLoggedUser();
+            var user = _instance.GetTestLoggedUser();
 
             TeamDTO? teamDTO = new TeamDTO(teamId, new List<PokemonDTO> { null },
                 null, null, null, null, 0, null, false, [], null);
@@ -429,7 +432,7 @@ namespace api.Test.Controllers
                 var teamdb = await context.Team.FirstOrDefaultAsync(t => t.Id == teamId);
                 if (teamdb == null)
                 {
-                    var entity = new Team { Id = teamId, PlayerId = player.Id };
+                    var entity = new Team { Id = teamId, PlayerId = user.Id };
                     context.Team.Add(entity);
                     await context.SaveChangesAsync();
                 }
@@ -439,7 +442,7 @@ namespace api.Test.Controllers
             client.BaseAddress = _baseAddres;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             
-            var validJwtToken = _instance.GenerateValidJwtToken();
+            var validJwtToken = _instance.GenerateValidJwtToken(user);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", validJwtToken);
             var accessCookie = new CookieHeaderValue("accessToken", validJwtToken);
@@ -453,14 +456,14 @@ namespace api.Test.Controllers
 
             var teamResponse = await response.Content.ReadAsAsync<OkResultDTO>();
             var savedTeamId = (string)teamResponse.content;
-            savedTeamId.Should().NotBeNull();
+            Assert.NotNull(savedTeamId);
 
             using (var scope = _instance.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<PokeTeamContext>();
                 var team = await context.Team.FirstOrDefaultAsync(t => t.Id == savedTeamId);
-                team.Should().NotBeNull();
-                team.Id.Should().Be(savedTeamId);
+                Assert.NotNull(team);
+                Assert.Equal(savedTeamId, team.Id);
             }
         }
 
@@ -497,8 +500,8 @@ namespace api.Test.Controllers
             var responsePlayerNull = await client.PostAsJsonAsync(uri, bodyPlayerNull);
 
             //Assert
-            responseTeamNull.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-            responsePlayerNull.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            Assert.Equal(HttpStatusCode.Unauthorized, responseTeamNull.StatusCode);
+            Assert.Equal(HttpStatusCode.Unauthorized, responsePlayerNull.StatusCode);
         }
 
         [Fact]
@@ -506,6 +509,7 @@ namespace api.Test.Controllers
         {
             //Arrange
             var uri = "delete";
+            var user = _instance.GetTestLoggedUser();
             var teamId = "deleteE1";
             TeamIdDTO? teamIdDTO = new TeamIdDTO() { Id = teamId };
             var body = teamIdDTO;
@@ -524,7 +528,7 @@ namespace api.Test.Controllers
             client.BaseAddress = _baseAddres;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var validJwtToken = _instance.GenerateValidJwtToken();
+            var validJwtToken = _instance.GenerateValidJwtToken(user);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", validJwtToken);
             var accessCookie = new CookieHeaderValue("accessToken", validJwtToken);
@@ -534,7 +538,7 @@ namespace api.Test.Controllers
             var response = await client.PostAsJsonAsync(uri, body);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
         [Fact]
@@ -543,7 +547,7 @@ namespace api.Test.Controllers
             //Arrange
             var uri = "delete";
             var teamId = "deleteE3";
-            var player = _instance.GetTestLoggedUser();
+            var user = _instance.GetTestLoggedUser();
             TeamDTO? teamDTO = new TeamDTO(teamId, new List<PokemonDTO> { null },
                 null, null, null, null, 0, null, false, [], null);
             var body = teamDTO;
@@ -553,7 +557,7 @@ namespace api.Test.Controllers
                 var context = scope.ServiceProvider.GetRequiredService<PokeTeamContext>();
                 await context.Database.MigrateAsync();
 
-                var entity = new Team { Id = teamId, PlayerId = player.Id };
+                var entity = new Team { Id = teamId, PlayerId = user.Id };
                 context.Team.Add(entity);
                 await context.SaveChangesAsync();
             }
@@ -562,7 +566,7 @@ namespace api.Test.Controllers
             client.BaseAddress = _baseAddres;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var validJwtToken = _instance.GenerateValidJwtToken();
+            var validJwtToken = _instance.GenerateValidJwtToken(user);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", validJwtToken);
             var accessCookie = new CookieHeaderValue("accessToken", validJwtToken);
@@ -575,14 +579,14 @@ namespace api.Test.Controllers
             response.EnsureSuccessStatusCode();
 
             var teamResponse = await response.Content.ReadAsAsync<string>();
-            teamResponse.Should().NotBeNull();
-            teamResponse.Should().Be("Team successfully deleted");
+            Assert.NotNull(teamResponse);
+            Assert.Equal("Team successfully deleted", teamResponse);
 
             using (var scope = _instance.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<PokeTeamContext>();
                 var team = await context.Team.FirstOrDefaultAsync(t => t.Id == teamResponse);
-                team.Should().BeNull();
+                Assert.Null(team);
             }
         }
 
@@ -603,7 +607,7 @@ namespace api.Test.Controllers
             var response = await client.PostAsJsonAsync(uri, body);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         [Fact]
@@ -653,7 +657,7 @@ namespace api.Test.Controllers
             var response = await client.PostAsJsonAsync(uri, body);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
         }
 
         [Fact]
@@ -671,9 +675,9 @@ namespace api.Test.Controllers
             var response = await client.PostAsJsonAsync(uri, body);
 
             //Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             var responseString = await response.Content.ReadAsStringAsync();
-            responseString.Should().Be("Query not found");
+            Assert.Equal("Query not found", responseString);
         }
 
         [Fact]
@@ -721,10 +725,11 @@ namespace api.Test.Controllers
             //Assert
             response.EnsureSuccessStatusCode();
             var responseQuery = await response.Content.ReadAsAsync<TeamSearchQueryResponseDTO>();
-            responseQuery.TotalTeams.Should().Be(1);
-            responseQuery.Teams.Should().HaveCount(1);
-            responseQuery.Teams.First().Should().NotBeNull();
-            responseQuery.Teams.First().ID.Should().Be("testQueryA");
+            Assert.NotNull(responseQuery);
+            Assert.Equal(1, responseQuery.TotalTeams);
+            Assert.Single<TeamPreviewDTO>(responseQuery.Teams);
+            Assert.NotNull(responseQuery.Teams.First());
+            Assert.Equal("testQueryA", responseQuery.Teams.First()?.ID);
         }
     }
 }

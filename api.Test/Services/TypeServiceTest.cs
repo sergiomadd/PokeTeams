@@ -5,7 +5,6 @@ using api.Models;
 using api.Services.PokedexServices;
 using api.Test.Data;
 using api.Test.Integration;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -27,7 +26,7 @@ namespace api.Test.Services
         public TypeServiceTest()
         {
             //dependencies
-            _configuration = new ConfigurationBuilder().AddUserSecrets<AppInstance>().Build();
+            _configuration = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
             var connectionString = _configuration["ConnectionStrings:SQLServerPokedex"];
             var options = new DbContextOptionsBuilder<PokedexContext>().UseSqlServer(connectionString).Options;
             _dbContext = new PokedexContext(options);
@@ -54,9 +53,9 @@ namespace api.Test.Services
             var result = await _service.GetTypeById(id, langId);
 
             //Assert
-            expectedType.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedType);
+            Assert.NotNull(expectedType);
+            Assert.NotNull(result);
+            Assert.Equivalent(expectedType, result);
         }
 
         [Theory]
@@ -69,7 +68,7 @@ namespace api.Test.Services
             var result = await _service.GetTypeById(id, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -84,9 +83,9 @@ namespace api.Test.Services
             var result = await _service.GetTypeByIdentifier(name, false, langId);
 
             //Assert
-            expectedType.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedType);
+            Assert.NotNull(expectedType);
+            Assert.NotNull(result);
+            Assert.Equivalent(expectedType, result);
         }
 
         [Theory]
@@ -100,7 +99,7 @@ namespace api.Test.Services
             var result = await _service.GetTypeByIdentifier(identifier, false, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -115,9 +114,9 @@ namespace api.Test.Services
             var result = await _service.GetTypeWithEffectivenessById(id, langId);
 
             //Assert
-            expectedTypeWithEffectiveness.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedTypeWithEffectiveness);
+            Assert.NotNull(expectedTypeWithEffectiveness);
+            Assert.NotNull(result);
+            Assert.Equivalent(expectedTypeWithEffectiveness, result);
         }
 
         [Theory]
@@ -130,7 +129,7 @@ namespace api.Test.Services
             var result = await _service.GetTypeWithEffectivenessById(id, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -145,9 +144,11 @@ namespace api.Test.Services
             var result = await _service.GetTypeWithEffectivenessByIdentifier(name, langId);
 
             //Assert
-            expectedTypeWithEffectiveness.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedTypeWithEffectiveness);
+            Assert.NotNull(expectedTypeWithEffectiveness);
+            Assert.NotNull(result);
+            var obj1Str = ExpectedResults.GetSerializedObject(expectedTypeWithEffectiveness);
+            var obj2Str = ExpectedResults.GetSerializedObject(result);
+            Assert.Equal(obj1Str, obj2Str);
         }
 
         [Theory]
@@ -161,7 +162,7 @@ namespace api.Test.Services
             var result = await _service.GetTypeWithEffectivenessByIdentifier(identifier, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -181,9 +182,9 @@ namespace api.Test.Services
             var result = await _service.GetTypeEffectivenessAttack(id, langId);
 
             //Assert
-            expectedAttackEffectiveness.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedAttackEffectiveness);
+            Assert.NotNull(expectedAttackEffectiveness);
+            Assert.NotNull(result);
+            Assert.Equivalent(expectedAttackEffectiveness, result);
         }
 
         [Theory]
@@ -196,7 +197,7 @@ namespace api.Test.Services
             var result = await _service.GetTypeEffectivenessAttack(id, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -216,9 +217,9 @@ namespace api.Test.Services
             var result = await _service.GetTypeEffectivenessDefense(id, langId);
 
             //Assert
-            expectedDefenseEffectiveness.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedDefenseEffectiveness);
+            Assert.NotNull(expectedDefenseEffectiveness);
+            Assert.NotNull(result);
+            Assert.Equivalent(expectedDefenseEffectiveness, result);
         }
 
         [Theory]
@@ -231,7 +232,7 @@ namespace api.Test.Services
             var result = await _service.GetTypeEffectivenessDefense(id, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -246,9 +247,9 @@ namespace api.Test.Services
             var result = await _service.GetPokemonTypes(id, langId);
 
             //Assert
-            expectedTypes.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedTypes);
+            Assert.NotNull(expectedTypes);
+            Assert.NotNull(result);
+            Assert.Equivalent(expectedTypes, result);
         }
 
         [Theory]
@@ -262,7 +263,7 @@ namespace api.Test.Services
             var result = await _service.GetPokemonTypes(id, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -277,9 +278,9 @@ namespace api.Test.Services
             var result = await _service.GetPokemonTypesWithEffectiveness(id, langId);
 
             //Assert
-            expectedTypesWithEffectiveness.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedTypesWithEffectiveness);
+            Assert.NotNull(expectedTypesWithEffectiveness);
+            Assert.NotNull(result);
+            Assert.Equivalent(expectedTypesWithEffectiveness, result);
         }
 
         [Theory]
@@ -293,12 +294,12 @@ namespace api.Test.Services
             var result = await _service.GetPokemonTypesWithEffectiveness(id, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
-        [InlineData((int)Lang.en, 18)]
-        [InlineData((int)Lang.es, 18)]
+        [InlineData((int)Lang.en, 19)]
+        [InlineData((int)Lang.es, 19)]
         public async Task GetAllTypes_ReturnsCount(int langId, int count)
         {
             //Arrange
@@ -307,15 +308,16 @@ namespace api.Test.Services
             var result = await _service.GetAllTypes(langId);
 
             //Assert
-            result.Should().NotBeNullOrEmpty();
-            result.Should().HaveCount(count);
-            result.Should().AllBeOfType<PokeTypeDTO>();
-            result.Should().AllSatisfy(t => t.Teratype.Should().Be(false));
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            Assert.Equal(count, result.Count);
+            Assert.True(result.All(i => i is PokeTypeDTO));
+            Assert.True(result.All(i => !i.Teratype));
         }
 
         [Theory]
-        [InlineData((int)Lang.en, 18)]
-        [InlineData((int)Lang.es, 18)]
+        [InlineData((int)Lang.en, 19)]
+        [InlineData((int)Lang.es, 19)]
         public async Task GetAllTeraTypes_ReturnsCount(int langId, int count)
         {
             //Arrange
@@ -324,10 +326,11 @@ namespace api.Test.Services
             var result = await _service.GetAllTeraTypes(langId);
 
             //Assert
-            result.Should().NotBeNullOrEmpty();
-            result.Should().HaveCount(count);
-            result.Should().AllBeOfType<PokeTypeDTO>();
-            result.Should().AllSatisfy(t => t.Teratype.Should().Be(true));
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            Assert.Equal(count, result.Count);
+            Assert.True(result.All(i => i is PokeTypeDTO));
+            Assert.True(result.All(i => i.Teratype));
         }
 
         [Theory]
@@ -342,9 +345,11 @@ namespace api.Test.Services
             var result = await _service.QueryTypesByName(key, langId);
 
             //Assert
-            expectedQueryResult.Should().NotBeNullOrEmpty();
-            result.Should().NotBeNullOrEmpty();
-            result.Should().BeEquivalentTo(expectedQueryResult);
+            Assert.NotNull(expectedQueryResult);
+            Assert.NotEmpty(expectedQueryResult);
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            Assert.Equivalent(expectedQueryResult, result);
         }
 
         [Theory]
@@ -358,13 +363,13 @@ namespace api.Test.Services
             var result = await _service.QueryTypesByName(key, langId);
 
             //Assert
-            result.Should().NotBeNull();
-            result.Should().BeEmpty();
+            Assert.NotNull(result);
+            Assert.Empty(result);
         }
 
         [Theory]
-        [InlineData((int)Lang.en, 18)]
-        [InlineData((int)Lang.es, 18)]
+        [InlineData((int)Lang.en, 19)]
+        [InlineData((int)Lang.es, 19)]
         public async Task QueryAllTeraTypes_ReturnsCount(int langId, int count)
         {
             //Arrange
@@ -373,9 +378,10 @@ namespace api.Test.Services
             var result = await _service.QueryAllTeraTypes(langId);
 
             //Assert
-            result.Should().NotBeNullOrEmpty();
-            result.Should().HaveCount(count);
-            result.Should().AllBeOfType<QueryResultDTO>();
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            Assert.Equal(count, result.Count);
+            Assert.True(result.All(i => i is QueryResultDTO));
         }
     }
 }

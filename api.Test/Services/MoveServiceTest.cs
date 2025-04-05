@@ -5,7 +5,6 @@ using api.Models;
 using api.Services.PokedexServices;
 using api.Test.Data;
 using api.Test.Integration;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -27,7 +26,7 @@ namespace api.Test.Services
         public MoveServiceTest()
         {
             //dependencies
-            _configuration = new ConfigurationBuilder().AddUserSecrets<AppInstance>().Build();
+            _configuration = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
             var connectionString = _configuration["ConnectionStrings:SQLServerPokedex"];
             var options = new DbContextOptionsBuilder<PokedexContext>().UseSqlServer(connectionString).Options;
             _dbContext = new PokedexContext(options);
@@ -56,9 +55,11 @@ namespace api.Test.Services
             var result = await _service.GetMoveByIdentifier(identifier, langId);
 
             //Assert
-            expectedMove.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedMove);
+            Assert.NotNull(expectedMove);
+            Assert.NotNull(result);
+            var obj1Str = ExpectedResults.GetSerializedObject(expectedMove);
+            var obj2Str = ExpectedResults.GetSerializedObject(result);
+            Assert.Equal(obj1Str, obj2Str);
         }
 
         [Theory]
@@ -71,7 +72,7 @@ namespace api.Test.Services
             var result = await _service.GetMoveByIdentifier(identifier, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -88,9 +89,11 @@ namespace api.Test.Services
             var result = await _service.GetMoveByName(name, langId);
 
             //Assert
-            expectedMove.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedMove);
+            Assert.NotNull(expectedMove);
+            Assert.NotNull(result);
+            var obj1Str = ExpectedResults.GetSerializedObject(expectedMove);
+            var obj2Str = ExpectedResults.GetSerializedObject(result);
+            Assert.Equal(obj1Str, obj2Str);
         }
 
         [Theory]
@@ -104,7 +107,7 @@ namespace api.Test.Services
             var result = await _service.GetMoveByName(identifier, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -119,9 +122,9 @@ namespace api.Test.Services
             var result = await _service.GetMovePreviewByIdentifier(name, langId);
 
             //Assert
-            expectedMove.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedMove);
+            Assert.NotNull(expectedMove);
+            Assert.NotNull(result);
+            Assert.Equivalent(expectedMove, result);
         }
 
         [Theory]
@@ -135,7 +138,7 @@ namespace api.Test.Services
             var result = await _service.GetMovePreviewByIdentifier(identifier, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -150,9 +153,11 @@ namespace api.Test.Services
             var result = await _service.QueryMovesByName(key, langId);
 
             //Assert
-            expectedQueryResult.Should().NotBeNullOrEmpty();
-            result.Should().NotBeNullOrEmpty();
-            result.Should().BeEquivalentTo(expectedQueryResult);
+            Assert.NotNull(expectedQueryResult);
+            Assert.NotEmpty(expectedQueryResult);
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            Assert.Equivalent(expectedQueryResult, result);
         }
 
         [Theory]
@@ -166,8 +171,8 @@ namespace api.Test.Services
             var result = await _service.QueryMovesByName(key, langId);
 
             //Assert
-            result.Should().NotBeNull();
-            result.Should().BeEmpty();
+            Assert.NotNull(result);
+            Assert.Empty(result);
         }
     }
 }

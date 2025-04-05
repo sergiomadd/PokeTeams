@@ -5,7 +5,6 @@ using api.Models;
 using api.Services.PokedexServices;
 using api.Test.Data;
 using api.Test.Integration;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -26,7 +25,7 @@ namespace api.Test.Services
         public NatureServiceTest()
         {
             //dependencies
-            _configuration = new ConfigurationBuilder().AddUserSecrets<AppInstance>().Build();
+            _configuration = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
             var connectionString = _configuration["ConnectionStrings:SQLServerPokedex"];
             var options = new DbContextOptionsBuilder<PokedexContext>().UseSqlServer(connectionString).Options;
             _dbContext = new PokedexContext(options);
@@ -53,9 +52,9 @@ namespace api.Test.Services
             var result = await _service.GetNatureByIdentifier(identifier, langId);
 
             //Assert
-            expectedNature.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedNature);
+            Assert.NotNull(expectedNature);
+            Assert.NotNull(result);
+            Assert.Equivalent(expectedNature, result);
         }
 
         [Theory]
@@ -68,7 +67,7 @@ namespace api.Test.Services
             var result = await _service.GetNatureByIdentifier(identifier, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -85,9 +84,9 @@ namespace api.Test.Services
             var result = await _service.GetNatureByName(name, langId);
 
             //Assert
-            expectedNature.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedNature);
+            Assert.NotNull(expectedNature);
+            Assert.NotNull(result);
+            Assert.Equivalent(expectedNature, result);
         }
 
         [Theory]
@@ -101,7 +100,7 @@ namespace api.Test.Services
             var result = await _service.GetNatureByName(identifier, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -115,9 +114,10 @@ namespace api.Test.Services
             var result = await _service.GetAllNatures(langId);
 
             //Assert
-            result.Should().NotBeNullOrEmpty();
-            result.Should().HaveCount(count);
-            result.Should().AllBeOfType<NatureDTO>();
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            Assert.Equal(count, result.Count);
+            Assert.True(result.All(i => i is NatureDTO));
         }
 
         [Theory]
@@ -132,9 +132,11 @@ namespace api.Test.Services
             var result = await _service.QueryNaturesByName(key, langId);
 
             //Assert
-            expectedQueryResult.Should().NotBeNullOrEmpty();
-            result.Should().NotBeNullOrEmpty();
-            result.Should().BeEquivalentTo(expectedQueryResult);
+            Assert.NotNull(expectedQueryResult);
+            Assert.NotEmpty(expectedQueryResult);
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            Assert.Equivalent(expectedQueryResult, result);
         }
 
         [Theory]
@@ -148,8 +150,8 @@ namespace api.Test.Services
             var result = await _service.QueryNaturesByName(key, langId);
 
             //Assert
-            result.Should().NotBeNull();
-            result.Should().BeEmpty();
+            Assert.NotNull(result);
+            Assert.Empty(result);
         }
 
         [Theory]
@@ -163,9 +165,10 @@ namespace api.Test.Services
             var result = await _service.QueryAllNatures(langId);
 
             //Assert
-            result.Should().NotBeNullOrEmpty();
-            result.Should().HaveCount(count);
-            result.Should().AllBeOfType<QueryResultDTO>();
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            Assert.Equal(count, result.Count);
+            Assert.True(result.All(i => i is QueryResultDTO));
         }
     }
 }

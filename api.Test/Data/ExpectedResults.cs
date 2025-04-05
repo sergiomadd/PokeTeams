@@ -13,6 +13,11 @@ namespace api.Test.Data
 {
     public static class ExpectedResults
     {
+        public static string GetSerializedObject(object obj)
+        {
+            return JsonConvert.SerializeObject(obj).Replace("\\r\\n", "").Replace("\\r", "").Replace("\\n", "");
+        }
+
         public static PokedexExpectedResults? TryGetPokedexExpectedResults()
         {
             try

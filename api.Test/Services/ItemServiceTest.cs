@@ -6,7 +6,6 @@ using api.Models.DBModels;
 using api.Services.PokedexServices;
 using api.Test.Data;
 using api.Test.Integration;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -22,7 +21,7 @@ namespace api.Test.Services
         public ItemServiceTest() 
         {
             //dependencies
-            _configuration = new ConfigurationBuilder().AddUserSecrets<AppInstance>().Build();
+            _configuration = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
             var connectionString = _configuration["ConnectionStrings:SQLServerPokedex"];
             var options = new DbContextOptionsBuilder<PokedexContext>().UseSqlServer(connectionString).Options;
             _dbContext = new PokedexContext(options);
@@ -49,9 +48,11 @@ namespace api.Test.Services
             var result = await _service.GetItemByIdentifier(identifier, langId);
 
             //Assert
-            expectedItem.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedItem);
+            Assert.NotNull(expectedItem);
+            Assert.NotNull(result);
+            var obj1Str = ExpectedResults.GetSerializedObject(expectedItem);
+            var obj2Str = ExpectedResults.GetSerializedObject(result);
+            Assert.Equal(obj1Str, obj2Str);
         }
 
         [Theory]
@@ -64,7 +65,7 @@ namespace api.Test.Services
             var result = await _service.GetItemByIdentifier(identifier, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -81,9 +82,11 @@ namespace api.Test.Services
             var result = await _service.GetItemByName(name, langId);
 
             //Assert
-            expectedItem.Should().NotBeNull();
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(expectedItem);
+            Assert.NotNull(expectedItem);
+            Assert.NotNull(result);
+            var obj1Str = ExpectedResults.GetSerializedObject(expectedItem);
+            var obj2Str = ExpectedResults.GetSerializedObject(result);
+            Assert.Equal(obj1Str, obj2Str);
         }
 
         [Theory]
@@ -97,7 +100,7 @@ namespace api.Test.Services
             var result = await _service.GetItemByName(identifier, langId);
 
             //Assert
-            result.Should().BeNull();
+            Assert.Null(result);
         }
 
         [Theory]
@@ -112,9 +115,11 @@ namespace api.Test.Services
             var result = await _service.QueryItemsByName(key, langId);
 
             //Assert
-            expectedQueryResult.Should().NotBeNullOrEmpty();
-            result.Should().NotBeNullOrEmpty();
-            result.Should().BeEquivalentTo(expectedQueryResult);
+            Assert.NotNull(expectedQueryResult);
+            Assert.NotEmpty(expectedQueryResult);
+            Assert.NotNull(result);
+            Assert.NotEmpty(result);
+            Assert.Equivalent(expectedQueryResult, result);
         }
 
         [Theory]
@@ -128,8 +133,8 @@ namespace api.Test.Services
             var result = await _service.QueryItemsByName(key, langId);
 
             //Assert
-            result.Should().NotBeNull();
-            result.Should().BeEmpty();
+            Assert.NotNull(result);
+            Assert.Empty(result);
         }
     }
 }
