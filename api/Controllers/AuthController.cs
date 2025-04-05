@@ -54,7 +54,7 @@ namespace api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("Refresh")]
+        [HttpPost("refresh")]
         public async Task<ActionResult> RefreshToken()
         {
             using (var transaction = await _pokeTeamContext.Database.BeginTransactionAsync())
@@ -73,7 +73,7 @@ namespace api.Controllers
                         return BadRequest("Refresh Error");
                     }
 
-                    var username = principal.Identity.Name;
+                    var username = principal?.Identity?.Name;
                     var user = await _userManager.FindByNameAsync(username);
                     if (user is null || user.RefreshToken == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
                     {
@@ -84,6 +84,7 @@ namespace api.Controllers
                     user.RefreshToken = newRefreshToken;
                     user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
 
+                    //Needed for back to back refresh requests
                     var result = await _userManager.UpdateAsync(user);
                     if (!result.Succeeded)
                     {
@@ -111,25 +112,17 @@ namespace api.Controllers
         [HttpGet, Route("logged")]
         public async Task<ActionResult> GetLoggedUser()
         {
-            Printer.Log("Trying to get logged user...");
             UserDTO userDTO;
             try
             {
-                if (User.Identity?.Name != null)
+                User? user = await _identityService.GetLoggedUser();
+                if (user != null)
                 {
-                    User? user = await _userManager.FindByNameAsync(User.Identity.Name);
-                    if (user != null)
-                    {
-                        userDTO = await _userService.BuildUserDTO(user, true);
-                    }
-                    else
-                    {
-                        return Unauthorized("Logged user not found");
-                    }
+                    userDTO = await _userService.BuildUserDTO(user, true);
                 }
                 else
                 {
-                    return NotFound("No user logged");
+                    return Unauthorized("Logged user not found");
                 }
             }
             catch (Exception ex)
@@ -146,25 +139,18 @@ namespace api.Controllers
             EmailDTO emailDTO;
             try
             {
-                if (User.Identity?.Name != null)
+                User? user = await _identityService.GetLoggedUser();
+                if (user != null)
                 {
-                    User? user = await _userManager.FindByNameAsync(User.Identity.Name);
-                    if (user != null)
+                    emailDTO = new EmailDTO
                     {
-                        emailDTO = new EmailDTO
-                        {
-                            Email = user.Email,
-                            EmailConfirmed = user.EmailConfirmed
-                        };
-                    }
-                    else
-                    {
-                        return Unauthorized("Logged user not found");
-                    }
+                        Email = user.Email,
+                        EmailConfirmed = user.EmailConfirmed
+                    };
                 }
                 else
                 {
-                    return NotFound("No user logged");
+                    return Unauthorized("Logged user not found");
                 }
             }
             catch (Exception ex)
@@ -179,17 +165,14 @@ namespace api.Controllers
         [HttpPost, Route("login")]
         public async Task<ActionResult> LogIn(LogInDTO model)
         {
-            Printer.Log("Trying to log in user...");
-
             try
             {
                 if (model == null || !ModelState.IsValid)
                 {
                     return BadRequest("Form invalid");
                 }
-                User signedUserByEmail = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
-                User signedUserByUserName = await _userManager.FindByNameAsync(model.UserNameOrEmail);
-                Microsoft.AspNetCore.Identity.SignInResult logInResult = new Microsoft.AspNetCore.Identity.SignInResult();
+                User? signedUserByEmail = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
+                User? signedUserByUserName = await _userManager.FindByNameAsync(model.UserNameOrEmail);
                 if (signedUserByEmail != null)
                 {
                     return await PerformLogIn(signedUserByEmail, model);
@@ -247,7 +230,6 @@ namespace api.Controllers
         public async Task<ActionResult> Signup(SignUpDTO model)
         {
             User user;
-            Printer.Log("Trying to sign up user...");
             try
             {
                 if (model == null || !ModelState.IsValid)
@@ -266,13 +248,9 @@ namespace api.Controllers
                 var signUpResult = await _userManager.CreateAsync(user, model.Password);
                 if (!signUpResult.Succeeded)
                 {
-                    //var errors = signUpResult.Errors.Select(e => e.Description);
-                    //Printer log Identity errors: 
                     return BadRequest("Server error");
                 }
-                Printer.Log("User successfully generated");
                 await _signInManager.SignInAsync(user, true);
-                Printer.Log("User signed in");
             }
             catch (Exception ex)
             {
@@ -295,10 +273,9 @@ namespace api.Controllers
         [HttpGet, Route("logout")]
         public async Task<ActionResult> LogOut()
         {
-            Printer.Log("User logged out");
             try
             {
-                User? user = await _userManager.FindByNameAsync(_identityService.GetLoggedUserName());
+                User? user = await _identityService.GetLoggedUser();
                 if(user != null)
                 {
                     await _userService.DeleteRefreshToken(user);
@@ -319,12 +296,7 @@ namespace api.Controllers
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewUserName != null)
             {
-                if (updateData == null || !ModelState.IsValid)
-                {
-                    return BadRequest("Form invalid");
-                }
-                User newUser = await _userService.GetUserByUserName(updateData.NewUserName);
-                if (newUser != null)
+                if (!await _userService.UserNameAvailable(updateData.NewUserName))
                 {
                     return BadRequest("Username already claimed");
                 }
@@ -336,11 +308,8 @@ namespace api.Controllers
                 IdentityResult result = await _userManager.SetUserNameAsync(user, updateData.NewUserName);
                 if (result.Errors.ToList().Count > 0)
                 {
-                    //var errors = result.Errors.Select(e => e.Description);
-                    //Printer log Identity errors: 
                     return BadRequest("Server error");
                 }
-                //await RefreshLoggedUser(user);
                 User updatedUser = await _userService.GetUserByUserName(updateData.NewUserName);
 
                 string token = _tokenGenerator.GenerateAccessToken(user);
@@ -359,22 +328,11 @@ namespace api.Controllers
             return BadRequest("Wrong data");
         }
 
-        private async Task RefreshLoggedUser(User user)
-        {
-            await _signInManager.SignOutAsync();
-            await _signInManager.SignInAsync(user, true);
-        }
-
         [HttpPost, Route("update/email")]
         public async Task<ActionResult> UpdateEmail(UserUpdateDTO updateData)
         {
-            Printer.Log($"Updating email of {updateData.CurrentUserName}");
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewEmail != null)
             {
-                if (updateData == null || !ModelState.IsValid)
-                {
-                    return BadRequest("Form invalid");
-                }
                 User newUser = await _userManager.FindByEmailAsync(updateData.NewEmail);
                 if (newUser != null)
                 {
@@ -388,8 +346,6 @@ namespace api.Controllers
                 IdentityResult result = await _userManager.SetEmailAsync(user, updateData.NewEmail);
                 if (!result.Succeeded)
                 {
-                    //var errors = signUpResult.Errors.Select(e => e.Description);
-                    //Printer log Identity errors: 
                     return BadRequest("Server error");
                 }
                 await _userManager.UpdateAsync(user);
@@ -407,45 +363,40 @@ namespace api.Controllers
         [HttpGet, Route("code")]
         public async Task<ActionResult> GetEmailConfirmationCode()
         {
-            Printer.Log($"Getting email verification code");
-            if (User.Identity.Name != null)
-            {
-                var user = await _userManager.FindByNameAsync(User.Identity.Name);
-                if (user == null)
-                {
-                    return NotFound("Couldn't find user");
-                }
-                string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var tokenBytes = Encoding.UTF8.GetBytes(token);
-                var encodedToken = WebEncoders.Base64UrlEncode(tokenBytes);
-                string newCofrmiation = $"http://localhost:4200/@{user.UserName}/emailconfirmation?email={user.Email}&token={encodedToken}";
-                string confirmationLink = $"http://localhost:4200/emailconfirmation?email={user.Email}&token={encodedToken}";
-                string emailTo = user.Email;
-                string subject = "Confirm email";
-                string message = $"Confirmation email link {confirmationLink}";
+            var user = await _identityService.GetLoggedUser();
+            string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var tokenBytes = Encoding.UTF8.GetBytes(token);
+            var encodedToken = WebEncoders.Base64UrlEncode(tokenBytes);
+            string newCofrmiation = $"http://localhost:4200/@{user.UserName}/emailconfirmation?email={user.Email}&token={encodedToken}";
+            string confirmationLink = $"http://localhost:4200/emailconfirmation?email={user.Email}&token={encodedToken}";
+            string emailTo = user.Email;
+            string subject = "Confirm email";
+            string message = $"Confirmation email link {confirmationLink}";
 
-                bool emailSent = await _emailService.SendEmailAsync(emailTo, subject, message);
-                if (!emailSent)
-                {
-                    return BadRequest("Error sending email");
-                }
-                return Ok();
+            bool emailSent = await _emailService.SendEmailAsync(emailTo, subject, message);
+            if (!emailSent)
+            {
+                return BadRequest("Error sending email");
             }
-            return BadRequest("No user logged");
+            return Ok();
         }
 
         [HttpPost, Route("update/code")]
         public async Task<ActionResult> ConfirmEmail(UserUpdateDTO updateData)
         {
-            string email = updateData.CurrentEmail;
-            string inputToken = updateData.EmailConfirmationCode;
+            string? email = updateData.CurrentEmail;
+            string? inputToken = updateData.EmailConfirmationCode;
+            if(email == null ||  inputToken == null)
+            {
+                return BadRequest("Wrong data");
+            }
             var decodedTokenBytes = WebEncoders.Base64UrlDecode(inputToken);
             var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
 
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                return BadRequest("User not found");
+                return NotFound("Couldn't find user");
             }
             var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
             if (!result.Succeeded)
@@ -464,14 +415,9 @@ namespace api.Controllers
         [HttpPost, Route("update/password")]
         public async Task<ActionResult> UpdatePassword(UserUpdateDTO updateData)
         {
-            Printer.Log($"Updating password of {updateData.CurrentUserName}");
             if (updateData != null && updateData.CurrentUserName != null
                 && updateData.CurrentPassword != null && updateData.NewPassword != null)
             {
-                if (updateData == null || !ModelState.IsValid)
-                {
-                    return BadRequest("Form invalid");
-                }
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
@@ -480,8 +426,7 @@ namespace api.Controllers
                 IdentityResult result = await _userManager.ChangePasswordAsync(user, updateData.CurrentPassword, updateData.NewPassword);
                 if (!result.Succeeded)
                 {
-                    var errors = result.Errors.Select(e => e.Description);
-                    return BadRequest(errors.ToList()[0]);
+                    return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
                 var token = _tokenGenerator.GenerateAccessToken(updatedUser);
@@ -497,13 +442,8 @@ namespace api.Controllers
         [HttpPost, Route("update/name")]
         public async Task<ActionResult> UpdateName(UserUpdateDTO updateData)
         {
-            Printer.Log("Trying to change name of ", updateData.CurrentUserName);
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewName != null)
             {
-                if (updateData == null || !ModelState.IsValid)
-                {
-                    return BadRequest("Form invalid");
-                }
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
@@ -512,8 +452,6 @@ namespace api.Controllers
                 bool result = await _userService.ChangeName(user, updateData.NewName);
                 if (!result)
                 {
-                    //var errors = signUpResult.Errors.Select(e => e.Description);
-                    //Printer log Identity errors: 
                     return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
@@ -532,10 +470,6 @@ namespace api.Controllers
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewPictureKey != null)
             {
-                if (updateData == null || !ModelState.IsValid)
-                {
-                    return BadRequest("Form invalid");
-                }
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
@@ -545,8 +479,6 @@ namespace api.Controllers
                 IdentityResult result = await _userManager.UpdateAsync(user);
                 if (!result.Succeeded)
                 {
-                    //var errors = signUpResult.Errors.Select(e => e.Description);
-                    //Printer log Identity errors: 
                     return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
@@ -565,10 +497,6 @@ namespace api.Controllers
         {
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewCountryCode != null)
             {
-                if (updateData == null || !ModelState.IsValid)
-                {
-                    return BadRequest("Form invalid");
-                }
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
                 if (user == null)
                 {
@@ -578,8 +506,6 @@ namespace api.Controllers
                 IdentityResult result = await _userManager.UpdateAsync(user);
                 if (!result.Succeeded)
                 {
-                    //var errors = signUpResult.Errors.Select(e => e.Description);
-                    //Printer log Identity errors: 
                     return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
@@ -596,7 +522,6 @@ namespace api.Controllers
         [HttpPost, Route("update/visibility")]
         public async Task<ActionResult> UpdateVisibility(UserUpdateDTO updateData)
         {
-            Printer.Log($"Updating visibility of {updateData.CurrentUserName}");
             if (updateData != null && updateData.CurrentUserName != null && updateData.NewVisibility != null)
             {
                 User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
@@ -608,8 +533,6 @@ namespace api.Controllers
                 IdentityResult result = await _userManager.UpdateAsync(user);
                 if (!result.Succeeded)
                 {
-                    //var errors = signUpResult.Errors.Select(e => e.Description);
-                    //Printer log Identity errors: 
                     return BadRequest("Server error");
                 }
                 User updatedUser = await _userService.GetUserByUserName(user.UserName);
@@ -626,31 +549,23 @@ namespace api.Controllers
         [HttpPost, Route("delete")]
         public async Task<ActionResult> DeleteLoggedUser()
         {
-            Printer.Log("Deleting user...");
-            if (User.Identity.Name == null)
+            User? loggedUser = await _identityService.GetLoggedUser();
+            if (loggedUser == null)
             {
-                return NotFound("No user is logged");
+                return BadRequest("No logged user");
             }
-            User user = await _userManager.FindByNameAsync(User.Identity.Name);
-            if (user != null)
+            //for external logins
+            /*
+            foreach (var login in logins.ToList())
             {
-                //for external logins
-                /*
-                foreach (var login in logins.ToList())
-                {
-                    await _userManager.RemoveLoginAsync(login.UserId, new UserLoginInfo(login.LoginProvider, login.ProviderKey));
-                }
-                */
-                await _pokeTeamService.DeleteUserTeams(user);
-                IdentityResult deleted = await _userManager.DeleteAsync(user);
-                if (!deleted.Succeeded)
-                {
-                    return NotFound("Couldn't delete user");
-                }
+                await _userManager.RemoveLoginAsync(login.UserId, new UserLoginInfo(login.LoginProvider, login.ProviderKey));
             }
-            else
+            */
+            await _pokeTeamService.DeleteUserTeams(loggedUser);
+            IdentityResult deleted = await _userManager.DeleteAsync(loggedUser);
+            if (!deleted.Succeeded)
             {
-                return NotFound("Couldn't find user");
+                return BadRequest("Couldn't delete user");
             }
 
             return Ok();
