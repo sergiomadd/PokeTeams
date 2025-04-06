@@ -96,29 +96,31 @@ namespace api.Util
 
         public void SetTokensInsideCookie(JwtResponseDTO tokens, HttpContext context)
         {
-            if (string.IsNullOrEmpty(tokens.AccessToken) || string.IsNullOrEmpty(tokens.RefreshToken))
+            if (!string.IsNullOrEmpty(tokens.AccessToken))
             {
-                return;
+                context.Response.Cookies.Append("accessToken", tokens.AccessToken,
+                    new CookieOptions
+                    {
+                        Expires = DateTime.UtcNow.AddMinutes(60),
+                        HttpOnly = true,
+                        IsEssential = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.None
+                    });
             }
-            context.Response.Cookies.Append("accessToken", tokens.AccessToken,
-                new CookieOptions
-                {
-                    Expires = DateTime.UtcNow.AddMinutes(60),
-                    HttpOnly = true,
-                    IsEssential = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.None
-                });
 
-            context.Response.Cookies.Append("refreshToken", tokens.RefreshToken,
-                new CookieOptions
-                {
-                    Expires = DateTime.UtcNow.AddDays(7),
-                    HttpOnly = true,
-                    IsEssential = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.None
-                });
+            if (!string.IsNullOrEmpty(tokens.RefreshToken))
+            {
+                context.Response.Cookies.Append("refreshToken", tokens.RefreshToken,
+                    new CookieOptions
+                    {
+                        Expires = DateTime.UtcNow.AddDays(7),
+                        HttpOnly = true,
+                        IsEssential = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.None
+                    });
+            }
         }
 
         public void RemoveTokensFromCookie(HttpContext context)
