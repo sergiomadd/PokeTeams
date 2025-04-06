@@ -17,7 +17,7 @@ namespace api.Services
         public Task<bool> DeleteUserTeams(User user);
         public Task<string> IncrementTeamViewCount(string teamKey);
         public Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery, int langId);
-        public string? ValidateTeamDTO(TeamDTO inputTeam);
+        public string? ValidateTeamDTO(TeamDTO? inputTeam);
         public string? ValidateTeamSearchQueryDTO(TeamSearchQueryDTO searchQuery);
     }
 }

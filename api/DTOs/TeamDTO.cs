@@ -25,12 +25,12 @@ namespace api.DTOs
         public TeamDTO(
             string id,
             List<PokemonDTO> pokemons,
-            UserPreviewDTO player,
-            TournamentDTO tournament,
-            RegulationDTO regulation,
+            UserPreviewDTO? player,
+            TournamentDTO? tournament,
+            RegulationDTO? regulation,
             string? rentalCode,
             int viewCount,
-            string date,
+            string? date,
             bool visibility,
             List<TagDTO> tags,
             TeamOptionsDTO? options = null

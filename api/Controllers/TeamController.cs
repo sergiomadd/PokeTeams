@@ -78,7 +78,7 @@ namespace api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
         [HttpPost, Route("save")]
-        public async Task<ActionResult> SaveTeam([FromBody] TeamDTO team)
+        public async Task<ActionResult> SaveTeam([FromBody] TeamDTO? team)
         {
             if (_identityService.CheckForRefresh(Request))
             {
@@ -96,69 +96,53 @@ namespace api.Controllers
                 {
                     return BadRequest("Error saving team");
                 }
-                else
-                {
-                    object response = new
-                    {
-                        content = newTeam.Id
-                    };
-                    return Ok(response);
-                }
+                return Ok(newTeam.Id);
             }
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost, Route("update")]
-        public async Task<ActionResult<string>> Update([FromBody] TeamDTO teamDTO)
+        public async Task<ActionResult<string>> Update(TeamDTO? teamDTO)
         {
+            //add validation
             Team? currentTeam = await _teamService.GetTeamModel(teamDTO.ID);
             if (currentTeam == null || currentTeam.Player == null)
             {
-                return Unauthorized("Unauthorized");
+                return Unauthorized("Unauthorized A");
             }
             User? loggedUser = await _identityService.GetLoggedUser();
-            if (loggedUser.Id == null || loggedUser.Id != currentTeam.Player.Id)
+            if (loggedUser?.Id == null || loggedUser.Id != currentTeam.Player.Id)
             {
-                return Unauthorized("Unauthorized");
+                return Unauthorized("Unauthorized B");
             }
             Team? newTeam = await _teamService.UpdateTeam(teamDTO, teamDTO.ID);
             if (newTeam == null)
             {
                 return BadRequest("Could not update team");
             }
-            else
-            {
-                object response = new
-                {
-                    content = newTeam.Id
-                };
-                return Ok(response);
-            }
+            return Ok(newTeam.Id);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost, Route("delete")]
-        public async Task<ActionResult<string>> Delete(TeamIdDTO data)
+        public async Task<ActionResult<string>> Delete(TeamIdDTO? data)
         {
-            if (!User.Identity.IsAuthenticated)
+            Team? teamModel = await _teamService.GetTeamModel(data.Id);
+            if (teamModel == null || teamModel.Player == null)
             {
                 return Unauthorized("Unauthorized");
             }
-            Team teammodel = await _teamService.GetTeamModel(data.Id);
-            if (teammodel == null || teammodel.Player == null)
-            {
-                return Unauthorized("Unauthorized");
-            }
-            if (User.Identity.Name != teammodel.Player.UserName)
+            User? loggedUser = await _identityService.GetLoggedUser();
+            if (loggedUser?.Id == null || loggedUser.Id != teamModel.Player.Id)
             {
                 return Unauthorized("Unauthorized");
             }           
             bool deleted = await _teamService.DeleteTeamById(data.Id);
             if (!deleted)
             {
-                return BadRequest("Failed to delete team.");
+                return BadRequest("Failed to delete team");
             }
-            return Ok("Team successfully deleted.");
+            return Ok("Team successfully deleted");
         }
 
         [HttpPost, Route("increment")]
@@ -169,13 +153,13 @@ namespace api.Controllers
             {
                 return Ok();
             }
-            return BadRequest();
+            return BadRequest(response);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
         [HttpPost, Route("query")]
-        public async Task<ActionResult<TeamSearchQueryResponseDTO>> QueryTeams(TeamSearchQueryDTO key)
+        public async Task<ActionResult<TeamSearchQueryResponseDTO>> QueryTeams(TeamSearchQueryDTO? key)
         {
             if (_identityService.CheckForRefresh(Request))
             {
@@ -186,14 +170,10 @@ namespace api.Controllers
                 string? validation = _teamService.ValidateTeamSearchQueryDTO(key);
                 if (validation != null)
                 {
-                    return NotFound(validation);
+                    return BadRequest(validation);
                 }
                 int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
                 TeamSearchQueryResponseDTO teams = await _teamService.QueryTeams(key, langId ?? 9);
-                if (teams == null)
-                {
-                    return NotFound("Couldn't find teams");
-                }
                 return Ok(teams);
             }
         }

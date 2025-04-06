@@ -137,7 +137,7 @@ namespace api.Services
         public async Task<Team?> BreakTeamDTO(TeamDTO inputTeam, string newTeamId)
         {
             Team newTeam = null;
-            if (inputTeam != null)
+            if (inputTeam != null && !inputTeam.Pokemons.IsNullOrEmpty())
             {
                 List<Pokemon> pokemons = new List<Pokemon>();
                 foreach (PokemonDTO pokemonDTO in inputTeam.Pokemons)
@@ -408,19 +408,15 @@ namespace api.Services
                 {
                     _pokeTeamContext.Team.Remove(team);
                     _pokeTeamContext.SaveChanges();
-                }
-                else
-                {
-                    return false;
+                    return true;
                 }
             }
             catch (Exception ex)
             {
                 Printer.Log("Exception in: DeleteUserByUserName(string userName)");
                 Printer.Log(ex);
-                return false;
             }
-            return true;
+            return false;
         }
 
         public async Task<bool> DeleteUserTeams(User user)
@@ -671,7 +667,7 @@ namespace api.Services
             return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public string? ValidateTeamDTO(TeamDTO inputTeam)
+        public string? ValidateTeamDTO(TeamDTO? inputTeam)
         {
             if (inputTeam == null)
             {
