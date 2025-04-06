@@ -48,7 +48,7 @@ namespace api.Test.Integration
                 // Add a new registration for dbcontext
                 services.AddDbContext<PokeTeamContext>(options =>
                     options.UseSqlServer(connectionString));
-                services.AddScoped<IPokeTeamContext, PokeTeamContext>();
+                services.AddTransient<IPokeTeamContext, PokeTeamContext>();
 
                 services.AddAuthentication("TestScheme")
                     .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", options => { });
@@ -75,8 +75,13 @@ namespace api.Test.Integration
             var user = GetTestLoggedUser();
             context.Database.EnsureDeleted();
             context.Database.Migrate();
-            context.User.Add(user);
-            context.SaveChanges();
+
+            var dbUser = context.User.FirstOrDefault(u => u.UserName == user.UserName);
+            if(dbUser == null)
+            {
+                context.User.Add(user);
+                context.SaveChanges();
+            }
         }
 
         public void Dispose()
@@ -90,7 +95,18 @@ namespace api.Test.Integration
 
         public User GetTestLoggedUser()
         {
-            return new User() { Id = "testid", UserName = "testusername" };
+            return new User() { Id = "testLog", UserName = "testUserName" };
+        }
+
+        public User GetTestAuthLoggedUser()
+        {
+            return new User() 
+            {
+                Id = "testAuth",
+                UserName = "testAuthUserName",
+                Email = "testAuth@gmail.com",
+                EmailConfirmed = false,
+            };
         }
 
         public static PokeTeamContext CreatePokeTeamDbContext(IServiceCollection services)
@@ -110,7 +126,7 @@ namespace api.Test.Integration
             return connectionString;
         }
 
-        public string GenerateValidJwtToken()
+        public string GenerateValidJwtToken(User? user)
         {
             var configuration = new ConfigurationBuilder()
                 .AddUserSecrets<AppInstance>()
@@ -118,8 +134,6 @@ namespace api.Test.Integration
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .Build();
             var test = configuration["JwtSettings:Issuer"];
-            var user = GetTestLoggedUser();
-
             var key = configuration["Jwt:Secret"]!;
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
@@ -129,8 +143,8 @@ namespace api.Test.Integration
                 Subject = new ClaimsIdentity(
                     [
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                        new Claim(ClaimTypes.Name, user.UserName.ToString())
+                        new Claim(JwtRegisteredClaimNames.Sub, user?.Id != null ? user.Id.ToString() : ""),
+                        new Claim(ClaimTypes.Name, user?.UserName != null ? user.UserName.ToString() : "")
                     ]),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = credentials,
