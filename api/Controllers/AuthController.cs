@@ -354,7 +354,7 @@ namespace api.Controllers
             string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var tokenBytes = Encoding.UTF8.GetBytes(token);
             var encodedToken = WebEncoders.Base64UrlEncode(tokenBytes);
-            string confirmationLink = $"http://localhost:4200/@{user.UserName}/emailconfirmation?email={user.Email}&token={encodedToken}";
+            string confirmationLink = $"http://localhost:4200/user/{user.UserName}/emailconfirmation?email={user.Email}&token={encodedToken}";
             string emailTo = user.Email;
             string subject = "Confirm email";
             string message = $"Confirmation email link {confirmationLink}";
