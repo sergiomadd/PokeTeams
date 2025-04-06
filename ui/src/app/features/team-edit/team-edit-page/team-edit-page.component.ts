@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { CustomError } from 'src/app/core/models/misc/customError.model';
 import { Team } from 'src/app/core/models/team/team.model';
 import { TeamData } from 'src/app/core/models/team/teamData.model';
-import { TeamSaveResponse } from 'src/app/core/models/team/teamSaveResponse.model';
 import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { TeamService } from 'src/app/core/services/team.service';
 import { selectLang } from 'src/app/core/store/config/config.selectors';
@@ -57,13 +56,13 @@ export class TeamEditPageComponent
         this.teamSubmitted = true;
         this.teamService.updateTeam(this.team).subscribe(
           {
-            next: (response: TeamSaveResponse) =>
+            next: (response: string) =>
             {
               this.teamSubmitted = false;
               console.log("Team edit response: ", response)
-              if(response && response.content)
+              if(response)
               {
-                this.router.navigate(['/', response.content])
+                this.router.navigate(['/', response])
               }
               this.feedback = undefined;
             },

@@ -11,7 +11,6 @@ import { Tag } from "../models/team/tag.model";
 import { Team } from "../models/team/team.model";
 import { TeamData } from "../models/team/teamData.model";
 import { TeamId } from "../models/team/teamId.dto";
-import { TeamSaveResponse } from "../models/team/teamSaveResponse.model";
 import { Tournament } from "../models/team/tournament.model";
 
 @Injectable({
@@ -43,16 +42,16 @@ export class TeamService
     return this.http.get<TeamData>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
 
-  saveTeam(team: Team): Observable<TeamSaveResponse>
+  saveTeam(team: Team): Observable<string>
   {
     let url = this.apiUrl + 'team/save';
-    return this.http.post<TeamSaveResponse>(url, team, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+    return this.http.post<string>(url, team, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
 
-  updateTeam(team: Team): Observable<TeamSaveResponse>
+  updateTeam(team: Team): Observable<string>
   {
     let url = this.apiUrl + 'team/update';
-    return this.http.post<TeamSaveResponse>(url, team, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+    return this.http.post<string>(url, team, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
   
   async incrementViewCount(teamKey: string)

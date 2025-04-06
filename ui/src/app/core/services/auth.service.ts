@@ -50,7 +50,7 @@ export class AuthService
   logOut() : Observable<void>
   {
     let url = this.apiUrl + 'logout';
-    return this.http.get<void>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+    return this.http.post<void>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
 
   deleteAccount() : Observable<void>

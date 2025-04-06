@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CustomError } from 'src/app/core/models/misc/customError.model';
 import { Team } from 'src/app/core/models/team/team.model';
-import { TeamSaveResponse } from 'src/app/core/models/team/teamSaveResponse.model';
 import { TeamService } from 'src/app/core/services/team.service';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { TeamEditorService } from '../../../shared/services/team-editor.service';
@@ -49,13 +48,13 @@ export class UploadPageComponent
       this.teamSubmitted = true;
       this.teamService.saveTeam(this.team).subscribe(
         {
-          next: (response: TeamSaveResponse) =>
+          next: (response: string) =>
           {
             this.teamSubmitted = false;
             console.log("Team response: ", response)
-            if(response && response.content)
+            if(response)
             {
-              this.router.navigate(['/', response.content])
+              this.router.navigate(['/', response])
             }
             this.feedback = undefined;
           },

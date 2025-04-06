@@ -39,7 +39,6 @@ export class EmailConfirmationComponent
     {
       const confirmUpdateDTO: UserUpdateDTO = 
       {
-        currentEmail: this.email,
         emailConfirmationCode: this.token
       }
       this.store.dispatch(authActions.confirmEmail({request: confirmUpdateDTO}))

@@ -154,7 +154,6 @@ export class UserSettingsComponent
       const key: string = this.getPictureKey(path);
       let updateDTO: UserUpdateDTO = 
       {
-        currentUserName: this.user?.username,
         newPictureKey: key
       }
       this.store.dispatch(authActions.changePicture({request: updateDTO}));
@@ -168,7 +167,6 @@ export class UserSettingsComponent
     this.changeCountrySubmitted = true;
     let updateDTO: UserUpdateDTO = 
     {
-      currentUserName: this.user?.username,
       newCountryCode: $event.identifier
     }
     this.store.dispatch(authActions.changeCountry({request: updateDTO}));
@@ -180,7 +178,6 @@ export class UserSettingsComponent
     this.changeVisibilitySubmitted = true;
     let updateDTO: UserUpdateDTO = 
     {
-      currentUserName: this.user?.username,
       newVisibility: $event
     }
     this.store.dispatch(authActions.changeVisibility({request: updateDTO}));
@@ -195,7 +192,6 @@ export class UserSettingsComponent
       this.changeNameSubmitted = true;
       let updateDTO: UserUpdateDTO = 
       {
-        currentUserName: this.user?.username,
         newName: this.changeNameForm.controls.newName.value
       }
       this.store.dispatch(authActions.changeName({request: updateDTO}));
@@ -211,7 +207,6 @@ export class UserSettingsComponent
       this.changeUserNameSubmitted = true;
       let updateDTO: UserUpdateDTO = 
       {
-        currentUserName: this.user?.username,
         newUserName: this.changeUserNameForm.controls.newUserName.value
       }
       this.store.dispatch(authActions.changeUserName({request: updateDTO}));
@@ -227,7 +222,6 @@ export class UserSettingsComponent
       this.changeEmailSubmitted = true;
       let updateDTO: UserUpdateDTO = 
       {
-        currentUserName: this.user?.username,
         newEmail: this.changeEmailForm.controls.newEmail.value
       }
       this.store.dispatch(authActions.changeEmail({request: updateDTO}));
@@ -245,7 +239,6 @@ export class UserSettingsComponent
       this.changePasswordSubmitted = true;
       let updateDTO: UserUpdateDTO = 
       {
-        currentUserName: this.user?.username,
         currentPassword: this.changePasswordForm.controls.currentPassword.value,
         newPassword: this.changePasswordForm.controls.password.value
       }
