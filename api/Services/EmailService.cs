@@ -17,8 +17,6 @@ namespace api.Services
         {
             string emailFrom = _config["Email:Username"]!;
             string emailFromPassword = _config["Email:Password"]!;
-            Printer.Log(emailFrom);
-            Printer.Log(emailFromPassword);
             try
             {
                 SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587)

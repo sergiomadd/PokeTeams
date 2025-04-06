@@ -116,14 +116,11 @@ namespace api.Controllers
             try
             {
                 User? user = await _identityService.GetLoggedUser();
-                if (user != null)
+                if (user == null)
                 {
-                    userDTO = await _userService.BuildUserDTO(user, true);
+                    return BadRequest("No user logged");
                 }
-                else
-                {
-                    return Unauthorized("Logged user not found");
-                }
+                userDTO = await _userService.BuildUserDTO(user, true);
             }
             catch (Exception ex)
             {
@@ -140,18 +137,15 @@ namespace api.Controllers
             try
             {
                 User? user = await _identityService.GetLoggedUser();
-                if (user != null)
+                if (user == null)
                 {
-                    emailDTO = new EmailDTO
-                    {
-                        Email = user.Email,
-                        EmailConfirmed = user.EmailConfirmed
-                    };
+                    return BadRequest("No user logged");
                 }
-                else
+                emailDTO = new EmailDTO
                 {
-                    return Unauthorized("Logged user not found");
-                }
+                    Email = user.Email,
+                    EmailConfirmed = user.EmailConfirmed
+                };
             }
             catch (Exception ex)
             {
@@ -167,10 +161,7 @@ namespace api.Controllers
         {
             try
             {
-                if (model == null || !ModelState.IsValid)
-                {
-                    return BadRequest("Form invalid");
-                }
+
                 User? signedUserByEmail = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
                 User? signedUserByUserName = await _userManager.FindByNameAsync(model.UserNameOrEmail);
                 if (signedUserByEmail != null)
@@ -204,13 +195,13 @@ namespace api.Controllers
             {
                 return Unauthorized("Log in failed");
             }
-            if (logInResult.IsNotAllowed)
+            if (logInResult.RequiresTwoFactor)
             {
-                return Unauthorized("You are not allowed");
+                return Unauthorized("Two factor authentication is needed");
             }
             if (logInResult.IsLockedOut)
             {
-                return Unauthorized("You account is locked");
+                return Unauthorized("Your account is locked out");
             }
             string token = _tokenGenerator.GenerateAccessToken(user);
             string refreshToken = _tokenGenerator.GenerateRefreshToken(user);
@@ -227,15 +218,11 @@ namespace api.Controllers
 
         [AllowAnonymous]
         [HttpPost, Route("signup")]
-        public async Task<ActionResult> Signup(SignUpDTO model)
+        public async Task<ActionResult> SignUp(SignUpDTO model)
         {
             User user;
             try
             {
-                if (model == null || !ModelState.IsValid)
-                {
-                    return BadRequest("Form invalid");
-                }
                 user = new User
                 {
                     UserName = model.UserName,
@@ -248,14 +235,14 @@ namespace api.Controllers
                 var signUpResult = await _userManager.CreateAsync(user, model.Password);
                 if (!signUpResult.Succeeded)
                 {
-                    return BadRequest("Server error");
+                    return BadRequest("Sign up failed");
                 }
                 await _signInManager.SignInAsync(user, true);
             }
             catch (Exception ex)
             {
                 Printer.Log(ex.Message);
-                return BadRequest("Signup error, exception, Model not valid");
+                return BadRequest("Sign up error");
             }
             string token = _tokenGenerator.GenerateAccessToken(user);
             string refreshToken = _tokenGenerator.GenerateRefreshToken(user);
@@ -270,7 +257,7 @@ namespace api.Controllers
             return Ok();
         }
 
-        [HttpGet, Route("logout")]
+        [HttpPost, Route("logout")]
         public async Task<ActionResult> LogOut()
         {
             try
@@ -294,70 +281,70 @@ namespace api.Controllers
         [HttpPost, Route("update/username")]
         public async Task<ActionResult> UpdateUserName(UserUpdateDTO updateData)
         {
-            if (updateData != null && updateData.CurrentUserName != null && updateData.NewUserName != null)
+            if (updateData == null || updateData.NewUserName == null)
             {
-                if (!await _userService.UserNameAvailable(updateData.NewUserName))
-                {
-                    return BadRequest("Username already claimed");
-                }
-                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
-                if (user == null)
-                {
-                    return NotFound("Couldn't find user");
-                }
-                IdentityResult result = await _userManager.SetUserNameAsync(user, updateData.NewUserName);
-                if (result.Errors.ToList().Count > 0)
-                {
-                    return BadRequest("Server error");
-                }
-                User updatedUser = await _userService.GetUserByUserName(updateData.NewUserName);
-
-                string token = _tokenGenerator.GenerateAccessToken(user);
-                string refreshToken = _tokenGenerator.GenerateRefreshToken(user);
-
-                user.RefreshToken = refreshToken;
-                user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
-                await _userManager.UpdateAsync(user);
-
-                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token, RefreshToken = refreshToken };
-                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
-                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
-
-                return Ok();
+                return BadRequest("Wrong data");
             }
-            return BadRequest("Wrong data");
+            if (!await _userService.UserNameAvailable(updateData.NewUserName))
+            {
+                return BadRequest("Username already claimed");
+            }
+            User? user = await _identityService.GetLoggedUser();
+            if (user == null)
+            {
+                return BadRequest("No user logged");
+            }
+            IdentityResult result = await _userManager.SetUserNameAsync(user, updateData.NewUserName);
+            if (result.Errors.ToList().Count > 0)
+            {
+                return BadRequest("Server error");
+            }
+            User updatedUser = await _userService.GetUserByUserName(updateData.NewUserName);
+
+            string token = _tokenGenerator.GenerateAccessToken(user);
+            string refreshToken = _tokenGenerator.GenerateRefreshToken(user);
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+            await _userManager.UpdateAsync(user);
+
+            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token, RefreshToken = refreshToken };
+            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+            return Ok();
         }
 
         [HttpPost, Route("update/email")]
         public async Task<ActionResult> UpdateEmail(UserUpdateDTO updateData)
         {
-            if (updateData != null && updateData.CurrentUserName != null && updateData.NewEmail != null)
+            if (updateData == null || updateData.NewEmail == null)
             {
-                User newUser = await _userManager.FindByEmailAsync(updateData.NewEmail);
-                if (newUser != null)
-                {
-                    return BadRequest("Email already taken");
-                }
-                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
-                if (user == null)
-                {
-                    return NotFound("Couldn't find user");
-                }
-                IdentityResult result = await _userManager.SetEmailAsync(user, updateData.NewEmail);
-                if (!result.Succeeded)
-                {
-                    return BadRequest("Server error");
-                }
-                await _userManager.UpdateAsync(user);
-                User updatedUser = await _userService.GetUserByUserName(user.UserName);
-                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-
-                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
-                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
-
-                return Ok();
+                return BadRequest("Wrong data");
             }
-            return BadRequest("Wrong data");
+            User? newUser = await _userManager.FindByEmailAsync(updateData.NewEmail);
+            if (newUser != null)
+            {
+                return BadRequest("Email already taken");
+            }
+            User? user = await _identityService.GetLoggedUser();
+            if (user == null)
+            {
+                return BadRequest("No user logged");
+            }
+            IdentityResult result = await _userManager.SetEmailAsync(user, updateData.NewEmail);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Server error");
+            }
+            await _userManager.UpdateAsync(user);
+            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+
+            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+            return Ok();
         }
 
         [HttpGet, Route("code")]
@@ -367,8 +354,7 @@ namespace api.Controllers
             string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var tokenBytes = Encoding.UTF8.GetBytes(token);
             var encodedToken = WebEncoders.Base64UrlEncode(tokenBytes);
-            string newCofrmiation = $"http://localhost:4200/@{user.UserName}/emailconfirmation?email={user.Email}&token={encodedToken}";
-            string confirmationLink = $"http://localhost:4200/emailconfirmation?email={user.Email}&token={encodedToken}";
+            string confirmationLink = $"http://localhost:4200/@{user.UserName}/emailconfirmation?email={user.Email}&token={encodedToken}";
             string emailTo = user.Email;
             string subject = "Confirm email";
             string message = $"Confirmation email link {confirmationLink}";
@@ -384,7 +370,12 @@ namespace api.Controllers
         [HttpPost, Route("update/code")]
         public async Task<ActionResult> ConfirmEmail(UserUpdateDTO updateData)
         {
-            string? email = updateData.CurrentEmail;
+            User? user = await _identityService.GetLoggedUser();
+            if (user == null)
+            {
+                return BadRequest("No user logged");
+            }
+            string? email = user.Email;
             string? inputToken = updateData.EmailConfirmationCode;
             if(email == null ||  inputToken == null)
             {
@@ -393,11 +384,6 @@ namespace api.Controllers
             var decodedTokenBytes = WebEncoders.Base64UrlDecode(inputToken);
             var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
 
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user == null)
-            {
-                return NotFound("Couldn't find user");
-            }
             var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
             if (!result.Succeeded)
             {
@@ -415,135 +401,134 @@ namespace api.Controllers
         [HttpPost, Route("update/password")]
         public async Task<ActionResult> UpdatePassword(UserUpdateDTO updateData)
         {
-            if (updateData != null && updateData.CurrentUserName != null
-                && updateData.CurrentPassword != null && updateData.NewPassword != null)
+            if (updateData == null || updateData.CurrentPassword == null || updateData.NewPassword == null)
             {
-                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
-                if (user == null)
-                {
-                    return NotFound("Couldn't find user");
-                }
-                IdentityResult result = await _userManager.ChangePasswordAsync(user, updateData.CurrentPassword, updateData.NewPassword);
-                if (!result.Succeeded)
-                {
-                    return BadRequest("Server error");
-                }
-                User updatedUser = await _userService.GetUserByUserName(user.UserName);
-                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-
-                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
-                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
-
-                return Ok();
+                return BadRequest("Wrong data");
             }
-            return BadRequest("Wrong data");
+            User? user = await _identityService.GetLoggedUser();
+            if (user == null)
+            {
+                return BadRequest("No user logged");
+            }
+            IdentityResult result = await _userManager.ChangePasswordAsync(user, updateData.CurrentPassword, updateData.NewPassword);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Server error");
+            }
+            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+
+            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+            return Ok();
         }
 
         [HttpPost, Route("update/name")]
         public async Task<ActionResult> UpdateName(UserUpdateDTO updateData)
         {
-            if (updateData != null && updateData.CurrentUserName != null && updateData.NewName != null)
+            if (updateData == null || updateData.NewName == null)
             {
-                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
-                if (user == null)
-                {
-                    return NotFound("Couldn't find user");
-                }
-                bool result = await _userService.ChangeName(user, updateData.NewName);
-                if (!result)
-                {
-                    return BadRequest("Server error");
-                }
-                User updatedUser = await _userService.GetUserByUserName(user.UserName);
-                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-
-                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
-                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
-
-                return Ok();
+                return BadRequest("Wrong data");
             }
-            return BadRequest("Wrong data");
+            User? user = await _identityService.GetLoggedUser();
+            if (user == null)
+            {
+                return BadRequest("No user logged");
+            }
+            bool result = await _userService.ChangeName(user, updateData.NewName);
+            if (!result)
+            {
+                return BadRequest("Server error");
+            }
+            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+
+            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+            return Ok();
         }
 
         [HttpPost, Route("update/picture")]
         public async Task<ActionResult> UpdatePicture(UserUpdateDTO updateData)
         {
-            if (updateData != null && updateData.CurrentUserName != null && updateData.NewPictureKey != null)
+            if (updateData == null || updateData.NewPictureKey == null)
             {
-                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
-                if (user == null)
-                {
-                    return NotFound("Couldn't find user");
-                }
-                user.Picture = updateData.NewPictureKey;
-                IdentityResult result = await _userManager.UpdateAsync(user);
-                if (!result.Succeeded)
-                {
-                    return BadRequest("Server error");
-                }
-                User updatedUser = await _userService.GetUserByUserName(user.UserName);
-                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-
-                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
-                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
-
-                return Ok();
+                return BadRequest("Wrong data");
             }
-            return BadRequest("Wrong data");
+            User? user = await _identityService.GetLoggedUser();
+            if (user == null)
+            {
+                return BadRequest("No user logged");
+            }
+            user.Picture = updateData.NewPictureKey;
+            IdentityResult result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Server error");
+            }
+            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+
+            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+            return Ok();
         }
 
         [HttpPost, Route("update/country")]
         public async Task<ActionResult> UpdateCountry(UserUpdateDTO updateData)
         {
-            if (updateData != null && updateData.CurrentUserName != null && updateData.NewCountryCode != null)
+            if (updateData == null || updateData.NewCountryCode == null)
             {
-                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
-                if (user == null)
-                {
-                    return NotFound("Couldn't find user");
-                }
-                user.Country = updateData.NewCountryCode;
-                IdentityResult result = await _userManager.UpdateAsync(user);
-                if (!result.Succeeded)
-                {
-                    return BadRequest("Server error");
-                }
-                User updatedUser = await _userService.GetUserByUserName(user.UserName);
-                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-
-                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
-                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
-
-                return Ok();
+                return BadRequest("Wrong data");
             }
-            return BadRequest("Wrong data");
+            User? user = await _identityService.GetLoggedUser();
+            if (user == null)
+            {
+                return BadRequest("No user logged");
+            }
+            user.Country = updateData.NewCountryCode;
+            IdentityResult result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Server error");
+            }
+            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+
+            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+            return Ok();
         }
 
         [HttpPost, Route("update/visibility")]
         public async Task<ActionResult> UpdateVisibility(UserUpdateDTO updateData)
         {
-            if (updateData != null && updateData.CurrentUserName != null && updateData.NewVisibility != null)
+            if (updateData == null || updateData.NewVisibility == null)
             {
-                User user = await _userService.GetUserByUserName(updateData.CurrentUserName);
-                if (user == null)
-                {
-                    return NotFound("Couldn't find user");
-                }
-                user.Visibility = (bool)updateData.NewVisibility;
-                IdentityResult result = await _userManager.UpdateAsync(user);
-                if (!result.Succeeded)
-                {
-                    return BadRequest("Server error");
-                }
-                User updatedUser = await _userService.GetUserByUserName(user.UserName);
-                var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-
-                JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
-                _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
-
-                return Ok();
+                return BadRequest("Wrong data");
             }
-            return BadRequest("Wrong data");
+            User? user = await _identityService.GetLoggedUser();
+            if (user == null)
+            {
+                return BadRequest("No user logged");
+            }
+            user.Visibility = (bool)updateData.NewVisibility;
+            IdentityResult result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Server error");
+            }
+            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            var token = _tokenGenerator.GenerateAccessToken(updatedUser);
+
+            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
+            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+            return Ok();
         }
 
         [HttpPost, Route("delete")]
@@ -552,7 +537,7 @@ namespace api.Controllers
             User? loggedUser = await _identityService.GetLoggedUser();
             if (loggedUser == null)
             {
-                return BadRequest("No logged user");
+                return BadRequest("No user logged");
             }
             //for external logins
             /*
@@ -574,23 +559,16 @@ namespace api.Controllers
         [HttpGet, Route("own/{teamID}")]
         public async Task<ActionResult> DoesLoggedUserOwnTeam(string teamID)
         {
-            if(string.IsNullOrEmpty(teamID))
-            {
-                return BadRequest("No team");
-            }
-
             User? loggedUser = await _identityService.GetLoggedUser();
             if (loggedUser == null)
             {
-                return Unauthorized("Unauthorized");
+                return BadRequest("No user logged");
             }
-
             Team? team = await _pokeTeamService.GetTeamModel(teamID);
             if(team == null || team.PlayerId == null || team.PlayerId != loggedUser.Id)
             {
                 return Unauthorized("Unauthorized");
             }
-
             return Ok(true);
         }
 

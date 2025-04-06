@@ -4,15 +4,8 @@ namespace api.DTOs
 {
     public class UserUpdateDTO
     {
-        [Required(ErrorMessage = "The current username is required")]
-        [StringLength(32, ErrorMessage = "The current username must be shorter than 32 characters")]
-        public string CurrentUserName { get; set; }
-
         [StringLength(32, ErrorMessage = "The new username must be shorter than 32 characters")]
         public string? NewUserName { get; set; }
-
-        [StringLength(256, ErrorMessage = "The current email must be shorter than 32 characters")]
-        public string? CurrentEmail { get; set; }
 
         [StringLength(256, ErrorMessage = "The new email must be shorter than 32 characters")]
         public string? NewEmail { get; set; }
