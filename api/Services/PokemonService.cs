@@ -146,52 +146,39 @@ namespace api.Services
             };
         }
 
-        public Pokemon BreakPokemonDTO(PokemonDTO pokemonDTO, string teamId)
+        public Pokemon BreakPokemonDTO(PokemonDTO? pokemonDTO, string teamId)
         {
-            JsonSerializerOptions options = new JsonSerializerOptions { IncludeFields = false };
-
-            string? serializedIVs = null;
-            string? serializedEVs = null;
-            try
-            {
-                serializedIVs = pokemonDTO.ivs != null ? JsonSerializer.Serialize(pokemonDTO.ivs, options) : null;
-                serializedEVs = pokemonDTO.evs != null ? JsonSerializer.Serialize(pokemonDTO.evs, options) : null;
-            }
-            catch (Exception ex)
-            {
-                Printer.Log("Error serializing ivs/evs on team upload ", ex);
-            }
             return new Pokemon
             {
                 TeamId = teamId,
-                DexNumber = pokemonDTO.DexNumber,
-                Nickname = pokemonDTO.Nickname,
-                Type1Identifier = pokemonDTO.Types.Type1?.Identifier,
-                Type2Identifier = pokemonDTO.Types.Type2?.Identifier,
-                TeraTypeIdentifier = pokemonDTO.TeraType?.Identifier,
-                ItemIdentifier = pokemonDTO.Item?.Identifier,
-                AbilityIdentifier = pokemonDTO.Ability?.Identifier,
-                NatureIdentifier = pokemonDTO.Nature?.Identifier,
-                Move1Identifier = pokemonDTO.Moves[0]?.Identifier,
-                Move2Identifier = pokemonDTO.Moves[1]?.Identifier,
-                Move3Identifier = pokemonDTO.Moves[2]?.Identifier,
-                Move4Identifier = pokemonDTO.Moves[3]?.Identifier,
-                Level = pokemonDTO.Level,
-                Shiny = pokemonDTO.Shiny,
-                Gender = pokemonDTO.Gender,
-                Notes = pokemonDTO.Notes,
-                IV_hp = pokemonDTO.ivs?[0]?.Value,
-                IV_atk = pokemonDTO.ivs?[1]?.Value,
-                IV_def = pokemonDTO.ivs?[2]?.Value,
-                IV_spa = pokemonDTO.ivs?[3]?.Value,
-                IV_spd = pokemonDTO.ivs?[4]?.Value,
-                IV_spe = pokemonDTO.ivs?[5]?.Value,
-                EV_hp = pokemonDTO.evs?[0]?.Value,
-                EV_atk = pokemonDTO.evs?[1]?.Value,
-                EV_def = pokemonDTO.evs?[2]?.Value,
-                EV_spa = pokemonDTO.evs?[3]?.Value,
-                EV_spd = pokemonDTO.evs?[4]?.Value,
-                EV_spe = pokemonDTO.evs?[5]?.Value
+                DexNumber = pokemonDTO?.DexNumber,
+                Nickname = pokemonDTO?.Nickname,
+                Type1Identifier = pokemonDTO?.Types?.Type1?.Identifier,
+                Type2Identifier = pokemonDTO?.Types?.Type2?.Identifier,
+                TeraTypeIdentifier = pokemonDTO?.TeraType?.Identifier,
+                ItemIdentifier = pokemonDTO?.Item?.Identifier,
+                AbilityIdentifier = pokemonDTO?.Ability?.Identifier,
+                NatureIdentifier = pokemonDTO?.Nature?.Identifier,
+                Move1Identifier = pokemonDTO?.Moves?[0]?.Identifier,
+                Move2Identifier = pokemonDTO?.Moves?[1]?.Identifier,
+                Move3Identifier = pokemonDTO?.Moves?[2]?.Identifier,
+                Move4Identifier = pokemonDTO?.Moves?[3]?.Identifier,
+                Level = pokemonDTO?.Level,
+                Shiny = pokemonDTO?.Shiny,
+                Gender = pokemonDTO?.Gender,
+                Notes = pokemonDTO?.Notes,
+                IV_hp = pokemonDTO?.ivs?[0]?.Value,
+                IV_atk = pokemonDTO?.ivs?[1]?.Value,
+                IV_def = pokemonDTO?.ivs?[2]?.Value,
+                IV_spa = pokemonDTO?.ivs?[3]?.Value,
+                IV_spd = pokemonDTO?.ivs?[4]?.Value,
+                IV_spe = pokemonDTO?.ivs?[5]?.Value,
+                EV_hp = pokemonDTO?.evs?[0]?.Value,
+                EV_atk = pokemonDTO?.evs?[1]?.Value,
+                EV_def = pokemonDTO?.evs?[2]?.Value,
+                EV_spa = pokemonDTO?.evs?[3]?.Value,
+                EV_spd = pokemonDTO?.evs?[4]?.Value,
+                EV_spe = pokemonDTO?.evs?[5]?.Value
             };
         }
 
