@@ -1,5 +1,5 @@
-import { Component, inject, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, skip } from 'rxjs';
 import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
@@ -22,13 +22,13 @@ export class UserPageComponent
   store = inject(Store);
   searchService = inject(SearchService);
   route = inject(ActivatedRoute);
+  router = inject(Router);
 
   selectedLang$: Observable<string> = this.store.select(selectLang);
   loggedUser$ = this.store.select(selectLoggedUser);
   loggedUsername?: string;
 
-  @Input() username?: string;
-
+  username?: string;
   user?: User;
   userTeams: TeamPreviewData[] = [];
   loading: boolean = false;
@@ -39,6 +39,8 @@ export class UserPageComponent
 
   ngOnInit()
   {
+    console.log("url ", this.router.url);
+    this.username = this.router.url.slice(1);
     this.route.params.subscribe(params =>
     {
       this.username = params["username"];

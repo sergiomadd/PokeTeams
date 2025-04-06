@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes, UrlSegment } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 
 import { NotFoundComponent } from './shared/components/dumb/not-found/not-found.component';
@@ -16,15 +16,8 @@ const routes: Routes =
     loadChildren: () => import('./features/search/search.module').then((m) => m.SearchModule),
   },
   {
-    matcher: (url) => 
-    {
-      if (url.length === 1 && url[0].path.includes('@')) 
-      {
-        return {consumed: url, posParams: {username: new UrlSegment(url[0].path.slice(1), {})}};
-      }
-      return null;
-    },
-    loadChildren: () => import('./features/user/user.module').then((m) => m.UserModule),
+    path: 'user',
+    loadChildren: () => import('./features/user/user.module').then((m) => m.UserModule)
   },
   { 
     path: 'edit/:id',
