@@ -149,7 +149,7 @@ namespace api.Services.PokedexServices
         {
             EffectivenessDTO? effectiveness = null;
             List<Tuple<PokeTypeDTO, double>> allValues = new List<Tuple<PokeTypeDTO, double>>();
-            List<Type_efficacy> typeEfficacyList = await _pokedexContext.Type_efficacy.Where(t => t.damage_type_id == id && t.damage_factor != 100).ToListAsync();
+            List<type_efficacy> typeEfficacyList = await _pokedexContext.Type_efficacy.Where(t => t.damage_type_id == id && t.damage_factor != 100).ToListAsync();
             if (typeEfficacyList != null)
             {
                 foreach (var typeEfficacy in typeEfficacyList)
@@ -162,7 +162,7 @@ namespace api.Services.PokedexServices
                 }
                 effectiveness = new EffectivenessDTO(allValues);
             }
-            if(effectiveness != null && effectiveness.AllValues.IsNullOrEmpty())
+            if(effectiveness != null && (effectiveness.AllValues == null || !effectiveness.AllValues.Any()))
             {
                 effectiveness = null;
             }
@@ -173,7 +173,7 @@ namespace api.Services.PokedexServices
         {
             EffectivenessDTO? effectiveness = null;
             List<Tuple<PokeTypeDTO, double>> allValues = new List<Tuple<PokeTypeDTO, double>>(); ;
-            List<Type_efficacy> typeEfficacyList = await _pokedexContext.Type_efficacy.Where(t => t.target_type_id == id && t.damage_factor != 100).ToListAsync();
+            List<type_efficacy> typeEfficacyList = await _pokedexContext.Type_efficacy.Where(t => t.target_type_id == id && t.damage_factor != 100).ToListAsync();
             if (typeEfficacyList != null)
             {
                 foreach (var typeEfficacy in typeEfficacyList)
@@ -186,7 +186,7 @@ namespace api.Services.PokedexServices
                 }
                 effectiveness = new EffectivenessDTO(allValues);
             }
-            if (effectiveness != null && effectiveness.AllValues.IsNullOrEmpty())
+            if (effectiveness != null && (effectiveness.AllValues == null || !effectiveness.AllValues.Any()))
             {
                 effectiveness = null;
             }
@@ -196,13 +196,13 @@ namespace api.Services.PokedexServices
         public async Task<PokeTypesDTO?> GetPokemonTypes(int id, int langId)
         {
             PokeTypeDTO? type1 = null;
-            Pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 1);
+            pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 1);
             if (pokemonType1 != null)
             {
                 type1 = GetTypeById(pokemonType1.type_id, langId).Result;
             }
             PokeTypeDTO? type2 = null;
-            Pokemon_types? pokemonType2 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 2);
+            pokemon_types? pokemonType2 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 2);
             if (pokemonType2 != null)
             {
                 type2 = GetTypeById(pokemonType2.type_id, langId).Result;
@@ -221,13 +221,13 @@ namespace api.Services.PokedexServices
             PokeTypesWithEffectivenessDTO? pokeTypes = null;
 
             PokeTypeWithEffectivenessDTO? type1 = null;
-            Pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 1);
+            pokemon_types? pokemonType1 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 1);
             if (pokemonType1 != null)
             {
                 type1 = await GetTypeWithEffectivenessById(pokemonType1.type_id, langId);
             }
             PokeTypeWithEffectivenessDTO? type2 = null;
-            Pokemon_types? pokemonType2 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 2);
+            pokemon_types? pokemonType2 = await _pokedexContext.Pokemon_types.FirstOrDefaultAsync(t => t.pokemon_id == id && t.slot == 2);
             if (pokemonType2 != null)
             {
                 type2 = await GetTypeWithEffectivenessById(pokemonType2.type_id, langId);

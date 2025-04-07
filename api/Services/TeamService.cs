@@ -39,7 +39,6 @@ using System.Composition;
 using System.Security.Cryptography.Xml;
 using System.Xml.Serialization;
 using Microsoft.IdentityModel.Tokens;
-using Azure;
 
 namespace api.Services
 {
@@ -137,7 +136,7 @@ namespace api.Services
         public async Task<Team?> BreakTeamDTO(TeamDTO inputTeam, string newTeamId)
         {
             Team newTeam = null;
-            if (inputTeam != null && !inputTeam.Pokemons.IsNullOrEmpty())
+            if (inputTeam != null && inputTeam.Pokemons != null && inputTeam.Pokemons.Any())
             {
                 List<Pokemon> pokemons = new List<Pokemon>();
                 foreach (PokemonDTO pokemonDTO in inputTeam.Pokemons)
@@ -683,8 +682,7 @@ namespace api.Services
             {
                 return "Rental code must be shorter than 32 characters";
             }
-            if (!inputTeam.Tags.IsNullOrEmpty()
-                && inputTeam.Tags.Any(t => t != null
+            if (inputTeam.Tags != null && inputTeam.Tags.Any(t => t != null
                 && (t.Name.Length > 16
                 || t.Identifier.Length > 16
                 || (t.Description != null && t.Description.Length > 256)
@@ -692,8 +690,7 @@ namespace api.Services
             {
                 return "Tag validation error";
             }
-            if (!inputTeam.Pokemons.IsNullOrEmpty()
-                && inputTeam.Pokemons.Any(p => p != null
+            if (inputTeam.Pokemons != null && inputTeam.Pokemons.Any(p => p != null
                 && ((p.Nickname != null && p.Nickname.Length > 16)
                 || (p.Notes != null && p.Notes.Length > 2048)
                 || (p.Level != null && (p.Level < 1 || p.Level > 100)))))
@@ -713,11 +710,11 @@ namespace api.Services
             {
                 return "Wrong teams per page";
             }
-            if (!searchQuery.Queries.IsNullOrEmpty() && searchQuery.Queries.Any(q => q.Type == "user" && q.Name.Length > 32))
+            if (searchQuery.Queries != null && searchQuery.Queries.Any(q => q.Type == "user" && q.Name.Length > 32))
             {
                 return "Player name must be shorter than 32 characters";
             }
-            if (!searchQuery.Queries.IsNullOrEmpty() && searchQuery.Queries.Any(q => q.Type == "tournament" && q.Name.Length > 256))
+            if (searchQuery.Queries != null && searchQuery.Queries.Any(q => q.Type == "tournament" && q.Name.Length > 256))
             {
                 return "Tournament name must be shorter than 32 characters";
             }

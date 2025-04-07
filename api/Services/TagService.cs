@@ -2,7 +2,6 @@
 using api.DTOs;
 using api.Models.DBPoketeamModels;
 using api.Util;
-using Azure;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Services

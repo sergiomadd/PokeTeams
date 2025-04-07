@@ -91,10 +91,10 @@ namespace api.Services.PokedexServices
         public async Task<List<NatureDTO>> GetAllNatures(int langId)
         {
             List<NatureDTO> natureDTOs = new List<NatureDTO>();
-            List<Natures> naturesList = await _pokedexContext.Natures.ToListAsync();
+            List<natures> naturesList = await _pokedexContext.Natures.ToListAsync();
             if (naturesList != null)
             {
-                foreach (Natures naturesItem in naturesList)
+                foreach (natures naturesItem in naturesList)
                 {
                     var query =
                         from natures in _pokedexContext.Natures.Where(i => i.id == naturesItem.id)
