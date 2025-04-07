@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace api.Models.DBModels
 {
-    public class Move_meta_stat_changes
+    public class move_meta_stat_changes
     {
         [Key]
         public int move_id { get; set; }

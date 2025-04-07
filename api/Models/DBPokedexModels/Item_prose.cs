@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Models.DBModels
 {
-    public class Item_prose
+    public class item_prose
     {
         [Key]
         public int item_id { get; set; }

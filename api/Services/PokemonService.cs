@@ -212,7 +212,7 @@ namespace api.Services
 
         public async Task<PokemonDataDTO?> GetPokemonDataByName(string name, int langId)
         {
-            Pokemon_species_names? pokemonName = await _pokedexContext.Pokemon_species_names.FirstOrDefaultAsync(p => p.name == name);
+            pokemon_species_names? pokemonName = await _pokedexContext.Pokemon_species_names.FirstOrDefaultAsync(p => p.name == name);
             if (pokemonName != null)
             {
                 return await GetPokemonDataById(pokemonName.pokemon_species_id, langId);
@@ -304,7 +304,7 @@ namespace api.Services
 
         private async Task<EvolutionDTO?> GetPokemonPreEvolution(int id, int langId)
         {
-            Pokemon_species? pokemonSpeciesPreEvolution = await _pokedexContext.Pokemon_species.FirstOrDefaultAsync(p => p.id == id);
+            pokemon_species? pokemonSpeciesPreEvolution = await _pokedexContext.Pokemon_species.FirstOrDefaultAsync(p => p.id == id);
             if (pokemonSpeciesPreEvolution != null && pokemonSpeciesPreEvolution.evolves_from_species_id != null)
             {
                 int newID = pokemonSpeciesPreEvolution.evolves_from_species_id ?? 0;
@@ -322,10 +322,10 @@ namespace api.Services
         private async Task<List<EvolutionDTO?>> GetPokemonEvolutions(int id, int langId)
         {
             List<EvolutionDTO?> evolutions = new List<EvolutionDTO?>();
-            List<Pokemon_species> pokemonSpeciesEvolutionList = await _pokedexContext.Pokemon_species.Where(p => p.evolves_from_species_id == id).ToListAsync();
+            List<pokemon_species> pokemonSpeciesEvolutionList = await _pokedexContext.Pokemon_species.Where(p => p.evolves_from_species_id == id).ToListAsync();
             if (pokemonSpeciesEvolutionList.Count() > 0)
             {
-                foreach (Pokemon_species pokemonSpeciesEvolution in pokemonSpeciesEvolutionList)
+                foreach (pokemon_species pokemonSpeciesEvolution in pokemonSpeciesEvolutionList)
                 {
                     if (pokemonSpeciesEvolution != null)
                     {

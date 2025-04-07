@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Models.DBModels
 {
-    public class Type_names
+    public class type_names
     {
         [Key]
         public int type_id { get; set; }

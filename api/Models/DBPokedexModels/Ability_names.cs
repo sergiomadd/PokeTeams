@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace api.Models.DBModels
 {
-    public class Ability_names
+    public class ability_names
     {
         [Key]
         public int ability_id { get; set; }

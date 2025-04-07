@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace api.Models.DBPokedexModels
 {
-    public class Abilities
+    public class abilities
     {
         [Key]
         public int id { get; set; }

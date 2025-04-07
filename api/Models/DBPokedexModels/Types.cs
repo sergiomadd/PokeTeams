@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace api.Models.DBModels
 {
-    public class Types
+    public class types
     {
         [Key]
         public int id { get; set; }

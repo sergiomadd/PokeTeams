@@ -185,7 +185,7 @@ namespace api.Services.PokedexServices
 
             if (move != null && move.PokeType != null)
             {
-                Types? types = await _pokedexContext.Types.FirstOrDefaultAsync(t => t.identifier == move.PokeType.Identifier);
+                types? types = await _pokedexContext.Types.FirstOrDefaultAsync(t => t.identifier == move.PokeType.Identifier);
                 if (types != null)
                 {
                     move.PokeType.EffectivenessAttack = await _typeService.GetTypeEffectivenessAttack(types.id, langId);

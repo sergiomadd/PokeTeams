@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace api.Models.DBModels
 {
     [Keyless]
-    public class Pokemon_stats
+    public class pokemon_stats
     {
         public int pokemon_id { get; set; }
         public int stat_id { get; set; }

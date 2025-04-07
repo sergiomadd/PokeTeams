@@ -4,7 +4,7 @@ using static api.DTOs.PokemonDTOs.MoveDTO;
 
 namespace api.Models.DBModels
 {
-    public class Move_meta
+    public class move_meta
     {
         [Key]
         public int move_id { get; set; }

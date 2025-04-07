@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Models.DBModels
 {
-    public class Move_target_prose
+    public class move_target_prose
     {
         [Key]
         public int move_target_id { get; set; }
