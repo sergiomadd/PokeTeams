@@ -14,8 +14,6 @@ using Microsoft.OpenApi.Models;
 using api.Services.PokedexServices;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMvc();
@@ -25,8 +23,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddDbContext<PokedexContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:SQLServerPokedex"]), ServiceLifetime.Scoped);
-builder.Services.AddDbContext<PokeTeamContext>(options => options.UseSqlServer(builder.Configuration["ConnectionStrings:SQLServerPoketeam"]), ServiceLifetime.Scoped);
+builder.Services.AddDbContext<PokedexContext>(options => options.UseNpgsql(builder.Configuration["ConnectionStrings:PostgrePokedex"]), ServiceLifetime.Scoped);
+builder.Services.AddDbContext<PokeTeamContext>(options => options.UseNpgsql(builder.Configuration["ConnectionStrings:PostgrePoketeam"]), ServiceLifetime.Scoped);
 builder.Services.AddScoped<IPokedexContext, PokedexContext>();
 builder.Services.AddScoped<IPokeTeamContext, PokeTeamContext>();
 
@@ -191,7 +189,7 @@ if (app.Environment.IsDevelopment())
 //app.UseRateLimiter();
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.MapStaticAssets();
 
 app.UseAuthentication();
 app.UseAuthorization();
