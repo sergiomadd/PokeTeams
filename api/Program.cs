@@ -170,13 +170,8 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
 });
 */
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "API Name", Version = "v1" });
+builder.Services.AddSwaggerGen();
 
-    // Register the operation filter to add Accept-Language header
-    c.OperationFilter<AcceptLanguageHeaderParameter>();
-});
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
