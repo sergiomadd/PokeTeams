@@ -212,7 +212,7 @@ namespace api.Services
 
         public async Task<PokemonDataDTO?> GetPokemonDataByName(string name, int langId)
         {
-            pokemon_species_names? pokemonName = await _pokedexContext.Pokemon_species_names.FirstOrDefaultAsync(p => p.name == name);
+            pokemon_species_names? pokemonName = await _pokedexContext.pokemon_species_names.FirstOrDefaultAsync(p => p.name == name);
             if (pokemonName != null)
             {
                 return await GetPokemonDataById(pokemonName.pokemon_species_id, langId);
@@ -256,13 +256,13 @@ namespace api.Services
         private async Task<LocalizedText?> GetPokemonName(int id, int langId)
         {
             var query =
-                from pokemonSpecies in _pokedexContext.Pokemon_species.Where(p => p.id == id)
+                from pokemonSpecies in _pokedexContext.pokemon_species.Where(p => p.id == id)
 
-                join pokemonSpeciesNames in _pokedexContext.Pokemon_species_names
+                join pokemonSpeciesNames in _pokedexContext.pokemon_species_names
                 on new { Key1 = pokemonSpecies.id, Key2 = langId } equals new { Key1 = pokemonSpeciesNames.pokemon_species_id, Key2 = pokemonSpeciesNames.local_language_id } into pokemonSpeciesNamesJoin
                 from pokemonSpeciesNames in pokemonSpeciesNamesJoin.DefaultIfEmpty()
 
-                join pokemonSpeciesNamesDefault in _pokedexContext.Pokemon_species_names
+                join pokemonSpeciesNamesDefault in _pokedexContext.pokemon_species_names
                 on new { Key1 = pokemonSpecies.id, Key2 = (int)Lang.en } equals new { Key1 = pokemonSpeciesNamesDefault.pokemon_species_id, Key2 = pokemonSpeciesNamesDefault.local_language_id } into pokemonSpeciesNamesDefaultJoin
                 from pokemonSpeciesNamesDefault in pokemonSpeciesNamesDefaultJoin.DefaultIfEmpty()
 
@@ -279,14 +279,14 @@ namespace api.Services
             for (int i = 1; i < 7; i++)
             {
                 var query =
-                    from pokemonStats in _pokedexContext.Pokemon_stats.Where(s => s.pokemon_id == id && s.stat_id == i)
-                    from stats in _pokedexContext.Stats.Where(s => s.id == i)
+                    from pokemonStats in _pokedexContext.pokemon_stats.Where(s => s.pokemon_id == id && s.stat_id == i)
+                    from stats in _pokedexContext.stats.Where(s => s.id == i)
 
-                    join statNames in _pokedexContext.Stat_names
+                    join statNames in _pokedexContext.stat_names
                     on new { Key1 = stats.id, Key2 = langId } equals new { Key1 = statNames.stat_id, Key2 = statNames.local_language_id } into statNamesJoin
                     from statNames in statNamesJoin.DefaultIfEmpty()
 
-                    join statNamesDefault in _pokedexContext.Stat_names
+                    join statNamesDefault in _pokedexContext.stat_names
                     on new { Key1 = stats.id, Key2 = (int)Lang.en } equals new { Key1 = statNamesDefault.stat_id, Key2 = statNamesDefault.local_language_id } into statNamesDefaultJoin
                     from statNamesDefault in statNamesDefaultJoin.DefaultIfEmpty()
 
@@ -304,7 +304,7 @@ namespace api.Services
 
         private async Task<EvolutionDTO?> GetPokemonPreEvolution(int id, int langId)
         {
-            pokemon_species? pokemonSpeciesPreEvolution = await _pokedexContext.Pokemon_species.FirstOrDefaultAsync(p => p.id == id);
+            pokemon_species? pokemonSpeciesPreEvolution = await _pokedexContext.pokemon_species.FirstOrDefaultAsync(p => p.id == id);
             if (pokemonSpeciesPreEvolution != null && pokemonSpeciesPreEvolution.evolves_from_species_id != null)
             {
                 int newID = pokemonSpeciesPreEvolution.evolves_from_species_id ?? 0;
@@ -322,7 +322,7 @@ namespace api.Services
         private async Task<List<EvolutionDTO?>> GetPokemonEvolutions(int id, int langId)
         {
             List<EvolutionDTO?> evolutions = new List<EvolutionDTO?>();
-            List<pokemon_species> pokemonSpeciesEvolutionList = await _pokedexContext.Pokemon_species.Where(p => p.evolves_from_species_id == id).ToListAsync();
+            List<pokemon_species> pokemonSpeciesEvolutionList = await _pokedexContext.pokemon_species.Where(p => p.evolves_from_species_id == id).ToListAsync();
             if (pokemonSpeciesEvolutionList.Count() > 0)
             {
                 foreach (pokemon_species pokemonSpeciesEvolution in pokemonSpeciesEvolutionList)
@@ -347,9 +347,9 @@ namespace api.Services
             string? statName = null;
 
             var query =
-                from stats in _pokedexContext.Stats.Where(i => i.identifier == identifier)
+                from stats in _pokedexContext.stats.Where(i => i.identifier == identifier)
 
-                join statNames in _pokedexContext.Stat_names
+                join statNames in _pokedexContext.stat_names
                 on new { Key1 = stats.id, Key2 = langId } equals new { Key1 = statNames.stat_id, Key2 = statNames.local_language_id } into statNamesJoin
                 from statNames in statNamesJoin.DefaultIfEmpty()
 
@@ -365,9 +365,9 @@ namespace api.Services
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from pokemonNames in _pokedexContext.Pokemon_species_names.Where(p => p.name.StartsWith(key) && p.local_language_id == langId)
+                from pokemonNames in _pokedexContext.pokemon_species_names.Where(p => p.name.StartsWith(key) && p.local_language_id == langId)
 
-                join pokemonNamesDefault in _pokedexContext.Pokemon_species_names
+                join pokemonNamesDefault in _pokedexContext.pokemon_species_names
                 on new { Key1 = pokemonNames.pokemon_species_id, Key2 = (int)Lang.en } equals new { Key1 = pokemonNamesDefault.pokemon_species_id, Key2 = pokemonNamesDefault.local_language_id } into pokemonNamesDefaultJoin
                 from pokemonNamesDefault in pokemonNamesDefaultJoin.DefaultIfEmpty()
 

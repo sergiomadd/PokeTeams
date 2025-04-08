@@ -24,21 +24,21 @@ namespace api.Services.PokedexServices
             ItemDTO? item = null;
 
             var query =
-                from items in _pokedexContext.Items.Where(i => i.identifier == identifier)
+                from items in _pokedexContext.items.Where(i => i.identifier == identifier)
 
-                join itemNames in _pokedexContext.Item_names
+                join itemNames in _pokedexContext.item_names
                 on new { Key1 = items.id, Key2 = langId } equals new { Key1 = itemNames.item_id, Key2 = itemNames.local_language_id } into itemNamesJoin
                 from itemNames in itemNamesJoin.DefaultIfEmpty()
 
-                join itemNamesDefault in _pokedexContext.Item_names
+                join itemNamesDefault in _pokedexContext.item_names
                 on new { Key1 = items.id, Key2 = (int)Lang.en } equals new { Key1 = itemNamesDefault.item_id, Key2 = itemNamesDefault.local_language_id } into itemNamesDefaultJoin
                 from itemNamesDefault in itemNamesDefaultJoin.DefaultIfEmpty()
 
-                join itemProses in _pokedexContext.Item_prose
+                join itemProses in _pokedexContext.item_prose
                 on new { Key1 = items.id, Key2 = langId } equals new { Key1 = itemProses.item_id, Key2 = itemProses.local_language_id } into itemProsesJoin
                 from itemProses in itemProsesJoin.DefaultIfEmpty()
 
-                join itemProsesDefault in _pokedexContext.Item_prose
+                join itemProsesDefault in _pokedexContext.item_prose
                 on new { Key1 = items.id, Key2 = (int)Lang.en } equals new { Key1 = itemProsesDefault.item_id, Key2 = itemProsesDefault.local_language_id } into itemProsesDefaultJoin
                 from itemProsesDefault in itemProsesDefaultJoin.DefaultIfEmpty()
 
@@ -62,25 +62,25 @@ namespace api.Services.PokedexServices
 
             var query =
 
-                from itemNamesInput in _pokedexContext.Item_names.Where(i => i.name == name)
+                from itemNamesInput in _pokedexContext.item_names.Where(i => i.name == name)
 
-                join items in _pokedexContext.Items
+                join items in _pokedexContext.items
                 on new { Key1 = itemNamesInput.item_id } equals new { Key1 = items.id } into itemsJoin
                 from items in itemsJoin.DefaultIfEmpty()
 
-                join itemNames in _pokedexContext.Item_names
+                join itemNames in _pokedexContext.item_names
                 on new { Key1 = items.id, Key2 = langId } equals new { Key1 = itemNames.item_id, Key2 = itemNames.local_language_id } into itemNamesJoin
                 from itemNames in itemNamesJoin.DefaultIfEmpty()
 
-                join itemNamesDefault in _pokedexContext.Item_names
+                join itemNamesDefault in _pokedexContext.item_names
                 on new { Key1 = items.id, Key2 = (int)Lang.en } equals new { Key1 = itemNamesDefault.item_id, Key2 = itemNamesDefault.local_language_id } into itemNamesDefaultJoin
                 from itemNamesDefault in itemNamesDefaultJoin.DefaultIfEmpty()
 
-                join itemProses in _pokedexContext.Item_prose
+                join itemProses in _pokedexContext.item_prose
                 on new { Key1 = items.id, Key2 = langId } equals new { Key1 = itemProses.item_id, Key2 = itemProses.local_language_id } into itemProsesJoin
                 from itemProses in itemProsesJoin.DefaultIfEmpty()
 
-                join itemProsesDefault in _pokedexContext.Item_prose
+                join itemProsesDefault in _pokedexContext.item_prose
                 on new { Key1 = items.id, Key2 = (int)Lang.en } equals new { Key1 = itemProsesDefault.item_id, Key2 = itemProsesDefault.local_language_id } into itemProsesDefaultJoin
                 from itemProsesDefault in itemProsesDefaultJoin.DefaultIfEmpty()
 
@@ -106,9 +106,9 @@ namespace api.Services.PokedexServices
             string pathStart = "https://localhost:7134/images/sprites/items/";
 
             var query =
-                from itemNames in _pokedexContext.Item_names.Where(i => i.name.StartsWith(key) && i.local_language_id == langId)
+                from itemNames in _pokedexContext.item_names.Where(i => i.name.StartsWith(key) && i.local_language_id == langId)
 
-                join items in _pokedexContext.Items
+                join items in _pokedexContext.items
                 on new { Key1 = itemNames.item_id } equals new { Key1 = items.id } into itemsJoin
                 from items in itemsJoin.DefaultIfEmpty()
 

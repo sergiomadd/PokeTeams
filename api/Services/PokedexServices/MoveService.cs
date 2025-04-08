@@ -25,13 +25,13 @@ namespace api.Services.PokedexServices
             MoveDTO? move = null;
 
             var query =
-                from moves in _pokedexContext.Moves.Where(m => m.identifier == identifier)
+                from moves in _pokedexContext.moves.Where(m => m.identifier == identifier)
 
-                join moveNames in _pokedexContext.Move_names
+                join moveNames in _pokedexContext.move_names
                 on new { Key1 = moves.id, Key2 = langId } equals new { Key1 = moveNames.move_id, Key2 = moveNames.local_language_id } into moveNamesJoin
                 from moveNames in moveNamesJoin.DefaultIfEmpty()
 
-                join moveNamesDefault in _pokedexContext.Move_names
+                join moveNamesDefault in _pokedexContext.move_names
                 on new { Key1 = moves.id, Key2 = (int)Lang.en } equals new { Key1 = moveNamesDefault.move_id, Key2 = moveNamesDefault.local_language_id } into moveNamesDefaultJoin
                 from moveNamesDefault in moveNamesDefaultJoin.DefaultIfEmpty()
 
@@ -52,73 +52,73 @@ namespace api.Services.PokedexServices
             MoveDTO? move = null;
 
             var query =
-                from moveNamesInput in _pokedexContext.Move_names.Where(m => m.name == name)
+                from moveNamesInput in _pokedexContext.move_names.Where(m => m.name == name)
 
-                join moves in _pokedexContext.Moves
+                join moves in _pokedexContext.moves
                 on new { Key1 = moveNamesInput.move_id } equals new { Key1 = moves.id } into movesJoin
                 from moves in movesJoin.DefaultIfEmpty()
 
-                join moveNames in _pokedexContext.Move_names
+                join moveNames in _pokedexContext.move_names
                 on new { Key1 = moves.id, Key2 = langId } equals new { Key1 = moveNames.move_id, Key2 = moveNames.local_language_id } into moveNamesJoin
                 from moveNames in moveNamesJoin.DefaultIfEmpty()
 
-                join moveNamesDefault in _pokedexContext.Move_names
+                join moveNamesDefault in _pokedexContext.move_names
                 on new { Key1 = moves.id, Key2 = (int)Lang.en } equals new { Key1 = moveNamesDefault.move_id, Key2 = moveNamesDefault.local_language_id } into moveNamesDefaultJoin
                 from moveNamesDefault in moveNamesDefaultJoin.DefaultIfEmpty()
 
-                join types in _pokedexContext.Types
+                join types in _pokedexContext.types
                 on new { Key1 = moves.type_id } equals new { Key1 = types.id } into typesJoin
                 from types in typesJoin.DefaultIfEmpty()
 
-                join typeNames in _pokedexContext.Type_names
+                join typeNames in _pokedexContext.type_names
                 on new { Key1 = moves.type_id, Key2 = langId } equals new { Key1 = typeNames.type_id, Key2 = typeNames.local_language_id } into typeNamesJoin
                 from typeNames in typeNamesJoin.DefaultIfEmpty()
 
-                join typeNamesDefault in _pokedexContext.Type_names
+                join typeNamesDefault in _pokedexContext.type_names
                 on new { Key1 = moves.type_id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
                 from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
 
-                join damageClass in _pokedexContext.Move_damage_class_prose
+                join damageClass in _pokedexContext.move_damage_class_prose
                 on new { Key1 = (int)moves.damage_class_id, Key2 = langId } equals new { Key1 = damageClass.move_damage_class_id, Key2 = damageClass.local_language_id } into damageClassJoin
                 from damageClass in damageClassJoin.DefaultIfEmpty()
 
-                join damageClassDefault in _pokedexContext.Move_damage_class_prose
+                join damageClassDefault in _pokedexContext.move_damage_class_prose
                 on new { Key1 = (int)moves.damage_class_id, Key2 = (int)Lang.en } equals new { Key1 = damageClassDefault.move_damage_class_id, Key2 = damageClassDefault.local_language_id } into damageClassDefaultJoin
                 from damageClassDefault in damageClassDefaultJoin.DefaultIfEmpty()
 
-                join target in _pokedexContext.Move_target_prose
+                join target in _pokedexContext.move_target_prose
                 on new { Key1 = (int)moves.target_id, Key2 = langId } equals new { Key1 = target.move_target_id, Key2 = target.local_language_id } into targetJoin
                 from target in targetJoin.DefaultIfEmpty()
 
-                join targetDefault in _pokedexContext.Move_target_prose
+                join targetDefault in _pokedexContext.move_target_prose
                 on new { Key1 = (int)moves.target_id, Key2 = (int)Lang.en } equals new { Key1 = targetDefault.move_target_id, Key2 = targetDefault.local_language_id } into targetDefaultJoin
                 from targetDefault in targetDefaultJoin.DefaultIfEmpty()
 
-                join effect in _pokedexContext.Move_effect_prose
+                join effect in _pokedexContext.move_effect_prose
                 on new { Key1 = (int)moves.effect_id, Key2 = langId } equals new { Key1 = effect.move_effect_id, Key2 = effect.local_language_id } into effectJoin
                 from effect in effectJoin.DefaultIfEmpty()
 
-                join effectDefault in _pokedexContext.Move_effect_prose
+                join effectDefault in _pokedexContext.move_effect_prose
                 on new { Key1 = (int)moves.effect_id, Key2 = (int)Lang.en } equals new { Key1 = effectDefault.move_effect_id, Key2 = effectDefault.local_language_id } into effectDefaultJoin
                 from effectDefault in effectDefaultJoin.DefaultIfEmpty()
 
-                join meta in _pokedexContext.Move_meta
+                join meta in _pokedexContext.move_meta
                 on new { Key1 = moves.type_id } equals new { Key1 = meta.move_id } into metaJoin
                 from meta in metaJoin.DefaultIfEmpty()
 
-                join statChanges in _pokedexContext.Move_meta_stat_changes
+                join statChanges in _pokedexContext.move_meta_stat_changes
                 on new { Key1 = moves.id } equals new { Key1 = statChanges.move_id } into statChangesJoin
                 from statChanges in statChangesJoin.DefaultIfEmpty()
 
-                join statNames in _pokedexContext.Stat_names
+                join statNames in _pokedexContext.stat_names
                 on new { Key1 = statChanges.stat_id, Key2 = langId } equals new { Key1 = statNames.stat_id, Key2 = statNames.local_language_id } into statNamesJoin
                 from statNames in statNamesJoin.DefaultIfEmpty()
 
-                join statNamesDefault in _pokedexContext.Stat_names
+                join statNamesDefault in _pokedexContext.stat_names
                 on new { Key1 = statChanges.stat_id, Key2 = (int)Lang.en } equals new { Key1 = statNamesDefault.stat_id, Key2 = statNamesDefault.local_language_id } into statNamesDefaultJoin
                 from statNamesDefault in statNamesDefaultJoin.DefaultIfEmpty()
 
-                join stats in _pokedexContext.Stats
+                join stats in _pokedexContext.stats
                 on new { Key1 = statChanges.stat_id } equals new { Key1 = stats.id } into statsJoin
                 from stats in statsJoin.DefaultIfEmpty()
 
@@ -185,7 +185,7 @@ namespace api.Services.PokedexServices
 
             if (move != null && move.PokeType != null)
             {
-                types? types = await _pokedexContext.Types.FirstOrDefaultAsync(t => t.identifier == move.PokeType.Identifier);
+                types? types = await _pokedexContext.types.FirstOrDefaultAsync(t => t.identifier == move.PokeType.Identifier);
                 if (types != null)
                 {
                     move.PokeType.EffectivenessAttack = await _typeService.GetTypeEffectivenessAttack(types.id, langId);
@@ -201,25 +201,25 @@ namespace api.Services.PokedexServices
             MovePreviewDTO? movePreview = null;
 
             var query =
-                from moves in _pokedexContext.Moves.Where(m => m.identifier == identifier)
+                from moves in _pokedexContext.moves.Where(m => m.identifier == identifier)
 
-                join moveNames in _pokedexContext.Move_names
+                join moveNames in _pokedexContext.move_names
                 on new { Key1 = moves.id, Key2 = langId } equals new { Key1 = moveNames.move_id, Key2 = moveNames.local_language_id } into moveNamesJoin
                 from moveNames in moveNamesJoin.DefaultIfEmpty()
 
-                join moveNamesDefault in _pokedexContext.Move_names
+                join moveNamesDefault in _pokedexContext.move_names
                 on new { Key1 = moves.id, Key2 = (int)Lang.en } equals new { Key1 = moveNamesDefault.move_id, Key2 = moveNamesDefault.local_language_id } into moveNamesDefaultJoin
                 from moveNamesDefault in moveNamesDefaultJoin.DefaultIfEmpty()
 
-                join types in _pokedexContext.Types
+                join types in _pokedexContext.types
                 on new { Key1 = moves.type_id } equals new { Key1 = types.id } into typesJoin
                 from types in typesJoin.DefaultIfEmpty()
 
-                join typeNames in _pokedexContext.Type_names
+                join typeNames in _pokedexContext.type_names
                 on new { Key1 = types.id, Key2 = langId } equals new { Key1 = typeNames.type_id, Key2 = typeNames.local_language_id } into typeNamesJoin
                 from typeNames in typeNamesJoin.DefaultIfEmpty()
 
-                join typeNamesDefault in _pokedexContext.Type_names
+                join typeNamesDefault in _pokedexContext.type_names
                 on new { Key1 = types.id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
                 from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
 
@@ -245,13 +245,13 @@ namespace api.Services.PokedexServices
             var pathStart = "https://localhost:7134/images/sprites/types/generation-ix/";
 
             var query =
-                from moveNames in _pokedexContext.Move_names.Where(i => i.name.StartsWith(key) && i.local_language_id == langId)
+                from moveNames in _pokedexContext.move_names.Where(i => i.name.StartsWith(key) && i.local_language_id == langId)
 
-                join moves in _pokedexContext.Moves
+                join moves in _pokedexContext.moves
                 on new { Key1 = moveNames.move_id } equals new { Key1 = moves.id } into movesJoin
                 from moves in movesJoin.DefaultIfEmpty()
 
-                join types in _pokedexContext.Types
+                join types in _pokedexContext.types
                 on new { Key1 = moves.type_id } equals new { Key1 = types.id } into typesJoin
                 from types in typesJoin.DefaultIfEmpty()
 

@@ -24,21 +24,21 @@ namespace api.Services.PokedexServices
             AbilityDTO? ability = null;
 
             var query =
-                from abilities in _pokedexContext.Abilities.Where(i => i.identifier == identifier)
+                from abilities in _pokedexContext.abilities.Where(i => i.identifier == identifier)
 
-                join abilityNames in _pokedexContext.Ability_names
+                join abilityNames in _pokedexContext.ability_names
                 on new { Key1 = abilities.id, Key2 = langId } equals new { Key1 = abilityNames.ability_id, Key2 = abilityNames.local_language_id } into abilityNamesJoin
                 from abilityNames in abilityNamesJoin.DefaultIfEmpty()
 
-                join abilityNamesDefault in _pokedexContext.Ability_names
+                join abilityNamesDefault in _pokedexContext.ability_names
                 on new { Key1 = abilities.id, Key2 = (int)Lang.en } equals new { Key1 = abilityNamesDefault.ability_id, Key2 = abilityNamesDefault.local_language_id } into abilityNamesDefaultJoin
                 from abilityNamesDefault in abilityNamesDefaultJoin.DefaultIfEmpty()
 
-                join abilityProses in _pokedexContext.Ability_prose
+                join abilityProses in _pokedexContext.ability_prose
                 on new { Key1 = abilities.id, Key2 = langId } equals new { Key1 = abilityProses.ability_id, Key2 = abilityProses.local_language_id } into abilityProsesJoin
                 from abilityProses in abilityProsesJoin.DefaultIfEmpty()
 
-                join abilityProsesDefault in _pokedexContext.Ability_prose
+                join abilityProsesDefault in _pokedexContext.ability_prose
                 on new { Key1 = abilities.id, Key2 = (int)Lang.en } equals new { Key1 = abilityProsesDefault.ability_id, Key2 = abilityProsesDefault.local_language_id } into abilityProsesDefaultJoin
                 from abilityProsesDefault in abilityProsesDefaultJoin.DefaultIfEmpty()
 
@@ -63,25 +63,25 @@ namespace api.Services.PokedexServices
             AbilityDTO? ability = null;
 
             var query =
-                from abilityNamesInput in _pokedexContext.Ability_names.Where(i => i.name == name)
+                from abilityNamesInput in _pokedexContext.ability_names.Where(i => i.name == name)
 
-                join abilities in _pokedexContext.Abilities
+                join abilities in _pokedexContext.abilities
                 on new { Key1 = abilityNamesInput.ability_id } equals new { Key1 = abilities.id } into abilitiesJoin
                 from abilities in abilitiesJoin.DefaultIfEmpty()
 
-                join abilityNames in _pokedexContext.Ability_names
+                join abilityNames in _pokedexContext.ability_names
                 on new { Key1 = abilities.id, Key2 = langId } equals new { Key1 = abilityNames.ability_id, Key2 = abilityNames.local_language_id } into abilityNamesJoin
                 from abilityNames in abilityNamesJoin.DefaultIfEmpty()
 
-                join abilityNamesDefault in _pokedexContext.Ability_names
+                join abilityNamesDefault in _pokedexContext.ability_names
                 on new { Key1 = abilities.id, Key2 = (int)Lang.en } equals new { Key1 = abilityNamesDefault.ability_id, Key2 = abilityNamesDefault.local_language_id } into abilityNamesDefaultJoin
                 from abilityNamesDefault in abilityNamesDefaultJoin.DefaultIfEmpty()
 
-                join abilityProses in _pokedexContext.Ability_prose
+                join abilityProses in _pokedexContext.ability_prose
                 on new { Key1 = abilities.id, Key2 = langId } equals new { Key1 = abilityProses.ability_id, Key2 = abilityProses.local_language_id } into abilityProsesJoin
                 from abilityProses in abilityProsesJoin.DefaultIfEmpty()
 
-                join abilityProsesDefault in _pokedexContext.Ability_prose
+                join abilityProsesDefault in _pokedexContext.ability_prose
                 on new { Key1 = abilities.id, Key2 = (int)Lang.en } equals new { Key1 = abilityProsesDefault.ability_id, Key2 = abilityProsesDefault.local_language_id } into abilityProsesDefaultJoin
                 from abilityProsesDefault in abilityProsesDefaultJoin.DefaultIfEmpty()
 
@@ -107,9 +107,9 @@ namespace api.Services.PokedexServices
         public async Task<bool> IsAbilityPokemonHiddenAbility(string abilityIdentifier, int dexNumber)
         {
             var query =
-                from pokemonAbilities in _pokedexContext.Pokemon_abilities.Where(p => p.pokemon_id == dexNumber && p.is_hidden)
+                from pokemonAbilities in _pokedexContext.pokemon_abilities.Where(p => p.pokemon_id == dexNumber && p.is_hidden)
 
-                join abilities in _pokedexContext.Abilities
+                join abilities in _pokedexContext.abilities
                 on new { Key1 = pokemonAbilities.ability_id } equals new { Key1 = abilities.id } into abilitiesJoin
                 from abilities in abilitiesJoin.DefaultIfEmpty()
 
@@ -132,17 +132,17 @@ namespace api.Services.PokedexServices
                 if (Int32.TryParse(id, out _))
                 {
                     var query =
-                        from pokemonAbilities in _pokedexContext.Pokemon_abilities.Where(p => p.pokemon_id == Int32.Parse(id))
+                        from pokemonAbilities in _pokedexContext.pokemon_abilities.Where(p => p.pokemon_id == Int32.Parse(id))
 
-                        join abilities in _pokedexContext.Abilities
+                        join abilities in _pokedexContext.abilities
                         on new { Key1 = pokemonAbilities.ability_id } equals new { Key1 = abilities.id } into abilitiesJoin
                         from abilities in abilitiesJoin.DefaultIfEmpty()
 
-                        join abilityNames in _pokedexContext.Ability_names
+                        join abilityNames in _pokedexContext.ability_names
                         on new { Key1 = pokemonAbilities.ability_id, Key2 = langId } equals new { Key1 = abilityNames.ability_id, Key2 = abilityNames.local_language_id } into abilityNamesJoin
                         from abilityNames in abilityNamesJoin.DefaultIfEmpty()
 
-                        join abilityNamesDefault in _pokedexContext.Ability_names
+                        join abilityNamesDefault in _pokedexContext.ability_names
                         on new { Key1 = pokemonAbilities.ability_id, Key2 = (int)Lang.en } equals new { Key1 = abilityNamesDefault.ability_id, Key2 = abilityNamesDefault.local_language_id } into abilityNamesDefaultJoin
                         from abilityNamesDefault in abilityNamesDefaultJoin.DefaultIfEmpty()
 
@@ -165,9 +165,9 @@ namespace api.Services.PokedexServices
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from abilityNames in _pokedexContext.Ability_names.Where(i => i.name.StartsWith(key) && i.local_language_id == langId)
+                from abilityNames in _pokedexContext.ability_names.Where(i => i.name.StartsWith(key) && i.local_language_id == langId)
 
-                join abilities in _pokedexContext.Abilities
+                join abilities in _pokedexContext.abilities
                 on new { Key1 = abilityNames.ability_id } equals new { Key1 = abilities.id } into abilitiesJoin
                 from abilities in abilitiesJoin.DefaultIfEmpty()
 
@@ -183,13 +183,13 @@ namespace api.Services.PokedexServices
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from abilities in _pokedexContext.Abilities
+                from abilities in _pokedexContext.abilities
 
-                join abilityNames in _pokedexContext.Ability_names
+                join abilityNames in _pokedexContext.ability_names
                 on new { Key1 = abilities.id, Key2 = langId } equals new { Key1 = abilityNames.ability_id, Key2 = abilityNames.local_language_id } into abilityNamesJoin
                 from abilityNames in abilityNamesJoin.DefaultIfEmpty()
 
-                join abilityNamesDefault in _pokedexContext.Ability_names
+                join abilityNamesDefault in _pokedexContext.ability_names
                 on new { Key1 = abilities.id, Key2 = (int)Lang.en } equals new { Key1 = abilityNamesDefault.ability_id, Key2 = abilityNamesDefault.local_language_id } into abilityNamesDefaultJoin
                 from abilityNamesDefault in abilityNamesDefaultJoin.DefaultIfEmpty()
 

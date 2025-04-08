@@ -22,39 +22,39 @@ namespace api.Data
             //optionsBuilder.EnableSensitiveDataLogging();
         }
 
-        public DbSet<abilities> Abilities { get; set; }
-        public DbSet<ability_names> Ability_names { get; set; }
-        public DbSet<ability_prose> Ability_prose { get; set; }
+        public DbSet<abilities> abilities { get; set; }
+        public DbSet<ability_names> ability_names { get; set; }
+        public DbSet<ability_prose> ability_prose { get; set; }
 
-        public DbSet<item_names> Item_names { get; set; }
-        public DbSet<item_prose> Item_prose { get; set; }
-        public DbSet<items> Items { get; set; }
+        public DbSet<item_names> item_names { get; set; }
+        public DbSet<item_prose> item_prose { get; set; }
+        public DbSet<items> items { get; set; }
 
-        public DbSet<move_damage_class_prose> Move_damage_class_prose { get; set; }
-        public DbSet<move_effect_prose> Move_effect_prose { get; set; }
-        public DbSet<move_meta> Move_meta { get; set; }
-        public DbSet<move_meta_stat_changes> Move_meta_stat_changes { get; set; }
-        public DbSet<move_names> Move_names { get; set; }
-        public DbSet<move_target_prose> Move_target_prose { get; set; }
-        public DbSet<moves> Moves { get; set; }
+        public DbSet<move_damage_class_prose> move_damage_class_prose { get; set; }
+        public DbSet<move_effect_prose> move_effect_prose { get; set; }
+        public DbSet<move_meta> move_meta { get; set; }
+        public DbSet<move_meta_stat_changes> move_meta_stat_changes { get; set; }
+        public DbSet<move_names> move_names { get; set; }
+        public DbSet<move_target_prose> move_target_prose { get; set; }
+        public DbSet<moves> moves { get; set; }
 
-        public DbSet<nature_names> Nature_names { get; set; }
-        public DbSet<natures> Natures { get; set; }
+        public DbSet<nature_names> nature_names { get; set; }
+        public DbSet<natures> natures { get; set; }
 
-        public DbSet<pokemon_abilities> Pokemon_abilities { get; set; }
-        public DbSet<pokemon_moves> Pokemon_moves { get; set; }
-        public DbSet<pokemon_species> Pokemon_species { get; set; }
-        public DbSet<pokemon_species_names> Pokemon_species_names { get; set; }
-        public DbSet<pokemon_stats> Pokemon_stats { get; set; }
-        public DbSet<pokemon_types> Pokemon_types { get; set; }
+        public DbSet<pokemon_abilities> pokemon_abilities { get; set; }
+        public DbSet<pokemon_moves> pokemon_moves { get; set; }
+        public DbSet<pokemon_species> pokemon_species { get; set; }
+        public DbSet<pokemon_species_names> pokemon_species_names { get; set; }
+        public DbSet<pokemon_stats> pokemon_stats { get; set; }
+        public DbSet<pokemon_types> pokemon_types { get; set; }
 
-        public DbSet<stat_names> Stat_names { get; set; }
-        public DbSet<stats> Stats { get; set; }
+        public DbSet<stat_names> stat_names { get; set; }
+        public DbSet<stats> stats { get; set; }
 
-        public DbSet<type_efficacy> Type_efficacy { get; set; }
-        public DbSet<type_names> Type_names { get; set; }
-        public DbSet<types> Types { get; set; }
+        public DbSet<type_efficacy> type_efficacy { get; set; }
+        public DbSet<type_names> type_names { get; set; }
+        public DbSet<types> types { get; set; }
 
-        public DbSet<languages> Languages { get; set; }
+        public DbSet<languages> languages { get; set; }
     }
 }

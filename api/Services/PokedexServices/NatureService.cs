@@ -20,21 +20,21 @@ namespace api.Services.PokedexServices
             NatureDTO? nature = null;
 
             var query =
-                from natures in _pokedexContext.Natures.Where(i => i.identifier == identifier)
+                from natures in _pokedexContext.natures.Where(i => i.identifier == identifier)
 
-                join natureNames in _pokedexContext.Nature_names
+                join natureNames in _pokedexContext.nature_names
                 on new { Key1 = natures.id, Key2 = langId } equals new { Key1 = natureNames.nature_id, Key2 = natureNames.local_language_id } into natureNamesJoin
                 from natureNames in natureNamesJoin.DefaultIfEmpty()
 
-                join natureNamesDefault in _pokedexContext.Nature_names
+                join natureNamesDefault in _pokedexContext.nature_names
                 on new { Key1 = natures.id, Key2 = (int)Lang.en } equals new { Key1 = natureNamesDefault.nature_id, Key2 = natureNamesDefault.local_language_id } into natureNamesDefaultJoin
                 from natureNamesDefault in natureNamesDefaultJoin.DefaultIfEmpty()
 
-                join increasedStat in _pokedexContext.Stats
+                join increasedStat in _pokedexContext.stats
                 on new { Key1 = natures.increased_stat_id } equals new { Key1 = increasedStat.id } into increasedStatJoin
                 from increasedStat in increasedStatJoin.DefaultIfEmpty()
 
-                join decreasedStat in _pokedexContext.Stats
+                join decreasedStat in _pokedexContext.stats
                 on new { Key1 = natures.decreased_stat_id } equals new { Key1 = decreasedStat.id } into decreasedStatJoin
                 from decreasedStat in decreasedStatJoin.DefaultIfEmpty()
 
@@ -54,25 +54,25 @@ namespace api.Services.PokedexServices
             NatureDTO? nature = null;
 
             var query =
-                from natureNamesInput in _pokedexContext.Nature_names.Where(n => n.name == name)
+                from natureNamesInput in _pokedexContext.nature_names.Where(n => n.name == name)
 
-                join natures in _pokedexContext.Natures
+                join natures in _pokedexContext.natures
                 on new { Key1 = natureNamesInput.nature_id } equals new { Key1 = natures.id } into naturesJoin
                 from natures in naturesJoin.DefaultIfEmpty()
 
-                join natureNames in _pokedexContext.Nature_names
+                join natureNames in _pokedexContext.nature_names
                 on new { Key1 = natures.id, Key2 = langId } equals new { Key1 = natureNames.nature_id, Key2 = natureNames.local_language_id } into natureNamesJoin
                 from natureNames in natureNamesJoin.DefaultIfEmpty()
 
-                join natureNamesDefault in _pokedexContext.Nature_names
+                join natureNamesDefault in _pokedexContext.nature_names
                 on new { Key1 = natures.id, Key2 = (int)Lang.en } equals new { Key1 = natureNamesDefault.nature_id, Key2 = natureNamesDefault.local_language_id } into natureNamesDefaultJoin
                 from natureNamesDefault in natureNamesDefaultJoin.DefaultIfEmpty()
 
-                join increasedStat in _pokedexContext.Stats
+                join increasedStat in _pokedexContext.stats
                 on new { Key1 = natures.increased_stat_id } equals new { Key1 = increasedStat.id } into increasedStatJoin
                 from increasedStat in increasedStatJoin.DefaultIfEmpty()
 
-                join decreasedStat in _pokedexContext.Stats
+                join decreasedStat in _pokedexContext.stats
                 on new { Key1 = natures.decreased_stat_id } equals new { Key1 = decreasedStat.id } into decreasedStatJoin
                 from decreasedStat in decreasedStatJoin.DefaultIfEmpty()
 
@@ -91,27 +91,27 @@ namespace api.Services.PokedexServices
         public async Task<List<NatureDTO>> GetAllNatures(int langId)
         {
             List<NatureDTO> natureDTOs = new List<NatureDTO>();
-            List<natures> naturesList = await _pokedexContext.Natures.ToListAsync();
+            List<natures> naturesList = await _pokedexContext.natures.ToListAsync();
             if (naturesList != null)
             {
                 foreach (natures naturesItem in naturesList)
                 {
                     var query =
-                        from natures in _pokedexContext.Natures.Where(i => i.id == naturesItem.id)
+                        from natures in _pokedexContext.natures.Where(i => i.id == naturesItem.id)
 
-                        join natureNames in _pokedexContext.Nature_names
+                        join natureNames in _pokedexContext.nature_names
                         on new { Key1 = natures.id, Key2 = langId } equals new { Key1 = natureNames.nature_id, Key2 = natureNames.local_language_id } into natureNamesJoin
                         from natureNames in natureNamesJoin.DefaultIfEmpty()
 
-                        join natureNamesDefault in _pokedexContext.Nature_names
+                        join natureNamesDefault in _pokedexContext.nature_names
                         on new { Key1 = natures.id, Key2 = (int)Lang.en } equals new { Key1 = natureNamesDefault.nature_id, Key2 = natureNamesDefault.local_language_id } into natureNamesDefaultJoin
                         from natureNamesDefault in natureNamesDefaultJoin.DefaultIfEmpty()
 
-                        join increasedStat in _pokedexContext.Stats
+                        join increasedStat in _pokedexContext.stats
                         on new { Key1 = natures.increased_stat_id } equals new { Key1 = increasedStat.id } into increasedStatJoin
                         from increasedStat in increasedStatJoin.DefaultIfEmpty()
 
-                        join decreasedStat in _pokedexContext.Stats
+                        join decreasedStat in _pokedexContext.stats
                         on new { Key1 = natures.decreased_stat_id } equals new { Key1 = decreasedStat.id } into decreasedStatJoin
                         from decreasedStat in decreasedStatJoin.DefaultIfEmpty()
 
@@ -134,13 +134,13 @@ namespace api.Services.PokedexServices
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from natureNames in _pokedexContext.Nature_names.Where(i => i.name.StartsWith(key) && i.local_language_id == langId)
+                from natureNames in _pokedexContext.nature_names.Where(i => i.name.StartsWith(key) && i.local_language_id == langId)
 
-                join natures in _pokedexContext.Natures
+                join natures in _pokedexContext.natures
                 on new { Key1 = natureNames.nature_id } equals new { Key1 = natures.id } into naturesJoin
                 from natures in naturesJoin.DefaultIfEmpty()
 
-                join natureNamesDefault in _pokedexContext.Nature_names
+                join natureNamesDefault in _pokedexContext.nature_names
                 on new { Key1 = natureNames.nature_id, Key2 = (int)Lang.en } equals new { Key1 = natureNamesDefault.nature_id, Key2 = natureNamesDefault.local_language_id } into natureNamesDefaultJoin
                 from natureNamesDefault in natureNamesDefaultJoin.DefaultIfEmpty()
 
@@ -157,13 +157,13 @@ namespace api.Services.PokedexServices
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from natures in _pokedexContext.Natures
+                from natures in _pokedexContext.natures
 
-                join natureNames in _pokedexContext.Nature_names
+                join natureNames in _pokedexContext.nature_names
                 on new { Key1 = natures.id, Key2 = langId } equals new { Key1 = natureNames.nature_id, Key2 = natureNames.local_language_id } into natureNamesJoin
                 from natureNames in natureNamesJoin.DefaultIfEmpty()
 
-                join natureNamesDefault in _pokedexContext.Nature_names
+                join natureNamesDefault in _pokedexContext.nature_names
                 on new { Key1 = natures.id, Key2 = (int)Lang.en } equals new { Key1 = natureNamesDefault.nature_id, Key2 = natureNamesDefault.local_language_id } into natureNamesDefaultJoin
                 from natureNamesDefault in natureNamesDefaultJoin.DefaultIfEmpty()
 
