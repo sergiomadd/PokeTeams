@@ -40,7 +40,7 @@ namespace api.Util
 
         public static int? GetLangIDFromHttpContext(HttpContext context)
         {
-            if(context.Request.GetTypedHeaders().AcceptLanguage == null || context.Request.GetTypedHeaders().AcceptLanguage.Any())
+            if(context.Request.GetTypedHeaders().AcceptLanguage == null || !context.Request.GetTypedHeaders().AcceptLanguage.Any())
             {
                 return null;
             }

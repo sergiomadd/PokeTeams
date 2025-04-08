@@ -380,9 +380,17 @@ namespace api.Controllers
             {
                 return BadRequest("Wrong data");
             }
-            var decodedTokenBytes = WebEncoders.Base64UrlDecode(inputToken);
-            var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
-
+            byte[] decodedTokenBytes;
+            string decodedToken;
+            try
+            {
+                decodedTokenBytes = WebEncoders.Base64UrlDecode(inputToken);
+                decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest("Error confirming email");
+            }
             var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
             if (!result.Succeeded)
             {
