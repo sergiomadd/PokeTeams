@@ -245,7 +245,7 @@ namespace api.Services.PokedexServices
             var pathStart = "https://localhost:7134/images/sprites/types/generation-ix/";
 
             var query =
-                from moveNames in _pokedexContext.move_names.Where(i => i.name.StartsWith(key) && i.local_language_id == langId)
+                from moveNames in _pokedexContext.move_names.Where(i => i.name.ToLower().StartsWith(key.ToLower()) && i.local_language_id == langId)
 
                 join moves in _pokedexContext.moves
                 on new { Key1 = moveNames.move_id } equals new { Key1 = moves.id } into movesJoin

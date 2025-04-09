@@ -365,14 +365,14 @@ namespace api.Services
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from pokemonNames in _pokedexContext.pokemon_species_names.Where(p => p.name.StartsWith(key) && p.local_language_id == langId)
+                from pokemonNames in _pokedexContext.pokemon_species_names.Where(p => p.name.ToLower().StartsWith(key.ToLower()) && p.local_language_id == langId)
 
                 join pokemonNamesDefault in _pokedexContext.pokemon_species_names
                 on new { Key1 = pokemonNames.pokemon_species_id, Key2 = (int)Lang.en } equals new { Key1 = pokemonNamesDefault.pokemon_species_id, Key2 = pokemonNamesDefault.local_language_id } into pokemonNamesDefaultJoin
                 from pokemonNamesDefault in pokemonNamesDefaultJoin.DefaultIfEmpty()
 
-                select pokemonNames != null ? new QueryResultDTO(pokemonNames.name, pokemonNames.pokemon_species_id.ToString(), $"https://localhost:7134/images/sprites/pokemon/{pokemonNames.pokemon_species_id}.png", "nature") :
-                    new QueryResultDTO(pokemonNamesDefault.name, pokemonNames.pokemon_species_id.ToString(), $"https://localhost:7134/images/sprites/pokemon/{pokemonNames.pokemon_species_id}.png", "nature");
+                select pokemonNames != null ? new QueryResultDTO(pokemonNames.name, pokemonNames.pokemon_species_id.ToString(), $"https://localhost:7134/images/sprites/pokemon/{pokemonNames.pokemon_species_id}.png", "pokemon") :
+                    new QueryResultDTO(pokemonNamesDefault.name, pokemonNames.pokemon_species_id.ToString(), $"https://localhost:7134/images/sprites/pokemon/{pokemonNames.pokemon_species_id}.png", "pokemon");
 
             queryResults = await query.ToListAsync();
 

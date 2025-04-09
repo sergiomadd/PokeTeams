@@ -165,7 +165,7 @@ namespace api.Services.PokedexServices
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from abilityNames in _pokedexContext.ability_names.Where(i => i.name.StartsWith(key) && i.local_language_id == langId)
+                from abilityNames in _pokedexContext.ability_names.Where(i => i.name.ToLower().StartsWith(key.ToLower()) && i.local_language_id == langId)
 
                 join abilities in _pokedexContext.abilities
                 on new { Key1 = abilityNames.ability_id } equals new { Key1 = abilities.id } into abilitiesJoin

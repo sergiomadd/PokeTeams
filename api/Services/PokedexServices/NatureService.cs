@@ -134,7 +134,7 @@ namespace api.Services.PokedexServices
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from natureNames in _pokedexContext.nature_names.Where(i => i.name.StartsWith(key) && i.local_language_id == langId)
+                from natureNames in _pokedexContext.nature_names.Where(i => i.name.ToLower().StartsWith(key.ToLower()) && i.local_language_id == langId)
 
                 join natures in _pokedexContext.natures
                 on new { Key1 = natureNames.nature_id } equals new { Key1 = natures.id } into naturesJoin
