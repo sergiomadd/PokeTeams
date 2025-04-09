@@ -32,6 +32,7 @@ export class ParserService {
   {
     let pokePaste: PokePaste = <PokePaste>{}; 
     let lines = pokemon.split(/\r?\n|\r|\n/g);
+    lines = lines.filter(str => str !== "");
     for(let i=0;i<lines.length;i++)
     {
       let line = lines[i];
