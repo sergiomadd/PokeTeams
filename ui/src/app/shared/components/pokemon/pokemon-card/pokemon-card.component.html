@@ -125,7 +125,14 @@
                   <ng-container *ngIf="pokemon.item?.name && pokemon.item?.name?.language != (selectedLang$ | async)">
                     <app-no-translation></app-no-translation>
                   </ng-container>
-                  <img src="{{pokemon.item?.iconPath}}" alt="" class="icon-m">
+                  <ng-container *ngIf="pokemon.item?.identifier === 'error'; else itemIcon">
+                    <div class="icon-m">
+                      <ng-container *ngTemplateOutlet="errorSVG"></ng-container>
+                    </div>
+                  </ng-container>
+                  <ng-template #itemIcon>
+                    <img src="{{pokemon.item?.iconPath}}" alt="" class="icon-m">
+                  </ng-template>
                 </div>
               </div>
             </div>
