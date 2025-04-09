@@ -23,8 +23,8 @@ namespace api.Test.Services
         {
             //dependencies
             _configuration = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
-            var connectionString = _configuration["ConnectionStrings:SQLServerPokedex"];
-            var options = new DbContextOptionsBuilder<PokedexContext>().UseSqlServer(connectionString).Options;
+            var connectionString = _configuration["ConnectionStrings:PostgrePokedex"];
+            var options = new DbContextOptionsBuilder<PokedexContext>().UseNpgsql(connectionString).Options;
             _dbContext = new PokedexContext(options);
 
             PokedexExpectedResults? input = ExpectedResults.TryGetPokedexExpectedResults();

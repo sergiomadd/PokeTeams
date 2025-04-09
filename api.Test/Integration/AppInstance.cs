@@ -47,7 +47,7 @@ namespace api.Test.Integration
 
                 // Add a new registration for dbcontext
                 services.AddDbContext<PokeTeamContext>(options =>
-                    options.UseSqlServer(connectionString));
+                    options.UseNpgsql(connectionString));
                 services.AddTransient<IPokeTeamContext, PokeTeamContext>();
 
                 services.AddAuthentication("TestScheme")
@@ -122,7 +122,7 @@ namespace api.Test.Integration
             var configuration = new ConfigurationBuilder()
                 .AddUserSecrets<AppInstance>()
                 .Build();
-            var connectionString = configuration["ConnectionStrings:SQLServerPoketeamTest"];
+            var connectionString = configuration["ConnectionStrings:PostgrePoketeamTest"];
             return connectionString;
         }
 

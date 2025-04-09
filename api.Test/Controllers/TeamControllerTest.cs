@@ -265,16 +265,15 @@ namespace api.Test.Controllers
 
             //Assert
             response.EnsureSuccessStatusCode();
-            var teamResponse = await response.Content.ReadAsAsync<OkResultDTO>();
-            var savedTeamId = (string)teamResponse.content;
-            Assert.NotNull(savedTeamId);
+            var teamResponse = await response.Content.ReadAsAsync<string>();
+            Assert.NotNull(teamResponse);
 
             using (var scope = _instance.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<PokeTeamContext>();
-                var team = await context.Team.FirstOrDefaultAsync(t => t.Id == savedTeamId);
+                var team = await context.Team.FirstOrDefaultAsync(t => t.Id == teamResponse);
                 Assert.NotNull(team);
-                Assert.Equal(savedTeamId, team.Id);
+                Assert.Equal(teamResponse, team.Id);
             }
         }
 
@@ -454,16 +453,15 @@ namespace api.Test.Controllers
             //Assert
             response.EnsureSuccessStatusCode();
 
-            var teamResponse = await response.Content.ReadAsAsync<OkResultDTO>();
-            var savedTeamId = (string)teamResponse.content;
-            Assert.NotNull(savedTeamId);
+            var teamResponse = await response.Content.ReadAsAsync<string>();
+            Assert.NotNull(teamResponse);
 
             using (var scope = _instance.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<PokeTeamContext>();
-                var team = await context.Team.FirstOrDefaultAsync(t => t.Id == savedTeamId);
+                var team = await context.Team.FirstOrDefaultAsync(t => t.Id == teamResponse);
                 Assert.NotNull(team);
-                Assert.Equal(savedTeamId, team.Id);
+                Assert.Equal(teamResponse, team.Id);
             }
         }
 
