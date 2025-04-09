@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable, catchError, lastValueFrom, timeout } from "rxjs";
 import { environment } from "src/environments/environment.development";
 import { Ability, defaultAbility } from "../models/pokemon/ability.model";
-import { DefaultItem, Item } from "../models/pokemon/item.model";
+import { Item, defaultItem } from "../models/pokemon/item.model";
 import { Move, defaultMove } from "../models/pokemon/move.model";
 import { Nature, defaultNature } from "../models/pokemon/nature.model";
 import { Pokemon } from "../models/pokemon/pokemon.model";
@@ -30,6 +30,7 @@ export class PokemonService
   {
     //const now = new Date().getTime();
     let pokemon: Pokemon = <Pokemon>{};
+
     try 
     {
       const pokemonDataPromise: Promise<PokemonData> | undefined = pokePaste.name ? this.getPokemonDataByName(pokePaste.name) : undefined;
@@ -38,11 +39,9 @@ export class PokemonService
       const abilityPromise: Promise<Ability> | undefined = pokePaste.ability ? this.getAbilityByName(pokePaste.ability) : undefined;
       const naturePromise: Promise<Nature> | undefined = pokePaste.nature ? this.getNatureByName(pokePaste.nature) : undefined;
       const movesPromise: Promise<Move[]> | undefined = pokePaste.moves ? this.getMoves(pokePaste.moves) : undefined;
-      const ivsPromise: Promise<Stat[]> | undefined = pokePaste.ivs ? this.getStats(pokePaste.ivs) : undefined;
-      const evsPromise: Promise<Stat[]> | undefined = pokePaste.evs ? this.getStats(pokePaste.evs) : undefined;
       
-      await Promise.allSettled([pokemonDataPromise, teraTypePromise, itemPromise, abilityPromise, naturePromise, movesPromise, ivsPromise, evsPromise])
-      .then(([pokemonData, teraType, itemPromise, abilityPromise, naturePromise, movesPromise, ivsPromise, evsPromise]) => 
+      await Promise.allSettled([pokemonDataPromise, teraTypePromise, itemPromise, abilityPromise, naturePromise, movesPromise])
+      .then(([pokemonData, teraType, itemPromise, abilityPromise, naturePromise, movesPromise]) => 
       {
         pokemon.name = pokemonData.status == "fulfilled" ? pokemonData.value?.name : undefined;
         pokemon.dexNumber = pokemonData.status == "fulfilled" ? pokemonData.value?.dexNumber : 0;
@@ -60,8 +59,6 @@ export class PokemonService
         pokemon.ability = abilityPromise.status == "fulfilled" ? abilityPromise.value : undefined; 
         pokemon.nature = naturePromise.status == "fulfilled" ? naturePromise.value : undefined; 
         pokemon.moves = movesPromise.status == "fulfilled" ? movesPromise.value ?? [] : []; 
-        pokemon.ivs = ivsPromise.status == "fulfilled" ? ivsPromise.value ?? [] : []; 
-        pokemon.evs = evsPromise.status == "fulfilled" ? evsPromise.value ?? [] : []; 
       });
     } 
     catch (error) 
@@ -72,10 +69,15 @@ export class PokemonService
     {
       console.log('Generated pokemon: ', pokemon);
     }
+    
     if(pokemon.dexNumber && pokemon.ability)
     {
       pokemon.ability.hidden = await this.isAbilityHidden(pokemon.ability?.identifier, pokemon.dexNumber);
     }
+
+    pokemon.ivs = pokePaste.ivs ? this.getStats(pokePaste.ivs) : [];
+    pokemon.evs = pokePaste.evs ? this.getStats(pokePaste.evs) : [];
+
     //console.log("Time to generate pokemon: ", new Date().getTime() - now);
     return pokemon;
   }
@@ -118,7 +120,7 @@ export class PokemonService
   {
     let item: Item = <Item>{}
     let url = this.apiUrl + 'item/name/' + name;
-    item = await lastValueFrom(this.http.get<Item>(url).pipe(catchError(() => [DefaultItem]), timeout(this.dataTimeout)));
+    item = await lastValueFrom(this.http.get<Item>(url).pipe(catchError(() => [defaultItem]), timeout(this.dataTimeout)));
     return item;
   }
 
@@ -169,43 +171,27 @@ export class PokemonService
   {
     let type: TypeWithEffectiveness = <TypeWithEffectiveness>{};
     let url = this.apiUrl + 'type/' + (teratype ? 'teratype/' : '') + typeName;
-    this.http.get<TypeWithEffectiveness>(url).subscribe
     type = await lastValueFrom(this.http.get<TypeWithEffectiveness>(url).pipe(catchError(() => [defaultTypeWithEffectiveness]), timeout(this.dataTimeout)));
     return type;
   }
 
-  async getStats(statsData: string[][]) : Promise<Stat[]>
+  getStats(statsData: string[][]) : Stat[]
   {
-    const statPromises: Promise<Stat>[] = [];
+    const stats: Stat[] = [];
     for (const statData of statsData)
     {
-      statPromises.push(this.createStat(statData));
+      stats.push(this.createStat(statData));
     }
-    return await Promise.all(statPromises);
+    return stats;
   }
 
-  async createStat(statData: string[]) : Promise<Stat>
+  createStat(statData: string[]) : Stat
   {
-    return this.getStatName(statData[0]).then((value) => 
-    {
-      let stat: Stat = <Stat>{}
-      stat.identifier = statData[0];
-      stat.name = 
-      {
-        content: value,
-        language: ""
-      };
-      stat.value = Number(statData[1]);
-      return stat;
-    })
-  }
-
-  async getStatName(identifier: string) : Promise<string>
-  {
-    let statName: string = '';
-    let url = this.apiUrl + 'stat/' + identifier;
-    statName = await lastValueFrom(this.http.get(url, {responseType: 'text'}).pipe(timeout(this.dataTimeout)));
-    return statName;
+    let stat: Stat = <Stat>{};
+    stat.identifier = statData[0];
+    stat.name = undefined;
+    stat.value = Number(statData[1]);
+    return stat;
   }
 
   createEmptyPokemon(): Pokemon
@@ -227,56 +213,26 @@ export class PokemonService
       ivs:     
       [
         {
-          name: 
-          {
-            content: "HP",
-            language: "en"
-          },
           identifier: "hp",
           value: 0
         },
         {
-          name: 
-          {
-            content: "Atk",
-            language: "en"
-          },
           identifier: "attack",
           value: 0
         },
         {
-          name: 
-          {
-            content: "Def",
-            language: "en"
-          },
           identifier: "defense",
           value: 0
         },
         {
-          name: 
-          {
-            content: "SpA",
-            language: "en"
-          },
           identifier: "special-attack",
           value: 0
         },
         {
-          name: 
-          {
-            content: "SpD",
-            language: "en"
-          },
           identifier: "special-defense",
           value: 0
         },
         {
-          name: 
-          {
-            content: "Spe",
-            language: "en"
-          },
           identifier: "speed",
           value: 0
         }
@@ -284,56 +240,26 @@ export class PokemonService
       evs: 
       [
         {
-          name: 
-          {
-            content: "HP",
-            language: "en"
-          },
           identifier: "hp",
           value: 0
         },
         {
-          name: 
-          {
-            content: "Atk",
-            language: "en"
-          },
           identifier: "attack",
           value: 0
         },
         {
-          name: 
-          {
-            content: "Def",
-            language: "en"
-          },
           identifier: "defense",
           value: 0
         },
         {
-          name: 
-          {
-            content: "SpA",
-            language: "en"
-          },
           identifier: "special-attack",
           value: 0
         },
         {
-          name: 
-          {
-            content: "SpD",
-            language: "en"
-          },
           identifier: "special-defense",
           value: 0
         },
         {
-          name: 
-          {
-            content: "Spe",
-            language: "en"
-          },
           identifier: "speed",
           value: 0
         }
