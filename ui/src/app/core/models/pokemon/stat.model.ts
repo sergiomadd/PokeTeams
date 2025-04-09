@@ -3,17 +3,13 @@ import { LocalizedText } from "../misc/localizedText.model"
 export interface Stat
 {
   identifier: string,
-  name: LocalizedText,
+  name?: LocalizedText,
   value: number
 }
 
 export const defaultStat: Stat = 
 {
   identifier: "error",
-  name: 
-  {
-    content: "",
-    language: "en"
-  },
+  name: undefined,
   value: 0
 }

@@ -65,6 +65,6 @@ export const defaultMove: Move =
   {
     name: "",
     description: "",
-    iconPath: "assets/error.png"
+    iconPath: ""
   }
 }

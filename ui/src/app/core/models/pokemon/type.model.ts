@@ -15,5 +15,5 @@ export const defaultType: Type =
     content: "Not Found",
     language: "en"
   },
-  iconPath: "assets/error.png"
+  iconPath: ""
 }

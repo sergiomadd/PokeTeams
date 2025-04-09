@@ -18,7 +18,7 @@ export const defaultTypeWithEffectiveness: TypeWithEffectiveness =
     content: "Not Found",
     language: "en"
   },
-  iconPath: "assets/error.png",
+  iconPath: "",
   effectivenessAttack: defaultEffectiveness,
   effectivenessDefense: defaultEffectiveness
 }

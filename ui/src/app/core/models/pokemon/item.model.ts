@@ -9,7 +9,7 @@ export interface Item
   language: string
 }
 
-export const DefaultItem: Item =
+export const defaultItem: Item =
 {
   identifier: "error",
   name:
@@ -22,6 +22,6 @@ export const DefaultItem: Item =
     content: "Not Found",
     language: "en"
   },
-  iconPath: "assets/error.png",
+  iconPath: "",
   language: ""
 }
