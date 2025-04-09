@@ -19,7 +19,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMvc();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 
@@ -36,6 +35,7 @@ builder.Services.AddScoped<IAbilityService, AbilityService>();
 builder.Services.AddScoped<IMoveService, MoveService>();
 builder.Services.AddScoped<INatureService, NatureService>();
 builder.Services.AddScoped<ITypeService, TypeService>();
+builder.Services.AddScoped<IStatService, StatService>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -178,6 +178,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
     app.UseCors(apiCorsPolicy);
 }
 

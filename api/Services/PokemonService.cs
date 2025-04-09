@@ -21,6 +21,7 @@ namespace api.Services
         private readonly IMoveService _moveService;
         private readonly INatureService _natureService;
         private readonly ITypeService _typeService;
+        private readonly IStatService _statService;
         private readonly IIdentityService _identityService;
 
         public PokemonService
@@ -32,6 +33,7 @@ namespace api.Services
                 IMoveService moveService,
                 INatureService natureService,
                 ITypeService typeService,
+                IStatService statService,
                 IIdentityService identityService
             )
         {
@@ -42,6 +44,7 @@ namespace api.Services
             _moveService = moveService;
             _natureService = natureService;
             _typeService = typeService;
+            _statService = statService;
             _identityService = identityService;
         }
 
@@ -203,7 +206,7 @@ namespace api.Services
                 await GetPokemonName(id, langId),
                 id,
                 await _typeService.GetPokemonTypesWithEffectiveness(id, langId),
-                await GetPokemonStats(id, langId),
+                await _statService.GetPokemonStats(id, langId),
                 new SpriteDTO(id),
                 preEvolution: await GetPokemonPreEvolution(id, langId),
                 evolutions: await GetPokemonEvolutions(id, langId));
@@ -273,34 +276,7 @@ namespace api.Services
             return await query.FirstOrDefaultAsync();
         }
 
-        private async Task<List<StatDTO>> GetPokemonStats(int id, int langId)
-        {
-            List<StatDTO> pokeStats = new List<StatDTO>();
-            for (int i = 1; i < 7; i++)
-            {
-                var query =
-                    from pokemonStats in _pokedexContext.pokemon_stats.Where(s => s.pokemon_id == id && s.stat_id == i)
-                    from stats in _pokedexContext.stats.Where(s => s.id == i)
 
-                    join statNames in _pokedexContext.stat_names
-                    on new { Key1 = stats.id, Key2 = langId } equals new { Key1 = statNames.stat_id, Key2 = statNames.local_language_id } into statNamesJoin
-                    from statNames in statNamesJoin.DefaultIfEmpty()
-
-                    join statNamesDefault in _pokedexContext.stat_names
-                    on new { Key1 = stats.id, Key2 = (int)Lang.en } equals new { Key1 = statNamesDefault.stat_id, Key2 = statNamesDefault.local_language_id } into statNamesDefaultJoin
-                    from statNamesDefault in statNamesDefaultJoin.DefaultIfEmpty()
-
-                    select new StatDTO(
-                        stats.identifier,
-                        new LocalizedText(statNames != null ? statNames.name : statNamesDefault.name,
-                        statNames != null ? statNames.local_language_id : statNamesDefault.local_language_id),
-                        pokemonStats.base_stat);
-
-                StatDTO? stat = await query.FirstOrDefaultAsync();
-                if (stat != null) { pokeStats.Add(stat); }
-            }
-            return pokeStats;
-        }
 
         private async Task<EvolutionDTO?> GetPokemonPreEvolution(int id, int langId)
         {
@@ -312,7 +288,7 @@ namespace api.Services
                     await GetPokemonName(newID, langId),
                     newID,
                     await _typeService.GetPokemonTypes(newID, langId),
-                    await GetPokemonStats(newID, langId),
+                    await _statService.GetPokemonStats(newID, langId),
                     new SpriteDTO(newID),
                     preEvolution: await GetPokemonPreEvolution(newID, langId));
             }
@@ -333,31 +309,13 @@ namespace api.Services
                         evolutions.Add(new EvolutionDTO(
                             await GetPokemonName(newID, langId), newID,
                             await _typeService.GetPokemonTypes(newID, langId),
-                            await GetPokemonStats(newID, langId),
+                            await _statService.GetPokemonStats(newID, langId),
                             new SpriteDTO(newID),
                             evolutions: await GetPokemonEvolutions(newID, langId)));
                     }
                 }
             }
             return evolutions;
-        }
-
-        public async Task<string?> GetStatNameByIdentifier(string identifier, int langId)
-        {
-            string? statName = null;
-
-            var query =
-                from stats in _pokedexContext.stats.Where(i => i.identifier == identifier)
-
-                join statNames in _pokedexContext.stat_names
-                on new { Key1 = stats.id, Key2 = langId } equals new { Key1 = statNames.stat_id, Key2 = statNames.local_language_id } into statNamesJoin
-                from statNames in statNamesJoin.DefaultIfEmpty()
-
-                select statNames.name;
-
-            statName = await query.FirstOrDefaultAsync();
-
-            return statName;
         }
 
         public async Task<List<QueryResultDTO>> QueryPokemonsByName(string key, int langId)

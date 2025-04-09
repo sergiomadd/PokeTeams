@@ -14,7 +14,6 @@ namespace api.Services
         public Task<PokemonPreviewDTO?> GetPokemonPreviewById(int id, int langId);
         public Task<List<PokemonPreviewDTO?>> GetTeamPokemonPreviews(string id, int langId);
         public Task<PokemonDataDTO?> GetPokemonDataByName(string name, int langId);
-        public Task<string?> GetStatNameByIdentifier(string identifier, int langId);
         public Task<List<QueryResultDTO>> QueryPokemonsByName(string key, int langId);
     }
 }
