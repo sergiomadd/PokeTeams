@@ -156,7 +156,7 @@ namespace api.Services
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from user in _pokeTeamContext.Users.Where(u => u.UserName.StartsWith(key))
+                from user in _pokeTeamContext.Users.Where(u => u.UserName.ToLower().StartsWith(key.ToLower()))
 
                 select new QueryResultDTO(user.UserName, user.UserName, $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png", "user");
 
@@ -179,19 +179,13 @@ namespace api.Services
             return queryResults;
         }
 
-        //Keep incase countries change IRL
+        //Keep incase countries change
         /*
-        public async Task<bool> AddCountry(CountryDTOB countryDTOB)
+        public async Task<bool> AddCountry(Country countryModel)
         {
             try
             {
-                Country country = new Country
-                {
-                    NormalizedName = countryDTOB.NormalizedName,
-                    Name = countryDTOB.Name,
-                    Code = countryDTOB.Code
-                };
-                await _pokeTeamContext.Country.AddAsync(country);
+                await _pokeTeamContext.Country.AddAsync(countryModel);
                 await _pokeTeamContext.SaveChangesAsync();
             }
             catch (Exception e)
@@ -202,6 +196,5 @@ namespace api.Services
             return true;
         }
         */
-
     }
 }

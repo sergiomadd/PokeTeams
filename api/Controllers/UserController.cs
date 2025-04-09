@@ -6,6 +6,7 @@ using api.Models.DBPoketeamModels;
 using api.DTOs;
 using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text.Json;
 
 namespace api.Controllers
 {
@@ -153,34 +154,23 @@ namespace api.Controllers
             }
             return pictures;
         }
+
         //Keep incase countries change
         /*
-        [HttpPost, Route("country/add")]
-        public async Task<ActionResult<object>> AddCountry([FromBody] CountryDTOB countryDTOB)
-        {
-            bool added = await _userService.AddCountry(countryDTOB);
-            if (added)
-            {
-                return Ok();
-            }
-            return BadRequest();
-        }
-        
-
         [HttpGet, Route("country/process")]
         public async Task<ActionResult<object>> Process()
         {
-            List<CountryDTOC> countries = new List<CountryDTOC>();
-            using (StreamReader r = new StreamReader("wwwroot/data/countriesnew.json"))
+            List<CountryInsertDTO> countries = new List<CountryInsertDTO>();
+            using (StreamReader r = new StreamReader("wwwroot/data/countries.json"))
             {
                 string json = r.ReadToEnd();
-                countries = JsonSerializer.Deserialize<List<CountryDTOC>>(json);
+                countries = JsonSerializer.Deserialize<List<CountryInsertDTO>>(json);
                 foreach (var country in countries)
                 {
                     if (country != null)
                     {
                         string normalizedName = country.country.ToLower().Replace(" ", "-");
-                        CountryDTOB countryDTOB = new CountryDTOB
+                        Country countryDTOB = new Country
                         {
                             NormalizedName = normalizedName,
                             Name = country.country,
@@ -196,7 +186,6 @@ namespace api.Controllers
                     {
                         return BadRequest(country.country);
                     }
-
                 }
             }
             return Ok();

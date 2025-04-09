@@ -18,7 +18,6 @@ namespace api.Services
         public Task<List<QueryResultDTO>> ChunkQueryUsers(string key, int startIndex, int pageSize);
         public Task<List<QueryResultDTO>> QueryCountriesByName(string key);
         public Task<List<QueryResultDTO>> QueryAllCountries();
-
-        //public Task<bool> AddCountry(CountryDTOB countryDTOB);
+        //public Task<bool> AddCountry(Country countryModel);
     }
 }

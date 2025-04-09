@@ -15,4 +15,12 @@ namespace api.DTOs
             Icon = $"https://localhost:7134/images/sprites/flags/{country.Code}.svg";
         }
     }
+
+    /*
+    public class CountryInsertDTO
+    {
+        public string country { get; set; }
+        public string abbreviation { get; set; }
+    }
+    */
 }
