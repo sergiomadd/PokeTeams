@@ -60,5 +60,16 @@ namespace api.Controllers
             }
             return Ok(true);
         }
+
+        [HttpGet("query/all")]
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryAllTags()
+        {
+            List<QueryResultDTO> results = await _tagService.QueryAllTags();
+            if (results == null)
+            {
+                return NotFound("Couldn't find tags");
+            }
+            return Ok(results);
+        }
     }
 }

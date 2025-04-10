@@ -64,12 +64,12 @@ namespace api.Controllers
         }
 
         [HttpGet("query/all")]
-        public async Task<ActionResult<List<QueryResultDTO>>> QueryAllRegulations()
+        public async Task<ActionResult<List<QueryResultDTO>>> QueryAllTournaments()
         {
             List<QueryResultDTO> results = await _tournamentService.QueryAllTournaments();
             if (results == null)
             {
-                return NotFound("Couldn't find regulation");
+                return NotFound("Couldn't find tournaments");
             }
             return Ok(results);
         }
