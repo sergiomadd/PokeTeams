@@ -164,8 +164,6 @@ namespace api.Services
                 TeamId = teamId,
                 DexNumber = pokemonDTO?.DexNumber,
                 Nickname = pokemonDTO?.Nickname,
-                Type1Identifier = pokemonDTO?.Types?.Type1?.Identifier,
-                Type2Identifier = pokemonDTO?.Types?.Type2?.Identifier,
                 TeraTypeIdentifier = pokemonDTO?.TeraType?.Identifier,
                 ItemIdentifier = pokemonDTO?.Item?.Identifier,
                 AbilityIdentifier = pokemonDTO?.Ability?.Identifier,

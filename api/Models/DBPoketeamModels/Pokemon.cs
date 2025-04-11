@@ -19,12 +19,6 @@ namespace api.Models.DBPoketeamModels
         [MaxLength(16, ErrorMessage = "Nickname is too long")]
         public string? Nickname { get; set; }
 
-        [MaxLength(128, ErrorMessage = "Type1Identifier is too long")]
-        public string? Type1Identifier { get; set; }
-
-        [MaxLength(128, ErrorMessage = "Type2Identifier is too long")]
-        public string? Type2Identifier { get; set; }
-
         [MaxLength(128, ErrorMessage = "TeraTypeIdentifier is too long")]
         public string? TeraTypeIdentifier { get; set; }
 
