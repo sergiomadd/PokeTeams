@@ -25,8 +25,9 @@ export class AuthInterceptorService
         status: HttpError.status,
         message: HttpError.message
       };
-      
-      if((error.status === 401 && error.message && error.message.includes("NoTokensProvided")))
+            
+      if((error.status === 401 && error.message && error.message.includes("NoTokensProvided"))
+        || (error.status === 400 && error.message && error.message.includes("Refresh Error")))
       {
         this.store.dispatch(authActions.logOutSuccess());
       }

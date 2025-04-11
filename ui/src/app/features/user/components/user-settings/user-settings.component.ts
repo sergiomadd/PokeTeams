@@ -257,7 +257,7 @@ export class UserSettingsComponent
   }
   
   logOut()
-  {
+  {    
     this.store.dispatch(authActions.logOut());
   }
 
