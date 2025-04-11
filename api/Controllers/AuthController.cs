@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using Humanizer;
 using api.Data;
+using System.Buffers.Text;
 
 namespace api.Controllers
 {
@@ -30,7 +31,9 @@ namespace api.Controllers
         private readonly ITeamService _pokeTeamService;
         private readonly IEmailService _emailService;
         private readonly IIdentityService _identityService;
+        private readonly IConfiguration _config;
         private readonly PokeTeamContext _pokeTeamContext;
+        private string baseUrl;
 
         public AuthController(UserManager<User> userManager,
             SignInManager<User> signInManager,
@@ -39,7 +42,8 @@ namespace api.Controllers
             ITeamService teamService,
             IEmailService emailService,
             IIdentityService identityService,
-            PokeTeamContext pokeTeamContext
+            PokeTeamContext pokeTeamContext,
+            IConfiguration config
             )
         {
             _userManager = userManager;
@@ -50,6 +54,9 @@ namespace api.Controllers
             _emailService = emailService;
             _identityService = identityService;
             _pokeTeamContext = pokeTeamContext;
+            _config = config;
+
+            baseUrl = _config["BaseUrl"];
         }
 
         [AllowAnonymous]
@@ -63,12 +70,14 @@ namespace api.Controllers
                     HttpContext.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
                     if (refreshToken == null)
                     {
+                        _tokenGenerator.RemoveTokensFromCookie(HttpContext);
                         return BadRequest("Refresh Error");
                     }
 
                     var principal = _tokenGenerator.GetPrincipalFromRefreshToken(refreshToken);
                     if (principal == null)
                     {
+                        _tokenGenerator.RemoveTokensFromCookie(HttpContext);
                         return BadRequest("Refresh Error");
                     }
 
@@ -76,6 +85,7 @@ namespace api.Controllers
                     var user = await _userManager.FindByNameAsync(username);
                     if (user is null || user.RefreshToken == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
                     {
+                        _tokenGenerator.RemoveTokensFromCookie(HttpContext);
                         return BadRequest("Refresh Error");
                     }
 
@@ -102,8 +112,9 @@ namespace api.Controllers
                 catch (Exception ex)
                 {
                     Printer.Log("Error in refresh: ", ex);
+                    _tokenGenerator.RemoveTokensFromCookie(HttpContext);
                     await transaction.RollbackAsync();
-                    return StatusCode(500, "Internal server error");
+                    return BadRequest("Refresh Error");
                 }
             }
         }
@@ -353,7 +364,7 @@ namespace api.Controllers
             string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var tokenBytes = Encoding.UTF8.GetBytes(token);
             var encodedToken = WebEncoders.Base64UrlEncode(tokenBytes);
-            string confirmationLink = $"http://localhost:4200/user/{user.UserName}/emailconfirmation?email={user.Email}&token={encodedToken}";
+            string confirmationLink = $"{baseUrl}user/{user.UserName}/emailconfirmation?email={user.Email}&token={encodedToken}";
             string emailTo = user.Email;
             string subject = "Confirm email";
             string message = $"Confirmation email link {confirmationLink}";
