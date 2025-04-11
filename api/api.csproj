@@ -30,5 +30,10 @@
 <ItemGroup>
 	<InternalsVisibleTo Include="api.Test" />
 </ItemGroup>
+<ItemGroup>
+	<None Update="appsettings.Production.json">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+</ItemGroup>
 
 </Project>

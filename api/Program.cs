@@ -170,6 +170,12 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
 });
 */
 
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables();
+
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
