@@ -13,10 +13,15 @@ namespace api.Services
     public class UserService : IUserService
     {
         private readonly PokeTeamContext _pokeTeamContext;
+        private readonly IConfiguration _config;
+        private string baseUrl;
 
-        public UserService(PokeTeamContext pokeTeamContext)
+        public UserService(PokeTeamContext pokeTeamContext, IConfiguration config)
         {
             _pokeTeamContext = pokeTeamContext;
+            _config = config;
+
+            baseUrl = _config["BaseUrl"];
         }
 
         public async Task<UserDTO> BuildUserDTO(User user, bool logged = false)
@@ -29,7 +34,7 @@ namespace api.Services
                     return new UserDTO
                     {
                         Username = user.UserName,
-                        Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png",
+                        Picture = $"{baseUrl}images/profile-pics/{user.Picture}.png",
                         Visibility = user.Visibility ? true : false
                     };
                 }
@@ -37,7 +42,7 @@ namespace api.Services
                 {
                     Name = user.Name,
                     Username = user.UserName,
-                    Picture = $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png",
+                    Picture = $"{baseUrl}images/profile-pics/{user.Picture}.png",
                     Country = user.Country != null ? GetCountry(user.Country) : null,
                     Visibility = user.Visibility ? true : false
                 };
@@ -118,7 +123,7 @@ namespace api.Services
             Country? country = _pokeTeamContext.Country.FirstOrDefault(c => c.Code == code);
             if (country != null)
             {
-                countryDTO = new CountryDTO(country);
+                countryDTO = new CountryDTO(country, $"{baseUrl}images/flags/{country.Code}.svg");
             }
             return countryDTO;
         }
@@ -130,7 +135,7 @@ namespace api.Services
             var query =
                 from country in _pokeTeamContext.Country.Where(i => i.NormalizedName.StartsWith(key.ToLower()))
 
-            select new QueryResultDTO(country.Name, country.Code, $"https://localhost:7134/images/sprites/flags/{country.Code}.svg", "country");
+            select new QueryResultDTO(country.Name, country.Code, $"{baseUrl}images/flags/{country.Code}.svg", "country");
 
             queryResults = await query.ToListAsync();
 
@@ -144,7 +149,7 @@ namespace api.Services
             var query =
                 from country in _pokeTeamContext.Country
 
-                select new QueryResultDTO(country.Name, country.Code, $"https://localhost:7134/images/sprites/flags/{country.Code}.svg", "country");
+                select new QueryResultDTO(country.Name, country.Code, $"{baseUrl}images/flags/{country.Code}.svg", "country");
 
             queryResults = await query.ToListAsync();
 
@@ -158,7 +163,7 @@ namespace api.Services
             var query =
                 from user in _pokeTeamContext.Users.Where(u => u.UserName.ToLower().StartsWith(key.ToLower()))
 
-                select new QueryResultDTO(user.UserName, user.UserName, $"https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png", "user");
+                select new QueryResultDTO(user.UserName, user.UserName, $"{baseUrl}images/profile-pics/{user.Picture}.png", "user");
 
             queryResults = await query.ToListAsync();
 
@@ -172,7 +177,7 @@ namespace api.Services
             var query =
                 from user in _pokeTeamContext.Users.Where(u => u.UserName.Contains(key)).Skip(startIndex).Take(pageSize)
 
-                select new QueryResultDTO(user.UserName, user.UserName, "https://localhost:7134/images/sprites/profile-pics/{user.Picture}.png", "user");
+                select new QueryResultDTO(user.UserName, user.UserName, $"{baseUrl}images/profile-pics/{user.Picture}.png", "user");
 
             queryResults = await query.ToListAsync();
 

@@ -7,7 +7,8 @@ namespace api.Util
 {
     public static class Formatter
     {
-        public static string? FormatProse(string? value, string[]? args = null)
+
+        public static string? FormatProse(string? value, string baseUrl, string[]? args = null)
         {
             string? formated = value;
             if(formated != null)
@@ -19,7 +20,7 @@ namespace api.Util
                     Match match = Regex.Match(value, linkRegex);
                     while (match.Success)
                     {
-                        formated = formated.Replace(match.Groups[1].Value, InsertLink(match.Groups[1].Value));
+                        formated = formated.Replace(match.Groups[1].Value, InsertLink(match.Groups[1].Value, baseUrl));
                         match = match.NextMatch();
                     }
                 }
@@ -42,7 +43,7 @@ namespace api.Util
             return formated;
         }
 
-        private static string InsertLink(string originalValue)
+        private static string InsertLink(string originalValue, string baseUrl)
         {
             //cases where the data category comes as "mechanic"
             //but the bulbapedia url doesnt use (status_condition)
@@ -54,11 +55,11 @@ namespace api.Util
             List<string> damage = new List<string>() { "regular-damage", "super-effective", "not-very-effective" };
 
             string wikiStart = "https://bulbapedia.bulbagarden.net/wiki/";
-            string typeStart = "https://localhost:7134/images/sprites/types/generation-ix/";
-            //string pokemonStart = "https://localhost:7134/images/sprites/pokemon/";
+            string typeStart = $"{baseUrl}images/types/";
+            //string pokemonStart = $"{baseUrl}images/pokemon/";
 
-            //Original value: [paralyzed]{mechanic:paralysis} -> [originalName]{categoryType:categoryName}
-            //Output: [originalName](path){categoryType:categoryName}
+            //Original: [paralyzed]{mechanic:paralysis} -> [originalName]{categoryType:categoryName}
+            //Output:   [originalName](path){categoryType:categoryName}
 
             string originalName = originalValue.Split('[')[1].Split(']')[0];
             string categoryType = originalValue.Split(':')[0].Split('{')[1];

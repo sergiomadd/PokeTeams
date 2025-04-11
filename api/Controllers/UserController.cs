@@ -18,17 +18,20 @@ namespace api.Controllers
         private readonly ITeamService _pokeTeamService;
         private readonly IUserService _userService;
         private readonly IIdentityService _identityService;
+        private readonly IConfiguration _config;
 
         public UserController(UserManager<User> userManager,
             ITeamService teamService,
             IUserService userService,
-            IIdentityService identityService
+            IIdentityService identityService,
+            IConfiguration config
             )
         {
             _userManager = userManager;
             _pokeTeamService = teamService;
             _userService = userService;
             _identityService = identityService;
+            _config = config;   
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -134,7 +137,8 @@ namespace api.Controllers
         [HttpGet, Route("pictures")]
         public async Task<ActionResult<List<string>>> GetPictures()
         {
-            //full path "https://localhost:7134/images/sprites/profile-pics/blastoise.jpeg",
+            string baseUrl = _config["BaseUrl"];
+
             List<string> keys = new List<string>
             {
                 "bulbasaur",
@@ -150,7 +154,7 @@ namespace api.Controllers
 
             foreach (var key in keys)
             {
-                pictures.Add($"https://localhost:7134/images/sprites/profile-pics/{key}.png");
+                pictures.Add($"{baseUrl}images/profile-pics/{key}.png");
             }
             return pictures;
         }

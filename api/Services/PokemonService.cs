@@ -23,8 +23,9 @@ namespace api.Services
         private readonly ITypeService _typeService;
         private readonly IStatService _statService;
         private readonly IIdentityService _identityService;
+        private readonly IConfiguration _config;
 
-        private readonly string pokemonSpriteUrl = "https://localhost:7134/images/sprites/pokemon/";
+        private string pokemonSpriteUrl;
 
         public PokemonService
             (
@@ -36,7 +37,8 @@ namespace api.Services
                 INatureService natureService,
                 ITypeService typeService,
                 IStatService statService,
-                IIdentityService identityService
+                IIdentityService identityService,
+                IConfiguration config
             )
         {
             _pokedexContext = pokedexContext;
@@ -48,6 +50,10 @@ namespace api.Services
             _typeService = typeService;
             _statService = statService;
             _identityService = identityService;
+            _config = config;
+
+            string baseUrl = _config["BaseUrl"];
+            pokemonSpriteUrl = $"{baseUrl}images/pokemon/";
         }
 
         public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon, int langId, TeamOptionsDTO? options = null)

@@ -6,18 +6,23 @@ using api.Models.DBModels;
 using api.Util;
 using MethodTimer;
 using Microsoft.EntityFrameworkCore;
-
+using System.Buffers.Text;
 
 namespace api.Services.PokedexServices
 {
     public class ItemService : IItemService
     {
         private readonly IPokedexContext _pokedexContext;
-        private readonly string itemIconPath = "https://localhost:7134/images/sprites/items/";
+        private readonly IConfiguration _config;
+        private string baseUrl;
+        private string itemIconPath;
 
-        public ItemService(IPokedexContext pokedexContext)
+        public ItemService(IPokedexContext pokedexContext, IConfiguration config)
         {
             _pokedexContext = pokedexContext;
+            _config = config;
+            baseUrl = _config["BaseUrl"];
+            itemIconPath = $"{baseUrl}images/items/";
         }
 
         public async Task<ItemDTO?> GetItemByIdentifier(string identifier, int langId)
@@ -47,7 +52,7 @@ namespace api.Services.PokedexServices
                     items.identifier,
                     new LocalizedText(itemNames != null ? itemNames.name : itemNamesDefault.name,
                         itemNames != null ? itemNames.local_language_id : itemNamesDefault.local_language_id),
-                    new LocalizedText(Formatter.FormatProse(itemProses != null ? itemProses.effect : itemProsesDefault.effect, null),
+                    new LocalizedText(Formatter.FormatProse(itemProses != null ? itemProses.effect : itemProsesDefault.effect, baseUrl, null),
                         itemProses != null ? itemProses.local_language_id : itemProsesDefault.local_language_id),
                     $"{itemIconPath}{items.identifier}.png");
 
@@ -90,7 +95,7 @@ namespace api.Services.PokedexServices
                         new LocalizedText(itemNames != null && itemNames.local_language_id == langId ? itemNames.name : itemNamesDefault.name,
                         itemNames != null && itemNames.local_language_id == langId ? itemNames.local_language_id : itemNamesDefault.local_language_id) : null,
                     itemProses != null || itemProsesDefault != null ?
-                        new LocalizedText(Formatter.FormatProse(itemProses != null && itemProses.local_language_id == langId ? itemProses.effect : itemProsesDefault.effect, null),
+                        new LocalizedText(Formatter.FormatProse(itemProses != null && itemProses.local_language_id == langId ? itemProses.effect : itemProsesDefault.effect, baseUrl, null),
                         itemProses != null && itemProses.local_language_id == langId ? itemProses.local_language_id : itemProsesDefault.local_language_id) : null,
                     $"{itemIconPath}{items.identifier}.png");
 

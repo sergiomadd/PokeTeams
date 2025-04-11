@@ -9,13 +9,15 @@ namespace api.Services
     public class TournamentService : ITournamentService
     {
         private readonly PokeTeamContext _pokeTeamContext;
-        private readonly IRegulationService _regulationService;
+        private readonly IConfiguration _config;
+        private static string baseUrl;
 
-
-        public TournamentService(PokeTeamContext pokeTeamContext, IRegulationService regulationService) 
+        public TournamentService(PokeTeamContext pokeTeamContext, IConfiguration config) 
         {
             _pokeTeamContext = pokeTeamContext;
-            _regulationService = regulationService;
+            _config = config;
+
+            baseUrl = _config["BaseUrl"];
         }
 
         public TournamentDTO BuildTournamentDTO(Tournament tournament)
@@ -131,16 +133,16 @@ namespace api.Services
             switch (category)
             {
                 case "regional":
-                    path = "https://localhost:7134/images/vgc/regionals.png";
+                    path = $"{baseUrl}images/vgc/regionals.png";
                     break;
                 case "special":
-                    path = "https://localhost:7134/images/vgc/regionals.png";
+                    path = $"{baseUrl}images/vgc/regionals.png";
                     break;
                 case "international":
-                    path = "https://localhost:7134/images/vgc/internationals.png";
+                    path = $"{baseUrl}images/vgc/internationals.png";
                     break;
                 case "world":
-                    path = "https://localhost:7134/images/vgc/worlds.png";
+                    path = $"{baseUrl}images/vgc/worlds.png";
                     break;
                 default:
                     path = null;

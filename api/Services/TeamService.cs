@@ -39,6 +39,7 @@ using System.Composition;
 using System.Security.Cryptography.Xml;
 using System.Xml.Serialization;
 using Microsoft.IdentityModel.Tokens;
+using System.Buffers.Text;
 
 namespace api.Services
 {
@@ -50,6 +51,8 @@ namespace api.Services
         private readonly ITournamentService _tournamentService;
         private readonly IRegulationService _regulationService;
         private readonly IPokemonService _pokemonService;
+        private readonly IConfiguration _config;
+        private string baseUrl;
 
         private static Random random = new Random();
 
@@ -61,7 +64,8 @@ namespace api.Services
                 IIdentityService identityService,
                 ITournamentService tournamentService,
                 IRegulationService regulationService,
-                IPokemonService pokemonService
+                IPokemonService pokemonService,
+                IConfiguration config
             )
         {
             _pokeTeamContext = dataContext;
@@ -70,6 +74,9 @@ namespace api.Services
             _tournamentService = tournamentService;
             _regulationService = regulationService;
             _pokemonService = pokemonService;
+            _config = config;
+
+            baseUrl = _config["BaseUrl"];
         }
 
         public async Task<TeamDTO?> BuildTeamDTO(Team team, int langId)
@@ -271,7 +278,7 @@ namespace api.Services
             if (team.PlayerId != null)
             {
                 User player = await _userService.GetUserById(team.PlayerId);
-                string? picture = player.Picture != null ? $"https://localhost:7134/images/sprites/profile-pics/{player.Picture}.png" : null;
+                string? picture = player.Picture != null ? $"{baseUrl}images/profile-pics/{player.Picture}.png" : null;
                 return new UserPreviewDTO(player.UserName, picture, true);
             }
             else if (team.AnonPlayer != null)

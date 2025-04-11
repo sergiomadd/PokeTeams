@@ -13,11 +13,20 @@ namespace api.Services.PokedexServices
     {
         private readonly IPokedexContext _pokedexContext;
         private readonly ITypeService _typeService;
+        private readonly IConfiguration _config;
+        private string baseUrl;
+        private string pokeTypeIconPath;
+        private string damageClassIconPath;
 
-        public MoveService(IPokedexContext pokedexContext, ITypeService typeService)
+        public MoveService(IPokedexContext pokedexContext, ITypeService typeService, IConfiguration config)
         {
             _pokedexContext = pokedexContext;
             _typeService = typeService;
+            _config = config;
+
+            baseUrl = _config["BaseUrl"];
+            pokeTypeIconPath = $"{baseUrl}images/types/";
+            damageClassIconPath = $"{baseUrl}images/damage-class/";
         }
 
         public async Task<MoveDTO?> GetMoveByIdentifier(string identifier, int langId)
@@ -129,6 +138,7 @@ namespace api.Services.PokedexServices
                     PokeType = new PokeTypeWithEffectivenessDTO(
                         types.identifier,
                         new LocalizedText(typeNames.name, typeNames.local_language_id),
+                        $"{pokeTypeIconPath}{types.identifier}.png",
                         null,
                         null,
                         false),
@@ -136,7 +146,7 @@ namespace api.Services.PokedexServices
                     {
                         Name = Formatter.CapitalizeFirst(damageClass != null ? damageClass.name : damageClassDefault.name),
                         Description = damageClass != null ? damageClass.description : damageClassDefault.description,
-                        IconPath = $"https://localhost:7134/images/sprites/damage-class/{damageClass.move_damage_class_id}.png"
+                        IconPath = $"{damageClassIconPath}{damageClass.move_damage_class_id}.png"
                     },
                     Power = moves.power,
                     Pp = moves.pp,
@@ -145,16 +155,16 @@ namespace api.Services.PokedexServices
                     Target = new MoveTarget
                     {
                         Name = target != null ? target.name : targetDefault.name,
-                        Description = target != null ? new LocalizedText(Formatter.FormatProse(target.description, null), target.local_language_id) :
-                            new LocalizedText(Formatter.FormatProse(targetDefault.description, null), targetDefault.local_language_id)
+                        Description = target != null ? new LocalizedText(Formatter.FormatProse(target.description, baseUrl, null), target.local_language_id) :
+                            new LocalizedText(Formatter.FormatProse(targetDefault.description, baseUrl, null), targetDefault.local_language_id)
                     },
                     Effect = new MoveEffect
                     {
-                        Short = effect != null ? new LocalizedText(Formatter.FormatProse(effect.short_effect, new string[] { moves.effect_chance.ToString() }), effect.local_language_id) :
-                            new LocalizedText(Formatter.FormatProse(effectDefault.short_effect, new string[] { moves.effect_chance.ToString() }), effectDefault.local_language_id),
+                        Short = effect != null ? new LocalizedText(Formatter.FormatProse(effect.short_effect, baseUrl, new string[] { moves.effect_chance.ToString() }), effect.local_language_id) :
+                            new LocalizedText(Formatter.FormatProse(effectDefault.short_effect, baseUrl, new string[] { moves.effect_chance.ToString() }), effectDefault.local_language_id),
 
-                        Long = effect != null ? new LocalizedText(Formatter.FormatProse(effect.effect, new string[] { moves.effect_chance.ToString() }), effect.local_language_id) :
-                            new LocalizedText(Formatter.FormatProse(effectDefault.effect, new string[] { moves.effect_chance.ToString() }), effectDefault.local_language_id),
+                        Long = effect != null ? new LocalizedText(Formatter.FormatProse(effect.effect, baseUrl, new string[] { moves.effect_chance.ToString() }), effect.local_language_id) :
+                            new LocalizedText(Formatter.FormatProse(effectDefault.effect, baseUrl, new string[] { moves.effect_chance.ToString() }), effectDefault.local_language_id),
 
                         Chance = moves.effect_chance
                     },
@@ -231,6 +241,7 @@ namespace api.Services.PokedexServices
                         typeNames != null ?
                             new LocalizedText(typeNames.name, typeNames.local_language_id) :
                             new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                        $"{pokeTypeIconPath}{types.identifier}.png",
                         false));
 
             movePreview = await query.FirstOrDefaultAsync();
@@ -241,8 +252,6 @@ namespace api.Services.PokedexServices
         public async Task<List<QueryResultDTO>> QueryMovesByName(string key, int langId)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-
-            var pathStart = "https://localhost:7134/images/sprites/types/generation-ix/";
 
             var query =
                 from moveNames in _pokedexContext.move_names.Where(i => i.name.ToLower().StartsWith(key.ToLower()) && i.local_language_id == langId)
@@ -255,7 +264,7 @@ namespace api.Services.PokedexServices
                 on new { Key1 = moves.type_id } equals new { Key1 = types.id } into typesJoin
                 from types in typesJoin.DefaultIfEmpty()
 
-                select new QueryResultDTO(moveNames.name, moves.identifier, $"{pathStart}{types.identifier}.png", "move");
+                select new QueryResultDTO(moveNames.name, moves.identifier, $"{pokeTypeIconPath}{types.identifier}.png", "move");
 
             queryResults = await query.ToListAsync();
 

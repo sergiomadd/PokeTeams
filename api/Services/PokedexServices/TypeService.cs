@@ -13,12 +13,18 @@ namespace api.Services.PokedexServices
     public class TypeService : ITypeService
     {
         private readonly IPokedexContext _pokedexContext;
-        private readonly string pokeTypeIconPath = "https://localhost:7134/images/sprites/types/generation-ix/";
-        private readonly string pokeTypeTeraIconPath = "https://localhost:7134/images/sprites/teratypes/";
+        private readonly IConfiguration _config;
+        private readonly string pokeTypeIconPath;
+        private readonly string pokeTypeTeraIconPath;
 
-        public TypeService(IPokedexContext pokedexContext)
+        public TypeService(IPokedexContext pokedexContext, IConfiguration config)
         {
             _pokedexContext = pokedexContext;
+            _config = config;
+
+            string baseUrl = _config["BaseUrl"];
+            pokeTypeIconPath = $"{baseUrl}images/types/";
+            pokeTypeTeraIconPath = $"{baseUrl}images/teratypes/";
         }
 
         public async Task<PokeTypeDTO?> GetTypeById(int id, int langId, bool teraType = false)

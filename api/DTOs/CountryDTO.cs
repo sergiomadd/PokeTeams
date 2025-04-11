@@ -4,15 +4,15 @@ namespace api.DTOs
 {
     public class CountryDTO
     {
-        public string name { get; set; }
-        public string code { get; set; }
-        public string Icon { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
+        public string IconPath { get; set; }
 
-        public CountryDTO(Country country) 
+        public CountryDTO(Country country, string iconPath) 
         {
-            name = country.Name;
-            code = country.Code;
-            Icon = $"https://localhost:7134/images/sprites/flags/{country.Code}.svg";
+            Name = country.Name;
+            Code = country.Code;
+            IconPath = iconPath;
         }
     }
 
