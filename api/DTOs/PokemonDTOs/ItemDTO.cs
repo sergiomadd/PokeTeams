@@ -7,14 +7,12 @@
         public LocalizedText? Prose { get; set; }
         public string IconPath { get; set; }
 
-        string pathStart = "https://localhost:7134/images/sprites/items/";
-
-        public ItemDTO(string identifier, LocalizedText? name, LocalizedText? prose)
+        public ItemDTO(string identifier, LocalizedText? name, LocalizedText? prose, string iconPath)
         {
             Identifier = identifier;
             Name = name;
             Prose = prose;
-            IconPath = $"{pathStart}{identifier}.png";
+            IconPath = iconPath;
         }
     }
 }

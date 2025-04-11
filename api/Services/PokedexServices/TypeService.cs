@@ -13,6 +13,8 @@ namespace api.Services.PokedexServices
     public class TypeService : ITypeService
     {
         private readonly IPokedexContext _pokedexContext;
+        private readonly string pokeTypeIconPath = "https://localhost:7134/images/sprites/types/generation-ix/";
+        private readonly string pokeTypeTeraIconPath = "https://localhost:7134/images/sprites/teratypes/";
 
         public TypeService(IPokedexContext pokedexContext)
         {
@@ -39,6 +41,7 @@ namespace api.Services.PokedexServices
                     typeNames != null ?
                         new LocalizedText(typeNames.name, typeNames.local_language_id) :
                         new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                    teraType ? $"{pokeTypeTeraIconPath}{types.identifier}.png" : $"{pokeTypeIconPath}{types.identifier}.png",
                     teraType);
 
             pokeType = await query.FirstOrDefaultAsync();
@@ -66,6 +69,7 @@ namespace api.Services.PokedexServices
                     typeNames != null ?
                         new LocalizedText(typeNames.name, typeNames.local_language_id) :
                         new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                    teraType ? $"{pokeTypeTeraIconPath}{types.identifier}.png" : $"{pokeTypeIconPath}{types.identifier}.png",
                     teraType);
 
             pokeType = await query.FirstOrDefaultAsync();
@@ -93,6 +97,7 @@ namespace api.Services.PokedexServices
                     typeNames != null ?
                         new LocalizedText(typeNames.name, typeNames.local_language_id) :
                         new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                    $"{pokeTypeIconPath}{types.identifier}.png",
                     null,
                     null,
                     false);
@@ -128,6 +133,7 @@ namespace api.Services.PokedexServices
                     typeNames != null ?
                         new LocalizedText(typeNames.name, typeNames.local_language_id) :
                         new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                    $"{pokeTypeIconPath}{types.identifier}.png",
                     null,
                     null,
                     false);
@@ -257,6 +263,7 @@ namespace api.Services.PokedexServices
                     typeNames != null ?
                         new LocalizedText(typeNames.name, typeNames.local_language_id) :
                         new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                    $"{pokeTypeIconPath}{types.identifier}.png",
                     false);
 
             pokeTypes = await query.ToListAsync();
@@ -291,6 +298,7 @@ namespace api.Services.PokedexServices
                     typeNames != null ?
                         new LocalizedText(typeNames.name, typeNames.local_language_id) :
                         new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                    $"{pokeTypeTeraIconPath}{types.identifier}.png",
                     true);
 
             pokeTypes = await query.ToListAsync();
@@ -308,8 +316,7 @@ namespace api.Services.PokedexServices
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
-            string pathStart = teraType ? "https://localhost:7134/images/sprites/teratypes/"
-                : "https://localhost:7134/images/sprites/types/generation-viii/";
+            string path = teraType ? pokeTypeTeraIconPath : pokeTypeTeraIconPath;
 
             var query =
                 from typeNames in _pokedexContext.type_names.Where(i => i.name.ToLower().StartsWith(key.ToLower()) && i.local_language_id == langId)
@@ -322,8 +329,8 @@ namespace api.Services.PokedexServices
                 on new { Key1 = typeNames.type_id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
                 from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
 
-                select typeNames != null ? new QueryResultDTO(typeNames.name, types.identifier, $"{pathStart}{types.identifier}.png", "type") :
-                    new QueryResultDTO(typeNamesDefault.name, types.identifier, $"{pathStart}{types.identifier}.png", "type");
+                select typeNames != null ? new QueryResultDTO(typeNames.name, types.identifier, $"{path}{types.identifier}.png", "type") :
+                    new QueryResultDTO(typeNamesDefault.name, types.identifier, $"{path}{types.identifier}.png", "type");
 
             queryResults = await query.ToListAsync();
 
@@ -333,8 +340,6 @@ namespace api.Services.PokedexServices
         public async Task<List<QueryResultDTO>> QueryAllTeraTypes(int langId)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-
-            string pathStart = "https://localhost:7134/images/sprites/teratypes/";
 
             var query =
                 from types in _pokedexContext.types
@@ -347,8 +352,8 @@ namespace api.Services.PokedexServices
                 on new { Key1 = types.id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
                 from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
 
-                select typeNames != null ? new QueryResultDTO(typeNames.name, types.identifier, $"{pathStart}{types.identifier}.png", "type") :
-                    new QueryResultDTO(typeNamesDefault.name, types.identifier, $"{pathStart}{types.identifier}.png", "type");
+                select typeNames != null ? new QueryResultDTO(typeNames.name, types.identifier, $"{pokeTypeTeraIconPath}{types.identifier}.png", "type") :
+                    new QueryResultDTO(typeNamesDefault.name, types.identifier, $"{pokeTypeTeraIconPath}{types.identifier}.png", "type");
 
             queryResults = await query.ToListAsync();
 

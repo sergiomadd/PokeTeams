@@ -13,6 +13,7 @@ namespace api.Services.PokedexServices
     public class ItemService : IItemService
     {
         private readonly IPokedexContext _pokedexContext;
+        private readonly string itemIconPath = "https://localhost:7134/images/sprites/items/";
 
         public ItemService(IPokedexContext pokedexContext)
         {
@@ -44,12 +45,11 @@ namespace api.Services.PokedexServices
 
                 select new ItemDTO(
                     items.identifier,
-
                     new LocalizedText(itemNames != null ? itemNames.name : itemNamesDefault.name,
                         itemNames != null ? itemNames.local_language_id : itemNamesDefault.local_language_id),
-
                     new LocalizedText(Formatter.FormatProse(itemProses != null ? itemProses.effect : itemProsesDefault.effect, null),
-                        itemProses != null ? itemProses.local_language_id : itemProsesDefault.local_language_id));
+                        itemProses != null ? itemProses.local_language_id : itemProsesDefault.local_language_id),
+                    $"{itemIconPath}{items.identifier}.png");
 
             item = await query.FirstOrDefaultAsync();
 
@@ -86,14 +86,13 @@ namespace api.Services.PokedexServices
 
                 select new ItemDTO(
                     items.identifier,
-
                     itemNames != null || itemProsesDefault != null ?
                         new LocalizedText(itemNames != null && itemNames.local_language_id == langId ? itemNames.name : itemNamesDefault.name,
                         itemNames != null && itemNames.local_language_id == langId ? itemNames.local_language_id : itemNamesDefault.local_language_id) : null,
-
                     itemProses != null || itemProsesDefault != null ?
                         new LocalizedText(Formatter.FormatProse(itemProses != null && itemProses.local_language_id == langId ? itemProses.effect : itemProsesDefault.effect, null),
-                        itemProses != null && itemProses.local_language_id == langId ? itemProses.local_language_id : itemProsesDefault.local_language_id) : null);
+                        itemProses != null && itemProses.local_language_id == langId ? itemProses.local_language_id : itemProsesDefault.local_language_id) : null,
+                    $"{itemIconPath}{items.identifier}.png");
 
             item = query != null ? await query.FirstOrDefaultAsync() : null;
 
@@ -103,7 +102,6 @@ namespace api.Services.PokedexServices
         public async Task<List<QueryResultDTO>> QueryItemsByName(string key, int langId)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
-            string pathStart = "https://localhost:7134/images/sprites/items/";
 
             var query =
                 from itemNames in _pokedexContext.item_names.Where(i => i.name.ToLower().StartsWith(key.ToLower()) && i.local_language_id == langId)
@@ -112,7 +110,7 @@ namespace api.Services.PokedexServices
                 on new { Key1 = itemNames.item_id } equals new { Key1 = items.id } into itemsJoin
                 from items in itemsJoin.DefaultIfEmpty()
 
-                select new QueryResultDTO(itemNames.name, items.identifier, $"{pathStart}{items.identifier}.png", "item");
+                select new QueryResultDTO(itemNames.name, items.identifier, $"{itemIconPath}{items.identifier}.png", "item");
 
             queryResults = await query.ToListAsync();
 

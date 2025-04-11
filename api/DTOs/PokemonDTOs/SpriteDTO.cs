@@ -11,7 +11,6 @@ namespace api.DTOs.PokemonDTOs
         public string? Female { get; set; }
         public string? ShinyFemale { get; set; }
 
-        private const string urlStart = "https://localhost:7134/images/sprites/pokemon/";
         private const string urlEnd = ".png";
         private const string shiny = "shiny/";
         private const string female = "female/";
@@ -22,13 +21,13 @@ namespace api.DTOs.PokemonDTOs
 
         }
 
-        public SpriteDTO(int dexNumber)
+        public SpriteDTO(int dexNumber, string path)
         {
             string dex = dexNumber.ToString();
-            string baseUrl = urlStart + dex + urlEnd;
-            string shinyUrl = urlStart + shiny + dex + urlEnd;
-            string? femaleUrl = HasFemaleForm(dexNumber) ? urlStart + female + dex + urlEnd : null;
-            string? shinyFemaleUrl = HasFemaleForm(dexNumber) ? urlStart + shinyFemale + dex + urlEnd : null;
+            string baseUrl = path + dex + urlEnd;
+            string shinyUrl = path + shiny + dex + urlEnd;
+            string? femaleUrl = HasFemaleForm(dexNumber) ? path + female + dex + urlEnd : null;
+            string? shinyFemaleUrl = HasFemaleForm(dexNumber) ? path + shinyFemale + dex + urlEnd : null;
 
             Base = baseUrl;
             Shiny = shinyUrl;

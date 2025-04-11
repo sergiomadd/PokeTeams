@@ -24,6 +24,8 @@ namespace api.Services
         private readonly IStatService _statService;
         private readonly IIdentityService _identityService;
 
+        private readonly string pokemonSpriteUrl = "https://localhost:7134/images/sprites/pokemon/";
+
         public PokemonService
             (
                 IPokedexContext pokedexContext,
@@ -140,7 +142,7 @@ namespace api.Services
                 Name = await GetPokemonName(pokemon.DexNumber ?? 1, langId),
                 DexNumber = pokemon.DexNumber,
                 TeraType = await _typeService.GetTypeByIdentifier(pokemon.TeraTypeIdentifier ?? "", true, langId),
-                Sprite = new SpriteDTO(pokemon.DexNumber ?? 1),
+                Sprite = new SpriteDTO(pokemon.DexNumber ?? 1, pokemonSpriteUrl),
                 Shiny = pokemon.Shiny,
                 Gender = pokemon.Gender,
                 Moves = moves,
@@ -207,7 +209,7 @@ namespace api.Services
                 id,
                 await _typeService.GetPokemonTypesWithEffectiveness(id, langId),
                 await _statService.GetPokemonStats(id, langId),
-                new SpriteDTO(id),
+                new SpriteDTO(id, pokemonSpriteUrl),
                 preEvolution: await GetPokemonPreEvolution(id, langId),
                 evolutions: await GetPokemonEvolutions(id, langId));
             return pokemonData;
@@ -289,7 +291,7 @@ namespace api.Services
                     newID,
                     await _typeService.GetPokemonTypes(newID, langId),
                     await _statService.GetPokemonStats(newID, langId),
-                    new SpriteDTO(newID),
+                    new SpriteDTO(newID, pokemonSpriteUrl),
                     preEvolution: await GetPokemonPreEvolution(newID, langId));
             }
             return null;
@@ -310,7 +312,7 @@ namespace api.Services
                             await GetPokemonName(newID, langId), newID,
                             await _typeService.GetPokemonTypes(newID, langId),
                             await _statService.GetPokemonStats(newID, langId),
-                            new SpriteDTO(newID),
+                            new SpriteDTO(newID, pokemonSpriteUrl),
                             evolutions: await GetPokemonEvolutions(newID, langId)));
                     }
                 }
@@ -329,8 +331,8 @@ namespace api.Services
                 on new { Key1 = pokemonNames.pokemon_species_id, Key2 = (int)Lang.en } equals new { Key1 = pokemonNamesDefault.pokemon_species_id, Key2 = pokemonNamesDefault.local_language_id } into pokemonNamesDefaultJoin
                 from pokemonNamesDefault in pokemonNamesDefaultJoin.DefaultIfEmpty()
 
-                select pokemonNames != null ? new QueryResultDTO(pokemonNames.name, pokemonNames.pokemon_species_id.ToString(), $"https://localhost:7134/images/sprites/pokemon/{pokemonNames.pokemon_species_id}.png", "pokemon") :
-                    new QueryResultDTO(pokemonNamesDefault.name, pokemonNames.pokemon_species_id.ToString(), $"https://localhost:7134/images/sprites/pokemon/{pokemonNames.pokemon_species_id}.png", "pokemon");
+                select pokemonNames != null ? new QueryResultDTO(pokemonNames.name, pokemonNames.pokemon_species_id.ToString(), $"{pokemonSpriteUrl}{pokemonNames.pokemon_species_id}.png", "pokemon") :
+                    new QueryResultDTO(pokemonNamesDefault.name, pokemonNames.pokemon_species_id.ToString(), $"{pokemonSpriteUrl}{pokemonNames.pokemon_species_id}.png", "pokemon");
 
             queryResults = await query.ToListAsync();
 

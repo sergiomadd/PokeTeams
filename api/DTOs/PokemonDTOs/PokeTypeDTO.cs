@@ -7,18 +7,12 @@
         public string IconPath { get; set; }
         public bool Teratype { get; set; }
 
-        public PokeTypeDTO(string identifier, LocalizedText name, bool teraType = false)
+        public PokeTypeDTO(string identifier, LocalizedText name, string iconPath, bool teraType = false)
         {
             Identifier = identifier;
             Name = name;
             Teratype = teraType ? teraType : false;
-            var pathStart = "https://localhost:7134/images/sprites/types/generation-ix/";
-            if (teraType)
-            {
-                pathStart = "https://localhost:7134/images/sprites/teratypes/";
-            }
-
-            IconPath = $"{pathStart}{identifier}.png";
+            IconPath = iconPath;
         }
     }
 }

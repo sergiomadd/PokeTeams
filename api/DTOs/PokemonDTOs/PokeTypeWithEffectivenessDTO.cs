@@ -10,20 +10,14 @@
         public bool Teratype { get; set; }
 
 
-        public PokeTypeWithEffectivenessDTO(string identifier, LocalizedText name, EffectivenessDTO? effectivenessAttack = null, EffectivenessDTO? effectivenessDefense = null, bool teraType = false)
+        public PokeTypeWithEffectivenessDTO(string identifier, LocalizedText name, string iconPath, EffectivenessDTO? effectivenessAttack = null, EffectivenessDTO? effectivenessDefense = null, bool teraType = false)
         {
             Identifier = identifier;
             Name = name;
+            IconPath = iconPath;
             EffectivenessAttack = effectivenessAttack;
             EffectivenessDefense = effectivenessDefense;
-            Teratype = teraType ? teraType : false;
-            var pathStart = "https://localhost:7134/images/sprites/types/generation-ix/";
-            if (teraType)
-            {
-                pathStart = "https://localhost:7134/images/sprites/teratypes/";
-            }
-
-            IconPath = $"{pathStart}{identifier}.png";
+            Teratype = teraType;
         }
     }
 }
