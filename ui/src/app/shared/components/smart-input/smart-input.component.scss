@@ -94,12 +94,22 @@ ul
   border-radius: .25em;
   cursor: pointer;
   overflow: hidden;
+  border-radius: 5px;
 
   &:hover
   {
     background-color: var(--bg-color-3);
     color: var(--text-color);
-    border-radius: 5px;
+  }
+}
+
+.tag-result
+{
+  margin: 0.2em 0 0.2em 0;
+
+  &:hover
+  {
+    outline: 1px solid var(--text-color);
   }
 }
 

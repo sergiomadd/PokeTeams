@@ -104,7 +104,7 @@ export class QueryService
 
   queryTags = (args: any): Observable<QueryItem[]> => 
   {
-    let url = this.apiUrl + 'tag/all';
+    let url = this.apiUrl + 'tag/query/all';
     return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), 
     map((QueryResults: QueryItem[]) => QueryResults.filter(t => 
       {
@@ -119,7 +119,7 @@ export class QueryService
 
   queryAllTags() : Observable<QueryItem[]>
   {
-    let url = this.apiUrl + 'tag/all';
+    let url = this.apiUrl + 'tag/query/all';
     return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout));
   }
   tagAllCallback = (): Observable<QueryItem[]> => 

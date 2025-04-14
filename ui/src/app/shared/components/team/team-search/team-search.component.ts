@@ -8,7 +8,6 @@ import { WindowService } from 'src/app/core/helpers/window.service';
 import { Chip } from 'src/app/core/models/misc/chip.model';
 import { QueryItem } from 'src/app/core/models/misc/queryResult.model';
 import { SetOperation } from 'src/app/core/models/search/setOperation.enum';
-import { Tag } from 'src/app/core/models/team/tag.model';
 import { QueryService } from 'src/app/core/services/query.service';
 import { TeamService } from 'src/app/core/services/team.service';
 import { selectTheme } from 'src/app/core/store/config/config.selectors';
@@ -64,14 +63,13 @@ export class TeamSearchComponent
     {
       if(event.type === "tag")
       {
-        const tag: Tag = event as Tag;
         const chip: Chip = 
         {
-          name: tag.name,
-          identifier: tag.identifier,
-          tooltipText: tag.description,
-          color: tag.color,
-          textColor: tag.color ? this.theme.getTagTextColor(tag.color) : undefined,
+          name: event.name,
+          identifier: event.identifier,
+          color: event.icon,
+          textColor: event.icon ? this.theme.getTagTextColor(event.icon) : undefined,
+          type: event.type
         }
         this.chips?.push(chip);
       }

@@ -128,7 +128,16 @@
         <ng-container *ngFor="let result of results; index as i">
           <li 
           class="result"
-          [ngClass]="{'result-hovered': activeResult === i}"
+          [ngClass]="
+          {
+            'result-hovered': activeResult === i,
+            'tag-result': result.type === 'tag' && result.icon
+          }"
+          [ngStyle]="
+          {
+            'background-color': result.type === 'tag' && result.icon ? result.icon : '',
+            color: result.type === 'tag' && result.icon ? theme.getTagTextColor(result.icon) : '',
+          }"
           [class.active]="activeResult === i"
           (click)="selectResult(result)"
           >
@@ -146,7 +155,9 @@
                 </svg>
               </ng-container>
               <ng-template #icon>
-                <img [attr.src]="result.icon" alt="" class="icon-l" fill loading="lazy">
+                <ng-container *ngIf="result.type !== 'tag'">
+                  <img [attr.src]="result.icon" alt="" class="icon-l" fill loading="lazy">
+                </ng-container>
               </ng-template>
             </ng-container>
             {{result.name}}
