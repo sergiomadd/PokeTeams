@@ -551,6 +551,7 @@ export class PokemonEditorComponent
     if(this.pokemon)
     {
       this.pokemon = { ...this.pokemon, item: event ? await this.pokemonService.getItemByName(event.name) : undefined }
+      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
   }
 
