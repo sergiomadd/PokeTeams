@@ -574,7 +574,7 @@ namespace api.Services
                             }
                             break;
                         case "tournament":
-                            expressions.Add(t => t.Tournament != null && t.Tournament.NormalizedName == query.Name.ToUpper());
+                            expressions.Add(t => t.Tournament != null && t.Tournament.ShortName == query.Name);
                             break;
                         case "regulation":
                             expressions.Add(t => t.Regulation == query.Identifier);

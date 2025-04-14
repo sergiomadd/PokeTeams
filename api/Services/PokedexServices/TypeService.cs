@@ -139,7 +139,7 @@ namespace api.Services.PokedexServices
                     typeNames != null ?
                         new LocalizedText(typeNames.name, typeNames.local_language_id) :
                         new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
-                    $"{pokeTypeIconPath}{types.identifier}.png",
+                    teraType ? $"{pokeTypeTeraIconPath}{types.identifier}.png" : $"{pokeTypeIconPath}{types.identifier}.png",
                     null,
                     null,
                     false);

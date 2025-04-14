@@ -118,7 +118,7 @@ namespace api.Services
         private List<StatDTO?>? BuildPokemonEVs(Pokemon pokemon, TeamOptionsDTO? options)
         {
             List<StatDTO?> evs = new List<StatDTO?>();
-            if (options == null || !options.IvsVisibility)
+            if (options == null || !options.EvsVisibility)
             {
                 return null;
             }
