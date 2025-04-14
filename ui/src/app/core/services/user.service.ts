@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, lastValueFrom, Observable, timeout } from 'rxjs';
 import { TeamService } from 'src/app/core/services/team.service';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 import { User } from '../../features/user/models/user.model';
 
 @Injectable({

@@ -3,7 +3,7 @@ import { Injectable, inject } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Observable, lastValueFrom, timeout } from "rxjs";
 import { SearchQueryDTO } from "src/app/core/models/search/searchQuery.dto";
-import { environment } from "src/environments/environment.development";
+import { environment } from "src/environments/environment";
 import { UtilService } from "../helpers/util.service";
 import { SearchQueryResponseDTO } from "../models/search/searchQueryResponse.dto";
 import { Regulation } from "../models/team/regulation.model";

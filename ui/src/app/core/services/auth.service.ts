@@ -6,13 +6,14 @@ import { LogInDTO } from 'src/app/features/user/models/login.dto';
 import { SignUpDTO } from 'src/app/features/user/models/signup.dto';
 import { User } from 'src/app/features/user/models/user.model';
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService 
 {
-  private apiUrl = 'https://localhost:7134/api/auth/';
+  private apiUrl = environment.apiURL + "auth/";
   private dataTimeout = 5000;
 
   constructor(private http: HttpClient) { }

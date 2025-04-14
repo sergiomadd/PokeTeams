@@ -1,3 +1,5 @@
-export const environment = {
-  apiURL: "https://localhost:7134/api/"
+export const environment = 
+{
+  production: true,
+  apiURL: "https://poketeams.com/api/"
 };

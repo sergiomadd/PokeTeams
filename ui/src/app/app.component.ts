@@ -7,12 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent 
 {
-  title = 'ui';
+  title = 'PokeTeams';
   menuOpen: boolean = false;
 
   constructor() 
   {
-
   }
 
   toggleMenu()
