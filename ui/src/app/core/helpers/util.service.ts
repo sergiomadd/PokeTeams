@@ -2,13 +2,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { QueryItem } from '../models/misc/queryResult.model';
-import { Ability } from '../models/pokemon/ability.model';
-import { Item } from '../models/pokemon/item.model';
-import { Move } from '../models/pokemon/move.model';
-import { Nature } from '../models/pokemon/nature.model';
-import { Pokemon } from '../models/pokemon/pokemon.model';
 import { Stat } from '../models/pokemon/stat.model';
-import { Type } from '../models/pokemon/type.model';
 import { Tag } from '../models/team/tag.model';
 import { I18nService } from './i18n.service';
 
@@ -198,87 +192,8 @@ export class UtilService
     return nameDict[stat.identifier];
   }
 
-  getPokemonQueryResult(pokemon: Pokemon)
-  {
-    if(pokemon.name)
-    {
-      let queryResult: QueryItem = 
-      {
-        name: pokemon.name.content ?? "",
-        identifier: pokemon.name.content ?? "",
-        icon: pokemon.sprite?.base
-      }
-      return queryResult;
-    }
-    return undefined;
-  }
-
-  getMoveQueryResult(move?: Move): QueryItem | undefined
-  {
-    if(move)
-    {
-      return {
-        name: move.name.content,
-        identifier: move.name.content,
-        icon: move.pokeType?.iconPath
-      }
-    }
-    return undefined;
-  }
-
-  getItemQueryResult(item?: Item): QueryItem | undefined
-  {
-    if(item)
-    {
-      return {
-        name: item.name.content,
-        identifier: item.name.content,
-      }
-    }
-    return undefined;
-  }
-
-  getAbilityQueryResult(ability?: Ability): QueryItem | undefined
-  {
-    if(ability)
-    {
-      return {
-        name: ability.name.content,
-        identifier: ability.name.content,
-        icon: ability.hidden ? "hidden" : undefined
-      }
-    }
-    return undefined;
-  }
-
-  getNatureQueryResult(nature?: Nature): QueryItem | undefined
-  {
-    if(nature)
-    {
-      return {
-        name: nature.name.content,
-        identifier: nature.name.content,
-      }
-    }
-    return undefined;
-  }
-
-  getTypeQueryResult(type?: Type): QueryItem | undefined
-  {
-    if(type)
-    {
-      return {
-        name: type.name.content,
-        identifier: type.name.content,
-        icon: type.iconPath
-      }
-    }
-    return undefined;
-  }
-
   getTypeNameImagePath(typeIconPath: string)
   {
-    //https://localhost:7134/images/sprites/types/generation-ix/fire.png
     return typeIconPath ? typeIconPath.replace("ix", "ix_names") : typeIconPath;
   }
 
@@ -323,5 +238,10 @@ export class UtilService
       identifier: tag.identifier,
       type: "tag"
     }
+  }
+
+  openInNewTab(url) 
+  {
+    window.open(url, '_blank');
   }
 }

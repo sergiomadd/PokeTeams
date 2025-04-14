@@ -29,7 +29,7 @@
         <div class="form-inputs gap-m">
           <app-smart-input
           #pokemonInput 
-          [value]="util.getPokemonQueryResult(pokemon)"
+          [value]="queryService.getPokemonQueryResult(pokemon)"
           [label]="'team.pokemon_editor.pokemon' | translate"
           [keepSelected]="true"
           [getter]="queryService.queryPokemonCallback"
@@ -37,7 +37,7 @@
           class="smart-input-wrapper form-item"
           ></app-smart-input>
           <app-smart-input
-          [value]="util.getItemQueryResult(pokemon.item)"
+          [value]="queryService.getItemQueryResult(pokemon.item)"
           [label]="'team.pokemon_editor.item' | translate"
           [keepSelected]="true"
           [getter]="queryService.queryItemCallback"
@@ -60,7 +60,7 @@
               </div>
               <ng-container *ngIf="allAbilities; else pokemonAbilities">
                 <app-smart-input
-                [value]="util.getAbilityQueryResult(pokemon.ability)"
+                [value]="queryService.getAbilityQueryResult(pokemon.ability)"
                 [keepSelected]="true"
                 [getter]="queryService.queryAbilityCallback"
                 [allGetter]="queryService.abilityAllCallback"
@@ -70,7 +70,7 @@
               </ng-container>
               <ng-template #pokemonAbilities>
                 <app-smart-input
-                [value]="util.getAbilityQueryResult(pokemon.ability)"
+                [value]="queryService.getAbilityQueryResult(pokemon.ability)"
                 [keepSelected]="true"
                 [allGetter]="queryService.pokemonAbilitiesCallback"
                 [allGetterIndex]="this.pokemon?.dexNumber"
@@ -81,7 +81,7 @@
             </div>
           </div>
           <app-smart-input
-          [value]="util.getMoveQueryResult(pokemon.moves ? pokemon.moves[0] : undefined)"
+          [value]="queryService.getMoveQueryResult(pokemon.moves ? pokemon.moves[0] : undefined)"
           [label]="'team.pokemon_editor.move' | translate:{'index':1}"
           [keepSelected]="true"
           [getter]="queryService.queryMoveCallback"
@@ -89,7 +89,7 @@
           class="smart-input-wrapper form-item"
           ></app-smart-input>
           <app-smart-input
-          [value]="util.getMoveQueryResult(pokemon.moves ? pokemon.moves[1] : undefined)"
+          [value]="queryService.getMoveQueryResult(pokemon.moves ? pokemon.moves[1] : undefined)"
           [label]="'team.pokemon_editor.move' | translate:{'index':2}"
           [keepSelected]="true"
           [getter]="queryService.queryMoveCallback"
@@ -97,7 +97,7 @@
           class="smart-input-wrapper form-item"
           ></app-smart-input>
           <app-smart-input
-          [value]="util.getNatureQueryResult(pokemon.nature)"
+          [value]="queryService.getNatureQueryResult(pokemon.nature)"
           [label]="'team.pokemon_editor.nature' | translate"
           [keepSelected]="true"
           [getter]="queryService.queryNatureCallback"
@@ -106,7 +106,7 @@
           class="smart-input-wrapper form-item"
           ></app-smart-input>
           <app-smart-input
-          [value]="util.getMoveQueryResult(pokemon.moves ? pokemon.moves[2] : undefined)"
+          [value]="queryService.getMoveQueryResult(pokemon.moves ? pokemon.moves[2] : undefined)"
           [label]="'team.pokemon_editor.move' | translate:{'index':3}"
           [keepSelected]="true"
           [getter]="queryService.queryMoveCallback"
@@ -114,7 +114,7 @@
           class="smart-input-wrapper form-item"
           ></app-smart-input>
           <app-smart-input
-          [value]="util.getMoveQueryResult(pokemon.moves ? pokemon.moves[3] : undefined)"
+          [value]="queryService.getMoveQueryResult(pokemon.moves ? pokemon.moves[3] : undefined)"
           [label]="'team.pokemon_editor.move' | translate:{'index':4}"
           [keepSelected]="true"
           [getter]="queryService.queryMoveCallback"
@@ -122,7 +122,7 @@
           class="smart-input-wrapper form-item"
           ></app-smart-input>
           <app-smart-input
-          [value]="util.getTypeQueryResult(pokemon.teraType)"
+          [value]="queryService.getTypeQueryResult(pokemon.teraType)"
           [label]="'team.pokemon_editor.teratype' | translate"
           [keepSelected]="true"
           [getter]="queryService.queryTeratypeCallback"

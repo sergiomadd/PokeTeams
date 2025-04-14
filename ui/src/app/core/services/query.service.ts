@@ -1,8 +1,14 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, timeout } from 'rxjs';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 import { QueryItem } from '../models/misc/queryResult.model';
+import { Ability } from '../models/pokemon/ability.model';
+import { Item } from '../models/pokemon/item.model';
+import { Move } from '../models/pokemon/move.model';
+import { Nature } from '../models/pokemon/nature.model';
+import { Pokemon } from '../models/pokemon/pokemon.model';
+import { Type } from '../models/pokemon/type.model';
 
 @Injectable({
   providedIn: 'root'
@@ -102,7 +108,7 @@ export class QueryService
     return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), 
     map((QueryResults: QueryItem[]) => QueryResults.filter(t => 
       {
-        return t.name.toLowerCase().includes(args.toLowerCase())
+        return t.name.toLowerCase().startsWith(args.toLowerCase())
       }))
     );
   }
@@ -227,5 +233,85 @@ export class QueryService
   teraTypesAllCallback = (): Observable<QueryItem[]> => 
   {
     return this.queryAllTeraTypes();
+  }
+
+  //Converters
+
+  getPokemonQueryResult(pokemon: Pokemon)
+  {
+    if(pokemon.name)
+    {
+      let queryResult: QueryItem = 
+      {
+        name: pokemon.name.content ?? "",
+        identifier: pokemon.name.content ?? "",
+        icon: pokemon.sprite?.base
+      }
+      return queryResult;
+    }
+    return undefined;
+  }
+
+  getMoveQueryResult(move?: Move): QueryItem | undefined
+  {
+    if(move)
+    {
+      return {
+        name: move.name.content,
+        identifier: move.name.content,
+        icon: move.pokeType?.iconPath
+      }
+    }
+    return undefined;
+  }
+
+  getItemQueryResult(item?: Item): QueryItem | undefined
+  {
+    if(item)
+    {
+      return {
+        name: item.name.content,
+        identifier: item.name.content,
+      }
+    }
+    return undefined;
+  }
+
+  getAbilityQueryResult(ability?: Ability): QueryItem | undefined
+  {
+    if(ability)
+    {
+      return {
+        name: ability.name.content,
+        identifier: ability.name.content,
+        icon: ability.hidden ? "hidden" : undefined
+      }
+    }
+    return undefined;
+  }
+
+  getNatureQueryResult(nature?: Nature): QueryItem | undefined
+  {
+    if(nature)
+    {
+      return {
+        name: nature.name.content,
+        identifier: nature.name.content,
+      }
+    }
+    return undefined;
+  }
+
+  getTypeQueryResult(type?: Type): QueryItem | undefined
+  {
+    if(type)
+    {
+      return {
+        name: type.name.content,
+        identifier: type.name.content,
+        icon: type.iconPath
+      }
+    }
+    return undefined;
   }
 }
