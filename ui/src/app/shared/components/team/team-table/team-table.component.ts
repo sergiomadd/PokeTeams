@@ -84,6 +84,11 @@ export class TeamTableComponent
             this.store.dispatch(configActions.changeTeamsPerPage({request: value}))
           }
         }
+        else
+        {
+          this.paginationForm.controls.teamsPerPage.setValue(10);
+          this.store.dispatch(configActions.changeTeamsPerPage({request: 10}))
+        }
       }
     )
     this.loggedUser$.subscribe(value =>
