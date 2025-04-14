@@ -162,8 +162,7 @@ namespace api.Util
 
         public static string NormalizeString(string text)
         {
-            //return text.Replace(" ", "").ToLower();
-            return text.ToLower();
+            return text.ToUpperInvariant();
         }
 
         public static string CapitalizeFirst(string text)
@@ -171,6 +170,11 @@ namespace api.Util
             string firstCapitalized = text.Substring(0, 1).ToUpper();
             string rest = text.Substring(1, text.Length - 1);
             return firstCapitalized + rest;
+        }
+
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> value)
+        {
+            return value == null || !value.Any();
         }
     }
 }

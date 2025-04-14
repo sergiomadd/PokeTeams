@@ -1,0 +1,13 @@
+﻿<configuration>
+	<system.webServer>
+		<staticContent>
+			<mimeMap fileExtension=".svg" mimeType="image/svg+xml" />
+			<mimeMap fileExtension=".svgz" mimeType="image/svg+xml" />
+		</staticContent>
+		<httpCompression>
+			<staticTypes>
+				<add mimeType="image/svg+xml" enabled="true" />
+			</staticTypes>
+		</httpCompression>
+	</system.webServer>
+</configuration>

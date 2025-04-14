@@ -180,6 +180,22 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+//Auto-Migrate on App Startup
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<PokeTeamContext>();
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Auto-migration error: " + ex.Message);
+    }
+}
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

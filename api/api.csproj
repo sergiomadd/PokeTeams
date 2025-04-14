@@ -35,5 +35,10 @@
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</None>
 </ItemGroup>
+<ItemGroup>
+	<Content Update="web.config">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+</ItemGroup>
 
 </Project>
