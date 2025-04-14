@@ -67,7 +67,6 @@ namespace api.Services
             return true;
         }
 
-
         public async Task<List<QueryResultDTO>> QueryAllTags()
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
@@ -75,7 +74,7 @@ namespace api.Services
             var query =
                 from tag in _pokeTeamContext.Tag
 
-                select new QueryResultDTO(tag.Name, tag.Identifier, null, "tag");
+                select new QueryResultDTO(tag.Name, tag.Identifier, tag.Color, "tag");
 
             queryResults = await query.ToListAsync();
 
