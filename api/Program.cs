@@ -95,14 +95,13 @@ builder.Services.AddAuthentication(option =>
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsync("NoRefreshTokenProvided");
                 }
-                else
+                else if (string.IsNullOrEmpty(accessToken))
                 {
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsync("NoAccessTokenProvided");
                 }
             }
-
         };
     });
 builder.Services.AddAuthorization();
@@ -207,7 +206,7 @@ if (app.Environment.IsDevelopment())
 //app.UseRateLimiter();
 
 app.UseHttpsRedirection();
-app.MapStaticAssets();
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
