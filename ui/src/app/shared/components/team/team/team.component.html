@@ -21,7 +21,7 @@
       </ng-container>
       <ng-container *ngIf="team?.player; else noPlayer">
         <ng-container *ngIf="team?.player?.registered; else unregistered">
-          <div class="detail flex align-i-c">
+          <div class="detail flex align-i-c" (click)="util.openInNewTab('user/'+team?.player?.username)">
             <ng-container *ngIf="team?.player?.picture">
               <img src="{{team?.player?.picture}}" alt="" class="icon-m">
             </ng-container>
