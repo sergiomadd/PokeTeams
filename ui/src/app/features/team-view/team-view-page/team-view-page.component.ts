@@ -11,6 +11,7 @@ import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { TeamService } from 'src/app/core/services/team.service';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { selectLang } from 'src/app/core/store/config/config.selectors';
+import { environment } from 'src/environments/environment';
 import { User } from '../../user/models/user.model';
 
 @Component({
@@ -173,8 +174,7 @@ export class TeamViewPageComponent
   copyLink()
   {
     this.linkCopied = true;
-    const path: string = "http://localhost:4200/"
-    this.util.copyToClipboard(path + this.teamKey);
+    this.util.copyToClipboard(environment.apiURL + this.teamKey);
     setTimeout(()=>
     {
       this.linkCopied = false;

@@ -13,6 +13,7 @@ import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { TeamService } from 'src/app/core/services/team.service';
 import { selectTheme } from 'src/app/core/store/config/config.selectors';
 import { User } from 'src/app/features/user/models/user.model';
+import { environment } from 'src/environments/environment';
 import { PokemonPreviewComponent } from '../../pokemon/pokemon-preview/pokemon-preview.component';
 
 
@@ -136,7 +137,7 @@ export class TeamPreviewComponent
     this.linkCopied = true;
     if(this.team)
     {
-      this.util.copyToClipboard("http://localhost:4200/" + this.team.id);
+      this.util.copyToClipboard(environment.apiURL + this.team.id);
       setTimeout(()=>
       {
         this.linkCopied = false;
