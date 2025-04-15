@@ -1,17 +1,20 @@
+import { Gen9IconColors } from "./colors";
+
 export const tagBackgroundColors: string[] = 
 [
-  '#1f1723', '#3c2f52', '#8c7f90', '#bcb0b3',
-  '#e2e2e2', '#d86830', '#f09548', '#efd081',
-  '#b22741', '#f5464c', '#f79c88', '#4656a5',
-  '#4995f3', '#72deeb', '#3ec54b', '#b4e656',
+  Gen9IconColors.normal, Gen9IconColors.rock, Gen9IconColors.ground, Gen9IconColors.dark,
+  Gen9IconColors.steel,  Gen9IconColors.flying, Gen9IconColors.ice, Gen9IconColors.water,
+  Gen9IconColors.electric, Gen9IconColors.fighting, Gen9IconColors.bug, Gen9IconColors.grass, 
+  Gen9IconColors.fire, Gen9IconColors.psychic, Gen9IconColors.poison, Gen9IconColors.ghost, 
 ];
+
 
 //white -> true
 //black -> false
 export const tagTextColors: boolean[] = 
 [
-  true, true, true, false,
-  false, true, false, false,
-  true,  true, false, true,
-  true,  false, false, false,
+  false, false, true, true,
+  false, false, false, true,
+  false, false, true, true,
+  false, false, true, true,
 ];

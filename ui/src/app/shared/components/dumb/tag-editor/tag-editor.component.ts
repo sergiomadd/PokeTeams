@@ -33,7 +33,7 @@ export class TagEditorComponent
     name: ['', [Validators.required, Validators.maxLength(16)]],
     desc: ['', [Validators.maxLength(256)]],
     color: ['#f44336']
-  });
+  }, { updateOn: "blur" });
   formSubmitted: boolean = false;
 
   tag: Tag = 
