@@ -113,7 +113,7 @@ $openWidth: 11em;
   transition: transform ease-in-out 0.6s;
 }
 
-@media (max-width: $mobileBreakpoint) 
+@media (max-width: $tabletLandscape) 
 {
   .closed
   {

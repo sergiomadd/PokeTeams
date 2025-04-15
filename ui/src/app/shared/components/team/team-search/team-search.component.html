@@ -1,11 +1,10 @@
 <div class="col h-fit">
   <div class="top-background">
-    <div class="top flex-col justify-c-c align-i-c gap-s bor-rad-5" 
-      [ngClass]="{'pad-0': window.isMobile(), 'pad-l': !window.isMobile()}">
+    <div class="top flex-col justify-c-c align-i-c gap-s bor-rad-5">
       <div class="flex gap-m">
         <div class="m-auto w-fit">
           <div class="flex gap-m justify-c-c" 
-            [ngClass]="{'grid col-2 col-gap-m': window.isMobile()}">
+            [ngClass]="{'wrap': window.isTabletLandscapeOrLess()}">
             <ng-container *ngIf="!userSearch">
               <app-smart-input
               #userInput
@@ -47,37 +46,45 @@
             (selectEvent)="queryResultSelectEvent($event)"
             class="item smart-input-wrapper"
             ></app-smart-input>
+            <ng-template #secondInputsRow>
+              <app-smart-input
+              #pokemonInput
+              [label]="'search.team_search.pokemon' | translate"
+              [keepSelected]="false"
+              [getter]="queryService.queryPokemonCallback"
+              (selectEvent)="queryResultSelectEvent($event)"
+              class="item smart-input-wrapper"
+              ></app-smart-input>
+              <app-smart-input
+              #moveInput
+              [label]="'search.team_search.move' | translate"
+              [keepSelected]="false"
+              [getter]="queryService.queryMoveCallback"
+              (selectEvent)="queryResultSelectEvent($event)"
+              class="item smart-input-wrapper"
+              ></app-smart-input>
+              <app-smart-input
+              #itemInput
+              [label]="'search.team_search.item' | translate"
+              [keepSelected]="false"
+              [getter]="queryService.queryItemCallback"
+              (selectEvent)="queryResultSelectEvent($event)"
+              class="item smart-input-wrapper"
+              ></app-smart-input>
+            </ng-template>
+            <ng-container *ngIf="window.isTabletLandscapeOrLess()">
+              <ng-container *ngTemplateOutlet="secondInputsRow"></ng-container>
+            </ng-container>
           </div>
-          <div class="flex gap-m justify-c-c" 
-            [ngClass]="{'grid col-2 col-gap-m': window.isMobile()}">
-            <app-smart-input
-            #pokemonInput
-            [label]="'search.team_search.pokemon' | translate"
-            [keepSelected]="false"
-            [getter]="queryService.queryPokemonCallback"
-            (selectEvent)="queryResultSelectEvent($event)"
-            class="item smart-input-wrapper"
-            ></app-smart-input>
-            <app-smart-input
-            #moveInput
-            [label]="'search.team_search.move' | translate"
-            [keepSelected]="false"
-            [getter]="queryService.queryMoveCallback"
-            (selectEvent)="queryResultSelectEvent($event)"
-            class="item smart-input-wrapper"
-            ></app-smart-input>
-            <app-smart-input
-            #itemInput
-            [label]="'search.team_search.item' | translate"
-            [keepSelected]="false"
-            [getter]="queryService.queryItemCallback"
-            (selectEvent)="queryResultSelectEvent($event)"
-            class="item smart-input-wrapper"
-            ></app-smart-input>
-          </div>
+          <ng-container *ngIf="!window.isTabletLandscapeOrLess()">
+            <div class="flex gap-m justify-c-c">
+              <ng-container *ngTemplateOutlet="secondInputsRow"></ng-container>
+            </div>
+          </ng-container>
         </div>
       </div>
-      <div class="storages m-auto bor-rad-5 bor-1-3" [ngStyle]="{'margin-top': window.isMobile() ? '3em' : 'auto'}">
+      <div class="storages m-auto bor-rad-5 bor-1-3" 
+        [ngStyle]="{'margin-top': window.isLaptopOrLess() ? '3em' : 'auto'}">
         <div class="storage-settings flex justify-c-c">
           <app-radio
           [options]="unionTypeSettings"

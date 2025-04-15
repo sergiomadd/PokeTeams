@@ -1,9 +1,17 @@
+$laptop: 1600px;
+$tabletLandscape: 1024px;
+$tabletPortrait: 768px;
+$bigMobile: 480px;
+$mobile: 414px;
+$smallMobile: 360px;
+
 $desktopPokemonCardWidth: 30em;
-$mobilePokemonCardWidth: 25em;
+$tabletPokemonCardWidth: 25em;
+$mobilePokemonCardWidth: 95vw;
 
 $pokemonCardHeight: 12em;
 
-@media (min-width: 768px) 
+@media (min-width: $tabletLandscape) 
 {
   :root 
   {
@@ -11,7 +19,15 @@ $pokemonCardHeight: 12em;
   }
 }
 
-@media (max-width: 768px) 
+@media (min-width: $mobile) and (max-width: $tabletLandscape) 
+{
+  :root 
+  {
+    --pokemonCardWidth: #{$tabletPokemonCardWidth};
+  }
+}
+
+@media (max-width: $mobile) 
 {
   :root 
   {
@@ -19,5 +35,3 @@ $pokemonCardHeight: 12em;
   }
 }
 
-$mobileBreakpoint: 768px;
-$smallMobileBreakpoint: 480px;

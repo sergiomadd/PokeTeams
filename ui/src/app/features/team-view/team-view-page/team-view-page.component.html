@@ -5,7 +5,7 @@
 </ng-container>
 <ng-template #loaded>
   <ng-container *ngIf="team; else noteam">
-    <div class="m-auto flex-col justify-c-c align-i-c" [ngStyle]="{'margin-top': window.isMobile() ? '0.4em' : '7em'}">
+    <div class="m-auto flex-col justify-c-c align-i-c" [ngStyle]="{'margin-top': window.isTabletPortraitOrLess() ? '0.8em' : '7em'}">
       <app-team [team]="team"></app-team>
       <div class="buttons flex justify-c-c gap-s w-100">
         <button 
@@ -17,7 +17,7 @@
           [text]="'shared.copySuccess' | translate"
           [side]="'top'"
           [visible]="pasteCopied"
-          [instant]="!window.isMobile()"
+          [instant]="!window.isTabletLandscapeOrLess()"
           ></app-tooltip>
         </button>
         <ng-container *ngIf="loggedUser?.username && team.player?.username === loggedUser?.username">
@@ -38,7 +38,7 @@
           [text]="'shared.copySuccess' | translate"
           [side]="'top'"
           [visible]="linkCopied"
-          [instant]="!window.isMobile()"
+          [instant]="!window.isTabletLandscapeOrLess()"
           ></app-tooltip>
         </button>
       </div> 

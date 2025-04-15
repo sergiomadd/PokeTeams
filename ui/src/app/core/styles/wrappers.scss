@@ -59,7 +59,7 @@ $arrowSize: 0.4em;
   position: relative;
 }
 
-@media (min-width: $mobileBreakpoint) 
+@media (min-width: $tabletPortrait) 
 {
   .poke-tooltip-wrapper
   {

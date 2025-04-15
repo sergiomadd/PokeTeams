@@ -2,8 +2,8 @@
 [ngClass]="
 {
   'color-picker-visible': visible,
-  'color-picker-right': !window.isMobile(),
-  'color-picker-left': window.isMobile()
+  'color-picker-right': !window.isTabletLandscapeOrLess(),
+  'color-picker-left': window.isTabletLandscapeOrLess()
 }">
   <div class="color-picker-content">
     <div class="font-m text-center" style="margin-bottom: 0.2em;">{{"team.color_picker.title" | translate}}</div>

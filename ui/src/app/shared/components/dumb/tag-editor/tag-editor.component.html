@@ -2,8 +2,8 @@
 [ngClass]="
 {
   'tag-editor-visible': visible,
-  'tag-editor-right': !window.isMobile(),
-  'tag-editor-top': window.isMobile()
+  'tag-editor-right': !window.isTabletLandscapeOrLess(),
+  'tag-editor-top': window.isTabletLandscapeOrLess()
 }">
   <div class="color-picker-wrapper">
     <app-color-picker 

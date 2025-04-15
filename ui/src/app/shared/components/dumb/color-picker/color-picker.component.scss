@@ -1,3 +1,5 @@
+@use "/src/app/core/styles/variables.scss" as *;
+
 .color-picker
 {
   max-width: 0;
@@ -63,4 +65,35 @@
   width: 3em;
   height: 3em;
   border-radius: 5px;
+}
+
+@media (max-width: $mobile) 
+{
+  .color-picker-left
+  {
+    bottom: 1.7em;
+  }
+
+  .color-picker-visible.color-picker-left
+  {
+    transform: translateX(-10.2em);
+    transition: transform 0.5s ease-in;
+  }  
+
+  .colors
+  {
+    display: grid;
+    grid-template-columns: repeat(4, 2.2em);
+    justify-content: start;
+    justify-items: center;
+    gap: 0.2em;
+    margin: auto;
+  }
+  
+  .color
+  {
+    width: 2.5em;
+    height: 2.5em;
+    border-radius: 5px;
+  }
 }

@@ -2,5 +2,5 @@ export interface Country
 {
   name: string,
   code: string,
-  icon: string
+  iconPath: string
 }

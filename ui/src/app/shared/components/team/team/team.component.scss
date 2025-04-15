@@ -43,7 +43,7 @@ $teamWidth: calc($pokemonCardWidth * 2 + 0.8em);
   text-align: center;
 }
 
-@media (max-width: $mobileBreakpoint) 
+@media (max-width: $tabletPortrait) 
 {
   .full
   {

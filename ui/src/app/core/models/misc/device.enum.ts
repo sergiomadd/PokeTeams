@@ -1,6 +1,10 @@
 export enum Device
 {
-  mobile = "mobile",
   smallMobile = "smallMobile",
+  mobile = "mobile",
+  bigMobile = "bigMobile",
+  tabletPortrait = "tabletPortrait",
+  tabletLandscape = "tabletLandscape",
+  laptop = "laptop",
   desktop = "desktop" 
 }

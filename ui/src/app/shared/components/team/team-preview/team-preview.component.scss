@@ -1,4 +1,3 @@
-
 .detail
 {
   width: fit-content;
@@ -58,12 +57,4 @@
 .deleting
 {
   outline: 4px solid red;
-}
-
-@media only screen and (max-width: 768px) 
-{
-  .team-table
-  {
-    width: 90vw;
-  }
 }

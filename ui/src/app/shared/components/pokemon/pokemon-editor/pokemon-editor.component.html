@@ -19,12 +19,12 @@
     </ng-container>
   </div>
   <ng-container *ngIf="pokemon">
-    <div class="flex align-i-c gap-l" [ngClass]="{'flex-col': window.isMobile()}">
-      <form class="flex-col gap-l" [formGroup]="pokemonForm" 
+    <div class="flex align-i-c gap-l" [ngClass]="{'flex-col': window.isTabletPortraitOrLess()}">
+      <form class="flex-col" [formGroup]="pokemonForm" 
       [ngClass]="
       {
-        'gap-m': window.currentDevice === window.DeviceType.smallMobile,
-        'gap-l': window.currentDevice !== window.DeviceType.smallMobile
+        'gap-m align-i-c': window.isBigMobileOrLess(),
+        'gap-l': window.isBigMobileOrLess()
       }">
         <div class="form-inputs gap-m">
           <app-smart-input
@@ -44,7 +44,8 @@
           (selectEvent)="itemSelectEvent($event)"
           class="smart-input-wrapper form-item"
           ></app-smart-input>
-          <div class="flex-col justify-c-e align-i-c w-100 relative">
+          <div class="flex-col justify-c-e align-i-c relative" 
+            [ngClass]="{'w-100': !window.isBigMobileOrLess()}">
             <div class="smart-input-wrapper">
               <div class="smart-input-top">
                 <div class="smart-input-label">
@@ -133,7 +134,7 @@
         </div>
         <div class="flex-col gap-s w-100">
           <div class="flex-col justify-c-c align-i-c gap-m w-100">
-            <div class="flex justify-c-c gap-m">
+            <div class="flex wrap justify-c-c gap-m">
               <ng-container *ngFor="let stat of pokemon.ivs; index as i">
                 <div class="pad-s bor-rad-5 pointer text-center no-select" (click)="selectStat(i)"
                 style="color: white;"

@@ -1,3 +1,5 @@
+@use "/src/app/core/styles/variables.scss" as *;
+
 .editor-input
 {
   width: 12em;
@@ -19,4 +21,12 @@
   left: -1.5em;
   bottom: 0.55em;
   margin-right: 0.2em;
+}
+
+@media (max-width: $mobile) 
+{
+  .editor-input
+  {
+    width: 9em;
+  }
 }

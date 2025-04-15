@@ -2,7 +2,7 @@
   <div class="flex-col gap-m" style="margin-top: 1em;">
     <div class="flex-col justify-c-c align-i-c gap-m">
       <div class="flex justify-c-c align-i-c gap-m"
-      [ngClass]="{'grid col-2 col-gap-m': window.isMobile()}"
+      [ngClass]="{'grid col-2 col-gap-m': window.isTabletPortraitOrLess()}"
       >
         <div class="editor-input relative">
           <ng-container *ngIf="!loggedUser">
@@ -16,12 +16,10 @@
                   <path fill="var(--text-color)" d="M12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z"></path> 
                 </g>
               </svg>
-              <ng-container *ngIf="!window.isMobile()">
-                <app-tooltip
-                [text]="'team.editor.not_logged-warning' | translate"
-                [side]="'left'"
-                ></app-tooltip>
-              </ng-container>
+              <app-tooltip
+              [text]="'team.editor.not_logged-warning' | translate"
+              [side]="'left'"
+              ></app-tooltip>
             </div>
           </ng-container>
           <app-smart-input
@@ -57,7 +55,7 @@
           class="smart-input-wrapper input-m"
           ></app-smart-input>
         </div>
-        <ng-container *ngIf="window.isMobile()">
+        <ng-container *ngIf="window.isTabletPortraitOrLess()">
           <div class="editor-input relative">
             <app-smart-input
             #tagInput
@@ -81,7 +79,7 @@
         </ng-container>
       </div>
       <div class="flex justify-c-c align-i-c gap-m">
-        <ng-container *ngIf="!window.isMobile()">
+        <ng-container *ngIf="!window.isTabletPortraitOrLess()">
           <div class="editor-input relative">
             <app-smart-input
             [label]="'team.editor.rental_code-label' | translate"
@@ -92,7 +90,7 @@
             ></app-smart-input>      
           </div>
         </ng-container>
-        <ng-container *ngIf="!window.isMobile()">
+        <ng-container *ngIf="!window.isTabletPortraitOrLess()">
           <div class="editor-input relative">
             <app-smart-input
             #tagInput
@@ -114,7 +112,7 @@
             </div>
           </div>
         </ng-container>
-        <ng-container *ngIf="window.isMobile()">
+        <ng-container *ngIf="window.isTabletPortraitOrLess()">
           <div class="editor-input relative">
             <app-smart-input
             [label]="'team.editor.rental_code-label' | translate"

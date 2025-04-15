@@ -42,6 +42,8 @@ button
 .button-secondary-clear
 {
   border: 1px solid var(--secondary);
+  background-color: var(--bg-color-3);
+  color: var(--text-color);
 }
 
 .button-m

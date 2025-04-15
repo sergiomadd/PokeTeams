@@ -34,11 +34,27 @@
   right: 0.2em;
 }
 
-@media (max-width: $mobileBreakpoint) 
+@media (max-width: $laptop) and (min-width: $tabletLandscape)
 {
   .storages
   {
-    width: 90%;
+    width: 70vw;
+  }
+}
+
+@media (max-width: $tabletLandscape) and (min-width: $tabletPortrait)
+{
+  .storages
+  {
+    width: 80vw;
+  }
+}
+
+@media (max-width: $tabletPortrait) 
+{
+  .storages
+  {
+    width: 95vw;
   }
 
   .top
@@ -46,4 +62,30 @@
     width: 100%;
     margin: 2em auto auto auto;
   }  
+
+  .item
+  {
+    width: 11em;
+    max-width: 11em;
+  }
+}
+
+@media (max-width: $smallMobile) 
+{
+  .storages
+  {
+    width: 90vw;
+  }
+
+  .top
+  {
+    width: 100%;
+    margin: 2em auto auto auto;
+  }  
+
+  .item
+  {
+    width: 10em;
+    max-width: 10em;
+  }
 }

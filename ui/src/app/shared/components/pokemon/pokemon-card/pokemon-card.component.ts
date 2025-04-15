@@ -44,14 +44,13 @@ export class PokemonCardComponent
   @Input() editorPreview?: boolean = false;
   @Output() triggerNotesEvent = new EventEmitter<boolean>()
   @Output() updateStats = new EventEmitter();
+  @Output() triggerTooltip = new EventEmitter();
 
   selectedLang$: Observable<string> = this.store.select(selectLang);
   selectedLang?: string;
 
   pokemonSpritePath?: string = '';
   spriteCategory: number = 0;
-  maleIconPath: string = '';
-  femaleIconPath: string = '';
   copied?: boolean;
   readonly genderColors = GenderColors;
   readonly natureColors = NatureColors;
@@ -111,9 +110,6 @@ export class PokemonCardComponent
 
   async ngOnInit()
   {
-    this.maleIconPath = "https://localhost:7134/images/sprites/gender/male.png";
-    this.femaleIconPath = "https://localhost:7134/images/sprites/gender/female.png";
-  
     if(this.showStatsStart)
     {
       this.showStats[0] = true;
@@ -225,9 +221,10 @@ export class PokemonCardComponent
     //     -> show selected tooltip
     else
     {
-      if(this.window.isMobile())
+      if(this.window.isTabletPortraitOrLess())
       {
         this.closeAllProfileTooltips();
+        this.triggerTooltip.emit();
       }
       for(var i = 0; i < list.length; i++) 
       {

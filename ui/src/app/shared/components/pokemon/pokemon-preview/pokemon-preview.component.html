@@ -9,13 +9,15 @@
       <div class="inverted-border"></div>
       <span class="row-one">{{getMoveNameRows(i)[0]}}</span>
       <span class="row-two">{{getMoveNameRows(i)[1]}}</span>
-      <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name?.content}}"
-      alt="{{move?.pokeType?.name?.content}}" class="type"
-      [ngClass]="
-      {
-        'icon-s': window.isMobile(),
-        'icon-m': !window.isMobile()
-      }">
+      <ng-container *ngIf="!window.isSmallMobile()">
+        <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name?.content}}"
+        alt="{{move?.pokeType?.name?.content}}" class="type"
+        [ngClass]="
+        {
+          'icon-s': window.isSmallMobile(),
+          'icon-m': !window.isSmallMobile()
+        }">
+      </ng-container>
     </ng-container>
     </div>
   </ng-container>
@@ -26,8 +28,8 @@
         [alt]="pokemon?.name?.content"
         [ngClass]="
         {
-          'sprite-small': window.isMobile(),
-          'sprite-m': !window.isMobile()
+          'sprite-small': window.isSmallMobile(),
+          'sprite-m': !window.isSmallMobile()
         }">
         <app-tooltip 
         [text]="pokemon?.name?.content" 
@@ -37,16 +39,16 @@
         <div class="teratype w-fit h-fit bor-rad-20 bg-2 tooltip-wrapper"
         [ngClass]="
         {
-          'icon-s': window.isMobile(),
-          'icon-m': !window.isMobile()
+          'icon-s': window.isSmallMobile(),
+          'icon-m': !window.isSmallMobile()
         }">
           <img [src]="pokemon?.teraType?.iconPath" 
           [title]="pokemon?.teraType?.name?.content"
           [alt]="pokemon?.teraType?.name?.content"
           [ngClass]="
           {
-            'icon-s': window.isMobile(),
-            'icon-m': !window.isMobile()
+            'icon-s': window.isSmallMobile(),
+            'icon-m': !window.isSmallMobile()
           }">
         </div>
       </ng-container>
@@ -54,14 +56,14 @@
         <div class="item bor-rad-20 bg-2 pointer tooltip-wrapper"
         [ngClass]="
         {
-          'icon-s': window.isMobile(),
-          'icon-m': !window.isMobile()
+          'icon-s': window.isSmallMobile(),
+          'icon-m': !window.isSmallMobile()
         }">
           <img [src]="pokemon?.item?.iconPath" [alt]="pokemon?.item?.name?.content" 
           [ngClass]="
           {
-            'icon-s': window.isMobile(),
-            'icon-m': !window.isMobile()
+            'icon-s': window.isSmallMobile(),
+            'icon-m': !window.isSmallMobile()
           }">
           <app-tooltip [text]="pokemon?.item?.name?.content" [side]="'top'"></app-tooltip>
         </div>

@@ -41,7 +41,7 @@ export class PokemonPreviewComponent
       {
         const rowOne = this.pokemon?.moves[index].name?.content.substring(0, 7);
         const rowTwo = this.pokemon?.moves[index].name?.content.substring(7);
-        if(index > 1 && this.pokemon?.moves[index].name?.content.length < 7)
+        if(index > 1 && this.pokemon?.moves[index].name?.content.length <= 7)
         {
           return [rowTwo, rowOne];
         }

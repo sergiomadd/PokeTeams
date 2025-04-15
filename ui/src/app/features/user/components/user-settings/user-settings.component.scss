@@ -151,7 +151,7 @@ input[type='checkbox']
   text-align: center;
 }
 
-@media (max-width: $mobileBreakpoint) 
+@media (max-width: $tabletLandscape) 
 {
   .settings
   {
@@ -186,7 +186,18 @@ input[type='checkbox']
   }
 }
 
-@media (max-width: $smallMobileBreakpoint) 
+@media (max-width: $bigMobile) 
+{
+  .section
+  {
+    .subtitle
+    {
+      margin-right: 0.8em;
+    }
+  }
+}
+
+@media (max-width: $mobile) 
 {
   .section
   {

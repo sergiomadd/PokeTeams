@@ -9,12 +9,12 @@ class="poke-tooltip"
   bottom: side === 'bottom',
   left: side === 'left',
   'poke-tooltip-visible': visible,
-  mobile: mobileChanged && window.isMobile()
+  mobile: mobileChanged && window.isTabletPortraitOrLess()
 }"
 >
   <ng-container *ngIf="content">
-    <ng-container *ngIf="!window.isMobile() || visible">
-      <ng-container *ngIf="!window.isMobile()">
+    <ng-container *ngIf="!window.isTabletPortraitOrLess() || visible">
+      <ng-container *ngIf="!window.isTabletPortraitOrLess()">
         <span
         [ngClass]="{
           'poke-arrow-bottom': side === 'top', 'poke-arrow-left': side === 'right', 

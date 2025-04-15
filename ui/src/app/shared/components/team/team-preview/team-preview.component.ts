@@ -137,7 +137,7 @@ export class TeamPreviewComponent
     this.linkCopied = true;
     if(this.team)
     {
-      this.util.copyToClipboard(environment.apiURL + this.team.id);
+      this.util.copyToClipboard(environment.url + this.team.id);
       setTimeout(()=>
       {
         this.linkCopied = false;
