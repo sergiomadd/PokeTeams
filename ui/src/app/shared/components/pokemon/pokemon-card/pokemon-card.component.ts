@@ -423,7 +423,7 @@ export class PokemonCardComponent
 
   calculateEV(ev: number) : number
   {
-    return Math.round((Math.floor(ev / 4) * (this.pokemon?.level ? this.pokemon.level : 50)) / 100);
+    return Math.floor((Math.floor(ev / 4) * (this.pokemon?.level ? this.pokemon.level : 50)) / 100);
   }
 
   getNatureValue(baseStat?: Stat, nature?: Nature) : number
