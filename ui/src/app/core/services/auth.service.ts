@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthService 
 {
-  private apiUrl = environment.apiURL + "auth/";
+  private apiUrl = environment.apiUrl + "auth/";
   private dataTimeout = 5000;
 
   constructor(private http: HttpClient) { }

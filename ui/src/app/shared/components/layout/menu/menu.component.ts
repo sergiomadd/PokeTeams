@@ -42,7 +42,7 @@ export class MenuComponent
   lang = Lang;
   langs = langs;
   langChips: Chip[] = []
-  private apiUrl = environment.apiURL;
+  private url = environment.url;
 
   ngOnInit()
   { 
@@ -60,7 +60,7 @@ export class MenuComponent
           {
             name: `lang.${value}`,
             identifier: value,
-            iconPath: `${this.apiUrl}images/flags/${flags[langs.indexOf(value)]}.svg`
+            iconPath: `${this.url}images/flags/${flags[langs.indexOf(value)]}.svg`
           }
         }
       })
@@ -109,7 +109,7 @@ export class MenuComponent
         {
           name: `lang.${langs[i]}`,
           identifier: langs[i],
-          iconPath: `https://localhost:7134/images/sprites/flags/${flags[i]}.svg`
+          iconPath: `${this.url}images/flags/${flags[i]}.svg`
         }
       )
     }

@@ -18,7 +18,7 @@ import { PokePaste } from "../models/team/pokePaste.model";
 })
 export class PokemonService 
 {
-  private apiUrl = environment.apiURL;
+  private apiUrl = environment.apiUrl;
   private dataTimeout = 5000;
 
   constructor(private http: HttpClient) 

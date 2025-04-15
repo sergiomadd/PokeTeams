@@ -12,7 +12,7 @@ export class UserService
 {
   teamService = inject(TeamService);
 
-  private apiUrl = environment.apiURL + 'user/';
+  private apiUrl = environment.apiUrl + 'user/';
   private dataTimeout = 2000;
 
   constructor(private http: HttpClient) { }

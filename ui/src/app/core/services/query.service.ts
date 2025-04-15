@@ -15,7 +15,7 @@ import { Type } from '../models/pokemon/type.model';
 })
 export class QueryService 
 {
-  private apiUrl = environment.apiURL;
+  private apiUrl = environment.apiUrl;
   private dataTimeout = 5000;
   
   constructor(private http: HttpClient) { }

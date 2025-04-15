@@ -1,5 +1,6 @@
 export const environment = 
 {
   production: true,
-  apiURL: "https://poketeams.com/api/"
+  url: "https://poketeams.com/",
+  apiUrl: "https://poketeams.com/api/"
 };

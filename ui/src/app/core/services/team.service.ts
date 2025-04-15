@@ -22,7 +22,7 @@ export class TeamService
   store = inject(Store);
   util = inject(UtilService);
 
-  private apiUrl = environment.apiURL;
+  private apiUrl = environment.apiUrl;
   private dataTimeout = 5000;
 
   constructor(private http: HttpClient) 
