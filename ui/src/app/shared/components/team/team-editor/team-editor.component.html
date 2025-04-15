@@ -24,7 +24,7 @@
           </ng-container>
           <app-smart-input
           #userInput
-          [label]="'team.editor.player_input-label' | translate"
+          [label]="'shared.team.player' | translate"
           [value]="loggedUser"
           [disableRemove]="true"
           [updateOnChange]="true"
@@ -36,7 +36,7 @@
         <div class="editor-input relative">
           <app-smart-input
           #tournamentInput
-          [label]="'team.editor.tournament_input-label' | translate"
+          [label]="'shared.team.tournament' | translate"
           [keepSelected]="true"
           [getter]="queryService.queryTournamentCallback"
           [allGetter]="queryService.tournamentAllCallback"
@@ -47,7 +47,7 @@
         <div class="editor-input relative">
           <app-smart-input
           #regulationInput
-          [label]="'team.editor.regulation_input-label' | translate"
+          [label]="'shared.team.regulation' | translate"
           [keepSelected]="true"
           [getter]="queryService.queryRegulationCallback"
           [allGetter]="queryService.regulationAllCallback"
@@ -82,7 +82,7 @@
         <ng-container *ngIf="!window.isTabletPortraitOrLess()">
           <div class="editor-input relative">
             <app-smart-input
-            [label]="'team.editor.rental_code-label' | translate"
+            [label]="'shared.team.rental_code' | translate"
             [updateOnChange]="true"
             [error]="rentalCodeError ? true : false"
             (updateEvent)="rentalCodeSelectEvent($event)"
@@ -115,7 +115,7 @@
         <ng-container *ngIf="window.isTabletPortraitOrLess()">
           <div class="editor-input relative">
             <app-smart-input
-            [label]="'team.editor.rental_code-label' | translate"
+            [label]="'shared.team.rental_code' | translate"
             [updateOnChange]="true"
             [error]="rentalCodeError ? true : false"
             (updateEvent)="rentalCodeSelectEvent($event)"
@@ -145,13 +145,13 @@
           ></app-checkbox>
           <app-checkbox
           [checked]="team.options.naturesVisibility"
-          [label]="'Nature'"
+          [label]="'shared.pokemon.nature' | translate"
           [lock]="!this.team.visibility"
           (checkEvent)="showNatureCheckEvent($event)"
           ></app-checkbox>
           <app-checkbox
           [checked]="team.visibility"
-          [label]="'Team'"
+          [label]="'shared.team.team' | translate"
           (checkEvent)="teamVisibiltyCheckEvent($event)"
           ></app-checkbox>
         </div>

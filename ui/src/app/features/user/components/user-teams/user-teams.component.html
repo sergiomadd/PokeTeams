@@ -5,7 +5,7 @@
     class="button search-button"
     [ngClass]="{'button-selected': searchVisible}"
     (click)="toggleSearch()"
-    >{{'search.team_search.search' | translate}}</button>
+    >{{'shared.search' | translate}}</button>
   </div>
   <div class="search" [ngClass]="{'search-visible': searchVisible}">
     <app-team-search [userSearch]="true"></app-team-search>

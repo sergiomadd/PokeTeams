@@ -17,7 +17,7 @@
             </g>
           </svg>          <span>{{'user.email_confirmation.email_confirmed-feedback' | translate}}</span>
         </div>
-        <button class="button-primary" [routerLink]="['/']">{{'user.email_confirmation.home-button' | translate}}</button>
+        <button class="button-primary" [routerLink]="['/']">{{'shared.go_home-button' | translate}}</button>
       </div>
     </ng-container>
     <ng-container *ngIf="(backendError$ | async) as error">
@@ -33,7 +33,7 @@
             </g>
           </svg>          <span class="formFeedbackError">{{error}}</span>
         </div>
-        <button class="button-primary" [routerLink]="['/']">{{'user.email_confirmation.home-button' | translate}}</button>
+        <button class="button-primary" [routerLink]="['/']">{{'shared.go_home-button' | translate}}</button>
       </div>
     </ng-container>
   </ng-container>
@@ -50,7 +50,7 @@
           </g>
         </svg>        <span class="formFeedbackError">{{'user.email_confirmation.incorrect_credentials-feedback' | translate}}</span>
       </div>
-      <button class="button-primary" [routerLink]="['/']">{{'user.email_confirmation.home-button' | translate}}</button>
+      <button class="button-primary" [routerLink]="['/']">{{'shared.go_home-button' | translate}}</button>
     </div>
   </ng-template>
 </div>

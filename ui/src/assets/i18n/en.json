@@ -7,7 +7,6 @@
   "menu":
   { 
     "upload": "Upload",
-    "search": "Search",
     "theme": "Theme",
     "login": "Log In"
   },
@@ -29,12 +28,8 @@
     "editor":
     {
       "not_logged-warning": "Not logged in, the team wont be added to a user. Make sure to save the link!",
-      "player_input-label": "Player",
-      "tournament_input-label": "Tournament",
-      "regulation_input-label": "Regulation",
       "tag_input-label": "Tags ({{currentTags}}/{{maxTags}})",
       "tag_input-feedback": "Tag already added",
-      "rental_code-label": "Rental Code",
       "visibility-label": "Privacy",
       "visibility_false-feedback": "Team is private. Check team to select others.",
       "errors": 
@@ -55,15 +50,8 @@
     },
     "pokemon_editor": 
     {
-      "pokemon": "Pokemon",
-      "item": "Item",
-      "ability": "Ability",
       "show_all": "Show all",
       "move": "Move {{index}}",
-      "nature": "Nature",
-      "teratype": "Teratype",
-      "nickname": "Nickname",
-      "level": "Level",
       "remaining_evs": "Remaining EVs: ",
       "no_pokemon_ability-error": "Select a pokemon or show all",
       "no_pokemon_stats-error": "Select a pokemon"
@@ -108,17 +96,9 @@
   {
     "team_search":
     {
-      "player": "Player",
-      "tournament": "Tournament",
-      "regulation": "Regulation",
-      "tag": "Tag",
-      "pokemon": "Pokemon",
-      "move": "Move",
-      "item": "Item",
       "intersection": "Teams that match all",
       "union": "Teams that match any",
-      "duplicate-feedback": "Item already added",
-      "search": "Search"
+      "duplicate-feedback": "Item already added"
     },
     "team_table":
     {
@@ -217,15 +197,14 @@
     "email_confirmation":
     {
       "email_confirmed-feedback": "Email successfully confirmed",
-      "incorrect_credentials-feedback": "Incorrect Credentials",
-      "home-button": "Go home"
+      "incorrect_credentials-feedback": "Incorrect Credentials"
     }
   },
   "shared":
   {
     "user_not_found": "User @{{resourceName}} not found!",
     "page_not_found": "Page not found!",
-    "back-button": "Go home",
+    "go_home-button": "Go home",
     "smart_input_placeholder": "Search...",
     "smart_input_results": "Results",
     "errors":
@@ -249,6 +228,27 @@
     "copySuccess": "Copied!",
     "copyError": "Error copying",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "search": "Search",
+    "team":
+    {
+      "team": "Team",
+      "player": "Player",
+      "tournament": "Tournament",
+      "regulation": "Regulation",
+      "tag": "Tag",
+      "rental_code": "Rental Code"
+    },
+    "pokemon":
+    {
+      "pokemon": "Pokémon",
+      "item": "Item",
+      "ability": "Ability",
+      "move": "Move",
+      "nature": "Nature",
+      "teratype": "Teratype",
+      "nickname": "Nickname",
+      "level": "Level"
+    }
   }
 }

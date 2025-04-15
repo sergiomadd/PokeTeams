@@ -30,7 +30,7 @@
           <app-smart-input
           #pokemonInput 
           [value]="queryService.getPokemonQueryResult(pokemon)"
-          [label]="'team.pokemon_editor.pokemon' | translate"
+          [label]="'shared.pokemon.pokemon' | translate"
           [keepSelected]="true"
           [getter]="queryService.queryPokemonCallback"
           (selectEvent)="pokemonSelectEvent($event)"
@@ -38,7 +38,7 @@
           ></app-smart-input>
           <app-smart-input
           [value]="queryService.getItemQueryResult(pokemon.item)"
-          [label]="'team.pokemon_editor.item' | translate"
+          [label]="'shared.pokemon.item' | translate"
           [keepSelected]="true"
           [getter]="queryService.queryItemCallback"
           (selectEvent)="itemSelectEvent($event)"
@@ -49,7 +49,7 @@
             <div class="smart-input-wrapper">
               <div class="smart-input-top">
                 <div class="smart-input-label">
-                  {{'team.pokemon_editor.ability' | translate}}
+                  {{'shared.pokemon.ability' | translate}}
                 </div>
                 <div class="font-s">
                   <app-checkbox
@@ -99,7 +99,7 @@
           ></app-smart-input>
           <app-smart-input
           [value]="queryService.getNatureQueryResult(pokemon.nature)"
-          [label]="'team.pokemon_editor.nature' | translate"
+          [label]="'shared.pokemon.nature' | translate"
           [keepSelected]="true"
           [getter]="queryService.queryNatureCallback"
           [allGetter]="queryService.naturesAllCallback"
@@ -124,7 +124,7 @@
           ></app-smart-input>
           <app-smart-input
           [value]="queryService.getTypeQueryResult(pokemon.teraType)"
-          [label]="'team.pokemon_editor.teratype' | translate"
+          [label]="'shared.pokemon.teratype' | translate"
           [keepSelected]="true"
           [getter]="queryService.queryTeratypeCallback"
           [allGetter]="queryService.teraTypesAllCallback"
@@ -221,7 +221,7 @@
           <div class="flex justify-c-c align-i-c gap-l w-100">
             <div class="flex-col">
               <div class="flex justify-c-c align-i-c gap-s" [ngClass]="{'flex-col': window.currentDevice === window.DeviceType.smallMobile}">
-                <label for="">{{"team.pokemon_editor.nickname" | translate}}</label>
+                <label for="">{{"shared.pokemon.nickname" | translate}}</label>
                 <input type="text" class="nickname input-s" formControlName="nickname"
                 [ngClass]="{controlInvalid: isInvalid('nickname')}"
                 value="pokemon.nickname ?? 'error'"
@@ -233,7 +233,7 @@
             <div class="flex justify-c-c align-i-c gap-s">
               <div class="flex-col">
                 <div class="flex justify-c-c align-i-c gap-m" [ngClass]="{'flex-col': window.currentDevice === window.DeviceType.smallMobile}">
-                  <label for="">{{"team.pokemon_editor.level" | translate}}</label>
+                  <label for="">{{"shared.pokemon.level" | translate}}</label>
                   <input 
                   type="text" 
                   class="level text-center input-s" 

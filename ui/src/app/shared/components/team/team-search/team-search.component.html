@@ -8,7 +8,7 @@
             <ng-container *ngIf="!userSearch">
               <app-smart-input
               #userInput
-              [label]="'search.team_search.player' | translate"
+              [label]="'shared.team.player' | translate"
               [keepSelected]="false"
               [allowCustom]="true"
               [customType]="'user'"
@@ -19,7 +19,7 @@
             </ng-container>
             <app-smart-input
             #tournamentInput
-            [label]="'search.team_search.tournament' | translate"
+            [label]="'shared.team.tournament' | translate"
             [keepSelected]="false"
             [allowCustom]="true"
             [customType]="'tournament'"
@@ -30,7 +30,7 @@
             ></app-smart-input>
             <app-smart-input
             #regulationInput
-            [label]="'search.team_search.regulation' | translate"
+            [label]="'shared.team.regulation' | translate"
             [keepSelected]="false"
             [getter]="queryService.queryRegulationCallback"
             [allGetter]="queryService.regulationAllCallback"
@@ -39,7 +39,7 @@
             ></app-smart-input>
             <app-smart-input
             #tagInput
-            [label]="'search.team_search.tag' | translate"
+            [label]="'shared.team.tag' | translate"
             [keepSelected]="false"
             [getter]="queryService.queryTagCallback"
             [allGetter]="queryService.tagAllCallback"
@@ -49,7 +49,7 @@
             <ng-template #secondInputsRow>
               <app-smart-input
               #pokemonInput
-              [label]="'search.team_search.pokemon' | translate"
+              [label]="'shared.pokemon.pokemon' | translate"
               [keepSelected]="false"
               [getter]="queryService.queryPokemonCallback"
               (selectEvent)="queryResultSelectEvent($event)"
@@ -57,7 +57,7 @@
               ></app-smart-input>
               <app-smart-input
               #moveInput
-              [label]="'search.team_search.move' | translate"
+              [label]="'shared.pokemon.move' | translate"
               [keepSelected]="false"
               [getter]="queryService.queryMoveCallback"
               (selectEvent)="queryResultSelectEvent($event)"
@@ -65,7 +65,7 @@
               ></app-smart-input>
               <app-smart-input
               #itemInput
-              [label]="'search.team_search.item' | translate"
+              [label]="'shared.pokemon.item' | translate"
               [keepSelected]="false"
               [getter]="queryService.queryItemCallback"
               (selectEvent)="queryResultSelectEvent($event)"

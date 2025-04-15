@@ -7,7 +7,6 @@
   "menu":
   { 
     "upload": "Subir",
-    "search": "Buscar",
     "theme": "Tema",
     "login": "Iniciar Sesión"
   },
@@ -15,7 +14,7 @@
   {
     "upload":
     {
-      "generate-button": "Generar Equipo"
+      "save-button": "Generar Equipo"
     },
     "view":
     {
@@ -29,11 +28,8 @@
     "editor":
     {
       "not_logged-warning": "No estas logeado, por lo que el equipo no se te añadira a tu usuario. Asegurate de guardar el link!",
-      "player_input-label": "Jugador",
-      "tournament_input-label": "Torneo",
       "tag_input-label": "Tags ({{currentTags}}/{{maxTags}})",
       "tag_input-feedback": "Tag ya añadida",
-      "rental_code-label": "Codigo rental",
       "visibility-label": "Privacidad",
       "visibility_false-feedback": "El equipo es privado. Activa 'equipo' para seleccionar las demas",
       "errors": 
@@ -54,15 +50,8 @@
     },
     "pokemon_editor": 
     {
-      "pokemon": "Pokémon",
-      "item": "Objecto",
-      "ability": "Habilidad",
       "show_all": "Mostar todas",
       "move": "Movimiento {{index}}",
-      "nature": "Naturaleza",
-      "teratype": "Teratipo",
-      "nickname": "Apodo",
-      "level": "Nivel",
       "remaining_evs": "EVs restantes: ",
       "no_pokemon_ability-error": "Selecciona un pokemon o muestra todas",
       "no_pokemon_stats-error": "Selecciona un pokemon"
@@ -107,30 +96,23 @@
   {
     "team_search":
     {
-      "player": "Jugador",
-      "tournament": "Torneo",
-      "regulation": "Regulación",
-      "tag": "Tag",
-      "pokemon": "Pokemon",
-      "move": "Movimiento",
-      "item": "Objecto",
       "intersection": "Equipos que tienen todas",
       "union": "Equipos que tienen almenos una",
-      "duplicate-feedback": "Ya esta añadida",
-      "search": "Buscar"
+      "duplicate-feedback": "Ya esta añadida"
     },
     "team_table":
     {
       "sort_date": "Fecha",
       "sort_views": "Visitas",
       "total_teams": " equipos",
+      "total_teams_single": " equipo",
       "teams_per_page": "Equipos por página: ",
       "no_teams": "No hay resultados"
     }
   },
   "pokemon": 
   {
-    "show_stats": "Mostrar stats",
+    "show_stats": "Mostrar estadísticas",
     "no_stats": "No hay pokemon",
     "show_notes": "Mostrar notas",
     "no_notes": "No hay notas",
@@ -214,15 +196,14 @@
     "email_confirmation":
     {
       "email_confirmed-feedback": "Correo confirmado!",
-      "incorrect_credentials-feedback": "Credenciales incorrectos",
-      "home-button": "Ir a inicio"
+      "incorrect_credentials-feedback": "Credenciales incorrectos"
     }
   },
   "shared":
   {
     "user_not_found": "Usuario @{{resourceName}} no encontrado!",
     "page_not_found": "Pagina no encontrada!",
-    "back-button": "Ir a inicio",
+    "go_home-button": "Ir a inicio",
     "smart_input_placeholder": "Buscar...",
     "smart_input_results": "Resultados",
     "errors":
@@ -246,6 +227,27 @@
     "copySuccess": "Copiado!",
     "copyError": "Error copiando",
     "yes": "Si",
-    "no": "No"
+    "no": "No",
+    "search": "Buscar",
+    "team":
+    {
+      "team": "Equipo",
+      "player": "Jugador",
+      "tournament": "Torneo",
+      "regulation": "Regulación",
+      "tag": "Tag",
+      "rental_code": "Codigo Rental"
+    },
+    "pokemon":
+    {
+      "pokemon": "Pokémon",
+      "item": "Objecto",
+      "ability": "Habilidad",
+      "move": "Movimiento",
+      "nature": "Naturaleza",
+      "teratype": "Teratipo",
+      "nickname": "Apodo",
+      "level": "Nivel"
+    }
   }
 }
