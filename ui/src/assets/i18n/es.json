@@ -236,7 +236,8 @@
       "tournament": "Torneo",
       "regulation": "Regulación",
       "tag": "Tag",
-      "rental_code": "Codigo Rental"
+      "rental_code": "Codigo Rental",
+      "unauthorized": "Este equipo es privado"
     },
     "pokemon":
     {

@@ -31,7 +31,7 @@
       "tag_input-label": "Tags ({{currentTags}}/{{maxTags}})",
       "tag_input-feedback": "Tag already added",
       "visibility-label": "Privacy",
-      "visibility_false-feedback": "Team is private. Check team to select others.",
+      "visibility_false-feedback": "Team is private. Enable team to select others",
       "errors": 
       {
         "no_pokemons": "No pokemons loaded",
@@ -237,7 +237,8 @@
       "tournament": "Tournament",
       "regulation": "Regulation",
       "tag": "Tag",
-      "rental_code": "Rental Code"
+      "rental_code": "Rental Code",
+      "unauthorized": "This team is private"
     },
     "pokemon":
     {
