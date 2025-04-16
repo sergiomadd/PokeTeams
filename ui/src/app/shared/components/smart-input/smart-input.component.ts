@@ -186,6 +186,13 @@ export class SmartInputComponent
   {
     this.selected = undefined;
     this.searchForm.controls.key.setValue("");
+    setTimeout(() => 
+    {
+      if (this.input) 
+      {
+        this.input.nativeElement.focus();
+      }
+    });
     this.selectEvent.emit(undefined);
   }
 
@@ -240,7 +247,7 @@ export class SmartInputComponent
   {
     if(!this.disabled)
     {
-      if(this.results.length > 0 && (this.allowCustom && this.results.length > 1))
+      if((this.results.length > 0 && (this.allowCustom || this.results.length > 1)) || this.searchForm.controls.key.value)
       {
         this.showOptions = true;
       }
