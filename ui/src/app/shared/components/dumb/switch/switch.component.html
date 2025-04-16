@@ -2,9 +2,15 @@
   <div class="selector option" 
   [ngClass]="{selectedLeft: !state, selectedRight: state}"></div>
   <div class="option left" [ngClass]="{selected: state}" (click)="onClick()">
-    {{leftText}}
+    <ng-container *ngIf="leftText">
+      {{leftText}}
+    </ng-container>
+    <ng-container *ngIf="leftSVG" [ngTemplateOutlet]="leftSVG"></ng-container>
   </div>
   <div class="option right" [ngClass]="{selected: !state}" (click)="onClick()">
-    {{rightText}}
+    <ng-container *ngIf="rightText">
+      {{rightText}}
+    </ng-container>
+    <ng-container *ngIf="rightSVG" [ngTemplateOutlet]="rightSVG"></ng-container>
   </div>
 </div>

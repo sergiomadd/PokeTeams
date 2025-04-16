@@ -3,8 +3,6 @@
 {
   position: relative;
   display: flex;
-
-  border: 1px solid var(--bg-color-reverse-2);
   background-color: var(--bg-color-2);
   border-radius: 5px;
   user-select: none;
@@ -14,12 +12,13 @@
 {
   display: flex;
   align-items: center;
-  width: 3em;
-  height: 1em;
-  padding: calc(0.4em + 1px);
+  width: 1.5em;
+  height: 1.5em;
+  padding: 0.4em;
   background-color: transparent;
   cursor: pointer;
   z-index: 2;
+  opacity: 0.4;
 }
 
 .selected
@@ -28,19 +27,24 @@
   opacity: 1;
 }
 
+.not-selected
+{
+  color: white;
+}
+
 .selector
 {
   position: absolute;
-  background-color: var(--primary);
+  background-color: var(--secondary);
   top: 0;
   left: 0;
   transition: transform 0.3s ease-in-out, border-radius 0.3s ease;
-  border-radius: 5px;
+  opacity: 1;
 }
 
 .selectedLeft
 {
-  transform: translateX(100%);
+  transform: translateX(round(100%, 1px));
   border-radius: 0 5px 5px 0;
 }
 
