@@ -44,6 +44,28 @@ export enum PokeColorHsl
     fairy = "hsl(330, 50%, 68%)"
 }
 
+export enum Gen9IconColorsHex
+{
+    normal = "#a0a2a0",
+    fire = "#e62828",
+    water = "#2a7fef",
+    electric = "#fac000",
+    grass = "#40a22a",
+    ice = "#3dd8ff",
+    fighting = "#ff8000",
+    poison = "#9343cb",
+    ground = "#915221",
+    flying = "#81b9ef",
+    psychic = "#ef437a",
+    bug = "#8f9f19",
+    rock = "#afa983",
+    ghost = "#714171",
+    dragon = "#5161e1",
+    dark = "#50413f",
+    steel = "#61a1b8",
+    fairy = "#ef71ef"
+}
+
 export enum Gen9IconColors
 {
     normal = "hsl(120, 1%, 63%)",

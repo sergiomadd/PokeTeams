@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ThemeService } from 'src/app/core/helpers/theme.service';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
+import { Gen9IconColorsHex } from 'src/app/core/models/misc/colors';
 import { tagBackgroundColors } from 'src/app/core/models/misc/tagColors.model';
 import { Tag } from 'src/app/core/models/team/tag.model';
 import { TeamService } from 'src/app/core/services/team.service';
@@ -32,7 +33,7 @@ export class TagEditorComponent
   {
     name: ['', [Validators.required, Validators.maxLength(16)]],
     desc: ['', [Validators.maxLength(256)]],
-    color: ['#f44336']
+    color: [Gen9IconColorsHex.normal.toString()]
   }, { updateOn: "blur" });
   formSubmitted: boolean = false;
 

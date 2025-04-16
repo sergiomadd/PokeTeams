@@ -118,11 +118,11 @@ export class PokemonCardComponent
 
   async linkify()
   {
-    if(this.pokemon?.ability)
+    if(this.pokemon?.ability?.prose)
     {
       this.abilityProse = this.linkifier.linkifyProse(this.pokemon.ability?.prose.content);
     }
-    if(this.pokemon?.item)
+    if(this.pokemon?.item?.prose)
     {
       this.itemProse = this.linkifier.linkifyProse(this.pokemon.item?.prose.content);
     }

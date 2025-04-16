@@ -349,7 +349,10 @@ export class PokemonEditorComponent
   deletePokemon()
   {
     this.teamEditorService.deletePokemon(this.selectedPokemonIndex);
-    this.selectPokemon(this.selectedPokemonIndex - 1);
+    if(this.selectedPokemonIndex > 0)
+    {
+      this.selectPokemon(this.selectedPokemonIndex - 1);
+    }
   }
 
 
