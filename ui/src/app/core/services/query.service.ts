@@ -272,6 +272,7 @@ export class QueryService
       return {
         name: item.name.content,
         identifier: item.name.content,
+        icon: item.iconPath
       }
     }
     return undefined;
