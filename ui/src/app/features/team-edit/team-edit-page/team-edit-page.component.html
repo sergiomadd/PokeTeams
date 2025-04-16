@@ -1,18 +1,18 @@
 <div class="team-edit">
   <app-pokemon-editor></app-pokemon-editor>
   <app-team-editor></app-team-editor>
-  <div class="col-center s-gap">
-    <div class="row relative">
+  <div class="flex-col justify-i-c align-i-c gap-s">
+    <div class="flex justify-i-c align-i-c relative">
       <button
       (click)="saveTeam()"
       class="button-primary"
       >{{'team.edit.save_team-button' | translate}}</button>
-      <ng-container *ngIf="teamSubmitted">
-        <div class="spinner-wrapper">
-          <div class="pokemon-spinner"></div>
-        </div>
-      </ng-container>
     </div>
+    <ng-container *ngIf="teamSubmitted">
+      <div class="spinner-wrapper">
+        <div class="pokemon-spinner"></div>
+      </div>
+    </ng-container>
     <ng-container *ngIf="feedback">
       <span class="formFeedbackError text-center">{{feedback}}</span>
     </ng-container>
