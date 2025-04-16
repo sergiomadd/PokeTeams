@@ -199,7 +199,7 @@ namespace api.Services
                     tags: tags,
                     rentalCode: inputTeam.RentalCode,
                     viewCount: inputTeam.ViewCount,
-                    dateCreated: inputTeam.Date != null && inputTeam.Date != "" ? DateTime.Parse(inputTeam.Date) : DateTime.UtcNow,
+                    dateCreated: inputTeam.Date != null && inputTeam.Date != "" ? DateTime.Parse(inputTeam.Date).ToUniversalTime() : DateTime.UtcNow,
                     visibility: player == null ? true : inputTeam.Visibility,
                     ivsVisibilty: player == null ? true : inputTeam.Options != null ? inputTeam.Options.IvsVisibility : false,
                     evsVisibilty: player == null ? true : inputTeam.Options != null ? inputTeam.Options.EvsVisibility : false,

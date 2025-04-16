@@ -123,7 +123,7 @@ namespace api.Services
             Country? country = _pokeTeamContext.Country.FirstOrDefault(c => c.Code == code);
             if (country != null)
             {
-                countryDTO = new CountryDTO(country, $"{baseUrl}images/flags/{country.Code}.svg");
+                countryDTO = new CountryDTO(country, $"{baseUrl}images/flags/{country.Code.ToUpperInvariant()}.svg");
             }
             return countryDTO;
         }
@@ -135,7 +135,7 @@ namespace api.Services
             var query =
                 from country in _pokeTeamContext.Country.Where(i => i.NormalizedName.StartsWith(key.ToLower()))
 
-            select new QueryResultDTO(country.Name, country.Code, $"{baseUrl}images/flags/{country.Code}.svg", "country");
+            select new QueryResultDTO(country.Name, country.Code, $"{baseUrl}images/flags/{country.Code.ToUpperInvariant()}.svg", "country");
 
             queryResults = await query.ToListAsync();
 
@@ -149,7 +149,7 @@ namespace api.Services
             var query =
                 from country in _pokeTeamContext.Country
 
-                select new QueryResultDTO(country.Name, country.Code, $"{baseUrl}images/flags/{country.Code}.svg", "country");
+                select new QueryResultDTO(country.Name, country.Code, $"{baseUrl}images/flags/{country.Code.ToUpperInvariant()}.svg", "country");
 
             queryResults = await query.ToListAsync();
 
