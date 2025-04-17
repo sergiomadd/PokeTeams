@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ParserService } from 'src/app/core/helpers/parser.service';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
+import { CustomError } from 'src/app/core/models/misc/customError.model';
 import { Team } from 'src/app/core/models/team/team.model';
 import { TeamData } from 'src/app/core/models/team/teamData.model';
 import { PokemonService } from 'src/app/core/services/pokemon.service';
@@ -41,6 +42,7 @@ export class TeamViewPageComponent
 
   pasteCopied: boolean = false;
   linkCopied: boolean = false;
+  unauthorized: boolean = false;
 
   async ngOnInit()
   {
@@ -67,7 +69,6 @@ export class TeamViewPageComponent
           this.teamData = response;
           if(this.teamData)
           {
-            console.log(response)
             this.team = 
             {
               ...this.team,
@@ -88,10 +89,14 @@ export class TeamViewPageComponent
             this.loadPokemons(this.teamData.pokemonIDs);
           }
         },
-        error: (error) =>
+        error: (error: CustomError) =>
         {
           console.log("Error getting team data", error)
           this.loading = false;
+          if(error.status === 401)
+          {
+            this.unauthorized = true;
+          }
         },
         complete: () => 
         {
@@ -122,6 +127,7 @@ export class TeamViewPageComponent
               if(this.team && response) 
               { 
                 this.team.pokemons[index] = response;
+                this.team = {...this.team, pokemons: this.team.pokemons}
               }
             },
             error: () =>
@@ -129,6 +135,7 @@ export class TeamViewPageComponent
               if(this.team) 
               { 
                 this.team.pokemons[index] = null;
+                this.team = {...this.team, pokemons: this.team.pokemons}
               }            
             }
           }
