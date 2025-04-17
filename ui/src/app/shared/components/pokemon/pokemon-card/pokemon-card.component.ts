@@ -454,4 +454,9 @@ export class PokemonCardComponent
     }
     return natureValue;
   }
+
+  shouldBeInMiddle(index, types): boolean 
+  {
+    return types && types.length > 2 && index % 2 === 0;
+  }
 }

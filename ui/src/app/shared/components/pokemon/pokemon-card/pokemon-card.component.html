@@ -376,8 +376,9 @@
                               <span class="bold">x2</span>
                             </div>
                             <div class="type-category-icons">
-                              <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.superEffective">
-                                <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                              <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.superEffective; let i = index; let last = last">
+                                <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.teraType?.effectivenessDefense?.superEffective)}">
                               </ng-container>
                             </div>
                           </div>
@@ -391,8 +392,9 @@
                               <span class="bold">x0.5</span>
                             </div>
                             <div class="type-category-icons">
-                              <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.notVeryEffective">
-                                <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                              <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.notVeryEffective; let i = index; let last = last">
+                                <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.teraType?.effectivenessDefense?.notVeryEffective)}">
                               </ng-container>
                             </div>
                           </div>
@@ -408,8 +410,9 @@
                               <span class="bold">x0</span> 
                             </div>
                             <div class="type-category-icons">
-                              <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.inmune">
-                                <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                              <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.inmune; let i = index; let last = last">
+                                <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.teraType?.effectivenessDefense?.inmune)}">
                               </ng-container>
                             </div>
                           </div>
@@ -462,8 +465,9 @@
                                   <span class="bold">x4</span>
                                 </div>
                                 <div class="type-category-icons">
-                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleSuperEffective">
-                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleSuperEffective; let i = index; let last = last">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                    [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.doubleSuperEffective)}">
                                   </ng-container>
                                 </div>
                               </div>
@@ -482,8 +486,9 @@
                                   <span class="bold">x2</span>
                                 </div>
                                 <div class="type-category-icons">
-                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.superEffective">
-                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.superEffective; let i = index; let last = last">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                    [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.superEffective)}">
                                   </ng-container>
                                 </div>
                               </div>
@@ -502,8 +507,9 @@
                                   <span class="bold">x0.5</span>
                                 </div>
                                 <div class="type-category-icons">
-                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.notVeryEffective">
-                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.notVeryEffective; let i = index; let last = last">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                    [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.notVeryEffective)}">
                                   </ng-container>
                                 </div>
                               </div>
@@ -520,8 +526,9 @@
                                   <span class="bold">x0.25</span>
                                 </div>
                                 <div class="type-category-icons">
-                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleNotVeryEffective">
-                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleNotVeryEffective; let i = index; let last = last">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                    [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.doubleNotVeryEffective)}">
                                   </ng-container>
                                 </div>
                               </div>
@@ -537,8 +544,9 @@
                                   <span class="bold">x0</span>
                                 </div>
                                 <div class="type-category-icons">
-                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.inmune">
-                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.inmune; let i = index; let last = last">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                    [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.inmune)}">
                                   </ng-container>
                                 </div>
                               </div>
@@ -551,8 +559,9 @@
                                   <span class="bold">x2</span>
                                 </div>
                                 <div class="type-category-icons">
-                                  <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.superEffective">
-                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.superEffective; let i = index; let last = last">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                    [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.type1?.effectivenessDefense?.superEffective)}">
                                   </ng-container>
                                 </div>
                               </div>
@@ -566,8 +575,9 @@
                                   <span class="bold">x0.5</span>
                                 </div>
                                 <div class="type-category-icons">
-                                  <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.notVeryEffective">
-                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.notVeryEffective; let i = index; let last = last">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                    [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.type1?.effectivenessDefense?.notVeryEffective)}">
                                   </ng-container>
                                 </div>
                               </div>
@@ -575,7 +585,7 @@
                                 <div class="flex align-i-c">
                                   <div class="divider"></div>
                                 </div>
-                            </ng-container>
+                              </ng-container>
                             </ng-container>
                             <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.inmune?.length ?? false">
                               <div class="type-category">
@@ -583,8 +593,9 @@
                                   <span class="bold">x0</span> 
                                 </div>
                                 <div class="type-category-icons">
-                                  <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.inmune">
-                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s">
+                                  <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.inmune; let i = index; let last = last">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                    [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.type1?.effectivenessDefense?.inmune)}">
                                   </ng-container>
                                 </div>
                               </div>
@@ -730,8 +741,9 @@
                                     <span class="bold">x2</span>
                                   </div>
                                   <div class="type-category-icons">
-                                    <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.superEffective">
-                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
+                                    <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.superEffective; let i = index; let last = last">
+                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, move?.pokeType?.effectivenessAttack?.superEffective)}">
                                     </ng-container>
                                   </div>
                                 </div>
@@ -745,8 +757,9 @@
                                     <span class="bold">x0.5</span>
                                   </div>
                                   <div class="type-category-icons">
-                                    <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.notVeryEffective">
-                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
+                                    <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.notVeryEffective; let i = index; let last = last">
+                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, move?.pokeType?.effectivenessAttack?.notVeryEffective)}">
                                     </ng-container>
                                   </div>
                                 </div>
@@ -762,8 +775,9 @@
                                     <span class="bold">x0</span> 
                                   </div>
                                   <div class="type-category-icons">
-                                    <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.inmune">
-                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon">
+                                    <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.inmune; let i = index; let last = last">
+                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, move?.pokeType?.effectivenessAttack?.inmune)}">
                                     </ng-container>
                                   </div>
                                 </div>
