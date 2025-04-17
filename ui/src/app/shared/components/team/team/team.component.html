@@ -83,57 +83,63 @@
     <ng-container *ngIf="team?.pokemons && team?.pokemons!.length > 0">
       <ng-container *ngIf="!window.isBigMobileOrLess()">
         <div class="flex-col gap-m align-i-e">
-          <div class="mar-y-s">
-            <div 
-            class="detail tooltip-wrapper no-select left-button"
-            (click)="team?.options?.ivsVisibility ? toggleIVs() : false"
-            [ngClass]="
-            {
-              active: team?.options?.showIVs,
-              disabled: !team?.options?.ivsVisibility
-            }"
-            >
-              <app-tooltip
-              [text]="team?.options?.ivsVisibility ? ('team.team.ivs-tooltip' | translate) : ('team.team.ivs_disabled-tooltip' | translate)"
-              [side]="'left'"
-              ></app-tooltip>
-              IV
+          <ng-container *ngIf="team?.options?.showIVs !== undefined">
+            <div class="mar-y-s">
+              <div 
+              class="detail tooltip-wrapper no-select left-button"
+              (click)="team?.options?.ivsVisibility ? toggleIVs() : false"
+              [ngClass]="
+              {
+                active: team?.options?.showIVs,
+                disabled: !team?.options?.ivsVisibility
+              }"
+              >
+                <app-tooltip
+                [text]="team?.options?.ivsVisibility ? ('team.team.ivs-tooltip' | translate) : ('team.team.ivs_disabled-tooltip' | translate)"
+                [side]="'left'"
+                ></app-tooltip>
+                IV
+              </div>
             </div>
-          </div>
-          <div class="mar-y-s">
-            <div 
-            class="detail tooltip-wrapper no-select left-button"
-            (click)="team?.options?.evsVisibility ? toggleEVs() : false"
-            [ngClass]="
-            {
-              active: team?.options?.showEVs,
-              disabled: !team?.options?.evsVisibility
-            }"
-            >
-              <app-tooltip
-              [text]="team?.options?.evsVisibility ? ('team.team.evs-tooltip' | translate) : ('team.team.evs_disabled-tooltip' | translate)"
-              [side]="'left'"
-              ></app-tooltip>
-              EV
+          </ng-container>
+          <ng-container *ngIf="team?.options?.showEVs !== undefined">
+            <div class="mar-y-s">
+              <div 
+              class="detail tooltip-wrapper no-select left-button"
+              (click)="team?.options?.evsVisibility ? toggleEVs() : false"
+              [ngClass]="
+              {
+                active: team?.options?.showEVs,
+                disabled: !team?.options?.evsVisibility
+              }"
+              >
+                <app-tooltip
+                [text]="team?.options?.evsVisibility ? ('team.team.evs-tooltip' | translate) : ('team.team.evs_disabled-tooltip' | translate)"
+                [side]="'left'"
+                ></app-tooltip>
+                EV
+              </div>
             </div>
-          </div>
-          <div class="mar-y-s">
-            <div 
-            class="detail tooltip-wrapper no-select left-button"
-            (click)="team?.options?.naturesVisibility ? toggleNatures() : false"
-            [ngClass]="
-            {
-              active: team?.options?.showNature,
-              disabled: !team?.options?.naturesVisibility
-            }"
-            >
-              <app-tooltip
-              [text]="team?.options?.naturesVisibility ? ('team.team.natures-tooltip' | translate) : ('team.team.natures_disabled-tooltip' | translate)"
-              [side]="'left'"
-              ></app-tooltip>
-              NA
+          </ng-container>
+          <ng-container *ngIf="team?.options?.showNature !== undefined">
+            <div class="mar-y-s">
+              <div 
+              class="detail tooltip-wrapper no-select left-button"
+              (click)="team?.options?.naturesVisibility ? toggleNatures() : false"
+              [ngClass]="
+              {
+                active: team?.options?.showNature,
+                disabled: !team?.options?.naturesVisibility
+              }"
+              >
+                <app-tooltip
+                [text]="team?.options?.naturesVisibility ? ('team.team.natures-tooltip' | translate) : ('team.team.natures_disabled-tooltip' | translate)"
+                [side]="'left'"
+                ></app-tooltip>
+                NA
+              </div>
             </div>
-          </div>
+          </ng-container>
         </div>
       </ng-container>
     </ng-container>

@@ -8,7 +8,6 @@ import { Team } from 'src/app/core/models/team/team.model';
 import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
 import { PokemonCardComponent } from '../../pokemon/pokemon-card/pokemon-card.component';
 
-
 @Component({
   selector: 'app-team',
   templateUrl: './team.component.html',
@@ -45,9 +44,51 @@ export class TeamComponent
     if(this.team)
     {
       this.team.options.showIVs = this.team?.options.ivsVisibility;
+      //If ivs not null && no ivs in any pokemon -> dont show ivs button
+      if(this.team.options.showIVs && !this.anyIVs())
+      {
+        this.team.options.showIVs = undefined;
+      }
+
       this.team.options.showEVs = this.team?.options.evsVisibility;
+      if(this.team.options.showEVs && !this.anyEVs())
+      {
+        this.team.options.showEVs = undefined;
+      }
+
       this.team.options.showNature = this.team?.options.naturesVisibility;
+      if(this.team.options.showNature && !this.anyNatures())
+      {
+        this.team.options.showNature = undefined;
+      }
     }
+  }
+
+  anyIVs() : boolean
+  {
+    if(this.team?.pokemons)
+    {
+      return this.team?.pokemons.some(p => p?.ivs && p?.ivs.some(i => i.value != 0));
+    }
+    return false;
+  }
+
+  anyEVs() : boolean
+  {
+    if(this.team?.pokemons)
+    {
+      return this.team?.pokemons.some(p => p?.evs && p?.evs.some(i => i.value != 0));
+    }
+    return false;
+  }
+
+  anyNatures() : boolean
+  {
+    if(this.team?.pokemons)
+    {
+      return this.team?.pokemons.some(p => p?.nature);
+    }
+    return false;
   }
   
   forceChange(options: TeamOptions)
@@ -126,6 +167,7 @@ export class TeamComponent
 
   toggleIVs()
   {
+    console.log("options ", this.team?.options)
     if(this.team?.options)
     {
       this.team.options.showIVs = !this.team.options.showIVs
