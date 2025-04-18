@@ -27,6 +27,7 @@ export class TeamComponent
 
   showAllStats: boolean = false;
   showAllNotes: boolean = false;
+  hasAnyNotes: boolean = false;
   maxStat: number = 0;
   rentalCodeCopied: boolean = false;
 
@@ -61,6 +62,8 @@ export class TeamComponent
       {
         this.team.options.showNature = undefined;
       }
+
+      this.hasAnyNotes = this.anyNotes();
     }
   }
 
@@ -90,6 +93,15 @@ export class TeamComponent
     }
     return false;
   }
+
+  anyNotes()
+  {
+    if(this.team?.pokemons)
+    {
+      return this.team?.pokemons.some(p => p?.notes);
+    }
+    return false;
+  }
   
   forceChange(options: TeamOptions)
   {
@@ -111,7 +123,10 @@ export class TeamComponent
         this.showAllNotes = !this.showAllNotes;
         this.pokemonComponents.forEach(pokemon => 
         {
-          pokemon.showNotes[0] = this.showAllNotes;
+          if(pokemon.pokemon?.notes)
+          {
+            pokemon.showNotes[0] = this.showAllNotes;
+          }
         });
         break;
       case 2:
@@ -167,7 +182,6 @@ export class TeamComponent
 
   toggleIVs()
   {
-    console.log("options ", this.team?.options)
     if(this.team?.options)
     {
       this.team.options.showIVs = !this.team.options.showIVs
