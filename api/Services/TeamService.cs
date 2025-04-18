@@ -79,28 +79,40 @@ namespace api.Services
             baseUrl = _config["BaseUrl"];
         }
 
-        public async Task<TeamDTO?> BuildTeamDTO(Team team, int langId)
+        public async Task<TeamDataDTO?> BuildTeamDataDTO(Team team, int langId)
         {
-            TeamDTO teamDTO = null;
+            TeamDataDTO? teamDataDTO = null;
             if (team != null)
             {
                 List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
-                List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
                 TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(team.IVsVisibility, team.EVsVisibility, team.NaturesVisibility);
-                if (team.PlayerId != null && team.PlayerId == _identityService.GetLoggedUserID())
+                UserPreviewDTO? userPreview = null;
+                if (team.PlayerId != null)
                 {
-                    teamOptionsDTO.Logged();
+                    User? teamPlayer = await _userService.GetUserById(team.PlayerId);
+                    if (teamPlayer != null)
+                    {
+                        if (teamPlayer.Id == _identityService.GetLoggedUserID())
+                        {
+                            teamOptionsDTO.Logged();
+                        }
+                        else if (!teamPlayer.Visibility || !team.Visibility)
+                        {
+                            team.Id = "unauthorized";
+                        }
+                    }
+                    string? picture = teamPlayer?.Picture != null ? $"{baseUrl}images/profile-pics/{teamPlayer.Picture}.png" : null;
+                    userPreview = new UserPreviewDTO(teamPlayer?.UserName, picture, true);
+                }
+                else if (team.AnonPlayer != null)
+                {
+                    userPreview = new UserPreviewDTO(team.AnonPlayer);
                 }
 
-                foreach (Pokemon pokemon in pokemons)
-                {
-                    pokemonDTOs.Add(await _pokemonService.BuildPokemonDTO(pokemon, langId, teamOptionsDTO));
-                }
-
-                teamDTO = new TeamDTO(
+                teamDataDTO = new TeamDataDTO(
                     team.Id,
-                    pokemonDTOs,
-                    await GetTeamPlayer(team),
+                    pokemons.Select(p => p.Id).ToList(),
+                    userPreview,
                     await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName),
                     await _regulationService.GetRegulationByIdentifier(team.Regulation),
                     team.RentalCode,
@@ -108,8 +120,31 @@ namespace api.Services
                     team.DateCreated.ToString("yyyy-MM-dd"),
                     team.Visibility,
                     await GetTeamTags(team),
-                    options: teamOptionsDTO
+                    teamOptionsDTO
                     );
+            }
+            return teamDataDTO;
+        }
+
+        public async Task<TeamDTO?> BuildTeamDTO(Team team, int langId)
+        {
+            TeamDTO? teamDTO = null;
+            if (team != null)
+            {
+                TeamDataDTO? teamDataDTO = await BuildTeamDataDTO(team, langId);
+                if(teamDataDTO != null && teamDataDTO.PokemonIDs.Count > 0)
+                {
+                    List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
+                    List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
+                    foreach (int pokemonId in teamDataDTO.PokemonIDs)
+                    {
+                        Pokemon? pokemon = await _pokeTeamContext.Pokemon.FindAsync(pokemonId);
+                        if(pokemon != null)
+                        {
+                            pokemonDTOs.Add(await _pokemonService.BuildPokemonDTO(pokemon, langId, teamDataDTO.Options));
+                        }
+                    }
+                }
             }
             return teamDTO;
         }
@@ -125,11 +160,30 @@ namespace api.Services
                 pokemonPreviewIDs.Add(pokemon.Id);
             }
 
+            UserPreviewDTO? userPreview = null;
+            if (team.PlayerId != null)
+            {
+                User? teamPlayer = await _userService.GetUserById(team.PlayerId);
+                if (teamPlayer != null)
+                {
+                    if ((!teamPlayer.Visibility || !team.Visibility) && teamPlayer.Id != _identityService.GetLoggedUserID())
+                    {
+                        team.Id = "unauthorized";
+                    }
+                }
+                string? picture = teamPlayer?.Picture != null ? $"{baseUrl}images/profile-pics/{teamPlayer.Picture}.png" : null;
+                userPreview = new UserPreviewDTO(teamPlayer?.UserName, picture, true);
+            }
+            else if (team.AnonPlayer != null)
+            {
+                userPreview = new UserPreviewDTO(team.AnonPlayer);
+            }
+
             teamPreviewDTO = new TeamPreviewDTO
             {
                 ID = team.Id,
                 PokemonIDs = pokemonPreviewIDs,
-                Player = await GetTeamPlayer(team),
+                Player = userPreview,
                 Tournament = await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName),
                 Regulation = await _regulationService.GetRegulationByIdentifier(team.Regulation),
                 ViewCount = team.ViewCount,
@@ -246,46 +300,17 @@ namespace api.Services
         public async Task<TeamDataDTO?> GetTeamData(string id, int langId)
         {
             TeamDataDTO teamDataDTO = null;
-            Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
-            if (team != null)
+            try
             {
-                List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
-                TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(team.IVsVisibility, team.EVsVisibility, team.NaturesVisibility);
-                var test = _identityService.GetLoggedUserID();
-                if (team.PlayerId != null && team.PlayerId == _identityService.GetLoggedUserID())
-                {
-                    teamOptionsDTO.Logged();
-                }
-                teamDataDTO = new TeamDataDTO(
-                    team.Id,
-                    pokemons.Select(p => p.Id).ToList(),
-                    await GetTeamPlayer(team),
-                    await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName),
-                    await _regulationService.GetRegulationByIdentifier(team.Regulation),
-                    team.RentalCode,
-                    team.ViewCount,
-                    team.DateCreated.ToString("yyyy-MM-dd"),
-                    team.Visibility,
-                    await GetTeamTags(team),
-                    teamOptionsDTO
-                    );
+                Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
+                teamDataDTO = await BuildTeamDataDTO(team, langId);
+            }
+            catch (Exception ex)
+            {
+                Printer.Log(ex.Message);
+                return null;
             }
             return teamDataDTO;
-        }
-
-        private async Task<UserPreviewDTO?> GetTeamPlayer(Team team)
-        {
-            if (team.PlayerId != null)
-            {
-                User player = await _userService.GetUserById(team.PlayerId);
-                string? picture = player.Picture != null ? $"{baseUrl}images/profile-pics/{player.Picture}.png" : null;
-                return new UserPreviewDTO(player.UserName, picture, true);
-            }
-            else if (team.AnonPlayer != null)
-            {
-                return new UserPreviewDTO(team.AnonPlayer);
-            }
-            return null;
         }
 
         private async Task<List<TagDTO>> GetTeamTags(Team team)

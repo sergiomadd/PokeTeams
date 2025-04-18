@@ -8,10 +8,10 @@ namespace api.DTOs
     {
         public string ID { get; set; }
         public List<int> PokemonIDs { get; set; }
-        public UserPreviewDTO Player { get; set; }
-        public TournamentDTO Tournament { get; set; }
-        public RegulationDTO Regulation { get; set; }
-        public string RentalCode { get; set; }
+        public UserPreviewDTO? Player { get; set; }
+        public TournamentDTO? Tournament { get; set; }
+        public RegulationDTO? Regulation { get; set; }
+        public string? RentalCode { get; set; }
         public int ViewCount { get; set; }
         public string Date { get; set; }
         public bool Visibility { get; set; }
@@ -22,10 +22,10 @@ namespace api.DTOs
         public TeamDataDTO(
             string id, 
             List<int> pokemonIDs, 
-            UserPreviewDTO player, 
-            TournamentDTO tournament, 
-            RegulationDTO regulation, 
-            string rentalCode, 
+            UserPreviewDTO? player, 
+            TournamentDTO? tournament, 
+            RegulationDTO? regulation, 
+            string? rentalCode, 
             int viewCount, 
             string date, 
             bool visibility, 

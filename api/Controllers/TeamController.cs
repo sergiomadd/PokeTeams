@@ -50,6 +50,10 @@ namespace api.Controllers
                 {
                     return BadRequest("Team not found.");
                 }
+                else if (team.ID == "unauthorized")
+                {
+                    return Unauthorized("This team is private");
+                }
                 return Ok(team);
             }
         }
@@ -66,10 +70,15 @@ namespace api.Controllers
             else
             {
                 int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
+
                 var team = await _teamService.GetTeamData(id, langId ?? 9);
                 if (team == null)
                 {
                     return BadRequest("Team data not found.");
+                }
+                else if (team.ID == "unauthorized")
+                {
+                    return Unauthorized("This team is private");
                 }
                 return Ok(team);
             }
@@ -78,7 +87,7 @@ namespace api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
         [HttpPost, Route("save")]
-        public async Task<ActionResult> SaveTeam([FromBody] TeamDTO? team)
+        public async Task<ActionResult> SaveTeam([FromBody] TeamDTO? teamDTO)
         {
             if (_identityService.CheckForRefresh(Request))
             {
@@ -86,12 +95,12 @@ namespace api.Controllers
             }
             else
             {
-                string? validation = _teamService.ValidateTeamDTO(team);
+                string? validation = _teamService.ValidateTeamDTO(teamDTO);
                 if (validation != null)
                 {
                     return BadRequest(validation);
                 }
-                Team? newTeam = await _teamService.SaveTeam(team);
+                Team? newTeam = await _teamService.SaveTeam(teamDTO);
                 if (newTeam == null)
                 {
                     return BadRequest("Error saving team");
@@ -104,7 +113,11 @@ namespace api.Controllers
         [HttpPost, Route("update")]
         public async Task<ActionResult<string>> Update(TeamDTO? teamDTO)
         {
-            //add validation
+            string? validation = _teamService.ValidateTeamDTO(teamDTO);
+            if (validation != null)
+            {
+                return BadRequest(validation);
+            }
             Team? currentTeam = await _teamService.GetTeamModel(teamDTO.ID);
             if (currentTeam == null || currentTeam.Player == null)
             {
