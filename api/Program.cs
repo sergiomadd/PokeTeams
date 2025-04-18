@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
 using api.Services.PokedexServices;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -143,31 +146,32 @@ var apiCorsPolicy = "_apiCorsPolicy";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: apiCorsPolicy,
-                      builder =>
-                      {
-                          builder.WithOrigins("http://localhost:4200", "https://localhost:7134/")
-                            .AllowAnyHeader()
-                            .AllowAnyMethod()
-                            .AllowCredentials();
-                      });
-});
-/*
-builder.Services.AddRateLimiter(options =>
-{
-    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:4200", "https://localhost:7134/")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+        });
 });
 
 builder.Services.AddRateLimiter(rateLimiterOptions =>
 {
+    rateLimiterOptions.OnRejected = async (context, token) =>
+    {
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        await context.HttpContext.Response.WriteAsync("Too many requests. Please try again later.", token);
+    };
+
     rateLimiterOptions.AddFixedWindowLimiter("fixed", options =>
     {
-        options.PermitLimit = 1;
-        options.Window = TimeSpan.FromSeconds(10);
+        options.PermitLimit = 5;
+        options.Window = TimeSpan.FromSeconds(30);
         options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
         options.QueueLimit = 0;
     });
 });
-*/
+
 
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -203,7 +207,7 @@ if (app.Environment.IsDevelopment())
     app.UseCors(apiCorsPolicy);
 }
 
-//app.UseRateLimiter();
+app.UseRateLimiter();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
