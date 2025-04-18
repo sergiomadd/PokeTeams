@@ -20,6 +20,7 @@ $arrowSize: 0.4em;
   height: fit-content;
   max-width: 10em;
   padding: 0.4em;
+  position: relative;
   
   display: flex;
   align-items: center;
@@ -32,7 +33,7 @@ $arrowSize: 0.4em;
   font-size: 0.80rem;
   text-align: center;
   cursor: default;
-  opacity: 1;
+  opacity: 1 !important;
 }
 
 .transition

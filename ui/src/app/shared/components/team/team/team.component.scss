@@ -39,8 +39,9 @@ $teamWidth: calc($pokemonCardWidth * 2 + 0.8em);
 
 .left-button
 {
-  width: 1.5em;
+  min-width: 1.5em;
   text-align: center;
+  z-index: 3;
 }
 
 @media (max-width: $tabletPortrait) 
