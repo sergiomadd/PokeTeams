@@ -57,9 +57,9 @@ namespace api.Services
             return true;
         }
 
-        public bool TagAvailable(string tagName)
+        public async Task<bool> TagAvailable(string tagName)
         {
-            Tag? tag = _pokeTeamContext.Tag.FirstOrDefault(t => t.Identifier == Formatter.NormalizeString(tagName));
+            Tag? tag = await _pokeTeamContext.Tag.FirstOrDefaultAsync(t => t.Identifier == Formatter.NormalizeString(tagName));
             if (tag != null)
             {
                 return false;

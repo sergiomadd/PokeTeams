@@ -43,7 +43,7 @@ namespace api.Services
                     Name = user.Name,
                     Username = user.UserName,
                     Picture = $"{baseUrl}images/profile-pics/{user.Picture}.png",
-                    Country = user.Country != null ? GetCountry(user.Country) : null,
+                    Country = user.Country != null ? await GetCountry(user.Country) : null,
                     Visibility = user.Visibility ? true : false
                 };
             }
@@ -58,7 +58,7 @@ namespace api.Services
 
         public async Task<User> GetUserByUserName(string userName)
         {
-            User user = _pokeTeamContext.Users.FirstOrDefault(u => u.UserName == userName);
+            User user = await _pokeTeamContext.Users.FirstOrDefaultAsync(u => u.UserName == userName);
             return user;
         }
 
@@ -68,7 +68,7 @@ namespace api.Services
             {
                 user.Name = newName;
                 _pokeTeamContext.User.Update(user);
-                _pokeTeamContext.SaveChanges();
+                await _pokeTeamContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace api.Services
             {
                 user.Picture = newPictureKey;
                 _pokeTeamContext.User.Update(user);
-                _pokeTeamContext.SaveChanges();
+                await _pokeTeamContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -109,7 +109,7 @@ namespace api.Services
 
         public async Task<bool> UserNameAvailable(string userName)
         {
-            User user = _pokeTeamContext.Users.FirstOrDefault(u => u.UserName == userName);
+            User? user = await _pokeTeamContext.Users.FirstOrDefaultAsync(u => u.UserName == userName);
             if (user != null)
             {
                 return false;
@@ -117,10 +117,10 @@ namespace api.Services
             return true;
         }
 
-        public CountryDTO? GetCountry(string code)
+        public async Task<CountryDTO?> GetCountry(string code)
         {
             CountryDTO? countryDTO = null;
-            Country? country = _pokeTeamContext.Country.FirstOrDefault(c => c.Code == code);
+            Country? country = await _pokeTeamContext.Country.FirstOrDefaultAsync(c => c.Code == code);
             if (country != null)
             {
                 countryDTO = new CountryDTO(country, $"{baseUrl}images/flags/{country.Code.ToUpperInvariant()}.svg");

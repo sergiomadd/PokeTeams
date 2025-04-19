@@ -13,7 +13,7 @@ namespace api.Services
         public Task<bool> UpdatePicture(User user, string newPictureKey);
         public Task<bool> DeleteRefreshToken(User user);
         public Task<bool> UserNameAvailable(string userName);
-        public CountryDTO? GetCountry(string code);
+        public Task<CountryDTO?> GetCountry(string code);
         public Task<List<QueryResultDTO>> QueryUsers(string key);
         public Task<List<QueryResultDTO>> ChunkQueryUsers(string key, int startIndex, int pageSize);
         public Task<List<QueryResultDTO>> QueryCountriesByName(string key);

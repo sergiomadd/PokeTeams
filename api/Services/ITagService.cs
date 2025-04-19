@@ -9,6 +9,6 @@ namespace api.Services
         public Task<List<TagDTO>> GetAllTags();
         public Task<bool> SaveTag(Tag tag);
         public Task<List<QueryResultDTO>> QueryAllTags();
-        public bool TagAvailable(string tagName);
+        public Task<bool> TagAvailable(string tagName);
     }
 }

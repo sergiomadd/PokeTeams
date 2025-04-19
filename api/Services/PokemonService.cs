@@ -101,7 +101,7 @@ namespace api.Services
 
         private List<StatDTO?>? BuildPokemonIVs(Pokemon pokemon, TeamOptionsDTO? options)
         {
-            List<StatDTO?> ivs = new List<StatDTO?>();
+            List<StatDTO?>? ivs = new List<StatDTO?>();
             if (options == null || !options.IvsVisibility)
             {
                 return null;
@@ -117,7 +117,7 @@ namespace api.Services
 
         private List<StatDTO?>? BuildPokemonEVs(Pokemon pokemon, TeamOptionsDTO? options)
         {
-            List<StatDTO?> evs = new List<StatDTO?>();
+            List<StatDTO?>? evs = new List<StatDTO?>();
             if (options == null || !options.EvsVisibility)
             {
                 return null;
@@ -134,7 +134,6 @@ namespace api.Services
         [Time]
         public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, int langId)
         {
-
             List<MovePreviewDTO?> moves = new List<MovePreviewDTO?>()
             {
                 await _moveService.GetMovePreviewByIdentifier(pokemon.Move1Identifier ?? "", langId),
@@ -193,7 +192,7 @@ namespace api.Services
 
         public async Task<PokemonDTO?> GetPokemonById(int id, int langId)
         {
-            Pokemon? pokemon = _pokeTeamContext.Pokemon.Include(p => p.Team).FirstOrDefault(p => p.Id == id);
+            Pokemon? pokemon = await _pokeTeamContext.Pokemon.Include(p => p.Team).FirstOrDefaultAsync(p => p.Id == id);
             if (pokemon != null)
             {
                 TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(pokemon.Team.IVsVisibility, pokemon.Team.EVsVisibility, pokemon.Team.NaturesVisibility);
@@ -231,7 +230,7 @@ namespace api.Services
 
         public async Task<PokemonPreviewDTO?> GetPokemonPreviewById(int id, int langId)
         {
-            Pokemon? pokemon = _pokeTeamContext.Pokemon.FirstOrDefault(t => t.Id == id);
+            Pokemon? pokemon = await _pokeTeamContext.Pokemon.FirstOrDefaultAsync(t => t.Id == id);
             if (pokemon != null)
             {
                 return await BuildPokemonPreviewDTO(pokemon, langId);
@@ -243,10 +242,10 @@ namespace api.Services
         {
             List<PokemonPreviewDTO> pokemonPreviewDTOs = new List<PokemonPreviewDTO>();
 
-            Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
+            Team team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == id);
             if (team != null)
             {
-                List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
+                List<Pokemon> pokemons = await _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
                 List<int> pokemonIds = pokemons.Select(p => p.Id).ToList();
 
                 foreach (int pokemonId in pokemonIds)

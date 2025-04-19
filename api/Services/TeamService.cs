@@ -84,7 +84,7 @@ namespace api.Services
             TeamDataDTO? teamDataDTO = null;
             if (team != null)
             {
-                List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
+                List<Pokemon> pokemons = await _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
                 TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(team.IVsVisibility, team.EVsVisibility, team.NaturesVisibility);
                 UserPreviewDTO? userPreview = null;
                 if (team.PlayerId != null)
@@ -135,7 +135,7 @@ namespace api.Services
                 if(teamDataDTO != null && teamDataDTO.PokemonIDs.Count > 0)
                 {
                     List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
-                    List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
+                    List<Pokemon> pokemons = await _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
                     foreach (int pokemonId in teamDataDTO.PokemonIDs)
                     {
                         Pokemon? pokemon = await _pokeTeamContext.Pokemon.FindAsync(pokemonId);
@@ -152,7 +152,7 @@ namespace api.Services
         public async Task<TeamPreviewDTO?> BuildTeamPreviewDTO(Team team, int langId)
         {
             TeamPreviewDTO teamPreviewDTO = null;
-            List<Pokemon> pokemons = _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToList();
+            List<Pokemon> pokemons = await _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
             List<int> pokemonPreviewIDs = new List<int>();
 
             foreach (Pokemon pokemon in pokemons)
@@ -286,7 +286,7 @@ namespace api.Services
             TeamDTO teamDTO = null;
             try
             {
-                Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
+                Team team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == id);
                 teamDTO = await BuildTeamDTO(team, langId);
             }
             catch (Exception ex)
@@ -302,7 +302,7 @@ namespace api.Services
             TeamDataDTO teamDataDTO = null;
             try
             {
-                Team team = _pokeTeamContext.Team.FirstOrDefault(t => t.Id == id);
+                Team team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == id);
                 teamDataDTO = await BuildTeamDataDTO(team, langId);
             }
             catch (Exception ex)
@@ -316,11 +316,10 @@ namespace api.Services
         private async Task<List<TagDTO>> GetTeamTags(Team team)
         {
             List<TagDTO> tags = new List<TagDTO>();
-            List<TeamTag> teamTags = _pokeTeamContext.TeamTag.Where(t => t.TeamsId == team.Id).ToList();
-
+            List<TeamTag> teamTags = await _pokeTeamContext.TeamTag.Where(t => t.TeamsId == team.Id).ToListAsync();
             foreach (TeamTag teamTag in teamTags)
             {
-                Tag tag = _pokeTeamContext.Tag.FirstOrDefault(t => t.Identifier == teamTag.TagsIdentifier);
+                Tag tag = await _pokeTeamContext.Tag.FirstOrDefaultAsync(t => t.Identifier == teamTag.TagsIdentifier);
                 if (tag != null)
                 {
                     TagDTO tagDTO = new TagDTO(tag.Name, tag.Identifier, description: tag.Description, color: tag.Color);
@@ -414,7 +413,7 @@ namespace api.Services
                 if (team != null)
                 {
                     _pokeTeamContext.Team.Remove(team);
-                    _pokeTeamContext.SaveChanges();
+                    await _pokeTeamContext.SaveChangesAsync();
                 }
                 else
                 {
@@ -438,7 +437,7 @@ namespace api.Services
                 if (team != null)
                 {
                     _pokeTeamContext.Team.Remove(team);
-                    _pokeTeamContext.SaveChanges();
+                    await _pokeTeamContext.SaveChangesAsync();
                     return true;
                 }
             }
@@ -455,7 +454,7 @@ namespace api.Services
             Printer.Log("Deleting teams of: ", user.UserName);
             try
             {
-                List<Team> userTeams = _pokeTeamContext.Team.Where(t => t.PlayerId == user.Id).ToList();
+                List<Team> userTeams = await _pokeTeamContext.Team.Where(t => t.PlayerId == user.Id).ToListAsync();
                 if (userTeams.Count > 0)
                 {
                     foreach (Team team in userTeams)
@@ -463,7 +462,6 @@ namespace api.Services
                         await DeleteTeamById(team.Id);
                     }
                 }
-                //_pokeTeamContext.Team.Where(t => t.PlayerId == user.Id).ForEachAsync(async t => await DeleteTeam(t.Id));
             }
             catch (Exception ex)
             {
@@ -480,7 +478,7 @@ namespace api.Services
                 Team team = await _pokeTeamContext.Team.FindAsync(teamKey);
                 if (team == null) { return "Team not found"; }
                 team.ViewCount++;
-                _pokeTeamContext.SaveChanges();
+                await _pokeTeamContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -525,12 +523,12 @@ namespace api.Services
             List<Team> teams = new List<Team>();
             try
             {
-                teams = _pokeTeamContext.Team
+                teams = await _pokeTeamContext.Team
                     .Include(t => t.Pokemons)
                     .Include(t => t.Player)
                     .Include(t => t.Tournament)
                     .Include(t => t.Tags)
-                    .ToList();
+                    .ToListAsync();
 
                 User? loggedUser = await _identityService.GetLoggedUser();
                 if (loggedUser != null)
