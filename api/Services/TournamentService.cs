@@ -20,9 +20,9 @@ namespace api.Services
             baseUrl = _config["BaseUrl"];
         }
 
-        public TournamentDTO BuildTournamentDTO(Tournament tournament)
+        public async Task<TournamentDTO?> BuildTournamentDTO(Tournament tournament)
         {
-            TournamentDTO tournamentDTO = null;
+            TournamentDTO? tournamentDTO = null;
             if (tournament != null)
             {
                 tournamentDTO = new TournamentDTO
@@ -31,6 +31,7 @@ namespace api.Services
                     ShortName = tournament.ShortName,
                     City = tournament.City,
                     CountryCode = tournament.CountryCode,
+                    CountryName = await GetCountryName(tournament.CountryCode),
                     Official = tournament.Official,
                     Category = tournament.Category,
                     Icon = GetTournamentIcon(tournament.Category),
@@ -41,15 +42,15 @@ namespace api.Services
             return tournamentDTO;
         }
 
-        public async Task<TournamentDTO> GetTournamentByNormalizedName(string normalizedName)
+        public async Task<TournamentDTO?> GetTournamentByNormalizedName(string normalizedName)
         {
-            TournamentDTO tournamentDTO = null;
+            TournamentDTO? tournamentDTO = null;
             if (normalizedName != null)
             {
-                Tournament tournament = await _pokeTeamContext.Tournament.FindAsync(normalizedName);
+                Tournament? tournament = await _pokeTeamContext.Tournament.FindAsync(normalizedName);
                 if (tournament != null)
                 {
-                    tournamentDTO = BuildTournamentDTO(tournament);
+                    tournamentDTO = await BuildTournamentDTO(tournament);
                 }
             }
             return tournamentDTO;
@@ -68,6 +69,7 @@ namespace api.Services
                     ShortName = tournament.ShortName,
                     City = tournament.City,
                     CountryCode = tournament.CountryCode,
+                    CountryName = GetCountryName(tournament.CountryCode).Result,
                     Official = tournament.Official,
                     Category = tournament.Category,
                     Icon = GetTournamentIcon(tournament.Category),
@@ -80,7 +82,7 @@ namespace api.Services
             return tournamentDTOs;
         }
 
-        public async Task<Tournament> SaveTournament(TournamentDTO tournamentDTO)
+        public async Task<Tournament?> SaveTournament(TournamentDTO tournamentDTO)
         {
             try
             {
@@ -125,6 +127,16 @@ namespace api.Services
 
             queryResults = await query.ToListAsync();
             return queryResults;
+        }
+
+        private async Task<string?> GetCountryName(string? countryCode)
+        {
+            Country? country = await _pokeTeamContext.Country.FirstOrDefaultAsync(c => countryCode != null && c.Code.ToLower() == countryCode.ToLower());
+            if(country != null && country.Name != null)
+            {
+                return country.Name;
+            }
+            return null;
         }
 
         private static string? GetTournamentIcon(string? category)
