@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { I18nService } from 'src/app/core/helpers/i18n.service';
 import { ThemeService } from 'src/app/core/helpers/theme.service';
+import { UtilService } from 'src/app/core/helpers/util.service';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { User } from 'src/app/features/user/models/user.model';
 import { environment } from 'src/environments/environment';
@@ -27,6 +28,7 @@ export class MenuComponent
   themeService = inject(ThemeService);
   i18n = inject(I18nService);
   window = inject(WindowService);
+  util = inject(UtilService);
 
   @Input() menuOpen: boolean = true;
   @Output() toggleEvent = new EventEmitter();
@@ -60,7 +62,7 @@ export class MenuComponent
           {
             name: `lang.${value}`,
             identifier: value,
-            iconPath: `${this.url}images/flags/${flags[langs.indexOf(value)]}.svg`
+            iconPath: this.util.getFlagIconUrl(flags[langs.indexOf(value)])
           }
         }
       })
@@ -109,7 +111,7 @@ export class MenuComponent
         {
           name: `lang.${langs[i]}`,
           identifier: langs[i],
-          iconPath: `${this.url}images/flags/${flags[i]}.svg`
+          iconPath: this.util.getFlagIconUrl(flags[i])
         }
       )
     }

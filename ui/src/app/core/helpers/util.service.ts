@@ -1,6 +1,7 @@
 
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 import { QueryItem } from '../models/misc/queryResult.model';
 import { Stat } from '../models/pokemon/stat.model';
 import { Tag } from '../models/team/tag.model';
@@ -12,6 +13,8 @@ import { I18nService } from './i18n.service';
 export class UtilService 
 {
   i18n = inject(I18nService);
+
+  private url = environment.url;
 
   constructor() 
   {
@@ -154,13 +157,18 @@ export class UtilService
     return passedTime > milisecondsToPass ? true : false;
   }
 
-  customFormatDate(date: string)
+  customFormatDate(date?: string)
   {
     //Format from backend YYYY-MM-DD
-    const day = date.split('-')[2];
-    const month = date.split('-')[1];
-    const year = date.split('-')[0];
-    return [day, month, year].join('/');
+    if(date)
+    {
+      const day = date.split('-')[2];
+      const month = date.split('-')[1];
+      const year = date.split('-')[0];
+      return [day, month, year].join('/');
+    }
+    return date;
+
   }
 
   getStatCode(stat: Stat)
@@ -243,5 +251,10 @@ export class UtilService
   openInNewTab(url) 
   {
     window.open(url, '_blank');
+  }
+
+  getFlagIconUrl(countryCode?: string)
+  {
+    return countryCode ? `${this.url}images/flags/${countryCode}.svg` : countryCode;
   }
 }
