@@ -109,7 +109,7 @@ namespace api.Services.PokedexServices
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from itemNames in _pokedexContext.item_names.Where(i => i.name.ToLower().StartsWith(key.ToLower()) && i.local_language_id == langId)
+                from itemNames in _pokedexContext.item_names.Where(i => i.name != null && i.name.ToLower().StartsWith(key.ToLower()) && i.local_language_id == langId)
 
                 join items in _pokedexContext.items
                 on new { Key1 = itemNames.item_id } equals new { Key1 = items.id } into itemsJoin

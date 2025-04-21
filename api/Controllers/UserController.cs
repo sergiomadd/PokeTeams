@@ -102,9 +102,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("countries/{code}")]
-        public ActionResult<CountryDTO> GetCountry(string code)
+        public async Task<ActionResult<CountryDTO>> GetCountry(string code)
         {
-            CountryDTO country = _userService.GetCountry(code);
+            CountryDTO country = await _userService.GetCountry(code);
             if (country == null)
             {
                 return BadRequest();

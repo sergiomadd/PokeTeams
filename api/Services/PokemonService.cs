@@ -58,7 +58,7 @@ namespace api.Services
 
         public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon, int langId, TeamOptionsDTO? options = null)
         {
-            PokemonDataDTO? pokemonData = await GetPokemonDataById(pokemon.DexNumber ?? 1, langId);
+            PokemonDataDTO pokemonData = await GetPokemonDataById(pokemon.DexNumber ?? 1, langId);
 
             List<MoveDTO?> moves = new List<MoveDTO?>
             {
@@ -87,7 +87,7 @@ namespace api.Services
                 Level = pokemon.Level,
                 Shiny = pokemon.Shiny,
                 Gender = pokemon.Gender,
-                Sprite = pokemonData.Sprite,
+                Sprite = pokemonData?.Sprite,
                 Notes = pokemon.Notes
             };
 
@@ -152,7 +152,7 @@ namespace api.Services
                 Gender = pokemon.Gender,
                 Moves = moves,
                 Item = await _itemService.GetItemByIdentifier(pokemon.ItemIdentifier ?? "", langId),
-                AbilityName = _abilityService.GetAbilityByIdentifier(pokemon.AbilityIdentifier ?? "", langId).Result != null ? _abilityService.GetAbilityByIdentifier(pokemon.AbilityIdentifier ?? "", langId).Result.Name : null
+                AbilityName = _abilityService.GetAbilityByIdentifier(pokemon.AbilityIdentifier ?? "", langId).Result?.Name
             };
         }
 
@@ -205,7 +205,7 @@ namespace api.Services
             return null;
         }
 
-        public async Task<PokemonDataDTO?> GetPokemonDataById(int id, int langId)
+        public async Task<PokemonDataDTO> GetPokemonDataById(int id, int langId)
         {
             PokemonDataDTO pokemonData = new PokemonDataDTO(
                 await GetPokemonName(id, langId),
@@ -242,7 +242,7 @@ namespace api.Services
         {
             List<PokemonPreviewDTO> pokemonPreviewDTOs = new List<PokemonPreviewDTO>();
 
-            Team team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == id);
+            Team? team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == id);
             if (team != null)
             {
                 List<Pokemon> pokemons = await _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
@@ -250,7 +250,7 @@ namespace api.Services
 
                 foreach (int pokemonId in pokemonIds)
                 {
-                    PokemonPreviewDTO pokemonPreviewDTO = await GetPokemonPreviewById(pokemonId, langId);
+                    PokemonPreviewDTO? pokemonPreviewDTO = await GetPokemonPreviewById(pokemonId, langId);
                     if (pokemonPreviewDTO != null)
                     {
                         pokemonPreviewDTOs.Add(pokemonPreviewDTO);

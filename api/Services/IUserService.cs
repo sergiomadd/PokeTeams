@@ -6,9 +6,9 @@ namespace api.Services
 {
     public interface IUserService
     {
-        public Task<UserDTO> BuildUserDTO(User user, bool logged = false);
-        public Task<User> GetUserById(string id);
-        public Task<User> GetUserByUserName(string userName);
+        public Task<UserDTO?> BuildUserDTO(User user, bool logged = false);
+        public Task<User?> GetUserById(string id);
+        public Task<User?> GetUserByUserName(string userName);
         public Task<bool> ChangeName(User user, string newName);
         public Task<bool> UpdatePicture(User user, string newPictureKey);
         public Task<bool> DeleteRefreshToken(User user);

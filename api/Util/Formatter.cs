@@ -8,10 +8,10 @@ namespace api.Util
     public static class Formatter
     {
 
-        public static string? FormatProse(string? value, string baseUrl, string[]? args = null)
+        public static string? FormatProse(string? value, string baseUrl, string?[]? args = null)
         {
             string? formated = value;
-            if(formated != null)
+            if(value != null)
             {
                 //Regex example: [paralyzed]{mechanic:paralysis}
                 string linkRegex = new Regex(@"(\[.+?})").ToString();
@@ -122,7 +122,7 @@ namespace api.Util
             return result;
         }
 
-        public static string FormatNameForLink(string name)
+        public static string? FormatNameForLink(string name)
         {
             string[] words = name.Split("-");
             if (words.Count() > 1)
@@ -139,14 +139,16 @@ namespace api.Util
             }
         }
 
-        public static string FirstLetterToUpper(string str)
+        public static string FirstLetterToUpper(string? str)
         {
             if (str == null)
-                return null;
-
+            {
+                return str;
+            }
             if (str.Length > 1)
+            {
                 return char.ToUpper(str[0]) + str.Substring(1);
-
+            }
             return str.ToUpper();
         }
 

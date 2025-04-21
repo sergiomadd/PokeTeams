@@ -15,9 +15,9 @@ namespace api.Services
             _pokeTeamContext = pokeTeamContext;
         }
 
-        public RegulationDTO BuildRegulationDTO(Regulation regulation)
+        public RegulationDTO? BuildRegulationDTO(Regulation regulation)
         {
-            RegulationDTO regulationDTO = null;
+            RegulationDTO? regulationDTO = null;
             if (regulation != null)
             {
                 regulationDTO = new RegulationDTO
@@ -31,9 +31,9 @@ namespace api.Services
             return regulationDTO;
         }
 
-        public Regulation BreakRegulationDTO(RegulationDTO regulationDTO)
+        public Regulation? BreakRegulationDTO(RegulationDTO regulationDTO)
         {
-            Regulation regulation = null;
+            Regulation? regulation = null;
             if (regulationDTO != null)
             {
                 regulation = new Regulation
@@ -47,12 +47,12 @@ namespace api.Services
             return regulation;
         }
 
-        public async Task<RegulationDTO> GetRegulationByIdentifier(string identifier)
+        public async Task<RegulationDTO?> GetRegulationByIdentifier(string identifier)
         {
-            RegulationDTO regulationDTO = null;
+            RegulationDTO? regulationDTO = null;
             if (identifier != null)
             {
-                Regulation regulation = await _pokeTeamContext.Regulation.FindAsync(identifier);
+                Regulation? regulation = await _pokeTeamContext.Regulation.FindAsync(identifier);
                 if (regulation != null)
                 {
                     regulationDTO = BuildRegulationDTO(regulation);
@@ -82,16 +82,19 @@ namespace api.Services
             return regulationDTOs;
         }
 
-        public async Task<Regulation> SaveRegulation(RegulationDTO regulationDTO)
+        public async Task<Regulation?> SaveRegulation(RegulationDTO regulationDTO)
         {
             try
             {
                 if (regulationDTO != null)
                 {
-                    Regulation regulation = BreakRegulationDTO(regulationDTO);
-                    await _pokeTeamContext.Regulation.AddAsync(regulation);
-                    await _pokeTeamContext.SaveChangesAsync();
-                    return regulation;
+                    Regulation? regulation = BreakRegulationDTO(regulationDTO);
+                    if(regulation != null)
+                    {
+                        await _pokeTeamContext.Regulation.AddAsync(regulation);
+                        await _pokeTeamContext.SaveChangesAsync();
+                        return regulation;
+                    }
                 }
             }
             catch (Exception ex)

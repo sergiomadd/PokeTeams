@@ -24,9 +24,9 @@ namespace api.Services
             baseUrl = _config["BaseUrl"];
         }
 
-        public async Task<UserDTO> BuildUserDTO(User user, bool logged = false)
+        public async Task<UserDTO?> BuildUserDTO(User user, bool logged = false)
         {
-            if (user != null)
+            if (user != null && user.UserName != null)
             {
                 //private and not logged
                 if (!user.Visibility && !logged)
@@ -40,7 +40,7 @@ namespace api.Services
                 }
                 return new UserDTO
                 {
-                    Name = user.Name,
+                    Name = user.Name ?? "",
                     Username = user.UserName,
                     Picture = $"{baseUrl}images/profile-pics/{user.Picture}.png",
                     Country = user.Country != null ? await GetCountry(user.Country) : null,
@@ -50,15 +50,15 @@ namespace api.Services
             return null;
         }
 
-        public async Task<User> GetUserById(string id)
+        public async Task<User?> GetUserById(string id)
         {
-            User user = await _pokeTeamContext.Users.FindAsync(id);
+            User? user = await _pokeTeamContext.Users.FindAsync(id);
             return user;
         }
 
-        public async Task<User> GetUserByUserName(string userName)
+        public async Task<User?> GetUserByUserName(string userName)
         {
-            User user = await _pokeTeamContext.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+            User? user = await _pokeTeamContext.Users.FirstOrDefaultAsync(u => u.UserName == userName);
             return user;
         }
 
@@ -161,7 +161,7 @@ namespace api.Services
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from user in _pokeTeamContext.Users.Where(u => u.UserName.ToLower().StartsWith(key.ToLower()))
+                from user in _pokeTeamContext.Users.Where(u => u.UserName != null && u.UserName.ToLower().StartsWith(key.ToLower()))
 
                 select new QueryResultDTO(user.UserName, user.UserName, $"{baseUrl}images/profile-pics/{user.Picture}.png", "user");
 
@@ -175,7 +175,7 @@ namespace api.Services
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
 
             var query =
-                from user in _pokeTeamContext.Users.Where(u => u.UserName.Contains(key)).Skip(startIndex).Take(pageSize)
+                from user in _pokeTeamContext.Users.Where(u => u.UserName != null && u.UserName.Contains(key)).Skip(startIndex).Take(pageSize)
 
                 select new QueryResultDTO(user.UserName, user.UserName, $"{baseUrl}images/profile-pics/{user.Picture}.png", "user");
 

@@ -54,13 +54,13 @@ namespace api.Util
             return null;
         }
 
-        public static string? GetLangCodeFromID(int id)
+        public static string GetLangCodeFromID(int id)
         {
             if(langs.ContainsKey(id))
             {
                 return langs[id];
             }
-            return null;
+            return "en";
         }
 
         public static int? GetLangIDFromCode(string code)

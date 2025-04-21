@@ -11,7 +11,7 @@ namespace api.Services.PokedexServices
         public Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessByIdentifier(string identifier, int langId, bool teraType = false);
         public Task<EffectivenessDTO?> GetTypeEffectivenessAttack(int id, int langId);
         public Task<EffectivenessDTO?> GetTypeEffectivenessDefense(int id, int langId);
-        public Task<PokeTypesDTO> GetPokemonTypes(int id, int langId);
+        public Task<PokeTypesDTO?> GetPokemonTypes(int id, int langId);
         public Task<PokeTypesWithEffectivenessDTO?> GetPokemonTypesWithEffectiveness(int id, int langId);
         public Task<List<PokeTypeDTO>> GetAllTypes(int langId);
         public Task<List<PokeTypeDTO>> GetAllTeraTypes(int langId);

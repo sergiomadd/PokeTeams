@@ -13,9 +13,9 @@ namespace api.Services
         {
             _pokeTeamContext = pokeTeamContext;
         }
-        public async Task<Tag> GetTag(string identifier)
+        public async Task<Tag?> GetTag(string identifier)
         {
-            Tag tag = await _pokeTeamContext.Tag.FindAsync(identifier);
+            Tag? tag = await _pokeTeamContext.Tag.FindAsync(identifier);
             if (tag != null)
             {
                 return tag;

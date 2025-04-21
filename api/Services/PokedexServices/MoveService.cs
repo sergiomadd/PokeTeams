@@ -160,11 +160,11 @@ namespace api.Services.PokedexServices
                     },
                     Effect = new MoveEffect
                     {
-                        Short = effect != null ? new LocalizedText(Formatter.FormatProse(effect.short_effect, baseUrl, new string[] { moves.effect_chance.ToString() }), effect.local_language_id) :
-                            new LocalizedText(Formatter.FormatProse(effectDefault.short_effect, baseUrl, new string[] { moves.effect_chance.ToString() }), effectDefault.local_language_id),
+                        Short = effect != null ? new LocalizedText(Formatter.FormatProse(effect.short_effect, baseUrl, new string?[] { moves.effect_chance.ToString() }), effect.local_language_id) :
+                            new LocalizedText(Formatter.FormatProse(effectDefault.short_effect, baseUrl, new string?[] { moves.effect_chance.ToString() }), effectDefault.local_language_id),
 
-                        Long = effect != null ? new LocalizedText(Formatter.FormatProse(effect.effect, baseUrl, new string[] { moves.effect_chance.ToString() }), effect.local_language_id) :
-                            new LocalizedText(Formatter.FormatProse(effectDefault.effect, baseUrl, new string[] { moves.effect_chance.ToString() }), effectDefault.local_language_id),
+                        Long = effect != null ? new LocalizedText(Formatter.FormatProse(effect.effect, baseUrl, new string?[] { moves.effect_chance.ToString() }), effect.local_language_id) :
+                            new LocalizedText(Formatter.FormatProse(effectDefault.effect, baseUrl, new string?[] { moves.effect_chance.ToString() }), effectDefault.local_language_id),
 
                         Chance = moves.effect_chance
                     },
