@@ -10,6 +10,8 @@ namespace api.DTOs.PokemonDTOs
         public SpriteDTO? Sprite { get; set; }
         public EvolutionDTO? PreEvolution { get; set; }
         public List<EvolutionDTO?> Evolutions { get; set; }
+        public int? FormId { get; set; }
+        public List<FormDTO?>? Forms { get; set; }
 
         public PokemonDataDTO(
             LocalizedText? name, 
@@ -18,7 +20,9 @@ namespace api.DTOs.PokemonDTOs
             List<StatDTO> stats, 
             SpriteDTO? sprite, 
             EvolutionDTO? preEvolution = null, 
-            List<EvolutionDTO?>? evolutions = null)
+            List<EvolutionDTO?>? evolutions = null,
+            int? formId = null,
+            List<FormDTO?>? forms = null)
         {
             Name = name;
             DexNumber = dexNumber;
@@ -27,6 +31,8 @@ namespace api.DTOs.PokemonDTOs
             Sprite = sprite;
             PreEvolution = preEvolution;
             Evolutions = evolutions ?? new List<EvolutionDTO?>();
+            FormId = formId;
+            Forms = forms ?? new List<FormDTO?>();
         }
     }
 }

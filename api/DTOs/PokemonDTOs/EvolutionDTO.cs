@@ -20,8 +20,7 @@ namespace api.DTOs.PokemonDTOs
         public EvolutionDTO(
             LocalizedText? name, 
             int dexNumber, 
-            PokeTypesDTO? types, 
-            List<StatDTO> stats, 
+            PokeTypesDTO? types,
             SpriteDTO? sprite, 
             EvolutionDTO? preEvolution = null, 
             List<EvolutionDTO?>? evolutions = null)

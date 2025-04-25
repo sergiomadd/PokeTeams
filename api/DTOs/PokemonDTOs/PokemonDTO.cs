@@ -7,8 +7,10 @@ namespace api.DTOs.PokemonDTOs
         public LocalizedText? Name { get; set; }
         public string? Nickname { get; set; }
         public int? DexNumber { get; set; }
+        public int? FormId { get; set; }
         public EvolutionDTO? PreEvolution { get; set; }
         public List<EvolutionDTO?>? Evolutions { get; set; }
+        public List<FormDTO?>? Forms { get; set; }
         public PokeTypesWithEffectivenessDTO? Types { get; set; }
         public PokeTypeWithEffectivenessDTO? TeraType { get; set; }
         public ItemDTO? Item { get; set; }

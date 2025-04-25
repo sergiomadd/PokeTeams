@@ -10,6 +10,9 @@ namespace api.Data
         public DbSet<pokemon_species> pokemon_species { get; set; }
         public DbSet<pokemon_types> pokemon_types { get; set; }
         public DbSet<pokemon_stats> pokemon_stats { get; set; }
+        public DbSet<pokemon_forms> pokemon_forms { get; set; }
+        public DbSet<pokemon_form_names> pokemon_form_names { get; set; }
+        public DbSet<pokemon_form_types> pokemon_form_types { get; set; }
         public DbSet<items> items { get; set; }
         public DbSet<item_names> item_names { get; set; }
         public DbSet<item_prose> item_prose { get; set; }

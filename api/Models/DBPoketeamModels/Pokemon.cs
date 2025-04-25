@@ -13,8 +13,11 @@ namespace api.Models.DBPoketeamModels
 
         public virtual Team Team { get; set; }
 
-        [Range(1, 10000, ErrorMessage = "DesNumber is too long")]
+        [Range(1, 10000, ErrorMessage = "DexNumber is too long")]
         public int? DexNumber { get; set; }
+
+        [Range(1, 10000, ErrorMessage = "FormId is too long")]
+        public int? FormId { get; set; }
 
         [MaxLength(16, ErrorMessage = "Nickname is too long")]
         public string? Nickname { get; set; }
