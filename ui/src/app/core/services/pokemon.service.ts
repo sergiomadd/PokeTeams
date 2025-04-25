@@ -47,6 +47,8 @@ export class PokemonService
         pokemon.dexNumber = pokemonData.status == "fulfilled" ? pokemonData.value?.dexNumber : 0;
         pokemon.preEvolution = pokemonData.status == "fulfilled" ? pokemonData.value?.preEvolution : undefined;
         pokemon.evolutions = pokemonData.status == "fulfilled" ? pokemonData.value?.evolutions ?? [] : [];
+        pokemon.formId = pokemonData.status == "fulfilled" ? pokemonData.value?.formId : undefined;
+        pokemon.forms = pokemonData.status == "fulfilled" ? pokemonData.value?.forms ?? [] : [];
         pokemon.types = pokemonData.status == "fulfilled" ? pokemonData.value?.types : undefined;
         pokemon.stats = pokemonData.status == "fulfilled" ? pokemonData.value?.stats ?? [] : [];
         pokemon.sprite = pokemonData.status == "fulfilled" ? pokemonData.value?.sprite : undefined;

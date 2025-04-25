@@ -1,6 +1,7 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { Evolution } from 'src/app/core/models/pokemon/evolution.model';
 import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
+import { PokemonForm } from 'src/app/core/models/pokemon/pokemonForm.model';
 import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
 
 @Component({
@@ -11,7 +12,7 @@ import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
 export class EvolutionComponent 
 {
   @Input() sourcePokemon!: Pokemon;
-  @Input() pokemon!: Evolution;
+  @Input() pokemon!: Evolution | PokemonForm;
   @Input() teamOptions?: TeamOptions;
 
   pokemonSpritePath?: string = '';
@@ -33,6 +34,8 @@ export class EvolutionComponent
     {
       this.pokemon = changes['pokemon'].currentValue;
       this.loadSprite();
+      console.log(this.pokemon)
+
     }
     
   }

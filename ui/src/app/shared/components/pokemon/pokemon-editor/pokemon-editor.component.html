@@ -24,7 +24,7 @@
       [ngClass]="
       {
         'gap-m align-i-c': window.isBigMobileOrLess(),
-        'gap-l': window.isBigMobileOrLess()
+        'gap-l': !window.isBigMobileOrLess()
       }">
         <div class="form-inputs gap-m">
           <app-smart-input
