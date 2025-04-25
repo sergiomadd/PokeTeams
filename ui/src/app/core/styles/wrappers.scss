@@ -54,9 +54,38 @@ $arrowSize: 0.4em;
   }
 }
 
+.content-tooltip-wrapper
+{
+  position: relative;
+
+  &:hover > .content-tooltip
+  {
+    width: max-content;
+    height: fit-content;
+    
+    display: flex;
+    align-items: center;
+
+    background-color: var(--bg-color-2);
+    color: var(--text-color);
+    border-radius: 5px;
+    border: 1px solid var(--text-color);
+
+    text-align: center;
+    cursor: default;
+    opacity: 1;
+    overflow: visible;
+  }
+}
+
 .poke-tooltip-wrapper
 {
   position: relative;
+}
+
+.static-page
+{
+  font-size: 1.3rem;
 }
 
 @media (min-width: $tabletPortrait) 
@@ -67,6 +96,7 @@ $arrowSize: 0.4em;
     &:hover > .section-content > .tooltip-component > .poke-tooltip
     {
       width: max-content;
+      max-width: 95vw;
       height: fit-content;
       
       display: flex;
@@ -75,13 +105,29 @@ $arrowSize: 0.4em;
       background-color: var(--bg-color-2);
       color: var(--text-color);
       border-radius: 5px;
-      border: 1px solid black;
+      border: 1px solid var(--text-color);
   
       text-align: center;
       cursor: default;
       opacity: 1;
       overflow: visible;
     }
+  }
+}
+
+@media (max-width: $tabletLandscape) 
+{
+  .static-page
+  {
+    margin: 0 2em 0 2em;
+  }
+}
+
+@media (min-width: $tabletLandscape) 
+{
+  .static-page
+  {
+    margin: 2em 15em 0 15em;
   }
 }
 
