@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 
 import { NotFoundComponent } from './shared/components/dumb/not-found/not-found.component';
+import { AboutComponent } from './shared/components/layout/about/about.component';
+import { PrivacyPolicyComponent } from './shared/components/layout/privacy-policy/privacy-policy.component';
 
 const routes: Routes = 
 [
@@ -18,6 +20,14 @@ const routes: Routes =
   {
     path: 'user',
     loadChildren: () => import('./features/user/user.module').then((m) => m.UserModule)
+  },
+  {
+    path: 'privacy-policy',
+    component: PrivacyPolicyComponent
+  },
+  {
+    path: 'about',
+    component: AboutComponent,
   },
   { 
     path: 'edit/:id',
