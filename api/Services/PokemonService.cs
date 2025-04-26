@@ -14,6 +14,7 @@ using System.Security.Cryptography;
 using Microsoft.SqlServer.Server;
 using api.Migrations;
 using System.ComponentModel;
+using System.Linq;
 
 namespace api.Services
 {
@@ -270,17 +271,50 @@ namespace api.Services
             return pokemonData;
         }
 
-        public async Task<PokemonDataDTO> GetPokemonDataByDexNumber(int dexNumber, int langId)
+        public async Task<PokemonDataDTO?> GetPokemonDataByDexNumber(int dexNumber, int langId)
         {
-            PokemonDataDTO pokemonData = new PokemonDataDTO(
-                await GetPokemonName(dexNumber, langId),
-                dexNumber,
-                await _typeService.GetPokemonTypesWithEffectiveness(dexNumber, langId),
-                await _statService.GetPokemonStats(dexNumber, langId),
-                new SpriteDTO(dexNumber, pokemonSpriteUrl),
-                preEvolution: await GetPokemonPreEvolution(dexNumber, langId),
-                evolutions: await GetPokemonEvolutions(dexNumber, langId));
-            return pokemonData;
+            int? speciesDexNumber = null;
+            List<FormDTO?>? forms = null;
+            int? formId = null;
+            pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.pokemon_id == dexNumber);
+            if(pokemon_forms != null)
+            {
+                LocalizedText? pokemonName = null;
+                if (pokemon_forms.form_identifier == null)
+                {
+                    pokemonName = await GetPokemonName(pokemon_forms.id, langId);
+                }
+                else
+                {
+                    pokemonName = await GetPokemonFormNameByFormId(pokemon_forms.id, langId);
+                    speciesDexNumber = await GetPokemonSpeciesDexNumber(dexNumber);
+                }
+
+                string speciesIdentifier = pokemon_forms.identifier.Split("-")[0];
+                List<pokemon_forms> pokemonForms = await _pokedexContext.pokemon_forms.Where(p => p.identifier.Contains(speciesIdentifier)).ToListAsync();
+                if (pokemonForms.Count > 1)
+                {
+                    if (pokemon_forms != null)
+                    {
+                        formId = pokemon_forms.id;
+                        forms = await GetPokemonForms(pokemon_forms.id, langId);
+                        forms.RemoveAll(f => f != null && f.DexNumber == pokemon_forms.id);
+                    }
+                }
+
+                return new PokemonDataDTO(
+                    pokemonName,
+                    speciesDexNumber != null ? (int)speciesDexNumber : dexNumber,
+                    await _typeService.GetPokemonTypesWithEffectiveness(dexNumber, langId),
+                    await _statService.GetPokemonStats(dexNumber, langId),
+                    new SpriteDTO(dexNumber, pokemonSpriteUrl),
+                    preEvolution: await GetPokemonPreEvolution(speciesDexNumber != null ? (int)speciesDexNumber : dexNumber, langId),
+                    evolutions: await GetPokemonEvolutions(speciesDexNumber != null ? (int)speciesDexNumber : dexNumber, langId),
+                    formId: formId,
+                    forms: forms
+                    );
+            }
+            return null;
         }
 
         public async Task<PokemonDataDTO?> GetPokemonDataByName(string name, int langId)
@@ -424,7 +458,6 @@ namespace api.Services
         private async Task<int?> GetPokemonIdByFormId(int? formId)
         {
             int? pokemonId = null;
-
             if (formId != null)
             {
                 pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.id == formId);
@@ -433,7 +466,22 @@ namespace api.Services
                     pokemonId = pokemon_forms.pokemon_id;
                 }
             }
+            return pokemonId;
+        }
 
+        private async Task<int?> GetPokemonSpeciesDexNumber(int dexNumber)
+        {
+            int? pokemonId = null;
+            pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.pokemon_id == dexNumber);
+            if (pokemon_forms != null)
+            {
+                string speciesIdentifier = pokemon_forms.identifier.Split("-")[0];
+                pokemon_species? pokemon_species = await _pokedexContext.pokemon_species.FirstOrDefaultAsync(p => p.identifier == speciesIdentifier);
+                if (pokemon_species != null)
+                {
+                    pokemonId = pokemon_species.id;
+                }
+            }
             return pokemonId;
         }
 
@@ -523,10 +571,30 @@ namespace api.Services
                 on new { Key1 = pokemonNames.pokemon_species_id, Key2 = (int)Lang.en } equals new { Key1 = pokemonNamesDefault.pokemon_species_id, Key2 = pokemonNamesDefault.local_language_id } into pokemonNamesDefaultJoin
                 from pokemonNamesDefault in pokemonNamesDefaultJoin.DefaultIfEmpty()
 
-                select pokemonNames != null ? new QueryResultDTO(pokemonNames.name, pokemonNames.pokemon_species_id.ToString(), $"{pokemonSpriteUrl}{pokemonNames.pokemon_species_id}.png", "pokemon") :
+                select pokemonNames != null ? 
+                    new QueryResultDTO(pokemonNames.name, pokemonNames.pokemon_species_id.ToString(), $"{pokemonSpriteUrl}{pokemonNames.pokemon_species_id}.png", "pokemon") :
                     new QueryResultDTO(pokemonNamesDefault.name, pokemonNames.pokemon_species_id.ToString(), $"{pokemonSpriteUrl}{pokemonNames.pokemon_species_id}.png", "pokemon");
 
+            var formsQuery =
+                from pokemonFormNames in _pokedexContext.pokemon_form_names.Where(p => p.pokemon_name.ToLower().Contains(key.ToLower()) && p.local_language_id == langId)
+
+                join pokemonFormNamesDefault in _pokedexContext.pokemon_form_names
+                on new { Key1 = pokemonFormNames.pokemon_form_id, Key2 = (int)Lang.en } equals new { Key1 = pokemonFormNamesDefault.pokemon_form_id, Key2 = pokemonFormNamesDefault.local_language_id } into pokemonFormNamesDefaultJoin
+                from pokemonFormNamesDefault in pokemonFormNamesDefaultJoin.DefaultIfEmpty()
+
+                join pokemonForms in _pokedexContext.pokemon_forms
+                on new { Key1 = pokemonFormNames.pokemon_form_id } equals new { Key1 = pokemonForms.id } into pokemonFormsDefaultJoin
+                from pokemonForms in pokemonFormsDefaultJoin.DefaultIfEmpty()
+
+                select pokemonFormNames != null ? 
+                    new QueryResultDTO(pokemonFormNames.pokemon_name, pokemonForms.pokemon_id.ToString(), $"{pokemonSpriteUrl}{pokemonForms.pokemon_id}.png", "pokemon") :
+                    new QueryResultDTO(pokemonFormNamesDefault.pokemon_name, pokemonForms.pokemon_id.ToString(), $"{pokemonSpriteUrl}{pokemonForms.pokemon_id}.png", "pokemon");
+
             queryResults = await query.ToListAsync();
+
+            var formsQueryResults = await formsQuery.ToListAsync();
+
+            queryResults = queryResults.Union(formsQueryResults).ToList();
 
             return queryResults;
         }

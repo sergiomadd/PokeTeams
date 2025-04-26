@@ -10,7 +10,7 @@ namespace api.Services
         public Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, int langId);
         public Pokemon BreakPokemonDTO(PokemonDTO pokemonDTO, string teamId);
         public Task<PokemonDTO?> GetPokemonById(int id, int langId);
-        public Task<PokemonDataDTO> GetPokemonDataByDexNumber(int id, int langId);
+        public Task<PokemonDataDTO?> GetPokemonDataByDexNumber(int dexNumber, int langId);
         public Task<PokemonDataDTO?> GetPokemonDataByName(string name, int langId);
         public Task<PokemonPreviewDTO?> GetPokemonPreviewById(int id, int langId);
         public Task<List<PokemonPreviewDTO>> GetTeamPokemonPreviews(string id, int langId);

@@ -82,6 +82,23 @@ namespace api.Controllers
             return Ok(pokemon);
         }
 
+        [HttpGet("dex/{dexNumberString}", Name = "GetPokemonDataByDexNumber")]
+        public async Task<ActionResult<PokemonDataDTO>> GetPokemonDataByDexNumber(string dexNumberString)
+        {
+            int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
+            int dexNumber;
+            if(!Int32.TryParse(dexNumberString, out dexNumber))
+            {
+                return BadRequest("Worng data.");
+            }
+            var pokemon = await _pokemonService.GetPokemonDataByDexNumber(dexNumber, langId ?? 9);
+            if (pokemon == null)
+            {
+                return NotFound("Pokemon not found.");
+            }
+            return Ok(pokemon);
+        }
+
         [HttpGet("pokemon-previews/{teamId}")]
         public async Task<ActionResult<List<PokemonPreviewDTO>>> GetTeamPokemonPreviews(string teamId)
         {
