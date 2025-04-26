@@ -510,7 +510,7 @@ export class PokemonEditorComponent
     {
       if(event)
       {
-        const data: PokemonData = await this.pokemonService.getPokemonDataByName(event.name);
+        const data: PokemonData = await this.pokemonService.getPokemonDataByDexNumber(event.identifier);
         this.pokemon = 
         { 
           ...this.pokemon,
@@ -520,6 +520,8 @@ export class PokemonEditorComponent
           sprite: data.sprite,
           evolutions: data.evolutions,
           preEvolution: data.preEvolution,
+          formId: data.formId,
+          forms: data.forms,
           stats: [...data.stats]
         };
         if(this.pokemonPreviewComponent)
@@ -538,6 +540,8 @@ export class PokemonEditorComponent
           sprite: undefined,
           evolutions: [],
           preEvolution: undefined,
+          formId: undefined,
+          forms: undefined,
           stats: []
         }
         if(this.pokemonPreviewComponent)

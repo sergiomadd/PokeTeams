@@ -118,6 +118,14 @@ export class PokemonService
     return pokemonData;
   }
 
+  async getPokemonDataByDexNumber(dexNumber: string) : Promise<PokemonData>
+  {
+    let pokemonData: PokemonData = <PokemonData>{}
+    let url = this.apiUrl + 'pokemon/dex/' + dexNumber;
+    pokemonData = await lastValueFrom(this.http.get<PokemonData>(url).pipe(catchError(() => [defaultPokemonData]), timeout(this.dataTimeout)));
+    return pokemonData;
+  }
+
   async getItemByName(name: string) : Promise<Item>
   {
     let item: Item = <Item>{}

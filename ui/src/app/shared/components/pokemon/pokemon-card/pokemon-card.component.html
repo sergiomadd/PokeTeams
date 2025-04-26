@@ -25,27 +25,41 @@
                 </app-poke-tooltip>
               </ng-container>
               <ng-template #familyTooltip>
-                <div class="flex align-i-c bg-2 bor-rad-5">
-                  <ng-container *ngIf="pokemon.preEvolution">
-                    <ng-container *ngIf="pokemon.preEvolution.preEvolution">
-                      <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon.preEvolution.preEvolution" [teamOptions]="teamOptions"></app-evolution>
-                      <svg class="icon" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M3165 4036 c-59 -28 -107 -76 -131 -131 -15 -34 -19 -84 -23 -325 -6 -269 -7 -287 -28 -326 -23 -44 -70 -88 -112 -107 -19 -9 -385 -13 -1361 -17 l-1335 -5 -41 -22 c-53 -28 -107 -91 -122 -142 -8 -26 -12 -157 -12 -412 0 -373 0 -374 24 -424 28 -59 76 -107 131 -132 38 -17 117 -18 1375 -23 1461 -5 1361 -1 1416 -62 57 -62 59 -72 65 -373 6 -321 10 -337 89 -408 79 -72 183 -87 275 -43 28 14 419 312 869 663 922 717 871 671 871 803 -1 89 -27 135 -118 209 -334 275 -1591 1267 -1622 1282 -58 27 -147 25 -210 -5z"/> </g> </svg>
-                    </ng-container>
-                    <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon.preEvolution" [teamOptions]="teamOptions"></app-evolution>
-                    <svg class="icon" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M3165 4036 c-59 -28 -107 -76 -131 -131 -15 -34 -19 -84 -23 -325 -6 -269 -7 -287 -28 -326 -23 -44 -70 -88 -112 -107 -19 -9 -385 -13 -1361 -17 l-1335 -5 -41 -22 c-53 -28 -107 -91 -122 -142 -8 -26 -12 -157 -12 -412 0 -373 0 -374 24 -424 28 -59 76 -107 131 -132 38 -17 117 -18 1375 -23 1461 -5 1361 -1 1416 -62 57 -62 59 -72 65 -373 6 -321 10 -337 89 -408 79 -72 183 -87 275 -43 28 14 419 312 869 663 922 717 871 671 871 803 -1 89 -27 135 -118 209 -334 275 -1591 1267 -1622 1282 -58 27 -147 25 -210 -5z"/> </g> </svg>
-                  </ng-container>
-                  <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon" [teamOptions]="teamOptions"></app-evolution>
-                  <ng-container *ngIf="pokemon.evolutions ? pokemon.evolutions.length > 0 ? true : false : false">
-                    <svg class="icon" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M3165 4036 c-59 -28 -107 -76 -131 -131 -15 -34 -19 -84 -23 -325 -6 -269 -7 -287 -28 -326 -23 -44 -70 -88 -112 -107 -19 -9 -385 -13 -1361 -17 l-1335 -5 -41 -22 c-53 -28 -107 -91 -122 -142 -8 -26 -12 -157 -12 -412 0 -373 0 -374 24 -424 28 -59 76 -107 131 -132 38 -17 117 -18 1375 -23 1461 -5 1361 -1 1416 -62 57 -62 59 -72 65 -373 6 -321 10 -337 89 -408 79 -72 183 -87 275 -43 28 14 419 312 869 663 922 717 871 671 871 803 -1 89 -27 135 -118 209 -334 275 -1591 1267 -1622 1282 -58 27 -147 25 -210 -5z"/> </g> </svg>
-                    <ng-container *ngFor="let evolution of pokemon.evolutions">
-                      <app-evolution [sourcePokemon]="pokemon" [pokemon]="evolution" [teamOptions]="teamOptions"></app-evolution>
-                      <ng-container *ngIf="evolution.evolutions ? evolution.evolutions.length > 0 ? true : false : false">
+                <div class="flex wrap justify-c-c align-i-c">
+                  <ng-container *ngIf="pokemon.preEvolution || pokemon.evolutions">
+                    <div class="flex align-i-c bg-2 bor-rad-5">
+                      <ng-container *ngIf="pokemon.preEvolution">
+                        <ng-container *ngIf="pokemon.preEvolution.preEvolution">
+                          <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon.preEvolution.preEvolution" [teamOptions]="teamOptions"></app-evolution>
+                          <svg class="icon"  viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M14.7055 18.9112C14.2784 18.7306 14 18.3052 14 17.8333V15H3C2.44772 15 2 14.5523 2 14V10C2 9.44772 2.44772 9 3 9H14V6.1667C14 5.69483 14.2784 5.26942 14.7055 5.08884C15.1326 4.90826 15.6241 5.00808 15.951 5.34174L21.6653 11.175C22.1116 11.6307 22.1116 12.3693 21.6653 12.825L15.951 18.6583C15.6241 18.9919 15.1326 19.0917 14.7055 18.9112Z" fill="#000000"></path> </g></svg>
+                        </ng-container>
+                        <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon.preEvolution" [teamOptions]="teamOptions"></app-evolution>
                         <svg class="icon" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M3165 4036 c-59 -28 -107 -76 -131 -131 -15 -34 -19 -84 -23 -325 -6 -269 -7 -287 -28 -326 -23 -44 -70 -88 -112 -107 -19 -9 -385 -13 -1361 -17 l-1335 -5 -41 -22 c-53 -28 -107 -91 -122 -142 -8 -26 -12 -157 -12 -412 0 -373 0 -374 24 -424 28 -59 76 -107 131 -132 38 -17 117 -18 1375 -23 1461 -5 1361 -1 1416 -62 57 -62 59 -72 65 -373 6 -321 10 -337 89 -408 79 -72 183 -87 275 -43 28 14 419 312 869 663 922 717 871 671 871 803 -1 89 -27 135 -118 209 -334 275 -1591 1267 -1622 1282 -58 27 -147 25 -210 -5z"/> </g> </svg>
-                        <ng-container *ngFor="let evolution of evolution.evolutions">
+                      </ng-container>
+                      <app-evolution [sourcePokemon]="pokemon" [pokemon]="pokemon" [teamOptions]="teamOptions"></app-evolution>
+                      <ng-container *ngIf="pokemon.evolutions ? pokemon.evolutions.length > 0 ? true : false : false">
+                        <svg class="icon" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M3165 4036 c-59 -28 -107 -76 -131 -131 -15 -34 -19 -84 -23 -325 -6 -269 -7 -287 -28 -326 -23 -44 -70 -88 -112 -107 -19 -9 -385 -13 -1361 -17 l-1335 -5 -41 -22 c-53 -28 -107 -91 -122 -142 -8 -26 -12 -157 -12 -412 0 -373 0 -374 24 -424 28 -59 76 -107 131 -132 38 -17 117 -18 1375 -23 1461 -5 1361 -1 1416 -62 57 -62 59 -72 65 -373 6 -321 10 -337 89 -408 79 -72 183 -87 275 -43 28 14 419 312 869 663 922 717 871 671 871 803 -1 89 -27 135 -118 209 -334 275 -1591 1267 -1622 1282 -58 27 -147 25 -210 -5z"/> </g> </svg>
+                        <ng-container *ngFor="let evolution of pokemon.evolutions">
                           <app-evolution [sourcePokemon]="pokemon" [pokemon]="evolution" [teamOptions]="teamOptions"></app-evolution>
+                          <ng-container *ngIf="evolution.evolutions ? evolution.evolutions.length > 0 ? true : false : false">
+                            <svg class="icon" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M3165 4036 c-59 -28 -107 -76 -131 -131 -15 -34 -19 -84 -23 -325 -6 -269 -7 -287 -28 -326 -23 -44 -70 -88 -112 -107 -19 -9 -385 -13 -1361 -17 l-1335 -5 -41 -22 c-53 -28 -107 -91 -122 -142 -8 -26 -12 -157 -12 -412 0 -373 0 -374 24 -424 28 -59 76 -107 131 -132 38 -17 117 -18 1375 -23 1461 -5 1361 -1 1416 -62 57 -62 59 -72 65 -373 6 -321 10 -337 89 -408 79 -72 183 -87 275 -43 28 14 419 312 869 663 922 717 871 671 871 803 -1 89 -27 135 -118 209 -334 275 -1591 1267 -1622 1282 -58 27 -147 25 -210 -5z"/> </g> </svg>
+                            <ng-container *ngFor="let evolution of evolution.evolutions">
+                              <app-evolution [sourcePokemon]="pokemon" [pokemon]="evolution" [teamOptions]="teamOptions"></app-evolution>
+                            </ng-container>
+                          </ng-container>
                         </ng-container>
                       </ng-container>
-                    </ng-container>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngIf="pokemon.forms">
+                    <div class="flex wrap align-i-c bg-2 bor-rad-5">
+                      <ng-container *ngFor="let form of pokemon.forms">
+                        <ng-container *ngIf="pokemon.name.content != form.name?.content">
+                          <svg class="icon" viewBox="0 0 24 24" fill="var(--text-color)" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 6.50004C2.99999 5.94776 3.4477 5.50004 3.99999 5.50003L15 5.4999V3.00001C15 2.59555 15.2437 2.23091 15.6173 2.07613C15.991 1.92135 16.4211 2.00691 16.7071 2.29291L20.7071 6.29291C21.0977 6.68343 21.0977 7.3166 20.7071 7.70712L16.7071 11.7071C16.4211 11.9931 15.991 12.0787 15.6173 11.9239C15.2437 11.7691 15 11.4045 15 11V8.4999L4.00002 8.50003C3.44774 8.50004 3.00002 8.05233 3.00001 7.50004L3 6.50004Z" fill="#000000"></path> <path d="M9 21C9 21.4045 8.75636 21.7691 8.38268 21.9239C8.00901 22.0787 7.57889 21.9931 7.29289 21.7071L4.08582 18.5H4V18.4142L3.29289 17.7071C2.90237 17.3166 2.90237 16.6834 3.29289 16.2929L4 15.5858V15.5H4.08576L7.29289 12.2929C7.57889 12.0069 8.00901 11.9214 8.38268 12.0761C8.75636 12.2309 9 12.5956 9 13V15.5L20 15.5C20.5523 15.5 21 15.9478 21 16.5V17.5C21 18.0523 20.5523 18.5 20 18.5L9 18.5V21Z" fill="#000000"></path> </g></svg>
+                          <app-evolution [sourcePokemon]="pokemon" [pokemon]="form" [teamOptions]="teamOptions"></app-evolution>
+                        </ng-container>
+                      </ng-container>
+                    </div>
                   </ng-container>
                 </div>
               </ng-template>
