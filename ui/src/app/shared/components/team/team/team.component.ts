@@ -144,6 +144,15 @@ export class TeamComponent
     );
   }
 
+  closeAllProfileTooltips()
+  {
+    this.pokemonComponents.forEach(pokemonComponent => 
+      {
+        pokemonComponent.closeAllProfileTooltips();
+      }
+    );
+  }
+
   @Output() removeEvent = new EventEmitter<Tag>()
 
   removeTag(index)
