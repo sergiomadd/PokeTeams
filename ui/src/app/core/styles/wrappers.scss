@@ -23,6 +23,12 @@
   margin-top: 3em;
 }
 
+
+.static-page
+{
+  font-size: 1.3rem;
+}
+
 $tooltipColor: var(--bg-color-tooltip);
 $arrowSize: 0.4em;
 
@@ -54,38 +60,27 @@ $arrowSize: 0.4em;
   }
 }
 
-.content-tooltip-wrapper
-{
-  position: relative;
-
-  &:hover > .content-tooltip
-  {
-    width: max-content;
-    height: fit-content;
-    
-    display: flex;
-    align-items: center;
-
-    background-color: var(--bg-color-2);
-    color: var(--text-color);
-    border-radius: 5px;
-    border: 1px solid var(--text-color);
-
-    text-align: center;
-    cursor: default;
-    opacity: 1;
-    overflow: visible;
-  }
-}
-
 .poke-tooltip-wrapper
 {
   position: relative;
 }
 
-.static-page
+.poke-tooltip-selected
 {
-  font-size: 1.3rem;
+  outline: 1px solid var(--text-color);
+  border-radius: 5px;
+}
+
+.poke-tooltip-content
+{
+  max-width: 20em;
+  background-color: var(--bg-color-2);
+  border-radius: 5px;
+}
+
+.poke-tooltip-body
+{
+  border-radius: 0 0 5px 5px;
 }
 
 @media (min-width: $tabletPortrait) 

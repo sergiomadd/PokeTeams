@@ -16,7 +16,6 @@ import { User } from 'src/app/features/user/models/user.model';
 import { environment } from 'src/environments/environment';
 import { PokemonPreviewComponent } from '../../pokemon/pokemon-preview/pokemon-preview.component';
 
-
 @Component({
   selector: 'app-team-preview',
   templateUrl: './team-preview.component.html',
@@ -48,6 +47,7 @@ export class TeamPreviewComponent
   copying?: boolean;
   copied?: boolean;
   linkCopied: boolean = false;
+  tooltips: boolean[] = [false, false, false]
 
   async ngOnInit()
   {
@@ -191,6 +191,22 @@ export class TeamPreviewComponent
     else if(!this.logged || (this.logged && this.logged.username != this.team?.player?.username))
     {
       this.feedback = "Unauthorized";
+    }
+  }
+
+  clickSection(index: number)
+  {    
+    if(this.tooltips[index])
+    {
+      this.tooltips[index] = false;
+    }
+    else
+    {
+      for(var i = 0; i < this.tooltips.length; i++) 
+      {
+        this.tooltips[i] = false;
+      }
+      this.tooltips[index] = true;
     }
   }
 }

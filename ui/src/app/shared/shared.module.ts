@@ -16,8 +16,10 @@ import { RadioComponent } from './components/dumb/radio/radio.component';
 import { SwitchComponent } from './components/dumb/switch/switch.component';
 import { TagEditorComponent } from './components/dumb/tag-editor/tag-editor.component';
 import { TooltipComponent } from './components/dumb/tooltip/tooltip.component';
+import { AboutComponent } from './components/layout/about/about.component';
 import { FooterComponent } from './components/layout/footer/footer.component';
 import { MenuComponent } from './components/layout/menu/menu.component';
+import { PrivacyPolicyComponent } from './components/layout/privacy-policy/privacy-policy.component';
 import { UserFormComponent } from './components/layout/user-form/user-form.component';
 import { EvolutionComponent } from './components/pokemon/evolution/evolution.component';
 import { PokeTooltipComponent } from './components/pokemon/poke-tooltip/poke-tooltip.component';
@@ -31,6 +33,7 @@ import { TeamPreviewComponent } from './components/team/team-preview/team-previe
 import { TeamSearchComponent } from './components/team/team-search/team-search.component';
 import { TeamTableComponent } from './components/team/team-table/team-table.component';
 import { TeamComponent } from './components/team/team/team.component';
+import { TournamentPreviewComponent } from './components/team/tournament-preview/tournament-preview.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 
 @NgModule({
@@ -69,7 +72,10 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
     SwitchComponent,
     TagEditorComponent,
     TooltipComponent,
-    PokemonCardComponent
+    PokemonCardComponent,
+    TournamentPreviewComponent,
+    PrivacyPolicyComponent,
+    AboutComponent
   ],
   imports: 
   [

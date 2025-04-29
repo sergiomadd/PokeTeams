@@ -114,14 +114,6 @@ export class TeamEditorComponent
   async tournamentSelectEvent(event: QueryItem)
   {
     this.team.tournament = event ? await this.teamService.getTournamentByIdentifier(event.identifier) : undefined;
-    if(!this.team.tournament)
-    {
-      this.team.tournament = 
-      {
-        name: event.name,
-        official: false
-      }
-    }
   }
 
   async regulationSelectEvent(event: QueryItem)

@@ -158,11 +158,6 @@ $padding: 0.2em;
   border-radius: 5px;
 }
 
-.poke-tooltip-content
-{
-  max-width: 20em;
-}
-
 .poke-tooltip-head
 {
   background-color: var(--bg-color-3);
@@ -177,13 +172,6 @@ $padding: 0.2em;
 {
   font-size: larger;
   text-align: center;
-}
-
-.poke-tooltip-body
-{
-  padding: $padding;
-  background-color: var(--bg-color-2);
-  border-radius: 0 0 5px 5px;
 }
 
 .one-piece

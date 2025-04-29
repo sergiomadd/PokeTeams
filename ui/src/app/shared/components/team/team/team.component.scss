@@ -39,6 +39,7 @@ $teamWidth: calc($pokemonCardWidth * 2 + 0.8em);
 
 .left-button
 {
+  position: relative;
   min-width: 1.5em;
   text-align: center;
   z-index: 3;

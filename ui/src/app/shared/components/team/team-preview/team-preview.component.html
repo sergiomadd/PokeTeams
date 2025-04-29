@@ -1,4 +1,4 @@
-<div class="flex-col pad-s gap-s bor-rad-5 bg-3" [ngClass]="{deleting: deleteDialog}">
+<div class="flex-col pad-s gap-s bor-rad-5 bg-3 relative" [ngClass]="{deleting: deleteDialog}">
   <div class="flex justify-c-sb w-100">
     <div class="flex justify-c-s gap-s wrap">
       <ng-container *ngIf="logged">
@@ -40,11 +40,40 @@
         </ng-template>
       </div>
       <ng-container *ngIf="team?.tournament">
-        <div class="detail pointer">
-          <ng-container *ngIf="team?.tournament?.icon">
-            <img src="{{team?.tournament?.icon}}" alt="{{team?.tournament?.name}}" class="icon-m">
-          </ng-container>
-          <span class="no-overflow">{{team?.tournament?.name}}</span>
+        <div
+        (click)="clickSection(1)"
+        [ngClass]="
+        {
+          section: true,
+          'poke-tooltip-selected': tooltips[1],
+          'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
+        }"
+        >
+          <div class="section-content">
+            <div class="detail pointer">
+              <ng-container *ngIf="team?.tournament?.icon">
+                <img src="{{team?.tournament?.icon}}" alt="{{team?.tournament?.name}}" class="icon-m">
+              </ng-container>
+              <span class="no-overflow">{{team?.tournament?.name}}</span>
+            </div>
+            <app-poke-tooltip
+            [content]="tournamentPreview"
+            [side]="'top'"
+            [visible]="tooltips[1]"
+            [mobileChanged]="window.isTabletPortraitOrLess()"
+            class="tooltip-component"
+            >
+              <ng-template #tournamentPreview>
+                <div class="poke-tooltip-content">
+                  <div class="poke-tooltip-body">
+                    <app-tournament-preview 
+                    [tournament]="team?.tournament"
+                    ></app-tournament-preview>
+                  </div>
+                </div>
+              </ng-template>
+            </app-poke-tooltip>
+          </div>
         </div>
       </ng-container>
       <ng-container *ngIf="team?.regulation">

@@ -30,6 +30,7 @@ export class TeamComponent
   hasAnyNotes: boolean = false;
   maxStat: number = 0;
   rentalCodeCopied: boolean = false;
+  tooltips: boolean[] = [false, false, false]
 
   ngOnChanges(changes: SimpleChanges)
   {
@@ -210,6 +211,22 @@ export class TeamComponent
     if(this.team?.options)
     {
       this.team.options.showNature = !this.team.options.showNature
+    }
+  }
+
+  clickSection(index: number)
+  {    
+    if(this.tooltips[index])
+    {
+      this.tooltips[index] = false;
+    }
+    else
+    {
+      for(var i = 0; i < this.tooltips.length; i++) 
+      {
+        this.tooltips[i] = false;
+      }
+      this.tooltips[index] = true;
     }
   }
 }
