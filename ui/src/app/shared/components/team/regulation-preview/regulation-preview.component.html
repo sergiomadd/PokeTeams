@@ -1,0 +1,10 @@
+<ng-container *ngIf="regulation">
+  <div class="poke-tooltip-content">
+    <div class="poke-tooltip-head">
+      <span>{{regulation?.name}}</span>
+    </div>
+    <div class="poke-tooltip-body flex justify-c-sa gap-m">
+      <span>{{util.customFormatDate(regulation?.startDate)}}</span> - <span>{{util.customFormatDate(regulation?.endDate)}}</span>
+    </div>
+  </div>
+</ng-container>

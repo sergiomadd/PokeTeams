@@ -35,6 +35,7 @@ import { TeamTableComponent } from './components/team/team-table/team-table.comp
 import { TeamComponent } from './components/team/team/team.component';
 import { TournamentPreviewComponent } from './components/team/tournament-preview/tournament-preview.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
+import { RegulationPreviewComponent } from './components/team/regulation-preview/regulation-preview.component';
 
 @NgModule({
   declarations: 
@@ -75,7 +76,8 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
     PokemonCardComponent,
     TournamentPreviewComponent,
     PrivacyPolicyComponent,
-    AboutComponent
+    AboutComponent,
+    RegulationPreviewComponent
   ],
   imports: 
   [
