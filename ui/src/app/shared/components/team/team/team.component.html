@@ -93,8 +93,33 @@
         </div>
       </ng-container>
       <ng-container *ngIf="team?.regulation">
-        <div class="detail flex align-i-c" style="background-color: var(--primary); color: #ffffff;">
-          {{team?.regulation?.identifier}}
+        <div
+        (click)="clickSection(2)"
+        [ngClass]="
+        {
+          section: true,
+          'poke-tooltip-selected-outline': tooltips[2],
+          'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
+        }"
+        >
+          <div class="section-content">
+            <div class="detail pointer" style="background-color: var(--primary); color: #ffffff;">
+              {{team?.regulation?.identifier}}
+            </div>
+            <app-poke-tooltip
+            [content]="regulationPreview"
+            [side]="'top'"
+            [visible]="tooltips[2]"
+            [mobileChanged]="window.isTabletPortraitOrLess()"
+            class="tooltip-component"
+            >
+              <ng-template #regulationPreview>
+                <app-regulation-preview 
+                [regulation]="team?.regulation"
+                ></app-regulation-preview>
+              </ng-template>
+            </app-poke-tooltip>
+          </div>
         </div>
       </ng-container>
     </div>
