@@ -76,7 +76,7 @@
                     </ng-container>
                     <ng-template #speciesName>
                       {{pokemon.name?.content}}
-                      <ng-container *ngIf="pokemon.name && pokemon.name?.language != (selectedLang$ | async)">
+                      <ng-container *ngIf="pokemon.name?.content && pokemon.name?.language != (selectedLang$ | async)">
                         <app-no-translation></app-no-translation>
                       </ng-container>
                     </ng-template>
@@ -113,7 +113,7 @@
                   <div class="poke-tooltip-head">
                     <span class="poke-tooltip-head-text">
                       {{pokemon.item?.name?.content}}
-                      <ng-container *ngIf="pokemon.item?.name && pokemon.item?.name?.language != (selectedLang$ | async)">
+                      <ng-container *ngIf="pokemon.item?.name?.content && pokemon.item?.name?.language != (selectedLang$ | async)">
                         <app-no-translation></app-no-translation>
                       </ng-container>
                     </span>
@@ -126,7 +126,7 @@
                         <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
                       </ng-container>
                     </ng-container>
-                    <ng-container *ngIf="pokemon.item?.prose && pokemon.item?.prose?.language != (selectedLang$ | async)">
+                    <ng-container *ngIf="pokemon.item?.prose?.content && pokemon.item?.prose?.language != (selectedLang$ | async)">
                       <app-no-translation></app-no-translation>
                     </ng-container>
                   </div>
@@ -181,7 +181,7 @@
 
                     <span class="poke-tooltip-head-text">
                       {{pokemon.ability?.name?.content}}
-                      <ng-container *ngIf="pokemon.ability?.name && pokemon.ability?.name?.language != (selectedLang$ | async)">
+                      <ng-container *ngIf="pokemon.ability?.name?.content && pokemon.ability?.name?.language != (selectedLang$ | async)">
                         <app-no-translation></app-no-translation>
                       </ng-container>
                     </span>
@@ -194,7 +194,7 @@
                         <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
                       </ng-container>
                     </ng-container>
-                    <ng-container *ngIf="pokemon.ability?.prose && pokemon.ability?.prose?.language != (selectedLang$ | async)">
+                    <ng-container *ngIf="pokemon.ability?.prose?.content && pokemon.ability?.prose?.language != (selectedLang$ | async)">
                       <app-no-translation></app-no-translation>
                     </ng-container>
                     <ng-container *ngIf="pokemon?.ability?.hidden">
@@ -232,7 +232,7 @@
                   <div class="space-nowrap no-overflow">
                     {{pokemon.ability?.name?.content}}
                   </div>
-                  <ng-container *ngIf="pokemon.ability?.name && pokemon.ability?.name?.language != (selectedLang$ | async)">
+                  <ng-container *ngIf="pokemon.ability?.name?.content && pokemon.ability?.name?.language != (selectedLang$ | async)">
                     <app-no-translation></app-no-translation>
                   </ng-container>
                   <ng-container *ngIf="pokemon?.ability?.hidden">
@@ -716,7 +716,7 @@
                 </div>
                   <div class="text-start space-nowrap no-overflow w-90">
                     {{move?.name?.content}}
-                    <ng-container *ngIf="move?.name && move?.name?.language != (selectedLang$ | async)">
+                    <ng-container *ngIf="move?.name?.content && move?.name?.language != (selectedLang$ | async)">
                       <app-no-translation></app-no-translation>
                     </ng-container>
                   </div>
@@ -803,7 +803,7 @@
                       </div>
                       <div class="poke-tooltip-head-text">
                         {{move?.name?.content}}
-                        <ng-container *ngIf="move?.name && move?.name?.language != (selectedLang$ | async)">
+                        <ng-container *ngIf="move?.name?.content && move?.name?.language != (selectedLang$ | async)">
                           <app-no-translation></app-no-translation>
                         </ng-container>
                       </div>
@@ -882,7 +882,7 @@
                                 <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
                               </ng-container>
                             </ng-container>
-                            <ng-container *ngIf="move?.effect?.short && move?.effect?.short?.language != (selectedLang$ | async)">
+                            <ng-container *ngIf="move?.effect?.short?.content && move?.effect?.short?.language != (selectedLang$ | async)">
                               <app-no-translation></app-no-translation>
                             </ng-container>
                           </span>
@@ -897,7 +897,7 @@
                                 <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
                               </ng-container>
                             </ng-container>
-                            <ng-container *ngIf="move?.target?.description && move?.target?.description?.language != (selectedLang$ | async)">
+                            <ng-container *ngIf="move?.target?.description?.content && move?.target?.description?.language != (selectedLang$ | async)">
                               <app-no-translation></app-no-translation>
                             </ng-container>
                           </span>
@@ -929,7 +929,7 @@
                 <div class="poke-tooltip-content">
                   <div class="poke-tooltip-head" [ngStyle]="{backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat))}">
                     {{stat.name?.content}}
-                    <ng-container *ngIf="stat.name && stat.name?.language != (selectedLang$ | async)">
+                    <ng-container *ngIf="stat.name?.content && stat.name?.language != (selectedLang$ | async)">
                       <app-no-translation></app-no-translation>
                     </ng-container>
                   </div>
