@@ -150,28 +150,11 @@ $padding: 0.2em;
 
 //----------------------------------------------------------------------------------------------------
 //poke-tooltip 
-
 .poke-tooltip-selected
 {
   border: 1px solid var(--text-color);
   background: none !important;
   border-radius: 5px;
-}
-
-.poke-tooltip-head
-{
-  background-color: var(--bg-color-3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: $paddingBig;
-  border-radius: 5px 5px 0 0;
-}
-
-.poke-tooltip-head-text
-{
-  font-size: larger;
-  text-align: center;
 }
 
 .one-piece

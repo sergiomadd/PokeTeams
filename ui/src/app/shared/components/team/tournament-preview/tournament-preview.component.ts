@@ -4,8 +4,7 @@ import { Tournament } from 'src/app/core/models/team/tournament.model';
 
 @Component({
   selector: 'app-tournament-preview',
-  templateUrl: './tournament-preview.component.html',
-  styleUrl: './tournament-preview.component.scss'
+  templateUrl: './tournament-preview.component.html'
 })
 export class TournamentPreviewComponent 
 {
