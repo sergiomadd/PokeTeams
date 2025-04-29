@@ -19,7 +19,8 @@
     "view":
     {
       "copy_paste-button": "Copy paste",
-      "copy_link-button": "Copy link"
+      "copy_link-button": "Copy link",
+      "help": "Hover a section to display it, click to pin it"
     },
     "edit":
     {
