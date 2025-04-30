@@ -123,7 +123,7 @@
                       <ng-container [ngSwitch]="chunk.type">
                         <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
                         <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
-                        <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
+                        <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon-s">
                       </ng-container>
                     </ng-container>
                     <ng-container *ngIf="pokemon.item?.prose?.content && pokemon.item?.prose?.language != (selectedLang$ | async)">
@@ -191,7 +191,7 @@
                       <ng-container [ngSwitch]="chunk.type">
                         <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
                         <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
-                        <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
+                        <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon-s">
                       </ng-container>
                     </ng-container>
                     <ng-container *ngIf="pokemon.ability?.prose?.content && pokemon.ability?.prose?.language != (selectedLang$ | async)">

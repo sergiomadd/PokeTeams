@@ -111,7 +111,10 @@ namespace api.Util
                         result = "[" + originalName + "]" + "(" + link + ")" + "{" + categoryType + "}";
                         return result;
                     }
-                    if (damage.Contains(categoryName)) { end = "Type#Type_effectiveness"; }
+                    if (damage.Contains(categoryName)) 
+                    {
+                        return originalName; 
+                    }
                     if (categoryName.Equals("stat-modifier") || categoryName.Equals("stage")) { end = "Stat_modifier#In-battle_modification"; }
                     if (categoryName.Equals("stat-modifier")) { end = "Stat_modifier#In-battle_modification"; }
                     break;
