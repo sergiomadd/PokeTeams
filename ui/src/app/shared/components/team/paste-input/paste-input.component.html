@@ -1,10 +1,13 @@
 <div class="flex-col w-fit gap-xl">
-  <div class="tabs flex justify-c-c gap-s mar-auto">
-    <div class="pointer pad-m bor-rad-10" (click)="selectTab(0)">
-      {{"team.input.paste" | translate}}
-    </div>
-    <div class="pointer pad-m bor-rad-10" (click)="selectTab(1)">
-      {{"team.input.editor" | translate}}
+  <div class="tabs mar-auto">
+    <div class="flex justify-c-c gap-s mar-auto relative">
+      <div class="pointer pad-m bor-rad-10" (click)="selectTab(0)">
+        {{"team.input.paste" | translate}}
+      </div>
+      <div class="pointer pad-m bor-rad-10" (click)="selectTab(1)">
+        {{"team.input.editor" | translate}}
+      </div>
+      <div class="selector" [ngClass]="{right: tabs[1]}"></div>
     </div>
   </div>
   <ng-container *ngIf="tabs[0]; else editor">

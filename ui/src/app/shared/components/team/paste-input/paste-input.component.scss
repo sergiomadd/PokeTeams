@@ -3,7 +3,9 @@
 .tabs
 {
   border-bottom: 1px solid var(--bg-color-3);
-  width: 10em;
+  width: 12em;
+  display: flex;
+  justify-content: center;
 }
 
 .pasteBox
@@ -19,6 +21,22 @@
   position: absolute;
   top: 0;
   right: -2.8em;
+}
+
+.selector
+{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height: 0.2em;
+  background-color: var(--primary);
+  transition: transform 0.3s ease;
+}
+
+.right
+{
+  transform: translateX(100%);
 }
 
 @media (max-width: $bigMobile) 
