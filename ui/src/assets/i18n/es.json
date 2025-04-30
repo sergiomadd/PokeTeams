@@ -18,8 +18,9 @@
     },
     "view":
     {
-      "copy-paste-button": "Copiar paste",
-      "copy-link-button": "Copiar link",
+      "copy_paste-button": "Copiar paste",
+      "edit-button": "Editar equipo",
+      "copy_link-button": "Copiar link",
       "help": "Pasa el ratón sobre una sección para mostrarla, haz clic para fijarla"
     },
     "edit":
