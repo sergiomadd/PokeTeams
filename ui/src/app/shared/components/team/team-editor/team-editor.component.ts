@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
+import { ThemeService } from 'src/app/core/helpers/theme.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
 import { FeedbackColors } from 'src/app/core/models/misc/colors';
 import { QueryItem } from 'src/app/core/models/misc/queryResult.model';
@@ -37,6 +38,7 @@ export class TeamEditorComponent
   translateSergice = inject(TranslateService);
   window = inject(WindowService);
   formBuilder = inject(FormBuilder);
+  theme = inject(ThemeService);
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
@@ -145,10 +147,11 @@ export class TeamEditorComponent
   currentTags: number = this.team?.tags ? this.team?.tags?.length : 0;
   maxTags: number = 3;
 
-  tagSelectEvent(tag: Tag)
+  async tagSelectEvent(queryItem: QueryItem)
   {
     this.feedback = undefined;
-    if(this.team.tags)
+    let tag: Tag = await this.teamService.getTagByIdentifier(queryItem.identifier);
+    if(this.team.tags && tag)
     {
       if(this.team.tags.length < 3 && !this.team.tags.some(t => t.identifier == tag.identifier))
       {
@@ -164,9 +167,26 @@ export class TeamEditorComponent
         this.feedback = this.translateSergice.instant("team.editor.tag_input-feedback");
       }
     }
-    else
+  }
+
+  tagAddNewEvent(tag: Tag)
+  {
+    this.feedback = undefined;
+    if(this.team.tags && tag)
     {
-      this.team.tags = [tag];
+      if(this.team.tags.length < 3 && !this.team.tags.some(t => t.identifier == tag.identifier))
+      {
+        this.team.tags = [...this.team.tags, tag];
+        if(this.team.tags.length === 3)
+        {
+          this.disableTagSelector();
+        }
+        this.currentTags = this.team?.tags ? this.team?.tags?.length : 0;
+      }
+      else if(this.team.tags.some(t => t.identifier == tag.identifier))
+      {
+        this.feedback = this.translateSergice.instant("team.editor.tag_input-feedback");
+      }
     }
   }
 
