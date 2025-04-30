@@ -67,7 +67,7 @@ export class TeamSearchComponent
         {
           name: event.name,
           identifier: event.identifier,
-          color: event.icon,
+          color: event.icon ? this.theme.getTagBgColor(event.icon) : undefined,
           textColor: event.icon ? this.theme.getTagTextColor(event.icon) : undefined,
           type: event.type
         }

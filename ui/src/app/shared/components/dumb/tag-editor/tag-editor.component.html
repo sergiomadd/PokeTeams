@@ -51,8 +51,8 @@
           [name]="tag.name"
           [tooltipText]="tag.description"
           [minWidth]="'100%'"
-          [bgColor]="tag.color"
-          [textColor]="tag.color ? theme.getTagTextColor(tag.color) : undefined"
+          [bgColor]="tag.color !== undefined ? tagBackgroundColors[tag.color] : undefined"
+          [textColor]="tag.color !== undefined ? theme.getTagTextColor(tag.color) : undefined"
           ></app-chip>
         </div>
         <div style="width: 48%;">

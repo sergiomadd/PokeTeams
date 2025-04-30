@@ -12,10 +12,10 @@ export class ColorPickerComponent
 
   @Input() colors: string[] = [];
   @Input() visible: boolean = false;
-  @Output() chooseEvent = new EventEmitter<string>();
+  @Output() chooseEvent = new EventEmitter<number>();
 
-  choose(color: string)
+  choose(colorIndex: number)
   {
-    this.chooseEvent.emit(color);
+    this.chooseEvent.emit(colorIndex);
   }
 }

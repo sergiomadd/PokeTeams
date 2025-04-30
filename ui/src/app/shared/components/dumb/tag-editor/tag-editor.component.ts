@@ -3,7 +3,6 @@ import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ThemeService } from 'src/app/core/helpers/theme.service';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
-import { Gen9IconColorsHex } from 'src/app/core/models/misc/colors';
 import { tagBackgroundColors } from 'src/app/core/models/misc/tagColors.model';
 import { Tag } from 'src/app/core/models/team/tag.model';
 import { TeamService } from 'src/app/core/services/team.service';
@@ -33,7 +32,7 @@ export class TagEditorComponent
   {
     name: ['', [Validators.required, Validators.maxLength(16)]],
     desc: ['', [Validators.maxLength(256)]],
-    color: [Gen9IconColorsHex.normal.toString()]
+    color: [0]
   }, { updateOn: "blur" });
   formSubmitted: boolean = false;
 
@@ -42,7 +41,7 @@ export class TagEditorComponent
     name: "",
     identifier: "",
     description: "",
-    color: ""
+    color: 0
   };
 
   colorPickerOpen: boolean = false;
@@ -67,7 +66,7 @@ export class TagEditorComponent
       })
     this.form.controls.color.valueChanges.subscribe(value => 
       {
-        this.tag = {...this.tag, color: value ?? ""}
+        this.tag = {...this.tag, color: value ?? 0}
       })
   }
 
@@ -78,7 +77,7 @@ export class TagEditorComponent
       name: this.form.controls.name.value ?? "",
       identifier: "",
       description: this.form.controls.desc.value ?? "",
-      color: this.form.controls.color.value ?? this.tagBackgroundColors[0]
+      color: this.form.controls.color.value ?? 0
     };
     this.form.controls.name.setValue("");
     this.form.controls.name.markAsUntouched();
@@ -88,7 +87,7 @@ export class TagEditorComponent
     this.form.controls.desc.markAsUntouched();
     this.form.controls.desc.markAsPristine();
 
-    this.form.controls.color.setValue(this.tagBackgroundColors[0]);
+    this.form.controls.color.setValue(0);
     this.colorPickerOpen = false;
 
     this.formSubmitted = false;

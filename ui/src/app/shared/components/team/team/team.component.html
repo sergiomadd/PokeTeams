@@ -129,7 +129,7 @@
           <app-chip 
           [name]="tag.name"
           [tooltipText]="tag.description"
-          [bgColor]="tag.color"
+          [bgColor]="tag.color ? theme.getTagBgColor(tag.color) : undefined"
           [textColor]="tag.color ? theme.getTagTextColor(tag.color) : undefined"
           [removable]="removableTags ?? false"
           (removeEvent)="removeTag($event)"
