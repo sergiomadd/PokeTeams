@@ -74,7 +74,7 @@ namespace api.Services
             var query =
                 from tag in _pokeTeamContext.Tag
 
-                select new QueryResultDTO(tag.Name, tag.Identifier, tag.Color, "tag");
+                select new QueryResultDTO(tag.Name, tag.Identifier, tag.Color.ToString(), "tag");
 
             queryResults = await query.ToListAsync();
 

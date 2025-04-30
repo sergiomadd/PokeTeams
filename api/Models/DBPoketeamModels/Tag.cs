@@ -14,11 +14,11 @@ namespace api.Models.DBPoketeamModels
         public string Name { get; set; }
 
         [StringLength(256, ErrorMessage = "Tag description is too long")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         [Required(ErrorMessage = "Tag color is required")]
-        [StringLength(8, ErrorMessage = "Tag color is too long")]
-        public string Color { get; set; }
+        [Range(0, 32, ErrorMessage = "Tag color is too big")]
+        public int Color { get; set; }
 
         public virtual ICollection<Team>? Teams { get; set; }
     }

@@ -225,7 +225,7 @@ namespace api.Services
                                 Identifier = Formatter.NormalizeString(tagDTO.Name),
                                 Name = tagDTO.Name,
                                 Description = tagDTO.Description,
-                                Color = tagDTO.Color,
+                                Color = tagDTO.Color != null ? (int)tagDTO.Color : 0,
                             };
                         }
                         tags.Add(tag);
@@ -716,12 +716,13 @@ namespace api.Services
                 && (t.Name.Length > 16
                 || t.Identifier.Length > 16
                 || (t.Description != null && t.Description.Length > 256)
-                || (t.Color != null && t.Color.Length > 8))))
+                || (t.Color != null && t.Color > 32))))
             {
                 return "Tag validation error";
             }
             if (inputTeam.Pokemons != null && inputTeam.Pokemons.Any(p => p != null
-                && ((p.Nickname != null && p.Nickname.Length > 16)
+                && ((p.DexNumber != null && p.DexNumber < 1)
+                || (p.Nickname != null && p.Nickname.Length > 16)
                 || (p.Notes != null && p.Notes.Length > 2048)
                 || (p.Level != null && (p.Level < 1 || p.Level > 100)))))
             {
