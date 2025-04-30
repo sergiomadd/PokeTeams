@@ -10,21 +10,27 @@ namespace api.Models.DBPoketeamModels
         [Required(ErrorMessage = "Team id is required")]
         public string Id { get; set; }
         public virtual ICollection<Pokemon> Pokemons { get; set; }
+
         [StringLength(450, ErrorMessage = "Team player id is not the correct length")]
         public string? PlayerId { get; set; }
         public virtual User? Player { get; set; }
+
         [StringLength(32, ErrorMessage = "Team player anon is too long")]
         public string? AnonPlayer { get; set;}
+
         [StringLength(256, ErrorMessage = "Team tournament name is too long")]
         public string? TournamentNormalizedName { get; set; }
         public virtual Tournament? Tournament { get; set; }
         public string? Regulation { get; set; }
-        public virtual ICollection<Tag> Tags { get; set; }
+        public ICollection<string> TagIds { get; set; }
+
         [StringLength(32, ErrorMessage = "Rental code is too long")]
         public string? RentalCode { get; set; }
         public int ViewCount { get; set; }
+
         [DataType(DataType.Date)]
         public DateTime DateCreated { get; set; }
+
         [Required(ErrorMessage = "Team visibility is required")]
         public bool Visibility { get; set; }
         public bool IVsVisibility { get; set; }
@@ -44,7 +50,7 @@ namespace api.Models.DBPoketeamModels
             string? tournamentNormalizedName,
             Tournament tournament,
             string? regulation,
-            ICollection<Tag> tags,
+            ICollection<string> tags,
             string? rentalCode,
             int viewCount,
             DateTime dateCreated,
@@ -61,7 +67,7 @@ namespace api.Models.DBPoketeamModels
             TournamentNormalizedName = tournamentNormalizedName;
             Tournament = tournament;
             Regulation = regulation;
-            Tags = tags;
+            TagIds = tags;
             RentalCode = rentalCode;
             ViewCount = viewCount;
             DateCreated = dateCreated;

@@ -212,7 +212,7 @@ namespace api.Services
                     player = loggedUser;
                 }
 
-                List<Tag> tags = new List<Tag>();
+                List<string> tagsIds = new List<string>();
                 if (inputTeam.Tags != null && inputTeam.Tags.Count > 0)
                 {
                     foreach (TagDTO tagDTO in inputTeam.Tags)
@@ -227,11 +227,13 @@ namespace api.Services
                                 Description = tagDTO.Description,
                                 Color = tagDTO.Color != null ? (int)tagDTO.Color : 0,
                             };
+                            await _pokeTeamContext.Tag.AddAsync(tag);
                         }
-                        tags.Add(tag);
+                        string tagId = tag.Identifier;
+                        tagsIds.Add(tagId);
                     }
                 }
-
+                
                 Tournament? tournament = null;
                 if (inputTeam.Tournament != null && inputTeam.Tournament.Name != null)
                 {
@@ -250,7 +252,7 @@ namespace api.Services
                     tournamentNormalizedName: tournament != null ? tournament.NormalizedName : null,
                     tournament: tournament,
                     regulation: inputTeam.Regulation != null ? inputTeam.Regulation.Identifier : null,
-                    tags: tags,
+                    tags: tagsIds,
                     rentalCode: inputTeam.RentalCode,
                     viewCount: inputTeam.ViewCount,
                     dateCreated: inputTeam.Date != null && inputTeam.Date != "" ? DateTime.Parse(inputTeam.Date).ToUniversalTime() : DateTime.UtcNow,
@@ -270,7 +272,6 @@ namespace api.Services
                 Team? team = await _pokeTeamContext.Team
                     .Include(t => t.Player)
                     .Include(t => t.Pokemons)
-                    .Include(t => t.Tags)
                     .FirstOrDefaultAsync(t => t.Id == id);
                 return team;
             }
@@ -316,16 +317,19 @@ namespace api.Services
         private async Task<List<TagDTO>> GetTeamTags(Team team)
         {
             List<TagDTO> tags = new List<TagDTO>();
-            List<TeamTag> teamTags = await _pokeTeamContext.TeamTag.Where(t => t.TeamsId == team.Id).ToListAsync();
-            foreach (TeamTag teamTag in teamTags)
+            if(team.TagIds != null && team.TagIds.Count > 0)
             {
-                Tag tag = await _pokeTeamContext.Tag.FirstOrDefaultAsync(t => t.Identifier == teamTag.TagsIdentifier);
-                if (tag != null)
+                foreach (string tadId in team.TagIds)
                 {
-                    TagDTO tagDTO = new TagDTO(tag.Name, tag.Identifier, description: tag.Description, color: tag.Color);
-                    tags.Add(tagDTO);
+                    Tag? tag = await _pokeTeamContext.Tag.FirstOrDefaultAsync(t => t.Identifier == tadId);
+                    if (tag != null)
+                    {
+                        TagDTO tagDTO = new TagDTO(tag.Name, tag.Identifier, description: tag.Description, color: tag.Color);
+                        tags.Add(tagDTO);
+                    }
                 }
             }
+
             return tags;
         }
 
@@ -392,7 +396,7 @@ namespace api.Services
                 currentTeam.TournamentNormalizedName = newTeam.TournamentNormalizedName;
                 currentTeam.Tournament = newTeam.Tournament;
                 currentTeam.Regulation = newTeam.Regulation;
-                currentTeam.Tags = newTeam.Tags;
+                currentTeam.TagIds = newTeam.TagIds;
                 currentTeam.ViewCount = newTeam.ViewCount;
                 currentTeam.DateCreated = newTeam.DateCreated;
                 currentTeam.Visibility = newTeam.Visibility;
@@ -527,7 +531,6 @@ namespace api.Services
                     .Include(t => t.Pokemons)
                     .Include(t => t.Player)
                     .Include(t => t.Tournament)
-                    .Include(t => t.Tags)
                     .ToListAsync();
 
                 User? loggedUser = await _identityService.GetLoggedUser();
@@ -603,7 +606,7 @@ namespace api.Services
                             expressions.Add(t => t.Regulation == query.Identifier);
                             break;
                         case "tag":
-                            expressions.Add(t => t.Tags.Any(t => t.Name == query.Name));
+                            expressions.Add(t => t.TagIds.Any(t => query.Name != null && t == Formatter.NormalizeString(query.Name)));
                             break;
                         case "pokemon":
                             expressions.Add(t => t.Pokemons.Any(p => p.DexNumber == int.Parse(query.Identifier)));

@@ -12,7 +12,6 @@ using api.Services.PokedexServices;
 using System.Xml.Linq;
 using System.Security.Cryptography;
 using Microsoft.SqlServer.Server;
-using api.Migrations;
 using System.ComponentModel;
 using System.Linq;
 

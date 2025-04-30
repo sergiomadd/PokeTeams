@@ -22,7 +22,6 @@ namespace api.Data
         public DbSet<Team> Team { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Tag> Tag { get; set; }
-        public DbSet<TeamTag> TeamTag { get; set; }
         public DbSet<Pokemon> Pokemon { get; set; }
         public DbSet<Tournament> Tournament { get; set; }
         public DbSet<Regulation> Regulation { get; set; }
@@ -44,9 +43,8 @@ namespace api.Data
                 .HasForeignKey(p => p.TeamId);
 
             modelBuilder.Entity<Team>()
-                .HasMany(t => t.Tags)
-                .WithMany(ta => ta.Teams)
-                .UsingEntity<TeamTag>();
+                .Property(t => t.TagIds)
+                .HasColumnType("text[]");
 
             modelBuilder.Entity<Team>()
                 .HasOne(t => t.Player)

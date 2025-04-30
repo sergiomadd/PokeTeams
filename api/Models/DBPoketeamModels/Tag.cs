@@ -19,7 +19,5 @@ namespace api.Models.DBPoketeamModels
         [Required(ErrorMessage = "Tag color is required")]
         [Range(0, 32, ErrorMessage = "Tag color is too big")]
         public int Color { get; set; }
-
-        public virtual ICollection<Team>? Teams { get; set; }
     }
 }

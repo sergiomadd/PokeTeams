@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialReset : Migration
+    public partial class Reset : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -92,8 +92,8 @@ namespace api.Migrations
                 {
                     Identifier = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
                     Name = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false),
-                    Description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    Color = table.Column<string>(type: "character varying(8)", maxLength: 8, nullable: false)
+                    Description = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Color = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -234,6 +234,7 @@ namespace api.Migrations
                     AnonPlayer = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
                     TournamentNormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Regulation = table.Column<string>(type: "text", nullable: true),
+                    TagIds = table.Column<string[]>(type: "text[]", nullable: false),
                     RentalCode = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
                     ViewCount = table.Column<int>(type: "integer", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -266,9 +267,8 @@ namespace api.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     TeamId = table.Column<string>(type: "character varying(10)", nullable: false),
                     DexNumber = table.Column<int>(type: "integer", nullable: true),
+                    FormId = table.Column<int>(type: "integer", nullable: true),
                     Nickname = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: true),
-                    Type1Identifier = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
-                    Type2Identifier = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     TeraTypeIdentifier = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     ItemIdentifier = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
                     AbilityIdentifier = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: true),
@@ -300,30 +300,6 @@ namespace api.Migrations
                     table.ForeignKey(
                         name: "FK_Pokemon_Team_TeamId",
                         column: x => x.TeamId,
-                        principalTable: "Team",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TeamTag",
-                columns: table => new
-                {
-                    TagsIdentifier = table.Column<string>(type: "character varying(16)", nullable: false),
-                    TeamsId = table.Column<string>(type: "character varying(10)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TeamTag", x => new { x.TagsIdentifier, x.TeamsId });
-                    table.ForeignKey(
-                        name: "FK_TeamTag_Tag_TagsIdentifier",
-                        column: x => x.TagsIdentifier,
-                        principalTable: "Tag",
-                        principalColumn: "Identifier",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TeamTag_Team_TeamsId",
-                        column: x => x.TeamsId,
                         principalTable: "Team",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -381,11 +357,6 @@ namespace api.Migrations
                 name: "IX_Team_TournamentNormalizedName",
                 table: "Team",
                 column: "TournamentNormalizedName");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeamTag_TeamsId",
-                table: "TeamTag",
-                column: "TeamsId");
         }
 
         /// <inheritdoc />
@@ -416,13 +387,10 @@ namespace api.Migrations
                 name: "Regulation");
 
             migrationBuilder.DropTable(
-                name: "TeamTag");
+                name: "Tag");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Tag");
 
             migrationBuilder.DropTable(
                 name: "Team");

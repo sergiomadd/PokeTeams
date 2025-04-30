@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(PokeTeamContext))]
-    [Migration("20250411221915_removeTypesFromPokemon")]
-    partial class removeTypesFromPokemon
+    [Migration("20250430105421_Reset")]
+    partial class Reset
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -208,6 +208,9 @@ namespace api.Migrations
                     b.Property<int?>("EV_spe")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("FormId")
+                        .HasColumnType("integer");
+
                     b.Property<bool?>("Gender")
                         .HasColumnType("boolean");
 
@@ -310,13 +313,10 @@ namespace api.Migrations
                         .HasMaxLength(16)
                         .HasColumnType("character varying(16)");
 
-                    b.Property<string>("Color")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("character varying(8)");
+                    b.Property<int>("Color")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
@@ -363,6 +363,10 @@ namespace api.Migrations
                         .HasMaxLength(32)
                         .HasColumnType("character varying(32)");
 
+                    b.PrimitiveCollection<string[]>("TagIds")
+                        .IsRequired()
+                        .HasColumnType("text[]");
+
                     b.Property<string>("TournamentNormalizedName")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -380,21 +384,6 @@ namespace api.Migrations
                     b.HasIndex("TournamentNormalizedName");
 
                     b.ToTable("Team");
-                });
-
-            modelBuilder.Entity("api.Models.DBPoketeamModels.TeamTag", b =>
-                {
-                    b.Property<string>("TagsIdentifier")
-                        .HasColumnType("character varying(16)");
-
-                    b.Property<string>("TeamsId")
-                        .HasColumnType("character varying(10)");
-
-                    b.HasKey("TagsIdentifier", "TeamsId");
-
-                    b.HasIndex("TeamsId");
-
-                    b.ToTable("TeamTag");
                 });
 
             modelBuilder.Entity("api.Models.DBPoketeamModels.Tournament", b =>
@@ -609,21 +598,6 @@ namespace api.Migrations
                     b.Navigation("Player");
 
                     b.Navigation("Tournament");
-                });
-
-            modelBuilder.Entity("api.Models.DBPoketeamModels.TeamTag", b =>
-                {
-                    b.HasOne("api.Models.DBPoketeamModels.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsIdentifier")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("api.Models.DBPoketeamModels.Team", null)
-                        .WithMany()
-                        .HasForeignKey("TeamsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("api.Models.DBPoketeamModels.Team", b =>
