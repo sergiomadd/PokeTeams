@@ -18,6 +18,8 @@ export class ThemeService
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
   selectedTheme?: Theme;
 
+  tagBackgroundColors = tagBackgroundColors;
+
   constructor()
   {
     if(this.selectedTheme$)
@@ -74,9 +76,24 @@ export class ThemeService
       })
   }
 
-  getTagTextColor(backgroundColor: string): string
+  getTagBgColor(color: number | string): string
   {
-    if(tagTextColors[tagBackgroundColors.indexOf(backgroundColor)])
+    if(typeof color === "string")
+    {
+      color = +color;
+    }
+    console.log(this.tagBackgroundColors[color]);
+    return this.tagBackgroundColors[color];
+  }
+
+  getTagTextColor(color: number | string): string
+  {
+    if(typeof color === "string")
+    {
+      color = +color;
+    }
+    //console.log(color);
+    if(tagTextColors[color])
     {
       return themes[1].colors['--text-color'];
     }

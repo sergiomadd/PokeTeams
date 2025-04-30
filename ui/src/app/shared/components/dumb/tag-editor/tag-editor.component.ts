@@ -33,7 +33,7 @@ export class TagEditorComponent
     name: ['', [Validators.required, Validators.maxLength(16)]],
     desc: ['', [Validators.maxLength(256)]],
     color: [0]
-  }, { updateOn: "blur" });
+  });
   formSubmitted: boolean = false;
 
   tag: Tag = 
@@ -55,10 +55,6 @@ export class TagEditorComponent
       {
         this.tag.name = value ?? "";
         this.tag.identifier = value ?? "";
-        if(value && !await this.teamService.checkTagAvailable(value))
-        {
-          this.form.controls.name.setErrors({ "tagTaken": true });
-        }
       })
     this.form.controls.desc.valueChanges.subscribe(value => 
       {
@@ -93,13 +89,21 @@ export class TagEditorComponent
     this.formSubmitted = false;
   }
 
-  add()
+  async add()
   {
     this.formSubmitted = true;
     if(this.form.valid)
     {
-      this.addEvent.emit(this.tag);
-      this.resetEditor();
+      let tagAvailable: boolean = await this.teamService.checkTagAvailable(this.tag.name);
+      if(!tagAvailable)
+      {
+        this.form.controls.name.setErrors({ "tagTaken": true });
+      }
+      else
+      {
+        this.addEvent.emit(this.tag);
+        this.resetEditor();
+      }
     }
   }
 

@@ -161,7 +161,7 @@ export class TeamEditorComponent
       }
       else if(this.team.tags.some(t => t.identifier == tag.identifier))
       {
-        this.feedback = this.translateSergice.instant("tag_input-feedback");
+        this.feedback = this.translateSergice.instant("team.editor.tag_input-feedback");
       }
     }
     else
