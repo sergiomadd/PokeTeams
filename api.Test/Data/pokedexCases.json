@@ -9,17 +9,15 @@
         "result":
         {
           "identifier": "awakening",
-          "name":
-          {
+          "name": {
             "content": "Awakening",
             "language": "en"
           },
-          "prose":
-          {
-            "content": "Used on a party Pokémon\r\n:   Cures [sleep](https://bulbapedia.bulbagarden.net/wiki/Sleep_(status_condition)){mechanic}.",
+          "prose": {
+            "content": "Used on a party Pokémon\n:   Cures [sleep](https://bulbapedia.bulbagarden.net/wiki/Sleep_(status_condition)){mechanic}.",
             "language": "en"
           },
-          "iconPath": "https://localhost:7134/images/sprites/items/awakening.png"
+          "iconPath": "https://localhost:7134/images/items/awakening.png"
         }
       },
       "query1":
@@ -30,31 +28,31 @@
           {
             "name": "Pure Incense",
             "identifier": "pure-incense",
-            "icon": "https://localhost:7134/images/sprites/items/pure-incense.png",
+            "icon": "https://localhost:7134/images/items/pure-incense.png",
             "type": "item"
           },
           {
             "name": "Purple Nectar",
             "identifier": "purple-nectar",
-            "icon": "https://localhost:7134/images/sprites/items/purple-nectar.png",
+            "icon": "https://localhost:7134/images/items/purple-nectar.png",
             "type": "item"
           },
           {
             "name": "Purple Petal",
             "identifier": "purple-petal",
-            "icon": "https://localhost:7134/images/sprites/items/purple-petal.png",
+            "icon": "https://localhost:7134/images/items/purple-petal.png",
             "type": "item"
           },
           {
             "name": "Pungent Root",
             "identifier": "pungent-root",
-            "icon": "https://localhost:7134/images/sprites/items/pungent-root.png",
+            "icon": "https://localhost:7134/images/items/pungent-root.png",
             "type": "item"
           },
           {
             "name": "Punching Glove",
             "identifier": "punching-glove",
-            "icon": "https://localhost:7134/images/sprites/items/punching-glove.png",
+            "icon": "https://localhost:7134/images/items/punching-glove.png",
             "type": "item"
           }
         ]
@@ -133,366 +131,366 @@
         "identifier": "aerial-ace",
         "result":
         {
-          "identifier": "aerial-ace",
-          "name": {
-            "content": "Aerial Ace",
-            "language": "en"
-          },
-          "pokeType": {
-            "identifier": "flying",
+            "identifier": "aerial-ace",
             "name": {
-              "content": "Flying",
-              "language": "en"
+                "content": "Aerial Ace",
+                "language": "en"
             },
-            "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
-            "effectivenessAttack": {
-              "allValues": [
-                {
-                  "item1": {
-                    "identifier": "fighting",
-                    "name": {
-                      "content": "Fighting",
-                      "language": "en"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1": {
-                    "identifier": "rock",
-                    "name": {
-                      "content": "Rock",
-                      "language": "en"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1": {
-                    "identifier": "bug",
-                    "name": {
-                      "content": "Bug",
-                      "language": "en"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1": {
-                    "identifier": "steel",
-                    "name": {
-                      "content": "Steel",
-                      "language": "en"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/steel.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1": {
-                    "identifier": "grass",
-                    "name": {
-                      "content": "Grass",
-                      "language": "en"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1": {
-                    "identifier": "electric",
-                    "name": {
-                      "content": "Electric",
-                      "language": "en"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                }
-              ],
-              "doubleSuperEffective": [],
-              "superEffective": [
-                {
-                  "identifier": "fighting",
-                  "name": {
-                    "content": "Fighting",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "bug",
-                  "name": {
-                    "content": "Bug",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "grass",
-                  "name": {
-                    "content": "Grass",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                  "teratype": false
-                }
-              ],
-              "notVeryEffective": [
-                {
-                  "identifier": "rock",
-                  "name": {
-                    "content": "Rock",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "steel",
-                  "name": {
-                    "content": "Steel",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/steel.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "electric",
-                  "name": {
-                    "content": "Electric",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
-                  "teratype": false
-                }
-              ],
-              "doubleNotVeryEffective": [],
-              "inmune": []
-            },
-            "effectivenessDefense": {
-              "allValues": [
-                {
-                  "item1": {
-                    "identifier": "fighting",
-                    "name": {
-                      "content": "Fighting",
-                      "language": "en"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1": {
-                    "identifier": "ground",
-                    "name": {
-                      "content": "Ground",
-                      "language": "en"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ground.png",
-                    "teratype": false
-                  },
-                  "item2": 0
-                },
-                {
-                  "item1": {
-                    "identifier": "rock",
-                    "name": {
-                      "content": "Rock",
-                      "language": "en"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1": {
-                    "identifier": "bug",
-                    "name": {
-                      "content": "Bug",
-                      "language": "en"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1": {
-                    "identifier": "grass",
-                    "name": {
-                      "content": "Grass",
-                      "language": "en"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1": {
-                    "identifier": "electric",
-                    "name": {
-                      "content": "Electric",
-                      "language": "en"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1": {
-                    "identifier": "ice",
-                    "name": {
-                      "content": "Ice",
-                      "language": "en"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ice.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                }
-              ],
-              "doubleSuperEffective": [],
-              "superEffective": [
-                {
-                  "identifier": "rock",
-                  "name": {
-                    "content": "Rock",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "electric",
-                  "name": {
-                    "content": "Electric",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "ice",
-                  "name": {
-                    "content": "Ice",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ice.png",
-                  "teratype": false
-                }
-              ],
-              "notVeryEffective": [
-                {
-                  "identifier": "fighting",
-                  "name": {
-                    "content": "Fighting",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "bug",
-                  "name": {
-                    "content": "Bug",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "grass",
-                  "name": {
-                    "content": "Grass",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                  "teratype": false
-                }
-              ],
-              "doubleNotVeryEffective": [],
-              "inmune": [
-                {
-                  "identifier": "ground",
-                  "name": {
-                    "content": "Ground",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ground.png",
-                  "teratype": false
-                }
-              ]
-            },
-            "teratype": false
-          },
-          "damageClass": {
-            "name": "Physical",
-            "description": "Physical damage, controlled by Attack and Defense",
-            "iconPath": "https://localhost:7134/images/sprites/damage-class/2.png"
-          },
-          "power": 60,
-          "pp": 20,
-          "accuracy": null,
-          "priority": 0,
-          "target": {
-            "name": "Selected Pokémon",
-            "description": {
-              "content": "One other Pokémon on the field, selected by the trainer.",
-              "language": "en"
-            }
-          },
-          "effect": {
-            "short": {
-              "content": "Never misses.",
-              "language": "en"
-            },
-            "long": {
-              "content": "Inflicts [regular damage](https://bulbapedia.bulbagarden.net/wiki/Type#Type_effectiveness){mechanic}.  Ignores [accuracy](https://bulbapedia.bulbagarden.net/wiki/Accuracy){mechanic} and [evasion](https://bulbapedia.bulbagarden.net/wiki/Stat#Evasion){mechanic} modifiers.",
-              "language": "en"
-            },
-            "chance": null
-          },
-          "meta": {
-            "minHits": 2,
-            "maxHits": 5,
-            "minTurns": null,
-            "maxTurns": null,
-            "drain": 0,
-            "healing": 0,
-            "critRate": 0,
-            "statusChance": 0,
-            "flinchChance": 0,
-            "statChange": {
-              "stat": {
-                "identifier": null,
+            "pokeType": {
+                "identifier": "flying",
                 "name": {
-                  "content": null,
-                  "language": "en"
+                    "content": "Flying",
+                    "language": "en"
                 },
-                "value": null
-              },
-              "change": null,
-              "changeChance": 0
+                "iconPath": "https://localhost:7134/images/types/flying.png",
+                "effectivenessAttack": {
+                    "allValues": [
+                        {
+                            "item1": {
+                                "identifier": "fighting",
+                                "name": {
+                                    "content": "Fighting",
+                                    "language": "en"
+                                },
+                                "iconPath": "https://localhost:7134/images/types/fighting.png",
+                                "teratype": false
+                            },
+                            "item2": 2
+                        },
+                        {
+                            "item1": {
+                                "identifier": "rock",
+                                "name": {
+                                    "content": "Rock",
+                                    "language": "en"
+                                },
+                                "iconPath": "https://localhost:7134/images/types/rock.png",
+                                "teratype": false
+                            },
+                            "item2": 0.5
+                        },
+                        {
+                            "item1": {
+                                "identifier": "bug",
+                                "name": {
+                                    "content": "Bug",
+                                    "language": "en"
+                                },
+                                "iconPath": "https://localhost:7134/images/types/bug.png",
+                                "teratype": false
+                            },
+                            "item2": 2
+                        },
+                        {
+                            "item1": {
+                                "identifier": "steel",
+                                "name": {
+                                    "content": "Steel",
+                                    "language": "en"
+                                },
+                                "iconPath": "https://localhost:7134/images/types/steel.png",
+                                "teratype": false
+                            },
+                            "item2": 0.5
+                        },
+                        {
+                            "item1": {
+                                "identifier": "grass",
+                                "name": {
+                                    "content": "Grass",
+                                    "language": "en"
+                                },
+                                "iconPath": "https://localhost:7134/images/types/grass.png",
+                                "teratype": false
+                            },
+                            "item2": 2
+                        },
+                        {
+                            "item1": {
+                                "identifier": "electric",
+                                "name": {
+                                    "content": "Electric",
+                                    "language": "en"
+                                },
+                                "iconPath": "https://localhost:7134/images/types/electric.png",
+                                "teratype": false
+                            },
+                            "item2": 0.5
+                        }
+                    ],
+                    "doubleSuperEffective": [],
+                    "superEffective": [
+                        {
+                            "identifier": "fighting",
+                            "name": {
+                                "content": "Fighting",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/fighting.png",
+                            "teratype": false
+                        },
+                        {
+                            "identifier": "bug",
+                            "name": {
+                                "content": "Bug",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/bug.png",
+                            "teratype": false
+                        },
+                        {
+                            "identifier": "grass",
+                            "name": {
+                                "content": "Grass",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/grass.png",
+                            "teratype": false
+                        }
+                    ],
+                    "notVeryEffective": [
+                        {
+                            "identifier": "rock",
+                            "name": {
+                                "content": "Rock",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/rock.png",
+                            "teratype": false
+                        },
+                        {
+                            "identifier": "steel",
+                            "name": {
+                                "content": "Steel",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/steel.png",
+                            "teratype": false
+                        },
+                        {
+                            "identifier": "electric",
+                            "name": {
+                                "content": "Electric",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/electric.png",
+                            "teratype": false
+                        }
+                    ],
+                    "doubleNotVeryEffective": [],
+                    "inmune": []
+                },
+                "effectivenessDefense": {
+                    "allValues": [
+                        {
+                            "item1": {
+                                "identifier": "fighting",
+                                "name": {
+                                    "content": "Fighting",
+                                    "language": "en"
+                                },
+                                "iconPath": "https://localhost:7134/images/types/fighting.png",
+                                "teratype": false
+                            },
+                            "item2": 0.5
+                        },
+                        {
+                            "item1": {
+                                "identifier": "ground",
+                                "name": {
+                                    "content": "Ground",
+                                    "language": "en"
+                                },
+                                "iconPath": "https://localhost:7134/images/types/ground.png",
+                                "teratype": false
+                            },
+                            "item2": 0
+                        },
+                        {
+                            "item1": {
+                                "identifier": "rock",
+                                "name": {
+                                    "content": "Rock",
+                                    "language": "en"
+                                },
+                                "iconPath": "https://localhost:7134/images/types/rock.png",
+                                "teratype": false
+                            },
+                            "item2": 2
+                        },
+                        {
+                            "item1": {
+                                "identifier": "bug",
+                                "name": {
+                                    "content": "Bug",
+                                    "language": "en"
+                                },
+                                "iconPath": "https://localhost:7134/images/types/bug.png",
+                                "teratype": false
+                            },
+                            "item2": 0.5
+                        },
+                        {
+                            "item1": {
+                                "identifier": "grass",
+                                "name": {
+                                    "content": "Grass",
+                                    "language": "en"
+                                },
+                                "iconPath": "https://localhost:7134/images/types/grass.png",
+                                "teratype": false
+                            },
+                            "item2": 0.5
+                        },
+                        {
+                            "item1": {
+                                "identifier": "electric",
+                                "name": {
+                                    "content": "Electric",
+                                    "language": "en"
+                                },
+                                "iconPath": "https://localhost:7134/images/types/electric.png",
+                                "teratype": false
+                            },
+                            "item2": 2
+                        },
+                        {
+                            "item1": {
+                                "identifier": "ice",
+                                "name": {
+                                    "content": "Ice",
+                                    "language": "en"
+                                },
+                                "iconPath": "https://localhost:7134/images/types/ice.png",
+                                "teratype": false
+                            },
+                            "item2": 2
+                        }
+                    ],
+                    "doubleSuperEffective": [],
+                    "superEffective": [
+                        {
+                            "identifier": "rock",
+                            "name": {
+                                "content": "Rock",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/rock.png",
+                            "teratype": false
+                        },
+                        {
+                            "identifier": "electric",
+                            "name": {
+                                "content": "Electric",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/electric.png",
+                            "teratype": false
+                        },
+                        {
+                            "identifier": "ice",
+                            "name": {
+                                "content": "Ice",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/ice.png",
+                            "teratype": false
+                        }
+                    ],
+                    "notVeryEffective": [
+                        {
+                            "identifier": "fighting",
+                            "name": {
+                                "content": "Fighting",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/fighting.png",
+                            "teratype": false
+                        },
+                        {
+                            "identifier": "bug",
+                            "name": {
+                                "content": "Bug",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/bug.png",
+                            "teratype": false
+                        },
+                        {
+                            "identifier": "grass",
+                            "name": {
+                                "content": "Grass",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/grass.png",
+                            "teratype": false
+                        }
+                    ],
+                    "doubleNotVeryEffective": [],
+                    "inmune": [
+                        {
+                            "identifier": "ground",
+                            "name": {
+                                "content": "Ground",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/ground.png",
+                            "teratype": false
+                        }
+                    ]
+                },
+                "teratype": false
+            },
+            "damageClass": {
+                "name": "Physical",
+                "description": "Physical damage, controlled by Attack and Defense",
+                "iconPath": "https://localhost:7134/images/damage-class/2.png"
+            },
+            "power": 60,
+            "pp": 20,
+            "accuracy": null,
+            "priority": 0,
+            "target": {
+                "name": "Selected Pokémon",
+                "description": {
+                    "content": "One other Pokémon on the field, selected by the trainer.",
+                    "language": "en"
+                }
+            },
+            "effect": {
+                "short": {
+                    "content": "Never misses.",
+                    "language": "en"
+                },
+                "long": {
+                    "content": "Inflicts regular damage.  Ignores [accuracy](https://bulbapedia.bulbagarden.net/wiki/Accuracy){mechanic} and [evasion](https://bulbapedia.bulbagarden.net/wiki/Stat#Evasion){mechanic} modifiers.",
+                    "language": "en"
+                },
+                "chance": null
+            },
+            "meta": {
+                "minHits": 2,
+                "maxHits": 5,
+                "minTurns": null,
+                "maxTurns": null,
+                "drain": 0,
+                "healing": 0,
+                "critRate": 0,
+                "statusChance": 0,
+                "flinchChance": 0,
+                "statChange": {
+                    "stat": {
+                        "identifier": null,
+                        "name": {
+                            "content": null,
+                            "language": "en"
+                        },
+                        "value": null
+                    },
+                    "change": null,
+                    "changeChance": 0
+                }
             }
-          }
         }
       },
       "DTO2":
@@ -500,24 +498,21 @@
         "identifier": "aerial-ace",
         "result":
         {
-          "identifier": "aerial-ace",
-          "name":
-          {
-            "content": "Aerial Ace",
-            "language": "en"
-          },
-          "pokeType":
-          {
-            "identifier": "flying",
-            "name":
-            {
-              "content": "Flying",
-              "language": "en"
+            "identifier": "aerial-ace",
+            "name": {
+                "content": "Aerial Ace",
+                "language": "en"
             },
-            "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
-            "teratype": false
-          }
-        }
+            "pokeType": {
+                "identifier": "flying",
+                "name": {
+                    "content": "Flying",
+                    "language": "en"
+                },
+                "iconPath": "https://localhost:7134/images/types/flying.png",
+                "teratype": false
+            }
+        },
       },
       "query1":
       {
@@ -525,27 +520,27 @@
         "queryResult":
         [
           {
-            "name": "Camouflage",
-            "identifier": "camouflage",
-            "icon": "https://localhost:7134/images/sprites/types/generation-ix/normal.png",
-            "type": "move"
-          },
-          {
-            "name": "Calm Mind",
-            "identifier": "calm-mind",
-            "icon": "https://localhost:7134/images/sprites/types/generation-ix/psychic.png",
-            "type": "move"
-          },
-          {
             "name": "Captivate",
             "identifier": "captivate",
-            "icon": "https://localhost:7134/images/sprites/types/generation-ix/normal.png",
+            "icon": "https://localhost:7134/images/types/normal.png",
+            "type": "move"
+          },
+          {
+            "name": "Camouflage",
+            "identifier": "camouflage",
+            "icon": "https://localhost:7134/images/types/normal.png",
             "type": "move"
           },
           {
             "name": "Catastropika",
             "identifier": "catastropika",
-            "icon": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
+            "icon": "https://localhost:7134/images/types/electric.png",
+            "type": "move"
+          },
+          {
+            "name": "Calm Mind",
+            "identifier": "calm-mind",
+            "icon": "https://localhost:7134/images/types/psychic.png",
             "type": "move"
           }
         ]
@@ -596,12 +591,11 @@
         "result":
         {
           "identifier": "ghost",
-          "name":
-          {
-            "content": "Ghost",
-            "language": "en"
+          "name": {
+              "content": "Ghost",
+              "language": "en"
           },
-          "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ghost.png",
+          "iconPath": "https://localhost:7134/images/types/ghost.png",
           "teratype": false
         }
       },
@@ -609,675 +603,568 @@
       {
         "identifier": "ghost",
         "result":
-        {
+{
+  "identifier": "ghost",
+  "name": {
+    "content": "Ghost",
+    "language": "en"
+  },
+  "iconPath": "https://localhost:7134/images/types/ghost.png",
+  "effectivenessAttack": {
+    "allValues": [
+      {
+        "item1": {
+          "identifier": "normal",
+          "name": {
+            "content": "Normal",
+            "language": "en"
+          },
+          "iconPath": "https://localhost:7134/images/types/normal.png",
+          "teratype": false
+        },
+        "item2": 0
+      },
+      {
+        "item1": {
           "identifier": "ghost",
-          "name":
-          {
+          "name": {
             "content": "Ghost",
             "language": "en"
           },
-          "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ghost.png",
-          "effectivenessAttack":
-          {
-            "allValues":
-            [
-              {
-                "item1":
-                {
-                  "identifier": "normal",
-                  "name":
-                  {
-                    "content": "Normal",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/normal.png",
-                  "teratype": false
-                },
-                "item2": 0
-              },
-              {
-                "item1":
-                {
-                  "identifier": "ghost",
-                  "name":
-                  {
-                    "content": "Ghost",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ghost.png",
-                  "teratype": false
-                },
-                "item2": 2
-              },
-              {
-                "item1":
-                {
-                  "identifier": "psychic",
-                  "name":
-                  {
-                    "content": "Psychic",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/psychic.png",
-                  "teratype": false
-                },
-                "item2": 2
-              },
-              {
-                "item1":
-                {
-                  "identifier": "dark",
-                  "name":
-                  {
-                    "content": "Dark",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/dark.png",
-                  "teratype": false
-                },
-                "item2": 0.5
-              }
-            ],
-            "doubleSuperEffective":
-            [
-            ],
-            "superEffective":
-            [
-              {
-                "identifier": "ghost",
-                "name":
-                {
-                  "content": "Ghost",
-                  "language": "en"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ghost.png",
-                "teratype": false
-              },
-              {
-                "identifier": "psychic",
-                "name":
-                {
-                  "content": "Psychic",
-                  "language": "en"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/psychic.png",
-                "teratype": false
-              }
-            ],
-            "notVeryEffective":
-            [
-              {
-                "identifier": "dark",
-                "name":
-                {
-                  "content": "Dark",
-                  "language": "en"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/dark.png",
-                "teratype": false
-              }
-            ],
-            "doubleNotVeryEffective":
-            [
-            ],
-            "inmune":
-            [
-              {
-                "identifier": "normal",
-                "name":
-                {
-                  "content": "Normal",
-                  "language": "en"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/normal.png",
-                "teratype": false
-              }
-            ]
-          },
-          "effectivenessDefense":
-          {
-            "allValues":
-            [
-              {
-                "item1":
-                {
-                  "identifier": "normal",
-                  "name":
-                  {
-                    "content": "Normal",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/normal.png",
-                  "teratype": false
-                },
-                "item2": 0
-              },
-              {
-                "item1":
-                {
-                  "identifier": "fighting",
-                  "name":
-                  {
-                    "content": "Fighting",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
-                  "teratype": false
-                },
-                "item2": 0
-              },
-              {
-                "item1":
-                {
-                  "identifier": "poison",
-                  "name":
-                  {
-                    "content": "Poison",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/poison.png",
-                  "teratype": false
-                },
-                "item2": 0.5
-              },
-              {
-                "item1":
-                {
-                  "identifier": "bug",
-                  "name":
-                  {
-                    "content": "Bug",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
-                  "teratype": false
-                },
-                "item2": 0.5
-              },
-              {
-                "item1":
-                {
-                  "identifier": "ghost",
-                  "name":
-                  {
-                    "content": "Ghost",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ghost.png",
-                  "teratype": false
-                },
-                "item2": 2
-              },
-              {
-                "item1":
-                {
-                  "identifier": "dark",
-                  "name":
-                  {
-                    "content": "Dark",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/dark.png",
-                  "teratype": false
-                },
-                "item2": 2
-              }
-            ],
-            "doubleSuperEffective":
-            [
-            ],
-            "superEffective":
-            [
-              {
-                "identifier": "ghost",
-                "name":
-                {
-                  "content": "Ghost",
-                  "language": "en"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ghost.png",
-                "teratype": false
-              },
-              {
-                "identifier": "dark",
-                "name":
-                {
-                  "content": "Dark",
-                  "language": "en"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/dark.png",
-                "teratype": false
-              }
-            ],
-            "notVeryEffective":
-            [
-              {
-                "identifier": "poison",
-                "name":
-                {
-                  "content": "Poison",
-                  "language": "en"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/poison.png",
-                "teratype": false
-              },
-              {
-                "identifier": "bug",
-                "name":
-                {
-                  "content": "Bug",
-                  "language": "en"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
-                "teratype": false
-              }
-            ],
-            "doubleNotVeryEffective":
-            [
-            ],
-            "inmune":
-            [
-              {
-                "identifier": "normal",
-                "name":
-                {
-                  "content": "Normal",
-                  "language": "en"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/normal.png",
-                "teratype": false
-              },
-              {
-                "identifier": "fighting",
-                "name":
-                {
-                  "content": "Fighting",
-                  "language": "en"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
-                "teratype": false
-              }
-            ]
-          },
+          "iconPath": "https://localhost:7134/images/types/ghost.png",
           "teratype": false
-        }
+        },
+        "item2": 2
+      },
+      {
+        "item1": {
+          "identifier": "psychic",
+          "name": {
+            "content": "Psychic",
+            "language": "en"
+          },
+          "iconPath": "https://localhost:7134/images/types/psychic.png",
+          "teratype": false
+        },
+        "item2": 2
+      },
+      {
+        "item1": {
+          "identifier": "dark",
+          "name": {
+            "content": "Dark",
+            "language": "en"
+          },
+          "iconPath": "https://localhost:7134/images/types/dark.png",
+          "teratype": false
+        },
+        "item2": 0.5
+      }
+    ],
+    "doubleSuperEffective": [],
+    "superEffective": [
+      {
+        "identifier": "ghost",
+        "name": {
+          "content": "Ghost",
+          "language": "en"
+        },
+        "iconPath": "https://localhost:7134/images/types/ghost.png",
+        "teratype": false
+      },
+      {
+        "identifier": "psychic",
+        "name": {
+          "content": "Psychic",
+          "language": "en"
+        },
+        "iconPath": "https://localhost:7134/images/types/psychic.png",
+        "teratype": false
+      }
+    ],
+    "notVeryEffective": [
+      {
+        "identifier": "dark",
+        "name": {
+          "content": "Dark",
+          "language": "en"
+        },
+        "iconPath": "https://localhost:7134/images/types/dark.png",
+        "teratype": false
+      }
+    ],
+    "doubleNotVeryEffective": [],
+    "inmune": [
+      {
+        "identifier": "normal",
+        "name": {
+          "content": "Normal",
+          "language": "en"
+        },
+        "iconPath": "https://localhost:7134/images/types/normal.png",
+        "teratype": false
+      }
+    ]
+  },
+  "effectivenessDefense": {
+    "allValues": [
+      {
+        "item1": {
+          "identifier": "normal",
+          "name": {
+            "content": "Normal",
+            "language": "en"
+          },
+          "iconPath": "https://localhost:7134/images/types/normal.png",
+          "teratype": false
+        },
+        "item2": 0
+      },
+      {
+        "item1": {
+          "identifier": "fighting",
+          "name": {
+            "content": "Fighting",
+            "language": "en"
+          },
+          "iconPath": "https://localhost:7134/images/types/fighting.png",
+          "teratype": false
+        },
+        "item2": 0
+      },
+      {
+        "item1": {
+          "identifier": "poison",
+          "name": {
+            "content": "Poison",
+            "language": "en"
+          },
+          "iconPath": "https://localhost:7134/images/types/poison.png",
+          "teratype": false
+        },
+        "item2": 0.5
+      },
+      {
+        "item1": {
+          "identifier": "bug",
+          "name": {
+            "content": "Bug",
+            "language": "en"
+          },
+          "iconPath": "https://localhost:7134/images/types/bug.png",
+          "teratype": false
+        },
+        "item2": 0.5
+      },
+      {
+        "item1": {
+          "identifier": "ghost",
+          "name": {
+            "content": "Ghost",
+            "language": "en"
+          },
+          "iconPath": "https://localhost:7134/images/types/ghost.png",
+          "teratype": false
+        },
+        "item2": 2
+      },
+      {
+        "item1": {
+          "identifier": "dark",
+          "name": {
+            "content": "Dark",
+            "language": "en"
+          },
+          "iconPath": "https://localhost:7134/images/types/dark.png",
+          "teratype": false
+        },
+        "item2": 2
+      }
+    ],
+    "doubleSuperEffective": [],
+    "superEffective": [
+      {
+        "identifier": "ghost",
+        "name": {
+          "content": "Ghost",
+          "language": "en"
+        },
+        "iconPath": "https://localhost:7134/images/types/ghost.png",
+        "teratype": false
+      },
+      {
+        "identifier": "dark",
+        "name": {
+          "content": "Dark",
+          "language": "en"
+        },
+        "iconPath": "https://localhost:7134/images/types/dark.png",
+        "teratype": false
+      }
+    ],
+    "notVeryEffective": [
+      {
+        "identifier": "poison",
+        "name": {
+          "content": "Poison",
+          "language": "en"
+        },
+        "iconPath": "https://localhost:7134/images/types/poison.png",
+        "teratype": false
+      },
+      {
+        "identifier": "bug",
+        "name": {
+          "content": "Bug",
+          "language": "en"
+        },
+        "iconPath": "https://localhost:7134/images/types/bug.png",
+        "teratype": false
+      }
+    ],
+    "doubleNotVeryEffective": [],
+    "inmune": [
+      {
+        "identifier": "normal",
+        "name": {
+          "content": "Normal",
+          "language": "en"
+        },
+        "iconPath": "https://localhost:7134/images/types/normal.png",
+        "teratype": false
+      },
+      {
+        "identifier": "fighting",
+        "name": {
+          "content": "Fighting",
+          "language": "en"
+        },
+        "iconPath": "https://localhost:7134/images/types/fighting.png",
+        "teratype": false
+      }
+    ]
+  },
+  "teratype": false
+}
       },
       "DTO3":
       {
-        "identifier": "ghost",
+        "identifier": 7,
         "result":
         {
           "type1": {
-              "identifier": "water",
-              "name": {
-                  "content": "Water",
-                  "language": "en"
-              },
-              "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/water.png",
-              "teratype": false
-          },
+                    "identifier": "water",
+                    "name": {
+                        "content": "Water",
+                        "language": "en"
+                    },
+                    "iconPath": "https://localhost:7134/images/types/water.png",
+                    "teratype": false
+                },
           "type2": null
         }
       },
       "DTO4":
       {
-        "identifier": "ghost",
+        "identifier": 7,
         "result":
         {
-          "dualEffectiveness": null,
-          "type1":
-          {
+        "dualEffectiveness": null,
+        "type1": {
             "identifier": "water",
-            "name":
-            {
-              "content": "Water",
-              "language": "en"
+            "name": {
+                "content": "Water",
+                "language": "en"
             },
-            "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/water.png",
-            "effectivenessAttack":
-            {
-              "allValues":
-              [
-                {
-                  "item1":
-                  {
-                    "identifier": "ground",
-                    "name":
+            "iconPath": "https://localhost:7134/images/types/water.png",
+            "effectivenessAttack": {
+                "allValues": [
                     {
-                      "content": "Ground",
-                      "language": "en"
+                        "item1": {
+                            "identifier": "ground",
+                            "name": {
+                                "content": "Ground",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/ground.png",
+                            "teratype": false
+                        },
+                        "item2": 2
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ground.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "rock",
-                    "name":
                     {
-                      "content": "Rock",
-                      "language": "en"
+                        "item1": {
+                            "identifier": "rock",
+                            "name": {
+                                "content": "Rock",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/rock.png",
+                            "teratype": false
+                        },
+                        "item2": 2
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "fire",
-                    "name":
                     {
-                      "content": "Fire",
-                      "language": "en"
+                        "item1": {
+                            "identifier": "fire",
+                            "name": {
+                                "content": "Fire",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/fire.png",
+                            "teratype": false
+                        },
+                        "item2": 2
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fire.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "water",
-                    "name":
                     {
-                      "content": "Water",
-                      "language": "en"
+                        "item1": {
+                            "identifier": "water",
+                            "name": {
+                                "content": "Water",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/water.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/water.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "grass",
-                    "name":
                     {
-                      "content": "Grass",
-                      "language": "en"
+                        "item1": {
+                            "identifier": "grass",
+                            "name": {
+                                "content": "Grass",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/grass.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "dragon",
-                    "name":
                     {
-                      "content": "Dragon",
-                      "language": "en"
+                        "item1": {
+                            "identifier": "dragon",
+                            "name": {
+                                "content": "Dragon",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/dragon.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
+                    }
+                ],
+                "doubleSuperEffective": [],
+                "superEffective": [
+                    {
+                        "identifier": "ground",
+                        "name": {
+                            "content": "Ground",
+                            "language": "en"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/ground.png",
+                        "teratype": false
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/dragon.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                }
-              ],
-              "doubleSuperEffective":
-              [
-              ],
-              "superEffective":
-              [
-                {
-                  "identifier": "ground",
-                  "name":
-                  {
-                    "content": "Ground",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ground.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "rock",
-                  "name":
-                  {
-                    "content": "Rock",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "fire",
-                  "name":
-                  {
-                    "content": "Fire",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fire.png",
-                  "teratype": false
-                }
-              ],
-              "notVeryEffective":
-              [
-                {
-                  "identifier": "water",
-                  "name":
-                  {
-                    "content": "Water",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/water.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "grass",
-                  "name":
-                  {
-                    "content": "Grass",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "dragon",
-                  "name":
-                  {
-                    "content": "Dragon",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/dragon.png",
-                  "teratype": false
-                }
-              ],
-              "doubleNotVeryEffective":
-              [
-              ],
-              "inmune":
-              [
-              ]
+                    {
+                        "identifier": "rock",
+                        "name": {
+                            "content": "Rock",
+                            "language": "en"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/rock.png",
+                        "teratype": false
+                    },
+                    {
+                        "identifier": "fire",
+                        "name": {
+                            "content": "Fire",
+                            "language": "en"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/fire.png",
+                        "teratype": false
+                    }
+                ],
+                "notVeryEffective": [
+                    {
+                        "identifier": "water",
+                        "name": {
+                            "content": "Water",
+                            "language": "en"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/water.png",
+                        "teratype": false
+                    },
+                    {
+                        "identifier": "grass",
+                        "name": {
+                            "content": "Grass",
+                            "language": "en"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/grass.png",
+                        "teratype": false
+                    },
+                    {
+                        "identifier": "dragon",
+                        "name": {
+                            "content": "Dragon",
+                            "language": "en"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/dragon.png",
+                        "teratype": false
+                    }
+                ],
+                "doubleNotVeryEffective": [],
+                "inmune": []
             },
-            "effectivenessDefense":
-            {
-              "allValues":
-              [
-                {
-                  "item1":
-                  {
-                    "identifier": "steel",
-                    "name":
+            "effectivenessDefense": {
+                "allValues": [
                     {
-                      "content": "Steel",
-                      "language": "en"
+                        "item1": {
+                            "identifier": "steel",
+                            "name": {
+                                "content": "Steel",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/steel.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/steel.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "fire",
-                    "name":
                     {
-                      "content": "Fire",
-                      "language": "en"
+                        "item1": {
+                            "identifier": "fire",
+                            "name": {
+                                "content": "Fire",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/fire.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fire.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "water",
-                    "name":
                     {
-                      "content": "Water",
-                      "language": "en"
+                        "item1": {
+                            "identifier": "water",
+                            "name": {
+                                "content": "Water",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/water.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/water.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "grass",
-                    "name":
                     {
-                      "content": "Grass",
-                      "language": "en"
+                        "item1": {
+                            "identifier": "grass",
+                            "name": {
+                                "content": "Grass",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/grass.png",
+                            "teratype": false
+                        },
+                        "item2": 2
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "electric",
-                    "name":
                     {
-                      "content": "Electric",
-                      "language": "en"
+                        "item1": {
+                            "identifier": "electric",
+                            "name": {
+                                "content": "Electric",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/electric.png",
+                            "teratype": false
+                        },
+                        "item2": 2
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "ice",
-                    "name":
                     {
-                      "content": "Ice",
-                      "language": "en"
+                        "item1": {
+                            "identifier": "ice",
+                            "name": {
+                                "content": "Ice",
+                                "language": "en"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/ice.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
+                    }
+                ],
+                "doubleSuperEffective": [],
+                "superEffective": [
+                    {
+                        "identifier": "grass",
+                        "name": {
+                            "content": "Grass",
+                            "language": "en"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/grass.png",
+                        "teratype": false
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ice.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                }
-              ],
-              "doubleSuperEffective":
-              [
-              ],
-              "superEffective":
-              [
-                {
-                  "identifier": "grass",
-                  "name":
-                  {
-                    "content": "Grass",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "electric",
-                  "name":
-                  {
-                    "content": "Electric",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
-                  "teratype": false
-                }
-              ],
-              "notVeryEffective":
-              [
-                {
-                  "identifier": "steel",
-                  "name":
-                  {
-                    "content": "Steel",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/steel.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "fire",
-                  "name":
-                  {
-                    "content": "Fire",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fire.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "water",
-                  "name":
-                  {
-                    "content": "Water",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/water.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "ice",
-                  "name":
-                  {
-                    "content": "Ice",
-                    "language": "en"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ice.png",
-                  "teratype": false
-                }
-              ],
-              "doubleNotVeryEffective":
-              [
-              ],
-              "inmune":
-              [
-              ]
+                    {
+                        "identifier": "electric",
+                        "name": {
+                            "content": "Electric",
+                            "language": "en"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/electric.png",
+                        "teratype": false
+                    }
+                ],
+                "notVeryEffective": [
+                    {
+                        "identifier": "steel",
+                        "name": {
+                            "content": "Steel",
+                            "language": "en"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/steel.png",
+                        "teratype": false
+                    },
+                    {
+                        "identifier": "fire",
+                        "name": {
+                            "content": "Fire",
+                            "language": "en"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/fire.png",
+                        "teratype": false
+                    },
+                    {
+                        "identifier": "water",
+                        "name": {
+                            "content": "Water",
+                            "language": "en"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/water.png",
+                        "teratype": false
+                    },
+                    {
+                        "identifier": "ice",
+                        "name": {
+                            "content": "Ice",
+                            "language": "en"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/ice.png",
+                        "teratype": false
+                    }
+                ],
+                "doubleNotVeryEffective": [],
+                "inmune": []
             },
             "teratype": false
-          },
-          "type2": null
-        }
+        },
+        "type2": null
+    }
       },
       "query1":
       {
-        "identifier": "ca",
+        "identifier": "w",
         "queryResult":
         [
           {
             "name": "Water",
             "identifier": "water",
-            "icon": "https://localhost:7134/images/sprites/types/generation-viii/water.png",
+            "icon": "https://localhost:7134/images/teratypes/water.png",
             "type": "type"
           }
         ]
@@ -1294,17 +1181,15 @@
         "result":
         {
           "identifier": "awakening",
-          "name":
-          {
+          "name": {
             "content": "Despertar",
             "language": "es"
           },
-          "prose":
-          {
-            "content": "Used on a party Pokémon\r\n:   Cures [sleep](https://bulbapedia.bulbagarden.net/wiki/Sleep_(status_condition)){mechanic}.",
+          "prose": {
+            "content": "Used on a party Pokémon\n:   Cures [sleep](https://bulbapedia.bulbagarden.net/wiki/Sleep_(status_condition)){mechanic}.",
             "language": "en"
           },
-          "iconPath": "https://localhost:7134/images/sprites/items/awakening.png"
+          "iconPath": "https://localhost:7134/images/items/awakening.png"
         }
       },
       "query1":
@@ -1315,19 +1200,19 @@
           {
             "name": "Muda Concha",
             "identifier": "shed-shell",
-            "icon": "https://localhost:7134/images/sprites/items/shed-shell.png",
+            "icon": "https://localhost:7134/images/items/shed-shell.png",
             "type": "item"
           },
           {
             "name": "Musgo Brillante",
             "identifier": "luminous-moss",
-            "icon": "https://localhost:7134/images/sprites/items/luminous-moss.png",
+            "icon": "https://localhost:7134/images/items/luminous-moss.png",
             "type": "item"
           },
           {
             "name": "Muelle Estirado",
             "identifier": "stretchy-spring",
-            "icon": "https://localhost:7134/images/sprites/items/stretchy-spring.png",
+            "icon": "https://localhost:7134/images/items/stretchy-spring.png",
             "type": "item"
           }
         ]
@@ -1417,391 +1302,388 @@
       {
         "identifier": "aerial-ace",
         "result":
-          {
-            "identifier": "aerial-ace",
-            "name": {
-              "content": "Golpe Aéreo",
-              "language": "es"
-            },
-            "pokeType": {
-              "identifier": "flying",
-              "name": {
-                "content": "Volador",
-                "language": "es"
-              },
-              "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
-              "effectivenessAttack": {
-                "allValues": [
-                  {
+{
+    "identifier": "aerial-ace",
+    "name": {
+        "content": "Golpe Aéreo",
+        "language": "es"
+    },
+    "pokeType": {
+        "identifier": "flying",
+        "name": {
+            "content": "Volador",
+            "language": "es"
+        },
+        "iconPath": "https://localhost:7134/images/types/flying.png",
+        "effectivenessAttack": {
+            "allValues": [
+                {
                     "item1": {
-                      "identifier": "fighting",
-                      "name": {
-                        "content": "Lucha",
-                        "language": "es"
-                      },
-                      "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
-                      "teratype": false
+                        "identifier": "fighting",
+                        "name": {
+                            "content": "Lucha",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/fighting.png",
+                        "teratype": false
                     },
                     "item2": 2
-                  },
-                  {
+                },
+                {
                     "item1": {
-                      "identifier": "rock",
-                      "name": {
-                        "content": "Roca",
-                        "language": "es"
-                      },
-                      "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
-                      "teratype": false
+                        "identifier": "rock",
+                        "name": {
+                            "content": "Roca",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/rock.png",
+                        "teratype": false
                     },
                     "item2": 0.5
-                  },
-                  {
+                },
+                {
                     "item1": {
-                      "identifier": "bug",
-                      "name": {
-                        "content": "Bicho",
-                        "language": "es"
-                      },
-                      "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
-                      "teratype": false
+                        "identifier": "bug",
+                        "name": {
+                            "content": "Bicho",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/bug.png",
+                        "teratype": false
                     },
                     "item2": 2
-                  },
-                  {
+                },
+                {
                     "item1": {
-                      "identifier": "steel",
-                      "name": {
-                        "content": "Acero",
-                        "language": "es"
-                      },
-                      "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/steel.png",
-                      "teratype": false
+                        "identifier": "steel",
+                        "name": {
+                            "content": "Acero",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/steel.png",
+                        "teratype": false
                     },
                     "item2": 0.5
-                  },
-                  {
+                },
+                {
                     "item1": {
-                      "identifier": "grass",
-                      "name": {
-                        "content": "Planta",
-                        "language": "es"
-                      },
-                      "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                      "teratype": false
+                        "identifier": "grass",
+                        "name": {
+                            "content": "Planta",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/grass.png",
+                        "teratype": false
                     },
                     "item2": 2
-                  },
-                  {
+                },
+                {
                     "item1": {
-                      "identifier": "electric",
-                      "name": {
-                        "content": "Eléctrico",
-                        "language": "es"
-                      },
-                      "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
-                      "teratype": false
+                        "identifier": "electric",
+                        "name": {
+                            "content": "Eléctrico",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/electric.png",
+                        "teratype": false
                     },
                     "item2": 0.5
-                  }
-                ],
-                "doubleSuperEffective": [],
-                "superEffective": [
-                  {
+                }
+            ],
+            "doubleSuperEffective": [],
+            "superEffective": [
+                {
                     "identifier": "fighting",
                     "name": {
-                      "content": "Lucha",
-                      "language": "es"
+                        "content": "Lucha",
+                        "language": "es"
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
+                    "iconPath": "https://localhost:7134/images/types/fighting.png",
                     "teratype": false
-                  },
-                  {
+                },
+                {
                     "identifier": "bug",
                     "name": {
-                      "content": "Bicho",
-                      "language": "es"
+                        "content": "Bicho",
+                        "language": "es"
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
+                    "iconPath": "https://localhost:7134/images/types/bug.png",
                     "teratype": false
-                  },
-                  {
+                },
+                {
                     "identifier": "grass",
                     "name": {
-                      "content": "Planta",
-                      "language": "es"
+                        "content": "Planta",
+                        "language": "es"
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
+                    "iconPath": "https://localhost:7134/images/types/grass.png",
                     "teratype": false
-                  }
-                ],
-                "notVeryEffective": [
-                  {
+                }
+            ],
+            "notVeryEffective": [
+                {
                     "identifier": "rock",
                     "name": {
-                      "content": "Roca",
-                      "language": "es"
+                        "content": "Roca",
+                        "language": "es"
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
+                    "iconPath": "https://localhost:7134/images/types/rock.png",
                     "teratype": false
-                  },
-                  {
+                },
+                {
                     "identifier": "steel",
                     "name": {
-                      "content": "Acero",
-                      "language": "es"
+                        "content": "Acero",
+                        "language": "es"
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/steel.png",
+                    "iconPath": "https://localhost:7134/images/types/steel.png",
                     "teratype": false
-                  },
-                  {
+                },
+                {
                     "identifier": "electric",
                     "name": {
-                      "content": "Eléctrico",
-                      "language": "es"
-                    },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
-                    "teratype": false
-                  }
-                ],
-                "doubleNotVeryEffective": [],
-                "inmune": []
-              },
-              "effectivenessDefense": {
-                "allValues": [
-                  {
-                    "item1": {
-                      "identifier": "fighting",
-                      "name": {
-                        "content": "Lucha",
-                        "language": "es"
-                      },
-                      "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
-                      "teratype": false
-                    },
-                    "item2": 0.5
-                  },
-                  {
-                    "item1": {
-                      "identifier": "ground",
-                      "name": {
-                        "content": "Tierra",
-                        "language": "es"
-                      },
-                      "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ground.png",
-                      "teratype": false
-                    },
-                    "item2": 0
-                  },
-                  {
-                    "item1": {
-                      "identifier": "rock",
-                      "name": {
-                        "content": "Roca",
-                        "language": "es"
-                      },
-                      "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
-                      "teratype": false
-                    },
-                    "item2": 2
-                  },
-                  {
-                    "item1": {
-                      "identifier": "bug",
-                      "name": {
-                        "content": "Bicho",
-                        "language": "es"
-                      },
-                      "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
-                      "teratype": false
-                    },
-                    "item2": 0.5
-                  },
-                  {
-                    "item1": {
-                      "identifier": "grass",
-                      "name": {
-                        "content": "Planta",
-                        "language": "es"
-                      },
-                      "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                      "teratype": false
-                    },
-                    "item2": 0.5
-                  },
-                  {
-                    "item1": {
-                      "identifier": "electric",
-                      "name": {
                         "content": "Eléctrico",
                         "language": "es"
-                      },
-                      "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
-                      "teratype": false
                     },
-                    "item2": 2
-                  },
-                  {
+                    "iconPath": "https://localhost:7134/images/types/electric.png",
+                    "teratype": false
+                }
+            ],
+            "doubleNotVeryEffective": [],
+            "inmune": []
+        },
+        "effectivenessDefense": {
+            "allValues": [
+                {
                     "item1": {
-                      "identifier": "ice",
-                      "name": {
-                        "content": "Hielo",
-                        "language": "es"
-                      },
-                      "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ice.png",
-                      "teratype": false
+                        "identifier": "fighting",
+                        "name": {
+                            "content": "Lucha",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/fighting.png",
+                        "teratype": false
+                    },
+                    "item2": 0.5
+                },
+                {
+                    "item1": {
+                        "identifier": "ground",
+                        "name": {
+                            "content": "Tierra",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/ground.png",
+                        "teratype": false
+                    },
+                    "item2": 0
+                },
+                {
+                    "item1": {
+                        "identifier": "rock",
+                        "name": {
+                            "content": "Roca",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/rock.png",
+                        "teratype": false
                     },
                     "item2": 2
-                  }
-                ],
-                "doubleSuperEffective": [],
-                "superEffective": [
-                  {
+                },
+                {
+                    "item1": {
+                        "identifier": "bug",
+                        "name": {
+                            "content": "Bicho",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/bug.png",
+                        "teratype": false
+                    },
+                    "item2": 0.5
+                },
+                {
+                    "item1": {
+                        "identifier": "grass",
+                        "name": {
+                            "content": "Planta",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/grass.png",
+                        "teratype": false
+                    },
+                    "item2": 0.5
+                },
+                {
+                    "item1": {
+                        "identifier": "electric",
+                        "name": {
+                            "content": "Eléctrico",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/electric.png",
+                        "teratype": false
+                    },
+                    "item2": 2
+                },
+                {
+                    "item1": {
+                        "identifier": "ice",
+                        "name": {
+                            "content": "Hielo",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/ice.png",
+                        "teratype": false
+                    },
+                    "item2": 2
+                }
+            ],
+            "doubleSuperEffective": [],
+            "superEffective": [
+                {
                     "identifier": "rock",
                     "name": {
-                      "content": "Roca",
-                      "language": "es"
+                        "content": "Roca",
+                        "language": "es"
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
+                    "iconPath": "https://localhost:7134/images/types/rock.png",
                     "teratype": false
-                  },
-                  {
+                },
+                {
                     "identifier": "electric",
                     "name": {
-                      "content": "Eléctrico",
-                      "language": "es"
+                        "content": "Eléctrico",
+                        "language": "es"
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
+                    "iconPath": "https://localhost:7134/images/types/electric.png",
                     "teratype": false
-                  },
-                  {
+                },
+                {
                     "identifier": "ice",
                     "name": {
-                      "content": "Hielo",
-                      "language": "es"
+                        "content": "Hielo",
+                        "language": "es"
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ice.png",
+                    "iconPath": "https://localhost:7134/images/types/ice.png",
                     "teratype": false
-                  }
-                ],
-                "notVeryEffective": [
-                  {
+                }
+            ],
+            "notVeryEffective": [
+                {
                     "identifier": "fighting",
                     "name": {
-                      "content": "Lucha",
-                      "language": "es"
+                        "content": "Lucha",
+                        "language": "es"
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
+                    "iconPath": "https://localhost:7134/images/types/fighting.png",
                     "teratype": false
-                  },
-                  {
+                },
+                {
                     "identifier": "bug",
                     "name": {
-                      "content": "Bicho",
-                      "language": "es"
+                        "content": "Bicho",
+                        "language": "es"
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
+                    "iconPath": "https://localhost:7134/images/types/bug.png",
                     "teratype": false
-                  },
-                  {
+                },
+                {
                     "identifier": "grass",
                     "name": {
-                      "content": "Planta",
-                      "language": "es"
+                        "content": "Planta",
+                        "language": "es"
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
+                    "iconPath": "https://localhost:7134/images/types/grass.png",
                     "teratype": false
-                  }
-                ],
-                "doubleNotVeryEffective": [],
-                "inmune": [
-                  {
+                }
+            ],
+            "doubleNotVeryEffective": [],
+            "inmune": [
+                {
                     "identifier": "ground",
                     "name": {
-                      "content": "Tierra",
-                      "language": "es"
+                        "content": "Tierra",
+                        "language": "es"
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ground.png",
+                    "iconPath": "https://localhost:7134/images/types/ground.png",
                     "teratype": false
-                  }
-                ]
-              },
-              "teratype": false
-            },
-            "damageClass": {
-              "name": "Físico",
-              "description": "Daño Físico, controlado por el Ataque y Defensa",
-              "iconPath": "https://localhost:7134/images/sprites/damage-class/2.png"
-            },
-            "power": 60,
-            "pp": 20,
-            "accuracy": null,
-            "priority": 0,
-            "target": {
-              "name": "Selected Pokémon",
-              "description": {
-                "content": "One other Pokémon on the field, selected by the trainer.",
-                "language": "en"
-              }
-            },
-            "effect": {
-              "short": {
-                "content": "Never misses.",
-                "language": "en"
-              },
-              "long": {
-                "content": "Inflicts [regular damage](https://bulbapedia.bulbagarden.net/wiki/Type#Type_effectiveness){mechanic}.  Ignores [accuracy](https://bulbapedia.bulbagarden.net/wiki/Accuracy){mechanic} and [evasion](https://bulbapedia.bulbagarden.net/wiki/Stat#Evasion){mechanic} modifiers.",
-                "language": "en"
-              },
-              "chance": null
-            },
-            "meta": {
-              "minHits": 2,
-              "maxHits": 5,
-              "minTurns": null,
-              "maxTurns": null,
-              "drain": 0,
-              "healing": 0,
-              "critRate": 0,
-              "statusChance": 0,
-              "flinchChance": 0,
-              "statChange": {
-                "stat": {
-                  "identifier": null,
-                  "name": {
+                }
+            ]
+        },
+        "teratype": false
+    },
+    "damageClass": {
+        "name": "Físico",
+        "description": "Daño Físico, controlado por el Ataque y Defensa",
+        "iconPath": "https://localhost:7134/images/damage-class/2.png"
+    },
+    "power": 60,
+    "pp": 20,
+    "accuracy": null,
+    "priority": 0,
+    "target": {
+        "name": "Selected Pokémon",
+        "description": {
+            "content": "One other Pokémon on the field, selected by the trainer.",
+            "language": "en"
+        }
+    },
+    "effect": {
+        "short": {
+            "content": "Never misses.",
+            "language": "en"
+        },
+        "long": {
+            "content": "Inflicts regular damage.  Ignores [accuracy](https://bulbapedia.bulbagarden.net/wiki/Accuracy){mechanic} and [evasion](https://bulbapedia.bulbagarden.net/wiki/Stat#Evasion){mechanic} modifiers.",
+            "language": "en"
+        },
+        "chance": null
+    },
+    "meta": {
+        "minHits": 2,
+        "maxHits": 5,
+        "minTurns": null,
+        "maxTurns": null,
+        "drain": 0,
+        "healing": 0,
+        "critRate": 0,
+        "statusChance": 0,
+        "flinchChance": 0,
+        "statChange": {
+            "stat": {
+                "identifier": null,
+                "name": {
                     "content": null,
                     "language": "en"
-                  },
-                  "value": null
                 },
-                "change": null,
-                "changeChance": 0
-              }
-            }
-          }
+                "value": null
+            },
+            "change": null,
+            "changeChance": 0
+        }
+    }
+}
       },
       "DTO2":
       {
         "identifier": "aerial-ace",
         "result":
         {
-          "identifier": "aerial-ace",
-          "name":
-          {
-            "content": "Golpe Aéreo",
-            "language": "es"
-          },
-          "pokeType":
-          {
-            "identifier": "flying",
-            "name":
-            {
-              "content": "Volador",
-              "language": "es"
+            "identifier": "aerial-ace",
+            "name": {
+                "content": "Golpe Aéreo",
+                "language": "es"
             },
-            "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/flying.png",
-            "teratype": false
-          }
+            "pokeType": {
+                "identifier": "flying",
+                "name": {
+                    "content": "Volador",
+                    "language": "es"
+                },
+                "iconPath": "https://localhost:7134/images/types/flying.png",
+                "teratype": false
+            }
         }
       },
       "query1":
@@ -1810,33 +1692,33 @@
         "queryResult":
         [
           {
-            "name": "Tinieblas",
-            "identifier": "night-shade",
-            "icon": "https://localhost:7134/images/sprites/types/generation-ix/ghost.png",
-            "type": "move"
-          },
-          {
             "name": "Tiro Vital",
             "identifier": "vital-throw",
-            "icon": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
-            "type": "move"
-          },
-          {
-            "name": "Tijera X",
-            "identifier": "x-scissor",
-            "icon": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
+            "icon": "https://localhost:7134/images/types/fighting.png",
             "type": "move"
           },
           {
             "name": "Tierra Viva",
             "identifier": "earth-power",
-            "icon": "https://localhost:7134/images/sprites/types/generation-ix/ground.png",
+            "icon": "https://localhost:7134/images/types/ground.png",
+            "type": "move"
+          },
+          {
+            "name": "Tijera X",
+            "identifier": "x-scissor",
+            "icon": "https://localhost:7134/images/types/bug.png",
+            "type": "move"
+          },
+          {
+            "name": "Tinieblas",
+            "identifier": "night-shade",
+            "icon": "https://localhost:7134/images/types/ghost.png",
             "type": "move"
           },
           {
             "name": "Tifón Oscuro",
             "identifier": "shadow-storm",
-            "icon": "https://localhost:7134/images/sprites/types/generation-ix/shadow.png",
+            "icon": "https://localhost:7134/images/types/shadow.png",
             "type": "move"
           }
         ]
@@ -1891,313 +1773,263 @@
       {
         "identifier": "ghost",
         "result":
-        {
-          "identifier": "ghost",
-          "name":
-          {
-            "content": "Fantasma",
-            "language": "es"
-          },
-          "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ghost.png",
-          "teratype": false
-        }
+{
+                    "identifier": "ghost",
+                    "name": {
+                        "content": "Fantasma",
+                        "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/types/ghost.png",
+                    "teratype": false
+                }
       },
       "DTO2":
       {
         "identifier": "ghost",
         "result":
-        {
+{
+  "identifier": "ghost",
+  "name": {
+    "content": "Fantasma",
+    "language": "es"
+  },
+  "iconPath": "https://localhost:7134/images/types/ghost.png",
+  "effectivenessAttack": {
+    "allValues": [
+      {
+        "item1": {
+          "identifier": "normal",
+          "name": {
+            "content": "Normal",
+            "language": "es"
+          },
+          "iconPath": "https://localhost:7134/images/types/normal.png",
+          "teratype": false
+        },
+        "item2": 0
+      },
+      {
+        "item1": {
           "identifier": "ghost",
-          "name":
-          {
+          "name": {
             "content": "Fantasma",
             "language": "es"
           },
-          "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ghost.png",
-          "effectivenessAttack":
-          {
-            "allValues":
-            [
-              {
-                "item1":
-                {
-                  "identifier": "normal",
-                  "name":
-                  {
-                    "content": "Normal",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/normal.png",
-                  "teratype": false
-                },
-                "item2": 0
-              },
-              {
-                "item1":
-                {
-                  "identifier": "ghost",
-                  "name":
-                  {
-                    "content": "Fantasma",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ghost.png",
-                  "teratype": false
-                },
-                "item2": 2
-              },
-              {
-                "item1":
-                {
-                  "identifier": "psychic",
-                  "name":
-                  {
-                    "content": "Psíquico",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/psychic.png",
-                  "teratype": false
-                },
-                "item2": 2
-              },
-              {
-                "item1":
-                {
-                  "identifier": "dark",
-                  "name":
-                  {
-                    "content": "Siniestro",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/dark.png",
-                  "teratype": false
-                },
-                "item2": 0.5
-              }
-            ],
-            "doubleSuperEffective":
-            [
-            ],
-            "superEffective":
-            [
-              {
-                "identifier": "ghost",
-                "name":
-                {
-                  "content": "Fantasma",
-                  "language": "es"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ghost.png",
-                "teratype": false
-              },
-              {
-                "identifier": "psychic",
-                "name":
-                {
-                  "content": "Psíquico",
-                  "language": "es"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/psychic.png",
-                "teratype": false
-              }
-            ],
-            "notVeryEffective":
-            [
-              {
-                "identifier": "dark",
-                "name":
-                {
-                  "content": "Siniestro",
-                  "language": "es"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/dark.png",
-                "teratype": false
-              }
-            ],
-            "doubleNotVeryEffective":
-            [
-            ],
-            "inmune":
-            [
-              {
-                "identifier": "normal",
-                "name":
-                {
-                  "content": "Normal",
-                  "language": "es"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/normal.png",
-                "teratype": false
-              }
-            ]
-          },
-          "effectivenessDefense":
-          {
-            "allValues":
-            [
-              {
-                "item1":
-                {
-                  "identifier": "normal",
-                  "name":
-                  {
-                    "content": "Normal",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/normal.png",
-                  "teratype": false
-                },
-                "item2": 0
-              },
-              {
-                "item1":
-                {
-                  "identifier": "fighting",
-                  "name":
-                  {
-                    "content": "Lucha",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
-                  "teratype": false
-                },
-                "item2": 0
-              },
-              {
-                "item1":
-                {
-                  "identifier": "poison",
-                  "name":
-                  {
-                    "content": "Veneno",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/poison.png",
-                  "teratype": false
-                },
-                "item2": 0.5
-              },
-              {
-                "item1":
-                {
-                  "identifier": "bug",
-                  "name":
-                  {
-                    "content": "Bicho",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
-                  "teratype": false
-                },
-                "item2": 0.5
-              },
-              {
-                "item1":
-                {
-                  "identifier": "ghost",
-                  "name":
-                  {
-                    "content": "Fantasma",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ghost.png",
-                  "teratype": false
-                },
-                "item2": 2
-              },
-              {
-                "item1":
-                {
-                  "identifier": "dark",
-                  "name":
-                  {
-                    "content": "Siniestro",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/dark.png",
-                  "teratype": false
-                },
-                "item2": 2
-              }
-            ],
-            "doubleSuperEffective":
-            [
-            ],
-            "superEffective":
-            [
-              {
-                "identifier": "ghost",
-                "name":
-                {
-                  "content": "Fantasma",
-                  "language": "es"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ghost.png",
-                "teratype": false
-              },
-              {
-                "identifier": "dark",
-                "name":
-                {
-                  "content": "Siniestro",
-                  "language": "es"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/dark.png",
-                "teratype": false
-              }
-            ],
-            "notVeryEffective":
-            [
-              {
-                "identifier": "poison",
-                "name":
-                {
-                  "content": "Veneno",
-                  "language": "es"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/poison.png",
-                "teratype": false
-              },
-              {
-                "identifier": "bug",
-                "name":
-                {
-                  "content": "Bicho",
-                  "language": "es"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/bug.png",
-                "teratype": false
-              }
-            ],
-            "doubleNotVeryEffective":
-            [
-            ],
-            "inmune":
-            [
-              {
-                "identifier": "normal",
-                "name":
-                {
-                  "content": "Normal",
-                  "language": "es"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/normal.png",
-                "teratype": false
-              },
-              {
-                "identifier": "fighting",
-                "name":
-                {
-                  "content": "Lucha",
-                  "language": "es"
-                },
-                "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fighting.png",
-                "teratype": false
-              }
-            ]
-          },
+          "iconPath": "https://localhost:7134/images/types/ghost.png",
           "teratype": false
-        }
+        },
+        "item2": 2
+      },
+      {
+        "item1": {
+          "identifier": "psychic",
+          "name": {
+            "content": "Psíquico",
+            "language": "es"
+          },
+          "iconPath": "https://localhost:7134/images/types/psychic.png",
+          "teratype": false
+        },
+        "item2": 2
+      },
+      {
+        "item1": {
+          "identifier": "dark",
+          "name": {
+            "content": "Siniestro",
+            "language": "es"
+          },
+          "iconPath": "https://localhost:7134/images/types/dark.png",
+          "teratype": false
+        },
+        "item2": 0.5
+      }
+    ],
+    "doubleSuperEffective": [],
+    "superEffective": [
+      {
+        "identifier": "ghost",
+        "name": {
+          "content": "Fantasma",
+          "language": "es"
+        },
+        "iconPath": "https://localhost:7134/images/types/ghost.png",
+        "teratype": false
+      },
+      {
+        "identifier": "psychic",
+        "name": {
+          "content": "Psíquico",
+          "language": "es"
+        },
+        "iconPath": "https://localhost:7134/images/types/psychic.png",
+        "teratype": false
+      }
+    ],
+    "notVeryEffective": [
+      {
+        "identifier": "dark",
+        "name": {
+          "content": "Siniestro",
+          "language": "es"
+        },
+        "iconPath": "https://localhost:7134/images/types/dark.png",
+        "teratype": false
+      }
+    ],
+    "doubleNotVeryEffective": [],
+    "inmune": [
+      {
+        "identifier": "normal",
+        "name": {
+          "content": "Normal",
+          "language": "es"
+        },
+        "iconPath": "https://localhost:7134/images/types/normal.png",
+        "teratype": false
+      }
+    ]
+  },
+  "effectivenessDefense": {
+    "allValues": [
+      {
+        "item1": {
+          "identifier": "normal",
+          "name": {
+            "content": "Normal",
+            "language": "es"
+          },
+          "iconPath": "https://localhost:7134/images/types/normal.png",
+          "teratype": false
+        },
+        "item2": 0
+      },
+      {
+        "item1": {
+          "identifier": "fighting",
+          "name": {
+            "content": "Lucha",
+            "language": "es"
+          },
+          "iconPath": "https://localhost:7134/images/types/fighting.png",
+          "teratype": false
+        },
+        "item2": 0
+      },
+      {
+        "item1": {
+          "identifier": "poison",
+          "name": {
+            "content": "Veneno",
+            "language": "es"
+          },
+          "iconPath": "https://localhost:7134/images/types/poison.png",
+          "teratype": false
+        },
+        "item2": 0.5
+      },
+      {
+        "item1": {
+          "identifier": "bug",
+          "name": {
+            "content": "Bicho",
+            "language": "es"
+          },
+          "iconPath": "https://localhost:7134/images/types/bug.png",
+          "teratype": false
+        },
+        "item2": 0.5
+      },
+      {
+        "item1": {
+          "identifier": "ghost",
+          "name": {
+            "content": "Fantasma",
+            "language": "es"
+          },
+          "iconPath": "https://localhost:7134/images/types/ghost.png",
+          "teratype": false
+        },
+        "item2": 2
+      },
+      {
+        "item1": {
+          "identifier": "dark",
+          "name": {
+            "content": "Siniestro",
+            "language": "es"
+          },
+          "iconPath": "https://localhost:7134/images/types/dark.png",
+          "teratype": false
+        },
+        "item2": 2
+      }
+    ],
+    "doubleSuperEffective": [],
+    "superEffective": [
+      {
+        "identifier": "ghost",
+        "name": {
+          "content": "Fantasma",
+          "language": "es"
+        },
+        "iconPath": "https://localhost:7134/images/types/ghost.png",
+        "teratype": false
+      },
+      {
+        "identifier": "dark",
+        "name": {
+          "content": "Siniestro",
+          "language": "es"
+        },
+        "iconPath": "https://localhost:7134/images/types/dark.png",
+        "teratype": false
+      }
+    ],
+    "notVeryEffective": [
+      {
+        "identifier": "poison",
+        "name": {
+          "content": "Veneno",
+          "language": "es"
+        },
+        "iconPath": "https://localhost:7134/images/types/poison.png",
+        "teratype": false
+      },
+      {
+        "identifier": "bug",
+        "name": {
+          "content": "Bicho",
+          "language": "es"
+        },
+        "iconPath": "https://localhost:7134/images/types/bug.png",
+        "teratype": false
+      }
+    ],
+    "doubleNotVeryEffective": [],
+    "inmune": [
+      {
+        "identifier": "normal",
+        "name": {
+          "content": "Normal",
+          "language": "es"
+        },
+        "iconPath": "https://localhost:7134/images/types/normal.png",
+        "teratype": false
+      },
+      {
+        "identifier": "fighting",
+        "name": {
+          "content": "Lucha",
+          "language": "es"
+        },
+        "iconPath": "https://localhost:7134/images/types/fighting.png",
+        "teratype": false
+      }
+    ]
+  },
+  "teratype": false
+}
       },
       "DTO3":
       {
@@ -2205,16 +2037,15 @@
         "result":
         {
           "type1":
-          {
-            "identifier": "water",
-            "name":
-            {
-              "content": "Agua",
-              "language": "es"
-            },
-            "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/water.png",
-            "teratype": false
-          },
+{
+                    "identifier": "water",
+                    "name": {
+                        "content": "Agua",
+                        "language": "es"
+                    },
+                    "iconPath": "https://localhost:7134/images/types/water.png",
+                    "teratype": false
+                },
           "type2": null
         }
       },
@@ -2222,351 +2053,293 @@
       {
         "identifier": "7",
         "result":
-        {
-          "dualEffectiveness": null,
-          "type1":
-          {
+{
+        "dualEffectiveness": null,
+        "type1": {
             "identifier": "water",
-            "name":
-            {
-              "content": "Agua",
-              "language": "es"
+            "name": {
+                "content": "Agua",
+                "language": "es"
             },
-            "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/water.png",
-            "effectivenessAttack":
-            {
-              "allValues":
-              [
-                {
-                  "item1":
-                  {
-                    "identifier": "ground",
-                    "name":
+            "iconPath": "https://localhost:7134/images/types/water.png",
+            "effectivenessAttack": {
+                "allValues": [
                     {
-                      "content": "Tierra",
-                      "language": "es"
+                        "item1": {
+                            "identifier": "ground",
+                            "name": {
+                                "content": "Tierra",
+                                "language": "es"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/ground.png",
+                            "teratype": false
+                        },
+                        "item2": 2
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ground.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "rock",
-                    "name":
                     {
-                      "content": "Roca",
-                      "language": "es"
+                        "item1": {
+                            "identifier": "rock",
+                            "name": {
+                                "content": "Roca",
+                                "language": "es"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/rock.png",
+                            "teratype": false
+                        },
+                        "item2": 2
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "fire",
-                    "name":
                     {
-                      "content": "Fuego",
-                      "language": "es"
+                        "item1": {
+                            "identifier": "fire",
+                            "name": {
+                                "content": "Fuego",
+                                "language": "es"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/fire.png",
+                            "teratype": false
+                        },
+                        "item2": 2
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fire.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "water",
-                    "name":
                     {
-                      "content": "Agua",
-                      "language": "es"
+                        "item1": {
+                            "identifier": "water",
+                            "name": {
+                                "content": "Agua",
+                                "language": "es"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/water.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/water.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "grass",
-                    "name":
                     {
-                      "content": "Planta",
-                      "language": "es"
+                        "item1": {
+                            "identifier": "grass",
+                            "name": {
+                                "content": "Planta",
+                                "language": "es"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/grass.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "dragon",
-                    "name":
                     {
-                      "content": "Dragón",
-                      "language": "es"
+                        "item1": {
+                            "identifier": "dragon",
+                            "name": {
+                                "content": "Dragón",
+                                "language": "es"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/dragon.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
+                    }
+                ],
+                "doubleSuperEffective": [],
+                "superEffective": [
+                    {
+                        "identifier": "ground",
+                        "name": {
+                            "content": "Tierra",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/ground.png",
+                        "teratype": false
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/dragon.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                }
-              ],
-              "doubleSuperEffective":
-              [
-              ],
-              "superEffective":
-              [
-                {
-                  "identifier": "ground",
-                  "name":
-                  {
-                    "content": "Tierra",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ground.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "rock",
-                  "name":
-                  {
-                    "content": "Roca",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/rock.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "fire",
-                  "name":
-                  {
-                    "content": "Fuego",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fire.png",
-                  "teratype": false
-                }
-              ],
-              "notVeryEffective":
-              [
-                {
-                  "identifier": "water",
-                  "name":
-                  {
-                    "content": "Agua",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/water.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "grass",
-                  "name":
-                  {
-                    "content": "Planta",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "dragon",
-                  "name":
-                  {
-                    "content": "Dragón",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/dragon.png",
-                  "teratype": false
-                }
-              ],
-              "doubleNotVeryEffective":
-              [
-              ],
-              "inmune":
-              [
-              ]
+                    {
+                        "identifier": "rock",
+                        "name": {
+                            "content": "Roca",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/rock.png",
+                        "teratype": false
+                    },
+                    {
+                        "identifier": "fire",
+                        "name": {
+                            "content": "Fuego",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/fire.png",
+                        "teratype": false
+                    }
+                ],
+                "notVeryEffective": [
+                    {
+                        "identifier": "water",
+                        "name": {
+                            "content": "Agua",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/water.png",
+                        "teratype": false
+                    },
+                    {
+                        "identifier": "grass",
+                        "name": {
+                            "content": "Planta",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/grass.png",
+                        "teratype": false
+                    },
+                    {
+                        "identifier": "dragon",
+                        "name": {
+                            "content": "Dragón",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/dragon.png",
+                        "teratype": false
+                    }
+                ],
+                "doubleNotVeryEffective": [],
+                "inmune": []
             },
-            "effectivenessDefense":
-            {
-              "allValues":
-              [
-                {
-                  "item1":
-                  {
-                    "identifier": "steel",
-                    "name":
+            "effectivenessDefense": {
+                "allValues": [
                     {
-                      "content": "Acero",
-                      "language": "es"
+                        "item1": {
+                            "identifier": "steel",
+                            "name": {
+                                "content": "Acero",
+                                "language": "es"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/steel.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/steel.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "fire",
-                    "name":
                     {
-                      "content": "Fuego",
-                      "language": "es"
+                        "item1": {
+                            "identifier": "fire",
+                            "name": {
+                                "content": "Fuego",
+                                "language": "es"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/fire.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fire.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "water",
-                    "name":
                     {
-                      "content": "Agua",
-                      "language": "es"
+                        "item1": {
+                            "identifier": "water",
+                            "name": {
+                                "content": "Agua",
+                                "language": "es"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/water.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/water.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "grass",
-                    "name":
                     {
-                      "content": "Planta",
-                      "language": "es"
+                        "item1": {
+                            "identifier": "grass",
+                            "name": {
+                                "content": "Planta",
+                                "language": "es"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/grass.png",
+                            "teratype": false
+                        },
+                        "item2": 2
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "electric",
-                    "name":
                     {
-                      "content": "Eléctrico",
-                      "language": "es"
+                        "item1": {
+                            "identifier": "electric",
+                            "name": {
+                                "content": "Eléctrico",
+                                "language": "es"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/electric.png",
+                            "teratype": false
+                        },
+                        "item2": 2
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
-                    "teratype": false
-                  },
-                  "item2": 2
-                },
-                {
-                  "item1":
-                  {
-                    "identifier": "ice",
-                    "name":
                     {
-                      "content": "Hielo",
-                      "language": "es"
+                        "item1": {
+                            "identifier": "ice",
+                            "name": {
+                                "content": "Hielo",
+                                "language": "es"
+                            },
+                            "iconPath": "https://localhost:7134/images/types/ice.png",
+                            "teratype": false
+                        },
+                        "item2": 0.5
+                    }
+                ],
+                "doubleSuperEffective": [],
+                "superEffective": [
+                    {
+                        "identifier": "grass",
+                        "name": {
+                            "content": "Planta",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/grass.png",
+                        "teratype": false
                     },
-                    "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ice.png",
-                    "teratype": false
-                  },
-                  "item2": 0.5
-                }
-              ],
-              "doubleSuperEffective":
-              [
-              ],
-              "superEffective":
-              [
-                {
-                  "identifier": "grass",
-                  "name":
-                  {
-                    "content": "Planta",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/grass.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "electric",
-                  "name":
-                  {
-                    "content": "Eléctrico",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/electric.png",
-                  "teratype": false
-                }
-              ],
-              "notVeryEffective":
-              [
-                {
-                  "identifier": "steel",
-                  "name":
-                  {
-                    "content": "Acero",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/steel.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "fire",
-                  "name":
-                  {
-                    "content": "Fuego",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/fire.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "water",
-                  "name":
-                  {
-                    "content": "Agua",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/water.png",
-                  "teratype": false
-                },
-                {
-                  "identifier": "ice",
-                  "name":
-                  {
-                    "content": "Hielo",
-                    "language": "es"
-                  },
-                  "iconPath": "https://localhost:7134/images/sprites/types/generation-ix/ice.png",
-                  "teratype": false
-                }
-              ],
-              "doubleNotVeryEffective":
-              [
-              ],
-              "inmune":
-              [
-              ]
+                    {
+                        "identifier": "electric",
+                        "name": {
+                            "content": "Eléctrico",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/electric.png",
+                        "teratype": false
+                    }
+                ],
+                "notVeryEffective": [
+                    {
+                        "identifier": "steel",
+                        "name": {
+                            "content": "Acero",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/steel.png",
+                        "teratype": false
+                    },
+                    {
+                        "identifier": "fire",
+                        "name": {
+                            "content": "Fuego",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/fire.png",
+                        "teratype": false
+                    },
+                    {
+                        "identifier": "water",
+                        "name": {
+                            "content": "Agua",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/water.png",
+                        "teratype": false
+                    },
+                    {
+                        "identifier": "ice",
+                        "name": {
+                            "content": "Hielo",
+                            "language": "es"
+                        },
+                        "iconPath": "https://localhost:7134/images/types/ice.png",
+                        "teratype": false
+                    }
+                ],
+                "doubleNotVeryEffective": [],
+                "inmune": []
             },
             "teratype": false
-          },
-          "type2": null
-        }
+        },
+        "type2": null
+    }
       },
       "query1":
       {
@@ -2576,13 +2349,19 @@
           {
             "name": "Acero",
             "identifier": "steel",
-            "icon": "https://localhost:7134/images/sprites/types/generation-viii/steel.png",
+            "icon": "https://localhost:7134/images/teratypes/steel.png",
             "type": "type"
           },
           {
             "name": "Agua",
             "identifier": "water",
-            "icon": "https://localhost:7134/images/sprites/types/generation-viii/water.png",
+            "icon": "https://localhost:7134/images/teratypes/water.png",
+            "type": "type"
+          },
+          {
+            "name": "Astral",
+            "identifier": "stellar",
+            "icon": "https://localhost:7134/images/teratypes/stellar.png",
             "type": "type"
           }
         ]

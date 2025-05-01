@@ -22,7 +22,12 @@ namespace api.Test.Services
         public AbilityServiceTest()
         {
             //dependencies
-            _configuration = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
+            _configuration = new ConfigurationBuilder()
+                .AddUserSecrets<AppInstance>()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.Test.json", optional: true, reloadOnChange: true)
+                .Build();
+            
             var connectionString = _configuration["ConnectionStrings:PostgrePokedex"];
             var options = new DbContextOptionsBuilder<PokedexContext>().UseNpgsql(connectionString).Options;
             _dbContext = new PokedexContext(options);
@@ -34,7 +39,7 @@ namespace api.Test.Services
             }
 
             //sut
-            _service = new AbilityService(_dbContext);
+            _service = new AbilityService(_dbContext, _configuration);
         }
 
         [Theory]

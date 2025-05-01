@@ -21,7 +21,12 @@ namespace api.Test.Services
         public ItemServiceTest() 
         {
             //dependencies
-            _configuration = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
+            _configuration = new ConfigurationBuilder()
+                .AddUserSecrets<AppInstance>()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.Test.json", optional: true, reloadOnChange: true)
+                .Build();
+
             var connectionString = _configuration["ConnectionStrings:PostgrePokedex"];
             var options = new DbContextOptionsBuilder<PokedexContext>().UseNpgsql(connectionString).Options;
             _dbContext = new PokedexContext(options);
@@ -33,7 +38,7 @@ namespace api.Test.Services
             }
 
             //sut
-            _service = new ItemService(_dbContext);
+            _service = new ItemService(_dbContext, _configuration);
         }
 
         [Theory]

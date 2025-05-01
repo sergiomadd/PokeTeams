@@ -26,7 +26,12 @@ namespace api.Test.Services
         public MoveServiceTest()
         {
             //dependencies
-            _configuration = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
+            _configuration = new ConfigurationBuilder()
+                .AddUserSecrets<AppInstance>()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.Test.json", optional: true, reloadOnChange: true)
+                .Build();
+
             var connectionString = _configuration["ConnectionStrings:PostgrePokedex"];
             var options = new DbContextOptionsBuilder<PokedexContext>().UseNpgsql(connectionString).Options;
             _dbContext = new PokedexContext(options);
@@ -37,10 +42,10 @@ namespace api.Test.Services
                 _expectedResults = input;
             }
 
-            _typeService = new TypeService(_dbContext);
+            _typeService = new TypeService(_dbContext, _configuration);
 
             //sut
-            _service = new MoveService(_dbContext, _typeService);
+            _service = new MoveService(_dbContext, _typeService, _configuration);
         }
 
         [Theory]
