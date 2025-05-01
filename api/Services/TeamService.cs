@@ -132,18 +132,22 @@ namespace api.Services
             if (team != null)
             {
                 TeamDataDTO? teamDataDTO = await BuildTeamDataDTO(team, langId);
-                if(teamDataDTO != null && teamDataDTO.PokemonIDs.Count > 0)
+                List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
+                if (teamDataDTO != null)
                 {
-                    List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
-                    List<Pokemon> pokemons = await _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
-                    foreach (int pokemonId in teamDataDTO.PokemonIDs)
+                    if(teamDataDTO.PokemonIDs.Count > 0)
                     {
-                        Pokemon? pokemon = await _pokeTeamContext.Pokemon.FindAsync(pokemonId);
-                        if(pokemon != null)
+                        List<Pokemon> pokemons = await _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
+                        foreach (int pokemonId in teamDataDTO.PokemonIDs)
                         {
-                            pokemonDTOs.Add(await _pokemonService.BuildPokemonDTO(pokemon, langId, teamDataDTO.Options));
+                            Pokemon? pokemon = await _pokeTeamContext.Pokemon.FindAsync(pokemonId);
+                            if (pokemon != null)
+                            {
+                                pokemonDTOs.Add(await _pokemonService.BuildPokemonDTO(pokemon, langId, teamDataDTO.Options));
+                            }
                         }
                     }
+                    teamDTO = new TeamDTO(teamDataDTO, pokemonDTOs);
                 }
             }
             return teamDTO;

@@ -22,7 +22,7 @@ namespace api.Models.DBPoketeamModels
         public string? TournamentNormalizedName { get; set; }
         public virtual Tournament? Tournament { get; set; }
         public string? Regulation { get; set; }
-        public ICollection<string> TagIds { get; set; }
+        public ICollection<string>? TagIds { get; set; }
 
         [StringLength(32, ErrorMessage = "Rental code is too long")]
         public string? RentalCode { get; set; }

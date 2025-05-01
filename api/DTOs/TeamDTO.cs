@@ -48,5 +48,23 @@ namespace api.DTOs
             Visibility = visibility;
             Tags = tags;
         }
+
+        public TeamDTO(
+            TeamDataDTO teamData,
+            List<PokemonDTO> pokemons
+            )
+        {
+            ID = teamData.ID;
+            Pokemons = pokemons;
+            Options = teamData.Options;
+            Player = teamData.Player;
+            Tournament = teamData.Tournament;
+            Regulation = teamData.Regulation;
+            RentalCode = teamData.RentalCode;
+            ViewCount = teamData.ViewCount;
+            Date = teamData.Date;
+            Visibility = teamData.Visibility;
+            Tags = teamData.Tags;
+        }
     }
 }
