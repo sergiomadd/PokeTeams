@@ -104,7 +104,19 @@ builder.Services.AddAuthentication(option =>
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsync("NoAccessTokenProvided");
                 }
-            }
+            },
+            OnAuthenticationFailed = async context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync("AuthenticationFailed");
+            },
+            OnForbidden = async context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsync("AuthenticationForbidden");
+            },
         };
     });
 builder.Services.AddAuthorization();
@@ -179,7 +191,14 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
     .AddEnvironmentVariables();
 
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+
+    // Register your custom header operation filter
+    c.OperationFilter<AcceptLanguageHeaderParameter>();
+});
 
 var app = builder.Build();
 
