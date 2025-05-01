@@ -3,27 +3,19 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using System.Text.Encodings.Web;
 using System.Security.Claims;
-using FakeItEasy;
-using api.Services;
 using api.Models.DBPoketeamModels;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace api.Test.Integration
 {
@@ -40,18 +32,54 @@ namespace api.Test.Integration
 
             builder.ConfigureTestServices(services =>
             {
+                var configuration = new ConfigurationBuilder()
+                    .AddUserSecrets<AppInstance>()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.Test.json", optional: true, reloadOnChange: true)
+                    .Build();
+
                 //Forget the connection string and options of real db
                 services.RemoveAll(typeof(DbContextOptions<PokeTeamContext>));
 
-                string? connectionString = GetConnectionString();
+                var connectionString = configuration["ConnectionStrings:PostgrePoketeamTest"];
 
-                // Add a new registration for dbcontext
+                //Add a new registration for dbcontext
                 services.AddDbContext<PokeTeamContext>(options =>
                     options.UseNpgsql(connectionString));
                 services.AddTransient<IPokeTeamContext, PokeTeamContext>();
+                
+                //Forget the jwt config
+                services.RemoveAll(typeof(IConfigureOptions<AuthenticationOptions>));
+                services.RemoveAll(typeof(IConfigureOptions<JwtBearerOptions>));
 
-                services.AddAuthentication("TestScheme")
-                    .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", options => { });
+                //Add a new jwt config
+                services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!)),
+                        ValidIssuer = configuration["JwtSettings:Issuer"],
+                        ValidAudience = configuration["JwtSettings:Audience"],
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true
+                    };
+                })
+                .AddCookie(IdentityConstants.ApplicationScheme)
+                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", options => { });
+
+                services.PostConfigure<AuthenticationOptions>(options =>
+                {
+                    options.DefaultAuthenticateScheme = "TestScheme";
+                    options.DefaultChallengeScheme = "TestScheme";
+                });
 
                 services.AddCors(options =>
                 {
@@ -117,23 +145,13 @@ namespace api.Test.Integration
             return dbContext;
         }
 
-        private static string? GetConnectionString()
-        {
-            var configuration = new ConfigurationBuilder()
-                .AddUserSecrets<AppInstance>()
-                .Build();
-            var connectionString = configuration["ConnectionStrings:PostgrePoketeamTest"];
-            return connectionString;
-        }
-
         public string GenerateValidJwtToken(User? user)
         {
             var configuration = new ConfigurationBuilder()
                 .AddUserSecrets<AppInstance>()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
                 .Build();
-            var test = configuration["JwtSettings:Issuer"];
             var key = configuration["Jwt:Secret"]!;
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);

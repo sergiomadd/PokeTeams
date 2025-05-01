@@ -4,10 +4,12 @@ using api.DTOs.PokemonDTOs;
 using api.Models.DBPoketeamModels;
 using api.Test.Integration;
 using Azure;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Common;
 using NuGet.ContentModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -548,7 +550,11 @@ namespace api.Test.Controllers
             var user = _instance.GetTestLoggedUser();
             TeamDTO? teamDTO = new TeamDTO(teamId, new List<PokemonDTO> { null },
                 null, null, null, null, 0, null, false, [], null);
-            var body = teamDTO;
+            TeamIdDTO teamIdDTO = new TeamIdDTO()
+            {
+                Id = teamDTO.ID
+            };
+            var body = teamIdDTO;
 
             using (var scope = _instance.Services.CreateScope())
             {

@@ -9,6 +9,11 @@ namespace api.DTOs.PokemonDTOs
         public PokeTypeWithEffectivenessDTO? Type1 { get; set; }
         public PokeTypeWithEffectivenessDTO? Type2 { get; set; }
 
+        public PokeTypesWithEffectivenessDTO()
+        {
+
+        }
+
         public PokeTypesWithEffectivenessDTO(PokeTypeWithEffectivenessDTO? type1, PokeTypeWithEffectivenessDTO? type2)
         {
             Type1 = type1;

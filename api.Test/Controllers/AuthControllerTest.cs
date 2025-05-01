@@ -345,6 +345,8 @@ namespace api.Test.Controllers
             var client = _instance.CreateClient();
             client.BaseAddress = _baseAddres;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("TestScheme");
+
             //Act
             var response = await client.PostAsJsonAsync(request, body);
 

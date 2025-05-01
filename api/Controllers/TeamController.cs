@@ -130,7 +130,7 @@ namespace api.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost, Route("delete")]
-        public async Task<ActionResult<string>> Delete(TeamIdDTO? data)
+        public async Task<ActionResult<string>> Delete([FromBody] TeamIdDTO? data)
         {
             Team? teamModel = await _teamService.GetTeamModel(data.Id);
             if (teamModel == null || teamModel.Player == null)
