@@ -131,20 +131,15 @@ namespace api.Controllers
         [HttpGet, Route("logged")]
         public async Task<ActionResult> GetLoggedUser()
         {
-            UserDTO? userDTO;
-            try
+            User? user = await _identityService.GetLoggedUser();
+            if (user == null)
             {
-                User? user = await _identityService.GetLoggedUser();
-                if (user == null)
-                {
-                    return BadRequest("No user logged");
-                }
-                userDTO = await _userService.BuildUserDTO(user, true);
+                return BadRequest("No user logged");
             }
-            catch (Exception ex)
+            UserDTO? userDTO = await _userService.BuildUserDTO(user, true);
+            if (userDTO == null)
             {
-                Printer.Log(ex.Message);
-                return BadRequest("Getting user error, exception");
+                return BadRequest("Error getting logged user");
             }
             return Ok(userDTO);
         }
@@ -152,25 +147,16 @@ namespace api.Controllers
         [HttpGet, Route("email")]
         public async Task<ActionResult> GetLoggedUserEmail()
         {
-            EmailDTO emailDTO;
-            try
+            User? user = await _identityService.GetLoggedUser();
+            if (user == null)
             {
-                User? user = await _identityService.GetLoggedUser();
-                if (user == null)
-                {
-                    return BadRequest("No user logged");
-                }
-                emailDTO = new EmailDTO
-                {
-                    Email = user.Email,
-                    EmailConfirmed = user.EmailConfirmed
-                };
+                return BadRequest("No user logged");
             }
-            catch (Exception ex)
+            EmailDTO emailDTO = new EmailDTO
             {
-                Printer.Log(ex.Message);
-                return BadRequest("Getting user error, exception");
-            }
+                Email = user.Email,
+                EmailConfirmed = user.EmailConfirmed
+            };
             return Ok(emailDTO);
         }
 
@@ -178,27 +164,23 @@ namespace api.Controllers
         [HttpPost, Route("login")]
         public async Task<ActionResult> LogIn(LogInDTO model)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                User? signedUserByEmail = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
-                User? signedUserByUserName = await _userManager.FindByNameAsync(model.UserNameOrEmail);
-                if (signedUserByEmail != null)
-                {
-                    return await PerformLogIn(signedUserByEmail, model);
-                }
-                else if (signedUserByUserName != null)
-                {
-                    return await PerformLogIn(signedUserByUserName, model);
-                }
-                else
-                {
-                    return BadRequest("User not found");
-                }
+                return BadRequest("Login form not valid");
             }
-            catch (Exception ex)
+            User? signedUserByEmail = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
+            User? signedUserByUserName = await _userManager.FindByNameAsync(model.UserNameOrEmail);
+            if (signedUserByEmail != null)
             {
-                Printer.Log(ex.Message);
-                return BadRequest("Log in error, exception, Model not valid");
+                return await PerformLogIn(signedUserByEmail, model);
+            }
+            else if (signedUserByUserName != null)
+            {
+                return await PerformLogIn(signedUserByUserName, model);
+            }
+            else
+            {
+                return BadRequest("User not found");
             }
         }
 
@@ -238,30 +220,25 @@ namespace api.Controllers
         [HttpPost, Route("signup")]
         public async Task<ActionResult> SignUp(SignUpDTO model)
         {
-            User user;
-            try
+            if (!ModelState.IsValid)
             {
-                user = new User
-                {
-                    UserName = model.UserName,
-                    Email = model.Email,
-                    PasswordHash = model.Password,
-                    EmailConfirmed = false,
-                    Picture = "snorlax",
-                    Visibility = true
-                };
-                var signUpResult = await _userManager.CreateAsync(user, model.Password);
-                if (!signUpResult.Succeeded)
-                {
-                    return BadRequest("Sign up failed");
-                }
-                await _signInManager.SignInAsync(user, true);
+                return BadRequest("Signup form not valid");
             }
-            catch (Exception ex)
+            User user = new User
             {
-                Printer.Log(ex.Message);
-                return BadRequest("Sign up error");
+                UserName = model.UserName,
+                Email = model.Email,
+                PasswordHash = model.Password,
+                EmailConfirmed = false,
+                Picture = "snorlax",
+                Visibility = true
+            };
+            var signUpResult = await _userManager.CreateAsync(user, model.Password);
+            if (!signUpResult.Succeeded)
+            {
+                return BadRequest("Sign up failed");
             }
+            await _signInManager.SignInAsync(user, true);
             string token = _tokenGenerator.GenerateAccessToken(user);
             string refreshToken = _tokenGenerator.GenerateRefreshToken(user);
 
@@ -291,7 +268,7 @@ namespace api.Controllers
             catch (Exception ex)
             {
                 Printer.Log(ex.Message);
-                return BadRequest("Error: could not log out");
+                return BadRequest("Server error, could not log out");
             }
             return Ok();
         }
@@ -432,7 +409,7 @@ namespace api.Controllers
                 return BadRequest("Wrong data");
             }
             User? user = await _identityService.GetLoggedUser();
-            if (user == null)
+            if (user == null || user.UserName == null)
             {
                 return BadRequest("No user logged");
             }
@@ -443,10 +420,8 @@ namespace api.Controllers
             }
             User? updatedUser = await _userService.GetUserByUserName(user.UserName);
             var token = _tokenGenerator.GenerateAccessToken(updatedUser);
-
             JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
             _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
-
             return Ok();
         }
 
@@ -458,7 +433,7 @@ namespace api.Controllers
                 return BadRequest("Wrong data");
             }
             User? user = await _identityService.GetLoggedUser();
-            if (user == null)
+            if (user == null || user.UserName == null)
             {
                 return BadRequest("No user logged");
             }
@@ -484,7 +459,7 @@ namespace api.Controllers
                 return BadRequest("Wrong data");
             }
             User? user = await _identityService.GetLoggedUser();
-            if (user == null)
+            if (user == null || user.UserName == null)
             {
                 return BadRequest("No user logged");
             }
@@ -511,7 +486,7 @@ namespace api.Controllers
                 return BadRequest("Wrong data");
             }
             User? user = await _identityService.GetLoggedUser();
-            if (user == null)
+            if (user == null || user.UserName == null)
             {
                 return BadRequest("No user logged");
             }
@@ -538,7 +513,7 @@ namespace api.Controllers
                 return BadRequest("Wrong data");
             }
             User? user = await _identityService.GetLoggedUser();
-            if (user == null)
+            if (user == null || user.UserName == null)
             {
                 return BadRequest("No user logged");
             }

@@ -16,6 +16,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Diagnostics;
+using System.Net;
+using api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,7 +72,6 @@ builder.Services.AddAuthentication(option =>
 
         options.Events = new JwtBearerEvents
         { 
-            
             OnMessageReceived = context =>
             {
                 context.Request.Cookies.TryGetValue("accessToken", out var accessToken);
@@ -225,6 +227,7 @@ if (app.Environment.IsDevelopment())
     app.UseCors(apiCorsPolicy);
 }
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseRateLimiter();
 
 app.UseHttpsRedirection();
