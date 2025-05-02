@@ -53,7 +53,6 @@ namespace api.Services
         private readonly IPokemonService _pokemonService;
         private readonly IConfiguration _config;
         private string baseUrl;
-
         private static Random random = new Random();
 
         public TeamService
@@ -76,10 +75,15 @@ namespace api.Services
             _pokemonService = pokemonService;
             _config = config;
 
-            baseUrl = _config["BaseUrl"];
+            baseUrl = "";
+            string? baseUrlTemp = _config["BaseUrl"];
+            if (baseUrlTemp != null)
+            {
+                baseUrl = (string)baseUrlTemp;
+            }
         }
 
-        public async Task<TeamDataDTO?> BuildTeamDataDTO(Team team, int langId)
+        public async Task<TeamDataDTO?> BuildTeamDataDTO(Team? team, int langId)
         {
             TeamDataDTO? teamDataDTO = null;
             if (team != null)
@@ -113,8 +117,8 @@ namespace api.Services
                     team.Id,
                     pokemons.Select(p => p.Id).ToList(),
                     userPreview,
-                    await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName),
-                    await _regulationService.GetRegulationByIdentifier(team.Regulation),
+                    team.TournamentNormalizedName != null ? await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName) : null,
+                    team.Regulation != null ? await _regulationService.GetRegulationByIdentifier(team.Regulation) : null,
                     team.RentalCode,
                     team.ViewCount,
                     team.DateCreated.ToString("yyyy-MM-dd"),
@@ -126,7 +130,7 @@ namespace api.Services
             return teamDataDTO;
         }
 
-        public async Task<TeamDTO?> BuildTeamDTO(Team team, int langId)
+        public async Task<TeamDTO?> BuildTeamDTO(Team? team, int langId)
         {
             TeamDTO? teamDTO = null;
             if (team != null)
@@ -155,7 +159,7 @@ namespace api.Services
 
         public async Task<TeamPreviewDTO?> BuildTeamPreviewDTO(Team team, int langId)
         {
-            TeamPreviewDTO teamPreviewDTO = null;
+            TeamPreviewDTO? teamPreviewDTO = null;
             List<Pokemon> pokemons = await _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
             List<int> pokemonPreviewIDs = new List<int>();
 
@@ -188,8 +192,8 @@ namespace api.Services
                 ID = team.Id,
                 PokemonIDs = pokemonPreviewIDs,
                 Player = userPreview,
-                Tournament = await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName),
-                Regulation = await _regulationService.GetRegulationByIdentifier(team.Regulation),
+                Tournament = team.TournamentNormalizedName != null ? await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName) : null,
+                Regulation = team.Regulation != null ? await _regulationService.GetRegulationByIdentifier(team.Regulation) : null,
                 ViewCount = team.ViewCount,
                 Date = team.DateCreated.ToString("yyyy-MM-dd"),
                 Visibility = team.Visibility,
@@ -200,13 +204,16 @@ namespace api.Services
 
         public async Task<Team?> BreakTeamDTO(TeamDTO inputTeam, string newTeamId)
         {
-            Team newTeam = null;
+            Team? newTeam = null;
             if (inputTeam != null && inputTeam.Pokemons != null && inputTeam.Pokemons.Any())
             {
                 List<Pokemon> pokemons = new List<Pokemon>();
-                foreach (PokemonDTO pokemonDTO in inputTeam.Pokemons)
+                foreach (PokemonDTO? pokemonDTO in inputTeam.Pokemons)
                 {
-                    pokemons.Add(_pokemonService.BreakPokemonDTO(pokemonDTO, newTeamId));
+                    if(pokemonDTO != null)
+                    {
+                        pokemons.Add(_pokemonService.BreakPokemonDTO(pokemonDTO, newTeamId));
+                    }
                 }
 
                 User? loggedUser = await _identityService.GetLoggedUser();
@@ -288,10 +295,10 @@ namespace api.Services
 
         public async Task<TeamDTO?> GetTeam(string id, int langId)
         {
-            TeamDTO teamDTO = null;
+            TeamDTO? teamDTO = null;
             try
             {
-                Team team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == id);
+                Team? team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == id);
                 teamDTO = await BuildTeamDTO(team, langId);
             }
             catch (Exception ex)
@@ -304,10 +311,10 @@ namespace api.Services
 
         public async Task<TeamDataDTO?> GetTeamData(string id, int langId)
         {
-            TeamDataDTO teamDataDTO = null;
+            TeamDataDTO? teamDataDTO = null;
             try
             {
-                Team team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == id);
+                Team? team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == id);
                 teamDataDTO = await BuildTeamDataDTO(team, langId);
             }
             catch (Exception ex)
@@ -377,8 +384,11 @@ namespace api.Services
                 if (newTeam != null)
                 {
                     Team? currentTeam = await GetTeamModel(currentTeamID);
-                    UpdateTeamProperties(currentTeam, newTeam);
-                    await _pokeTeamContext.SaveChangesAsync();
+                    if(currentTeam != null)
+                    {
+                        UpdateTeamProperties(currentTeam, newTeam);
+                        await _pokeTeamContext.SaveChangesAsync();
+                    }
                 }
             }
             catch (Exception ex)
@@ -441,7 +451,7 @@ namespace api.Services
         {
             try
             {
-                Team team = await _pokeTeamContext.Team.FindAsync(teamId);
+                Team? team = await _pokeTeamContext.Team.FindAsync(teamId);
                 if (team != null)
                 {
                     _pokeTeamContext.Team.Remove(team);
@@ -483,7 +493,7 @@ namespace api.Services
         {
             try
             {
-                Team team = await _pokeTeamContext.Team.FindAsync(teamKey);
+                Team? team = await _pokeTeamContext.Team.FindAsync(teamKey);
                 if (team == null) { return "Team not found"; }
                 team.ViewCount++;
                 await _pokeTeamContext.SaveChangesAsync();
@@ -590,40 +600,46 @@ namespace api.Services
             {
                 foreach (QueryResultDTO query in searchQuery.Queries)
                 {
-                    switch (query.Type)
+                    if(query != null)
                     {
-                        case "user":
-                            User user = await _userService.GetUserByUserName(query.Name);
-                            if (user != null)
-                            {
-                                expressions.Add(t => t.PlayerId == user.Id);
-                            }
-                            else
-                            {
-                                expressions.Add(t => t.AnonPlayer != null && t.AnonPlayer.Contains(query.Name));
-                            }
-                            break;
-                        case "tournament":
-                            expressions.Add(t => t.Tournament != null && t.Tournament.ShortName == query.Name);
-                            break;
-                        case "regulation":
-                            expressions.Add(t => t.Regulation == query.Identifier);
-                            break;
-                        case "tag":
-                            expressions.Add(t => t.TagIds.Any(t => query.Name != null && t == Formatter.NormalizeString(query.Name)));
-                            break;
-                        case "pokemon":
-                            expressions.Add(t => t.Pokemons.Any(p => p.DexNumber == int.Parse(query.Identifier)));
-                            break;
-                        case "move":
-                            expressions.Add(t => t.Pokemons.Any(p => p.Move1Identifier == query.Identifier
-                                || p.Move2Identifier == query.Identifier
-                                || p.Move3Identifier == query.Identifier
-                                || p.Move4Identifier == query.Identifier));
-                            break;
-                        case "item":
-                            expressions.Add(t => t.Pokemons.Any(p => p.ItemIdentifier == query.Identifier));
-                            break;
+                        switch (query.Type)
+                        {
+                            case "user":
+                                if(query.Name != null)
+                                {
+                                    User? user = await _userService.GetUserByUserName(query.Name);
+                                    if (user != null)
+                                    {
+                                        expressions.Add(t => t.PlayerId == user.Id);
+                                    }
+                                    else
+                                    {
+                                        expressions.Add(t => t.AnonPlayer != null && t.AnonPlayer.Contains(query.Name));
+                                    }
+                                }
+                                break;
+                            case "tournament":
+                                expressions.Add(t => t.Tournament != null && t.Tournament.ShortName == query.Name);
+                                break;
+                            case "regulation":
+                                expressions.Add(t => t.Regulation == query.Identifier);
+                                break;
+                            case "tag":
+                                expressions.Add(t => t.TagIds != null && t.TagIds.Any(t => query.Name != null && t == Formatter.NormalizeString(query.Name)));
+                                break;
+                            case "pokemon":
+                                expressions.Add(t => t.Pokemons.Any(p => query.Identifier != null && p.DexNumber == int.Parse(query.Identifier))); 
+                                break;
+                            case "move":
+                                expressions.Add(t => t.Pokemons.Any(p => p.Move1Identifier == query.Identifier
+                                    || p.Move2Identifier == query.Identifier
+                                    || p.Move3Identifier == query.Identifier
+                                    || p.Move4Identifier == query.Identifier));
+                                break;
+                            case "item":
+                                expressions.Add(t => t.Pokemons.Any(p => p.ItemIdentifier == query.Identifier));
+                                break;
+                        }
                     }
                 }
             }
@@ -659,6 +675,14 @@ namespace api.Services
         private List<Team> SortTeams(List<Team> teams, SortOrder? order)
         {
             List<Team> sortedTeams = teams.ToList();
+            if(order == null)
+            {
+                order = new SortOrder()
+                {
+                    Type = SortType.Date,
+                    Way = SortWay.Descending
+                };
+            }
             if (order.Type == SortType.Date)
             {
                 if (order.Way == SortWay.Ascending)
@@ -748,11 +772,11 @@ namespace api.Services
             {
                 return "Wrong teams per page";
             }
-            if (searchQuery.Queries != null && searchQuery.Queries.Any(q => q.Type == "user" && q.Name.Length > 32))
+            if (searchQuery.Queries != null && searchQuery.Queries.Any(q => q.Type == "user" && q.Name != null && q.Name.Length > 32))
             {
                 return "Player name must be shorter than 32 characters";
             }
-            if (searchQuery.Queries != null && searchQuery.Queries.Any(q => q.Type == "tournament" && q.Name.Length > 256))
+            if (searchQuery.Queries != null && searchQuery.Queries.Any(q => q.Type == "tournament" && q.Name != null && q.Name.Length > 256))
             {
                 return "Tournament name must be shorter than 32 characters";
             }

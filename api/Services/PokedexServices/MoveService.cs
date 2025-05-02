@@ -24,7 +24,12 @@ namespace api.Services.PokedexServices
             _typeService = typeService;
             _config = config;
 
-            baseUrl = _config["BaseUrl"];
+            baseUrl = "";
+            string? baseUrlTemp = _config["BaseUrl"];
+            if (baseUrlTemp != null)
+            {
+                baseUrl = (string)baseUrlTemp;
+            }
             pokeTypeIconPath = $"{baseUrl}images/types/";
             damageClassIconPath = $"{baseUrl}images/damage-class/";
         }

@@ -36,7 +36,6 @@ namespace api.Services
             catch (Exception ex)
             {
                 Printer.Log("Error sending email: ", ex.Message);
-                Printer.Log(ex.StackTrace);
                 return false;
             }
             return true;

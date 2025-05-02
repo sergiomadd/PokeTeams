@@ -17,7 +17,12 @@ namespace api.Services
             _pokeTeamContext = pokeTeamContext;
             _config = config;
 
-            baseUrl = _config["BaseUrl"];
+            baseUrl = "";
+            string? baseUrlTemp = _config["BaseUrl"];
+            if (baseUrlTemp != null)
+            {
+                baseUrl = (string)baseUrlTemp;
+            }
         }
 
         public async Task<TournamentDTO?> BuildTournamentDTO(Tournament tournament)

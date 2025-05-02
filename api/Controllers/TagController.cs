@@ -20,7 +20,7 @@ namespace api.Controllers
         [HttpGet("{identifier}")]
         public async Task<ActionResult<Tag>> Get(string identifier)
         {
-            Tag tag = await _tagService.GetTag(identifier);
+            Tag? tag = await _tagService.GetTag(identifier);
             if (tag == null)
             {
                 return BadRequest("Tag not found.");

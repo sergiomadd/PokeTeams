@@ -14,6 +14,7 @@ using System.Security.Cryptography;
 using Microsoft.SqlServer.Server;
 using System.ComponentModel;
 using System.Linq;
+using System.Buffers.Text;
 
 namespace api.Services
 {
@@ -29,7 +30,7 @@ namespace api.Services
         private readonly IStatService _statService;
         private readonly IIdentityService _identityService;
         private readonly IConfiguration _config;
-
+        private string baseUrl;
         private string pokemonSpriteUrl;
 
         public PokemonService
@@ -57,7 +58,12 @@ namespace api.Services
             _identityService = identityService;
             _config = config;
 
-            string baseUrl = _config["BaseUrl"];
+            baseUrl = "";
+            string? baseUrlTemp = _config["BaseUrl"];
+            if (baseUrlTemp != null)
+            {
+                baseUrl = (string)baseUrlTemp;
+            }
             pokemonSpriteUrl = $"{baseUrl}images/pokemon/";
         }
 
@@ -180,7 +186,7 @@ namespace api.Services
             }
         }
 
-        public Pokemon BreakPokemonDTO(PokemonDTO? pokemonDTO, string teamId)
+        public Pokemon BreakPokemonDTO(PokemonDTO pokemonDTO, string teamId)
         {
             return new Pokemon
             {
@@ -575,7 +581,7 @@ namespace api.Services
                     new QueryResultDTO(pokemonNamesDefault.name, pokemonNames.pokemon_species_id.ToString(), $"{pokemonSpriteUrl}{pokemonNames.pokemon_species_id}.png", "pokemon");
 
             var formsQuery =
-                from pokemonFormNames in _pokedexContext.pokemon_form_names.Where(p => p.pokemon_name.ToLower().Contains(key.ToLower()) && p.local_language_id == langId)
+                from pokemonFormNames in _pokedexContext.pokemon_form_names.Where(p => p.pokemon_name != null && p.pokemon_name.ToLower().Contains(key.ToLower()) && p.local_language_id == langId)
 
                 join pokemonFormNamesDefault in _pokedexContext.pokemon_form_names
                 on new { Key1 = pokemonFormNames.pokemon_form_id, Key2 = (int)Lang.en } equals new { Key1 = pokemonFormNamesDefault.pokemon_form_id, Key2 = pokemonFormNamesDefault.local_language_id } into pokemonFormNamesDefaultJoin

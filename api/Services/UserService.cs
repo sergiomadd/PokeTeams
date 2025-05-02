@@ -21,7 +21,12 @@ namespace api.Services
             _pokeTeamContext = pokeTeamContext;
             _config = config;
 
-            baseUrl = _config["BaseUrl"];
+            baseUrl = "";
+            string? baseUrlTemp = _config["BaseUrl"];
+            if (baseUrlTemp != null)
+            {
+                baseUrl = (string)baseUrlTemp;
+            }
         }
 
         public async Task<UserDTO?> BuildUserDTO(User user, bool logged = false)
@@ -73,6 +78,7 @@ namespace api.Services
             }
             catch (Exception ex)
             {
+                Printer.Log(ex);
                 return false;
             }
         }
@@ -88,6 +94,7 @@ namespace api.Services
             }
             catch (Exception ex)
             {
+                Printer.Log(ex);
                 return false;
             }
         }
@@ -103,6 +110,7 @@ namespace api.Services
             }
             catch (Exception ex)
             {
+                Printer.Log(ex);
                 return false;
             }
         }

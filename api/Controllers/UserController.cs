@@ -45,12 +45,13 @@ namespace api.Controllers
             }
             else
             {
-                User user = await _userService.GetUserByUserName(userName);
+                User? user = await _userService.GetUserByUserName(userName);
                 if (user == null)
                 {
                     return NotFound("Couldn't find user");
                 }
-                UserDTO userDTO = await _userService.BuildUserDTO(user, User.Identity.Name != null ? User.Identity.Name == user.UserName : false);
+                string? loggedUsername = _identityService.GetLoggedUserName();
+                UserDTO? userDTO = await _userService.BuildUserDTO(user, loggedUsername != null ? loggedUsername == user.UserName : false);
                 return Ok(userDTO);
             }
         }
@@ -104,7 +105,7 @@ namespace api.Controllers
         [HttpGet, Route("countries/{code}")]
         public async Task<ActionResult<CountryDTO>> GetCountry(string code)
         {
-            CountryDTO country = await _userService.GetCountry(code);
+            CountryDTO? country = await _userService.GetCountry(code);
             if (country == null)
             {
                 return BadRequest();
@@ -135,9 +136,9 @@ namespace api.Controllers
         }
 
         [HttpGet, Route("pictures")]
-        public async Task<ActionResult<List<string>>> GetPictures()
+        public ActionResult<List<string>> GetPictures()
         {
-            string baseUrl = _config["BaseUrl"];
+            string? baseUrl = _config["BaseUrl"];
 
             List<string> keys = new List<string>
             {

@@ -33,7 +33,7 @@ namespace api.Controllers
         [HttpGet("{normalizedName}")]
         public async Task<ActionResult<TournamentDTO>> Get(string normalizedName)
         {
-            TournamentDTO tournamentDTO = await _tournamentService.GetTournamentByNormalizedName(normalizedName);
+            TournamentDTO? tournamentDTO = await _tournamentService.GetTournamentByNormalizedName(normalizedName);
             if (tournamentDTO == null)
             {
                 return NotFound("Couldn't find tournament");
@@ -44,7 +44,7 @@ namespace api.Controllers
         [HttpPost]
         public async Task<ActionResult<object>> Post([FromBody] TournamentDTO tournamentDTO)
         {
-            Tournament newTournament = await _tournamentService.SaveTournament(tournamentDTO);
+            Tournament? newTournament = await _tournamentService.SaveTournament(tournamentDTO);
             if (newTournament == null)
             {
                 object response = new

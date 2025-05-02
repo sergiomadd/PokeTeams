@@ -56,7 +56,12 @@ namespace api.Controllers
             _pokeTeamContext = pokeTeamContext;
             _config = config;
 
-            baseUrl = _config["BaseUrl"];
+            baseUrl = "";
+            string? baseUrlTemp = _config["BaseUrl"];
+            if (baseUrlTemp != null)
+            {
+                baseUrl = (string)baseUrlTemp;
+            }
         }
 
         [AllowAnonymous]
@@ -81,7 +86,11 @@ namespace api.Controllers
                         return BadRequest("Refresh Error");
                     }
 
-                    var username = principal?.Identity?.Name;
+                    string? username = principal?.Identity?.Name;
+                    if (username == null)
+                    {
+                        return BadRequest("Refresh Error");
+                    }
                     var user = await _userManager.FindByNameAsync(username);
                     if (user is null || user.RefreshToken == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
                     {
@@ -122,7 +131,7 @@ namespace api.Controllers
         [HttpGet, Route("logged")]
         public async Task<ActionResult> GetLoggedUser()
         {
-            UserDTO userDTO;
+            UserDTO? userDTO;
             try
             {
                 User? user = await _identityService.GetLoggedUser();
@@ -171,7 +180,6 @@ namespace api.Controllers
         {
             try
             {
-
                 User? signedUserByEmail = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
                 User? signedUserByUserName = await _userManager.FindByNameAsync(model.UserNameOrEmail);
                 if (signedUserByEmail != null)
@@ -309,7 +317,7 @@ namespace api.Controllers
             {
                 return BadRequest("Server error");
             }
-            User updatedUser = await _userService.GetUserByUserName(updateData.NewUserName);
+            User? updatedUser = await _userService.GetUserByUserName(updateData.NewUserName);
 
             string token = _tokenGenerator.GenerateAccessToken(user);
             string refreshToken = _tokenGenerator.GenerateRefreshToken(user);
@@ -338,7 +346,7 @@ namespace api.Controllers
                 return BadRequest("Email already taken");
             }
             User? user = await _identityService.GetLoggedUser();
-            if (user == null)
+            if (user == null || user.UserName == null)
             {
                 return BadRequest("No user logged");
             }
@@ -348,7 +356,7 @@ namespace api.Controllers
                 return BadRequest("Server error");
             }
             await _userManager.UpdateAsync(user);
-            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            User? updatedUser = await _userService.GetUserByUserName(user.UserName);
             var token = _tokenGenerator.GenerateAccessToken(updatedUser);
 
             JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
@@ -398,7 +406,7 @@ namespace api.Controllers
                 decodedTokenBytes = WebEncoders.Base64UrlDecode(inputToken);
                 decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return BadRequest("Error confirming email");
             }
@@ -407,7 +415,7 @@ namespace api.Controllers
             {
                 return BadRequest("Error confirming email");
             }
-            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            User? updatedUser = await _userService.GetUserByUserName(user.UserName);
             var token = _tokenGenerator.GenerateAccessToken(updatedUser);
 
             JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
@@ -433,7 +441,7 @@ namespace api.Controllers
             {
                 return BadRequest("Server error");
             }
-            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            User? updatedUser = await _userService.GetUserByUserName(user.UserName);
             var token = _tokenGenerator.GenerateAccessToken(updatedUser);
 
             JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
@@ -459,7 +467,7 @@ namespace api.Controllers
             {
                 return BadRequest("Server error");
             }
-            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            User? updatedUser = await _userService.GetUserByUserName(user.UserName);
             var token = _tokenGenerator.GenerateAccessToken(updatedUser);
 
             JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
@@ -486,7 +494,7 @@ namespace api.Controllers
             {
                 return BadRequest("Server error");
             }
-            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            User? updatedUser = await _userService.GetUserByUserName(user.UserName);
             var token = _tokenGenerator.GenerateAccessToken(updatedUser);
 
             JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
@@ -513,7 +521,7 @@ namespace api.Controllers
             {
                 return BadRequest("Server error");
             }
-            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            User? updatedUser = await _userService.GetUserByUserName(user.UserName);
             var token = _tokenGenerator.GenerateAccessToken(updatedUser);
 
             JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };
@@ -540,7 +548,7 @@ namespace api.Controllers
             {
                 return BadRequest("Server error");
             }
-            User updatedUser = await _userService.GetUserByUserName(user.UserName);
+            User? updatedUser = await _userService.GetUserByUserName(user.UserName);
             var token = _tokenGenerator.GenerateAccessToken(updatedUser);
 
             JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token };

@@ -42,7 +42,7 @@ namespace api.Controllers
         [HttpGet("{identifier}")]
         public async Task<ActionResult<RegulationDTO>> Get(string identifier)
         {
-            RegulationDTO regulationDTO = await _regulationService.GetRegulationByIdentifier(identifier);
+            RegulationDTO? regulationDTO = await _regulationService.GetRegulationByIdentifier(identifier);
             if (regulationDTO == null)
             {
                 return NotFound("Couldn't find regulation");
@@ -53,7 +53,7 @@ namespace api.Controllers
         [HttpPost]
         public async Task<ActionResult<object>> Post([FromBody] RegulationDTO regulationDTO)
         {
-            Regulation newRegulation = await _regulationService.SaveRegulation(regulationDTO);
+            Regulation? newRegulation = await _regulationService.SaveRegulation(regulationDTO);
             if (newRegulation == null)
             {
                 object response = new

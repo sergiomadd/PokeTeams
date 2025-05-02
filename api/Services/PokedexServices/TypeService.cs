@@ -16,13 +16,19 @@ namespace api.Services.PokedexServices
         private readonly IConfiguration _config;
         private readonly string pokeTypeIconPath;
         private readonly string pokeTypeTeraIconPath;
+        private string baseUrl;
 
         public TypeService(IPokedexContext pokedexContext, IConfiguration config)
         {
             _pokedexContext = pokedexContext;
             _config = config;
 
-            string baseUrl = _config["BaseUrl"];
+            baseUrl = "";
+            string? baseUrlTemp = _config["BaseUrl"];
+            if (baseUrlTemp != null)
+            {
+                baseUrl = (string)baseUrlTemp;
+            }
             pokeTypeIconPath = $"{baseUrl}images/types/";
             pokeTypeTeraIconPath = $"{baseUrl}images/teratypes/";
         }

@@ -20,7 +20,13 @@ namespace api.Services.PokedexServices
         {
             _pokedexContext = pokedexContext;
             _config = config;
-            string baseUrl = _config["BaseUrl"];
+
+            baseUrl = "";
+            string? baseUrlTemp = _config["BaseUrl"];
+            if(baseUrlTemp != null)
+            {
+                baseUrl = (string)baseUrlTemp;
+            }
         }
 
         public async Task<AbilityDTO?> GetAbilityByIdentifier(string identifier, int langId)
