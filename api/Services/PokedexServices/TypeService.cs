@@ -3,9 +3,6 @@ using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Models.DBModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.IdentityModel.Tokens;
-using System.Collections.Generic;
 
 
 namespace api.Services.PokedexServices

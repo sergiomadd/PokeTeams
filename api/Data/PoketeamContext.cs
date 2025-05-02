@@ -1,9 +1,7 @@
-﻿using api.Models.DBModels;
-using api.Models.DBPoketeamModels;
+﻿using api.Models.DBPoketeamModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
 namespace api.Data
 {
@@ -60,8 +58,7 @@ namespace api.Data
             modelBuilder.Entity<User>(
                 u =>
                 {
-                    u.HasIndex(p => p.NormalizedEmail).HasName("EmailIndex").IsUnique();
-
+                    u.HasIndex(p => p.NormalizedEmail).HasDatabaseName("EmailIndex").IsUnique();
                     u.Property(p => p.UserName).HasMaxLength(32);
                     u.Property(p => p.NormalizedUserName).HasMaxLength(32);
                     u.Property(p => p.Email).HasMaxLength(256);

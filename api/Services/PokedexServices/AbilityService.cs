@@ -1,12 +1,9 @@
 ﻿using api.Data;
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
-using api.Models;
-using api.Models.DBModels;
 using api.Models.DBPokedexModels;
 using api.Util;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace api.Services.PokedexServices
 {

@@ -1,10 +1,7 @@
 ﻿using api.DTOs;
 using api.Models.DBPoketeamModels;
 using api.Services;
-using api.Util;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace api.Controllers
 {

@@ -18,6 +18,6 @@ namespace api.Services
         public Task<string> IncrementTeamViewCount(string teamKey);
         public Task<TeamSearchQueryResponseDTO> QueryTeams(TeamSearchQueryDTO searchQuery, int langId);
         public string? ValidateTeamDTO(TeamDTO? inputTeam);
-        public string? ValidateTeamSearchQueryDTO(TeamSearchQueryDTO searchQuery);
+        public string? ValidateTeamSearchQueryDTO(TeamSearchQueryDTO? searchQuery);
     }
 }

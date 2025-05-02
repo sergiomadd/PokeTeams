@@ -1,7 +1,6 @@
 ﻿using api.DTOs;
 using api.Models.DBPoketeamModels;
 using api.Services;
-using api.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers

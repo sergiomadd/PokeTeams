@@ -4,17 +4,8 @@ using api.DTOs;
 using api.Models.DBModels;
 using api.Models.DBPokedexModels;
 using api.Models.DBPoketeamModels;
-using MethodTimer;
 using Microsoft.EntityFrameworkCore;
-using api.Util;
-using System.Text.Json;
 using api.Services.PokedexServices;
-using System.Xml.Linq;
-using System.Security.Cryptography;
-using Microsoft.SqlServer.Server;
-using System.ComponentModel;
-using System.Linq;
-using System.Buffers.Text;
 
 namespace api.Services
 {

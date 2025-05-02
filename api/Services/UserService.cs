@@ -1,12 +1,8 @@
 ﻿using api.Data;
 using api.DTOs;
-using api.Models.DBModels;
 using api.Models.DBPoketeamModels;
 using api.Util;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Diagnostics.Metrics;
-using System.Text.Json;
 
 namespace api.Services
 {

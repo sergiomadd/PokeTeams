@@ -1,12 +1,9 @@
 ﻿using api.Data;
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
-using api.Models;
 using api.Models.DBModels;
 using api.Util;
-using MethodTimer;
 using Microsoft.EntityFrameworkCore;
-using System.Buffers.Text;
 
 namespace api.Services.PokedexServices
 {

@@ -1,6 +1,5 @@
 ﻿using api.Data;
 using api.DTOs;
-using api.Models;
 using api.Models.DBPoketeamModels;
 using api.Util;
 using Microsoft.EntityFrameworkCore;

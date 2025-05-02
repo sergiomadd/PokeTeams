@@ -1,17 +1,10 @@
-﻿using api.Data;
-using api.DTOs;
+﻿using api.DTOs;
 using api.DTOs.PokemonDTOs;
-using api.Models;
-using api.Models.DBModels;
 using api.Services;
-using api.Services.PokedexServices;
 using api.Util;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 
 namespace api.Controllers
 {

@@ -91,8 +91,7 @@ namespace api.Controllers
                 {
                     return BadRequest(validation);
                 }
-                
-                Team? newTeam = await _teamService.SaveTeam(teamDTO);
+                Team? newTeam = await _teamService.SaveTeam(teamDTO!);
                 if (newTeam == null)
                 {
                     return BadRequest("Error saving team");
@@ -110,7 +109,7 @@ namespace api.Controllers
             {
                 return BadRequest(validation);
             }
-            Team? currentTeam = await _teamService.GetTeamModel(teamDTO.ID);
+            Team? currentTeam = await _teamService.GetTeamModel(teamDTO!.ID);
             if (currentTeam == null || currentTeam.Player == null)
             {
                 return Unauthorized("Unauthorized A");
@@ -132,10 +131,14 @@ namespace api.Controllers
         [HttpPost, Route("delete")]
         public async Task<ActionResult<string>> Delete([FromBody] TeamIdDTO? data)
         {
+            if(data == null || data.Id == null)
+            {
+                return Unauthorized("Wrong data");
+            }
             Team? teamModel = await _teamService.GetTeamModel(data.Id);
             if (teamModel == null || teamModel.Player == null)
             {
-                return Unauthorized("Unauthorized");
+                return Unauthorized("Team not found");
             }
             User? loggedUser = await _identityService.GetLoggedUser();
             if (loggedUser?.Id == null || loggedUser.Id != teamModel.Player.Id)
@@ -178,7 +181,7 @@ namespace api.Controllers
                     return BadRequest(validation);
                 }
                 int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
-                TeamSearchQueryResponseDTO teams = await _teamService.QueryTeams(key, langId ?? 9);
+                TeamSearchQueryResponseDTO teams = await _teamService.QueryTeams(key!, langId ?? 9);
                 return Ok(teams);
             }
         }

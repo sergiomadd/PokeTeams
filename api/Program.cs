@@ -9,15 +9,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using api.Util;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
 using api.Services.PokedexServices;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Diagnostics;
-using System.Net;
 using api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);

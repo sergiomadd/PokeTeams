@@ -6,16 +6,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
-using System.Net.Mail;
-using System.Net;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using NuGet.Common;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
-using Humanizer;
 using api.Data;
-using System.Buffers.Text;
 
 namespace api.Controllers
 {

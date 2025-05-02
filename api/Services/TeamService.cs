@@ -6,40 +6,9 @@ using System.Data;
 using Microsoft.EntityFrameworkCore;
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
-using System.Security.Cryptography;
-using api.Models.DBModels;
-using System.Numerics;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using MethodTimer;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-using System.Linq;
-using api.Models;
-using System.Collections.Generic;
-using NuGet.Packaging.Signing;
-using Microsoft.AspNetCore.Components.Forms;
 using System.Linq.Expressions;
-using System.Reflection;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using System;
-using System.Reflection.Metadata;
-using System.Data.Common;
-using static NuGet.Packaging.PackagingConstants;
-using System.Collections.ObjectModel;
-using System.IO;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.VisualBasic;
-using Newtonsoft.Json.Linq;
-using static System.Net.WebRequestMethods;
-using System.Xml.Linq;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using LinqKit;
-using System.Data.Entity.Core.Common.CommandTrees;
-using System.Composition;
-using System.Security.Cryptography.Xml;
-using System.Xml.Serialization;
-using Microsoft.IdentityModel.Tokens;
-using System.Buffers.Text;
 
 namespace api.Services
 {
@@ -762,7 +731,7 @@ namespace api.Services
             return null;
         }
 
-        public string? ValidateTeamSearchQueryDTO(TeamSearchQueryDTO searchQuery)
+        public string? ValidateTeamSearchQueryDTO(TeamSearchQueryDTO? searchQuery)
         {
             if (searchQuery == null)
             {

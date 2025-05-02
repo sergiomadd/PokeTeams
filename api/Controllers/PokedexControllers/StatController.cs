@@ -1,9 +1,7 @@
 ﻿using api.DTOs.PokemonDTOs;
-using api.Services;
 using api.Services.PokedexServices;
 using api.Util;
 using Microsoft.AspNetCore.Mvc;
-using System.Xml.Linq;
 
 namespace api.Controllers.PokedexControllers
 {

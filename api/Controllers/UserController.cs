@@ -6,7 +6,6 @@ using api.Models.DBPoketeamModels;
 using api.DTOs;
 using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Text.Json;
 
 namespace api.Controllers
 {

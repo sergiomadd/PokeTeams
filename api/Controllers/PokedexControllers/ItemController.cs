@@ -1,12 +1,8 @@
-﻿using api.Data;
-using api.DTOs;
+﻿using api.DTOs;
 using api.DTOs.PokemonDTOs;
-using api.Services;
 using api.Services.PokedexServices;
 using api.Util;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers.PokedexControllers
 {

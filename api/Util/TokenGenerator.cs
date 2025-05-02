@@ -1,12 +1,9 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using api.Models.DBPoketeamModels;
-using System.Security.Cryptography;
 using api.DTOs;
-using System.Net;
 
 namespace api.Util
 {

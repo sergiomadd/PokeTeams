@@ -5,7 +5,6 @@ using api.Models.DBModels;
 using static api.DTOs.PokemonDTOs.MoveDTO;
 using Microsoft.EntityFrameworkCore;
 using api.Util;
-using api.Models;
 
 namespace api.Services.PokedexServices
 {

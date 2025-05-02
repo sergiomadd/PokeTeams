@@ -1,7 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.Linq;
-
-namespace api.Util
+﻿namespace api.Util
 {
     public static class Converter
     {
