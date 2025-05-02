@@ -346,6 +346,18 @@ namespace api.Controllers
         public async Task<ActionResult> GetEmailConfirmationCode()
         {
             var user = await _identityService.GetLoggedUser();
+            if (user == null || user.UserName == null)
+            {
+                return BadRequest("No user logged");
+            }
+            if (user.Email == null)
+            {
+                return BadRequest($"No defined email for {user.UserName}");
+            }
+            if (user.EmailConfirmed)
+            {
+                return BadRequest($"Email already confirmed for {user.UserName}");
+            }
             string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             var tokenBytes = Encoding.UTF8.GetBytes(token);
             var encodedToken = WebEncoders.Base64UrlEncode(tokenBytes);

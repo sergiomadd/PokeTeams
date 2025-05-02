@@ -783,7 +783,33 @@ namespace api.Test.Controllers
         //GetEmailConfirmationCode
 
         [Fact]
-        public async Task GetEmailConfirmationCode_ReturnsBadRequest()
+        public async Task GetEmailConfirmationCode_ReturnsBadRequest_NoUserLogged()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "code";
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var validJwtToken = _instance.GenerateValidJwtToken(null);
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", validJwtToken);
+            var accessCookie = new CookieHeaderValue("accessToken", validJwtToken);
+            client.DefaultRequestHeaders.Add("Cookie", accessCookie.ToString());
+
+            //Act
+            var response = await client.GetAsync(request);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsAsync<string>();
+            Assert.Equal("No user logged", responseString);
+        }
+
+        [Fact]
+        public async Task GetEmailConfirmationCode_ReturnsBadRequest_NoEmail()
         {
             //Arrange
             var _instance = new AppInstance();
@@ -810,7 +836,38 @@ namespace api.Test.Controllers
             //Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             var responseString = await response.Content.ReadAsAsync<string>();
-            Assert.Equal("Error sending email", responseString);
+            Assert.Equal($"No defined email for {authUser.UserName}", responseString);
+        }
+
+        [Fact]
+        public async Task GetEmailConfirmationCode_ReturnsBadRequest_EmailConfirmed()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "code";
+            var authUser = _instance.GetTestAuthLoggedUser();
+            var scope = _instance.Services.CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            authUser.EmailConfirmed = true;
+            await userManager.CreateAsync(authUser);
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var validJwtToken = _instance.GenerateValidJwtToken(authUser);
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", validJwtToken);
+            var accessCookie = new CookieHeaderValue("accessToken", validJwtToken);
+            client.DefaultRequestHeaders.Add("Cookie", accessCookie.ToString());
+
+            //Act
+            var response = await client.GetAsync(request);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsAsync<string>();
+            Assert.Equal($"Email already confirmed for {authUser.UserName}", responseString);
         }
 
         [Fact]
