@@ -720,6 +720,10 @@ namespace api.Services
             {
                 return "Tag validation error";
             }
+            if (inputTeam.Pokemons == null || inputTeam.Pokemons.Count == 0)
+            {
+                return "No pokemons loaded";
+            }
             if (inputTeam.Pokemons != null && inputTeam.Pokemons.Any(p => p != null
                 && ((p.DexNumber != null && p.DexNumber < 1)
                 || (p.Nickname != null && p.Nickname.Length > 16)
