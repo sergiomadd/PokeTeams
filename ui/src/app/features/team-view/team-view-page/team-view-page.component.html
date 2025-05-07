@@ -6,11 +6,11 @@
 <ng-template #loaded>
   <ng-container *ngIf="!unauthorized; else teamUnauthorized">
     <ng-container *ngIf="team; else noteam">
-      <div class="m-auto flex-col justify-c-c align-i-c" [ngStyle]="{'margin-top': window.isTabletPortraitOrLess() ? '0.8em' : '7em'}">
+      <div class="m-auto flex-col justify-c-c align-i-c gap-m" [ngStyle]="{'margin-top': window.isTabletPortraitOrLess() ? '0.8em' : '7em'}">
         <app-team [team]="team"></app-team>
         <div class="buttons flex justify-c-c gap-s w-100">
           <button 
-          class="button-primary relative"
+          class="button relative"
           (click)="copyPaste()"
           >
             {{"team.view.copy_paste-button" | translate}}
@@ -29,6 +29,12 @@
             >
               {{"team.view.edit-button" | translate}}
             </button>
+            <button
+            class="button-primary relative"
+            (click)="tryDelete()"
+            >
+              {{"team.preview.deleteTeam" | translate}}
+            </button>
           </ng-container>
           <button
           class="button relative"
@@ -43,6 +49,11 @@
             ></app-tooltip>
           </button>
         </div> 
+        <ng-container *ngIf="feedback">
+          <div class="formFeedbackError">
+            {{feedback}}
+          </div>
+        </ng-container>
         <div style="color: var(--text-color-secondary); margin-top: 2.5em; opacity: 0.8; font-size: 0.8em;">
           {{"team.view.help" | translate}}
         </div>
@@ -61,3 +72,11 @@
     </div>
   </div>
 </ng-template>
+<app-dialog 
+[title]="'team.preview.deleteTeamDialog' | translate"
+[trueButtonText]="'shared.no' | translate"
+[falseButtonText]="'shared.yes' | translate"
+[visible]="deleteDialog"
+(choose)="deleteChooseEvent($event)"
+*ngIf="deleteDialog"
+></app-dialog>

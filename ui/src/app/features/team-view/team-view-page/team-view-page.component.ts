@@ -39,10 +39,12 @@ export class TeamViewPageComponent
   teamData?: TeamData;
   loading: boolean = false;
   viewIncrementCooldown: number = 1;
+  feedback: string | undefined = undefined;
 
   pasteCopied: boolean = false;
   linkCopied: boolean = false;
   unauthorized: boolean = false;
+  deleteDialog: boolean = false;
 
   async ngOnInit()
   {
@@ -200,6 +202,53 @@ export class TeamViewPageComponent
       this.team.options.showIVs = true;
       this.team.options.showEVs = true;
       this.team.options.showNature = true;
+    }
+  }
+
+  tryDelete()
+  {
+    this.deleteDialog = !this.deleteDialog;
+  }
+
+  deleteChooseEvent($event)
+  {
+    if($event)
+    {
+      this.delete();
+      this.deleteDialog = !this.deleteDialog;
+    }
+    else
+    {
+      this.deleteDialog = !this.deleteDialog;
+    }
+  }
+
+  delete()
+  {
+    if(this.team && this.team?.player?.registered
+      && this.loggedUser && this.loggedUser.username == this.team?.player?.username) 
+    {
+      this.teamService.deleteTeam(this.team?.id).subscribe(
+        {
+          next: () =>
+          {
+            this.router.navigate(['/']);
+          },
+          error: (error) =>
+          {
+            console.log("Error deleting team: ", error.message)
+            this.feedback = error.message;
+          }
+        }
+      )
+    }
+    else if(!this.team?.player?.registered)
+    {
+      this.feedback = "Unauthorized";
+    }
+    else if(!this.loggedUser || (this.loggedUser && this.loggedUser.username != this.team?.player?.username))
+    {
+      this.feedback = "Unauthorized";
     }
   }
 }
