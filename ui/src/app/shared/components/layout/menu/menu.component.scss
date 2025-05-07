@@ -70,10 +70,11 @@ $openWidth: 11em;
   {
     text-decoration: none;
   }
-  &:active 
-  {
-    text-decoration: none;
-  }
+}
+
+.active
+{ 
+  background-color: var(--bg-color-3);
 }
 
 .no-hover

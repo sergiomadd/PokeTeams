@@ -7,7 +7,6 @@ import { ThemeService } from 'src/app/core/helpers/theme.service';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { User } from 'src/app/features/user/models/user.model';
-import { environment } from 'src/environments/environment';
 import { WindowService } from '../../../../core/helpers/window.service';
 import { Chip } from '../../../../core/models/misc/chip.model';
 import { Device } from '../../../../core/models/misc/device.enum';
@@ -44,7 +43,6 @@ export class MenuComponent
   lang = Lang;
   langs = langs;
   langChips: Chip[] = []
-  private url = environment.url;
 
   ngOnInit()
   { 
