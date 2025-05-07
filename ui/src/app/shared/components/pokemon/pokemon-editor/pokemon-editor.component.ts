@@ -384,7 +384,6 @@ export class PokemonEditorComponent
 
   calculateAvailableEVs(newEVs: number) : boolean
   {
-    console.log(this.remainingEVs)
     //Selected more EVs than available
     if(this.remainingEVs == 0 && newEVs >= this.currentEVs)
     {

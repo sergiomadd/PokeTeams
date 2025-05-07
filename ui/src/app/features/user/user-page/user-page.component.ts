@@ -39,7 +39,6 @@ export class UserPageComponent
 
   ngOnInit()
   {
-    console.log("url ", this.router.url);
     this.username = this.router.url.slice(1);
     this.route.params.subscribe(params =>
     {

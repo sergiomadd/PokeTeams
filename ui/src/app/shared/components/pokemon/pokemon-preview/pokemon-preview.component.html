@@ -44,7 +44,6 @@
         }">
           <img [src]="pokemon?.teraType?.iconPath" 
           [title]="pokemon?.teraType?.name?.content"
-          [alt]="pokemon?.teraType?.name?.content"
           [ngClass]="
           {
             'icon-s': window.isSmallMobile(),
@@ -59,7 +58,7 @@
           'icon-s': window.isSmallMobile(),
           'icon-m': !window.isSmallMobile()
         }">
-          <img [src]="pokemon?.item?.iconPath" [alt]="pokemon?.item?.name?.content" 
+          <img [src]="pokemon?.item?.iconPath"
           [ngClass]="
           {
             'icon-s': window.isSmallMobile(),

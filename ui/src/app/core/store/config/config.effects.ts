@@ -28,7 +28,6 @@ export class ConfigEffects
           }),
           catchError((error) => 
           {
-            console.log("Error toggleling theme: ", error)
             return of(configActions.toggleThemeFailure(
               {
                 error: error.message
@@ -53,7 +52,6 @@ export class ConfigEffects
           }),
           catchError((error) => 
           {
-            console.log("Error switching language: ", error)
             return of(configActions.changeLangFailure(
               {
                 error: error.message

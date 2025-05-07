@@ -82,7 +82,6 @@ export class ThemeService
     {
       color = +color;
     }
-    console.log(this.tagBackgroundColors[color]);
     return this.tagBackgroundColors[color];
   }
 
@@ -92,7 +91,6 @@ export class ThemeService
     {
       color = +color;
     }
-    //console.log(color);
     if(tagTextColors[color])
     {
       return themes[1].colors['--text-color'];

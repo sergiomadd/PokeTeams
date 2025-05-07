@@ -52,14 +52,12 @@ export class TeamEditPageComponent
       this.feedback = this.teamEditorService.validateTeam(this.team);
       if(!this.feedback)
       {
-        console.log("Updating team: ", this.team);
         this.teamSubmitted = true;
         this.teamService.updateTeam(this.team).subscribe(
           {
             next: (response: string) =>
             {
               this.teamSubmitted = false;
-              console.log("Team edit response: ", response)
               if(response)
               {
                 this.router.navigate(['/', response])
@@ -87,7 +85,6 @@ export class TeamEditPageComponent
           this.teamData = response;
           if(this.teamData)
           {
-            console.log(response)
             this.team = 
             {
               ...this.team,
@@ -111,7 +108,6 @@ export class TeamEditPageComponent
         },
         error: (error) =>
         {
-          console.log("Error getting team data", error)
           this.loading = false;
         },
         complete: () => 

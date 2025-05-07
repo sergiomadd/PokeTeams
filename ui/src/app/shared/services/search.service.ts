@@ -110,7 +110,6 @@ export class SearchService
         error: (error) => 
         {
           console.log("Team search error", error);
-          //display error
           this.setSearched(false);
         },
         complete: () => 

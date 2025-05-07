@@ -163,7 +163,6 @@ export class SmartInputComponent
           {
             this.results = [];
             this.searching = false;
-            console.log("Error searching ", error)
           }
         }
       )
@@ -214,7 +213,6 @@ export class SmartInputComponent
             {
               this.results = [];
               this.searching = false;
-              console.log("Error searching ", error)
             }
           }
         )
@@ -235,7 +233,6 @@ export class SmartInputComponent
             error: (error) => 
             {
               this.results = [];
-              console.log("Error searching ", error)
             }
           }
         )
@@ -294,10 +291,5 @@ export class SmartInputComponent
     {
       this.resultsDiv.nativeElement.scrollBy(0, 38);
     }
-  }
-
-  onClickOutside()
-  {
-    console.log("OUTSIDE")
   }
 }

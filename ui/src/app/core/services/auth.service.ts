@@ -62,7 +62,6 @@ export class AuthService
 
   changeName(updateDTO: UserUpdateDTO) : Observable<void>
   {
-    console.log("changing name")
     let url = this.apiUrl + 'update/name';
     return this.http.post<void>(url, updateDTO, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }

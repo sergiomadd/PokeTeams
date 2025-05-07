@@ -34,10 +34,7 @@ export class EvolutionComponent
     {
       this.pokemon = changes['pokemon'].currentValue;
       this.loadSprite();
-      console.log(this.pokemon)
-
     }
-    
   }
 
   loadSprite()

@@ -13,7 +13,6 @@ export class ParserService {
 
   parsePaste(paste: string): PokePasteData
   {
-    console.log("Input paste: ", paste);
     let pokePasteData: PokePasteData = <PokePasteData>{}
     let pokemons = paste.split("\n\n");
     pokePasteData.pokemons = [];
@@ -24,7 +23,6 @@ export class ParserService {
         pokePasteData.pokemons.push(this.parsePokemon(pokemon));
       }
     });
-    console.log("Generated paste: ", pokePasteData);
     return pokePasteData;
   }
 

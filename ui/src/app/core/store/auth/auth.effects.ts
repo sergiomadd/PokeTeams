@@ -71,7 +71,6 @@ export class AuthEffects
           }),
           catchError((error: CustomError) => 
           {
-            console.log("Error in log in effect: ", error)
             return of(authActions.logInFailure(
               {
                 error: error.message
@@ -205,7 +204,6 @@ export class AuthEffects
           }),
           catchError((error: CustomError) => 
           {
-            console.log(error);
             return of(authActions.changeNameFailure(
               {
                 error: error.message
@@ -462,7 +460,6 @@ export class AuthEffects
           }),
           catchError((error: CustomError) => 
           {
-            console.log("Error in log in effect: ", error)
             return of(authActions.confirmEmailFailure(
               {
                 error: error.message

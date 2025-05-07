@@ -91,7 +91,6 @@ export class TeamViewPageComponent
         },
         error: (error: CustomError) =>
         {
-          console.log("Error getting team data", error)
           this.loading = false;
           if(error.status === 401)
           {

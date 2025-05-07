@@ -28,7 +28,6 @@ export class PokemonService
 
   async buildPokemon(pokePaste: PokePaste) : Promise<Pokemon>
   {
-    //const now = new Date().getTime();
     let pokemon: Pokemon = <Pokemon>{};
 
     try 
@@ -67,10 +66,6 @@ export class PokemonService
     {
       console.log("Error getting pokemons.", error);
     }
-    finally 
-    {
-      console.log('Generated pokemon: ', pokemon);
-    }
     
     if(pokemon.dexNumber && pokemon.ability)
     {
@@ -79,8 +74,6 @@ export class PokemonService
 
     pokemon.ivs = pokePaste.ivs ? this.getStats(pokePaste.ivs) : [];
     pokemon.evs = pokePaste.evs ? this.getStats(pokePaste.evs) : [];
-
-    //console.log("Time to generate pokemon: ", new Date().getTime() - now);
     return pokemon;
   }
 

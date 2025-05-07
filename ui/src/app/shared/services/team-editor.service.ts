@@ -95,7 +95,7 @@ export class TeamEditorService
     {
       return this.i18n.translateKeyWithParameters('team.editor.errors.too_many_pokemons', { max: 6 });
     }
-    if(team.pokemons.some(p => p && !p.dexNumber))
+    if(team.pokemons.some(p => p && !p.dexNumber || (p?.dexNumber && p.dexNumber < 1)))
     {
       return this.i18n.translateKey('team.editor.errors.empty_pokemons');
     }

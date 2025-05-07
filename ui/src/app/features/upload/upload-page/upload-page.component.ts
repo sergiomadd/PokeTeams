@@ -44,14 +44,12 @@ export class UploadPageComponent
     this.feedback = this.teamEditorService.validateTeam(this.team);
     if(!this.feedback)
     {
-      console.log("Saving team: ", this.team);
       this.teamSubmitted = true;
       this.teamService.saveTeam(this.team).subscribe(
         {
           next: (response: string) =>
           {
             this.teamSubmitted = false;
-            console.log("Team response: ", response)
             if(response)
             {
               this.router.navigate(['/', response])

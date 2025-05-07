@@ -67,14 +67,11 @@ export class PasteInputComponent
 
   async load()
   {
-    //const nowAll = new Date().getTime();
     this.pasteBoxFormSubmitted = true;
     if(this.pasteBoxForm.valid)
     {
       let formData = this.pasteBoxForm.controls.paste.value ?? "";
-      console.log("Submitting: ", formData)
       let data = this.parser.parsePaste(formData);
-      console.log("Parsed data: ", data)
       if(data.pokemons && data.pokemons.length > 0)
       {
         this.teamEditorService.updatePokemons([]);
@@ -91,7 +88,6 @@ export class PasteInputComponent
         )
       }
     }
-    //console.log("Time to generate pokemons: ", new Date().getTime() - nowAll);
   }
 
   selectTab(index)
@@ -351,7 +347,7 @@ IVs: 0 Atk
 - Trick Room  
 
 `
-    this.pasteHolder = test4;
+    this.pasteHolder = propaste;
     this.pasteBoxForm.controls.paste.setValue(this.pasteHolder);
   }
 }
