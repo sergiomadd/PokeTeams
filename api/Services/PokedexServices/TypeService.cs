@@ -328,7 +328,7 @@ namespace api.Services.PokedexServices
             string path = teraType ? pokeTypeTeraIconPath : pokeTypeTeraIconPath;
 
             var query =
-                from typeNames in _pokedexContext.type_names.Where(i => i.name.ToLower().StartsWith(key.ToLower()) && i.local_language_id == langId)
+                from typeNames in _pokedexContext.type_names.Where(i => i.name.ToLower().StartsWith(key.ToLower()) && i.local_language_id == langId && i.type_id <= 19)
 
                 join types in _pokedexContext.types
                 on new { Key1 = typeNames.type_id } equals new { Key1 = types.id } into typesJoin
