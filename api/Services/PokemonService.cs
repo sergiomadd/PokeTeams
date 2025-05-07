@@ -144,7 +144,7 @@ namespace api.Services
                 await _moveService.GetMovePreviewByIdentifier(pokemon.Move4Identifier ?? "", langId)
             };
 
-            if (pokemon.FormId != null)
+            if (pokemon.FormId != null && pokemon.DexNumber != null && !ArePokemonFormsExcluded((int)pokemon.DexNumber))
             {
                 int? id = await GetPokemonIdByFormId(pokemon.FormId);
                 return new PokemonPreviewDTO
@@ -242,7 +242,7 @@ namespace api.Services
 
             LocalizedText? name = await GetPokemonName(dexNumber, langId);
 
-            if (pokemon.FormId != null)
+            if (pokemon.FormId != null && pokemon.DexNumber != null && !ArePokemonFormsExcluded((int)pokemon.DexNumber))
             {
                 pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.id == pokemon.FormId);
                 if(pokemon_forms != null)
@@ -519,11 +519,17 @@ namespace api.Services
             return evolutions;
         }
 
+        private bool ArePokemonFormsExcluded(int dexNumber)
+        {
+            List<int> excludedPokemons = new List<int> { 25 };
+            return excludedPokemons.Contains(dexNumber);
+        }
+
         private async Task<List<FormDTO?>> GetPokemonForms(int formId, int langId)
         {
             List<FormDTO?> forms = new List<FormDTO?>();
             pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.id == formId);
-            if(pokemon_forms != null)
+            if(pokemon_forms != null && !ArePokemonFormsExcluded(pokemon_forms.pokemon_id))
             {
                 string speciesIdentifier = pokemon_forms.identifier.ToLower().Split("-")[0];
                 int formOrder = pokemon_forms.form_order;
