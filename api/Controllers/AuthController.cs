@@ -357,7 +357,7 @@ namespace api.Controllers
             string confirmationLink = $"{baseUrl}user/{user.UserName}/emailconfirmation?email={user.Email}&token={encodedToken}";
             string emailTo = user.Email;
             string subject = "Confirm email";
-            string message = $"Confirmation email link {confirmationLink}";
+            string message = _emailService.GetEmailBodyHTML(confirmationLink);
 
             bool emailSent = await _emailService.SendEmailAsync(emailTo, subject, message);
             if (!emailSent)
