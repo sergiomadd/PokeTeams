@@ -289,5 +289,42 @@ export const authReducers = createReducer(
       isSubmitting: false,
       error: action.error
     })),
-  
+  on(authActions.forgotPassword, (state) => (
+    {
+      ...state,
+      isSubmitting: true,
+      error: null,
+      success: false
+    })),
+  on(authActions.forgotPasswordSuccess, (state) => (
+    {
+      ...state,
+      isSubmitting: false,
+      success: true
+    })),
+  on(authActions.forgotPasswordFailure, (state, action) => (
+    {
+      ...state,
+      isSubmitting: false,
+      error: action.error
+    })),
+  on(authActions.resetPassword, (state) => (
+    {
+      ...state,
+      isSubmitting: true,
+      error: null,
+      success: false
+    })),
+  on(authActions.resetPasswordSuccess, (state, action) => (
+    {
+      ...state,
+      isSubmitting: false,
+      success: true
+    })),
+  on(authActions.resetPasswordFailure, (state, action) => (
+    {
+      ...state,
+      isSubmitting: false,
+      error: action.error
+    })),
 )

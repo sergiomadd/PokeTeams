@@ -119,4 +119,16 @@ export class AuthService
     let url = this.apiUrl + 'own/' + teamID;
     return this.http.get<boolean>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
+
+  forgotEmail(updateDTO: UserUpdateDTO) : Observable<void>
+  {
+    let url = this.apiUrl + 'forgot';
+    return this.http.post<void>(url, updateDTO, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+  }
+
+  resetPassword(updateDTO: UserUpdateDTO) : Observable<void>
+  {
+    let url = this.apiUrl + 'update/reset';
+    return this.http.post<void>(url, updateDTO, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+  }
 }

@@ -470,4 +470,52 @@ export class AuthEffects
       })
     )
   });
+
+  forgotPasswordEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.forgotPassword),
+      switchMap(({request}) =>
+      {
+        return this.authService.forgotEmail(request).pipe(
+          map(() =>
+          {
+            return authActions.resetPasswordSuccess();
+          }),
+          catchError((error: CustomError) => 
+          {
+            return of(authActions.forgotPasswordFailure(
+              {
+                error: error.message
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
+
+  resetPasswordEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.resetPassword),
+      switchMap(({request}) =>
+      {
+        return this.authService.resetPassword(request).pipe(
+          map(() =>
+          {
+            return authActions.resetPasswordSuccess();
+          }),
+          catchError((error: CustomError) => 
+          {
+            return of(authActions.resetPasswordFailure(
+              {
+                error: error.message
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
 }

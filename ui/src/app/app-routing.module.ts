@@ -5,6 +5,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { NotFoundComponent } from './shared/components/dumb/not-found/not-found.component';
 import { AboutComponent } from './shared/components/layout/about/about.component';
 import { PrivacyPolicyComponent } from './shared/components/layout/privacy-policy/privacy-policy.component';
+import { ResetPasswordComponent } from './shared/components/layout/reset-password/reset-password.component';
 
 const routes: Routes = 
 [
@@ -28,6 +29,10 @@ const routes: Routes =
   {
     path: 'about',
     component: AboutComponent,
+  },
+  {
+    path: 'reset',
+    component: ResetPasswordComponent,
   },
   { 
     path: 'edit/:id',

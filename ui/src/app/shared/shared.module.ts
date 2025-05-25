@@ -36,6 +36,7 @@ import { TeamComponent } from './components/team/team/team.component';
 import { TournamentPreviewComponent } from './components/team/tournament-preview/tournament-preview.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { RegulationPreviewComponent } from './components/team/regulation-preview/regulation-preview.component';
+import { ResetPasswordComponent } from './components/layout/reset-password/reset-password.component';
 
 @NgModule({
   declarations: 
@@ -77,7 +78,8 @@ import { RegulationPreviewComponent } from './components/team/regulation-preview
     TournamentPreviewComponent,
     PrivacyPolicyComponent,
     AboutComponent,
-    RegulationPreviewComponent
+    RegulationPreviewComponent,
+    ResetPasswordComponent
   ],
   imports: 
   [

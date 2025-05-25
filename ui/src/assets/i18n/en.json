@@ -189,6 +189,10 @@
     {
       "login": "Log In",
       "signup": "Sign Up",
+      "forgot-question": "Forgot your password?", 
+      "reset_request": "Send password reset email", 
+      "reset_password": "Reset your password", 
+      "reset_password-success": "Your password has been updated, please go home and log in", 
       "username-label": "Username",
       "email-label": "Email",
       "password-label": "Password",

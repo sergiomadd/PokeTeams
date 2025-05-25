@@ -50,7 +50,13 @@ export const authActions = createActionGroup(
       "sendVerification failure": props<{error: string}>(),
       confirmEmail: props<{request: UserUpdateDTO}>(),
       "confirmEmail success": props<{authResponse: AuthResponseDTO}>(),
-      "confirmEmail failure": props<{error: string}>()
+      "confirmEmail failure": props<{error: string}>(),
+      forgotPassword: props<{request: UserUpdateDTO}>(),
+      "forgotPassword success": emptyProps(),
+      "forgotPassword failure": props<{error: string}>(),
+      resetPassword: props<{request: UserUpdateDTO}>(),
+      "resetPassword success": emptyProps(),
+      "resetPassword failure": props<{error: string}>()
     },
   }
 )
