@@ -303,7 +303,7 @@ namespace api.Controllers
             User? user = await _userManager.FindByEmailAsync(updateData.CurrentEmail);
             if (user == null)
             {
-                return BadRequest("No user logged");
+                return BadRequest("Invalid credentials");
             }
             byte[] decodedTokenBytes;
             string decodedToken;
@@ -314,7 +314,7 @@ namespace api.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("Error confirming email");
+                return BadRequest("Error reseting password");
             }
             IdentityResult result = await _userManager.ResetPasswordAsync(user, decodedToken, updateData.NewPassword);
             if (!result.Succeeded)

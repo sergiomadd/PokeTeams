@@ -1766,5 +1766,218 @@ namespace api.Test.Controllers
             var teamResponse = await response.Content.ReadAsAsync<bool>();
             Assert.True(teamResponse);
         }
+
+        //ForgotPassword
+
+        [Fact]
+        public async Task ForgotPassword_ReturnsBadRequest_WrondData()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "forgot";
+
+            UserUpdateDTO body = new UserUpdateDTO()
+            {
+                CurrentEmail = null
+            };
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Act
+            var response = await client.PostAsJsonAsync(request, body);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsAsync<string>();
+            Assert.Equal("Wrong data", responseString);
+        }
+
+        [Fact]
+        public async Task ForgotPassword_ReturnsOk_NoUserWithEmail()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "forgot";
+            var authUser = _instance.GetTestAuthLoggedUser();
+            var scope = _instance.Services.CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            await userManager.CreateAsync(authUser);
+
+            UserUpdateDTO body = new UserUpdateDTO()
+            {
+                CurrentEmail = "testWrong@gmail.com"
+            };
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Act
+            var response = await client.PostAsJsonAsync(request, body);
+
+            //Assert
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task ForgotPassword_ReturnsOk()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "forgot";
+            var authUser = _instance.GetTestAuthLoggedUser();
+            var scope = _instance.Services.CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            await userManager.CreateAsync(authUser);
+
+            UserUpdateDTO body = new UserUpdateDTO()
+            {
+                CurrentEmail = "testAuth@gmail.com"
+            };
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Act
+            var response = await client.PostAsJsonAsync(request, body);
+
+            //Assert
+            response.EnsureSuccessStatusCode();
+        }
+
+        //ResetPassword
+
+        [Fact]
+        public async Task ResetPassword_ReturnsBadRequest_WrongData()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "update/reset";
+
+            UserUpdateDTO body = new UserUpdateDTO()
+            {
+                CurrentEmail = null,
+                NewPassword = "testtest",
+                PasswordResetCode = null
+            };
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Act
+            var response = await client.PostAsJsonAsync(request, body);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsAsync<string>();
+            Assert.Equal("Wrong data", responseString);
+        }
+
+        [Fact]
+        public async Task ResetPassword_ReturnsBadRequest_NoUserFound()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "update/reset";
+            var authUser = _instance.GetTestAuthLoggedUser();
+            var scope = _instance.Services.CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            await userManager.CreateAsync(authUser);
+
+            string token = await userManager.GeneratePasswordResetTokenAsync(authUser);
+            var tokenBytes = Encoding.UTF8.GetBytes(token);
+            var encodedToken = WebEncoders.Base64UrlEncode(tokenBytes);
+
+            UserUpdateDTO body = new UserUpdateDTO()
+            {
+                CurrentEmail = "testWrong@gmail.com",
+                NewPassword = "testtest",
+                PasswordResetCode = encodedToken
+            };
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Act
+            var response = await client.PostAsJsonAsync(request, body);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsAsync<string>();
+            Assert.Equal("Invalid credentials", responseString);
+        }
+
+        [Fact]
+        public async Task ResetPassword_ReturnsBadRequest_TokenError()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "update/reset";
+            var authUser = _instance.GetTestAuthLoggedUser();
+            var scope = _instance.Services.CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            await userManager.CreateAsync(authUser);
+
+            string token = "wrongtoken";
+            var tokenBytes = Encoding.UTF8.GetBytes(token);
+            var encodedToken = WebEncoders.Base64UrlEncode(tokenBytes);
+
+            UserUpdateDTO body = new UserUpdateDTO()
+            {
+                CurrentEmail = "testAuth@gmail.com",
+                NewPassword = "testtest",
+                PasswordResetCode = encodedToken
+            };
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Act
+            var response = await client.PostAsJsonAsync(request, body);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsAsync<string>();
+            Assert.Equal("Password reset window expired, ask for a new email again", responseString);
+        }
+
+        [Fact]
+        public async Task ResetPassword_ReturnsOk()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "update/reset";
+            var authUser = _instance.GetTestAuthLoggedUser();
+            var scope = _instance.Services.CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            await userManager.CreateAsync(authUser);
+
+            string token = await userManager.GeneratePasswordResetTokenAsync(authUser);
+            var tokenBytes = Encoding.UTF8.GetBytes(token);
+            var encodedToken = WebEncoders.Base64UrlEncode(tokenBytes);
+
+            UserUpdateDTO body = new UserUpdateDTO()
+            {
+                CurrentEmail = "testAuth@gmail.com",
+                NewPassword = "testtest",
+                PasswordResetCode = encodedToken
+            };
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Act
+            var response = await client.PostAsJsonAsync(request, body);
+
+            //Assert
+            response.EnsureSuccessStatusCode();
+        }
     }
 }
