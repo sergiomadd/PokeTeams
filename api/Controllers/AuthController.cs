@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using api.Data;
+using System.Security.Claims;
 
 namespace api.Controllers
 {
@@ -26,6 +27,7 @@ namespace api.Controllers
         private readonly IIdentityService _identityService;
         private readonly IConfiguration _config;
         private readonly PokeTeamContext _pokeTeamContext;
+        private readonly IWebHostEnvironment _env;
         private string baseUrl;
 
         public AuthController(UserManager<User> userManager,
@@ -36,7 +38,8 @@ namespace api.Controllers
             IEmailService emailService,
             IIdentityService identityService,
             PokeTeamContext pokeTeamContext,
-            IConfiguration config
+            IConfiguration config,
+            IWebHostEnvironment env
             )
         {
             _userManager = userManager;
@@ -48,12 +51,25 @@ namespace api.Controllers
             _identityService = identityService;
             _pokeTeamContext = pokeTeamContext;
             _config = config;
+            _env = env;
 
             baseUrl = "";
-            string? baseUrlTemp = _config["BaseUrl"];
-            if (baseUrlTemp != null)
+
+            if (_env.IsDevelopment())
             {
-                baseUrl = (string)baseUrlTemp;
+                string? baseUrlTemp = _config["ClientBaseUrl"];
+                if (baseUrlTemp != null)
+                {
+                    baseUrl = (string)baseUrlTemp;
+                }
+            }
+            else
+            {
+                string? baseUrlTemp = _config["BaseUrl"];
+                if (baseUrlTemp != null)
+                {
+                    baseUrl = (string)baseUrlTemp;
+                }
             }
         }
 
@@ -245,6 +261,73 @@ namespace api.Controllers
             return Ok();
         }
 
+        //Add rate limiting
+        [AllowAnonymous]
+        [HttpPost, Route("forgot")]
+        public async Task<ActionResult> ForgotPassword(UserUpdateDTO updateData)
+        {
+            if (updateData == null || updateData.CurrentEmail == null)
+            {
+                return BadRequest("Wrong data");
+            }
+            User? user = await _userManager.FindByEmailAsync(updateData.CurrentEmail);
+            if (user == null)
+            {
+                //We return ok regardless to not disclouse email privacy
+                return Ok("Recovery email sent");
+            }
+            string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var tokenBytes = Encoding.UTF8.GetBytes(token);
+            var encodedToken = WebEncoders.Base64UrlEncode(tokenBytes);
+            string resetLink = $"{baseUrl}reset?email={updateData.CurrentEmail}&token={encodedToken}";
+            string emailTo = updateData.CurrentEmail;
+            string subject = "Reset password";
+            string message = _emailService.GetResetPasswordBodyHTML(resetLink);
+
+            bool emailSent = await _emailService.SendEmailAsync(emailTo, subject, message);
+            if (!emailSent)
+            {
+                return BadRequest("Error sending email");
+            }
+            return Ok("Recovery email sent");
+        }
+
+        [AllowAnonymous]
+        [HttpPost, Route("update/reset")]
+        public async Task<ActionResult> ResetPassword(UserUpdateDTO updateData)
+        {
+            if (updateData == null || updateData.CurrentEmail == null || updateData.NewPassword == null || updateData.PasswordResetCode == null)
+            {
+                return BadRequest("Wrong data");
+            }
+            User? user = await _userManager.FindByEmailAsync(updateData.CurrentEmail);
+            if (user == null)
+            {
+                return BadRequest("No user logged");
+            }
+            byte[] decodedTokenBytes;
+            string decodedToken;
+            try
+            {
+                decodedTokenBytes = WebEncoders.Base64UrlDecode(updateData.PasswordResetCode);
+                decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error confirming email");
+            }
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, decodedToken, updateData.NewPassword);
+            if (!result.Succeeded)
+            {
+                if(result.Errors.Any(e => e.Description.Contains("token")))
+                {
+                    return BadRequest("Password reset window expired, ask for a new email again");
+                }
+                return BadRequest("Server error");
+            }
+            return Ok();
+        }
+
         [HttpPost, Route("logout")]
         public async Task<ActionResult> LogOut()
         {
@@ -357,7 +440,7 @@ namespace api.Controllers
             string confirmationLink = $"{baseUrl}user/{user.UserName}/emailconfirmation?email={user.Email}&token={encodedToken}";
             string emailTo = user.Email;
             string subject = "Confirm email";
-            string message = _emailService.GetEmailBodyHTML(confirmationLink);
+            string message = _emailService.GetConfirmEmailBodyHTML(confirmationLink);
 
             bool emailSent = await _emailService.SendEmailAsync(emailTo, subject, message);
             if (!emailSent)

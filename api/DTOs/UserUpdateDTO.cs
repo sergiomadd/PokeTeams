@@ -7,6 +7,9 @@ namespace api.DTOs
         [StringLength(32, ErrorMessage = "The new username must be shorter than 32 characters")]
         public string? NewUserName { get; set; }
 
+        [StringLength(256, ErrorMessage = "The current email must be shorter than 256 characters")]
+        public string? CurrentEmail { get; set; }
+
         [StringLength(256, ErrorMessage = "The new email must be shorter than 32 characters")]
         public string? NewEmail { get; set; }
 
@@ -14,6 +17,8 @@ namespace api.DTOs
 
         [StringLength(256, ErrorMessage = "The current password must be shorter than 256 characters")]
         public string? CurrentPassword { get; set; }
+
+        public string? PasswordResetCode { get; set; }
 
         [StringLength(256, ErrorMessage = "The new password must be shorter than 256 characters")]
         public string? NewPassword { get; set; }

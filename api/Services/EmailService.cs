@@ -40,7 +40,7 @@ namespace api.Services
             return true;
         }
 
-        public string GetEmailBodyHTML(string confirmationLink)
+        public string GetConfirmEmailBodyHTML(string confirmationLink)
         {
             return $@"
             <html>
@@ -90,5 +90,53 @@ namespace api.Services
             ";
         }
 
+        public string GetResetPasswordBodyHTML(string resetLink)
+        {
+            return $@"
+            <html>
+              <body style=""font-family: Arial, sans-serif; color: #333;"">
+                <table style=""margin: auto;"">
+                  <tr>
+                    <td align=""center"" colspan=""2"" style=""padding-bottom: 20px;"">
+                      <table cellpadding=""0"" cellspacing=""0"" border=""0"">
+                        <tr>
+                          <td style=""text-align: center;"">
+                            <img src=""https://poketeams.com/assets/img/logo.png"" alt=""Icon"" width=""50"" height=""50"">
+                          </td>
+                          <td style=""padding-left: 10px; vertical-align: middle;"">
+                            <span style=""font-size: 1.3em;"">POKETEAMS</span>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan=""2"" style=""padding-bottom: 20px;"">
+                      <p style=""margin: 0;"">
+                        <span>Hello trainer,</span><br>
+                        <span>click this button reset your password.</span>
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align=""center"" colspan=""2"" style=""padding-bottom: 20px;"">
+                      <a href=""{resetLink}"" 
+                        style=""display: inline-block; padding: 10px 20px; background-color: #e3262d; 
+                               color: white; text-decoration: none; border-radius: 5px; font-weight: bold;"">
+                        Reset password
+                      </a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan=""2"" style=""padding-bottom: 20px;"">
+                      If you don't see a button above, click this link: 
+                      <a href=""{resetLink}"">Reset password</a>
+                    </td>
+                  </tr>
+                </table>
+              </body>
+            </html>
+            ";
+        }
     }
 }
