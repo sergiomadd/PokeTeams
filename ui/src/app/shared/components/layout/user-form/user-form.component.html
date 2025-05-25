@@ -41,6 +41,7 @@
             <span *ngIf="isInvalid('password', 'login')" class="formFeedbackError">{{getError('password', 'login')}}</span>
           </div>
         </div>
+        <button class="button-secondary" type="button" (click)="showForgotForm()">Forgot password?</button>
         <div class="flex-col align-i-c w-100 gap-m">
           <div class="flex justify-c-e align-i-c w-100 gap-m">
             <ng-container *ngIf="data.isSubmitting">
@@ -105,6 +106,7 @@
             <span *ngIf="isInvalid('confirmPassword', 'signup')" class="formFeedbackError">{{getError('confirmPassword', 'signup')}}</span>
           </div>
         </div>
+        <button class="button-secondary" type="button" (click)="showForgotForm()">Forgot password?</button>
         <div class="flex-col align-i-c gap-m w-100">
           <div class="flex justify-c-e align-i-c w-100 gap-m">
             <ng-container *ngIf="data.isSubmitting">
@@ -119,6 +121,42 @@
             >{{'user.form.signup' | translate}}</button>
           </div>
           <ng-container *ngIf="signUpFormSubmitted && data.backendError">
+            <span class="formFeedbackError">{{data.backendError}}</span>
+          </ng-container>
+        </div>
+      </form>
+    </ng-container>
+    <ng-container *ngIf="forgot">
+      <form
+      class="user-form flex-col justify-c-c align-i-c gap-m w-100" 
+      [formGroup]="forgotForm" 
+      (ngSubmit)="forgotPassword()"
+      >
+        <div class="flex-col gap-s bor-1-b bg-2 pad-m">
+          <div class="item">
+            <label>{{'user.form.email-label' | translate}}*</label>
+            <input type="text" 
+            class="input-s"
+            formControlName="email"
+            [ngClass]="{controlInvalid: isInvalid('email', 'forgot')}"
+            >
+            <span *ngIf="isInvalid('email', 'forgot')" class="formFeedbackError">{{getError('email', 'forgot')}}</span>
+          </div>
+        </div>
+        <div class="flex-col align-i-c w-100 gap-m">
+          <div class="flex justify-c-e align-i-c w-100 gap-m">
+            <ng-container *ngIf="data.isSubmitting">
+              <div class="icon-m">
+                <div class="pokemon-spinner"></div>
+              </div>
+            </ng-container>
+            <button 
+            type="submit" 
+            class="button-primary"
+            [disabled]="data.isSubmitting"
+            >{{'user.form.reset_request' | translate}}</button>
+          </div>
+          <ng-container *ngIf="forgotPasswordSubmitted && data.backendError">
             <span class="formFeedbackError">{{data.backendError}}</span>
           </ng-container>
         </div>
