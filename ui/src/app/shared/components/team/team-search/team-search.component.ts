@@ -40,6 +40,14 @@ export class TeamSearchComponent
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
   selectedThemeName?: string;
 
+  ngOnInit()
+  {
+    this.searchService.searchError.subscribe((value) => 
+    {
+      this.feedback = value;
+    })
+  }
+
   search()
   {
     this.searchService.setQuerySelectedPage(1);

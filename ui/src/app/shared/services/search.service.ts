@@ -27,6 +27,9 @@ export class SearchService
   private searched$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   searched = this.searched$.asObservable();
 
+  private searchError$: BehaviorSubject<string> = new BehaviorSubject<string>("");
+  searchError = this.searchError$.asObservable();
+
   constructor() 
   {
     this.resetQuery();
@@ -59,6 +62,11 @@ export class SearchService
   setSearched(searched: boolean)
   {
     this.searched$.next(searched);
+  }
+
+  setSearchError(searchError: string)
+  {
+    this.searchError$.next(searchError);
   }
 
   setTotalTeams(totalTeams: number)
@@ -106,11 +114,14 @@ export class SearchService
         {
           this.setTeams(response.teams);
           this.setTotalTeams(response.totalTeams);
+          this.setSearchError("");
         },
         error: (error) => 
         {
-          console.log("Team search error", error);
           this.setSearched(false);
+          this.setSearchError(error.message);
+          this.setTeams([]);
+          this.setTotalTeams(0);
         },
         complete: () => 
         {

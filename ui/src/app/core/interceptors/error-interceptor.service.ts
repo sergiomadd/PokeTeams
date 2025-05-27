@@ -63,7 +63,7 @@ export class ErrorInterceptorService
               break;
             case 429:
               //Too Many Requests -> rate limiting
-              error.message = "Too many requests, try again later";
+              error.message = HttpError.error.error ?? "Too many requests, try again later";
               break;
             case 500:
               //Internal Server Error -> default
