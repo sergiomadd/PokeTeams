@@ -5,6 +5,8 @@ using api.DTOs;
 using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using api.Middlewares;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace api.Controllers
 {
@@ -26,6 +28,8 @@ namespace api.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
+        [EnableRateLimiting("teamGetLimiter")]
+        [RateLimitResponse("Too many requests, try again in a bit.")]
         [HttpGet("{id}")]
         public async Task<ActionResult<TeamDTO>> GetTeamDTO(string id)
         {
@@ -51,6 +55,8 @@ namespace api.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
+        [EnableRateLimiting("teamGetLimiter")]
+        [RateLimitResponse("Too many requests, try again in a bit.")]
         [HttpGet("data/{id}")]
         public async Task<ActionResult<TeamDataDTO>> GetTeamData(string id)
         {
@@ -77,6 +83,8 @@ namespace api.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
+        [EnableRateLimiting("teamUploadLimiter")]
+        [RateLimitResponse("Too many uploads, try again later.")]
         [HttpPost, Route("save")]
         public async Task<ActionResult> SaveTeam([FromBody] TeamDTO? teamDTO)
         {
@@ -100,6 +108,8 @@ namespace api.Controllers
             }
         }
 
+        [EnableRateLimiting("teamUploadLimiter")]
+        [RateLimitResponse("Too many uploads, try again later.")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost, Route("update")]
         public async Task<ActionResult<string>> Update(TeamDTO? teamDTO)
@@ -127,6 +137,8 @@ namespace api.Controllers
             return Ok(newTeam.Id);
         }
 
+        [EnableRateLimiting("teamSearchLimiter")]
+        [RateLimitResponse("Wait a bit before deleting again.")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost, Route("delete")]
         public async Task<ActionResult<string>> Delete([FromBody] TeamIdDTO? data)
@@ -164,6 +176,8 @@ namespace api.Controllers
             return BadRequest(response);
         }
 
+        [EnableRateLimiting("teamSearchLimiter")]
+        [RateLimitResponse("Wait a bit before searching again.")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
         [HttpPost, Route("query")]

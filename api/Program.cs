@@ -14,6 +14,7 @@ using api.Services.PokedexServices;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using api.Middlewares;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -164,23 +165,7 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddRateLimiter(rateLimiterOptions =>
-{
-    rateLimiterOptions.OnRejected = async (context, token) =>
-    {
-        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-        await context.HttpContext.Response.WriteAsync("Too many requests. Please try again later.", token);
-    };
-
-    rateLimiterOptions.AddFixedWindowLimiter("fixed", options =>
-    {
-        options.PermitLimit = 5;
-        options.Window = TimeSpan.FromSeconds(30);
-        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-        options.QueueLimit = 0;
-    });
-});
-
+builder.Services.AddCustomRateLimiters();
 
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())

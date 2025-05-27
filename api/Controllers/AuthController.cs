@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using api.Data;
 using System.Security.Claims;
+using Microsoft.AspNetCore.RateLimiting;
+using api.Middlewares;
 
 namespace api.Controllers
 {
@@ -170,6 +172,8 @@ namespace api.Controllers
         }
 
         [AllowAnonymous]
+        [EnableRateLimiting("authLimiterBase")]
+        [RateLimitResponse("Too many tries, try again in 5 minutes.")]
         [HttpPost, Route("login")]
         public async Task<ActionResult> LogIn(LogInDTO model)
         {
@@ -226,6 +230,8 @@ namespace api.Controllers
         }
 
         [AllowAnonymous]
+        [EnableRateLimiting("authLimiterHard")]
+        [RateLimitResponse("Too many changes, you can only change 1 per day.")]
         [HttpPost, Route("signup")]
         public async Task<ActionResult> SignUp(SignUpDTO model)
         {
@@ -263,6 +269,8 @@ namespace api.Controllers
 
         //Add rate limiting
         [AllowAnonymous]
+        [EnableRateLimiting("ipEmailLimiter")]
+        [RateLimitResponse("Too many requests. Try again tomorrow.")]
         [HttpPost, Route("forgot")]
         public async Task<ActionResult> ForgotPassword(UserUpdateDTO updateData)
         {
@@ -293,6 +301,8 @@ namespace api.Controllers
         }
 
         [AllowAnonymous]
+        [EnableRateLimiting("authLimiterHard")]
+        [RateLimitResponse("Too many changes, you can only change 1 per day.")]
         [HttpPost, Route("update/reset")]
         public async Task<ActionResult> ResetPassword(UserUpdateDTO updateData)
         {
@@ -349,6 +359,8 @@ namespace api.Controllers
             return Ok();
         }
 
+        [EnableRateLimiting("authLimiterHard")]
+        [RateLimitResponse("Too many changes, you can only change 1 per day.")]
         [HttpPost, Route("update/username")]
         public async Task<ActionResult> UpdateUserName(UserUpdateDTO updateData)
         {
@@ -386,6 +398,8 @@ namespace api.Controllers
             return Ok();
         }
 
+        [EnableRateLimiting("authLimiterHard")]
+        [RateLimitResponse("Too many changes, you can only change 1 per day.")]
         [HttpPost, Route("update/email")]
         public async Task<ActionResult> UpdateEmail(UserUpdateDTO updateData)
         {
@@ -418,6 +432,8 @@ namespace api.Controllers
             return Ok();
         }
 
+        [EnableRateLimiting("ipEmailLimiter")]
+        [RateLimitResponse("Too many requests. Try again tomorrow.")]
         [HttpGet, Route("code")]
         public async Task<ActionResult> GetEmailConfirmationCode()
         {
@@ -450,6 +466,8 @@ namespace api.Controllers
             return Ok();
         }
 
+        [EnableRateLimiting("authLimiterSoft")]
+        [RateLimitResponse("Too many changes, try again later.")]
         [HttpPost, Route("update/code")]
         public async Task<ActionResult> ConfirmEmail(UserUpdateDTO updateData)
         {
@@ -489,6 +507,8 @@ namespace api.Controllers
             return Ok();
         }
 
+        [EnableRateLimiting("authLimiterHard")]
+        [RateLimitResponse("Too many changes, you can only change 1 per day.")]
         [HttpPost, Route("update/password")]
         public async Task<ActionResult> UpdatePassword(UserUpdateDTO updateData)
         {
@@ -513,6 +533,8 @@ namespace api.Controllers
             return Ok();
         }
 
+        [EnableRateLimiting("authLimiterHard")]
+        [RateLimitResponse("Too many changes, you can only change 1 per day.")]
         [HttpPost, Route("update/name")]
         public async Task<ActionResult> UpdateName(UserUpdateDTO updateData)
         {
@@ -539,6 +561,8 @@ namespace api.Controllers
             return Ok();
         }
 
+        [EnableRateLimiting("authLimiterSoft")]
+        [RateLimitResponse("Too many changes, try again later.")]
         [HttpPost, Route("update/picture")]
         public async Task<ActionResult> UpdatePicture(UserUpdateDTO updateData)
         {
@@ -566,6 +590,8 @@ namespace api.Controllers
             return Ok();
         }
 
+        [EnableRateLimiting("authLimiterSoft")]
+        [RateLimitResponse("Too many changes, try again later.")]
         [HttpPost, Route("update/country")]
         public async Task<ActionResult> UpdateCountry(UserUpdateDTO updateData)
         {
@@ -593,6 +619,8 @@ namespace api.Controllers
             return Ok();
         }
 
+        [EnableRateLimiting("authLimiterSoft")]
+        [RateLimitResponse("Too many changes, try again later.")]
         [HttpPost, Route("update/visibility")]
         public async Task<ActionResult> UpdateVisibility(UserUpdateDTO updateData)
         {
