@@ -11,11 +11,13 @@ namespace api.Services.PokedexServices
     {
         private readonly IPokedexContext _pokedexContext;
         private readonly IConfiguration _config;
+        private readonly Printer Printer;
         private string baseUrl;
 
-        public AbilityService(IPokedexContext pokedexContext, IConfiguration config)
+        public AbilityService(IPokedexContext pokedexContext, IConfiguration config, Printer printer)
         {
             _pokedexContext = pokedexContext;
+            Printer = printer;
             _config = config;
 
             baseUrl = "";

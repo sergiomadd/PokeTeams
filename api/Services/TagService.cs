@@ -9,9 +9,12 @@ namespace api.Services
     public class TagService : ITagService
     {
         private readonly PokeTeamContext _pokeTeamContext;
-        public TagService(PokeTeamContext pokeTeamContext)
+        private readonly Printer Printer;
+
+        public TagService(PokeTeamContext pokeTeamContext, Printer printer)
         {
             _pokeTeamContext = pokeTeamContext;
+            Printer = printer;
         }
         public async Task<Tag?> GetTag(string identifier)
         {

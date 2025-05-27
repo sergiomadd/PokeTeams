@@ -3,6 +3,7 @@ using api.DTOs;
 using api.Models.DBPoketeamModels;
 using api.Util;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace api.Services
 {
@@ -10,12 +11,14 @@ namespace api.Services
     {
         private readonly PokeTeamContext _pokeTeamContext;
         private readonly IConfiguration _config;
+        private readonly Printer Printer;
         private static string baseUrl;
 
-        public TournamentService(PokeTeamContext pokeTeamContext, IConfiguration config) 
+        public TournamentService(PokeTeamContext pokeTeamContext, IConfiguration config, Printer printer) 
         {
             _pokeTeamContext = pokeTeamContext;
             _config = config;
+            Printer = printer;
 
             baseUrl = "";
             string? baseUrlTemp = _config["BaseUrl"];

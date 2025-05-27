@@ -18,19 +18,22 @@ namespace api.Controllers
         private readonly IUserService _userService;
         private readonly IIdentityService _identityService;
         private readonly IConfiguration _config;
+        private readonly Printer Printer;
 
         public UserController(UserManager<User> userManager,
             ITeamService teamService,
             IUserService userService,
             IIdentityService identityService,
-            IConfiguration config
+            IConfiguration config,
+            Printer printer
             )
         {
             _userManager = userManager;
             _pokeTeamService = teamService;
             _userService = userService;
             _identityService = identityService;
-            _config = config;   
+            _config = config;
+            Printer = printer;
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

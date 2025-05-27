@@ -9,9 +9,12 @@ namespace api.Services
     public class RegulationService : IRegulationService
     {
         private readonly PokeTeamContext _pokeTeamContext;
-        public RegulationService(PokeTeamContext pokeTeamContext) 
+        private readonly Printer Printer;
+
+        public RegulationService(PokeTeamContext pokeTeamContext, Printer printer) 
         {
             _pokeTeamContext = pokeTeamContext;
+            Printer = printer;
         }
 
         public RegulationDTO? BuildRegulationDTO(Regulation regulation)

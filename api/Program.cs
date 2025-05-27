@@ -11,10 +11,7 @@ using System.Text;
 using api.Util;
 using Microsoft.OpenApi.Models;
 using api.Services.PokedexServices;
-using Microsoft.AspNetCore.RateLimiting;
-using System.Threading.RateLimiting;
 using api.Middlewares;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +27,7 @@ builder.Services.AddScoped<IPokedexContext, PokedexContext>();
 builder.Services.AddScoped<IPokeTeamContext, PokeTeamContext>();
 
 builder.Services.AddTransient<IIdentityService, IdentityService>();
+builder.Services.AddTransient<Printer>();
 
 builder.Services.AddScoped<IPokemonService, PokemonService>();
 builder.Services.AddScoped<IItemService, ItemService>();
@@ -181,6 +179,11 @@ builder.Services.AddSwaggerGen(c =>
     // Register your custom header operation filter
     c.OperationFilter<AcceptLanguageHeaderParameter>();
 });
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 var app = builder.Build();
 

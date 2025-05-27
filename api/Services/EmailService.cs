@@ -7,9 +7,12 @@ namespace api.Services
     public class EmailService : IEmailService
     {
         private readonly IConfiguration _config;
-        public EmailService(IConfiguration config)
+        private readonly Printer Printer;
+
+        public EmailService(IConfiguration config, Printer printer)
         {
             _config = config;
+            Printer = printer;
         }
 
         public async Task<bool> SendEmailAsync(string emailTo, string subject, string message)

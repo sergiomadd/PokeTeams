@@ -12,6 +12,7 @@ using api.Data;
 using System.Security.Claims;
 using Microsoft.AspNetCore.RateLimiting;
 using api.Middlewares;
+using System.Reflection;
 
 namespace api.Controllers
 {
@@ -30,6 +31,7 @@ namespace api.Controllers
         private readonly IConfiguration _config;
         private readonly PokeTeamContext _pokeTeamContext;
         private readonly IWebHostEnvironment _env;
+        private readonly Printer Printer;
         private string baseUrl;
 
         public AuthController(UserManager<User> userManager,
@@ -41,7 +43,8 @@ namespace api.Controllers
             IIdentityService identityService,
             PokeTeamContext pokeTeamContext,
             IConfiguration config,
-            IWebHostEnvironment env
+            IWebHostEnvironment env,
+            Printer printer
             )
         {
             _userManager = userManager;
@@ -54,6 +57,7 @@ namespace api.Controllers
             _pokeTeamContext = pokeTeamContext;
             _config = config;
             _env = env;
+            Printer = printer;
 
             baseUrl = "";
 

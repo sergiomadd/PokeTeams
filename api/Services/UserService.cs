@@ -10,12 +10,14 @@ namespace api.Services
     {
         private readonly PokeTeamContext _pokeTeamContext;
         private readonly IConfiguration _config;
+        private readonly Printer Printer;
         private string baseUrl;
 
-        public UserService(PokeTeamContext pokeTeamContext, IConfiguration config)
+        public UserService(PokeTeamContext pokeTeamContext, IConfiguration config, Printer printer)
         {
             _pokeTeamContext = pokeTeamContext;
             _config = config;
+            Printer = printer;
 
             baseUrl = "";
             string? baseUrlTemp = _config["BaseUrl"];

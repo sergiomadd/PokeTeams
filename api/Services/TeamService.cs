@@ -21,6 +21,7 @@ namespace api.Services
         private readonly IRegulationService _regulationService;
         private readonly IPokemonService _pokemonService;
         private readonly IConfiguration _config;
+        private readonly Printer Printer;
         private string baseUrl;
         private static Random random = new Random();
 
@@ -33,7 +34,8 @@ namespace api.Services
                 ITournamentService tournamentService,
                 IRegulationService regulationService,
                 IPokemonService pokemonService,
-                IConfiguration config
+                IConfiguration config,
+                Printer printer
             )
         {
             _pokeTeamContext = dataContext;
@@ -43,6 +45,7 @@ namespace api.Services
             _regulationService = regulationService;
             _pokemonService = pokemonService;
             _config = config;
+            Printer = printer;
 
             baseUrl = "";
             string? baseUrlTemp = _config["BaseUrl"];
@@ -409,7 +412,6 @@ namespace api.Services
             }
             catch (Exception ex)
             {
-                Printer.Log("Exception in: DeleteUserByUserName(string userName)");
                 Printer.Log(ex);
                 return false;
             }
@@ -430,7 +432,6 @@ namespace api.Services
             }
             catch (Exception ex)
             {
-                Printer.Log("Exception in: DeleteUserByUserName(string userName)");
                 Printer.Log(ex);
             }
             return false;
@@ -438,7 +439,6 @@ namespace api.Services
 
         public async Task<bool> DeleteUserTeams(User user)
         {
-            Printer.Log("Deleting teams of: ", user.UserName);
             try
             {
                 List<Team> userTeams = await _pokeTeamContext.Team.Where(t => t.PlayerId == user.Id).ToListAsync();
@@ -452,7 +452,6 @@ namespace api.Services
             }
             catch (Exception ex)
             {
-                Printer.Log("Exception in: DeleteUserByUserName(string userName)");
                 Printer.Log(ex);
             }
             return false;
@@ -469,7 +468,6 @@ namespace api.Services
             }
             catch (Exception ex)
             {
-                Printer.Log("Exception in: DeleteUserByUserName(string userName)");
                 Printer.Log(ex);
                 return "Failed to increment team";
             }
