@@ -211,7 +211,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseRateLimiter();
+
+if (!app.Environment.IsEnvironment("Test"))
+{
+    app.UseRateLimiter();
+}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

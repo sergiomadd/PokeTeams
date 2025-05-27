@@ -2,6 +2,7 @@
 using api.DTOs.PokemonDTOs;
 using api.Models;
 using api.Util;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,14 @@ namespace api.Test.Data
 {
     public static class ExpectedResults
     {
+        private static readonly Printer Printer = new Printer(LoggerFactory.Create(builder =>
+        {
+            builder
+                .AddConsole()
+                .AddDebug()
+                .SetMinimumLevel(LogLevel.Debug);
+        }).CreateLogger<Printer>());
+
         public static string GetSerializedObject(object obj)
         {
             return JsonConvert.SerializeObject(obj).Replace("\\r\\n", "").Replace("\\r", "").Replace("\\n", "");

@@ -23,7 +23,6 @@ namespace api.Services
         private readonly IConfiguration _config;
         private readonly Printer Printer;
         private string baseUrl;
-        private static Random random = new Random();
 
         public TeamService
             (

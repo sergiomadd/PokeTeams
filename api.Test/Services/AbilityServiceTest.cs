@@ -5,8 +5,10 @@ using api.Models;
 using api.Services.PokedexServices;
 using api.Test.Data;
 using api.Test.Integration;
+using api.Util;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
@@ -38,8 +40,16 @@ namespace api.Test.Services
                 _expectedResults = input;
             }
 
+            Printer Printer = new Printer(LoggerFactory.Create(builder =>
+            {
+                builder
+                    .AddConsole()
+                    .AddDebug()
+                    .SetMinimumLevel(LogLevel.Debug);
+            }).CreateLogger<Printer>());
+
             //sut
-            _service = new AbilityService(_dbContext, _configuration);
+            _service = new AbilityService(_dbContext, _configuration, Printer);
         }
 
         [Theory]

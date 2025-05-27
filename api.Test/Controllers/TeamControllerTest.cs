@@ -236,7 +236,7 @@ namespace api.Test.Controllers
             //Assert
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             var responseString = await response.Content.ReadAsAsync<string>();
-            Assert.Equal("Error saving team", responseString);
+            Assert.Equal("Error saving team, try again please", responseString);
         }
 
         [Fact]
