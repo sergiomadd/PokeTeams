@@ -322,16 +322,8 @@ namespace api.Services
 
             try
             {
-                string teamId = GenerateId(10);
-                Team? team = await _pokeTeamContext.Team.FindAsync(teamId);
-                //loop maybe too ineficent? seek another way to get unused ids?
-                //is there a way for sql server to auto generate custom ids?
-                while (team != null)
-                {
-                    teamId = GenerateId(10);
-                    team = await _pokeTeamContext.Team.FindAsync(teamId);
-                }
-
+                //No need to check if id exitst (collision virtually imposible)
+                string teamId = Generator.GenerateId(10);
                 newTeam = await BreakTeamDTO(inputTeam, teamId);
                 if (newTeam != null)
                 {
@@ -686,12 +678,6 @@ namespace api.Services
                 Printer.Log($"Error chunking teams: teamsperpage {teamsPerPage}, selectedpage {selectedPage}", ex);
                 return inteams.Chunk(teamsPerPage).ToArray()[0].ToList();
             }
-        }
-
-        private string GenerateId(int length)
-        {
-            const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
         public string? ValidateTeamDTO(TeamDTO? inputTeam)
