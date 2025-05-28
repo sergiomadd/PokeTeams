@@ -91,10 +91,12 @@ export class ThemeService
     {
       color = +color;
     }
+    //Dark
     if(tagTextColors[color])
     {
-      return themes[1].colors['--text-color'];
+      return this.selectedTheme?.name === themes[1].name ? themes[1].colors['--text-color'] : themes[1].colors['--white'];
     }
+    //Light
     else
     {
       return themes[0].colors['--text-color'];

@@ -52,10 +52,10 @@ export const themes: Theme[] =
       '--text-color-secondary': '#888888',
       '--text-color-highlight': '#fdc800',
       '--text-color-link': '#0075BE',
-      '--text-color-reverse': '#e1e1e1',
+      '--text-color-reverse': '#ffffff',
       '--success': 'hsl(140, 80%, 44%)',
       '--error': 'hsl(352, 80%, 51%)',
-      '--white': '#e1e1e1',
+      '--white': '#ffffff',
       '--black': '#000000'
     }
   },
@@ -79,7 +79,7 @@ export const themes: Theme[] =
       '--text-color-reverse': '#000000',
       '--success': 'hsl(140, 80%, 34%)',
       '--error': 'hsl(352, 80%, 41%)',
-      '--white': '#e1e1e1',
+      '--white': '#ffffff',
       '--black': '#000000'
     }
   }
