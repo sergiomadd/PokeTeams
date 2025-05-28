@@ -122,12 +122,12 @@ namespace api.Controllers
             Team? currentTeam = await _teamService.GetTeamModel(teamDTO!.ID);
             if (currentTeam == null || currentTeam.Player == null)
             {
-                return Unauthorized("Unauthorized A");
+                return Unauthorized("Unauthorized");
             }
             User? loggedUser = await _identityService.GetLoggedUser();
             if (loggedUser?.Id == null || loggedUser.Id != currentTeam.Player.Id)
             {
-                return Unauthorized("Unauthorized B");
+                return Unauthorized("Unauthorized");
             }
             Team? newTeam = await _teamService.UpdateTeam(teamDTO, teamDTO.ID);
             if (newTeam == null)

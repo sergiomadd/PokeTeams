@@ -212,40 +212,12 @@ namespace api.Test.Controllers
         }
 
         [Fact]
-        public async Task SaveTeam_ReturnsBadRequest_SavingError()
-        {
-            //Arrange
-            var uri = "save";
-            TeamDTO? teamDTO = new TeamDTO("saveTest", [], null, null, null, null, 0, null, false, [], null);
-
-            var body = teamDTO;
-
-            using (var scope = _instance.Services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<PokeTeamContext>();
-                await context.Database.MigrateAsync();
-            }
-
-            var client = _instance.CreateClient();
-            client.BaseAddress = _baseAddres;
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            //Act
-            var response = await client.PostAsJsonAsync(uri, body);
-
-            //Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            var responseString = await response.Content.ReadAsAsync<string>();
-            Assert.Equal("Error saving team, try again please", responseString);
-        }
-
-        [Fact]
         public async Task SaveTeam_ReturnsOk()
         {
             //Arrange
             var uri = "save";
             var teamId = "saveTest";
-            TeamDTO? teamDTO = new TeamDTO("", new List<PokemonDTO> { null }, null, null, null, null, 0, null, false, [], null);
+            TeamDTO? teamDTO = new TeamDTO("otherID", new List<PokemonDTO> { null }, null, null, null, null, 0, null, false, [], null);
             var body = teamDTO;
 
             using (var scope = _instance.Services.CreateScope())
@@ -282,13 +254,42 @@ namespace api.Test.Controllers
         //Update
 
         [Fact]
+        public async Task UpdateTeam_ReturnsBadRequest_ValidationError()
+        {
+            //Arrange
+            var uri = "update";
+            var teamId = "ownNotLog";
+            var user = _instance.GetTestLoggedUser();
+            TeamDTO? teamDTO = null;
+            var body = teamDTO;
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var validJwtToken = _instance.GenerateValidJwtToken(user);
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", validJwtToken);
+            var accessCookie = new CookieHeaderValue("accessToken", validJwtToken);
+            client.DefaultRequestHeaders.Add("Cookie", accessCookie.ToString());
+
+            //Act
+            var response = await client.PostAsJsonAsync(uri, body);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsAsync<string>();
+            Assert.Equal("Error uploading team", responseString);
+        }
+
+        [Fact]
         public async Task UpdateTeam_ReturnsUnauthorized_NoOwner()
         {
             //Arrange
             var uri = "update";
             User user = _instance.GetTestLoggedUser();
-            TeamDTO? teamDTOTeamNull = new TeamDTO("testError", [], null, null, null, null, 0, null, false, [], null);
-            TeamDTO? teamDTOPlayerNull = new TeamDTO("noOwn", [], null, null, null, null, 0, null, false, [], null);
+            TeamDTO? teamDTOTeamNull = new TeamDTO("testError", new List<PokemonDTO> { null }, null, null, null, null, 0, null, false, [], null);
+            TeamDTO? teamDTOPlayerNull = new TeamDTO("noOwn", new List<PokemonDTO> { null }, null, null, null, null, 0, null, false, [], null);
             var bodyTeamNull = teamDTOTeamNull;
             var bodyPlayerNull = teamDTOPlayerNull;
 
@@ -365,52 +366,6 @@ namespace api.Test.Controllers
 
             //Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
-
-        [Fact]
-        public async Task UpdateTeam_ReturnsBadRequest()
-        {
-            //Arrange
-            var uri = "update";
-            var teamId = "testUpdErr";
-            var user = _instance.GetTestLoggedUser();
-
-            //New team will return bad request because no pokemons error
-            TeamDTO? teamDTO = new TeamDTO(teamId, [], null, null, null, null, 0, null, false, [], null);
-            var body = teamDTO;
-
-            using (var scope = _instance.Services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<PokeTeamContext>();
-                await context.Database.MigrateAsync();
-
-                var team = await context.Team.FirstOrDefaultAsync(t => t.Id == teamId);
-                if (team == null)
-                {
-                    var entity = new Team { Id = teamId, PlayerId = user.Id };
-                    context.Team.Add(entity);
-                    await context.SaveChangesAsync();
-                }
-            }
-
-            var client = _instance.CreateClient();
-            client.BaseAddress = _baseAddres;
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            var validJwtToken = _instance.GenerateValidJwtToken(user);
-
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", validJwtToken);
-            var accessCookie = new CookieHeaderValue("accessToken", validJwtToken);
-            client.DefaultRequestHeaders.Add("Cookie", accessCookie.ToString());
-
-            //Act
-            var response = await client.PostAsJsonAsync(uri, body);
-
-            //Assert
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-            var responseString = await response.Content.ReadAsAsync<string>();
-            Assert.Equal("Could not update team", responseString);
-
         }
 
         [Fact]

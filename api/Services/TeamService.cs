@@ -351,15 +351,15 @@ namespace api.Services
                     {
                         UpdateTeamProperties(currentTeam, newTeam);
                         await _pokeTeamContext.SaveChangesAsync();
+                        return newTeam;
                     }
                 }
             }
             catch (Exception ex)
             {
                 Printer.Log("Exception in team update", ex);
-                return null;
             }
-            return newTeam;
+            return null;
         }
 
         private bool UpdateTeamProperties(Team currentTeam, Team newTeam)
