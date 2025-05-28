@@ -206,7 +206,10 @@ export class SmartInputComponent
             next: (response) => 
             {
               this.results = response;
-              this.results = [this.customQueryResult].concat(this.results);
+              if(this.allowCustom)
+              {
+                this.results = [this.customQueryResult].concat(this.results);
+              }
               this.searching = false;
             },
             error: (error) => 
