@@ -740,7 +740,7 @@
                     [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.identifier ?? '')}"
                     >
                       <div class="section animated-border poke-tooltip-wrapper"
-                      (click)="clickSection(i, 'rightType'); $event.stopPropagation()"
+                      (click)="clickSection(i, 'rightType', $event);"
                       [ngClass]="{'poke-tooltip-selected':  tooltipRightType[i]}"
                       >
                         <div class="type section-content">

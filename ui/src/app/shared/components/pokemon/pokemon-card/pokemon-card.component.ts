@@ -172,7 +172,7 @@ export class PokemonCardComponent
   }
 
   //For tooltip
-  clickSection(index: number, type: string)
+  clickSection(index: number, type: string, event?)
   {
     let list: boolean[] = [];
     switch(type)
@@ -193,6 +193,7 @@ export class PokemonCardComponent
         list = this.tooltipRight;
         break;
       case "rightType":
+        event.stopPropagation();
         list = this.tooltipRightType;
         break;
       case "rightClass":
@@ -221,7 +222,7 @@ export class PokemonCardComponent
     //     -> show selected tooltip
     else
     {
-      if(this.window.isTabletPortraitOrLess())
+      if(this.window.isTabletPortraitOrLess() && type !== "rightType")
       {
         this.closeAllProfileTooltips();
         this.triggerTooltip.emit();
