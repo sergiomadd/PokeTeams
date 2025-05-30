@@ -145,10 +145,10 @@
                     <div>{{util.getStatCode(stat)}}</div>
                     <div class="flex justify-c-c align-i-c w-100" style="min-width: 3.2em;">
                       <div class="w-50">
-                        {{this.pokemon.ivs ? this.pokemon.ivs[i].value : '0'}}
+                        {{this.pokemon.ivs ? this.pokemon.ivs[i]?.value : '0'}}
                       </div>
                       <div class="w-50">
-                        {{this.pokemon.evs ? this.pokemon.evs[i].value : '0'}}
+                        {{this.pokemon.evs ? this.pokemon.evs[i]?.value : '0'}}
                       </div>
                     </div>
                   </div>
@@ -167,27 +167,27 @@
             <div class="range">
               <label for="" class="text-center">IV</label>
               <input type="range" min="0" max="31" 
-              value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat].value : ''}}" 
+              value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat]?.value : ''}}" 
               class="slider" id="myRange" formControlName="ivs"
               [ngStyle]="{background: ivSliders[this.selectedStat]}">
               <input 
               type="text" 
               class="level text-center"
               formControlName="ivs"
-              value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat].value : ''}}"
+              value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat]?.value : ''}}"
               [ngClass]="{controlInvalid: isInvalid('ivs')}">
             </div>
             <div class="range">
               <label for="" class="text-center">EV</label>
               <input #evSlider type="range" min="0" max="252" 
-              value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat].value : '0'}}" 
+              value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat]?.value : '0'}}" 
               class="slider" id="myRange" formControlName="evs"
               [ngStyle]="{background: evSliders[this.selectedStat]}">
               <input 
               type="text" 
               class="level text-center"  
               formControlName="evs"
-              value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat].value : '0'}}"
+              value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat]?.value : '0'}}"
               [ngClass]="{controlInvalid: isInvalid('evs')}">
             </div>
             <div class="flex align-i-c gap-l">

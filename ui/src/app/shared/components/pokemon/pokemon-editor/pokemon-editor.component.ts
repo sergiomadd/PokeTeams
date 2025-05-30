@@ -98,13 +98,13 @@ export class PokemonEditorComponent
         this.selectPokemon(this.selectedPokemonIndex);
         this.pokemonForm.controls.nickname.setValue(this.pokemon.nickname ?? "", {emitEvent:false});
         this.pokemonForm.controls.level.setValue(this.pokemon.level ?? 0, {emitEvent:false});
-        if(this.pokemon.ivs![this.selectedStat].value != this.pokemonForm.controls.ivs.value)
+        if(this.pokemon.ivs[this.selectedStat] && this.pokemon.ivs[this.selectedStat].value != this.pokemonForm.controls.ivs.value)
         {
           this.pokemonForm.controls.ivs.setValue(this.pokemon.ivs[0].value, {emitEvent:false});
           this.currentIVs = this.pokemon.ivs[this.selectedStat].value;
           this.calcIVSliderBackground(this.pokemon.ivs[0].value, 0, 31);
         }
-        if(this.pokemon.evs![this.selectedStat].value != this.pokemonForm.controls.evs.value)
+        if(this.pokemon.evs[this.selectedStat] && this.pokemon.evs[this.selectedStat].value != this.pokemonForm.controls.evs.value)
         {
           this.pokemonForm.controls.evs.setValue(this.pokemon.evs[0].value, {emitEvent:false});
           this.currentEVs = this.pokemon.evs[this.selectedStat].value;
@@ -183,7 +183,8 @@ export class PokemonEditorComponent
     
     this.pokemonForm.controls.ivs.valueChanges.subscribe(async (value) => 
     {
-      if(this.pokemon && value != undefined && value != this.pokemon.ivs![this.selectedStat].value)
+      if(this.pokemon && value != undefined
+        && (this.pokemon.ivs[this.selectedStat] && this.pokemon.ivs[this.selectedStat].value != value))
       {
         if(!this.util.isNaN(value))
         {
@@ -240,7 +241,8 @@ export class PokemonEditorComponent
     });
     this.pokemonForm.controls.evs.valueChanges.subscribe(async (value) => 
     {
-      if(this.pokemon && value != undefined && value != this.pokemon.evs![this.selectedStat].value)
+      if(this.pokemon && value != undefined 
+        && (this.pokemon.evs[this.selectedStat] && this.pokemon.evs[this.selectedStat].value != value ))
       {
         if(!this.util.isNaN(value))
         {
@@ -315,8 +317,14 @@ export class PokemonEditorComponent
       {
         if(this.pokemon)
         {
-          this.calcIVSliderBackground(this.pokemon.ivs[this.selectedStat].value, 0, 31);
-          this.calcEVSliderBackground(this.pokemon.evs[this.selectedStat].value, 0, this.maxEVs);
+          if(this.pokemon.ivs && this.pokemon.ivs[this.selectedStat])
+          {
+            this.calcIVSliderBackground(this.pokemon.ivs[this.selectedStat].value, 0, 31);
+          }
+          if(this.pokemon.evs && this.pokemon.evs[this.selectedStat])
+          {
+            this.calcEVSliderBackground(this.pokemon.evs[this.selectedStat].value, 0, this.maxEVs);
+          }
         }
       })
     if(this.pokemon)

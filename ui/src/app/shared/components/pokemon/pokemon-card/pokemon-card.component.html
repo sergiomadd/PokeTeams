@@ -950,16 +950,16 @@
                     </div>
                     <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;" [ngStyle]="{backgroundColor: theme.getStatColor('iv')}">
                       <div>IVs</div>
-                      <div>{{teamOptions?.ivsVisibility ? pokemon.ivs ? pokemon.ivs[i].value : "??" : "??"}}</div>
-                      <div>{{teamOptions?.ivsVisibility ? pokemon.ivs ? calculatedStats.ivs[i].value : "??" : "??"}}</div>
+                      <div>{{teamOptions?.ivsVisibility ? pokemon.ivs ? pokemon.ivs[i]?.value : "??" : "??"}}</div>
+                      <div>{{teamOptions?.ivsVisibility ? pokemon.ivs ? calculatedStats.ivs[i]?.value : "??" : "??"}}</div>
                     </div>
                     <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;"
-                    [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}"
+                    [ngClass]="{maxed: pokemon.evs && pokemon.evs[i] ? (pokemon.evs[i].value == 252) ? true : false: false}"
                     [ngStyle]="{backgroundColor: theme.getStatColor('ev')}"
                     >
                       <div>EVs</div>
-                      <div>{{teamOptions?.evsVisibility ? pokemon.evs ? pokemon.evs[i].value : "??" : "??"}}</div>
-                      <div>{{teamOptions?.evsVisibility ? pokemon.evs ? calculatedStats.evs[i].value : '??' : "??"}}</div>
+                      <div>{{teamOptions?.evsVisibility ? pokemon.evs ? pokemon.evs[i]?.value : "??" : "??"}}</div>
+                      <div>{{teamOptions?.evsVisibility ? pokemon.evs ? calculatedStats.evs[i]?.value : '??' : "??"}}</div>
                     </div>
                     <div class="flex-col bor-rad-5 pad-s"  style="min-width: 2em;">
                       <div>{{'pokemon.stat.nature' | translate}}</div>
@@ -1007,8 +1007,8 @@
                   {
                     width: getStatSize(calculatedStats.base[i].value),
                     backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat)),
-                    borderRadius: (teamOptions?.showIVs && pokemon.ivs ? (pokemon.ivs[i].value / 4) === 0 ? false : true : false)  ||
-                      (teamOptions?.showEVs && pokemon.evs ? (pokemon.evs[i].value / 4) === 0 ? false : true : false) ? ('15px 0 0 15px') : '15px'
+                    borderRadius: (teamOptions?.showIVs && pokemon.ivs && pokemon.ivs[i] ? (pokemon.ivs[i].value / 4) === 0 ? false : true : false)  ||
+                      (teamOptions?.showEVs && pokemon.evs && pokemon.evs[i] ? (pokemon.evs[i].value / 4) === 0 ? false : true : false) ? ('15px 0 0 15px') : '15px'
                   }"
                   >
                   </div>
@@ -1017,9 +1017,9 @@
                     class="bar"
                     [ngStyle]="
                     {
-                      width: pokemon.ivs ? getStatSize(calculatedStats.ivs[i].value) : 'none',
+                      width: pokemon.ivs ? getStatSize(calculatedStats.ivs[i]?.value) : 'none',
                       backgroundColor: theme.getStatColor('iv'),
-                      borderRadius: teamOptions?.showEVs && (pokemon.evs ? (pokemon.evs[i].value / 4) == 0 ? false : true : false) ? '0' : '0 15px 15px 0'
+                      borderRadius: teamOptions?.showEVs && (pokemon.evs && pokemon.evs[i] ? (pokemon.evs[i].value / 4) == 0 ? false : true : false) ? '0' : '0 15px 15px 0'
                     }"
                     >
                     </div>
@@ -1028,10 +1028,10 @@
                     <div class="bar" style="border-radius: 0 15px 15px 0;" 
                     [ngStyle]="
                     {
-                      width: pokemon.evs ? getStatSize(calculatedStats.evs[i].value) : 'none',
+                      width: pokemon.evs ? getStatSize(calculatedStats.evs[i]?.value) : 'none',
                       backgroundColor: theme.getStatColor('ev'),
                     }"
-                    [ngClass]="{maxed: pokemon.evs ? (pokemon.evs[i].value == 252) ? true : false: false}"
+                    [ngClass]="{maxed: pokemon.evs && pokemon.evs[i] ? pokemon.evs[i].value == 252 ? true : false: false}"
                     >
                     </div>
                   </ng-container>

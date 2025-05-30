@@ -77,6 +77,7 @@ export class ParserService {
     }
     pokePaste.moves = this.getMoves(lines.slice(lines.length-4, lines.length));
     if(!pokePaste.ivs) { pokePaste.ivs = this.getStats('', "noiv"); }
+    if(!pokePaste.evs) { pokePaste.evs = this.getStats('', "noev"); }
     pokePaste.source = pokemon;
     return pokePaste;
   }
@@ -142,6 +143,7 @@ export class ParserService {
   getReverseName(pokemon: Pokemon) : string
   {
     let line: string = "";
+    console.log(pokemon)
     if(pokemon.nickname && pokemon.item)
     {
       line = `${pokemon.nickname} (${pokemon.name?.content}) @ ${pokemon.item?.name.content}` 
@@ -244,6 +246,18 @@ export class ParserService {
         let stat: (string | number)[] = [];
         stat.push(statIdentifiers[i]);
         stat.push(31);
+        stats.push(stat);
+      }
+      return stats;
+    }
+
+    if(type === 'noev')
+    {
+      for(let i=0;i<statNames.length;i++)
+      {
+        let stat: (string | number)[] = [];
+        stat.push(statIdentifiers[i]);
+        stat.push(0);
         stats.push(stat);
       }
       return stats;

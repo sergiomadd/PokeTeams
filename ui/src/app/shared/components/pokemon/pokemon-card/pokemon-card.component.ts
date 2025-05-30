@@ -319,11 +319,15 @@ export class PokemonCardComponent
     this.updateStats.emit(this.maxStat);
   }
 
-  getStatSize(value: number)
+  getStatSize(value?: number)
   {
-    let maxValue: number = this.teamOptions && this.teamOptions?.maxStat > 0 
-    ? this.teamOptions?.maxStat : 700; //the maximun stat value of any pokemons
-    return `${value / maxValue * 100}%`;
+    if(value)
+    {
+      let maxValue: number = this.teamOptions && this.teamOptions?.maxStat > 0 
+      ? this.teamOptions?.maxStat : 700; //the maximun stat value of any pokemons
+      return `${value / maxValue * 100}%`;
+    }
+    return "0";
   }
 
   calculateStats()
@@ -342,13 +346,13 @@ export class PokemonCardComponent
         {
           identifier: stat.identifier,
           name: stat.name,
-          value: this.calculateIV(this.pokemon?.ivs ? this.pokemon.ivs[index].value : 0)
+          value: this.calculateIV(this.pokemon?.ivs && this.pokemon?.ivs.length > 0 ? this.pokemon.ivs[index].value : 0)
         }
         this.calculatedStats.evs[index] = 
         {
           identifier: stat.identifier,
           name: stat.name,
-          value: this.calculateEV(this.pokemon?.evs ? this.pokemon.evs[index].value : 0)
+          value: this.calculateEV(this.pokemon?.evs && this.pokemon?.evs.length > 0 ? this.pokemon.evs[index].value : 0)
         }
         this.calculatedStats.natures[index] = 
         {
@@ -363,8 +367,8 @@ export class PokemonCardComponent
           value: this.calculateStat(
             stat.value, 
             this.pokemon?.level ? this.pokemon.level : 50,
-            this.teamOptions?.ivsVisibility ? this.pokemon?.ivs ? this.pokemon.ivs[index].value : 0 : 0,
-            this.teamOptions?.evsVisibility ? this.pokemon?.evs ? this.pokemon.evs[index].value : 0 : 0, 
+            this.teamOptions?.ivsVisibility ? this.pokemon?.ivs && this.pokemon?.ivs.length > 0 ? this.pokemon.ivs[index].value : 0 : 0,
+            this.teamOptions?.evsVisibility ? this.pokemon?.evs && this.pokemon?.evs.length > 0 ? this.pokemon.evs[index].value : 0 : 0, 
             this.teamOptions?.naturesVisibility ? this.pokemon?.nature ? this.calculatedStats.natures[index].value : 1 : 1,
             stat.identifier === "hp" ? true : false)
         }
