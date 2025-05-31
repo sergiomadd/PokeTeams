@@ -11,14 +11,30 @@ import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
 })
 export class EvolutionComponent 
 {
-  @Input() sourcePokemon!: Pokemon;
-  @Input() pokemon!: Evolution | PokemonForm;
+  @Input() sourcePokemon?: Pokemon;
+  @Input() pokemon?: Evolution;
+  @Input() form?: PokemonForm;
   @Input() teamOptions?: TeamOptions;
 
   pokemonSpritePath?: string = '';
 
   ngOnInit()
   {
+    if(!this.pokemon)
+    {
+      this.pokemon = this.sourcePokemon;
+    }
+    if(this.form)
+    {
+      this.pokemon = 
+      {
+        name: this.form.name,
+        dexNumber: this.form.dexNumber,
+        types: this.form.types,
+        sprite: this.form.sprite,
+        evolutions: []
+      };
+    }
     this.loadSprite();
   }
 
@@ -39,15 +55,15 @@ export class EvolutionComponent
 
   loadSprite()
   {
-    if(this.pokemon.sprite)
+    if(this.pokemon?.sprite)
     {
-      if(this.sourcePokemon.gender && this.pokemon.sprite.female)
+      if(this.sourcePokemon?.gender && this.pokemon.sprite.female)
       {
-        this.pokemonSpritePath = this.sourcePokemon.shiny ? this.pokemon.sprite.shinyFemale : this.pokemon.sprite.female
+        this.pokemonSpritePath = this.sourcePokemon?.shiny ? this.pokemon.sprite.shinyFemale : this.pokemon.sprite.female
       }
       else
       {
-        this.pokemonSpritePath = this.sourcePokemon.shiny ? this.pokemon.sprite.shiny : this.pokemon.sprite.base
+        this.pokemonSpritePath = this.sourcePokemon?.shiny ? this.pokemon.sprite.shiny : this.pokemon.sprite.base
       }
     }
     else
