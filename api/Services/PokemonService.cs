@@ -1,11 +1,13 @@
 ﻿using api.Data;
-using api.DTOs.PokemonDTOs;
 using api.DTOs;
+using api.DTOs.PokemonDTOs;
 using api.Models.DBModels;
 using api.Models.DBPokedexModels;
 using api.Models.DBPoketeamModels;
-using Microsoft.EntityFrameworkCore;
 using api.Services.PokedexServices;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.SqlServer.Server;
+using System.Security.Cryptography;
 
 namespace api.Services
 {
@@ -60,7 +62,7 @@ namespace api.Services
 
         public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon, int langId, TeamOptionsDTO? options = null)
         {
-            PokemonDataDTO? pokemonData = await GetPokemonData(pokemon, langId);
+            PokemonDataDTO? pokemonData = await GetPokemonDataByPokemonModel(pokemon, langId);
 
             List<MoveDTO?> moves = new List<MoveDTO?>
             {
@@ -74,7 +76,7 @@ namespace api.Services
             {
                 Name = pokemonData?.Name,
                 Nickname = pokemon.Nickname,
-                DexNumber = pokemonData?.DexNumber,
+                DexNumber = pokemon.DexNumber,
                 PreEvolution = pokemonData?.PreEvolution,
                 Evolutions = pokemonData?.Evolutions,
                 Forms = pokemonData?.Forms,
@@ -94,7 +96,7 @@ namespace api.Services
                 Notes = pokemon.Notes
             };
 
-            if (pokemonDTO.Ability != null && pokemonDTO.DexNumber != null && await _abilityService.IsAbilityPokemonHiddenAbility(pokemonDTO.Ability.Identifier, pokemon.DexNumber ?? 0))
+            if (pokemonDTO.Ability != null && pokemonDTO.DexNumber != null && await _abilityService.IsAbilityPokemonHiddenAbility(pokemonDTO.Ability.Identifier, pokemon.DexNumber))
             {
                 pokemonDTO.Ability.Hidden = true;
             }
@@ -164,10 +166,10 @@ namespace api.Services
             {
                 return new PokemonPreviewDTO
                 {
-                    Name = await GetPokemonName(pokemon.DexNumber ?? 1, langId),
+                    Name = await GetPokemonName(pokemon.DexNumber, langId),
                     DexNumber = pokemon.DexNumber,
                     TeraType = await _typeService.GetTypeByIdentifier(pokemon.TeraTypeIdentifier ?? "", true, langId),
-                    Sprite = new SpriteDTO(pokemon.DexNumber ?? 1, pokemonSpriteUrl),
+                    Sprite = new SpriteDTO(pokemon.DexNumber, pokemonSpriteUrl),
                     Shiny = pokemon.Shiny,
                     Gender = pokemon.Gender,
                     Moves = moves,
@@ -182,7 +184,7 @@ namespace api.Services
             return new Pokemon
             {
                 TeamId = teamId,
-                DexNumber = pokemonDTO?.DexNumber,
+                DexNumber = pokemonDTO.DexNumber,
                 FormId = pokemonDTO?.FormId,
                 Nickname = pokemonDTO?.Nickname,
                 TeraTypeIdentifier = pokemonDTO?.TeraType?.Identifier,
@@ -227,152 +229,152 @@ namespace api.Services
             return null;
         }
 
-        public async Task<PokemonDataDTO> GetPokemonData(Pokemon pokemon, int langId)
+        public async Task<PokemonDataDTO> GetPokemonDataByPokemonModel(Pokemon pokemonModel, int langId)
         {
             PokemonDataDTO pokemonData;
-            int dexNumber = 0;
-            int id = 0;
+            int pokemonId = pokemonModel.DexNumber;
             List<FormDTO?>? forms = null;
+            LocalizedText? name = null;
 
-            if (pokemon.DexNumber != null)
+            if (pokemonModel.FormId != null && !ArePokemonFormsExcluded(pokemonModel.DexNumber))
             {
-                dexNumber = (int)pokemon.DexNumber;
-                id = dexNumber;
-            }
-
-            LocalizedText? name = await GetPokemonName(dexNumber, langId);
-
-            if (pokemon.FormId != null && pokemon.DexNumber != null && !ArePokemonFormsExcluded((int)pokemon.DexNumber))
-            {
-                pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.id == pokemon.FormId);
-                if(pokemon_forms != null)
+                pokemon? pokemon = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.id == pokemonModel.FormId);
+                if(pokemon != null)
                 {
-                    id = pokemon_forms.pokemon_id;
+                    pokemonId = pokemon.id;
+                    forms = await GetPokemonFormsByPokemonId(pokemon.id, langId);
+                    if (forms != null && forms.Count > 0)
+                    {
+                        FormDTO? currentForm = forms.Find(f => f != null && f.FormId == pokemon.id);
+                        if(currentForm != null && currentForm.Name != null && currentForm.Name.Content != null)
+                        {
+                            name = currentForm.Name;
+                        }
+                    }
                 }
-                forms = await GetPokemonForms((int)pokemon.FormId, langId);
-                forms.RemoveAll(f => f != null && f.DexNumber == pokemon.FormId);
-                name = await GetPokemonFormNameByFormId((int)pokemon.FormId, langId);
+            }
+            if(name == null || name.Content == null)
+            {
+                name = await GetPokemonName(pokemonModel.DexNumber, langId);
             }
 
             pokemonData = new PokemonDataDTO(
                 name,
-                dexNumber,
-                await _typeService.GetPokemonTypesWithEffectiveness(id, langId),
-                await _statService.GetPokemonStats(id, langId),
-                new SpriteDTO(id, pokemonSpriteUrl),
-                preEvolution: await GetPokemonPreEvolution(dexNumber, langId),
-                evolutions: await GetPokemonEvolutions(dexNumber, langId),
-                formId: pokemon.FormId,
+                pokemonModel.DexNumber,
+                await _typeService.GetPokemonTypesWithEffectiveness(pokemonId, langId),
+                await _statService.GetPokemonStats(pokemonId, langId),
+                new SpriteDTO(pokemonId, pokemonSpriteUrl),
+                preEvolution: await GetPokemonPreEvolution(pokemonModel.DexNumber, langId),
+                evolutions: await GetPokemonEvolutions(pokemonModel.DexNumber, langId),
+                formId: pokemonModel.FormId,
                 forms: forms);
             return pokemonData;
         }
 
-        public async Task<PokemonDataDTO?> GetPokemonDataByDexNumber(int dexNumber, int langId)
+        public async Task<PokemonDataDTO?> GetPokemonDataByPokemonId(int pokemonId, int langId)
         {
-            int? speciesDexNumber = null;
-            List<FormDTO?>? forms = null;
-            int? formId = null;
-            pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.pokemon_id == dexNumber);
-            if(pokemon_forms != null)
+            pokemon? pokemon = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.id == pokemonId);
+            if(pokemon != null)
             {
-                LocalizedText? pokemonName = null;
-                if (pokemon_forms.form_identifier == null)
-                {
-                    pokemonName = await GetPokemonName(pokemon_forms.id, langId);
-                }
-                else
-                {
-                    pokemonName = await GetPokemonFormNameByFormId(pokemon_forms.id, langId);
-                    speciesDexNumber = await GetPokemonSpeciesDexNumber(dexNumber);
-                }
-
-                string speciesIdentifier = pokemon_forms.identifier.Split("-")[0];
-                List<pokemon_forms> pokemonForms = await _pokedexContext.pokemon_forms.Where(p => p.identifier.Contains(speciesIdentifier)).ToListAsync();
-                if (pokemonForms.Count > 1)
-                {
-                    if (pokemon_forms != null)
-                    {
-                        formId = pokemon_forms.id;
-                        forms = await GetPokemonForms(pokemon_forms.id, langId);
-                        forms.RemoveAll(f => f != null && f.DexNumber == pokemon_forms.id);
-                    }
-                }
-
+                int dexNumber = pokemon.species_id;
                 return new PokemonDataDTO(
-                    pokemonName,
-                    speciesDexNumber != null ? (int)speciesDexNumber : dexNumber,
-                    await _typeService.GetPokemonTypesWithEffectiveness(dexNumber, langId),
-                    await _statService.GetPokemonStats(dexNumber, langId),
-                    new SpriteDTO(dexNumber, pokemonSpriteUrl),
-                    preEvolution: await GetPokemonPreEvolution(speciesDexNumber != null ? (int)speciesDexNumber : dexNumber, langId),
-                    evolutions: await GetPokemonEvolutions(speciesDexNumber != null ? (int)speciesDexNumber : dexNumber, langId),
-                    formId: formId,
-                    forms: forms
+                    await GetPokemonName(dexNumber, langId),
+                    dexNumber,
+                    await _typeService.GetPokemonTypesWithEffectiveness(pokemonId, langId),
+                    await _statService.GetPokemonStats(pokemonId, langId),
+                    new SpriteDTO(pokemonId, pokemonSpriteUrl),
+                    preEvolution: await GetPokemonPreEvolution(dexNumber, langId),
+                    evolutions: await GetPokemonEvolutions(dexNumber, langId),
+                    formId: null,
+                    forms: await GetPokemonFormsByPokemonId(pokemonId, langId)
                     );
             }
             return null;
         }
 
+        //Will only be used in paste input parse
         public async Task<PokemonDataDTO?> GetPokemonDataByName(string name, int langId)
         {
-            string speciesIdentifier = name.ToLower().Split("-")[0];
-            pokemon_species_names? pokemonName = await _pokedexContext.pokemon_species_names.FirstOrDefaultAsync(p => p.name.ToLower() == name.ToLower());
-            List<pokemon_forms> pokemonForms = await _pokedexContext.pokemon_forms.Where(p => p.identifier.Contains(speciesIdentifier)).ToListAsync();
-
-            if (pokemonName != null)
+            //Case 1: Name is in pokemon_species_names -> ho-ho
+            pokemon_species_names? pokemon_species_names = await _pokedexContext.pokemon_species_names.FirstOrDefaultAsync(p => p.name.ToLower() == name.ToLower());
+            if (pokemon_species_names != null)
             {
-                List<FormDTO?>? forms = null;
-                int? formId = null;
-                if (pokemonForms.Count > 1)
-                {
-                    pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.identifier == name.ToLower());
-                    if(pokemon_forms != null)
-                    {
-                        formId = pokemon_forms.id;
-                        forms = await GetPokemonForms(pokemon_forms.id, langId);
-                        forms.RemoveAll(f => f != null && f.DexNumber == pokemon_forms.id);
-                    }
-                }
-
+                int dexNumber = pokemon_species_names.pokemon_species_id;
                 return new PokemonDataDTO(
-                    await GetPokemonName(pokemonName.pokemon_species_id, langId),
-                    pokemonName.pokemon_species_id,
-                    await _typeService.GetPokemonTypesWithEffectiveness(pokemonName.pokemon_species_id, langId),
-                    await _statService.GetPokemonStats(pokemonName.pokemon_species_id, langId),
-                    new SpriteDTO(pokemonName.pokemon_species_id, pokemonSpriteUrl),
-                    preEvolution: await GetPokemonPreEvolution(pokemonName.pokemon_species_id, langId),
-                    evolutions: await GetPokemonEvolutions(pokemonName.pokemon_species_id, langId),
-                    formId: formId,
-                    forms: forms
+                    await GetPokemonName(dexNumber, langId),
+                    dexNumber,
+                    await _typeService.GetPokemonTypesWithEffectiveness(dexNumber, langId),
+                    await _statService.GetPokemonStats(dexNumber, langId),
+                    new SpriteDTO(dexNumber, pokemonSpriteUrl),
+                    preEvolution: await GetPokemonPreEvolution(dexNumber, langId),
+                    evolutions: await GetPokemonEvolutions(dexNumber, langId),
+                    formId: null,
+                    forms: await GetPokemonFormsByPokemonId(dexNumber, langId)
                     );
             }
-
-            //If pokemon name is form name
-            if (pokemonForms.Count > 0)
+            
+            //Case 2: Name is in pokemon_form_names -> Rapid Strike Urshifu
+            pokemon_form_names? pokemon_form_names = await _pokedexContext.pokemon_form_names
+                .FirstOrDefaultAsync(p => p.pokemon_name != null && p.pokemon_name.ToLower() == name.ToLower());
+            if (pokemon_form_names != null)
             {
-                int? formId = null;
-                pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.identifier == name.ToLower());
+                pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.id == pokemon_form_names.pokemon_form_id);
                 if (pokemon_forms != null)
                 {
-                    int dexNumber = pokemon_forms.pokemon_id;
-                    formId = pokemon_forms.id;
-                    pokemon_species? pokemon_species = await _pokedexContext.pokemon_species.FirstOrDefaultAsync(p => p.identifier == speciesIdentifier);
-                    if (pokemon_species != null)
+                    int pokemonId = pokemon_forms.pokemon_id;
+                    pokemon? pokemon = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.id == pokemonId);
+                    if (pokemon != null)
                     {
-                        dexNumber = pokemon_species.id;
+                        LocalizedText? pokemonName = await GetPokemonFormNameByFormId(pokemon_forms.id, langId);
+                        //If form name null -> use species name
+                        if (pokemonName == null || pokemonName.Content == null)
+                        {
+                            pokemonName = await GetPokemonName(pokemon.species_id, langId);
+                        }
+                        return new PokemonDataDTO(
+                            pokemonName,
+                            pokemon.species_id,
+                            await _typeService.GetPokemonTypesWithEffectiveness(pokemon.id, langId),
+                            await _statService.GetPokemonStats(pokemon.id, langId),
+                            new SpriteDTO(pokemon.id, pokemonSpriteUrl),
+                            preEvolution: await GetPokemonPreEvolution(pokemon.species_id, langId),
+                            evolutions: await GetPokemonEvolutions(pokemon.species_id, langId),
+                            formId: pokemon.id,
+                            forms: await GetPokemonFormsByPokemonId(pokemon.id, langId));
                     }
-
-                    return new PokemonDataDTO(
-                        await GetPokemonFormNameByFormId(pokemon_forms.id, langId),
-                        dexNumber,
-                        await _typeService.GetPokemonTypesWithEffectiveness(pokemon_forms.pokemon_id, langId),
-                        await _statService.GetPokemonStats(pokemon_forms.pokemon_id, langId),
-                        new SpriteDTO(pokemon_forms.pokemon_id, pokemonSpriteUrl),
-                        preEvolution: await GetPokemonPreEvolution(dexNumber, langId),
-                        evolutions: await GetPokemonEvolutions(dexNumber, langId),
-                        formId: formId,
-                        forms: await GetPokemonForms(pokemon_forms.id, langId));
                 }
+            }
+
+            //Case 3: Name isnt in any names database -> "Urshifu Rapid Strike" OR "Urshifu-Rapid-Strike"
+            //Try get the form otherwise
+            string formIdentifier = name.ToLower();
+            pokemon? pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
+            if(pokemon_ == null)
+            {
+                //Turn "Urshifu Rapid Strike" -> "urshifu-rapid-strike"
+                formIdentifier = String.Join("-", name.ToLower().Split(" "));
+                pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
+            }
+            if (pokemon_ != null)
+            {
+                int dexNumber = pokemon_.species_id;
+                int? formId = await GetFormIdByPokemonId(pokemon_.id);
+                LocalizedText? pokemonName = formId != null ? await GetPokemonFormNameByFormId((int)formId, langId) : null;
+                //If form name null -> use species name
+                if(pokemonName == null || pokemonName.Content == null)
+                {
+                    pokemonName = await GetPokemonName(dexNumber, langId);
+                }
+                return new PokemonDataDTO(
+                    pokemonName,
+                    dexNumber,
+                    await _typeService.GetPokemonTypesWithEffectiveness(pokemon_.id, langId),
+                    await _statService.GetPokemonStats(pokemon_.id, langId),
+                    new SpriteDTO(pokemon_.id, pokemonSpriteUrl),
+                    preEvolution: await GetPokemonPreEvolution(dexNumber, langId),
+                    evolutions: await GetPokemonEvolutions(dexNumber, langId),
+                    formId: pokemon_.id,
+                    forms: await GetPokemonFormsByPokemonId(pokemon_.id, langId));
             }
 
             return null;
@@ -465,6 +467,20 @@ namespace api.Services
             return pokemonId;
         }
 
+        private async Task<int?> GetFormIdByPokemonId(int pokemonId)
+        {
+            int? formId = null;
+            if (pokemonId != null)
+            {
+                pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.pokemon_id == pokemonId);
+                if (pokemon_forms != null)
+                {
+                    formId = pokemon_forms.id;
+                }
+            }
+            return formId;
+        }
+
         private async Task<int?> GetPokemonSpeciesDexNumber(int dexNumber)
         {
             int? pokemonId = null;
@@ -481,38 +497,41 @@ namespace api.Services
             return pokemonId;
         }
 
-        private async Task<EvolutionDTO?> GetPokemonPreEvolution(int id, int langId)
+        private async Task<EvolutionDTO?> GetPokemonPreEvolution(int dexNumber, int langId)
         {
-            pokemon_species? pokemonSpeciesPreEvolution = await _pokedexContext.pokemon_species.FirstOrDefaultAsync(p => p.id == id);
+            pokemon_species? pokemonSpeciesPreEvolution = await _pokedexContext.pokemon_species.FirstOrDefaultAsync(p => p.id == dexNumber);
             if (pokemonSpeciesPreEvolution != null && pokemonSpeciesPreEvolution.evolves_from_species_id != null)
             {
-                int newID = pokemonSpeciesPreEvolution.evolves_from_species_id ?? 0;
+                int preEvolutionDexnumber = pokemonSpeciesPreEvolution.evolves_from_species_id ?? 0;
                 return new EvolutionDTO(
-                    await GetPokemonName(newID, langId),
-                    newID,
-                    await _typeService.GetPokemonTypes(newID, langId),
-                    new SpriteDTO(newID, pokemonSpriteUrl),
-                    preEvolution: await GetPokemonPreEvolution(newID, langId));
+                    await GetPokemonName(preEvolutionDexnumber, langId),
+                    preEvolutionDexnumber,
+                    await _typeService.GetPokemonTypes(preEvolutionDexnumber, langId),
+                    new SpriteDTO(preEvolutionDexnumber, pokemonSpriteUrl),
+                    preEvolution: await GetPokemonPreEvolution(preEvolutionDexnumber, langId),
+                    forms: await GetPokemonFormsByPokemonId(preEvolutionDexnumber, langId));
             }
             return null;
         }
 
-        private async Task<List<EvolutionDTO?>> GetPokemonEvolutions(int id, int langId)
+        private async Task<List<EvolutionDTO?>> GetPokemonEvolutions(int dexNumber, int langId)
         {
             List<EvolutionDTO?> evolutions = new List<EvolutionDTO?>();
-            List<pokemon_species> pokemonSpeciesEvolutionList = await _pokedexContext.pokemon_species.Where(p => p.evolves_from_species_id == id).ToListAsync();
+            List<pokemon_species> pokemonSpeciesEvolutionList = await _pokedexContext.pokemon_species.Where(p => p.evolves_from_species_id == dexNumber).ToListAsync();
             if (pokemonSpeciesEvolutionList.Count() > 0)
             {
                 foreach (pokemon_species pokemonSpeciesEvolution in pokemonSpeciesEvolutionList)
                 {
                     if (pokemonSpeciesEvolution != null)
                     {
-                        int newID = pokemonSpeciesEvolution.id;
+                        int evolutionDexNumber = pokemonSpeciesEvolution.id;
+                        var test = await GetPokemonFormsByPokemonId(evolutionDexNumber, langId);
                         evolutions.Add(new EvolutionDTO(
-                            await GetPokemonName(newID, langId), newID,
-                            await _typeService.GetPokemonTypes(newID, langId),
-                            new SpriteDTO(newID, pokemonSpriteUrl),
-                            evolutions: await GetPokemonEvolutions(newID, langId)));
+                            await GetPokemonName(evolutionDexNumber, langId), evolutionDexNumber,
+                            await _typeService.GetPokemonTypes(evolutionDexNumber, langId),
+                            new SpriteDTO(evolutionDexNumber, pokemonSpriteUrl),
+                            evolutions: await GetPokemonEvolutions(evolutionDexNumber, langId),
+                            forms: await GetPokemonFormsByPokemonId(evolutionDexNumber, langId)));
                     }
                 }
             }
@@ -525,40 +544,45 @@ namespace api.Services
             return excludedPokemons.Contains(dexNumber);
         }
 
-        private async Task<List<FormDTO?>> GetPokemonForms(int formId, int langId)
+        //DexNumber = PokemonId in pokemon forms
+        private async Task<List<FormDTO?>> GetPokemonFormsByPokemonId(int pokemonId, int langId)
         {
             List<FormDTO?> forms = new List<FormDTO?>();
-            pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.id == formId);
-            if(pokemon_forms != null && !ArePokemonFormsExcluded(pokemon_forms.pokemon_id))
+            if (!ArePokemonFormsExcluded(pokemonId))
             {
-                string speciesIdentifier = pokemon_forms.identifier.ToLower().Split("-")[0];
-                int formOrder = pokemon_forms.form_order;
-                List<pokemon_forms> pokemonForms = await _pokedexContext.pokemon_forms.Where(p => p.identifier.Contains(speciesIdentifier)).ToListAsync();
-                if (pokemonForms.Count() > 0)
+                pokemon? pokemonInput = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.id == pokemonId);
+                if(pokemonInput != null)
                 {
-                    foreach (pokemon_forms pokemonForm in pokemonForms)
+                    List<pokemon> pokemonList = await _pokedexContext.pokemon.Where(p => p.species_id == pokemonInput.species_id).ToListAsync();
+                    if (pokemonList.Count() > 1)
                     {
-                        if (pokemonForm != null)
+                        //Remove input one, get only other forms
+                        pokemonList.RemoveAll(p => p.id == pokemonId);
+                        foreach (pokemon pokemon in pokemonList)
                         {
-                            LocalizedText? formName = await GetPokemonFormNameByFormId(pokemonForm.id, langId);
-                            if(formName != null && formName.Content == null)
+                            if (pokemon != null)
                             {
-                                pokemon_species? pokemon_species = await _pokedexContext.pokemon_species.FirstOrDefaultAsync(p => p.identifier == speciesIdentifier);
-                                if (pokemon_species != null)
+                                LocalizedText? formName = null;
+                                int? formId = await GetFormIdByPokemonId(pokemon.id);
+                                if (formId != null)
                                 {
-                                    formName = await GetPokemonName(pokemon_species.id, langId);
+                                    formName = await GetPokemonFormNameByFormId((int)formId, langId);
+                                    if (formName != null && formName.Content == null)
+                                    {
+                                        formName = await GetPokemonName(pokemon.species_id, langId);
+                                    }
                                 }
+                                forms.Add(new FormDTO(
+                                    formName,
+                                    pokemon.species_id,
+                                    pokemon.id,
+                                    await _typeService.GetPokemonTypes(pokemon.id, langId),
+                                    new SpriteDTO(pokemon.id, pokemonSpriteUrl)));
                             }
-                            forms.Add(new FormDTO(
-                                formName,
-                                pokemonForm.pokemon_id,
-                                await _typeService.GetPokemonTypes(pokemonForm.pokemon_id, langId),
-                                new SpriteDTO(pokemonForm.pokemon_id, pokemonSpriteUrl)));
                         }
                     }
                 }
             }
-
             return forms;
         }
 

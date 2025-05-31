@@ -84,7 +84,7 @@ namespace api.Controllers
             {
                 return BadRequest("Worng data.");
             }
-            var pokemon = await _pokemonService.GetPokemonDataByDexNumber(dexNumber, langId ?? 9);
+            var pokemon = await _pokemonService.GetPokemonDataByPokemonId(dexNumber, langId ?? 9);
             if (pokemon == null)
             {
                 return NotFound("Pokemon not found.");

@@ -6,6 +6,7 @@ namespace api.Data
 {
     public interface IPokedexContext : IDisposable
     {
+        public DbSet<pokemon> pokemon { get; set; }
         public DbSet<pokemon_species_names> pokemon_species_names { get; set; }
         public DbSet<pokemon_species> pokemon_species { get; set; }
         public DbSet<pokemon_types> pokemon_types { get; set; }

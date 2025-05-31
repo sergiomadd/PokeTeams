@@ -13,9 +13,11 @@ namespace api.Models.DBPoketeamModels
 
         public virtual Team Team { get; set; }
 
+        [Required]
         [Range(1, 10000, ErrorMessage = "DexNumber is too long")]
-        public int? DexNumber { get; set; }
+        public int DexNumber { get; set; }
 
+        //Formid here is pokemonid from pokemons with multiple same dexnumber rows
         [Range(1, 10000, ErrorMessage = "FormId is too long")]
         public int? FormId { get; set; }
 
