@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Models.DBPoketeamModels
 {
-    public class Pokemon
+    public class TeamPokemon
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int TeamPokemonId { get; set; }
 
         public string TeamId { get; set; }
 

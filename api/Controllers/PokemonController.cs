@@ -33,7 +33,7 @@ namespace api.Controllers
             else
             {
                 int? langId = Converter.GetLangIDFromHttpContext(HttpContext);
-                var pokemonDTO = await _pokemonService.GetPokemonById(pokemonId, langId ?? 9);
+                var pokemonDTO = await _pokemonService.GetPokemonByTeamPokemonId(pokemonId, langId ?? 9);
                 if (pokemonDTO == null)
                 {
                     return NotFound("Pokemon not found.");
@@ -53,7 +53,7 @@ namespace api.Controllers
             }
             else
             {
-                var pokemonDTO = await _pokemonService.GetPokemonById(pokemonId, (int)Lang.en);
+                var pokemonDTO = await _pokemonService.GetPokemonByTeamPokemonId(pokemonId, (int)Lang.en);
 
                 if (pokemonDTO == null)
                 {

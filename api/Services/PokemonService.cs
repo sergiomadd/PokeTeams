@@ -61,7 +61,7 @@ namespace api.Services
             pokemonSpriteUrl = $"{baseUrl}images/pokemon/";
         }
 
-        public async Task<PokemonDTO> BuildPokemonDTO(Pokemon pokemon, int langId, TeamOptionsDTO? options = null)
+        public async Task<PokemonDTO> BuildPokemonDTO(TeamPokemon pokemon, int langId, TeamOptionsDTO? options = null)
         {
             PokemonDataDTO? pokemonData = await GetPokemonDataByPokemonModel(pokemon, langId);
 
@@ -72,6 +72,16 @@ namespace api.Services
                 await _moveService.GetMoveByIdentifier(pokemon.Move3Identifier ?? "", langId),
                 await _moveService.GetMoveByIdentifier(pokemon.Move4Identifier ?? "", langId)
             };
+
+            LocalizedText? pokemonName = null;
+            if (teamPokemon.FormId != null && !ArePokemonFormsExcluded(teamPokemon.PokemonId))
+            {
+                pokemonName = await GetPokemonFormNameByFormId((int)teamPokemon.FormId, langId);
+            }
+            if (pokemonName == null || pokemonName.Content == null)
+            {
+                pokemonName = await GetPokemonName(teamPokemon.PokemonId, langId); ;
+            }
 
             PokemonDTO pokemonDTO = new PokemonDTO
             {
@@ -105,7 +115,7 @@ namespace api.Services
             return pokemonDTO;
         }
 
-        private List<StatDTO?>? BuildPokemonIVs(Pokemon pokemon, TeamOptionsDTO? options)
+        private List<StatDTO?>? BuildPokemonIVs(TeamPokemon pokemon, TeamOptionsDTO? options)
         {
             List<StatDTO?>? ivs = new List<StatDTO?>();
             if (options == null || !options.IvsVisibility)
@@ -121,7 +131,7 @@ namespace api.Services
             return ivs;
         }
 
-        private List<StatDTO?>? BuildPokemonEVs(Pokemon pokemon, TeamOptionsDTO? options)
+        private List<StatDTO?>? BuildPokemonEVs(TeamPokemon pokemon, TeamOptionsDTO? options)
         {
             List<StatDTO?>? evs = new List<StatDTO?>();
             if (options == null || !options.EvsVisibility)
@@ -137,43 +147,43 @@ namespace api.Services
             return evs;
         }
 
-        public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(Pokemon pokemon, int langId)
+        public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(TeamPokemon teamPokemon, int langId)
         {
             List<MovePreviewDTO?> moves = new List<MovePreviewDTO?>()
             {
-                await _moveService.GetMovePreviewByIdentifier(pokemon.Move1Identifier ?? "", langId),
-                await _moveService.GetMovePreviewByIdentifier(pokemon.Move2Identifier ?? "", langId),
-                await _moveService.GetMovePreviewByIdentifier(pokemon.Move3Identifier ?? "", langId),
-                await _moveService.GetMovePreviewByIdentifier(pokemon.Move4Identifier ?? "", langId)
+                await _moveService.GetMovePreviewByIdentifier(teamPokemon.Move1Identifier ?? "", langId),
+                await _moveService.GetMovePreviewByIdentifier(teamPokemon.Move2Identifier ?? "", langId),
+                await _moveService.GetMovePreviewByIdentifier(teamPokemon.Move3Identifier ?? "", langId),
+                await _moveService.GetMovePreviewByIdentifier(teamPokemon.Move4Identifier ?? "", langId)
             };
 
             LocalizedText? pokemonName = null;
-            if (pokemon.FormId != null && !ArePokemonFormsExcluded(pokemon.PokemonId))
+            if (teamPokemon.FormId != null && !ArePokemonFormsExcluded(teamPokemon.PokemonId))
             {
-                pokemonName = await GetPokemonFormNameByFormId((int)pokemon.FormId, langId);
+                pokemonName = await GetPokemonFormNameByFormId((int)teamPokemon.FormId, langId);
             }
             if (pokemonName == null || pokemonName.Content == null)
             {
-                pokemonName = await GetPokemonName(pokemon.PokemonId, langId); ;
+                pokemonName = await GetPokemonName(teamPokemon.PokemonId, langId); ;
             }
 
             return new PokemonPreviewDTO
             {
                 Name = pokemonName,
-                DexNumber = pokemon.PokemonId,
-                TeraType = await _typeService.GetTypeByIdentifier(pokemon.TeraTypeIdentifier ?? "", true, langId),
-                Sprite = new SpriteDTO(pokemon.PokemonId, pokemonSpriteUrl),
-                Shiny = pokemon.Shiny,
-                Gender = pokemon.Gender,
+                DexNumber = teamPokemon.PokemonId,
+                TeraType = await _typeService.GetTypeByIdentifier(teamPokemon.TeraTypeIdentifier ?? "", true, langId),
+                Sprite = new SpriteDTO(teamPokemon.PokemonId, pokemonSpriteUrl),
+                Shiny = teamPokemon.Shiny,
+                Gender = teamPokemon.Gender,
                 Moves = moves,
-                Item = await _itemService.GetItemByIdentifier(pokemon.ItemIdentifier ?? "", langId),
-                AbilityName = _abilityService.GetAbilityByIdentifier(pokemon.AbilityIdentifier ?? "", langId).Result?.Name
+                Item = await _itemService.GetItemByIdentifier(teamPokemon.ItemIdentifier ?? "", langId),
+                AbilityName = _abilityService.GetAbilityByIdentifier(teamPokemon.AbilityIdentifier ?? "", langId).Result?.Name
             };
         }
 
-        public Pokemon BreakPokemonDTO(PokemonDTO pokemonDTO, string teamId)
+        public TeamPokemon BreakPokemonDTO(PokemonDTO pokemonDTO, string teamId)
         {
-            return new Pokemon
+            return new TeamPokemon
             {
                 TeamId = teamId,
                 PokemonId = pokemonDTO.DexNumber,
@@ -206,34 +216,34 @@ namespace api.Services
             };
         }
 
-        public async Task<PokemonDTO?> GetPokemonById(int id, int langId)
+        public async Task<PokemonDTO?> GetPokemonByTeamPokemonId(int teamPokemonId, int langId)
         {
-            Pokemon? pokemon = await _pokeTeamContext.Pokemon.Include(p => p.Team).FirstOrDefaultAsync(p => p.Id == id);
-            if (pokemon != null)
+            TeamPokemon? teamPokemon = await _pokeTeamContext.TeamPokemon.Include(p => p.Team).FirstOrDefaultAsync(p => p.TeamPokemonId == teamPokemonId);
+            if (teamPokemon != null)
             {
-                TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(pokemon.Team.IVsVisibility, pokemon.Team.EVsVisibility, pokemon.Team.NaturesVisibility);
-                if (pokemon.Team.PlayerId != null && pokemon.Team.PlayerId == _identityService.GetLoggedUserID())
+                TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(teamPokemon.Team.IVsVisibility, teamPokemon.Team.EVsVisibility, teamPokemon.Team.NaturesVisibility);
+                if (teamPokemon.Team.PlayerId != null && teamPokemon.Team.PlayerId == _identityService.GetLoggedUserID())
                 {
                     teamOptionsDTO.Logged();
                 }
-                return await BuildPokemonDTO(pokemon, langId, teamOptionsDTO);
+                return await BuildPokemonDTO(teamPokemon, langId, teamOptionsDTO);
             }
             return null;
         }
 
-        public async Task<PokemonDataDTO> GetPokemonDataByPokemonModel(Pokemon pokemonModel, int langId)
+        public async Task<PokemonDataDTO> GetPokemonDataByPokemonModel(TeamPokemon teamPokemon, int langId)
         {
             PokemonDataDTO pokemonData;
             List<FormDTO?>? forms = null;
             LocalizedText? name = null;
-            int dexNumber = pokemonModel.PokemonId;
-            if (pokemonModel.FormId != null && !ArePokemonFormsExcluded(pokemonModel.PokemonId))
+            int dexNumber = teamPokemon.PokemonId;
+            if (teamPokemon.FormId != null && !ArePokemonFormsExcluded(teamPokemon.PokemonId))
             {
-                dexNumber = await GetDexNumberFromPokemonId(pokemonModel.PokemonId);
-                forms = await GetPokemonFormsByPokemonId(pokemonModel.PokemonId, langId);
+                dexNumber = await GetDexNumberFromPokemonId(teamPokemon.PokemonId);
+                forms = await GetPokemonFormsByPokemonId(teamPokemon.PokemonId, langId);
                 if (forms != null && forms.Count > 0)
                 {
-                    FormDTO? currentForm = forms.Find(f => f != null && f.FormId == pokemonModel.PokemonId);
+                    FormDTO? currentForm = forms.Find(f => f != null && f.FormId == teamPokemon.PokemonId);
                     if (currentForm != null && currentForm.Name != null && currentForm.Name.Content != null)
                     {
                         name = currentForm.Name;
@@ -242,18 +252,18 @@ namespace api.Services
             }
             if(name == null || name.Content == null)
             {
-                name = await GetPokemonName(pokemonModel.PokemonId, langId);
+                name = await GetPokemonName(teamPokemon.PokemonId, langId);
             }
 
             pokemonData = new PokemonDataDTO(
                 name,
                 dexNumber,
-                await _typeService.GetPokemonTypesWithEffectiveness(pokemonModel.PokemonId, langId),
-                await _statService.GetPokemonStats(pokemonModel.PokemonId, langId),
-                new SpriteDTO(pokemonModel.PokemonId, pokemonSpriteUrl),
+                await _typeService.GetPokemonTypesWithEffectiveness(teamPokemon.PokemonId, langId),
+                await _statService.GetPokemonStats(teamPokemon.PokemonId, langId),
+                new SpriteDTO(teamPokemon.PokemonId, pokemonSpriteUrl),
                 preEvolution: await GetPokemonPreEvolution(dexNumber, langId),
                 evolutions: await GetPokemonEvolutions(dexNumber, langId),
-                formId: pokemonModel.FormId,
+                formId: teamPokemon.FormId,
                 forms: forms);
             return pokemonData;
         }
@@ -381,9 +391,9 @@ namespace api.Services
             return null;
         }
 
-        public async Task<PokemonPreviewDTO?> GetPokemonPreviewById(int id, int langId)
+        public async Task<PokemonPreviewDTO?> GetPokemonPreviewByTeamPokemonId(int teamPokemonId, int langId)
         {
-            Pokemon? pokemon = await _pokeTeamContext.Pokemon.FirstOrDefaultAsync(t => t.Id == id);
+            TeamPokemon? pokemon = await _pokeTeamContext.TeamPokemon.FirstOrDefaultAsync(t => t.TeamPokemonId == teamPokemonId);
             if (pokemon != null)
             {
                 return await BuildPokemonPreviewDTO(pokemon, langId);
@@ -391,19 +401,19 @@ namespace api.Services
             return null;
         }
 
-        public async Task<List<PokemonPreviewDTO>> GetTeamPokemonPreviews(string id, int langId)
+        public async Task<List<PokemonPreviewDTO>> GetTeamPokemonPreviews(string teamId, int langId)
         {
             List<PokemonPreviewDTO> pokemonPreviewDTOs = new List<PokemonPreviewDTO>();
 
-            Team? team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == id);
+            Team? team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == teamId);
             if (team != null)
             {
-                List<Pokemon> pokemons = await _pokeTeamContext.Pokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
-                List<int> pokemonIds = pokemons.Select(p => p.Id).ToList();
+                List<TeamPokemon> pokemons = await _pokeTeamContext.TeamPokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
+                List<int> pokemonIds = pokemons.Select(p => p.TeamPokemonId).ToList();
 
                 foreach (int pokemonId in pokemonIds)
                 {
-                    PokemonPreviewDTO? pokemonPreviewDTO = await GetPokemonPreviewById(pokemonId, langId);
+                    PokemonPreviewDTO? pokemonPreviewDTO = await GetPokemonPreviewByTeamPokemonId(pokemonId, langId);
                     if (pokemonPreviewDTO != null)
                     {
                         pokemonPreviewDTOs.Add(pokemonPreviewDTO);

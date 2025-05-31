@@ -9,7 +9,7 @@ namespace api.Models.DBPoketeamModels
         [StringLength(10, ErrorMessage = "Team id is not the correct length")]
         [Required(ErrorMessage = "Team id is required")]
         public string Id { get; set; }
-        public virtual ICollection<Pokemon> Pokemons { get; set; }
+        public virtual ICollection<TeamPokemon> Pokemons { get; set; }
 
         [StringLength(450, ErrorMessage = "Team player id is not the correct length")]
         public string? PlayerId { get; set; }
@@ -44,7 +44,7 @@ namespace api.Models.DBPoketeamModels
 
         public Team(
             string id, 
-            ICollection<Pokemon> pokemons, 
+            ICollection<TeamPokemon> pokemons, 
             string? playerId,
             string? anonPlayer,
             string? tournamentNormalizedName,
