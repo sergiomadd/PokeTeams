@@ -586,7 +586,7 @@ namespace api.Services
                                 expressions.Add(t => t.TagIds != null && t.TagIds.Any(t => query.Name != null && t == Formatter.NormalizeString(query.Name)));
                                 break;
                             case "pokemon":
-                                expressions.Add(t => t.Pokemons.Any(p => query.Identifier != null && p.DexNumber == int.Parse(query.Identifier))); 
+                                expressions.Add(t => t.Pokemons.Any(p => query.Identifier != null && p.PokemonId == int.Parse(query.Identifier))); 
                                 break;
                             case "move":
                                 expressions.Add(t => t.Pokemons.Any(p => p.Move1Identifier == query.Identifier
