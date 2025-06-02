@@ -286,13 +286,13 @@ namespace api.Services
                         LocalizedText? pokemonName = await GetPokemonNameByPokemonId(pokemonId, langId);
                         return new PokemonDataDTO(
                             pokemonName,
-                            pokemon.species_id,
+                            pokemon.id,
                             await _typeService.GetPokemonTypesWithEffectiveness(pokemon.id, langId),
                             await _statService.GetPokemonStats(pokemon.id, langId),
                             new SpriteDTO(pokemon.id, pokemonSpriteUrl),
                             preEvolution: await GetPokemonPreEvolution(pokemon.species_id, langId),
                             evolutions: await GetPokemonEvolutions(pokemon.species_id, langId),
-                            formId: pokemon.id,
+                            formId: pokemon_forms.id,
                             forms: await GetPokemonFormsByPokemonId(pokemon.id, langId));
                     }
                 }
@@ -310,7 +310,7 @@ namespace api.Services
             }
             if (pokemon_ != null)
             {
-                int dexNumber = pokemon_.species_id;
+                int dexNumber = pokemon_.id;
                 int? formId = await GetFormIdByPokemonId(pokemon_.id);
                 LocalizedText? pokemonName = await GetPokemonNameByPokemonId(pokemon_.id, langId);
                 return new PokemonDataDTO(
