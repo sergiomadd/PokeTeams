@@ -309,6 +309,7 @@ namespace api.Services
             //Case 3: Name isnt in any names database -> "Urshifu Rapid Strike" OR "Urshifu-Rapid-Strike" (form)
             //Try get the form otherwise
             string formIdentifier = name.ToLower();
+            formIdentifier = HandleFormIdentifierExceptions(formIdentifier);
             pokemon? pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
             if(pokemon_ == null)
             {
@@ -519,6 +520,22 @@ namespace api.Services
             }
             return pokemonList;
         }
+
+        private string HandleFormIdentifierExceptions(string identifier)
+        {
+            //Ogerpon-Cornerstone
+            if (identifier.Contains("ogerpon"))
+            {
+                identifier += "-mask";
+            }
+            //Tauros-Paldea-Blaze (M)
+            if (identifier.Contains("tauros-paldea"))
+            {
+                identifier += "-breed";
+            }
+            return identifier;
+        }
+
         private bool ArePokemonFormsExcluded(int pokeminId)
         {
             List<int> excludedPokemons = new List<int> { 25 };
