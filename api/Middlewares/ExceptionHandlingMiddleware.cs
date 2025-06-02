@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using System.Net;
 
 namespace api.Middlewares
@@ -29,16 +30,28 @@ namespace api.Middlewares
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            _logger.LogError(exception.Message);
+            _logger.LogError(exception, "Exception");
 
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            await context.Response.WriteAsync(new ErrorDetails()
+            if (exception is PostgresException pgEx && pgEx.SqlState == "53300")
             {
-                StatusCode = context.Response.StatusCode,
-                Message = "Internal server error"
-            }.ToString());
+                context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+                await context.Response.WriteAsync(new ErrorDetails()
+                {
+                    StatusCode = context.Response.StatusCode,
+                    Message = "Database overloaded: too many connections. Please try again later."
+                }.ToString());
+            }
+            else
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                await context.Response.WriteAsync(new ErrorDetails()
+                {
+                    StatusCode = context.Response.StatusCode,
+                    Message = "Internal server error"
+                }.ToString());
+            }
         }
     }
 }
