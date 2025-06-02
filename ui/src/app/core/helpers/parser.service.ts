@@ -31,16 +31,13 @@ export class ParserService {
     let pokePaste: PokePaste = <PokePaste>{}; 
     let lines = pokemon.split(/\r?\n|\r|\n/g);
     lines = lines.filter(str => str !== "");
+    this.getName(pokePaste, lines[0]);
     for(let i=0;i<lines.length;i++)
     {
       let line = lines[i];
-      if(line.includes("@"))
+      if(line.includes("@") && line.split(" @ ")[1].length > 0)
       {
-        this.getName(pokePaste, line);
-        if(line.split(" @ ")[1].length > 0)
-        {
-          pokePaste.item = this.formatValue(line.split(" @ ")[1]);
-        }
+        pokePaste.item = this.formatValue(line.split(" @ ")[1]);
       }
       if(line.includes(":"))
       {
@@ -101,13 +98,12 @@ export class ParserService {
     pokePaste = pokePaste + this.getReverseName(pokemon);
     if(pokemon.ability){ pokePaste = pokePaste + `Ability: ${pokemon.ability.name.content}\n` }
     if(pokemon.level){pokePaste = pokePaste + `Level: ${pokemon.level}\n`}
-    if(pokemon.shiny !== undefined)
+    if(pokemon.shiny)
     {
       if(pokemon.shiny) {pokePaste = pokePaste + `Shiny: Yes\n`}
-      else {pokePaste = pokePaste + `Shiny: No\n`}
     }
     if(pokemon.teraType){pokePaste = pokePaste + `Tera Type: ${pokemon.teraType.name.content}\n`}
-    if(pokemon.evs)
+    if(pokemon.evs && pokemon.evs.some(e => e.value > 0))
     {
       let evLine = "EVs:";
       let evs: string[] = []
@@ -119,7 +115,7 @@ export class ParserService {
       pokePaste = pokePaste + evLine;
     }
     if(pokemon.nature){pokePaste = pokePaste + `${pokemon.nature.name.content} Nature\n`}
-    if(pokemon.ivs)
+    if(pokemon.ivs && pokemon.ivs.some(i => i.value > 0 && i.value !== 31))
     {
       let ivLine = "IVs:";
       let ivs: string[] = []
@@ -144,21 +140,22 @@ export class ParserService {
   {
     let line: string = "";
     console.log(pokemon)
+    let name: string | undefined = pokemon.formId ? pokemon.name?.content.split(" ").join("-") : pokemon.name?.content
     if(pokemon.nickname && pokemon.item)
     {
-      line = `${pokemon.nickname} (${pokemon.name?.content}) @ ${pokemon.item?.name.content}` 
+      line = `${pokemon.nickname} (${name}) @ ${pokemon.item?.name.content}` 
     }
     else if(pokemon.nickname)
     {
-      line = `${pokemon.nickname} (${pokemon.name?.content})` 
+      line = `${pokemon.nickname} (${name})` 
     }
     else if(pokemon.item)
     {
-      line = `${pokemon.name?.content} @ ${pokemon.item.name?.content}` 
+      line = `${name} @ ${pokemon.item.name?.content}` 
     }
     else
     {
-      line = `${pokemon.name?.content}` 
+      line = `${name}` 
     }
     return line + "\n";
   }
@@ -166,20 +163,20 @@ export class ParserService {
   matchStatIdentifierWithShortName(identifier: string)
   {
     let statNames = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"];
-    //let statIdentifiers = ["hp", "attack", "defense", "special-attack", "special-defense", "speed"];
+    let statIdentifiers = ["hp", "attack", "defense", "special-attack", "special-defense", "speed"];
     switch(identifier)
     {
-      case "hp":
+      case statIdentifiers[0]:
         return statNames[0];
-      case "atk":
+      case statIdentifiers[1]:
         return statNames[1];
-      case "def":
+      case statIdentifiers[2]:
         return statNames[2];
-      case "spa":
+      case statIdentifiers[3]:
         return statNames[3];
-      case "spd":
+      case statIdentifiers[4]:
         return statNames[4];
-      case "spe":
+      case statIdentifiers[5]:
         return statNames[5];
     }
     return ""
@@ -187,36 +184,40 @@ export class ParserService {
 
   getName(pokePaste: PokePaste, line: string)
   {
-    let profile: string = line.split(" @ ")[0];
-    //Case 1: Only species name 'Mamoswine'
-    if(!profile.includes("("))
+    let profile: string;
+    if(line.includes("@"))
     {
-      pokePaste.name = this.formatValue(profile);
-    }
-    //Case 2: Species + nickname 'Pickle (Mamoswine)' {only 1 '('}
-    else if(profile.includes("(") && profile.split("(").length === 2)
-    {
-      pokePaste.nickname = this.formatValue(profile.split("(")[0]);
-      pokePaste.name = this.formatValue(profile.split("(")[1], {rightParen: true});
-    }
-    //Case 3: Species + nickname + gender 'Pickle (Mamoswine) (F)'  {2 '('}
-    else if(profile.includes("(") && profile.split("(").length === 3)
-    {
-      pokePaste.nickname = this.formatValue(profile.split("(")[0]);
-      pokePaste.name = this.formatValue(profile.split("(")[1], {rightParen: true});
-      let genderString = this.formatValue(profile.split("(")[2], {rightParen: true});
-      if(genderString === "female" || genderString === "Female" || genderString === "f" || genderString === "F")
+      profile = line.split(" @ ")[0]
+      //Case 1: Only species name 'Mamoswine'
+      if(!profile.includes("("))
       {
-        pokePaste.gender = true;
+        pokePaste.name = this.formatValue(profile, {onlyOneWhiteSpace: true});
       }
-      else
+      //Case 2: Species + nickname 'Pickle (Mamoswine)' {only 1 '('}
+      else if(profile.includes("(") && profile.split("(").length === 2)
       {
-        pokePaste.gender = false;
+        pokePaste.nickname = this.formatValue(profile.split("(")[0]);
+        pokePaste.name = this.formatValue(profile.split("(")[1], {rightParen: true});
+      }
+      //Case 3: Species + nickname + gender 'Pickle (Mamoswine) (F)'  {2 '('}
+      else if(profile.includes("(") && profile.split("(").length === 3)
+      {
+        pokePaste.nickname = this.formatValue(profile.split("(")[0]);
+        pokePaste.name = this.formatValue(profile.split("(")[1], {rightParen: true});
+        let genderString = this.formatValue(profile.split("(")[2], {rightParen: true});
+        if(genderString === "female" || genderString === "Female" || genderString === "f" || genderString === "F")
+        {
+          pokePaste.gender = true;
+        }
+        else
+        {
+          pokePaste.gender = false;
+        }
       }
     }
     else
     {
-      console.log(`Error: Pokemon profile ${profile} format not recognized.`)
+      pokePaste.name = line;
     }
   }
 
@@ -231,13 +232,10 @@ export class ParserService {
     return moves;
   }
 
-
-
   getStats(line: string, type: string) : string[][]
   {
     let statNames = ["HP", "Atk", "Def", "SpA", "SpD", "Spe"];
     let statIdentifiers = ["hp", "attack", "defense", "special-attack", "special-defense", "speed"];
-
     let stats: any[][] = [];
     if(type === 'noiv')
     {
@@ -264,14 +262,15 @@ export class ParserService {
     }
 
     let singleStats = line.split(":")[1].split("/");
-    for(let i=0;i<statNames.length;i++)
+    for(let i=0; i<statNames.length; i++)
     {
       let stat: (string | number)[] = [];
+      //Get index incase missing stats => HP / {NONE} / DEF
       let statIndex = singleStats.findIndex(s => s.includes(statNames[i]));
       if(statIndex != -1)
       {
         stat.push(statIdentifiers[i]);
-        stat.push(parseInt(singleStats[statIndex].split(" ")[1]));
+        stat.push(parseInt(singleStats[statIndex].split(" ")[1].trim()));
       }
       else
       {
@@ -290,6 +289,12 @@ export class ParserService {
     if(options?.leftParen){ newValue = value.replace("(", "") }
     if(options?.rightParen){ newValue = value.replace(")", "") }
     if(options?.whiteSpace){ newValue = newValue.replaceAll(" ", "");}
+    if(options?.onlyOneWhiteSpace)
+    {
+      let wordList = newValue.split(" ");
+      wordList = wordList.filter(w => w !== "" && w !== " ");
+      newValue = wordList.join(" ");
+    }
     if(options?.lowercase){newValue = newValue.toLowerCase();}
     newValue = newValue?.trimStart();
     newValue = newValue?.trimEnd();
