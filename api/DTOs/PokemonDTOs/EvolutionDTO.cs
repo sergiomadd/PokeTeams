@@ -6,6 +6,7 @@ namespace api.DTOs.PokemonDTOs
     {
         public LocalizedText? Name { get; set; }
         public int? DexNumber { get; set; }
+        public int? PokemonId { get; set; }
         public PokeTypesDTO? Types { get; set; }
         public SpriteDTO? Sprite { get; set; }
         public EvolutionDTO? PreEvolution { get; set; }
@@ -20,7 +21,8 @@ namespace api.DTOs.PokemonDTOs
 
         public EvolutionDTO(
             LocalizedText? name, 
-            int dexNumber, 
+            int dexNumber,
+            int? pokemonId,
             PokeTypesDTO? types,
             SpriteDTO? sprite, 
             EvolutionDTO? preEvolution = null, 
@@ -29,6 +31,7 @@ namespace api.DTOs.PokemonDTOs
         {
             Name = name;
             DexNumber = dexNumber;
+            PokemonId = pokemonId;
             Types = types;
             Sprite = sprite;
             PreEvolution = preEvolution;

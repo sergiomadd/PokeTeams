@@ -64,7 +64,7 @@ namespace api.Services
 
         public async Task<PokemonDTO> BuildPokemonDTO(TeamPokemon pokemon, int langId, TeamOptionsDTO? options = null)
         {
-            PokemonDataDTO? pokemonData = await GetPokemonDataByPokemonModel(pokemon, langId);
+            PokemonDataDTO pokemonData = await GetPokemonDataByPokemonModel(pokemon, langId);
 
             List<MoveDTO?> moves = new List<MoveDTO?>
             {
@@ -76,25 +76,27 @@ namespace api.Services
 
             PokemonDTO pokemonDTO = new PokemonDTO
             {
-                Name = pokemonData?.Name,
+                Name = pokemonData.Name,
                 Nickname = pokemon.Nickname,
-                DexNumber = pokemon.PokemonId,
-                PreEvolution = pokemonData?.PreEvolution,
-                Evolutions = pokemonData?.Evolutions,
-                Forms = pokemonData?.Forms,
-                Types = pokemonData?.Types,
+                DexNumber = pokemonData.DexNumber,
+                PokemonId = pokemon.PokemonId,
+                FormId = pokemon.FormId,
+                PreEvolution = pokemonData.PreEvolution,
+                Evolutions = pokemonData.Evolutions,
+                Forms = pokemonData.Forms,
+                Types = pokemonData.Types,
                 TeraType = await _typeService.GetTypeWithEffectivenessByIdentifier(pokemon.TeraTypeIdentifier ?? "", langId, true),
                 Item = await _itemService.GetItemByIdentifier(pokemon.ItemIdentifier ?? "", langId),
                 Ability = await _abilityService.GetAbilityByIdentifier(pokemon.AbilityIdentifier ?? "", langId),
                 Nature = options != null && options.NaturesVisibility ? await _natureService.GetNatureByIdentifier(pokemon.NatureIdentifier ?? "", langId) : null,
                 Moves = moves,
-                Stats = pokemonData != null ? pokemonData.Stats : new List<StatDTO>(),
+                Stats = pokemonData.Stats.Count > 0 ? pokemonData.Stats : new List<StatDTO>(),
                 ivs = BuildPokemonIVs(pokemon, options),
                 evs = BuildPokemonEVs(pokemon, options),
                 Level = pokemon.Level,
                 Shiny = pokemon.Shiny,
                 Gender = pokemon.Gender,
-                Sprite = pokemonData?.Sprite,
+                Sprite = pokemonData.Sprite,
                 Notes = pokemon.Notes
             };
 
@@ -151,7 +153,8 @@ namespace api.Services
             return new PokemonPreviewDTO
             {
                 Name = await GetPokemonNameByPokemonId(teamPokemon.PokemonId, langId),
-                DexNumber = teamPokemon.PokemonId,
+                //If pokemon is a form, pokemonId wont be species dex number
+                DexNumber = teamPokemon.FormId != null ? await GetPokemonDexNumberByPokemonId(teamPokemon.PokemonId) : teamPokemon.PokemonId,
                 TeraType = await _typeService.GetTypeByIdentifier(teamPokemon.TeraTypeIdentifier ?? "", true, langId),
                 Sprite = new SpriteDTO(teamPokemon.PokemonId, pokemonSpriteUrl),
                 Shiny = teamPokemon.Shiny,
@@ -167,7 +170,7 @@ namespace api.Services
             return new TeamPokemon
             {
                 TeamId = teamId,
-                PokemonId = pokemonDTO.DexNumber,
+                PokemonId = pokemonDTO.PokemonId,
                 FormId = pokemonDTO?.FormId,
                 Nickname = pokemonDTO?.Nickname,
                 TeraTypeIdentifier = pokemonDTO?.TeraType?.Identifier,
@@ -215,10 +218,11 @@ namespace api.Services
         public async Task<PokemonDataDTO> GetPokemonDataByPokemonModel(TeamPokemon teamPokemon, int langId)
         {
             PokemonDataDTO pokemonData;
-            int dexNumber = teamPokemon.PokemonId;
+            int dexNumber = teamPokemon.FormId != null ? await GetPokemonDexNumberByPokemonId(teamPokemon.PokemonId) : teamPokemon.PokemonId;
             pokemonData = new PokemonDataDTO(
                 await GetPokemonNameByPokemonId(teamPokemon.PokemonId, langId),
                 dexNumber,
+                teamPokemon.PokemonId,
                 await _typeService.GetPokemonTypesWithEffectiveness(teamPokemon.PokemonId, langId),
                 await _statService.GetPokemonStats(teamPokemon.PokemonId, langId),
                 new SpriteDTO(teamPokemon.PokemonId, pokemonSpriteUrl),
@@ -238,6 +242,7 @@ namespace api.Services
                 return new PokemonDataDTO(
                     await GetPokemonNameByPokemonId(pokemonId, langId),
                     dexNumber,
+                    pokemonId,
                     await _typeService.GetPokemonTypesWithEffectiveness(pokemonId, langId),
                     await _statService.GetPokemonStats(pokemonId, langId),
                     new SpriteDTO(pokemonId, pokemonSpriteUrl),
@@ -260,6 +265,8 @@ namespace api.Services
                 int dexNumber = pokemon_species_names.pokemon_species_id;
                 return new PokemonDataDTO(
                     await GetPokemonNameByPokemonId(dexNumber, langId),
+                    dexNumber,
+                    //PokemonId IS dexNumber becouse its not a form
                     dexNumber,
                     await _typeService.GetPokemonTypesWithEffectiveness(dexNumber, langId),
                     await _statService.GetPokemonStats(dexNumber, langId),
@@ -286,7 +293,8 @@ namespace api.Services
                         LocalizedText? pokemonName = await GetPokemonNameByPokemonId(pokemonId, langId);
                         return new PokemonDataDTO(
                             pokemonName,
-                            pokemon.id,
+                            pokemon.species_id,
+                            pokemonId,
                             await _typeService.GetPokemonTypesWithEffectiveness(pokemon.id, langId),
                             await _statService.GetPokemonStats(pokemon.id, langId),
                             new SpriteDTO(pokemon.id, pokemonSpriteUrl),
@@ -310,17 +318,17 @@ namespace api.Services
             }
             if (pokemon_ != null)
             {
-                int dexNumber = pokemon_.id;
                 int? formId = await GetFormIdByPokemonId(pokemon_.id);
                 LocalizedText? pokemonName = await GetPokemonNameByPokemonId(pokemon_.id, langId);
                 return new PokemonDataDTO(
                     pokemonName,
-                    dexNumber,
+                    pokemon_.species_id,
+                    pokemon_.id,
                     await _typeService.GetPokemonTypesWithEffectiveness(pokemon_.id, langId),
                     await _statService.GetPokemonStats(pokemon_.id, langId),
                     new SpriteDTO(pokemon_.id, pokemonSpriteUrl),
-                    preEvolution: await GetPokemonPreEvolution(dexNumber, langId),
-                    evolutions: await GetPokemonEvolutions(dexNumber, langId),
+                    preEvolution: await GetPokemonPreEvolution(pokemon_.species_id, langId),
+                    evolutions: await GetPokemonEvolutions(pokemon_.species_id, langId),
                     formId: formId,
                     forms: await GetPokemonFormsByPokemonId(pokemon_.id, langId));
             }
@@ -403,13 +411,6 @@ namespace api.Services
             return result;
         }
 
-        private bool IsPokemonDefaultForm(int pokeminId)
-        {
-            //[Deoxys, Rotom, Basculin, Oricorio, Lycanroc, Ogerpon, Terapagos]
-            List<int> excludedPokemons = new List<int> { 386, 479, 550, 741, 745, 892, 1017, 1024 };
-            return excludedPokemons.Contains(pokeminId);
-        }
-
         private async Task<int?> GetFormIdByPokemonId(int pokemonId)
         {
             int? formId = null;
@@ -429,6 +430,7 @@ namespace api.Services
                 int preEvolutionDexnumber = pokemonSpeciesPreEvolution.evolves_from_species_id ?? 0;
                 return new EvolutionDTO(
                     await GetPokemonNameByPokemonId(preEvolutionDexnumber, langId),
+                    preEvolutionDexnumber,
                     preEvolutionDexnumber,
                     await _typeService.GetPokemonTypes(preEvolutionDexnumber, langId),
                     new SpriteDTO(preEvolutionDexnumber, pokemonSpriteUrl),
@@ -451,7 +453,9 @@ namespace api.Services
                         int evolutionDexNumber = pokemonSpeciesEvolution.id;
                         var test = await GetPokemonFormsByPokemonId(evolutionDexNumber, langId);
                         evolutions.Add(new EvolutionDTO(
-                            await GetPokemonNameByPokemonId(evolutionDexNumber, langId), evolutionDexNumber,
+                            await GetPokemonNameByPokemonId(evolutionDexNumber, langId),
+                            evolutionDexNumber,
+                            evolutionDexNumber,
                             await _typeService.GetPokemonTypes(evolutionDexNumber, langId),
                             new SpriteDTO(evolutionDexNumber, pokemonSpriteUrl),
                             evolutions: await GetPokemonEvolutions(evolutionDexNumber, langId),
@@ -460,12 +464,6 @@ namespace api.Services
                 }
             }
             return evolutions;
-        }
-
-        private bool ArePokemonFormsExcluded(int pokeminId)
-        {
-            List<int> excludedPokemons = new List<int> { 25 };
-            return excludedPokemons.Contains(pokeminId);
         }
 
         //DexNumber = PokemonId in pokemon forms
@@ -491,6 +489,7 @@ namespace api.Services
                                     await GetPokemonNameByPokemonId(pokemon.id, langId),
                                     pokemon.species_id,
                                     pokemon.id,
+                                    await GetFormIdByPokemonId(pokemon.id),
                                     await _typeService.GetPokemonTypes(pokemon.id, langId),
                                     new SpriteDTO(pokemon.id, pokemonSpriteUrl)));
                             }
@@ -501,6 +500,16 @@ namespace api.Services
             return forms;
         }
 
+        private async Task<int> GetPokemonDexNumberByPokemonId(int pokemonId)
+        {
+            pokemon? pokemon = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.id == pokemonId);
+            if (pokemon != null)
+            {
+                return pokemon.species_id;
+            }
+            return pokemonId;
+        }
+
         private List<pokemon> HandleFormExceptions(List<pokemon> pokemonList)
         {
             //If zygarde, non power construct forms (pokemonIds = [718, 10181])
@@ -509,6 +518,18 @@ namespace api.Services
                 pokemonList.RemoveAll(p => p.id == 718 || p.id == 10181);
             }
             return pokemonList;
+        }
+        private bool ArePokemonFormsExcluded(int pokeminId)
+        {
+            List<int> excludedPokemons = new List<int> { 25 };
+            return excludedPokemons.Contains(pokeminId);
+        }
+
+        private bool IsPokemonDefaultForm(int pokeminId)
+        {
+            //[Deoxys, Rotom, Basculin, Oricorio, Lycanroc, Ogerpon, Terapagos]
+            List<int> excludedPokemons = new List<int> { 386, 479, 550, 741, 745, 892, 1017, 1024 };
+            return excludedPokemons.Contains(pokeminId);
         }
 
         public async Task<List<QueryResultDTO>> QueryPokemonsByName(string key, int langId)
