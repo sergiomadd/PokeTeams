@@ -244,7 +244,7 @@ export class QueryService
       let queryResult: QueryItem = 
       {
         name: pokemon.name.content ?? "",
-        identifier: pokemon.name.content ?? "",
+        identifier: pokemon.pokemonId?.toString() ?? "",
         icon: pokemon.sprite?.base
       }
       return queryResult;

@@ -44,6 +44,7 @@ export class PokemonService
       {
         pokemon.name = pokemonData.status == "fulfilled" ? pokemonData.value?.name : undefined;
         pokemon.dexNumber = pokemonData.status == "fulfilled" ? pokemonData.value?.dexNumber : 0;
+        pokemon.pokemonId = pokemonData.status == "fulfilled" ? pokemonData.value?.pokemonId : 0;
         pokemon.preEvolution = pokemonData.status == "fulfilled" ? pokemonData.value?.preEvolution : undefined;
         pokemon.evolutions = pokemonData.status == "fulfilled" ? pokemonData.value?.evolutions ?? [] : [];
         pokemon.formId = pokemonData.status == "fulfilled" ? pokemonData.value?.formId : undefined;

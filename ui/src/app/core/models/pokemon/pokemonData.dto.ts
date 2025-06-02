@@ -9,6 +9,7 @@ export interface PokemonData
 {
   name?: LocalizedText,
   dexNumber?: number,
+  pokemonId?: number,
   preEvolution?: Evolution,
 	evolutions: Evolution[],
   formId?: number,
@@ -25,7 +26,8 @@ export const defaultPokemonData: PokemonData =
     content: "Not Found",
     language: "en"
   },
-  dexNumber: -1,
+  dexNumber: undefined,
+  pokemonId: undefined,
   preEvolution: undefined,
 	evolutions: [],
   formId: undefined,

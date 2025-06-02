@@ -6,6 +6,8 @@ export interface PokemonForm
 {
   name?: LocalizedText,
   dexNumber?: number,
+  pokemonId?: number,
+  formId?: string,
   types?: Types,
   sprite?: Sprite
 }
@@ -17,7 +19,9 @@ export const defaultPokemonForm: PokemonForm =
     content: "Not Found",
     language: "en"
   },
-  dexNumber: 0,
+  dexNumber: undefined,
+  pokemonId: undefined,
+  formId: undefined,
   types: defaultTypes,
   sprite: undefined
 }

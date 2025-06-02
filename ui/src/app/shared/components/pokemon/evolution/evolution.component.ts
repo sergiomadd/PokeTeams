@@ -30,6 +30,7 @@ export class EvolutionComponent
       {
         name: this.form.name,
         dexNumber: this.form.dexNumber,
+        pokemonId: this.form.pokemonId,
         types: this.form.types,
         sprite: this.form.sprite,
         evolutions: []

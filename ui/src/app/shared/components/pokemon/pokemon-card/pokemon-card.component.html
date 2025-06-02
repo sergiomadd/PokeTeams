@@ -4,17 +4,17 @@
       <div class="left">
         <ng-container *ngIf="pokemon.name; else emptySection">
           <div 
-          (click)="pokemon.dexNumber !== -1 ? clickSection(0, 'evol') : false"
+          (click)="pokemon.dexNumber ? clickSection(0, 'evol') : false"
           [ngClass]="
           {
-            section: pokemon.dexNumber !== -1,
-            'animated-border': pokemon.dexNumber !== -1 && !window.isTabletPortraitOrLess(),
+            section: pokemon.dexNumber,
+            'animated-border': pokemon.dexNumber && !window.isTabletPortraitOrLess(),
             'poke-tooltip-selected': tooltipEvol[0],
             'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
           }"
           >
             <div class="section-content flex align-i-c">
-              <ng-container *ngIf="pokemon.dexNumber !== -1">
+              <ng-container *ngIf="pokemon.dexNumber">
                 <app-poke-tooltip
                 [content]="familyTooltip"
                 [side]="'top'"
@@ -28,7 +28,7 @@
                 <app-evolution [sourcePokemon]="pokemon" [teamOptions]="teamOptions"></app-evolution>
               </ng-template>
               <div class="relative flex align-i-c h-100 w-100">
-                <ng-container *ngIf="pokemon.dexNumber && pokemon.dexNumber !== -1">
+                <ng-container *ngIf="pokemon.dexNumber">
                   <div class="dex-number">
                     #{{pokemon.dexNumber}}
                   </div>
@@ -599,10 +599,8 @@
             </ng-container>
           </div>
           <div class="flex justify-c-c align-i-c h-100">
-            <ng-container *ngIf="pokemon.dexNumber">
-              <ng-container *ngIf="pokemon.dexNumber !== -1; else errorSVG">
-                <img src={{pokemonSpritePath}} alt="" class="sprite">
-              </ng-container>
+            <ng-container *ngIf="pokemon.dexNumber; else errorSVG">
+              <img src={{pokemonSpritePath}} alt="" class="sprite">
             </ng-container>
           </div>
           <div class="flex justify-c-sb align-i-c" style="height: 1.2em;">
@@ -636,19 +634,17 @@
               </div>
             </ng-container>
             <div class="icon-s">
-              <ng-container *ngIf="pokemon.dexNumber">
-                <ng-container *ngIf="pokemon.dexNumber !== -1; else errorIcon">
-                  <ng-container *ngIf="pokemon.gender == true; else male">
-                    <div class="bor-rad-20 flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.female}">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-female"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M12 14v7" /><path d="M9 18h6" /></svg>
-                    </div>
-                  </ng-container>
-                  <ng-template #male>
-                    <div class="bor-rad-20 flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.male}">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-male"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 14m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M19 5l-5.4 5.4" /><path d="M19 5h-5" /><path d="M19 5v5" /></svg>                  
-                    </div>
-                  </ng-template>
+              <ng-container *ngIf="pokemon.dexNumber; else errorIcon">
+                <ng-container *ngIf="pokemon.gender == true; else male">
+                  <div class="bor-rad-20 flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.female}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-female"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M12 14v7" /><path d="M9 18h6" /></svg>
+                  </div>
                 </ng-container>
+                <ng-template #male>
+                  <div class="bor-rad-20 flex justify-c-c align-i-c" [ngStyle]="{backgroundColor: genderColors.male}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="#ffffff"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon-tabler icons-tabler-outline icon-tabler-gender-male"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 14m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" /><path d="M19 5l-5.4 5.4" /><path d="M19 5h-5" /><path d="M19 5v5" /></svg>                  
+                  </div>
+                </ng-template>
               </ng-container>
             </div>
           </div>

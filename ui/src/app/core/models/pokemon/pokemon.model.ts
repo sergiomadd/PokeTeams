@@ -15,6 +15,7 @@ export interface Pokemon
 	name?: LocalizedText,
 	nickname?: string,
 	dexNumber?: number,
+	pokemonId?: number,
 	preEvolution?: Evolution,
 	evolutions: Evolution[],
 	formId?: number,
