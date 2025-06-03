@@ -36,10 +36,10 @@
               </svg>
             </ng-container>
             <ng-template #icon>
-              <img [attr.src]="selected?.icon" alt="" class="icon-s" fill loading="lazy">
+              <img [attr.src]="selected?.icon" [alt]="selected?.type" fill loading="lazy" [ngClass]="{'icon-s': selected?.type === 'move', 'icon-l': selected?.type !== 'move'}">
             </ng-template>
           </ng-container>
-          {{selected?.name}}
+          {{selected?.type}}
         </div>
         <ng-container *ngIf="!disableRemove">
           <div class="remove flex align-i-c icon-xs pointer pad-s bor-rad-5" (click)="removeSelected()">
