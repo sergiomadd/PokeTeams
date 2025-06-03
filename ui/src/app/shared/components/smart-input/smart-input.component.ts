@@ -29,6 +29,7 @@ export class SmartInputComponent
   @Input() allGetter?: (args?: any) => Observable<QueryItem[]>
   @Input() allGetterIndex?: number;
   @Input() disabled?: boolean;
+  @Input() autoTab?: boolean = true;
 
   @Output() selectEvent = new EventEmitter<QueryItem>();
   @Output() newEvent = new EventEmitter();
@@ -155,6 +156,7 @@ export class SmartInputComponent
             if(this.allowCustom)
             {
               this.customQueryResult.name = key;
+              this.customQueryResult.identifier = key;
               this.results = [this.customQueryResult].concat(this.results);
             }
             this.searching = false;
@@ -179,6 +181,7 @@ export class SmartInputComponent
     this.showOptions = false;
     this.input.nativeElement.blur();
     this.selectEvent.emit(selectedResult);
+    this.focusNext();
   }
 
   removeSelected()
@@ -293,6 +296,49 @@ export class SmartInputComponent
     if(this.position === 9)
     {
       this.resultsDiv.nativeElement.scrollBy(0, 38);
+    }
+  }
+
+  onBlur()
+  {
+    this.showOptions = false;
+  }
+
+  focusNext(): void 
+  {
+    if(this.autoTab)
+    {
+      const smartInputComponent = this.smartInput.nativeElement.parentElement;
+      let next = smartInputComponent?.nextElementSibling as HTMLElement | null;
+      const input = next?.querySelector('input') as HTMLInputElement | null;
+      if(input)
+      {
+        input.focus();
+      }
+      else
+      {
+        //Ability input wrapper case
+        let next = smartInputComponent?.parentElement.parentElement.nextElementSibling as HTMLElement | null;
+        const input = next?.querySelector('input') as HTMLInputElement | null;
+        if(input)
+        {
+          input.focus();
+        }
+        //Tag wrapper case
+        else
+        {
+          let next = smartInputComponent?.parentElement.nextElementSibling as HTMLElement | null;
+          const input = next?.querySelector('input') as HTMLInputElement | null;
+          if(input)
+          {
+            input.focus();
+          }
+        }
+      }
+    }
+    else
+    {
+      this.input.nativeElement.focus();
     }
   }
 }

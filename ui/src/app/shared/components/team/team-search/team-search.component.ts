@@ -57,6 +57,7 @@ export class TeamSearchComponent
   async queryResultSelectEvent(event: QueryItem)
   {
     this.feedback = undefined;
+    if(!event) {return;}
     if(event.type === "user")
     {
       this.feedback = this.validatePlayer(event.name);

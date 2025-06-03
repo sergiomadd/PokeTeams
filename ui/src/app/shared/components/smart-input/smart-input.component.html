@@ -12,6 +12,7 @@
       value="result"
       class="input-m flex align-i-c no-overflow w-100"
       (focus)="onFocus()"
+      (blur)="onBlur()"
       (keyup.enter)="selectResult(results[activeResult])"
       [attr.disabled]="disabled ? '' : null"
       [readonly]="disabled"
@@ -58,6 +59,7 @@
   <ng-container *ngIf="showOptions || results.length > 0">
     <ul
     #resultsDiv
+    tabindex="-1"
     class="results custom-scrollbar"
     [ngClass]="
     {
@@ -131,7 +133,8 @@
           [ngClass]="
           {
             'result-hovered': activeResult === i,
-            'tag-result': result.type === 'tag' && result.icon
+            'tag-result': result.type === 'tag' && result.icon,
+            'tag-result-hovered': result.type === 'tag' && activeResult === i
           }"
           [ngStyle]="
           {

@@ -21,8 +21,6 @@
             #tournamentInput
             [label]="'shared.team.tournament' | translate"
             [keepSelected]="false"
-            [allowCustom]="true"
-            [customType]="'tournament'"
             [getter]="queryService.queryTournamentCallback"
             [allGetter]="queryService.tournamentAllCallback"
             (selectEvent)="queryResultSelectEvent($event)"
@@ -43,6 +41,7 @@
             [keepSelected]="false"
             [getter]="queryService.queryTagCallback"
             [allGetter]="queryService.tagAllCallback"
+            [autoTab]="false"
             (selectEvent)="queryResultSelectEvent($event)"
             class="item smart-input-wrapper"
             ></app-smart-input>
@@ -52,6 +51,7 @@
               [label]="'shared.pokemon.pokemon' | translate"
               [keepSelected]="false"
               [getter]="queryService.queryPokemonCallback"
+              [autoTab]="false"
               (selectEvent)="queryResultSelectEvent($event)"
               class="item smart-input-wrapper"
               ></app-smart-input>
@@ -60,6 +60,7 @@
               [label]="'shared.pokemon.move' | translate"
               [keepSelected]="false"
               [getter]="queryService.queryMoveCallback"
+              [autoTab]="false"
               (selectEvent)="queryResultSelectEvent($event)"
               class="item smart-input-wrapper"
               ></app-smart-input>
@@ -68,6 +69,7 @@
               [label]="'shared.pokemon.item' | translate"
               [keepSelected]="false"
               [getter]="queryService.queryItemCallback"
+              [autoTab]="false"
               (selectEvent)="queryResultSelectEvent($event)"
               class="item smart-input-wrapper"
               ></app-smart-input>
