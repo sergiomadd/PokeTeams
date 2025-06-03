@@ -1,5 +1,6 @@
 <ng-container *ngIf="pokemon">
-  <div class="flex wrap justify-c-c align-i-c"
+  <div class="flex wrap justify-c-c align-i-c" 
+  style="background-color: var(--bg-color-2); border-radius: 5px;"
   >
     <ng-container *ngIf="pokemon && pokemon?.preEvolution">
       <app-evolution [sourcePokemon]="sourcePokemon" [pokemon]="pokemon.preEvolution" [teamOptions]="teamOptions"></app-evolution>
@@ -23,7 +24,7 @@
       </div>
     </div>
     <ng-container *ngIf="pokemon.forms">
-      <div class="flex wrap align-i-c bg-2 bor-rad-5">
+      <div class="flex wrap justify-c-c align-i-c bg-2 bor-rad-5">
         <ng-container *ngFor="let form of pokemon.forms">
           <ng-container *ngIf="pokemon.name?.content != form.name?.content">
             <svg class="icon" viewBox="0 0 24 24" fill="var(--text-color)" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 6.50004C2.99999 5.94776 3.4477 5.50004 3.99999 5.50003L15 5.4999V3.00001C15 2.59555 15.2437 2.23091 15.6173 2.07613C15.991 1.92135 16.4211 2.00691 16.7071 2.29291L20.7071 6.29291C21.0977 6.68343 21.0977 7.3166 20.7071 7.70712L16.7071 11.7071C16.4211 11.9931 15.991 12.0787 15.6173 11.9239C15.2437 11.7691 15 11.4045 15 11V8.4999L4.00002 8.50003C3.44774 8.50004 3.00002 8.05233 3.00001 7.50004L3 6.50004Z" fill="var(--text-color)" ></path> <path d="M9 21C9 21.4045 8.75636 21.7691 8.38268 21.9239C8.00901 22.0787 7.57889 21.9931 7.29289 21.7071L4.08582 18.5H4V18.4142L3.29289 17.7071C2.90237 17.3166 2.90237 16.6834 3.29289 16.2929L4 15.5858V15.5H4.08576L7.29289 12.2929C7.57889 12.0069 8.00901 11.9214 8.38268 12.0761C8.75636 12.2309 9 12.5956 9 13V15.5L20 15.5C20.5523 15.5 21 15.9478 21 16.5V17.5C21 18.0523 20.5523 18.5 20 18.5L9 18.5V21Z" fill="var(--text-color)" ></path> </g></svg>

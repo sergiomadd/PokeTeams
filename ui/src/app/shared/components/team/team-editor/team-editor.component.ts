@@ -63,6 +63,11 @@ export class TeamEditorComponent
     this.teamEditorService.selectedTeam$.subscribe((value) => 
     {
       this.team = value;
+      if(this.teamComponent)
+      {
+        this.teamComponent.showAllStats = false;
+        this.teamComponent.showAllNotes = false;
+      }
     });
     this.loggedUser$.subscribe(async value => 
       {

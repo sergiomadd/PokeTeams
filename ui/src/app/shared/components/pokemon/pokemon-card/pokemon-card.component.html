@@ -28,11 +28,6 @@
                 <app-evolution [sourcePokemon]="pokemon" [teamOptions]="teamOptions"></app-evolution>
               </ng-template>
               <div class="relative flex align-i-c h-100 w-100">
-                <ng-container *ngIf="pokemon.dexNumber">
-                  <div class="dex-number">
-                    #{{pokemon.dexNumber}}
-                  </div>
-                </ng-container>
                 <div class="no-overflow row">
                   <div class="section-name">
                     <ng-container *ngIf="pokemon.nickname && teamOptions?.showNickname; else speciesName">
@@ -142,7 +137,6 @@
               <ng-template #abilityTooltip>
                 <div class="poke-tooltip-content">
                   <div class="poke-tooltip-head" [ngClass]="{'justify-c-sb': pokemon?.ability?.hidden}">
-
                     <span class="poke-tooltip-head-text">
                       {{pokemon.ability?.name?.content}}
                       <ng-container *ngIf="pokemon.ability?.name?.content && pokemon.ability?.name?.language != (selectedLang$ | async)">
@@ -325,278 +319,285 @@
       <div style="padding: 0.8em 0.4em 0.8em 0.4em;">
         <div class="flex-col h-100">
           <div class="flex justify-c-e align-i-c" style="height: 1.2em;">
-            <ng-container *ngIf="pokemon.teraType">
-              <ng-container *ngIf="pokemon.teraType?.identifier !== 'error'; else errorIcon">
-                <div 
-                (click)="clickSection(0, 'types')"
-                [ngClass]="
-                {
-                  section: pokemon.teraType?.identifier !== 'error',
-                  'animated-border': pokemon.teraType?.identifier !== 'error' && !window.isTabletPortraitOrLess() && pokemon.teraType?.identifier !== 'stellar',
-                  'poke-tooltip-selected': tooltipTypes[0] && pokemon.teraType?.identifier !== 'stellar',
-                  'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
-                }"
-                >
-                  <div class="section-content type">
-                    <ng-container *ngIf="pokemon.teraType?.effectivenessAttack || pokemon.teraType?.effectivenessDefense">
-                      <app-poke-tooltip
-                      [content]="teraTypeTooltip"
-                      [side]="'top'"
-                      [visible]="tooltipTypes[0]"
-                      [mobileChanged]="window.isTabletPortraitOrLess()"
-                      class="tooltip-component"
-                      >
-                      </app-poke-tooltip>
-                      <ng-template #teraTypeTooltip>
-                        <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
-                          <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.superEffective?.length ?? false">
-                            <div class="type-category">
-                              <div class="type-category-text">
-                                <span class="bold">x2</span>
+            <ng-container *ngIf="pokemon.dexNumber">
+              <div class="dex-number">
+                #{{pokemon.dexNumber}}
+              </div>
+            </ng-container>
+            <div class="flex">
+              <ng-container *ngIf="pokemon.teraType">
+                <ng-container *ngIf="pokemon.teraType?.identifier !== 'error'; else errorIcon">
+                  <div 
+                  (click)="clickSection(0, 'types')"
+                  [ngClass]="
+                  {
+                    section: pokemon.teraType?.identifier !== 'error',
+                    'animated-border': pokemon.teraType?.identifier !== 'error' && !window.isTabletPortraitOrLess() && pokemon.teraType?.identifier !== 'stellar',
+                    'poke-tooltip-selected': tooltipTypes[0] && pokemon.teraType?.identifier !== 'stellar',
+                    'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
+                  }"
+                  >
+                    <div class="section-content type">
+                      <ng-container *ngIf="pokemon.teraType?.effectivenessAttack || pokemon.teraType?.effectivenessDefense">
+                        <app-poke-tooltip
+                        [content]="teraTypeTooltip"
+                        [side]="'top'"
+                        [visible]="tooltipTypes[0]"
+                        [mobileChanged]="window.isTabletPortraitOrLess()"
+                        class="tooltip-component"
+                        >
+                        </app-poke-tooltip>
+                        <ng-template #teraTypeTooltip>
+                          <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
+                            <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.superEffective?.length ?? false">
+                              <div class="type-category">
+                                <div class="type-category-text">
+                                  <span class="bold">x2</span>
+                                </div>
+                                <div class="type-category-icons">
+                                  <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.superEffective; let i = index; let last = last">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                    [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.teraType?.effectivenessDefense?.superEffective)}">
+                                  </ng-container>
+                                </div>
                               </div>
-                              <div class="type-category-icons">
-                                <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.superEffective; let i = index; let last = last">
-                                  <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                  [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.teraType?.effectivenessDefense?.superEffective)}">
-                                </ng-container>
-                              </div>
-                            </div>
-                            <div class="flex align-i-c">
-                              <div class="divider"></div>
-                            </div>
-                          </ng-container>
-                          <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.notVeryEffective?.length ?? false">
-                            <div class="type-category">
-                              <div class="type-category-text">
-                                <span class="bold">x0.5</span>
-                              </div>
-                              <div class="type-category-icons">
-                                <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.notVeryEffective; let i = index; let last = last">
-                                  <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                  [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.teraType?.effectivenessDefense?.notVeryEffective)}">
-                                </ng-container>
-                              </div>
-                            </div>
-                            <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false">
                               <div class="flex align-i-c">
                                 <div class="divider"></div>
                               </div>
                             </ng-container>
-                          </ng-container>
-                          <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false">
-                            <div class="type-category">
-                              <div class="type-category-text">
-                                <span class="bold">x0</span> 
+                            <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.notVeryEffective?.length ?? false">
+                              <div class="type-category">
+                                <div class="type-category-text">
+                                  <span class="bold">x0.5</span>
+                                </div>
+                                <div class="type-category-icons">
+                                  <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.notVeryEffective; let i = index; let last = last">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                    [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.teraType?.effectivenessDefense?.notVeryEffective)}">
+                                  </ng-container>
+                                </div>
                               </div>
-                              <div class="type-category-icons">
-                                <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.inmune; let i = index; let last = last">
-                                  <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                  [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.teraType?.effectivenessDefense?.inmune)}">
-                                </ng-container>
-                              </div>
-                            </div>
-                          </ng-container>
-                        </div>
-                      </ng-template>
-                    </ng-container>
-                    <div class="icon-s">
-                      <img src="{{pokemon.teraType.iconPath}}" title="{{pokemon.teraType.name?.content}}" alt="{{pokemon.teraType.name?.content}}" class="icon-s">
-                    </div>
-                  </div>
-                </div>
-              </ng-container>
-              <div class="flex align-i-c" style="height: 1.5em; padding-right: 0.1em;">
-                <div class="divider"></div>
-              </div>          
-            </ng-container>
-            <ng-container *ngIf="pokemon.types">
-              <ng-container *ngIf="pokemon.types?.type1?.identifier !== 'error'; else errorIcon">
-                <div
-                (click)="clickSection(1, 'types')"
-                [ngClass]="
-                {
-                  section: pokemon.types?.type1?.identifier !== 'error',
-                  'animated-border': pokemon.types?.type1?.identifier !== 'error' && !window.isTabletPortraitOrLess(),
-                  'poke-tooltip-selected': tooltipTypes[1],
-                  'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
-                }"
-                >
-                  <div class="section-content type icon-s">
-                    <ng-container *ngIf="pokemon.types?.type1?.effectivenessAttack || pokemon.types?.type1?.effectivenessDefense || pokemon.types?.dualEffectiveness">
-                      <app-poke-tooltip
-                      [content]="typesTooltip"
-                      [side]="'top'"
-                      [visible]="tooltipTypes[1]"
-                      [mobileChanged]="window.isTabletPortraitOrLess()"
-                      class="tooltip-component"
-                      >
-                      </app-poke-tooltip>
-                      <ng-template #typesTooltip>
-                        <div [ngClass]="
-                        {
-                          'single-type': !pokemon.types?.dualEffectiveness,
-                          'dual-type': pokemon.types?.dualEffectiveness,
-                        }"
-                        >
-                          <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
-                            <ng-container *ngIf="pokemon.types?.dualEffectiveness ?? false; else monotypeTooltip">
-                              <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleSuperEffective?.length ?? false">
-                                <div class="type-category">
-                                  <div class="type-category-text">
-                                    <span class="bold">x4</span>
-                                  </div>
-                                  <div class="type-category-icons">
-                                    <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleSuperEffective; let i = index; let last = last">
-                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.doubleSuperEffective)}">
-                                    </ng-container>
-                                  </div>
-                                </div>
-                                <ng-container *ngIf="pokemon.types?.dualEffectiveness?.superEffective?.length
-                                  || pokemon.types?.dualEffectiveness?.notVeryEffective?.length
-                                  || pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
-                                  || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
-                                  <div class="flex align-i-c">
-                                    <div class="divider"></div>
-                                  </div>                          
-                                </ng-container>
-                              </ng-container>
-                              <ng-container *ngIf="pokemon.types?.dualEffectiveness?.superEffective?.length ?? false">
-                                <div class="type-category">
-                                  <div class="type-category-text">
-                                    <span class="bold">x2</span>
-                                  </div>
-                                  <div class="type-category-icons">
-                                    <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.superEffective; let i = index; let last = last">
-                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.superEffective)}">
-                                    </ng-container>
-                                  </div>
-                                </div>
-                                <ng-container *ngIf="pokemon.types?.dualEffectiveness?.notVeryEffective?.length
-                                  || pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
-                                  || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
-                                  <div></div>
-                                  <div class="flex align-i-c">
-                                    <div class="divider"></div>
-                                  </div>                          
-                                </ng-container>
-                              </ng-container>
-                              <ng-container *ngIf="pokemon.types?.dualEffectiveness?.notVeryEffective?.length ?? false">
-                                <div class="type-category">
-                                  <div class="type-category-text">
-                                    <span class="bold">x0.5</span>
-                                  </div>
-                                  <div class="type-category-icons">
-                                    <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.notVeryEffective; let i = index; let last = last">
-                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.notVeryEffective)}">
-                                    </ng-container>
-                                  </div>
-                                </div>
-                                <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
-                                  || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
-                                  <div class="flex align-i-c">
-                                    <div class="divider"></div>
-                                  </div>                          
-                                </ng-container>
-                              </ng-container>
-                              <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length ?? false">
-                                <div class="type-category">
-                                  <div class="type-category-text">
-                                    <span class="bold">x0.25</span>
-                                  </div>
-                                  <div class="type-category-icons">
-                                    <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleNotVeryEffective; let i = index; let last = last">
-                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.doubleNotVeryEffective)}">
-                                    </ng-container>
-                                  </div>
-                                </div>
-                                <ng-container *ngIf="pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
-                                  <div class="flex align-i-c">
-                                    <div class="divider"></div>
-                                  </div>
-                                </ng-container>
-                              </ng-container>
-                              <ng-container *ngIf="pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
-                                <div class="type-category">
-                                  <div class="type-category-text">
-                                    <span class="bold">x0</span>
-                                  </div>
-                                  <div class="type-category-icons">
-                                    <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.inmune; let i = index; let last = last">
-                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.inmune)}">
-                                    </ng-container>
-                                  </div>
-                                </div>
-                              </ng-container>
-                            </ng-container>
-                            <ng-template #monotypeTooltip>
-                              <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.superEffective?.length ?? false">
-                                <div class="type-category">
-                                  <div class="type-category-text">
-                                    <span class="bold">x2</span>
-                                  </div>
-                                  <div class="type-category-icons">
-                                    <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.superEffective; let i = index; let last = last">
-                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.type1?.effectivenessDefense?.superEffective)}">
-                                    </ng-container>
-                                  </div>
-                                </div>
+                              <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false">
                                 <div class="flex align-i-c">
                                   <div class="divider"></div>
                                 </div>
                               </ng-container>
-                              <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.notVeryEffective?.length ?? false">
-                                <div class="type-category">
-                                  <div class="type-category-text">
-                                    <span class="bold">x0.5</span>
-                                  </div>
-                                  <div class="type-category-icons">
-                                    <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.notVeryEffective; let i = index; let last = last">
-                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.type1?.effectivenessDefense?.notVeryEffective)}">
-                                    </ng-container>
-                                  </div>
+                            </ng-container>
+                            <ng-container *ngIf="pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false">
+                              <div class="type-category">
+                                <div class="type-category-text">
+                                  <span class="bold">x0</span> 
                                 </div>
-                                <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.inmune?.length ?? false">
+                                <div class="type-category-icons">
+                                  <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.inmune; let i = index; let last = last">
+                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                    [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.teraType?.effectivenessDefense?.inmune)}">
+                                  </ng-container>
+                                </div>
+                              </div>
+                            </ng-container>
+                          </div>
+                        </ng-template>
+                      </ng-container>
+                      <div class="icon-s">
+                        <img src="{{pokemon.teraType.iconPath}}" title="{{pokemon.teraType.name?.content}}" alt="{{pokemon.teraType.name?.content}}" class="icon-s">
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <div class="flex align-i-c" style="height: 1.5em; padding-right: 0.1em;">
+                  <div class="divider"></div>
+                </div>          
+              </ng-container>
+              <ng-container *ngIf="pokemon.types">
+                <ng-container *ngIf="pokemon.types?.type1?.identifier !== 'error'; else errorIcon">
+                  <div
+                  (click)="clickSection(1, 'types')"
+                  [ngClass]="
+                  {
+                    section: pokemon.types?.type1?.identifier !== 'error',
+                    'animated-border': pokemon.types?.type1?.identifier !== 'error' && !window.isTabletPortraitOrLess(),
+                    'poke-tooltip-selected': tooltipTypes[1],
+                    'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
+                  }"
+                  >
+                    <div class="section-content type icon-s">
+                      <ng-container *ngIf="pokemon.types?.type1?.effectivenessAttack || pokemon.types?.type1?.effectivenessDefense || pokemon.types?.dualEffectiveness">
+                        <app-poke-tooltip
+                        [content]="typesTooltip"
+                        [side]="'top'"
+                        [visible]="tooltipTypes[1]"
+                        [mobileChanged]="window.isTabletPortraitOrLess()"
+                        class="tooltip-component"
+                        >
+                        </app-poke-tooltip>
+                        <ng-template #typesTooltip>
+                          <div [ngClass]="
+                          {
+                            'single-type': !pokemon.types?.dualEffectiveness,
+                            'dual-type': pokemon.types?.dualEffectiveness,
+                          }"
+                          >
+                            <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
+                              <ng-container *ngIf="pokemon.types?.dualEffectiveness ?? false; else monotypeTooltip">
+                                <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleSuperEffective?.length ?? false">
+                                  <div class="type-category">
+                                    <div class="type-category-text">
+                                      <span class="bold">x4</span>
+                                    </div>
+                                    <div class="type-category-icons">
+                                      <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleSuperEffective; let i = index; let last = last">
+                                        <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                        [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.doubleSuperEffective)}">
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                  <ng-container *ngIf="pokemon.types?.dualEffectiveness?.superEffective?.length
+                                    || pokemon.types?.dualEffectiveness?.notVeryEffective?.length
+                                    || pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
+                                    || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
+                                    <div class="flex align-i-c">
+                                      <div class="divider"></div>
+                                    </div>                          
+                                  </ng-container>
+                                </ng-container>
+                                <ng-container *ngIf="pokemon.types?.dualEffectiveness?.superEffective?.length ?? false">
+                                  <div class="type-category">
+                                    <div class="type-category-text">
+                                      <span class="bold">x2</span>
+                                    </div>
+                                    <div class="type-category-icons">
+                                      <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.superEffective; let i = index; let last = last">
+                                        <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                        [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.superEffective)}">
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                  <ng-container *ngIf="pokemon.types?.dualEffectiveness?.notVeryEffective?.length
+                                    || pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
+                                    || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
+                                    <div></div>
+                                    <div class="flex align-i-c">
+                                      <div class="divider"></div>
+                                    </div>                          
+                                  </ng-container>
+                                </ng-container>
+                                <ng-container *ngIf="pokemon.types?.dualEffectiveness?.notVeryEffective?.length ?? false">
+                                  <div class="type-category">
+                                    <div class="type-category-text">
+                                      <span class="bold">x0.5</span>
+                                    </div>
+                                    <div class="type-category-icons">
+                                      <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.notVeryEffective; let i = index; let last = last">
+                                        <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                        [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.notVeryEffective)}">
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                  <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
+                                    || pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
+                                    <div class="flex align-i-c">
+                                      <div class="divider"></div>
+                                    </div>                          
+                                  </ng-container>
+                                </ng-container>
+                                <ng-container *ngIf="pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length ?? false">
+                                  <div class="type-category">
+                                    <div class="type-category-text">
+                                      <span class="bold">x0.25</span>
+                                    </div>
+                                    <div class="type-category-icons">
+                                      <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleNotVeryEffective; let i = index; let last = last">
+                                        <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                        [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.doubleNotVeryEffective)}">
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                  <ng-container *ngIf="pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
+                                    <div class="flex align-i-c">
+                                      <div class="divider"></div>
+                                    </div>
+                                  </ng-container>
+                                </ng-container>
+                                <ng-container *ngIf="pokemon.types?.dualEffectiveness?.inmune?.length ?? false">
+                                  <div class="type-category">
+                                    <div class="type-category-text">
+                                      <span class="bold">x0</span>
+                                    </div>
+                                    <div class="type-category-icons">
+                                      <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.inmune; let i = index; let last = last">
+                                        <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                        [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.inmune)}">
+                                      </ng-container>
+                                    </div>
+                                  </div>
+                                </ng-container>
+                              </ng-container>
+                              <ng-template #monotypeTooltip>
+                                <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.superEffective?.length ?? false">
+                                  <div class="type-category">
+                                    <div class="type-category-text">
+                                      <span class="bold">x2</span>
+                                    </div>
+                                    <div class="type-category-icons">
+                                      <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.superEffective; let i = index; let last = last">
+                                        <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                        [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.type1?.effectivenessDefense?.superEffective)}">
+                                      </ng-container>
+                                    </div>
+                                  </div>
                                   <div class="flex align-i-c">
                                     <div class="divider"></div>
                                   </div>
                                 </ng-container>
-                              </ng-container>
-                              <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.inmune?.length ?? false">
-                                <div class="type-category">
-                                  <div class="text">
-                                    <span class="bold">x0</span> 
+                                <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.notVeryEffective?.length ?? false">
+                                  <div class="type-category">
+                                    <div class="type-category-text">
+                                      <span class="bold">x0.5</span>
+                                    </div>
+                                    <div class="type-category-icons">
+                                      <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.notVeryEffective; let i = index; let last = last">
+                                        <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                        [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.type1?.effectivenessDefense?.notVeryEffective)}">
+                                      </ng-container>
+                                    </div>
                                   </div>
-                                  <div class="type-category-icons">
-                                    <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.inmune; let i = index; let last = last">
-                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.type1?.effectivenessDefense?.inmune)}">
-                                    </ng-container>
+                                  <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.inmune?.length ?? false">
+                                    <div class="flex align-i-c">
+                                      <div class="divider"></div>
+                                    </div>
+                                  </ng-container>
+                                </ng-container>
+                                <ng-container *ngIf="pokemon.types?.type1?.effectivenessDefense?.inmune?.length ?? false">
+                                  <div class="type-category">
+                                    <div class="text">
+                                      <span class="bold">x0</span> 
+                                    </div>
+                                    <div class="type-category-icons">
+                                      <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.inmune; let i = index; let last = last">
+                                        <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                        [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.type1?.effectivenessDefense?.inmune)}">
+                                      </ng-container>
+                                    </div>
                                   </div>
-                                </div>
-                              </ng-container>
-                            </ng-template>
+                                </ng-container>
+                              </ng-template>
+                            </div>
                           </div>
-                        </div>
+                        </ng-template>
+                      </ng-container>
+                      <ng-container *ngIf="pokemon.types?.dualEffectiveness ?? false; else monotype">
+                        <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon-s">
+                        <img src="{{pokemon.types?.type2?.iconPath}}" title="{{pokemon.types?.type2?.name?.content}}" alt="{{pokemon.types?.type2?.name?.content}}" class="icon-s">
+                      </ng-container>
+                      <ng-template #monotype>
+                        <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon-s">
                       </ng-template>
-                    </ng-container>
-                    <ng-container *ngIf="pokemon.types?.dualEffectiveness ?? false; else monotype">
-                      <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon-s">
-                      <img src="{{pokemon.types?.type2?.iconPath}}" title="{{pokemon.types?.type2?.name?.content}}" alt="{{pokemon.types?.type2?.name?.content}}" class="icon-s">
-                    </ng-container>
-                    <ng-template #monotype>
-                      <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon-s">
-                    </ng-template>
+                    </div>
                   </div>
-                </div>
+                </ng-container>
               </ng-container>
-            </ng-container>
+            </div>
           </div>
           <div class="flex justify-c-c align-i-c h-100">
             <ng-container *ngIf="pokemon.dexNumber; else errorSVG">

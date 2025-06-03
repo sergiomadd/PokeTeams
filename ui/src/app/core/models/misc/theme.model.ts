@@ -54,7 +54,7 @@ export const themes: Theme[] =
       '--text-color-link': '#0075BE',
       '--text-color-reverse': '#ffffff',
       '--success': 'hsl(140, 80%, 44%)',
-      '--error': 'hsl(352, 80%, 51%)',
+      '--error': 'hsl(358, 77%, 52%)',
       '--white': '#ffffff',
       '--black': '#000000'
     }
@@ -70,7 +70,7 @@ export const themes: Theme[] =
       '--bg-color-reverse-2': 'hsl(0, 0%, 95%)',
       '--bg-color-reverse-3': 'hsl(0, 0%, 85%)',
       '--bg-color-tooltip': 'hsla(0, 0%, 86%, 0.9)',
-      '--primary': 'hsl(358, 77%, 42%)',
+      '--primary': 'hsl(358, 77%, 47%)',
       '--secondary': 'hsl(202, 65%, 39%)',
       '--text-color': '#e1e1e1',
       '--text-color-secondary': '#9e9e9e',
@@ -78,7 +78,7 @@ export const themes: Theme[] =
       '--text-color-link': '#0075BE',
       '--text-color-reverse': '#000000',
       '--success': 'hsl(140, 80%, 34%)',
-      '--error': 'hsl(352, 80%, 41%)',
+      '--error': 'hsl(0, 80%, 50%)',
       '--white': '#ffffff',
       '--black': '#000000'
     }

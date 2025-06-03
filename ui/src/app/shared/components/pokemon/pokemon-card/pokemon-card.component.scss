@@ -82,11 +82,9 @@ $padding: 0.2em;
 
 .dex-number
 {
-  color: var(--primary);
-  position: absolute;
-  top: 0;
-  left: 0;
-  font-size: 0.6em;
+  color: var(--error);
+  font-size: 0.8em;
+  margin-right: 0.2em;
 }
 
 .option

@@ -633,6 +633,7 @@ export class PokemonEditorComponent
     if(this.pokemon)
     {
       this.pokemon.nature = event ? await this.pokemonService.getNatureByName(event.name) : undefined;
+      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
   }
 
