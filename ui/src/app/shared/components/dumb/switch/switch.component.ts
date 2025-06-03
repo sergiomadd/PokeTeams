@@ -23,7 +23,7 @@ export class SwitchComponent
 
   ngOnChanges(changes: SimpleChanges) 
   {
-    if(changes["inputState"]) 
+    if(changes["inputState"] && changes["inputState"].currentValue !== changes["inputState"].previousValue) 
     {
       this.state = changes["inputState"].currentValue
     }

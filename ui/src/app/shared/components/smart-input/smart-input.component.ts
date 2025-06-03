@@ -136,7 +136,7 @@ export class SmartInputComponent
 
   ngOnChanges(changes: SimpleChanges)
   {
-    if(changes["value"])
+    if(changes["value"] && changes["value"].currentValue?.name !== changes["value"].previousValue?.name)
     {
       this.selected = this.value;
     }
