@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, of, throwError } from 'rxjs';
-import { Gen9IconColors, Gen9IconColorsDark, Gen9IconColorsLight, StatColor, StatColorDark } from '../models/misc/colors';
+import { Gen9TypeColors, Gen9TypeColorsDark, Gen9TypeColorsLight, StatColor, StatColorDark } from '../models/misc/colors';
 import { tagBackgroundColors, tagTextColors } from '../models/misc/tagColors.model';
 import { Theme, themeProperties, themes } from '../models/misc/theme.model';
 import { configActions } from '../store/config/config.actions';
@@ -105,19 +105,19 @@ export class ThemeService
 
   getTypeColor(identifier?: string)
   {
-    return identifier ? Gen9IconColors[identifier] : "";  
+    return identifier ? Gen9TypeColors[identifier] : "";  
   }
 
   getMoveColor(identifier?: string)
   {
     if(this.selectedTheme?.name === "light")
     {
-      return identifier ? Gen9IconColorsLight[identifier] : "";
+      return identifier ? Gen9TypeColorsLight[identifier] : "";
 
     }
     else
     {
-      return identifier ? Gen9IconColorsDark[identifier] : "";
+      return identifier ? Gen9TypeColorsDark[identifier] : "";
     }
   }
 

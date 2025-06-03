@@ -66,7 +66,8 @@ export enum Gen9IconColorsHex
     fairy = "#ef71ef"
 }
 
-export enum Gen9IconColors
+//Used for type icon fillup
+export enum Gen9TypeColors
 {
     normal = "hsl(120, 1%, 63%)",
     fire = "hsl(360, 79%, 53%)",
@@ -88,7 +89,8 @@ export enum Gen9IconColors
     fairy = "hsl(300, 80%, 69%)"
 }
 
-export enum Gen9IconColorsLight
+//User for move background
+export enum Gen9TypeColorsLight
 {
     normal = "hsl(120, 1%, 83%)",
     fire = "hsl(360, 79%, 73%)",
@@ -110,26 +112,27 @@ export enum Gen9IconColorsLight
     fairy = "hsl(300, 80%, 79%)"
 }
 
-export enum Gen9IconColorsDark
+//User for move background
+export enum Gen9TypeColorsDark
 {
-    normal = "hsl(120, 1%, 43%)",
-    fire = "hsl(360, 69%, 43%)",
-    water = "hsl(214, 66%, 40%)",
-    electric = "hsl(46, 80%, 40%)",
-    grass = "hsl(109, 59%, 30%)",
-    ice = "hsl(192, 80%, 42%)",
-    fighting = "hsl(30, 80%, 40%)",
-    poison = "hsl(275, 57%, 43%)",
-    ground = "hsl(26, 63%, 25%)",
+    normal = "hsl(120, 1%, 45%)",
+    fire = "hsl(360, 69%, 45%)",
+    water = "hsl(214, 66%, 45%)",
+    electric = "hsl(46, 80%, 45%)",
+    grass = "hsl(109, 59%, 33%)",
+    ice = "hsl(192, 80%, 46%)",
+    fighting = "hsl(30, 80%, 45%)",
+    poison = "hsl(275, 57%, 45%)",
+    ground = "hsl(26, 63%, 28%)",
     flying = "hsl(209, 67%, 52%)",
     psychic = "hsl(341, 64%, 50%)",
-    bug = "hsl(67, 73%, 26%)",
-    rock = "hsl(52, 22%, 40%)",
-    ghost = "hsl(300, 27%, 25%)",
-    dragon = "hsl(233, 71%, 50%)",
+    bug = "hsl(67, 73%, 30%)",
+    rock = "hsl(52, 22%, 45%)",
+    ghost = "hsl(300, 27%, 30%)",
+    dragon = "hsl(233, 71%, 55%)",
     dark = "hsl(7, 12%, 23%)",
-    steel = "hsl(196, 38%, 35%)",
-    fairy = "hsl(300, 60%, 44%)"
+    steel = "hsl(196, 38%, 40%)",
+    fairy = "hsl(300, 60%, 48%)"
 }
 
 export enum StatColor
