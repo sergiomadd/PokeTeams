@@ -16,11 +16,13 @@
   outline: 1px solid var(--text-color); 
 }
 
-.example
+.input-right-side
 {
   position: absolute;
   top: 0;
   right: -2.8em;
+  display: flex;
+  flex-direction: column;
 }
 
 .selector
@@ -51,11 +53,23 @@
     width: 60vw;
   }
 
-  .example
+  .input-right-side
   {
     position: absolute;
     top: unset;
     bottom: 0.4em;
     right: 3em;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .input-left-side
+  {
+    position: absolute;
+    top: unset;
+    bottom: 0.4em;
+    left: 3em;
+    display: flex;
+    flex-direction: row;
   }
 }

@@ -12,23 +12,49 @@
   </div>
   <ng-container *ngIf="tabs[0]; else editor">
     <form [formGroup]="pasteBoxForm">
-      <div class="flex-col gap-xl mar-auto relative">
-        <textarea 
-        formControlName="paste"
-        class="pasteBox custom-scrollbar" 
-        spellcheck="false"
-        [ngClass]="{controlInvalid: isInvalid('paste')}"
-        >
-        </textarea>
-        <span *ngIf="isInvalid('paste')" class="formFeedbackError text-center">{{getError('paste')}}</span>
+      <div class="flex-col gap-m mar-auto relative">
+        <div class="flex-col gap-m">
+          <textarea 
+          formControlName="paste"
+          class="pasteBox custom-scrollbar" 
+          spellcheck="false"
+          [ngClass]="{controlInvalid: isInvalid('paste')}"
+          >
+          </textarea>
+          <div class="formFeedbackError text-center" style="min-height: 1.2em;">
+            <span *ngIf="isInvalid('paste')">{{getError('paste')}}</span>
+          </div>
+        </div>
         <button (click)="load()" class="button-m mar-auto button-primary">Load</button>
-        <button class="button example tooltip-wrapper" (click)="loadExample()">
-          <svg fill="var(--text-color)" class="icon-m" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M288 0L160 0 128 0C110.3 0 96 14.3 96 32s14.3 32 32 32l0 132.8c0 11.8-3.3 23.5-9.5 33.5L10.3 406.2C3.6 417.2 0 429.7 0 442.6C0 480.9 31.1 512 69.4 512l309.2 0c38.3 0 69.4-31.1 69.4-69.4c0-12.8-3.6-25.4-10.3-36.4L329.5 230.4c-6.2-10.1-9.5-21.7-9.5-33.5L320 64c17.7 0 32-14.3 32-32s-14.3-32-32-32L288 0zM192 196.8L192 64l64 0 0 132.8c0 23.7 6.6 46.9 19 67.1L309.5 320l-171 0L173 263.9c12.4-20.2 19-43.4 19-67.1z"/></svg>            
-          <app-tooltip
-          [text]="'team.input.example' | translate"
-          [side]="'top'"
-          ></app-tooltip>
-        </button>
+        <div class="input-right-side gap-l">
+          <button class="button tooltip-wrapper" (click)="loadExample()">
+            <svg fill="var(--text-color)" class="icon-m" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M288 0L160 0 128 0C110.3 0 96 14.3 96 32s14.3 32 32 32l0 132.8c0 11.8-3.3 23.5-9.5 33.5L10.3 406.2C3.6 417.2 0 429.7 0 442.6C0 480.9 31.1 512 69.4 512l309.2 0c38.3 0 69.4-31.1 69.4-69.4c0-12.8-3.6-25.4-10.3-36.4L329.5 230.4c-6.2-10.1-9.5-21.7-9.5-33.5L320 64c17.7 0 32-14.3 32-32s-14.3-32-32-32L288 0zM192 196.8L192 64l64 0 0 132.8c0 23.7 6.6 46.9 19 67.1L309.5 320l-171 0L173 263.9c12.4-20.2 19-43.4 19-67.1z"/></svg>            
+            <app-tooltip
+            [text]="'team.input.example' | translate"
+            [side]="'top'"
+            ></app-tooltip>
+          </button>
+          <ng-container *ngIf="!window.isMobile()">
+            <button class="button tooltip-wrapper" (click)="reset()">
+              <svg class="icon-m" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M3795 4479 c-128 -30 -196 -167 -150 -299 8 -23 15 -44 15 -47 0 -2 -26 14 -57 35 -207 139 -488 245 -763 288 -139 22 -419 22 -557 1 -419 -66 -777 -245 -1072 -537 -560 -553 -725 -1392 -415 -2117 266 -622 841 -1059 1513 -1148 126 -17 353 -19 471 -5 771 96 1400 625 1621 1363 60 203 97 527 69 611 -16 48 -63 102 -111 127 -70 35 -180 20 -237 -34 -50 -46 -65 -94 -73 -233 -14 -222 -59 -396 -155 -589 -205 -413 -580 -699 -1054 -801 -121 -27 -439 -27 -560 0 -474 102 -849 387 -1054 801 -108 218 -156 422 -156 665 0 709 476 1299 1179 1461 129 30 405 37 542 14 183 -30 344 -86 496 -171 l66 -37 -29 -12 c-75 -31 -131 -128 -122 -209 8 -65 50 -130 106 -163 l47 -28 350 -3 c417 -4 436 -2 505 68 39 38 50 58 61 104 l13 58 -122 367 c-105 317 -127 372 -156 404 -53 58 -135 83 -211 66z"/> </g> </svg>
+              <app-tooltip
+              [text]="'shared.reset' | translate"
+              [side]="'right'"
+              ></app-tooltip>
+            </button>
+          </ng-container>
+        </div>
+        <ng-container *ngIf="window.isMobile()">
+          <div class="input-left-side">
+            <button class="button tooltip-wrapper" (click)="reset()">
+              <svg class="icon-m" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M3795 4479 c-128 -30 -196 -167 -150 -299 8 -23 15 -44 15 -47 0 -2 -26 14 -57 35 -207 139 -488 245 -763 288 -139 22 -419 22 -557 1 -419 -66 -777 -245 -1072 -537 -560 -553 -725 -1392 -415 -2117 266 -622 841 -1059 1513 -1148 126 -17 353 -19 471 -5 771 96 1400 625 1621 1363 60 203 97 527 69 611 -16 48 -63 102 -111 127 -70 35 -180 20 -237 -34 -50 -46 -65 -94 -73 -233 -14 -222 -59 -396 -155 -589 -205 -413 -580 -699 -1054 -801 -121 -27 -439 -27 -560 0 -474 102 -849 387 -1054 801 -108 218 -156 422 -156 665 0 709 476 1299 1179 1461 129 30 405 37 542 14 183 -30 344 -86 496 -171 l66 -37 -29 -12 c-75 -31 -131 -128 -122 -209 8 -65 50 -130 106 -163 l47 -28 350 -3 c417 -4 436 -2 505 68 39 38 50 58 61 104 l13 58 -122 367 c-105 317 -127 372 -156 404 -53 58 -135 83 -211 66z"/> </g> </svg>
+              <app-tooltip
+              [text]="'shared.reset' | translate"
+              [side]="'top'"
+              ></app-tooltip>
+            </button>
+          </div>
+        </ng-container>
       </div>
     </form>
   </ng-container>

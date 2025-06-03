@@ -30,7 +30,7 @@ export class ParserService {
   {
     let pokePaste: PokePaste = <PokePaste>{}; 
     let lines = pokemon.split(/\r?\n|\r|\n/g);
-    lines = lines.filter(str => str !== "");
+    lines = lines.filter(str => str.trim());
     this.getName(pokePaste, lines[0]);
     for(let i=0;i<lines.length;i++)
     {
@@ -185,7 +185,6 @@ export class ParserService {
   {
     let profile: string;
     profile = line.split(" @ ")[0]
-    console.log("profile ", profile)
     //Only species name 'Mamoswine'
     if(!profile.includes("("))
     {

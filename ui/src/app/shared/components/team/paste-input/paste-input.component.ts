@@ -118,18 +118,25 @@ export class PasteInputComponent
 
   loadExample()
   {
-    /*
+       /*
     this.testService.getTestForms().subscribe(value => 
       {
         this.pasteHolder = value;
         this.pasteBoxForm.controls.paste.setValue(this.pasteHolder);
       })
+    
     */
-    this.testService.getTestPaste("test6").subscribe(value => 
+    this.testService.getTestPaste("allTypes").subscribe(value => 
     {
       this.pasteHolder = value;
       this.pasteBoxForm.controls.paste.setValue(this.pasteHolder);
     })
-    
+  }
+
+  reset()
+  {
+    this.pasteHolder = "";
+    this.pasteBoxForm.controls.paste.setValue("");
+    this.pasteBoxFormSubmitted = false;
   }
 }
