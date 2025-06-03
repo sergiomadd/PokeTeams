@@ -245,7 +245,8 @@ export class QueryService
       {
         name: pokemon.name.content ?? "",
         identifier: pokemon.pokemonId?.toString() ?? "",
-        icon: pokemon.sprite?.base
+        icon: pokemon.sprite?.base,
+        type: "pokemon"
       }
       return queryResult;
     }
@@ -259,7 +260,8 @@ export class QueryService
       return {
         name: move.name.content,
         identifier: move.name.content,
-        icon: move.pokeType?.iconPath
+        icon: move.pokeType?.iconPath,
+        type: "move"
       }
     }
     return undefined;
@@ -272,7 +274,8 @@ export class QueryService
       return {
         name: item.name.content,
         identifier: item.name.content,
-        icon: item.iconPath
+        icon: item.iconPath,
+        type: "item"
       }
     }
     return undefined;
@@ -285,7 +288,8 @@ export class QueryService
       return {
         name: ability.name.content,
         identifier: ability.name.content,
-        icon: ability.hidden ? "hidden" : undefined
+        icon: ability.hidden ? "hidden" : undefined,
+        type: "ability"
       }
     }
     return undefined;
@@ -298,6 +302,7 @@ export class QueryService
       return {
         name: nature.name.content,
         identifier: nature.name.content,
+        type: "nature"
       }
     }
     return undefined;
@@ -310,7 +315,8 @@ export class QueryService
       return {
         name: type.name.content,
         identifier: type.name.content,
-        icon: type.iconPath
+        icon: type.iconPath,
+        type: "type"
       }
     }
     return undefined;
