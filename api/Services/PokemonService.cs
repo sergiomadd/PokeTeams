@@ -28,6 +28,22 @@ namespace api.Services
         private string baseUrl;
         private string pokemonSpriteUrl;
 
+        List<int> excludedForms = new List<int> 
+        { 
+            //Pikachu forms
+            10080, 10081, 10082, 10083, 10084, 10085, 10094, 10095, 10096, 10097, 10098, 10099, 10148, 10158, 10160,
+            //Partner eevee
+            10159,
+            //Totems
+            10093, 10121, 10122, 10128, 10129, 10144, 10145, 10146, 10149, 10150, 10153, 10154,
+            //Cramorang
+            10182, 10183,
+            //Arceus forms
+            10041, 10042, 10043, 10044, 10045, 10046, 10047, 10048, 10049, 10050, 10051, 10052, 10053, 10054, 10055, 10056, 10057, 10085
+        };
+        //[Deoxys, Rotom, Basculin, Oricorio, Lycanroc, Ogerpon, Terapagos]
+        List<int> defaultFormPokemons = new List<int> { 386, 479, 550, 741, 745, 892, 1017, 1024 };
+
         public PokemonService
             (
                 IPokedexContext pokedexContext,
@@ -471,29 +487,26 @@ namespace api.Services
         private async Task<List<FormDTO?>> GetPokemonFormsByPokemonId(int pokemonId, int langId)
         {
             List<FormDTO?> forms = new List<FormDTO?>();
-            if (!ArePokemonFormsExcluded(pokemonId))
+            pokemon? pokemonInput = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.id == pokemonId);
+            if (pokemonInput != null)
             {
-                pokemon? pokemonInput = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.id == pokemonId);
-                if(pokemonInput != null)
+                List<pokemon> pokemonList = await _pokedexContext.pokemon.Where(p => p.species_id == pokemonInput.species_id).ToListAsync();
+                if (pokemonList.Count() > 1)
                 {
-                    List<pokemon> pokemonList = await _pokedexContext.pokemon.Where(p => p.species_id == pokemonInput.species_id).ToListAsync();
-                    if (pokemonList.Count() > 1)
+                    pokemonList = HandleFormExceptions(pokemonList);
+                    //Remove input pokemon, get only other forms
+                    pokemonList.RemoveAll(p => p.id == pokemonId);
+                    foreach (pokemon pokemon in pokemonList)
                     {
-                        pokemonList = HandleFormExceptions(pokemonList);
-                        //Remove input pokemon, get only other forms
-                        pokemonList.RemoveAll(p => p.id == pokemonId);
-                        foreach (pokemon pokemon in pokemonList)
+                        if (pokemon != null)
                         {
-                            if (pokemon != null)
-                            {
-                                forms.Add(new FormDTO(
-                                    await GetPokemonNameByPokemonId(pokemon.id, langId),
-                                    pokemon.species_id,
-                                    pokemon.id,
-                                    await GetFormIdByPokemonId(pokemon.id),
-                                    await _typeService.GetPokemonTypes(pokemon.id, langId),
-                                    new SpriteDTO(pokemon.id, pokemonSpriteUrl)));
-                            }
+                            forms.Add(new FormDTO(
+                                await GetPokemonNameByPokemonId(pokemon.id, langId),
+                                pokemon.species_id,
+                                pokemon.id,
+                                await GetFormIdByPokemonId(pokemon.id),
+                                await _typeService.GetPokemonTypes(pokemon.id, langId),
+                                new SpriteDTO(pokemon.id, pokemonSpriteUrl)));
                         }
                     }
                 }
@@ -513,10 +526,16 @@ namespace api.Services
 
         private List<pokemon> HandleFormExceptions(List<pokemon> pokemonList)
         {
+            pokemonList.RemoveAll(p => ArePokemonFormsExcluded(p.id));
             //If zygarde, non power construct forms (pokemonIds = [718, 10181])
             if (pokemonList.Any(p => p.species_id == 718))
             {
                 pokemonList.RemoveAll(p => p.id == 718 || p.id == 10181);
+            }
+            //If eevee, remove partner eevee
+            if (pokemonList.Any(p => p.species_id == 133))
+            {
+                pokemonList.RemoveAll(p => p.id == 10159);
             }
             return pokemonList;
         }
@@ -536,17 +555,14 @@ namespace api.Services
             return identifier;
         }
 
-        private bool ArePokemonFormsExcluded(int pokeminId)
+        private bool ArePokemonFormsExcluded(int pokemonId)
         {
-            List<int> excludedPokemons = new List<int> { 25 };
-            return excludedPokemons.Contains(pokeminId);
+            return excludedForms.Contains(pokemonId);
         }
 
         private bool IsPokemonDefaultForm(int pokeminId)
         {
-            //[Deoxys, Rotom, Basculin, Oricorio, Lycanroc, Ogerpon, Terapagos]
-            List<int> excludedPokemons = new List<int> { 386, 479, 550, 741, 745, 892, 1017, 1024 };
-            return excludedPokemons.Contains(pokeminId);
+            return defaultFormPokemons.Contains(pokeminId);
         }
 
         public async Task<List<QueryResultDTO>> QueryPokemonsByName(string key, int langId)
@@ -584,6 +600,8 @@ namespace api.Services
             var formsQueryResults = await formsQuery.ToListAsync();
 
             queryResults = queryResults.Union(formsQueryResults).DistinctBy(p => p.Identifier).ToList();
+
+            queryResults.RemoveAll(p => p != null && p.Identifier != null && ArePokemonFormsExcluded(Int32.Parse(p.Identifier)));
 
             return queryResults;
         }
