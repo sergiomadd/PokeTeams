@@ -127,13 +127,13 @@ namespace api.Middlewares
                     });
                 });
 
-                //Search limiter -> one search operation per 2 seconds
+                //Search limiter -> two search operation per 2 seconds
                 options.AddPolicy("teamSearchLimiter", context =>
                 {
                     var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
                     return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = 1,
+                        PermitLimit = 2,
                         Window = TimeSpan.FromSeconds(2),
                         QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                         QueueLimit = 0

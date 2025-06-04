@@ -84,7 +84,7 @@ namespace api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [AllowAnonymous]
         [EnableRateLimiting("teamUploadLimiter")]
-        [RateLimitResponse("Too many uploads, try again later.")]
+        [RateLimitResponse("Too many uploads, try again in a few seconds.")]
         [HttpPost, Route("save")]
         public async Task<ActionResult> SaveTeam([FromBody] TeamDTO? teamDTO)
         {
@@ -109,7 +109,7 @@ namespace api.Controllers
         }
 
         [EnableRateLimiting("teamUploadLimiter")]
-        [RateLimitResponse("Too many uploads, try again later.")]
+        [RateLimitResponse("Too many uploads, try again in a few seconds.")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost, Route("update")]
         public async Task<ActionResult<string>> Update(TeamDTO? teamDTO)
