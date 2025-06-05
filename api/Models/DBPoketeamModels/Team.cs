@@ -11,12 +11,12 @@ namespace api.Models.DBPoketeamModels
         public string Id { get; set; }
         public virtual ICollection<TeamPokemon> Pokemons { get; set; }
 
-        [StringLength(450, ErrorMessage = "Team player id is not the correct length")]
-        public string? PlayerId { get; set; }
-        public virtual User? Player { get; set; }
+        [StringLength(32, ErrorMessage = "Team player is too long")]
+        public string? Player { get; set; }
 
-        [StringLength(32, ErrorMessage = "Team player anon is too long")]
-        public string? AnonPlayer { get; set;}
+        [StringLength(450, ErrorMessage = "Team user is not the correct length")]
+        public string? UserId { get; set; }
+        public virtual User? User { get; set; }
 
         [StringLength(256, ErrorMessage = "Team tournament name is too long")]
         public string? TournamentNormalizedName { get; set; }
@@ -45,8 +45,8 @@ namespace api.Models.DBPoketeamModels
         public Team(
             string id, 
             ICollection<TeamPokemon> pokemons, 
-            string? playerId,
-            string? anonPlayer,
+            string? player,
+            string? userId,
             string? tournamentNormalizedName,
             Tournament tournament,
             string? regulation,
@@ -62,8 +62,8 @@ namespace api.Models.DBPoketeamModels
         {
             Id = id;
             Pokemons = pokemons;
-            PlayerId = playerId;
-            AnonPlayer = anonPlayer;
+            Player = player;
+            UserId = userId;
             TournamentNormalizedName = tournamentNormalizedName;
             Tournament = tournament;
             Regulation = regulation;

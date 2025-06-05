@@ -222,7 +222,7 @@ namespace api.Services
             if (teamPokemon != null)
             {
                 TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(teamPokemon.Team.IVsVisibility, teamPokemon.Team.EVsVisibility, teamPokemon.Team.NaturesVisibility);
-                if (teamPokemon.Team.PlayerId != null && teamPokemon.Team.PlayerId == _identityService.GetLoggedUserID())
+                if (teamPokemon.Team.UserId != null && teamPokemon.Team.UserId == _identityService.GetLoggedUserID())
                 {
                     teamOptionsDTO.Logged();
                 }

@@ -120,12 +120,12 @@ namespace api.Controllers
                 return BadRequest(validation);
             }
             Team? currentTeam = await _teamService.GetTeamModel(teamDTO!.ID);
-            if (currentTeam == null || currentTeam.Player == null)
+            if (currentTeam == null || currentTeam.User == null)
             {
                 return Unauthorized("Unauthorized");
             }
             User? loggedUser = await _identityService.GetLoggedUser();
-            if (loggedUser?.Id == null || loggedUser.Id != currentTeam.Player.Id)
+            if (loggedUser?.Id == null || loggedUser.Id != currentTeam.User?.Id)
             {
                 return Unauthorized("Unauthorized");
             }
@@ -148,12 +148,12 @@ namespace api.Controllers
                 return Unauthorized("Wrong data");
             }
             Team? teamModel = await _teamService.GetTeamModel(data.Id);
-            if (teamModel == null || teamModel.Player == null)
+            if (teamModel == null || teamModel.User == null)
             {
                 return Unauthorized("Team not found");
             }
             User? loggedUser = await _identityService.GetLoggedUser();
-            if (loggedUser?.Id == null || loggedUser.Id != teamModel.Player.Id)
+            if (loggedUser?.Id == null || loggedUser.Id != teamModel.User?.Id)
             {
                 return Unauthorized("Unauthorized");
             }           

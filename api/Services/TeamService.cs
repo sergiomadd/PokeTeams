@@ -62,31 +62,33 @@ namespace api.Services
                 List<TeamPokemon> teamPokemons = await _pokeTeamContext.TeamPokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
                 TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(team.IVsVisibility, team.EVsVisibility, team.NaturesVisibility);
                 UserPreviewDTO? userPreview = null;
-                if (team.PlayerId != null)
+                if (team.UserId != null)
                 {
-                    User? teamPlayer = await _userService.GetUserById(team.PlayerId);
-                    if (teamPlayer != null)
+                    User? teamUser = await _userService.GetUserById(team.UserId);
+                    if (teamUser != null)
                     {
-                        if (teamPlayer.Id == _identityService.GetLoggedUserID())
+                        if (teamUser.Id == _identityService.GetLoggedUserID())
                         {
                             teamOptionsDTO.Logged();
                         }
-                        else if (!teamPlayer.Visibility || !team.Visibility)
+                        else if (!teamUser.Visibility || !team.Visibility)
                         {
                             team.Id = "unauthorized";
                         }
                     }
-                    string? picture = teamPlayer?.Picture != null ? $"{baseUrl}images/profile-pics/{teamPlayer.Picture}.png" : null;
-                    userPreview = new UserPreviewDTO(teamPlayer?.UserName, picture, true);
+                    string? picture = teamUser?.Picture != null ? $"{baseUrl}images/profile-pics/{teamUser.Picture}.png" : null;
+                    userPreview = new UserPreviewDTO(teamUser?.UserName, teamUser?.Name, picture, true);
                 }
-                else if (team.AnonPlayer != null)
+                UserPreviewDTO? playerPreview = null;
+                if (team.Player != null)
                 {
-                    userPreview = new UserPreviewDTO(team.AnonPlayer);
+                    playerPreview = new UserPreviewDTO(team.Player);
                 }
 
                 teamDataDTO = new TeamDataDTO(
                     team.Id,
                     teamPokemons.Select(p => p.TeamPokemonId).ToList(),
+                    playerPreview,
                     userPreview,
                     team.TournamentNormalizedName != null ? await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName) : null,
                     team.Regulation != null ? await _regulationService.GetRegulationByIdentifier(team.Regulation) : null,
@@ -140,9 +142,9 @@ namespace api.Services
             }
 
             UserPreviewDTO? userPreview = null;
-            if (team.PlayerId != null)
+            if (team.UserId != null)
             {
-                User? teamPlayer = await _userService.GetUserById(team.PlayerId);
+                User? teamPlayer = await _userService.GetUserById(team.UserId);
                 if (teamPlayer != null)
                 {
                     if ((!teamPlayer.Visibility || !team.Visibility) && teamPlayer.Id != _identityService.GetLoggedUserID())
@@ -151,18 +153,20 @@ namespace api.Services
                     }
                 }
                 string? picture = teamPlayer?.Picture != null ? $"{baseUrl}images/profile-pics/{teamPlayer.Picture}.png" : null;
-                userPreview = new UserPreviewDTO(teamPlayer?.UserName, picture, true);
+                userPreview = new UserPreviewDTO(teamPlayer?.UserName, null, picture, true);
             }
-            else if (team.AnonPlayer != null)
+            UserPreviewDTO? playerPreview = null;
+            if (team.Player != null)
             {
-                userPreview = new UserPreviewDTO(team.AnonPlayer);
+                playerPreview = new UserPreviewDTO(team.Player);
             }
 
             teamPreviewDTO = new TeamPreviewDTO
             {
                 ID = team.Id,
                 PokemonIDs = pokemonPreviewIDs,
-                Player = userPreview,
+                Player = playerPreview,
+                User = userPreview,
                 Tournament = team.TournamentNormalizedName != null ? await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName) : null,
                 Regulation = team.Regulation != null ? await _regulationService.GetRegulationByIdentifier(team.Regulation) : null,
                 ViewCount = team.ViewCount,
@@ -188,10 +192,10 @@ namespace api.Services
                 }
 
                 User? loggedUser = await _identityService.GetLoggedUser();
-                User? player = null;
-                if (inputTeam.Player != null && inputTeam.Player.Username != null && loggedUser != null && loggedUser.UserName == inputTeam.Player.Username)
+                User? user = null;
+                if(inputTeam.User != null && inputTeam.User.Username != null && loggedUser != null && loggedUser.UserName == inputTeam.User.Username)
                 {
-                    player = loggedUser;
+                    user = loggedUser;
                 }
 
                 List<string> tagsIds = new List<string>();
@@ -229,8 +233,8 @@ namespace api.Services
                 newTeam = new Team(
                     id: newTeamId,
                     pokemons: pokemons,
-                    playerId: player != null ? player.Id : null,
-                    anonPlayer: (player == null && inputTeam.Player != null) ? inputTeam.Player.Username : null,
+                    player: inputTeam.Player?.Username,
+                    userId: user?.Id,
                     tournamentNormalizedName: tournament != null ? tournament.NormalizedName : null,
                     tournament: tournament,
                     regulation: inputTeam.Regulation != null ? inputTeam.Regulation.Identifier : null,
@@ -238,10 +242,10 @@ namespace api.Services
                     rentalCode: inputTeam.RentalCode,
                     viewCount: inputTeam.ViewCount,
                     dateCreated: inputTeam.Date != null && inputTeam.Date != "" ? DateTime.Parse(inputTeam.Date).ToUniversalTime() : DateTime.UtcNow,
-                    visibility: player == null ? true : inputTeam.Visibility,
-                    ivsVisibilty: player == null ? true : inputTeam.Options != null ? inputTeam.Options.IvsVisibility : false,
-                    evsVisibilty: player == null ? true : inputTeam.Options != null ? inputTeam.Options.EvsVisibility : false,
-                    naturesVisibilty: player == null ? true : inputTeam.Options != null ? inputTeam.Options.NaturesVisibility : false
+                    visibility: user == null ? true : inputTeam.Visibility,
+                    ivsVisibilty: user == null ? true : inputTeam.Options != null ? inputTeam.Options.IvsVisibility : false,
+                    evsVisibilty: user == null ? true : inputTeam.Options != null ? inputTeam.Options.EvsVisibility : false,
+                    naturesVisibilty: user == null ? true : inputTeam.Options != null ? inputTeam.Options.NaturesVisibility : false
                     );
             }
             return newTeam;
@@ -252,7 +256,7 @@ namespace api.Services
             try
             {
                 Team? team = await _pokeTeamContext.Team
-                    .Include(t => t.Player)
+                    .Include(t => t.User)
                     .Include(t => t.Pokemons)
                     .FirstOrDefaultAsync(t => t.Id == id);
                 return team;
@@ -368,8 +372,8 @@ namespace api.Services
             {
                 currentTeam.Id = newTeam.Id;
                 currentTeam.Pokemons = newTeam.Pokemons;
-                currentTeam.PlayerId = newTeam.PlayerId;
-                currentTeam.AnonPlayer = newTeam.AnonPlayer;
+                currentTeam.Player = newTeam.Player;
+                currentTeam.UserId = newTeam.UserId;
                 currentTeam.TournamentNormalizedName = newTeam.TournamentNormalizedName;
                 currentTeam.Tournament = newTeam.Tournament;
                 currentTeam.Regulation = newTeam.Regulation;
@@ -432,7 +436,7 @@ namespace api.Services
         {
             try
             {
-                List<Team> userTeams = await _pokeTeamContext.Team.Where(t => t.PlayerId == user.Id).ToListAsync();
+                List<Team> userTeams = await _pokeTeamContext.Team.Where(t => t.UserId == user.Id).ToListAsync();
                 if (userTeams.Count > 0)
                 {
                     foreach (Team team in userTeams)
@@ -501,20 +505,20 @@ namespace api.Services
             {
                 teams = await _pokeTeamContext.Team
                     .Include(t => t.Pokemons)
-                    .Include(t => t.Player)
+                    .Include(t => t.User)
                     .Include(t => t.Tournament)
                     .ToListAsync();
 
                 User? loggedUser = await _identityService.GetLoggedUser();
                 if (loggedUser != null)
                 {
-                    teams = teams.Where(t => ((t.Player == null || t.Player.Visibility) && t.Visibility)
-                        || (t.PlayerId != null && t.PlayerId == loggedUser.Id)).ToList();
+                    teams = teams.Where(t => ((t.User == null || t.User.Visibility) && t.Visibility)
+                        || (t.UserId != null && t.UserId == loggedUser.Id)).ToList();
                 }
                 else
                 {
                     //Only cut teams where player is private or team is private
-                    teams = teams.Where(t => (t.Player == null || t.Player.Visibility) && t.Visibility).ToList();
+                    teams = teams.Where(t => (t.User == null || t.User.Visibility) && t.Visibility).ToList();
                 }
 
                 if (searchQuery.Queries != null && searchQuery.Queries.Count > 0)
@@ -568,11 +572,11 @@ namespace api.Services
                                     User? user = await _userService.GetUserByUserName(query.Name);
                                     if (user != null)
                                     {
-                                        expressions.Add(t => t.PlayerId == user.Id);
+                                        expressions.Add(t => t.UserId == user.Id);
                                     }
                                     else
                                     {
-                                        expressions.Add(t => t.AnonPlayer != null && t.AnonPlayer.Contains(query.Name));
+                                        expressions.Add(t => t.Player != null && t.Player.Contains(query.Name));
                                     }
                                 }
                                 break;

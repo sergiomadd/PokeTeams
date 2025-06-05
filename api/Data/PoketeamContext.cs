@@ -45,14 +45,14 @@ namespace api.Data
                 .HasColumnType("text[]");
 
             modelBuilder.Entity<Team>()
-                .HasOne(t => t.Player)
+                .HasOne(t => t.User)
                 .WithMany(p => p.Teams)
-                .HasForeignKey(t => t.PlayerId)
+                .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.ClientCascade);
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Teams)
-                .WithOne(t => t.Player)
+                .WithOne(t => t.User)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>(

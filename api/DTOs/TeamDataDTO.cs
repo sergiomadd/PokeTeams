@@ -9,6 +9,7 @@ namespace api.DTOs
         public string ID { get; set; }
         public List<int> PokemonIDs { get; set; }
         public UserPreviewDTO? Player { get; set; }
+        public UserPreviewDTO? User { get; set; }
         public TournamentDTO? Tournament { get; set; }
         public RegulationDTO? Regulation { get; set; }
         public string? RentalCode { get; set; }
@@ -22,7 +23,8 @@ namespace api.DTOs
         public TeamDataDTO(
             string id, 
             List<int> pokemonIDs, 
-            UserPreviewDTO? player, 
+            UserPreviewDTO? player,
+            UserPreviewDTO? user,
             TournamentDTO? tournament, 
             RegulationDTO? regulation, 
             string? rentalCode, 
@@ -35,6 +37,7 @@ namespace api.DTOs
             ID = id;
             PokemonIDs = pokemonIDs;
             Player = player;
+            User = user;
             Tournament = tournament;
             Regulation = regulation;
             RentalCode = rentalCode;

@@ -686,7 +686,7 @@ namespace api.Controllers
                 return BadRequest("No user logged");
             }
             Team? team = await _pokeTeamService.GetTeamModel(teamID);
-            if(team == null || team.PlayerId == null || team.PlayerId != loggedUser.Id)
+            if(team == null || team.UserId == null || team.UserId != loggedUser.Id)
             {
                 return Unauthorized("Unauthorized");
             }
