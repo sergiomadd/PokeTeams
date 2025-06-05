@@ -103,7 +103,7 @@ export class SmartInputComponent
     this.searchForm.controls.key.valueChanges.subscribe(async (value) => 
     {
       if(value)
-      {
+      {          
         if(this.updateOnChange)
         {
           this.updateEvent.emit(value);
@@ -244,6 +244,11 @@ export class SmartInputComponent
         )
       }
     }
+  }
+
+  setInputValue(value: string)
+  {
+    this.searchForm.controls.key.setValue(value);
   }
 
   async onFocus()

@@ -54,6 +54,7 @@ $arrowSize: 0.4em;
     text-align: center;
     cursor: default;
     opacity: 1;
+    z-index: 5;
 
     transition: opacity 0.1s 0.5s ease;
   }

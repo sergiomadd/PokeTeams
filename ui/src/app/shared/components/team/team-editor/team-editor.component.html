@@ -1,9 +1,7 @@
 <div class="flex-col align-i-c gap-m" style="border-top: 1px solid var(--bg-color-3);">
   <div class="flex-col gap-m" style="margin-top: 1em;">
     <div class="flex-col justify-c-c align-i-c gap-m">
-      <div class="flex justify-c-c align-i-c gap-m"
-      [ngClass]="{'grid col-2 col-gap-m': window.isTabletPortraitOrLess()}"
-      >
+      <div class="team-editor-inputs-wrapper flex wrap justify-c-c align-i-c gap-m">
         <div class="editor-input relative">
           <ng-container *ngIf="!loggedUser">
             <div class="icon-m pointer tooltip-wrapper anon-warning">
@@ -23,13 +21,34 @@
             </div>
           </ng-container>
           <app-smart-input
-          #userInput
+          #playerInput
           [label]="'shared.team.player' | translate"
-          [value]="loggedUser"
-          [disableRemove]="true"
           [updateOnChange]="true"
+          [disableRemove]="true"
           [error]="playerError ? true : false"
           (updateEvent)="playerUpdateEvent($event)"
+          class="smart-input-wrapper input-m"
+          ></app-smart-input>
+        </div>
+        <ng-container *ngIf="loggedUser">
+          <button 
+          class="button-secondary tooltip-wrapper" 
+          style="margin: 1.6em 0 0 0.4em; width: 2em;"
+          (click)="matchUserToPlayer()"
+          > 
+          = 
+          <app-tooltip
+          [text]="'team.team.player_same_user-tooltip' | translate"
+          [side]="'top'"
+          ></app-tooltip>
+          </button>
+        </ng-container>
+        <div class="editor-input relative flex gap-m" *ngIf="loggedUser">
+          <app-smart-input
+          #userInput
+          [label]="'shared.team.user' | translate"
+          [value]="loggedUser"
+          [disableRemove]="true"
           class="smart-input-wrapper input-m"
           ></app-smart-input>
         </div>
@@ -55,74 +74,35 @@
           class="smart-input-wrapper input-m"
           ></app-smart-input>
         </div>
-        <ng-container *ngIf="window.isTabletPortraitOrLess()">
-          <div class="editor-input relative">
-            <app-smart-input
-            #tagInput
-            (disabled)="team?.tags ? team?.tags!.length > 2 : false"
-            [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
-            [allowNew]="true"
-            [getter]="queryService.queryTagCallback"
-            [allGetter]="queryService.tagAllCallback"
-            (selectEvent)="tagSelectEvent($event)"
-            (newEvent)="toggleTagEditor()"
-            class="smart-input-wrapper input-m"
-            ></app-smart-input>
-            <div class="tag-editor-wrapper">
-              <app-tag-editor 
-              [visible]="showTagEditor"
-              (addEvent)="tagAddNewEvent($event)"
-              (closeEvent)="tagEditorCloseEvent()"
-              ></app-tag-editor>
-            </div>
+        <div class="editor-input relative">
+          <app-smart-input
+          [label]="'shared.team.rental_code' | translate"
+          [updateOnChange]="true"
+          [error]="rentalCodeError ? true : false"
+          (updateEvent)="rentalCodeSelectEvent($event)"
+          class="smart-input-wrapper input-m"
+          ></app-smart-input>      
+        </div>
+        <div class="editor-input relative">
+          <app-smart-input
+          #tagInput
+          (disabled)="team?.tags ? team?.tags!.length > 2 : false"
+          [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
+          [allowNew]="true"
+          [getter]="queryService.queryTagCallback"
+          [allGetter]="queryService.tagAllCallback"
+          (selectEvent)="tagSelectEvent($event)"
+          (newEvent)="toggleTagEditor()"
+          class="smart-input-wrapper input-m"
+          ></app-smart-input>
+          <div class="tag-editor-wrapper">
+            <app-tag-editor 
+            [visible]="showTagEditor"
+            (addEvent)="tagAddNewEvent($event)"
+            (closeEvent)="tagEditorCloseEvent()"
+            ></app-tag-editor>
           </div>
-        </ng-container>
-      </div>
-      <div class="flex justify-c-c align-i-c gap-m">
-        <ng-container *ngIf="!window.isTabletPortraitOrLess()">
-          <div class="editor-input relative">
-            <app-smart-input
-            [label]="'shared.team.rental_code' | translate"
-            [updateOnChange]="true"
-            [error]="rentalCodeError ? true : false"
-            (updateEvent)="rentalCodeSelectEvent($event)"
-            class="smart-input-wrapper input-m"
-            ></app-smart-input>      
-          </div>
-        </ng-container>
-        <ng-container *ngIf="!window.isTabletPortraitOrLess()">
-          <div class="editor-input relative">
-            <app-smart-input
-            #tagInput
-            (disabled)="team?.tags ? team?.tags!.length > 2 : false"
-            [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
-            [allowNew]="true"
-            [getter]="queryService.queryTagCallback"
-            [allGetter]="queryService.tagAllCallback"
-            (selectEvent)="tagSelectEvent($event)"
-            (newEvent)="toggleTagEditor()"
-            class="smart-input-wrapper input-m"
-            ></app-smart-input>
-            <div class="tag-editor-wrapper">
-              <app-tag-editor 
-              [visible]="showTagEditor"
-              (addEvent)="tagAddNewEvent($event)"
-              (closeEvent)="tagEditorCloseEvent()"
-              ></app-tag-editor>
-            </div>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="window.isTabletPortraitOrLess()">
-          <div class="editor-input relative">
-            <app-smart-input
-            [label]="'shared.team.rental_code' | translate"
-            [updateOnChange]="true"
-            [error]="rentalCodeError ? true : false"
-            (updateEvent)="rentalCodeSelectEvent($event)"
-            class="smart-input-wrapper input-m"
-            ></app-smart-input>      
-          </div>
-        </ng-container>
+        </div>
       </div>
     </div>
     <ng-container *ngIf="loggedUser">

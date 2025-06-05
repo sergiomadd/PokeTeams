@@ -31,6 +31,7 @@ export class TeamComponent
   maxStat: number = 0;
   rentalCodeCopied: boolean = false;
   tooltips: boolean[] = [false, false, false]
+  isPlayerSameAsUser: boolean = false;
 
   ngOnChanges(changes: SimpleChanges)
   {
@@ -38,8 +39,26 @@ export class TeamComponent
     {
       this.team = changes['team'].currentValue;
       this.updateOptions();
+      this.checkUserToPlayer()
     }
   }
+
+  checkUserToPlayer()
+  {
+    if(this.team && this.team.player?.username && this.team.user
+        && (this.team.player.username === this.team.user.username 
+          || this.team.player.username === this.team.user.name))
+    {
+      this.isPlayerSameAsUser = true;
+      if(this.team.user.picture)
+      {
+        this.team.player.picture = this.team.user.picture;
+      }
+      return;
+    }
+    this.isPlayerSameAsUser = false;
+    if(this.team?.player) { this.team.player.picture = undefined; }
+  }  
 
   updateOptions()
   {

@@ -20,6 +20,7 @@ import { AboutComponent } from './components/layout/about/about.component';
 import { FooterComponent } from './components/layout/footer/footer.component';
 import { MenuComponent } from './components/layout/menu/menu.component';
 import { PrivacyPolicyComponent } from './components/layout/privacy-policy/privacy-policy.component';
+import { ResetPasswordComponent } from './components/layout/reset-password/reset-password.component';
 import { UserFormComponent } from './components/layout/user-form/user-form.component';
 import { EvolutionComponent } from './components/pokemon/evolution/evolution.component';
 import { PokeTooltipComponent } from './components/pokemon/poke-tooltip/poke-tooltip.component';
@@ -28,6 +29,7 @@ import { PokemonEditorComponent } from './components/pokemon/pokemon-editor/poke
 import { PokemonPreviewComponent } from './components/pokemon/pokemon-preview/pokemon-preview.component';
 import { SmartInputComponent } from './components/smart-input/smart-input.component';
 import { PasteInputComponent } from './components/team/paste-input/paste-input.component';
+import { RegulationPreviewComponent } from './components/team/regulation-preview/regulation-preview.component';
 import { TeamEditorComponent } from './components/team/team-editor/team-editor.component';
 import { TeamPreviewComponent } from './components/team/team-preview/team-preview.component';
 import { TeamSearchComponent } from './components/team/team-search/team-search.component';
@@ -35,8 +37,6 @@ import { TeamTableComponent } from './components/team/team-table/team-table.comp
 import { TeamComponent } from './components/team/team/team.component';
 import { TournamentPreviewComponent } from './components/team/tournament-preview/tournament-preview.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
-import { RegulationPreviewComponent } from './components/team/regulation-preview/regulation-preview.component';
-import { ResetPasswordComponent } from './components/layout/reset-password/reset-password.component';
 
 @NgModule({
   declarations: 
@@ -79,7 +79,7 @@ import { ResetPasswordComponent } from './components/layout/reset-password/reset
     PrivacyPolicyComponent,
     AboutComponent,
     RegulationPreviewComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
   ],
   imports: 
   [

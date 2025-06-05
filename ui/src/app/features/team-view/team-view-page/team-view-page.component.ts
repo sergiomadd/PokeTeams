@@ -78,6 +78,7 @@ export class TeamViewPageComponent
               id: this.teamData.id,
               options: this.teamData.options,
               player: this.teamData.player,
+              user: this.teamData.user,
               tournament: this.teamData.tournament,
               regulation: this.teamData.regulation,
               rentalCode: this.teamData.rentalCode,

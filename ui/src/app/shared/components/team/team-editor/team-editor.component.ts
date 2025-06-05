@@ -16,6 +16,7 @@ import { TeamService } from 'src/app/core/services/team.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { selectTheme } from 'src/app/core/store/config/config.selectors';
+import { User } from 'src/app/features/user/models/user.model';
 import { TeamEditorService } from 'src/app/shared/services/team-editor.service';
 import { TagEditorComponent } from '../../dumb/tag-editor/tag-editor.component';
 import { SmartInputComponent } from '../../smart-input/smart-input.component';
@@ -58,6 +59,8 @@ export class TeamEditorComponent
   playerError?: string;
   rentalCodeError?: string;
 
+  @ViewChild('playerInput') playerInput?: SmartInputComponent;
+
   async ngOnInit() 
   {
     this.teamEditorService.selectedTeam$.subscribe((value) => 
@@ -69,17 +72,17 @@ export class TeamEditorComponent
         this.teamComponent.showAllNotes = false;
       }
     });
-    this.loggedUser$.subscribe(async value => 
+    this.loggedUser$.subscribe(async (value: User | null) => 
       {
         if(value)
         {
           this.loggedUser = 
           {
-            identifier: value.username,
+            identifier: value.name ?? value.username,
             name: value.username,
             icon: value.picture
           };
-          this.team.player = 
+          this.team.user = 
           {
             username: value.username,
             picture: value.picture,
@@ -89,7 +92,7 @@ export class TeamEditorComponent
         else
         {
           this.loggedUser = undefined;
-          this.team.player = undefined;
+          this.team.user = undefined;
         }
       })
   }
@@ -106,15 +109,34 @@ export class TeamEditorComponent
 
   playerUpdateEvent(event: string)
   {
-    this.playerError = this.teamEditorService.validatePlayer(event);
     if(event)
     {
-      this.team.player = 
+      this.playerError = this.teamEditorService.validatePlayer(event);
+      if(!this.playerError)
       {
-        username: event,
-        picture: undefined,
-        registered: false
-      };        
+        this.team.player = 
+        {
+          username: event,
+          picture: undefined,
+          registered: false
+        };
+        this.teamComponent.checkUserToPlayer();
+        return;
+      }
+    }
+    this.team.player = undefined
+  }
+
+  matchUserToPlayer()
+  {
+    if(this.loggedUser && this.team.user)
+    {
+      this.team.player = this.team.user;
+      this.teamComponent.checkUserToPlayer();
+      if(this.playerInput && this.team.user.username)
+      {
+        this.playerInput.setInputValue(this.team.user.username)
+      }
     }
   }
 
@@ -228,6 +250,7 @@ export class TeamEditorComponent
     }
   }
   
+  //For custom tournaments maybe in future
   toggleTournamentEditor()
   {
     this.showTournamentEditor = !this.showTournamentEditor;
@@ -242,6 +265,8 @@ export class TeamEditorComponent
   {
     this.showTournamentEditor = false;
   }
+
+  //Privacy
 
   showIVsCheckEvent($event: boolean)
   {

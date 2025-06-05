@@ -235,6 +235,7 @@
     {
       "team": "Equipo",
       "player": "Jugador",
+      "user": "Usuario",
       "tournament": "Torneo",
       "regulation": "Regulación",
       "tag": "Tag",

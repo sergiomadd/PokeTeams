@@ -48,6 +48,7 @@ export class TeamPreviewComponent
   copied?: boolean;
   linkCopied: boolean = false;
   tooltips: boolean[] = [false, false, false]
+  isPlayerSameAsUser: boolean = false;
 
   async ngOnInit()
   {
@@ -68,8 +69,26 @@ export class TeamPreviewComponent
       {
         this.loadPokemons(this.team?.id)
       }
+      this.checkUserToPlayer()
     }
   }
+
+  checkUserToPlayer()
+  {
+    if(this.team && this.team.player?.username && this.team.user
+        && (this.team.player.username === this.team.user.username 
+          || this.team.player.username === this.team.user.name))
+    {
+      this.isPlayerSameAsUser = true;
+      if(this.team.user.picture)
+      {
+        this.team.player.picture = this.team.user.picture;
+      }
+      return;
+    }
+    this.isPlayerSameAsUser = false;
+    if(this.team?.player) { this.team.player.picture = undefined; }
+  }  
 
   loadPokemons(teamId: string)
   {

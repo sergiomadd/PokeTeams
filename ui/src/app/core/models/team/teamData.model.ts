@@ -1,4 +1,4 @@
-import { UserPreview } from "src/app/features/user/models/userPreview.model";
+import { UserPreview } from "src/app/core/models/team/userPreview.model";
 import { Regulation } from "./regulation.model";
 import { Tag } from "./tag.model";
 import { TeamOptions } from "./teamOptions.model";
@@ -10,6 +10,7 @@ export interface TeamData
   pokemonIDs: number[],
   options: TeamOptions,
   player?: UserPreview,
+  user?: UserPreview,
   tournament?: Tournament,
   regulation?: Regulation,
   rentalCode?: string,
