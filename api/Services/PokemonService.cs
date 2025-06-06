@@ -183,6 +183,12 @@ namespace api.Services
 
         public TeamPokemon BreakPokemonDTO(PokemonDTO pokemonDTO, string teamId)
         {
+            //If there are empty moves -> push them to the end
+            if (pokemonDTO.Moves != null && (pokemonDTO.Moves.Any(m => m == null) || pokemonDTO.Moves.Count < 4))
+            {
+                pokemonDTO.Moves = CleanMoves(pokemonDTO.Moves);
+            }
+
             return new TeamPokemon
             {
                 TeamId = teamId,
@@ -214,6 +220,24 @@ namespace api.Services
                 EV_spd = pokemonDTO?.evs?[4]?.Value,
                 EV_spe = pokemonDTO?.evs?[5]?.Value
             };
+        }
+
+        private List<MoveDTO?> CleanMoves(List<MoveDTO?> moves)
+        {
+            moves.Sort((a, b) =>
+            {
+                if (a == null && b == null) return 0;
+                if (a == null) return 1;  // a is null → goes after b
+                if (b == null) return -1; // b is null → a goes before
+                return 0;
+            });
+            //Make sure all moves are filled up
+            int desiredLength = 4;
+            while (moves.Count < desiredLength)
+            {
+                moves.Add(null);
+            }
+            return moves;
         }
 
         public async Task<PokemonDTO?> GetPokemonByTeamPokemonId(int teamPokemonId, int langId)
