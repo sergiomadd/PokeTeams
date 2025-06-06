@@ -1,4 +1,7 @@
 <div class="flex-col align-i-c gap-m">
+  <ng-container *ngIf="team?.title">
+    <h3 class="title">{{team?.title}}</h3>
+  </ng-container>
   <ng-container *ngIf="team?.pokemons && team?.pokemons!.length > 0">
     <ng-container *ngIf="window.isBigMobileOrLess()">
       <div class="flex full">

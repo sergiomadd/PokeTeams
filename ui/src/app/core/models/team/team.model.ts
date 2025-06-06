@@ -12,6 +12,7 @@ export interface Team
   options: TeamOptions,
   player?: UserPreview,
   user?: UserPreview,
+  title?: string,
   tournament?: Tournament,
   regulation?: Regulation,
   rentalCode?: string,

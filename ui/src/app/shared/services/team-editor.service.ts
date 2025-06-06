@@ -128,6 +128,16 @@ export class TeamEditorService
     return undefined;
   }
 
+  
+  validateTitle(title: string): string | undefined
+  {
+    if(title.length > 128)
+    {
+      return this.i18n.translateKeyWithParameters('team.editor.errors.title', { maxlength: 128 });
+    }
+    return undefined;
+  }
+
   setEmptyTeam()
   {
     this.team$.next(
@@ -136,6 +146,8 @@ export class TeamEditorService
       pokemons: [],
       options: this.getEmptyOptions(),
       player: undefined,
+      user: undefined,
+      title: undefined,
       tournament: undefined,
       regulation: undefined,
       viewCount: 0,

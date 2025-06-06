@@ -2,12 +2,22 @@
 
 .team-editor-inputs-wrapper
 {
+  max-width: 45em;
+}
+
+.team-editor-inputs-wrapper-user
+{
   max-width: 55em;
 }
 
 .editor-input
 {
   width: 12em;
+}
+
+.title-input
+{
+  width: 35em;
 }
 
 .tag-editor-wrapper
@@ -26,6 +36,14 @@
   left: -1.5em;
   bottom: 0.55em;
   margin-right: 0.2em;
+}
+
+@media (max-width: $tabletPortrait) 
+{
+  .title-input
+  {
+    width: 90vw;
+  }
 }
 
 @media (max-width: $mobile) 

@@ -12,6 +12,7 @@ export interface TeamPreview
   options: TeamOptions,
   player?: UserPreview,
   user?: UserPreview,
+  title?: string,
   tournament?: Tournament,
   regulation?: Regulation,
   viewCount: number,

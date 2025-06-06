@@ -1,7 +1,9 @@
-<div class="flex-col align-i-c gap-m" style="border-top: 1px solid var(--bg-color-3);">
+<div class="flex-col align-i-c gap-l" style="border-top: 1px solid var(--bg-color-3);">
   <div class="flex-col gap-m" style="margin-top: 1em;">
-    <div class="flex-col justify-c-c align-i-c gap-m">
-      <div class="team-editor-inputs-wrapper flex wrap justify-c-c align-i-c gap-m">
+    <div class="flex-col justify-c-c align-i-c">
+      <div class="team-editor-inputs-wrapper flex wrap justify-c-c align-i-c gap-m"
+      [ngClass]="{'team-editor-inputs-wrapper-user': loggedUser}"
+      >
         <div class="editor-input relative">
           <ng-container *ngIf="!loggedUser">
             <div class="icon-m pointer tooltip-wrapper anon-warning">
@@ -104,6 +106,17 @@
           </div>
         </div>
       </div>
+      <div class="title-input relative">
+        <app-smart-input
+        #titleInput
+        [label]="'team.editor.title-label' | translate"
+        [updateOnChange]="true"
+        [disableRemove]="true"
+        [error]="titleError ? true : false"
+        (updateEvent)="titleUpdateEvent($event)"
+        class="smart-input-wrapper input-m"
+        ></app-smart-input>
+      </div>
     </div>
     <ng-container *ngIf="loggedUser">
       <div class="flex-col justify-c-c  align-i-c gap-s">
@@ -148,6 +161,7 @@
       <span class="formFeedbackError">{{feedback}}</span>
       <span class="formFeedbackError">{{playerError}}</span>
       <span class="formFeedbackError">{{rentalCodeError}}</span>
+      <span class="formFeedbackError">{{titleError}}</span>
     </div>
   </div>
   <div class="team-holder">

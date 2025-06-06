@@ -58,6 +58,7 @@ export class TeamEditorComponent
   readonly feedbackColors = FeedbackColors;
   playerError?: string;
   rentalCodeError?: string;
+  titleError?: string;
 
   @ViewChild('playerInput') playerInput?: SmartInputComponent;
 
@@ -124,7 +125,27 @@ export class TeamEditorComponent
         return;
       }
     }
-    this.team.player = undefined
+    else
+    {
+      this.team.player = undefined
+    }
+  }
+
+  titleUpdateEvent(event: string)
+  {
+    if(event)
+    {
+      this.titleError = this.teamEditorService.validateTitle(event);
+      if(!this.titleError)
+      {
+        this.team.title = event;
+        return;
+      }
+    }
+    else
+    {
+      this.team.title = undefined
+    }
   }
 
   matchUserToPlayer()

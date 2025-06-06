@@ -13,6 +13,12 @@ $teamWidth: calc($pokemonCardWidth * 2 + 0.8em);
   width: calc($teamWidth - 0.4em);
 }
 
+.title
+{
+  text-align: center;
+  width: 80%;
+}
+
 .detail
 {
   width: fit-content;

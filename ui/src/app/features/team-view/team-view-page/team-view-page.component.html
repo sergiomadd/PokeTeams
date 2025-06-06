@@ -6,7 +6,7 @@
 <ng-template #loaded>
   <ng-container *ngIf="!unauthorized; else teamUnauthorized">
     <ng-container *ngIf="team; else noteam">
-      <div class="m-auto flex-col justify-c-c align-i-c gap-m" [ngStyle]="{'margin-top': window.isTabletPortraitOrLess() ? '0.8em' : '7em'}">
+      <div class="m-auto flex-col justify-c-c align-i-c gap-m" [ngStyle]="{'margin-top': window.isTabletPortraitOrLess() ? '0.8em' : '6em'}">
         <app-team [team]="team"></app-team>
         <div class="buttons flex justify-c-c gap-s w-100">
           <button 
