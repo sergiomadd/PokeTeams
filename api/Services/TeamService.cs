@@ -90,6 +90,7 @@ namespace api.Services
                     teamPokemons.Select(p => p.TeamPokemonId).ToList(),
                     playerPreview,
                     userPreview,
+                    team.Title,
                     team.TournamentNormalizedName != null ? await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName) : null,
                     team.Regulation != null ? await _regulationService.GetRegulationByIdentifier(team.Regulation) : null,
                     team.RentalCode,
@@ -167,6 +168,7 @@ namespace api.Services
                 PokemonIDs = pokemonPreviewIDs,
                 Player = playerPreview,
                 User = userPreview,
+                Title = team.Title,
                 Tournament = team.TournamentNormalizedName != null ? await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName) : null,
                 Regulation = team.Regulation != null ? await _regulationService.GetRegulationByIdentifier(team.Regulation) : null,
                 ViewCount = team.ViewCount,
@@ -235,6 +237,7 @@ namespace api.Services
                     pokemons: pokemons,
                     player: inputTeam.Player?.Username,
                     userId: user?.Id,
+                    title: inputTeam.Title,
                     tournamentNormalizedName: tournament != null ? tournament.NormalizedName : null,
                     tournament: tournament,
                     regulation: inputTeam.Regulation != null ? inputTeam.Regulation.Identifier : null,
@@ -325,7 +328,7 @@ namespace api.Services
 
             try
             {
-                //No need to check if id exitst (collision virtually imposible)
+                //No need to check if id exists (collision virtually imposible)
                 string teamId = Generator.GenerateId(10);
                 newTeam = await BreakTeamDTO(inputTeam, teamId);
                 if (newTeam != null)
@@ -374,6 +377,7 @@ namespace api.Services
                 currentTeam.Pokemons = newTeam.Pokemons;
                 currentTeam.Player = newTeam.Player;
                 currentTeam.UserId = newTeam.UserId;
+                currentTeam.Title = newTeam.Title;
                 currentTeam.TournamentNormalizedName = newTeam.TournamentNormalizedName;
                 currentTeam.Tournament = newTeam.Tournament;
                 currentTeam.Regulation = newTeam.Regulation;
@@ -693,6 +697,10 @@ namespace api.Services
                 && inputTeam.Player.Username.Length > 32)
             {
                 return "Player name must be shorter than 32 characters";
+            }
+            if (inputTeam.Title != null && inputTeam.Title.Length > 128)
+            {
+                return "Title must be shorter than 32 characters";
             }
             if (inputTeam.RentalCode != null
                 && inputTeam.RentalCode.Length > 32)

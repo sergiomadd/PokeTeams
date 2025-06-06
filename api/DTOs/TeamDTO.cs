@@ -8,6 +8,7 @@ namespace api.DTOs
         public List<PokemonDTO?>? Pokemons { get; set; }
         public UserPreviewDTO? Player { get; set; }
         public UserPreviewDTO? User { get; set; }
+        public string? Title { get; set; }
         public TournamentDTO? Tournament { get; set; }
         public RegulationDTO? Regulation { get; set; }
         public string? RentalCode { get; set; }
@@ -16,7 +17,6 @@ namespace api.DTOs
         public bool Visibility { get; set; }
         public List<TagDTO>? Tags { get; set; }
         public TeamOptionsDTO? Options { get; set; }
-
 
         public TeamDTO()
         {
@@ -28,6 +28,7 @@ namespace api.DTOs
             List<PokemonDTO> pokemons,
             UserPreviewDTO? player,
             UserPreviewDTO? user,
+            string? title,
             TournamentDTO? tournament,
             RegulationDTO? regulation,
             string? rentalCode,
@@ -43,6 +44,7 @@ namespace api.DTOs
             Options = options;
             Player = player;
             User = user;
+            Title = title;
             Tournament = tournament;
             Regulation = regulation;
             RentalCode = rentalCode;
@@ -62,6 +64,7 @@ namespace api.DTOs
             Options = teamData.Options;
             Player = teamData.Player;
             User = teamData.User;
+            Title = teamData.Title;
             Tournament = teamData.Tournament;
             Regulation = teamData.Regulation;
             RentalCode = teamData.RentalCode;
