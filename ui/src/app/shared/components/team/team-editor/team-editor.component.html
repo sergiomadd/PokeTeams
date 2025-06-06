@@ -26,6 +26,7 @@
           #playerInput
           [label]="'shared.team.player' | translate"
           [updateOnChange]="true"
+          [disableSearch]="true"
           [disableRemove]="true"
           [error]="playerError ? true : false"
           (updateEvent)="playerUpdateEvent($event)"
@@ -111,6 +112,7 @@
         #titleInput
         [label]="'team.editor.title-label' | translate"
         [updateOnChange]="true"
+        [disableSearch]="true"
         [disableRemove]="true"
         [error]="titleError ? true : false"
         (updateEvent)="titleUpdateEvent($event)"

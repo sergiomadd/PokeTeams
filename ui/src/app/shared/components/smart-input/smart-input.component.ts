@@ -19,6 +19,7 @@ export class SmartInputComponent
   @Input() value?: QueryItem;
   @Input() label?: string;
   @Input() keepSelected?: boolean = false;
+  @Input() disableSearch?: boolean = false;
   @Input() disableRemove?: boolean = false;
   @Input() updateOnChange?: boolean;
   @Input() allowCustom?: boolean;
@@ -112,6 +113,7 @@ export class SmartInputComponent
         {
           await this.search(value);
         }
+        if(this.disableSearch){return;}
         this.activeResult = 0;
         this.position = 0;
       }
@@ -121,6 +123,7 @@ export class SmartInputComponent
         {
           this.updateEvent.emit(undefined);
         }
+        if(this.disableSearch){return;}
         if(this.allGetter)
         {
           this.getAllResults();
@@ -253,9 +256,10 @@ export class SmartInputComponent
 
   async onFocus()
   {
-    if(!this.disabled)
+    if(!this.disabled && !this.disableSearch)
     {
-      if((this.results.length > 0 && (this.allowCustom || this.results.length > 1)) || this.searchForm.controls.key.value)
+      if((this.results.length > 0 && (this.allowCustom || this.results.length > 1)) 
+        || this.searchForm.controls.key.value)
       {
         this.showOptions = true;
       }
