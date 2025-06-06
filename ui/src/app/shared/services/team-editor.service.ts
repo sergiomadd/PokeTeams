@@ -107,6 +107,17 @@ export class TeamEditorService
     {
       return this.i18n.translateKeyWithParameters('team.editor.errors.rental_Code', { maxlength: 32 });
     }
+    //Put errored moves as undefined
+    if(team.pokemons.some(p => p?.moves.some(m => m?.identifier == "error")))
+    {
+      team.pokemons.forEach(pokemon => 
+      {
+        if(pokemon && pokemon.moves)
+        {
+          pokemon.moves = pokemon.moves.map(move => move?.identifier === "error" ? undefined : move)
+        }
+      });
+    }
     return undefined;
   }
 
