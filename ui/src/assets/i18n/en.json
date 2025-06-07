@@ -132,6 +132,7 @@
     "level": "The pokemon's level",
     "female": "This pokemon is female",
     "male": "This pokemon is male",
+    "hidden_ability": "Hidden Ability",
     "move": 
     {
       "power": "Power",
@@ -155,8 +156,7 @@
       "nature": "Nature",
       "neutral": "Neutral",
       "total": "Total"
-    },
-    "hidden_ability": "Hidden Ability"
+    }
   },
   "user":
   {

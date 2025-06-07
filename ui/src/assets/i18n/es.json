@@ -34,6 +34,7 @@
       "tag_input-feedback": "Tag ya añadida",
       "visibility-label": "Privacidad",
       "visibility_false-feedback": "El equipo es privado. Activa 'equipo' para seleccionar las demas",
+      "title-label": "Título",
       "errors": 
       {
         "no_pokemons": "No hay pokemons",
@@ -41,7 +42,8 @@
         "empty_pokemons": "Hay pokemons vacios",
         "player": "El nombre del jugador debe ser menor que {{maxlength}}",
         "tournament": "El nombre del torneo debe ser menor que {{maxlength}}",
-        "rental_Code": "El codigo rental debe ser menor que {{maxlength}}"
+        "rental_Code": "El codigo rental debe ser menor que {{maxlength}}",
+        "title": "El título debe ser menor que {{maxlength}}"
       }
     },
     "input":
@@ -60,7 +62,12 @@
     },
     "team":
     {
+      "private-tooltip": "Este equipo es privado",
       "no_player-tooltip": "Jugador desconocido", 
+      "unofficial_player-tooltip": "Jugador no verificado",
+      "player_same_user-tooltip": "Establecer jugador como usuario",
+      "uploaded_by-tooltip": "Subido por",
+      "uploaded_and_played_by-tooltip": "Subido y jugado por",
       "show_all_stats-tooltip": "Mostrar todas las estadísticas",
       "show_all_notes-tooltip": "Mostrar todas las notas",
       "close_all_tooltips-tooltip": "Cerrar todas las tooltips",
@@ -125,6 +132,7 @@
     "level": "El nivel del pokemon",
     "female": "Este pokemon es hembra",
     "male": "Este pokemon es macho",
+    "hidden_ability": "Habilidad Oculta",
     "move": 
     {
       "power": "Potencia",
@@ -231,6 +239,7 @@
     "yes": "Si",
     "no": "No",
     "search": "Buscar",
+    "reset": "Resetear",
     "team":
     {
       "team": "Equipo",
