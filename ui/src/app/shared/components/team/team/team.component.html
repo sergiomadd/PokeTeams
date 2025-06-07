@@ -101,7 +101,7 @@
           </div>
           <app-poke-tooltip
           [content]="tournamentPreview"
-          [side]="'top'"
+          [side]="team?.title ? 'top' : 'bottom'"
           [visible]="tooltips[1]"
           [mobileChanged]="window.isTabletPortraitOrLess()"
           class="tooltip-component"

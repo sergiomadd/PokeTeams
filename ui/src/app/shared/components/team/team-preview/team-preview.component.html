@@ -180,7 +180,7 @@
               </ng-container>
             </button>
           </div>
-          <ng-container *ngIf="logged && logged.username == team?.player?.username && team?.player?.registered">
+          <ng-container *ngIf="logged && logged.username == team?.user?.username && team?.user?.registered">
             <div class="preview-button">
               <button class="button-secondary tooltip-wrapper">
                 <a [routerLink]="['/edit/', team?.id]" target="_blank">

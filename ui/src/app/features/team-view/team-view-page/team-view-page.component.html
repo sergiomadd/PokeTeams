@@ -21,7 +21,7 @@
             [instant]="!window.isTabletLandscapeOrLess()"
             ></app-tooltip>
           </button>
-          <ng-container *ngIf="loggedUser?.username && team.player?.username === loggedUser?.username">
+          <ng-container *ngIf="loggedUser?.username && team.user?.username === loggedUser?.username">
             <button
             class="button relative"
             (click)="editTeam()"

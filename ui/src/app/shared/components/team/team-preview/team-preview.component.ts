@@ -185,9 +185,9 @@ export class TeamPreviewComponent
   delete()
   {
     if(this.team 
-      && this.team?.player?.registered
+      && this.team?.user?.registered
       && this.logged 
-      && this.logged.username == this.team?.player?.username) 
+      && this.logged.username == this.team?.user?.username) 
     {
       this.teamService.deleteTeam(this.team?.id).subscribe(
         {
@@ -203,11 +203,11 @@ export class TeamPreviewComponent
         }
       )
     }
-    else if(!this.team?.player?.registered)
+    else if(!this.team?.user?.registered)
     {
       this.feedback = "Unauthorized";
     }
-    else if(!this.logged || (this.logged && this.logged.username != this.team?.player?.username))
+    else if(!this.logged || (this.logged && this.logged.username != this.team?.user?.username))
     {
       this.feedback = "Unauthorized";
     }

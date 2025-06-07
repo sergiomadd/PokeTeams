@@ -236,8 +236,8 @@ export class TeamViewPageComponent
 
   delete()
   {
-    if(this.team && this.team?.player?.registered
-      && this.loggedUser && this.loggedUser.username == this.team?.player?.username) 
+    if(this.team && this.team?.user?.registered
+      && this.loggedUser && this.loggedUser.username == this.team?.user?.username) 
     {
       this.teamService.deleteTeam(this.team?.id).subscribe(
         {
@@ -253,11 +253,11 @@ export class TeamViewPageComponent
         }
       )
     }
-    else if(!this.team?.player?.registered)
+    else if(!this.team?.user?.registered)
     {
       this.feedback = "Unauthorized";
     }
-    else if(!this.loggedUser || (this.loggedUser && this.loggedUser.username != this.team?.player?.username))
+    else if(!this.loggedUser || (this.loggedUser && this.loggedUser.username != this.team?.user?.username))
     {
       this.feedback = "Unauthorized";
     }
