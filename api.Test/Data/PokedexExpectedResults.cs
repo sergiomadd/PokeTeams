@@ -1,11 +1,4 @@
-﻿using api.DTOs;
-using api.DTOs.PokemonDTOs;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json.Linq;
 
 namespace api.Test.Data
 {

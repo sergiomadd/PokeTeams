@@ -3,23 +3,17 @@ using api.DTOs;
 using api.Models.DBPoketeamModels;
 using api.Test.Integration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
-using api.DTOs.PokemonDTOs;
-using System.Net.Http;
-using System.Globalization;
 
 namespace api.Test.Controllers
 {
+    [Collection("Database Collection")]
     public class AuthControllerTest
     {
         private readonly Uri _baseAddres;
@@ -1743,7 +1737,7 @@ namespace api.Test.Controllers
                 var context = scope.ServiceProvider.GetRequiredService<PokeTeamContext>();
                 await context.Database.MigrateAsync();
 
-                var entity = new Team { Id = teamID, PlayerId = authUser.Id };
+                var entity = new Team { Id = teamID, UserId = authUser.Id };
                 context.Team.Add(entity);
                 await context.SaveChangesAsync();
             }

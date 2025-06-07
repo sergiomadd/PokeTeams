@@ -3,25 +3,15 @@ using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Models.DBPoketeamModels;
 using api.Test.Integration;
-using Azure;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using NuGet.Common;
-using NuGet.ContentModel;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Numerics;
-using System.Security.Claims;
-using System.Text;
 
 namespace api.Test.Controllers
 {
+    [Collection("Database Collection")]
     public class TeamControllerTest : IClassFixture<AppInstance>
     {
         private readonly AppInstance _instance;
@@ -217,7 +207,7 @@ namespace api.Test.Controllers
             //Arrange
             var uri = "save";
             var teamId = "saveTest";
-            TeamDTO? teamDTO = new TeamDTO("otherID", new List<PokemonDTO> { null }, null, null, null, null, 0, null, false, [], null);
+            TeamDTO? teamDTO = new TeamDTO("otherID", new List<PokemonDTO> { null }, null, null, null, null, null, null, 0, null, false, [], null);
             var body = teamDTO;
 
             using (var scope = _instance.Services.CreateScope())
@@ -288,8 +278,8 @@ namespace api.Test.Controllers
             //Arrange
             var uri = "update";
             User user = _instance.GetTestLoggedUser();
-            TeamDTO? teamDTOTeamNull = new TeamDTO("testError", new List<PokemonDTO> { null }, null, null, null, null, 0, null, false, [], null);
-            TeamDTO? teamDTOPlayerNull = new TeamDTO("noOwn", new List<PokemonDTO> { null }, null, null, null, null, 0, null, false, [], null);
+            TeamDTO? teamDTOTeamNull = new TeamDTO("testError", new List<PokemonDTO> { null }, null, null, null, null, null, null, 0, null, false, [], null);
+            TeamDTO? teamDTOPlayerNull = new TeamDTO("noOwn", new List<PokemonDTO> { null }, null, null, null, null, null, null, 0, null, false, [], null);
             var bodyTeamNull = teamDTOTeamNull;
             var bodyPlayerNull = teamDTOPlayerNull;
 
@@ -333,8 +323,8 @@ namespace api.Test.Controllers
             var teamId = "ownNotLog";
             var user = _instance.GetTestLoggedUser();
 
-            TeamDTO? teamDTO = new TeamDTO(teamId, new List<PokemonDTO> { null }, new UserPreviewDTO(user.UserName),
-                null, null, null, 0, null, false, [], null);
+            TeamDTO? teamDTO = new TeamDTO(teamId, new List<PokemonDTO> { null }, null, new UserPreviewDTO(user.UserName),
+                null, null, null, null, 0, null, false, [], null);
             var body = teamDTO;
 
             using (var scope = _instance.Services.CreateScope())
@@ -376,8 +366,9 @@ namespace api.Test.Controllers
             var teamId = "testUpdate";
             var user = _instance.GetTestLoggedUser();
 
-            TeamDTO? teamDTO = new TeamDTO(teamId, new List<PokemonDTO> { null },
-                null, null, null, null, 0, null, false, [], null);
+            TeamDTO? teamDTO = new TeamDTO(teamId,
+                new List<PokemonDTO> { null },
+                null, null, null, null, null, null, 0, null, false, [], null);
             var body = teamDTO;
 
             using (var scope = _instance.Services.CreateScope())
@@ -388,7 +379,7 @@ namespace api.Test.Controllers
                 var teamdb = await context.Team.FirstOrDefaultAsync(t => t.Id == teamId);
                 if (teamdb == null)
                 {
-                    var entity = new Team { Id = teamId, PlayerId = user.Id };
+                    var entity = new Team { Id = teamId, UserId = user.Id };
                     context.Team.Add(entity);
                     await context.SaveChangesAsync();
                 }
@@ -503,8 +494,8 @@ namespace api.Test.Controllers
             var uri = "delete";
             var teamId = "deleteE3";
             var user = _instance.GetTestLoggedUser();
-            TeamDTO? teamDTO = new TeamDTO(teamId, new List<PokemonDTO> { null },
-                null, null, null, null, 0, null, false, [], null);
+            TeamDTO? teamDTO = new TeamDTO(teamId, new List<PokemonDTO> { null }, null,
+                null, null, null, null, null, 0, null, false, [], null);
             TeamIdDTO teamIdDTO = new TeamIdDTO()
             {
                 Id = teamDTO.ID
@@ -516,8 +507,18 @@ namespace api.Test.Controllers
                 var context = scope.ServiceProvider.GetRequiredService<PokeTeamContext>();
                 await context.Database.MigrateAsync();
 
-                var entity = new Team { Id = teamId, PlayerId = user.Id };
+                var entity = new Team { Id = teamId, UserId = user.Id };
                 context.Team.Add(entity);
+                await context.SaveChangesAsync();
+            }
+
+            using (var scope = _instance.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<PokeTeamContext>();
+                await context.Database.MigrateAsync();
+
+                var entity2 = context.Team.FirstOrDefault(x => x.Id == teamId);
+                var test = entity2;
                 await context.SaveChangesAsync();
             }
 

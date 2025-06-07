@@ -9,8 +9,6 @@ using api.Util;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace api.Test.Services
 {

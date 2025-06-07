@@ -2,7 +2,6 @@
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Models;
-using api.Models.DBModels;
 using api.Services.PokedexServices;
 using api.Test.Data;
 using api.Test.Integration;
