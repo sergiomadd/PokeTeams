@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, skip } from 'rxjs';
+import { SeoService } from 'src/app/core/helpers/seo.service';
 import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { selectLang } from 'src/app/core/store/config/config.selectors';
@@ -23,6 +24,7 @@ export class UserPageComponent
   searchService = inject(SearchService);
   route = inject(ActivatedRoute);
   router = inject(Router);
+  seo = inject(SeoService);
 
   selectedLang$: Observable<string> = this.store.select(selectLang);
   loggedUser$ = this.store.select(selectLoggedUser);
@@ -39,7 +41,12 @@ export class UserPageComponent
 
   ngOnInit()
   {
-    this.username = this.router.url.slice(1);
+    this.username = this.router.url.slice(6);
+    this.seo.updateMetaData({
+      title: `${this.username}`,
+      description: 'The user page. It has a list of the users teams, and a settings page where the user can change their profile and account details.',
+      slug: `user/${this.username}`,
+    });
     this.route.params.subscribe(params =>
     {
       this.username = params["username"];

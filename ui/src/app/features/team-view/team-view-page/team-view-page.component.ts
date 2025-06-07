@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { ParserService } from 'src/app/core/helpers/parser.service';
+import { SeoService } from 'src/app/core/helpers/seo.service';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
 import { CustomError } from 'src/app/core/models/misc/customError.model';
@@ -29,7 +30,8 @@ export class TeamViewPageComponent
   parser = inject(ParserService);
   store = inject(Store);
   window = inject(WindowService);
-  
+  seo = inject(SeoService);
+
   loggedUser$: Observable<User | null> = this.store.select(selectLoggedUser);
   loggedUser?: User;
   selectedLang$: Observable<string> = this.store.select(selectLang);
@@ -49,6 +51,13 @@ export class TeamViewPageComponent
   async ngOnInit()
   {
     this.teamKey = this.router.url.slice(1);
+
+    this.seo.updateMetaData({
+      title: `${this.team?.title || 'PokeTeam'}`,
+      description: 'Display the pokemon team information in a visually engaging ui. With the option to copy the pokepaste of the team.',
+      slug: this.teamKey,
+    });
+
     this.loggedUser$.subscribe(value =>
       {
         this.loggedUser = value ?? undefined;

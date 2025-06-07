@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { SeoService } from 'src/app/core/helpers/seo.service';
 import { CustomError } from 'src/app/core/models/misc/customError.model';
 import { Team } from 'src/app/core/models/team/team.model';
 import { TeamService } from 'src/app/core/services/team.service';
@@ -19,6 +20,7 @@ export class UploadPageComponent
   teamService = inject(TeamService);
   teamEditorService = inject(TeamEditorService);
   store = inject(Store);
+  seo = inject(SeoService);
 
   loggedUser: User | null = null;
   user$ = this.store.select(selectLoggedUser);
@@ -29,6 +31,7 @@ export class UploadPageComponent
 
   async ngOnInit() 
   {
+    this.seo.updateMetaData();
     this.teamEditorService.selectedTeam$.subscribe((value) => 
     {
       this.team = value;
