@@ -347,7 +347,10 @@ export class SmartInputComponent
     }
     else
     {
-      this.input.nativeElement.focus();
+      if(!this.keepSelected)
+      {
+        this.input.nativeElement.focus();
+      }
     }
   }
 }

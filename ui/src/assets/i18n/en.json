@@ -43,7 +43,7 @@
         "player": "Player name must be shorter than {{maxlength}} characters",
         "tournament": "Tournament name must be shorter than {{maxlength}} characters",
         "rental_Code": "Rental code must be shorter than {{maxlength}} characters",
-        "title": "Title code must be shorter than {{maxlength}} characters"
+        "title": "Title must be shorter than {{maxlength}} characters"
       }
     },
     "input":

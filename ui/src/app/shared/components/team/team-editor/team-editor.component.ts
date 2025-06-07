@@ -1,16 +1,16 @@
 import { Component, inject, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { ThemeService } from 'src/app/core/helpers/theme.service';
+import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
 import { FeedbackColors } from 'src/app/core/models/misc/colors';
 import { QueryItem } from 'src/app/core/models/misc/queryResult.model';
 import { Tag } from 'src/app/core/models/team/tag.model';
 import { Team } from 'src/app/core/models/team/team.model';
-import { Tournament } from 'src/app/core/models/team/tournament.model';
 import { QueryService } from 'src/app/core/services/query.service';
 import { TeamService } from 'src/app/core/services/team.service';
 import { UserService } from 'src/app/core/services/user.service';
@@ -40,6 +40,7 @@ export class TeamEditorComponent
   window = inject(WindowService);
   formBuilder = inject(FormBuilder);
   theme = inject(ThemeService);
+  util = inject(UtilService);
 
   @ViewChild(TeamComponent) teamComponent!: TeamComponent;
 
@@ -49,16 +50,23 @@ export class TeamEditorComponent
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
   selectedThemeName?: string;
 
+  teamFormSubmitted: boolean = false;
+  teamForm = this.formBuilder.group(
+    {
+      player: ["", [Validators.maxLength(32)]],
+      rental: ["", [Validators.maxLength(32)]],
+      title: ["", [Validators.maxLength(128)]],
+    });
+
   team: Team = <Team>{};
-  showTournamentEditor: boolean = false;
+  currentTags: number = 0;
+  maxTags: number = 3;
+  disableTagInput: boolean = false;
   showTagEditor: boolean = false;
   tagAlreadyAdded: boolean = false;
   feedback?: string;
   teamPrivateFeedback: boolean = false;
   readonly feedbackColors = FeedbackColors;
-  playerError?: string;
-  rentalCodeError?: string;
-  titleError?: string;
 
   @ViewChild('playerInput') playerInput?: SmartInputComponent;
 
@@ -67,6 +75,9 @@ export class TeamEditorComponent
     this.teamEditorService.selectedTeam$.subscribe((value) => 
     {
       this.team = value;
+      this.currentTags = value.tags?.length ?? 0;
+      this.disableTagInput = this.currentTags >= this.maxTags ? true : false;
+      console.log(this.disableTagInput)
       if(this.teamComponent)
       {
         this.teamComponent.showAllStats = false;
@@ -96,6 +107,61 @@ export class TeamEditorComponent
           this.team.user = undefined;
         }
       })
+    this.teamForm.controls.player.valueChanges.subscribe(value =>
+    {
+      if(value)
+      {
+        if(value.length <= 32)
+        {
+          this.team.player = 
+          {
+            username: value,
+            picture: undefined,
+            registered: false
+          };
+          this.teamComponent.checkUserToPlayer();
+          return;
+        }
+      }
+      else
+      {
+        this.team.player = undefined
+      }
+    })
+    this.teamForm.controls.rental.valueChanges.subscribe(value =>
+    {
+      if(value)
+      {
+        if(value.length <= 32)
+        {
+          this.team.rentalCode = value 
+        }
+      }
+      else
+      {
+        this.team.rentalCode = undefined;
+      }
+    })
+    this.teamForm.controls.title.valueChanges.subscribe(value =>
+    {
+      if(value)
+      {
+        if(value.length <= 128)
+        {
+          this.team.title = value;
+          return;
+        }
+      }
+      else
+      {
+        this.team.title = undefined
+      }
+    })
+  }
+
+  ngOnChanges()
+  {
+
   }
 
   ngOnDestroy()
@@ -107,46 +173,6 @@ export class TeamEditorComponent
   {
     this.teamEditorService.setEmptyTeam();
   }  
-
-  playerUpdateEvent(event: string)
-  {
-    if(event)
-    {
-      this.playerError = this.teamEditorService.validatePlayer(event);
-      if(!this.playerError)
-      {
-        this.team.player = 
-        {
-          username: event,
-          picture: undefined,
-          registered: false
-        };
-        this.teamComponent.checkUserToPlayer();
-        return;
-      }
-    }
-    else
-    {
-      this.team.player = undefined
-    }
-  }
-
-  titleUpdateEvent(event: string)
-  {
-    if(event)
-    {
-      this.titleError = this.teamEditorService.validateTitle(event);
-      if(!this.titleError)
-      {
-        this.team.title = event;
-        return;
-      }
-    }
-    else
-    {
-      this.team.title = undefined
-    }
-  }
 
   matchUserToPlayer()
   {
@@ -171,15 +197,6 @@ export class TeamEditorComponent
     this.team.regulation = event ? await this.teamService.getRegulationByIdentifier(event.identifier) : undefined;
   }
 
-  rentalCodeSelectEvent(event: string)
-  {
-    this.rentalCodeError = this.teamEditorService.validateRentalCode(event);
-    if(event)
-    {
-      this.team.rentalCode = event 
-    }
-  }
-
   @ViewChild(TagEditorComponent) tagEditorComponent!: TagEditorComponent;
   @ViewChild("tagInput") tagSmartInput!: SmartInputComponent;
   toggleTagEditor()
@@ -191,9 +208,6 @@ export class TeamEditorComponent
       this.tagEditorComponent.setName(this.tagSmartInput.input.nativeElement.value)
     }
   }
-
-  currentTags: number = this.team?.tags ? this.team?.tags?.length : 0;
-  maxTags: number = 3;
 
   async tagSelectEvent(queryItem: QueryItem)
   {
@@ -270,22 +284,6 @@ export class TeamEditorComponent
       this.showTagEditor = false;
     }
   }
-  
-  //For custom tournaments maybe in future
-  toggleTournamentEditor()
-  {
-    this.showTournamentEditor = !this.showTournamentEditor;
-  }
-
-  tournamentAddEvent(tournament: Tournament)
-  {
-    this.team.tournament = tournament;
-  }
-
-  tournamentEditorCloseEvent()
-  {
-    this.showTournamentEditor = false;
-  }
 
   //Privacy
 
@@ -342,5 +340,21 @@ export class TeamEditorComponent
       this.teamPrivateFeedback = false;
     }
     this.team = {...this.team}
+  }
+
+  isInvalid(key: string) : boolean
+  {
+    var control = this.teamForm.get(key);
+    let invalid = (control?.errors
+      && (control?.dirty || control?.touched
+        || this.teamFormSubmitted)) 
+      ?? false;
+    return invalid;
+  }
+
+  getError(key: string) : string
+  {
+    let control: AbstractControl | null =  this.teamForm.get(key);
+    return this.util.getAuthFormError(control);
   }
 }

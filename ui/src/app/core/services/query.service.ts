@@ -9,6 +9,8 @@ import { Move } from '../models/pokemon/move.model';
 import { Nature } from '../models/pokemon/nature.model';
 import { Pokemon } from '../models/pokemon/pokemon.model';
 import { Type } from '../models/pokemon/type.model';
+import { Regulation } from '../models/team/regulation.model';
+import { Tournament } from '../models/team/tournament.model';
 
 @Injectable({
   providedIn: 'root'
@@ -317,6 +319,33 @@ export class QueryService
         identifier: type.name.content,
         icon: type.iconPath,
         type: "type"
+      }
+    }
+    return undefined;
+  }
+
+  getTournamentQueryResult(tournament?: Tournament): QueryItem | undefined
+  {
+    if(tournament)
+    {
+      return {
+        name: tournament.name,
+        identifier: tournament.name,
+        icon: tournament.icon,
+        type: "tournament"
+      }
+    }
+    return undefined;
+  }
+
+  getRegulationQueryResult(regulation?: Regulation): QueryItem | undefined
+  {
+    if(regulation)
+    {
+      return {
+        name: regulation.name,
+        identifier: regulation.identifier,
+        type: "regulation"
       }
     }
     return undefined;

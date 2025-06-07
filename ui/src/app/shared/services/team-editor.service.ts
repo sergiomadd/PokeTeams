@@ -99,13 +99,17 @@ export class TeamEditorService
     {
       return this.i18n.translateKey('team.editor.errors.empty_pokemons');
     }
-    if(team.player?.username && this.validatePlayer(team.player?.username))
+    if(team.player?.username && team.player?.username.length > 32)
     {
       return this.i18n.translateKeyWithParameters('team.editor.errors.player', { maxlength: 32 });
     }
-    if(team.rentalCode && this.validatePlayer(team.rentalCode))
+    if(team.rentalCode && team.rentalCode.length > 32)
     {
       return this.i18n.translateKeyWithParameters('team.editor.errors.rental_Code', { maxlength: 32 });
+    }
+    if(team.title && team.title.length > 128)
+    {
+      return this.i18n.translateKeyWithParameters('team.editor.errors.title', { maxlength: 128 });
     }
     //Put errored moves as undefined
     if(team.pokemons.some(p => p?.moves.some(m => m?.identifier == "error")))
@@ -117,34 +121,6 @@ export class TeamEditorService
           pokemon.moves = pokemon.moves.map(move => move?.identifier === "error" ? undefined : move)
         }
       });
-    }
-    return undefined;
-  }
-
-  validatePlayer(player: string): string | undefined
-  {
-    if(player.length > 32)
-    {
-      return this.i18n.translateKeyWithParameters('team.editor.errors.player', { maxlength: 32 });
-    }
-    return undefined;
-  }
-
-  validateRentalCode(rentalCode: string): string | undefined
-  {
-    if(rentalCode.length > 32)
-    {
-      return this.i18n.translateKeyWithParameters('team.editor.errors.rental_Code', { maxlength: 32 });
-    }
-    return undefined;
-  }
-
-  
-  validateTitle(title: string): string | undefined
-  {
-    if(title.length > 128)
-    {
-      return this.i18n.translateKeyWithParameters('team.editor.errors.title', { maxlength: 128 });
     }
     return undefined;
   }
