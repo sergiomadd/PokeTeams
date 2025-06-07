@@ -36,7 +36,7 @@
                     <ng-template #speciesName>
                       {{pokemon.name?.content}}
                       <ng-container *ngIf="pokemon.name?.content && pokemon.name?.language != (selectedLang$ | async)">
-                        <app-no-translation></app-no-translation>
+                        <app-no-translation [noTooltip]="true"></app-no-translation>
                       </ng-container>
                     </ng-template>
                   </div>
@@ -97,7 +97,7 @@
                     {{pokemon.item?.name?.content}}
                   </div>
                   <ng-container *ngIf="pokemon.item?.name && pokemon.item?.name?.language != (selectedLang$ | async)">
-                    <app-no-translation></app-no-translation>
+                    <app-no-translation [noTooltip]="true"></app-no-translation>
                   </ng-container>
                   <ng-container *ngIf="pokemon.item?.identifier === 'error'; else itemIcon">
                     <div class="icon-m">
@@ -191,7 +191,7 @@
                     {{pokemon.ability?.name?.content}}
                   </div>
                   <ng-container *ngIf="pokemon.ability?.name?.content && pokemon.ability?.name?.language != (selectedLang$ | async)">
-                    <app-no-translation></app-no-translation>
+                    <app-no-translation [noTooltip]="true"></app-no-translation>
                   </ng-container>
                   <ng-container *ngIf="pokemon?.ability?.hidden">
                     <svg class="icon-s" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000">
@@ -682,7 +682,7 @@
                   <div class="text-start space-nowrap no-overflow w-90">
                     {{move?.name?.content}}
                     <ng-container *ngIf="move?.name?.content && move?.name?.language != (selectedLang$ | async)">
-                      <app-no-translation></app-no-translation>
+                      <app-no-translation [noTooltip]="true"></app-no-translation>
                     </ng-container>
                   </div>
                 <ng-container *ngIf="move?.identifier !== 'error'">
@@ -796,7 +796,7 @@
                       </div>
                     </div>
                     <div class="poke-tooltip-body">
-                      <div class="flex justify-c-c wrap gap-s">
+                      <div class="flex justify-c-c wrap gap-m">
                         <div class="stat-atribute">
                           <span class="stat-property-title">{{'pokemon.move.power' | translate}}: </span>
                           <ng-container *ngIf="move?.power;else emptyLine">
@@ -836,37 +836,41 @@
                           <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.flinch_chance' | translate}}: </span>{{move?.meta?.flinchChance}}%</div>
                         </ng-container>
                       </div>
-                      <div class="flex-col pad-s">
-                        <div class="flex">
-                          <span class="stat-property-title">{{'pokemon.move.effect' | translate}}: </span> 
-                          <span class="text-start">
-                            <ng-container *ngFor="let chunk of moveEffectsShort[i]">
-                              <ng-container [ngSwitch]="chunk.type">
-                                <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
-                                <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
-                                <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
+                      <div class="flex-col pad-s gap-m">
+                        <ng-container *ngIf="move?.effect?.short?.content">
+                          <div class="flex">
+                            <span class="stat-property-title">{{'pokemon.move.effect' | translate}}: </span> 
+                            <span class="text-start">
+                              <ng-container *ngFor="let chunk of moveEffectsShort[i]">
+                                <ng-container [ngSwitch]="chunk.type">
+                                  <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
+                                  <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
+                                  <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
+                                </ng-container>
                               </ng-container>
-                            </ng-container>
-                            <ng-container *ngIf="move?.effect?.short?.content && move?.effect?.short?.language != (selectedLang$ | async)">
-                              <app-no-translation></app-no-translation>
-                            </ng-container>
-                          </span>
-                        </div>
-                        <div class="flex">
-                          <span class="stat-property-title">{{'pokemon.move.target' | translate}}: </span>
-                          <span class="text-start">
-                            <ng-container *ngFor="let chunk of moveTargets[i]">
-                              <ng-container [ngSwitch]="chunk.type">
-                                <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
-                                <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
-                                <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
+                              <ng-container *ngIf="move?.effect?.short?.content && move?.effect?.short?.language != (selectedLang$ | async)">
+                                <app-no-translation></app-no-translation>
                               </ng-container>
-                            </ng-container>
-                            <ng-container *ngIf="move?.target?.description?.content && move?.target?.description?.language != (selectedLang$ | async)">
-                              <app-no-translation></app-no-translation>
-                            </ng-container>
-                          </span>
-                        </div>
+                            </span>
+                          </div>
+                        </ng-container>
+                        <ng-container *ngIf="move?.target?.description?.content">
+                          <div class="flex">
+                            <span class="stat-property-title">{{'pokemon.move.target' | translate}}: </span>
+                            <span class="text-start">
+                              <ng-container *ngFor="let chunk of moveTargets[i]">
+                                <ng-container [ngSwitch]="chunk.type">
+                                  <ng-container *ngSwitchCase="'text'">{{ chunk.value }}</ng-container>
+                                  <a *ngSwitchCase="'link'" [href]="chunk.path">{{ chunk.value }}</a>
+                                  <img *ngSwitchCase="'img'" src="{{chunk.path}}" alt="{{chunk.value}}" class="icon">
+                                </ng-container>
+                              </ng-container>
+                              <ng-container *ngIf="move?.target?.description?.content && move?.target?.description?.language != (selectedLang$ | async)">
+                                <app-no-translation></app-no-translation>
+                              </ng-container>
+                            </span>
+                          </div>
+                        </ng-container>
                       </div>
                     </div>
                   </div>

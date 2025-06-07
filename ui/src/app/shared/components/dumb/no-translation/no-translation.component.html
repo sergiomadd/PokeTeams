@@ -11,8 +11,10 @@
       </g>
     </svg>
   </div>
-  <app-tooltip
-  [text]="'shared.no_translation' | translate"
-  [side]="'right'"
-  ></app-tooltip>
+  <ng-container *ngIf="!noTooltip">
+    <app-tooltip
+    [text]="'shared.no_translation' | translate"
+    [side]="'right'"
+    ></app-tooltip>
+  </ng-container>
 </span>

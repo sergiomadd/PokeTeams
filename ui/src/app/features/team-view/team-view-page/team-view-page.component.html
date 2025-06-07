@@ -54,9 +54,11 @@
             {{feedback}}
           </div>
         </ng-container>
-        <div style="color: var(--text-color-secondary); margin-top: 2.5em; opacity: 0.8; font-size: 0.8em;">
-          {{"team.view.help" | translate}}
-        </div>
+        <ng-container *ngIf="!window.isTabletLandscapeOrLess()">
+          <div style="color: var(--text-color-secondary); margin-top: 2.5em; opacity: 0.8; font-size: 0.8em;">
+            {{"team.view.help" | translate}}
+          </div>
+        </ng-container>
       </div>
     </ng-container>
   </ng-container>
