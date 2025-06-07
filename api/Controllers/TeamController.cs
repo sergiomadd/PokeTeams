@@ -102,7 +102,7 @@ namespace api.Controllers
                 Team? newTeam = await _teamService.SaveTeam(teamDTO!);
                 if (newTeam == null)
                 {
-                    return BadRequest("Error saving team, try again please");
+                    return BadRequest("Error saving team, please try again");
                 }
                 return Ok(newTeam.Id);
             }

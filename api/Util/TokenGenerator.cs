@@ -49,7 +49,7 @@ namespace api.Util
                         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                         new Claim(ClaimTypes.Name, user.UserName.ToString())
                     ]),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddDays(31),
                 SigningCredentials = credentials,
                 Issuer = configuration["JwtSettings:Issuer"],
                 Audience = configuration["JwtSettings:Audience"],
@@ -110,7 +110,7 @@ namespace api.Util
                 context.Response.Cookies.Append("refreshToken", tokens.RefreshToken,
                     new CookieOptions
                     {
-                        Expires = DateTime.UtcNow.AddDays(7),
+                        Expires = DateTime.UtcNow.AddDays(31),
                         HttpOnly = true,
                         IsEssential = true,
                         Secure = true,

@@ -60,7 +60,7 @@ namespace api.Middlewares
                     });
                 });
 
-                //Auth critical funcitons limiter -> 1 per day
+                //Auth critical funcitons limiter -> 2 per day
                 /* 
                  * - Sign up
                  * - Name change
@@ -73,8 +73,8 @@ namespace api.Middlewares
                     var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
                     return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = 1,
-                        Window = TimeSpan.FromDays(1),
+                        PermitLimit = 2,
+                        Window = TimeSpan.FromDays(2),
                         QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                         QueueLimit = 0
                     });
@@ -114,14 +114,14 @@ namespace api.Middlewares
                     });
                 });
 
-                //Team upload limiter -> 1 every 5s
+                //Team upload limiter -> 2 every 5s
                 options.AddPolicy("teamUploadLimiter", context =>
                 {
                     var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
                     return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = 1,
-                        Window = TimeSpan.FromSeconds(20),
+                        PermitLimit = 2,
+                        Window = TimeSpan.FromSeconds(5),
                         QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                         QueueLimit = 0
                     });
