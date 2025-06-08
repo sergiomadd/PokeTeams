@@ -83,7 +83,7 @@ export class QueryService
   {
     let url = this.apiUrl + 'regulation/query/all';
     return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), 
-    map((QueryResults: QueryItem[]) => QueryResults.filter(t => 
+    map((queryResults: QueryItem[]) => queryResults.filter(t => 
       {
         return t.name.toLowerCase().includes(args.toLowerCase())
       }))
@@ -91,7 +91,7 @@ export class QueryService
   }
   queryRegulationCallback = (args: any): Observable<QueryItem[]> => 
   {
-    return this.queryRegulationCallback(args);
+    return this.queryRegulation(args);
   }
 
   queryAllRegulations() : Observable<QueryItem[]>
