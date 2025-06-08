@@ -1,8 +1,10 @@
+@use "/src/app/core/styles/variables.scss" as *;
+
 .detail
 {
   width: fit-content;
-  max-width: 8em;
-  height: 1.2em;
+  max-width: 20em;
+  max-height: 1.2em;
   display: flex;
   align-items: center;
   background-color: var(--bg-color-2);
@@ -64,4 +66,13 @@
 .deleting
 {
   outline: 4px solid red;
+}
+
+
+@media (max-width: $tabletPortrait) 
+{
+  .detail
+  {
+    max-width: 10em;
+  }
 }

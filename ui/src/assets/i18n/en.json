@@ -64,10 +64,10 @@
     {
       "private-tooltip": "This team is private",
       "no_player-tooltip": "Unkown player", 
-      "unofficial_player-tooltip": "Unofficially played by",
+      "unofficial_player-tooltip": "Played by {{name}}",
       "player_same_user-tooltip": "Set player as user",
-      "uploaded_by-tooltip": "Uploaded by",
-      "uploaded_and_played_by-tooltip": "Uploaded and played by",
+      "uploaded_by-tooltip": "Uploaded by {{name}}",
+      "uploaded_and_played_by-tooltip": "Uploaded and played by {{name}}",
       "show_all_stats-tooltip": "Show all stats",
       "show_all_notes-tooltip": "Show all notes",
       "close_all_tooltips-tooltip": "Close all tooltips",

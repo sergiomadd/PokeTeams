@@ -64,10 +64,10 @@
     {
       "private-tooltip": "Este equipo es privado",
       "no_player-tooltip": "Jugador desconocido", 
-      "unofficial_player-tooltip": "Jugador no verificado",
+      "unofficial_player-tooltip": "Jugador por {{name}}",
       "player_same_user-tooltip": "Establecer jugador como usuario",
-      "uploaded_by-tooltip": "Subido por",
-      "uploaded_and_played_by-tooltip": "Subido y jugado por",
+      "uploaded_by-tooltip": "Subido por {{name}}",
+      "uploaded_and_played_by-tooltip": "Subido y jugado por {{name}}",
       "show_all_stats-tooltip": "Mostrar todas las estadísticas",
       "show_all_notes-tooltip": "Mostrar todas las notas",
       "close_all_tooltips-tooltip": "Cerrar todas las tooltips",

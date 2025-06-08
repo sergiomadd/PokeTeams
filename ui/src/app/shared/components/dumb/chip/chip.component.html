@@ -12,7 +12,7 @@ class="chip"
 }"
 >
   <ng-container *ngIf="iconPath">
-    <img [attr.src]="iconPath" alt="" class="icon-m" fill>
+    <img [attr.src]="iconPath" alt="" [ngClass]="{'icon-s': type === 'move', 'icon-l': type !== 'move'}" fill>
   </ng-container>
   <div class="no-overflow">
     {{name}} 

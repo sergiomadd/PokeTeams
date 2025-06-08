@@ -118,6 +118,7 @@
             <ng-container *ngFor="let chip of chips; index as i">
               <app-chip 
               [name]="chip.name"
+              [type]="chip.type"
               [iconPath]="chip.iconPath"
               [tooltipText]="chip.tooltipText ?? undefined"
               [bgColor]="chip.color ?? undefined"

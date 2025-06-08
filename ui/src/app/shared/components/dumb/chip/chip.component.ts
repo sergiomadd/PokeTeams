@@ -12,6 +12,7 @@ export class ChipComponent
   themeService = inject(ThemeService);
 
   @Input() name?: string;
+  @Input() type?: string;
   @Input() iconPath?: string;
   @Input() tooltipText?: string;
   @Input() removable: boolean = false;
