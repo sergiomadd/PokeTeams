@@ -1,5 +1,6 @@
 export interface LocalizedText
 {
   content: string,
-  language: string
+  language: string,
+  fallback?: string
 }

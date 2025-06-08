@@ -96,13 +96,13 @@ export class ParserService {
   {
     let pokePaste: string = ""
     pokePaste = pokePaste + this.getReverseName(pokemon);
-    if(pokemon.ability){ pokePaste = pokePaste + `Ability: ${pokemon.ability.name.content}\n` }
+    if(pokemon.ability){ pokePaste = pokePaste + `Ability: ${pokemon.ability.name.fallback}\n` }
     if(pokemon.level){pokePaste = pokePaste + `Level: ${pokemon.level}\n`}
     if(pokemon.shiny)
     {
       if(pokemon.shiny) {pokePaste = pokePaste + `Shiny: Yes\n`}
     }
-    if(pokemon.teraType){pokePaste = pokePaste + `Tera Type: ${pokemon.teraType.name.content}\n`}
+    if(pokemon.teraType){pokePaste = pokePaste + `Tera Type: ${pokemon.teraType.name.fallback}\n`}
     if(pokemon.evs && pokemon.evs.some(e => e.value > 0))
     {
       let evLine = "EVs:";
@@ -114,7 +114,7 @@ export class ParserService {
       evLine = evLine + evs.join("/") + "\n";
       pokePaste = pokePaste + evLine;
     }
-    if(pokemon.nature){pokePaste = pokePaste + `${pokemon.nature.name.content} Nature\n`}
+    if(pokemon.nature){pokePaste = pokePaste + `${pokemon.nature.name.fallback} Nature\n`}
     if(pokemon.ivs && pokemon.ivs.some(i => i.value > 0 && i.value !== 31))
     {
       let ivLine = "IVs:";
@@ -130,7 +130,7 @@ export class ParserService {
     {
       pokemon.moves.forEach(move => 
       {
-        pokePaste = pokePaste + `- ${move?.name.content}\n`;
+        pokePaste = pokePaste + `- ${move?.name.fallback}\n`;
       });
     }
     return pokePaste;
@@ -139,10 +139,10 @@ export class ParserService {
   getReverseName(pokemon: Pokemon) : string
   {
     let line: string = "";
-    let name: string | undefined = pokemon.formId ? pokemon.name?.content.split(" ").join("-") : pokemon.name?.content
+    let name: string = pokemon.name?.fallback ?? "";
     if(pokemon.nickname && pokemon.item)
     {
-      line = `${pokemon.nickname} (${name}) @ ${pokemon.item?.name.content}` 
+      line = `${pokemon.nickname} (${name}) @ ${pokemon.item?.name.fallback}` 
     }
     else if(pokemon.nickname)
     {
@@ -150,7 +150,7 @@ export class ParserService {
     }
     else if(pokemon.item)
     {
-      line = `${name} @ ${pokemon.item.name?.content}` 
+      line = `${name} @ ${pokemon.item.name?.fallback}` 
     }
     else
     {
@@ -195,7 +195,6 @@ export class ParserService {
     else if(profile.includes("(") && profile.split("(").length === 2)
     {
       let genderString = this.formatValue(profile.split("(")[1], {rightParen: true});
-      console.log(genderString);
       if(genderString === "female" || genderString === "Female" || genderString === "f" || genderString === "F")
       {
         pokePaste.gender = true;
@@ -323,6 +322,4 @@ export class ParserService {
     }
     return false;
   }
-
-
 }
