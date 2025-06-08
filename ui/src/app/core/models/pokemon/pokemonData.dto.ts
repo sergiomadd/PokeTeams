@@ -16,7 +16,8 @@ export interface PokemonData
   forms?: PokemonForm[],
   types?: TypesWithEffectiveness,
   stats: Stat[],
-  sprite?: Sprite
+  sprite?: Sprite,
+  gender?: boolean
 }
 
 export const defaultPokemonData: PokemonData =
@@ -34,5 +35,6 @@ export const defaultPokemonData: PokemonData =
   forms: [],
   types: defaultTypesWithEffectiveness,
   stats: [],
-  sprite: undefined
+  sprite: undefined,
+  gender: false
 }

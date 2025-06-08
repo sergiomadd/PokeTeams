@@ -55,7 +55,7 @@ export class PokemonService
         pokemon.nickname = pokePaste.nickname;
         pokemon.level = pokePaste.level ? pokePaste.level : 50;
         pokemon.shiny = pokePaste.shiny ? pokePaste.shiny : undefined;
-        pokemon.gender = pokePaste.gender ? pokePaste.gender : undefined;
+        pokemon.gender = pokePaste.gender ? pokePaste.gender : pokemonData.status == "fulfilled" ? pokemonData.value?.gender : undefined;
         pokemon.teraType = teraType.status == "fulfilled" ? teraType.value : undefined;
         pokemon.item = itemPromise.status == "fulfilled" ? itemPromise.value : undefined; 
         pokemon.ability = abilityPromise.status == "fulfilled" ? abilityPromise.value : undefined; 
