@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace api.Models
+namespace api.DTOs
 {
     public class ErrorDetails
     {

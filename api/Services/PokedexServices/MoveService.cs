@@ -138,10 +138,10 @@ namespace api.Services.PokedexServices
                 select new MoveDTO
                 {
                     Identifier = moves.identifier,
-                    Name = moveNames != null ? new LocalizedText(moveNames.name, moveNames.local_language_id) : new LocalizedText(moveNamesDefault.name, moveNamesDefault.local_language_id),
+                    Name = moveNames != null ? new LocalizedText(moveNames.name, moveNames.local_language_id, moveNamesDefault.name) : new LocalizedText(moveNamesDefault.name, moveNamesDefault.local_language_id, moveNamesDefault.name),
                     PokeType = new PokeTypeWithEffectivenessDTO(
                         types.identifier,
-                        new LocalizedText(typeNames.name, typeNames.local_language_id),
+                        new LocalizedText(typeNames.name, typeNames.local_language_id, null),
                         $"{pokeTypeIconPath}{types.identifier}.png",
                         null,
                         null,
@@ -159,15 +159,15 @@ namespace api.Services.PokedexServices
                     Target = new MoveTarget
                     {
                         Name = target != null ? target.name : targetDefault.name,
-                        Description = target != null ? new LocalizedText(Formatter.FormatProse(target.description, baseUrl, null), target.local_language_id) :
-                            new LocalizedText(Formatter.FormatProse(targetDefault.description, baseUrl, null), targetDefault.local_language_id)
+                        Description = target != null ? new LocalizedText(Formatter.FormatProse(target.description, baseUrl, null), target.local_language_id, targetDefault.description) :
+                            new LocalizedText(Formatter.FormatProse(targetDefault.description, baseUrl, null), targetDefault.local_language_id, targetDefault.description)
                     },
                     Effect = new MoveEffect
                     {
-                        Short = effect != null ? new LocalizedText(Formatter.FormatProse(effect.short_effect, baseUrl, new string?[] { moves.effect_chance.ToString() }), effect.local_language_id) :
-                            new LocalizedText(Formatter.FormatProse(effectDefault.short_effect, baseUrl, new string?[] { moves.effect_chance.ToString() }), effectDefault.local_language_id),
-                        Long = effect != null ? new LocalizedText(Formatter.FormatProse(effect.effect, baseUrl, new string?[] { moves.effect_chance.ToString() }), effect.local_language_id) :
-                            new LocalizedText(Formatter.FormatProse(effectDefault.effect, baseUrl, new string?[] { moves.effect_chance.ToString() }), effectDefault.local_language_id),
+                        Short = effect != null ? new LocalizedText(Formatter.FormatProse(effect.short_effect, baseUrl, new string?[] { moves.effect_chance.ToString() }), effect.local_language_id, effectDefault.short_effect) :
+                            new LocalizedText(Formatter.FormatProse(effectDefault.short_effect, baseUrl, new string?[] { moves.effect_chance.ToString() }), effectDefault.local_language_id, effectDefault.short_effect),
+                        Long = effect != null ? new LocalizedText(Formatter.FormatProse(effect.effect, baseUrl, new string?[] { moves.effect_chance.ToString() }), effect.local_language_id, effectDefault.effect) :
+                            new LocalizedText(Formatter.FormatProse(effectDefault.effect, baseUrl, new string?[] { moves.effect_chance.ToString() }), effectDefault.local_language_id, effectDefault.effect),
                         Chance = moves.effect_chance
                     },
                     Meta = new Metadata
@@ -185,7 +185,7 @@ namespace api.Services.PokedexServices
                         {
                             Stat = new StatDTO(
                                 stats.identifier,
-                                statNames != null ? new LocalizedText(statNames.name, statNames.local_language_id) : new LocalizedText(statNamesDefault.name, statNamesDefault.local_language_id),
+                                statNames != null ? new LocalizedText(statNames.name, statNames.local_language_id, statNamesDefault.name) : new LocalizedText(statNamesDefault.name, statNamesDefault.local_language_id, statNamesDefault.name),
                                 null),
                             Change = statChanges.change,
                             ChangeChance = meta.stat_chance
@@ -237,12 +237,12 @@ namespace api.Services.PokedexServices
 
                 select new MovePreviewDTO(
                     moves.identifier,
-                    moveNames != null ? new LocalizedText(moveNames.name, moveNames.local_language_id) : new LocalizedText(moveNamesDefault.name, moveNamesDefault.local_language_id),
+                    moveNames != null ? new LocalizedText(moveNames.name, moveNames.local_language_id, moveNamesDefault.name) : new LocalizedText(moveNamesDefault.name, moveNamesDefault.local_language_id, moveNamesDefault.name),
                     new PokeTypeDTO(
                         types.identifier,
                         typeNames != null ?
-                            new LocalizedText(typeNames.name, typeNames.local_language_id) :
-                            new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                            new LocalizedText(typeNames.name, typeNames.local_language_id, typeNamesDefault.name) :
+                            new LocalizedText(typeNamesDefault.name, typeNames.local_language_id, typeNamesDefault.name),
                         $"{pokeTypeIconPath}{types.identifier}.png",
                         false));
 

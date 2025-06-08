@@ -5,11 +5,7 @@ using api.Models.DBModels;
 using api.Models.DBPokedexModels;
 using api.Models.DBPoketeamModels;
 using api.Services.PokedexServices;
-using api.Util;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.SqlServer.Server;
-using System.Security.Cryptography;
-using System.Xml.Linq;
 
 namespace api.Services
 {
@@ -80,7 +76,7 @@ namespace api.Services
 
         public async Task<PokemonDTO> BuildPokemonDTO(TeamPokemon pokemon, int langId, TeamOptionsDTO? options = null)
         {
-            PokemonDataDTO pokemonData = await GetPokemonDataByPokemonModel(pokemon, langId);
+            PokemonDataDTO pokemonData = await GetPokemonDataByTeamPokemonModel(pokemon, langId);
 
             List<MoveDTO?> moves = new List<MoveDTO?>
             {
@@ -255,7 +251,7 @@ namespace api.Services
             return null;
         }
 
-        public async Task<PokemonDataDTO> GetPokemonDataByPokemonModel(TeamPokemon teamPokemon, int langId)
+        public async Task<PokemonDataDTO> GetPokemonDataByTeamPokemonModel(TeamPokemon teamPokemon, int langId)
         {
             PokemonDataDTO pokemonData;
             int dexNumber = teamPokemon.FormId != null ? await GetPokemonDexNumberByPokemonId(teamPokemon.PokemonId) : teamPokemon.PokemonId;
@@ -351,11 +347,27 @@ namespace api.Services
             string formIdentifier = name.ToLower();
             formIdentifier = HandleFormIdentifierExceptions(formIdentifier);
             pokemon? pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
-            if(pokemon_ == null)
+            //If not found, try joining with "-"
+            //Turn "Urshifu Rapid Strike" -> "urshifu-rapid-strike"
+            if (pokemon_ == null)
             {
-                //Turn "Urshifu Rapid Strike" -> "urshifu-rapid-strike"
-                formIdentifier = String.Join("-", name.ToLower().Split(" "));
-                pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
+                //If not found, try joining with "-" and reversing
+                //Turn "Rapid-Strike-Urshifu" -> "urshifu-rapid-strike"
+                //Calyrex forms: Ice-Calyrex -> calyrex-ice
+                if (name.Contains("-"))
+                {
+                    var parts = name.ToLower().Split("-", StringSplitOptions.RemoveEmptyEntries);
+                    //formIdentifier = String.Join("-", name.ToLower().Split("-").Reverse().ToArray());
+                    var reordered = new[] { parts[^1] }.Concat(parts.Take(parts.Length - 1));
+                    formIdentifier = String.Join("-", reordered);
+                    pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
+                }
+                else
+                {
+                    formIdentifier = String.Join("-", name.ToLower().Split(" "));
+                    pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
+                }
+
             }
             if (pokemon_ != null)
             {
@@ -426,8 +438,8 @@ namespace api.Services
                 from pokemonSpeciesNamesDefault in pokemonSpeciesNamesDefaultJoin.DefaultIfEmpty()
 
                 select pokemonSpeciesNames != null ?
-                    new LocalizedText(pokemonSpeciesNames.name, pokemonSpeciesNames.local_language_id) :
-                    new LocalizedText(pokemonSpeciesNamesDefault.name, pokemonSpeciesNamesDefault.local_language_id);
+                    new LocalizedText(pokemonSpeciesNames.name, pokemonSpeciesNames.local_language_id, pokemonSpeciesNamesDefault.name) :
+                    new LocalizedText(pokemonSpeciesNamesDefault.name, pokemonSpeciesNamesDefault.local_language_id, pokemonSpeciesNamesDefault.name);
 
             result = await query.FirstOrDefaultAsync();
             //Try get form name
@@ -445,8 +457,8 @@ namespace api.Services
                     from pokemonFormNamesDefault in pokemonFormNamesDefaultJoin.DefaultIfEmpty()
 
                     select pokemonFormNames != null ?
-                        new LocalizedText(pokemonFormNames.pokemon_name != null ? pokemonFormNames.pokemon_name : pokemonFormNames.form_name, pokemonFormNames.local_language_id) :
-                        new LocalizedText(pokemonFormNamesDefault.pokemon_name != null ? pokemonFormNamesDefault.pokemon_name : pokemonFormNamesDefault.form_name, pokemonFormNamesDefault.local_language_id);
+                        new LocalizedText(pokemonFormNames.pokemon_name != null ? pokemonFormNames.pokemon_name : pokemonFormNames.form_name, pokemonFormNames.local_language_id, pokemonFormNamesDefault.pokemon_name) :
+                        new LocalizedText(pokemonFormNamesDefault.pokemon_name != null ? pokemonFormNamesDefault.pokemon_name : pokemonFormNamesDefault.form_name, pokemonFormNamesDefault.local_language_id, pokemonFormNamesDefault.pokemon_name);
                 result = await query.FirstOrDefaultAsync();
             }
 
@@ -587,12 +599,6 @@ namespace api.Services
             {
                 var aux = identifier.Split("-");
                 identifier = aux[0] + "-" + "female";
-            }
-            //Calyrex forms: Ice-Calyrex -> calyrex-ice
-            if (identifier.ToLower().Contains("calyrex") && (identifier.ToLower().Contains("ice") || identifier.ToLower().Contains("shadow")))
-            {
-                var aux = identifier.Split("-");
-                identifier = aux[1] + "-" + aux[0];
             }
 
             return identifier;

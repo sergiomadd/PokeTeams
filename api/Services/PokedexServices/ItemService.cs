@@ -48,9 +48,9 @@ namespace api.Services.PokedexServices
                 select new ItemDTO(
                     items.identifier,
                     new LocalizedText(itemNames != null ? itemNames.name : itemNamesDefault.name,
-                        itemNames != null ? itemNames.local_language_id : itemNamesDefault.local_language_id),
+                        itemNames != null ? itemNames.local_language_id : itemNamesDefault.local_language_id, itemNamesDefault.name),
                     new LocalizedText(Formatter.FormatProse(itemProses != null ? itemProses.effect : itemProsesDefault.effect, baseUrl, null),
-                        itemProses != null ? itemProses.local_language_id : itemProsesDefault.local_language_id),
+                        itemProses != null ? itemProses.local_language_id : itemProsesDefault.local_language_id, itemProsesDefault.effect),
                     $"{itemIconPath}{items.identifier}.png");
 
             item = await query.FirstOrDefaultAsync();
@@ -90,10 +90,10 @@ namespace api.Services.PokedexServices
                     items.identifier,
                     itemNames != null || itemProsesDefault != null ?
                         new LocalizedText(itemNames != null && itemNames.local_language_id == langId ? itemNames.name : itemNamesDefault.name,
-                        itemNames != null && itemNames.local_language_id == langId ? itemNames.local_language_id : itemNamesDefault.local_language_id) : null,
+                        itemNames != null && itemNames.local_language_id == langId ? itemNames.local_language_id : itemNamesDefault.local_language_id, itemNamesDefault.name) : null,
                     itemProses != null || itemProsesDefault != null ?
                         new LocalizedText(Formatter.FormatProse(itemProses != null && itemProses.local_language_id == langId ? itemProses.effect : itemProsesDefault.effect, baseUrl, null),
-                        itemProses != null && itemProses.local_language_id == langId ? itemProses.local_language_id : itemProsesDefault.local_language_id) : null,
+                        itemProses != null && itemProses.local_language_id == langId ? itemProses.local_language_id : itemProsesDefault.local_language_id, itemProsesDefault.effect) : null,
                     $"{itemIconPath}{items.identifier}.png");
 
             item = query != null ? await query.FirstOrDefaultAsync() : null;

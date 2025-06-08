@@ -53,11 +53,9 @@ namespace api.Services.PokedexServices
 
                 select new AbilityDTO(
                     abilities.identifier,
-                    new LocalizedText(abilityNames != null ? abilityNames.name : abilityNamesDefault.name,
-                        abilityNames != null ? abilityNames.local_language_id : abilityNamesDefault.local_language_id),
+                    new LocalizedText(abilityNames.name, abilityNames.local_language_id, abilityNamesDefault.name),
                     new LocalizedText(Formatter.FormatProse(abilityProses != null ? abilityProses.effect : abilityProsesDefault.effect, baseUrl, null),
-                        abilityProses != null ? abilityProses.local_language_id : abilityProsesDefault.local_language_id),
-                    false);
+                        abilityProses != null ? abilityProses.local_language_id : abilityProsesDefault.local_language_id, null), false);
 
             ability = await query.FirstOrDefaultAsync();
 
@@ -95,10 +93,12 @@ namespace api.Services.PokedexServices
                     abilities.identifier,
                     abilityNames != null || abilityNamesDefault != null ?
                         new LocalizedText(abilityNames != null && abilityNames.local_language_id == langId ? abilityNames.name : abilityNamesDefault.name,
-                        abilityNames != null && abilityNames.local_language_id == langId ? abilityNames.local_language_id : abilityNamesDefault.local_language_id) : null,
+                        abilityNames != null && abilityNames.local_language_id == langId ? abilityNames.local_language_id : abilityNamesDefault.local_language_id,
+                        abilityNamesDefault.name) : null,
                     abilityProses != null || abilityProsesDefault != null ?
                         new LocalizedText(Formatter.FormatProse(abilityProses != null && abilityProses.local_language_id == langId ? abilityProses.effect : abilityProsesDefault.effect, baseUrl, null),
-                        abilityProses != null && abilityProses.local_language_id == langId ? abilityProses.local_language_id : abilityProsesDefault.local_language_id) : null,
+                        abilityProses != null && abilityProses.local_language_id == langId ? abilityProses.local_language_id : abilityProsesDefault.local_language_id,
+                        abilityProsesDefault.effect) : null,
                     false);
 
             ability = await query.FirstOrDefaultAsync();

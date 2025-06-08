@@ -1,5 +1,4 @@
-﻿
-namespace api.DTOs.PokemonDTOs
+﻿namespace api.DTOs.PokemonDTOs
 {
     public class PokemonDataDTO
     {

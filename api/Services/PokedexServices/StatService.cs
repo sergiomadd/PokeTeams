@@ -1,4 +1,5 @@
 ﻿using api.Data;
+using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using Microsoft.EntityFrameworkCore;
 
@@ -48,7 +49,7 @@ namespace api.Services.PokedexServices
                 select new StatDTO(
                     stats.identifier,
                     new LocalizedText(statNames != null ? statNames.name : statNamesDefault.name,
-                    statNames != null ? statNames.local_language_id : statNamesDefault.local_language_id),
+                    statNames != null ? statNames.local_language_id : statNamesDefault.local_language_id, statNamesDefault.name),
                     null);
 
             pokeStats = await query.ToListAsync();
@@ -73,7 +74,7 @@ namespace api.Services.PokedexServices
                 select new StatDTO(
                     stats.identifier,
                     new LocalizedText(statNames != null ? statNames.name : statNamesDefault.name,
-                    statNames != null ? statNames.local_language_id : statNamesDefault.local_language_id),
+                    statNames != null ? statNames.local_language_id : statNamesDefault.local_language_id, statNamesDefault.name),
                     pokemonStats.base_stat);
 
             pokeStats = await query.ToListAsync();

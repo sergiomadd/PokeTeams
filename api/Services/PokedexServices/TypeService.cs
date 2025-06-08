@@ -48,8 +48,8 @@ namespace api.Services.PokedexServices
                 select new PokeTypeDTO(
                     types.identifier,
                     typeNames != null ?
-                        new LocalizedText(typeNames.name, typeNames.local_language_id) :
-                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                        new LocalizedText(typeNames.name, typeNames.local_language_id, typeNamesDefault.name) :
+                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id, typeNamesDefault.name),
                     teraType ? $"{pokeTypeTeraIconPath}{types.identifier}.png" : $"{pokeTypeIconPath}{types.identifier}.png",
                     teraType);
 
@@ -76,8 +76,8 @@ namespace api.Services.PokedexServices
                 select new PokeTypeDTO(
                     types.identifier,
                     typeNames != null ?
-                        new LocalizedText(typeNames.name, typeNames.local_language_id) :
-                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                        new LocalizedText(typeNames.name, typeNames.local_language_id, typeNamesDefault.name) :
+                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id, typeNamesDefault.name),
                     teraType ? $"{pokeTypeTeraIconPath}{types.identifier}.png" : $"{pokeTypeIconPath}{types.identifier}.png",
                     teraType);
 
@@ -104,8 +104,8 @@ namespace api.Services.PokedexServices
                 select new PokeTypeWithEffectivenessDTO(
                     types.identifier,
                     typeNames != null ?
-                        new LocalizedText(typeNames.name, typeNames.local_language_id) :
-                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                        new LocalizedText(typeNames.name, typeNames.local_language_id, typeNamesDefault.name) :
+                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id, typeNamesDefault.name),
                     $"{pokeTypeIconPath}{types.identifier}.png",
                     null,
                     null,
@@ -140,8 +140,8 @@ namespace api.Services.PokedexServices
                 select new PokeTypeWithEffectivenessDTO(
                     types.identifier,
                     typeNames != null ?
-                        new LocalizedText(typeNames.name, typeNames.local_language_id) :
-                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                        new LocalizedText(typeNames.name, typeNames.local_language_id, typeNamesDefault.name) :
+                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id, typeNamesDefault.name),
                     teraType ? $"{pokeTypeTeraIconPath}{types.identifier}.png" : $"{pokeTypeIconPath}{types.identifier}.png",
                     null,
                     null,
@@ -270,8 +270,8 @@ namespace api.Services.PokedexServices
                 select new PokeTypeDTO(
                     types.identifier,
                     typeNames != null ?
-                        new LocalizedText(typeNames.name, typeNames.local_language_id) :
-                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                        new LocalizedText(typeNames.name, typeNames.local_language_id, typeNamesDefault.name) :
+                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id, typeNamesDefault.name),
                     $"{pokeTypeIconPath}{types.identifier}.png",
                     false);
 
@@ -305,8 +305,8 @@ namespace api.Services.PokedexServices
                 select new PokeTypeDTO(
                     types.identifier,
                     typeNames != null ?
-                        new LocalizedText(typeNames.name, typeNames.local_language_id) :
-                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id),
+                        new LocalizedText(typeNames.name, typeNames.local_language_id, typeNamesDefault.name) :
+                        new LocalizedText(typeNamesDefault.name, typeNames.local_language_id, typeNamesDefault.name),
                     $"{pokeTypeTeraIconPath}{types.identifier}.png",
                     true);
 

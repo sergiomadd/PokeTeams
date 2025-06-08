@@ -40,7 +40,7 @@ namespace api.Services.PokedexServices
 
                 select new NatureDTO(
                     new LocalizedText(natureNames != null ? natureNames.name : natureNamesDefault.name,
-                        natureNames != null ? natureNames.local_language_id : natureNamesDefault.local_language_id),
+                        natureNames != null ? natureNames.local_language_id : natureNamesDefault.local_language_id, natureNamesDefault.name),
                     natures.identifier,
                     increasedStat.identifier,
                     decreasedStat.identifier);
@@ -78,7 +78,7 @@ namespace api.Services.PokedexServices
 
                 select new NatureDTO(
                     new LocalizedText(natureNames != null ? natureNames.name : natureNamesDefault.name,
-                        natureNames != null ? natureNames.local_language_id : natureNamesDefault.local_language_id),
+                        natureNames != null ? natureNames.local_language_id : natureNamesDefault.local_language_id, natureNamesDefault.name),
                     natures.identifier,
                     increasedStat.identifier,
                     decreasedStat.identifier);
@@ -117,7 +117,7 @@ namespace api.Services.PokedexServices
 
                         select new NatureDTO(
                             new LocalizedText(natureNames != null ? natureNames.name : natureNamesDefault.name,
-                                natureNames != null ? natureNames.local_language_id : natureNamesDefault.local_language_id),
+                                natureNames != null ? natureNames.local_language_id : natureNamesDefault.local_language_id, natureNamesDefault.name),
                             natures.identifier,
                             increasedStat.identifier,
                             decreasedStat.identifier);
