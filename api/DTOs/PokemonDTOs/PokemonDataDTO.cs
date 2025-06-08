@@ -9,6 +9,7 @@ namespace api.DTOs.PokemonDTOs
         public PokeTypesWithEffectivenessDTO? Types { get; set; }
         public List<StatDTO> Stats { get; set; }
         public SpriteDTO? Sprite { get; set; }
+        public bool? Gender { get; set; }
         public EvolutionDTO? PreEvolution { get; set; }
         public List<EvolutionDTO?> Evolutions { get; set; }
         public int? FormId { get; set; }
@@ -21,6 +22,7 @@ namespace api.DTOs.PokemonDTOs
             PokeTypesWithEffectivenessDTO? types, 
             List<StatDTO> stats, 
             SpriteDTO? sprite, 
+            bool? gender = false,
             EvolutionDTO? preEvolution = null, 
             List<EvolutionDTO?>? evolutions = null,
             int? formId = null,
@@ -32,6 +34,7 @@ namespace api.DTOs.PokemonDTOs
             Types = types;
             Stats = stats;
             Sprite = sprite;
+            Gender = gender;
             PreEvolution = preEvolution;
             Evolutions = evolutions ?? new List<EvolutionDTO?>();
             FormId = formId;

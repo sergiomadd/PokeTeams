@@ -306,7 +306,7 @@ namespace api.Services
                 return new PokemonDataDTO(
                     await GetPokemonNameByPokemonId(dexNumber, langId),
                     dexNumber,
-                    //PokemonId IS dexNumber becouse its not a form
+                    //PokemonId IS dexNumber because its not a form
                     dexNumber,
                     await _typeService.GetPokemonTypesWithEffectiveness(dexNumber, langId),
                     await _statService.GetPokemonStats(dexNumber, langId),
@@ -368,6 +368,7 @@ namespace api.Services
                     await _typeService.GetPokemonTypesWithEffectiveness(pokemon_.id, langId),
                     await _statService.GetPokemonStats(pokemon_.id, langId),
                     new SpriteDTO(pokemon_.id, pokemonSpriteUrl),
+                    formIdentifier.Contains("female") ? true : false,
                     preEvolution: await GetPokemonPreEvolution(pokemon_.species_id, langId),
                     evolutions: await GetPokemonEvolutions(pokemon_.species_id, langId),
                     formId: formId,
@@ -571,11 +572,29 @@ namespace api.Services
             {
                 identifier += "-mask";
             }
-            //Tauros-Paldea-Blaze (M)
+            //Tauros-Paldea-Blaze
             if (identifier.Contains("tauros-paldea"))
             {
                 identifier += "-breed";
             }
+            /* Female forms that change pokemon identifier
+             * "meowstic-female"
+             * "indeedee-female"
+             * "basculegion-female"
+             * "oinkologne-female"
+             */
+            if (identifier.ToLower().Contains("f"))
+            {
+                var aux = identifier.Split("-");
+                identifier = aux[0] + "-" + "female";
+            }
+            //Calyrex forms: Ice-Calyrex -> calyrex-ice
+            if (identifier.ToLower().Contains("calyrex") && (identifier.ToLower().Contains("ice") || identifier.ToLower().Contains("shadow")))
+            {
+                var aux = identifier.Split("-");
+                identifier = aux[1] + "-" + aux[0];
+            }
+
             return identifier;
         }
 
