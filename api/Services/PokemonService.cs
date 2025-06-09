@@ -5,6 +5,7 @@ using api.Models.DBModels;
 using api.Models.DBPokedexModels;
 using api.Models.DBPoketeamModels;
 using api.Services.PokedexServices;
+using api.Util;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Services
@@ -23,22 +24,6 @@ namespace api.Services
         private readonly IConfiguration _config;
         private string baseUrl;
         private string pokemonSpriteUrl;
-
-        List<int> excludedForms = new List<int> 
-        { 
-            //Pikachu forms
-            10080, 10081, 10082, 10083, 10084, 10085, 10094, 10095, 10096, 10097, 10098, 10099, 10148, 10158, 10160,
-            //Partner eevee
-            10159,
-            //Totems
-            10093, 10121, 10122, 10128, 10129, 10144, 10145, 10146, 10149, 10150, 10153, 10154,
-            //Cramorang
-            10182, 10183,
-            //Arceus forms
-            10041, 10042, 10043, 10044, 10045, 10046, 10047, 10048, 10049, 10050, 10051, 10052, 10053, 10054, 10055, 10056, 10057, 10085
-        };
-        //[Deoxys, Rotom, Basculin, Oricorio, Lycanroc, Ogerpon, Terapagos]
-        List<int> defaultFormPokemons = new List<int> { 386, 479, 550, 741, 745, 892, 1017, 1024 };
 
         public PokemonService
             (
@@ -275,6 +260,12 @@ namespace api.Services
             if(pokemon != null)
             {
                 int dexNumber = pokemon.species_id;
+                int? formId = null;
+                pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.pokemon_id == pokemonId && p.form_identifier != null);
+                if (pokemon_forms != null)
+                {
+                    formId = pokemon_forms.id;
+                }
                 return new PokemonDataDTO(
                     await GetPokemonNameByPokemonId(pokemonId, langId),
                     dexNumber,
@@ -284,7 +275,7 @@ namespace api.Services
                     new SpriteDTO(pokemonId, pokemonSpriteUrl),
                     preEvolution: await GetPokemonPreEvolution(dexNumber, langId),
                     evolutions: await GetPokemonEvolutions(dexNumber, langId),
-                    formId: null,
+                    formId: formId,
                     forms: await GetPokemonFormsByPokemonId(pokemonId, langId)
                     );
             }
@@ -345,7 +336,7 @@ namespace api.Services
             //Case 3: Name isnt in any names database -> "Urshifu Rapid Strike" OR "Urshifu-Rapid-Strike" (form)
             //Try get the form otherwise
             string formIdentifier = name.ToLower();
-            formIdentifier = HandleFormIdentifierExceptions(formIdentifier);
+            formIdentifier = PokemonEdgeCasesHandler.HandleFormIdentifierEdgeCases(formIdentifier);
             pokemon? pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
             //If not found, try joining with "-"
             //Turn "Urshifu Rapid Strike" -> "urshifu-rapid-strike"
@@ -443,7 +434,7 @@ namespace api.Services
 
             result = await query.FirstOrDefaultAsync();
             //Try get form name
-            if (result == null || IsPokemonDefaultForm(pokemonId))
+            if (result == null || PokemonEdgeCasesHandler.IsPokemonDefaultForm(pokemonId))
             {
                 query =
                     from pokemonForms in _pokedexContext.pokemon_forms.Where(p => p.pokemon_id == pokemonId)
@@ -456,9 +447,15 @@ namespace api.Services
                     on new { Key1 = pokemonForms.id, Key2 = (int)Lang.en } equals new { Key1 = pokemonFormNamesDefault.pokemon_form_id, Key2 = pokemonFormNamesDefault.local_language_id } into pokemonFormNamesDefaultJoin
                     from pokemonFormNamesDefault in pokemonFormNamesDefaultJoin.DefaultIfEmpty()
 
+                    from pokemon in _pokedexContext.pokemon.Where(p => p.id == pokemonId)
+
+                    join pokemonSpeciesNames in _pokedexContext.pokemon_species_names
+                    on new { Key1 = pokemon.species_id, Key2 = langId } equals new { Key1 = pokemonSpeciesNames.pokemon_species_id, Key2 = pokemonSpeciesNames.local_language_id } into pokemonSpeciesNamesJoin
+                    from pokemonSpeciesNames in pokemonSpeciesNamesJoin.DefaultIfEmpty()
+
                     select pokemonFormNames != null ?
-                        new LocalizedText(pokemonFormNames.pokemon_name != null ? pokemonFormNames.pokemon_name : pokemonFormNames.form_name, pokemonFormNames.local_language_id, pokemonFormNamesDefault.pokemon_name) :
-                        new LocalizedText(pokemonFormNamesDefault.pokemon_name != null ? pokemonFormNamesDefault.pokemon_name : pokemonFormNamesDefault.form_name, pokemonFormNamesDefault.local_language_id, pokemonFormNamesDefault.pokemon_name);
+                        new LocalizedText(pokemonFormNames.pokemon_name != null ? pokemonFormNames.pokemon_name : PokemonEdgeCasesHandler.HandleFormNameEdgeCases(pokemonForms.id, pokemonSpeciesNames.name, pokemonFormNames.form_name), pokemonFormNames.local_language_id, PokemonEdgeCasesHandler.HandleFallbackNameEdgeCases(pokemonId, pokemonForms.identifier)):
+                        new LocalizedText(pokemonFormNamesDefault.pokemon_name != null ? pokemonFormNamesDefault.pokemon_name : pokemonFormNamesDefault.form_name, pokemonFormNamesDefault.local_language_id, PokemonEdgeCasesHandler.HandleFallbackNameEdgeCases(pokemonId, pokemonForms.identifier));
                 result = await query.FirstOrDefaultAsync();
             }
 
@@ -530,7 +527,7 @@ namespace api.Services
                 List<pokemon> pokemonList = await _pokedexContext.pokemon.Where(p => p.species_id == pokemonInput.species_id).ToListAsync();
                 if (pokemonList.Count() > 1)
                 {
-                    pokemonList = HandleFormExceptions(pokemonList);
+                    pokemonList = PokemonEdgeCasesHandler.HandleExcludedForms(pokemonList);
                     //Remove input pokemon, get only other forms
                     pokemonList.RemoveAll(p => p.id == pokemonId);
                     foreach (pokemon pokemon in pokemonList)
@@ -561,59 +558,6 @@ namespace api.Services
             return pokemonId;
         }
 
-        private List<pokemon> HandleFormExceptions(List<pokemon> pokemonList)
-        {
-            pokemonList.RemoveAll(p => ArePokemonFormsExcluded(p.id));
-            //If zygarde, non power construct forms (pokemonIds = [718, 10181])
-            if (pokemonList.Any(p => p.species_id == 718))
-            {
-                pokemonList.RemoveAll(p => p.id == 718 || p.id == 10181);
-            }
-            //If eevee, remove partner eevee
-            if (pokemonList.Any(p => p.species_id == 133))
-            {
-                pokemonList.RemoveAll(p => p.id == 10159);
-            }
-            return pokemonList;
-        }
-
-        private string HandleFormIdentifierExceptions(string identifier)
-        {
-            //Ogerpon-Cornerstone
-            if (identifier.Contains("ogerpon"))
-            {
-                identifier += "-mask";
-            }
-            //Tauros-Paldea-Blaze
-            if (identifier.Contains("tauros-paldea"))
-            {
-                identifier += "-breed";
-            }
-            /* Female forms that change pokemon identifier
-             * "meowstic-female"
-             * "indeedee-female"
-             * "basculegion-female"
-             * "oinkologne-female"
-             */
-            if (identifier.ToLower().Contains("f"))
-            {
-                var aux = identifier.Split("-");
-                identifier = aux[0] + "-" + "female";
-            }
-
-            return identifier;
-        }
-
-        private bool ArePokemonFormsExcluded(int pokemonId)
-        {
-            return excludedForms.Contains(pokemonId);
-        }
-
-        private bool IsPokemonDefaultForm(int pokeminId)
-        {
-            return defaultFormPokemons.Contains(pokeminId);
-        }
-
         public async Task<List<QueryResultDTO>> QueryPokemonsByName(string key, int langId)
         {
             List<QueryResultDTO> queryResults = new List<QueryResultDTO>();
@@ -630,8 +574,8 @@ namespace api.Services
                     new QueryResultDTO(pokemonNamesDefault.name, pokemonNames.pokemon_species_id.ToString(), $"{pokemonSpriteUrl}{pokemonNames.pokemon_species_id}.png", "pokemon");
 
             var formsQuery =
-                from pokemonFormNames in _pokedexContext.pokemon_form_names.Where(p => p.pokemon_name != null && p.pokemon_name.ToLower().Contains(key.ToLower()) && p.local_language_id == langId)
-
+                from pokemonFormNames in _pokedexContext.pokemon_form_names.Where(p => (p.pokemon_name != null && p.pokemon_name.ToLower().Contains(key.ToLower()) && (p.local_language_id == langId || p.local_language_id == 9))
+                                                                                            || p.form_name != null && p.form_name.ToLower().Contains(key.ToLower()) && (p.local_language_id == langId || p.local_language_id == 9))
                 join pokemonFormNamesDefault in _pokedexContext.pokemon_form_names
                 on new { Key1 = pokemonFormNames.pokemon_form_id, Key2 = (int)Lang.en } equals new { Key1 = pokemonFormNamesDefault.pokemon_form_id, Key2 = pokemonFormNamesDefault.local_language_id } into pokemonFormNamesDefaultJoin
                 from pokemonFormNamesDefault in pokemonFormNamesDefaultJoin.DefaultIfEmpty()
@@ -640,8 +584,8 @@ namespace api.Services
                 on new { Key1 = pokemonFormNames.pokemon_form_id } equals new { Key1 = pokemonForms.id } into pokemonFormsDefaultJoin
                 from pokemonForms in pokemonFormsDefaultJoin.DefaultIfEmpty()
 
-                select pokemonFormNames != null ? 
-                    new QueryResultDTO(pokemonFormNames.pokemon_name, pokemonForms.pokemon_id.ToString(), $"{pokemonSpriteUrl}{pokemonForms.pokemon_id}.png", "pokemon") :
+                select pokemonFormNames != null ?
+                    new QueryResultDTO(pokemonFormNames.pokemon_name != null ? pokemonFormNames.pokemon_name : pokemonFormNames.form_name, pokemonForms.pokemon_id.ToString(), $"{pokemonSpriteUrl}{pokemonForms.pokemon_id}.png", "pokemon") :
                     new QueryResultDTO(pokemonFormNamesDefault.pokemon_name, pokemonForms.pokemon_id.ToString(), $"{pokemonSpriteUrl}{pokemonForms.pokemon_id}.png", "pokemon");
 
             queryResults = await query.ToListAsync();
@@ -650,7 +594,7 @@ namespace api.Services
 
             queryResults = queryResults.Union(formsQueryResults).DistinctBy(p => p.Identifier).ToList();
 
-            queryResults.RemoveAll(p => p != null && p.Identifier != null && ArePokemonFormsExcluded(Int32.Parse(p.Identifier)));
+            queryResults.RemoveAll(p => p != null && p.Identifier != null && PokemonEdgeCasesHandler.ArePokemonFormsExcluded(Int32.Parse(p.Identifier)));
 
             return queryResults;
         }
