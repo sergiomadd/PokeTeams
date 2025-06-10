@@ -972,8 +972,7 @@
                   {
                     width: getStatSize(calculatedStats.base[i].value),
                     backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat)),
-                    borderRadius: (teamOptions?.showIVs && pokemon.ivs && pokemon.ivs[i] ? (pokemon.ivs[i].value / 4) === 0 ? false : true : false)  ||
-                      (teamOptions?.showEVs && pokemon.evs && pokemon.evs[i] ? (pokemon.evs[i].value / 4) === 0 ? false : true : false) ? ('15px 0 0 15px') : '15px'
+                    borderRadius: getStatBorderRadius(i, 'base')
                   }"
                   >
                   </div>
@@ -984,7 +983,7 @@
                     {
                       width: pokemon.ivs ? getStatSize(calculatedStats.ivs[i]?.value) : 'none',
                       backgroundColor: theme.getStatColor('iv'),
-                      borderRadius: teamOptions?.showEVs && (pokemon.evs && pokemon.evs[i] ? (pokemon.evs[i].value / 4) == 0 ? false : true : false) ? '0' : '0 15px 15px 0'
+                      borderRadius: getStatBorderRadius(i, 'iv')
                     }"
                     >
                     </div>

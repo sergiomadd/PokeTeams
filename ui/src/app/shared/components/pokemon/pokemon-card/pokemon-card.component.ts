@@ -330,6 +330,26 @@ export class PokemonCardComponent
     return "0";
   }
 
+  getStatBorderRadius(i: number, type: string): string 
+  {
+    const ivs = this.pokemon?.ivs?.[i]?.value ?? 0;
+    const evs = this.pokemon?.evs?.[i]?.value ?? 0;
+  
+    const showIVs = this.teamOptions?.showIVs && ivs / 4 !== 0;
+    const showEVs = this.teamOptions?.showEVs && evs / 4 !== 0;
+
+    if(type === "iv")
+    {
+      return showEVs  ? '0' : '0 15px 15px 0';
+    }
+    if(type === "base")
+    {
+      return (showIVs || showEVs) ? '15px 0 0 15px' : '15px';
+    }
+    return "";
+
+  }
+
   calculateStats()
   {
     if(this.pokemon && this.pokemon.stats)
