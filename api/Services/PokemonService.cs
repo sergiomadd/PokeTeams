@@ -454,7 +454,7 @@ namespace api.Services
                     from pokemonSpeciesNames in pokemonSpeciesNamesJoin.DefaultIfEmpty()
 
                     select pokemonFormNames != null ?
-                        new LocalizedText(pokemonFormNames.pokemon_name != null ? pokemonFormNames.pokemon_name : PokemonEdgeCasesHandler.HandleFormNameEdgeCases(pokemonForms.id, pokemonSpeciesNames.name, pokemonFormNames.form_name), pokemonFormNames.local_language_id, PokemonEdgeCasesHandler.HandleFallbackNameEdgeCases(pokemonId, pokemonForms.identifier)):
+                        new LocalizedText(pokemonFormNames.pokemon_name != null ? pokemonFormNames.pokemon_name : PokemonEdgeCasesHandler.HandleFormNameEdgeCases(pokemonSpeciesNames.name, pokemonFormNames.form_name != null ? pokemonFormNames.form_name : pokemonFormNamesDefault.form_name), pokemonFormNames.local_language_id, PokemonEdgeCasesHandler.HandleFallbackNameEdgeCases(pokemonId, pokemonForms.identifier)):
                         new LocalizedText(pokemonFormNamesDefault.pokemon_name != null ? pokemonFormNamesDefault.pokemon_name : pokemonFormNamesDefault.form_name, pokemonFormNamesDefault.local_language_id, PokemonEdgeCasesHandler.HandleFallbackNameEdgeCases(pokemonId, pokemonForms.identifier));
                 result = await query.FirstOrDefaultAsync();
             }
@@ -574,25 +574,31 @@ namespace api.Services
                     new QueryResultDTO(pokemonNamesDefault.name, pokemonNames.pokemon_species_id.ToString(), $"{pokemonSpriteUrl}{pokemonNames.pokemon_species_id}.png", "pokemon");
 
             var formsQuery =
-                from pokemonFormNames in _pokedexContext.pokemon_form_names.Where(p => (p.pokemon_name != null && p.pokemon_name.ToLower().Contains(key.ToLower()) && (p.local_language_id == langId || p.local_language_id == 9))
-                                                                                            || p.form_name != null && p.form_name.ToLower().Contains(key.ToLower()) && (p.local_language_id == langId || p.local_language_id == 9))
-                join pokemonFormNamesDefault in _pokedexContext.pokemon_form_names
-                on new { Key1 = pokemonFormNames.pokemon_form_id, Key2 = (int)Lang.en } equals new { Key1 = pokemonFormNamesDefault.pokemon_form_id, Key2 = pokemonFormNamesDefault.local_language_id } into pokemonFormNamesDefaultJoin
-                from pokemonFormNamesDefault in pokemonFormNamesDefaultJoin.DefaultIfEmpty()
+                from pokemonNames in _pokedexContext.pokemon_form_names.Where(p => (p.pokemon_name != null && p.pokemon_name.ToLower().Contains(key.ToLower()) && p.local_language_id == 9)
+                                                                        || p.form_name != null && p.form_name.ToLower().Contains(key.ToLower()) && p.local_language_id == 9)
+                join pokemonFormsDeName in _pokedexContext.pokemon_forms
+                on new { Key1 = pokemonNames.pokemon_form_id } equals new { Key1 = pokemonFormsDeName.id } into pokemonFormsDeNameDefaultJoin
+                from pokemonFormsDeName in pokemonFormsDeNameDefaultJoin.DefaultIfEmpty()
 
-                join pokemonForms in _pokedexContext.pokemon_forms
-                on new { Key1 = pokemonFormNames.pokemon_form_id } equals new { Key1 = pokemonForms.id } into pokemonFormsDefaultJoin
-                from pokemonForms in pokemonFormsDefaultJoin.DefaultIfEmpty()
+                join pokemon in _pokedexContext.pokemon
+                on new { Key1 = pokemonFormsDeName.pokemon_id } equals new { Key1 = pokemon.id } into pokemonDefaultJoin
+                from pokemon in pokemonDefaultJoin.DefaultIfEmpty()
 
-                select pokemonFormNames != null ?
-                    new QueryResultDTO(pokemonFormNames.pokemon_name != null ? pokemonFormNames.pokemon_name : pokemonFormNames.form_name, pokemonForms.pokemon_id.ToString(), $"{pokemonSpriteUrl}{pokemonForms.pokemon_id}.png", "pokemon") :
-                    new QueryResultDTO(pokemonFormNamesDefault.pokemon_name, pokemonForms.pokemon_id.ToString(), $"{pokemonSpriteUrl}{pokemonForms.pokemon_id}.png", "pokemon");
+                join pokemonNamesLocalReal in _pokedexContext.pokemon_species_names
+                on new { Key1 = pokemon.species_id, Key2 = langId } equals new { Key1 = pokemonNamesLocalReal.pokemon_species_id, Key2 = pokemonNamesLocalReal.local_language_id } into pokemonNamesLocalRealDefaultJoin
+                from pokemonNamesLocalReal in pokemonNamesLocalRealDefaultJoin.DefaultIfEmpty()
+
+                join pokemonLocalNames in _pokedexContext.pokemon_form_names
+                on new { Key1 = pokemonNames.pokemon_form_id, Key2 = langId } equals new { Key1 = pokemonLocalNames.pokemon_form_id, Key2 = pokemonLocalNames.local_language_id } into pokemonLocalNamesDefaultJoin
+                from pokemonLocalNames in pokemonLocalNamesDefaultJoin.DefaultIfEmpty()
+
+                select new QueryResultDTO(pokemonLocalNames.pokemon_name != null ? pokemonLocalNames.pokemon_name : PokemonEdgeCasesHandler.HandleFormNameEdgeCases(pokemonNamesLocalReal.name, pokemonLocalNames.form_name != null ? pokemonLocalNames.form_name : pokemonNames.form_name), pokemonFormsDeName.pokemon_id.ToString(), $"{pokemonSpriteUrl}{pokemonFormsDeName.pokemon_id}.png", "pokemon");
 
             queryResults = await query.ToListAsync();
 
             var formsQueryResults = await formsQuery.ToListAsync();
 
-            queryResults = queryResults.Union(formsQueryResults).DistinctBy(p => p.Identifier).ToList();
+            queryResults = formsQueryResults.Union(queryResults).DistinctBy(p => p.Identifier).ToList();
 
             queryResults.RemoveAll(p => p != null && p.Identifier != null && PokemonEdgeCasesHandler.ArePokemonFormsExcluded(Int32.Parse(p.Identifier)));
 
