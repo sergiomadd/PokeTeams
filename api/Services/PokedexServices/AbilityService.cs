@@ -98,7 +98,7 @@ namespace api.Services.PokedexServices
                     abilityProses != null || abilityProsesDefault != null ?
                         new LocalizedText(Formatter.FormatProse(abilityProses != null && abilityProses.local_language_id == langId ? abilityProses.effect : abilityProsesDefault.effect, baseUrl, null),
                         abilityProses != null && abilityProses.local_language_id == langId ? abilityProses.local_language_id : abilityProsesDefault.local_language_id,
-                        abilityProsesDefault.effect) : null,
+                        null) : null,
                     false);
 
             ability = await query.FirstOrDefaultAsync();

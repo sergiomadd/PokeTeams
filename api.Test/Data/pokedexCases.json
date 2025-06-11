@@ -11,7 +11,8 @@
           "identifier": "awakening",
           "name": {
             "content": "Awakening",
-            "language": "en"
+            "language": "en",
+            "identifier":"Awakening"
           },
           "prose": {
             "content": "Used on a party Pokémon\n:   Cures [sleep](https://bulbapedia.bulbagarden.net/wiki/Sleep_(status_condition)){mechanic}.",
@@ -69,7 +70,8 @@
           "name":
           {
             "content": "Stench",
-            "language": "en"
+            "language": "en",
+            "identifier":"Stench"
           },
           "prose":
           {
@@ -134,7 +136,8 @@
             "identifier": "aerial-ace",
             "name": {
                 "content": "Aerial Ace",
-                "language": "en"
+                "language": "en",
+                "identifier":"Aerial Ace"
             },
             "pokeType": {
                 "identifier": "flying",
@@ -501,7 +504,8 @@
             "identifier": "aerial-ace",
             "name": {
                 "content": "Aerial Ace",
-                "language": "en"
+                "language": "en",
+                "identifier":"Aerial Ace"
             },
             "pokeType": {
                 "identifier": "flying",
@@ -512,7 +516,7 @@
                 "iconPath": "https://localhost:7134/images/types/flying.png",
                 "teratype": false
             }
-        },
+        }
       },
       "query1":
       {
@@ -556,7 +560,8 @@
           "name":
           {
             "content": "Bold",
-            "language": "en"
+            "language": "en",
+            "identifier":"Bold"
           },
           "identifier": "bold",
           "increasedStatIdentifier": "defense",
@@ -1183,7 +1188,8 @@
           "identifier": "awakening",
           "name": {
             "content": "Despertar",
-            "language": "es"
+            "language": "es",
+            "identifier":"Awakening"
           },
           "prose": {
             "content": "Used on a party Pokémon\n:   Cures [sleep](https://bulbapedia.bulbagarden.net/wiki/Sleep_(status_condition)){mechanic}.",
@@ -1229,7 +1235,8 @@
           "name":
           {
             "content": "Hedor",
-            "language": "es"
+            "language": "es",
+            "identifier":"Stench"
           },
           "prose":
           {
@@ -1306,7 +1313,8 @@
     "identifier": "aerial-ace",
     "name": {
         "content": "Golpe Aéreo",
-        "language": "es"
+        "language": "es",
+        "identifier":"Aerial Ace"
     },
     "pokeType": {
         "identifier": "flying",
@@ -1673,7 +1681,8 @@
             "identifier": "aerial-ace",
             "name": {
                 "content": "Golpe Aéreo",
-                "language": "es"
+                "language": "es",
+                "identifier":"Aerial Ace"
             },
             "pokeType": {
                 "identifier": "flying",
@@ -1734,7 +1743,8 @@
           "name":
           {
             "content": "Osada",
-            "language": "es"
+            "language": "es",
+            "identifier":"Bold"
           },
           "identifier": "bold",
           "increasedStatIdentifier": "defense",
