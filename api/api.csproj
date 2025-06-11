@@ -42,4 +42,16 @@
 		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</Content>
 </ItemGroup>
+
+	<ItemGroup>
+		<Content Remove="Data\Util\**" />
+		<None Remove="Data\Util\**" />
+	</ItemGroup>
+
+	<Target Name="ExcludeMigrationsFromPublish" BeforeTargets="ComputeFilesToPublish">
+		<ItemGroup>
+			<FilesForPublish Remove="@(FilesForPublish)" Condition=" '$(MSBuildThisFileDirectory)' != '' and $([System.String]::Copy('%(RelativePath)').StartsWith('Data\Util/')) " />
+		</ItemGroup>
+	</Target>
+	
 </Project>
