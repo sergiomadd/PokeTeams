@@ -338,27 +338,33 @@ namespace api.Services
             string formIdentifier = name.ToLower();
             formIdentifier = PokemonEdgeCasesHandler.HandleFormIdentifierEdgeCases(formIdentifier);
             pokemon? pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
-            //If not found, try joining with "-"
-            //Turn "Urshifu Rapid Strike" -> "urshifu-rapid-strike"
             if (pokemon_ == null)
             {
-                //If not found, try joining with "-" and reversing
-                //Turn "Rapid-Strike-Urshifu" -> "urshifu-rapid-strike"
-                //Calyrex forms: Ice-Calyrex -> calyrex-ice
-                if (name.Contains("-"))
+                //If not found, try getting it by form identifier
+                pokemon_forms? pokemon_forms = await _pokedexContext.pokemon_forms.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
+                if(pokemon_forms != null)
                 {
-                    var parts = name.ToLower().Split("-", StringSplitOptions.RemoveEmptyEntries);
-                    //formIdentifier = String.Join("-", name.ToLower().Split("-").Reverse().ToArray());
-                    var reordered = new[] { parts[^1] }.Concat(parts.Take(parts.Length - 1));
-                    formIdentifier = String.Join("-", reordered);
-                    pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
+                    pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.id == pokemon_forms.pokemon_id);
                 }
                 else
                 {
-                    formIdentifier = String.Join("-", name.ToLower().Split(" "));
-                    pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
+                    //If not found, try joining with "-" and reversing
+                    //Turn "Rapid-Strike-Urshifu" -> "urshifu-rapid-strike"
+                    //Calyrex forms: Ice-Calyrex -> calyrex-ice
+                    if (name.Contains("-"))
+                    {
+                        var parts = name.ToLower().Split("-", StringSplitOptions.RemoveEmptyEntries);
+                        //formIdentifier = String.Join("-", name.ToLower().Split("-").Reverse().ToArray());
+                        var reordered = new[] { parts[^1] }.Concat(parts.Take(parts.Length - 1));
+                        formIdentifier = String.Join("-", reordered);
+                        pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
+                    }
+                    else
+                    {
+                        formIdentifier = String.Join("-", name.ToLower().Split(" "));
+                        pokemon_ = await _pokedexContext.pokemon.FirstOrDefaultAsync(p => p.identifier == formIdentifier);
+                    }
                 }
-
             }
             if (pokemon_ != null)
             {

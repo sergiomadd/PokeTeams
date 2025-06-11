@@ -114,8 +114,6 @@ namespace api.Util
         { 
             //Pikachu forms
             10080, 10081, 10082, 10083, 10084, 10085, 10094, 10095, 10096, 10097, 10098, 10099, 10148, 10158, 10160,
-            //Pichu forms
-
             //Partner eevee
             10159,
             //Totems
