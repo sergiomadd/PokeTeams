@@ -96,13 +96,13 @@ export class ParserService {
   {
     let pokePaste: string = ""
     pokePaste = pokePaste + this.getReverseName(pokemon);
-    if(pokemon.ability){ pokePaste = pokePaste + `Ability: ${pokemon.ability.name.fallback}\n` }
+    if(pokemon.ability){ pokePaste = pokePaste + `Ability: ${pokemon.ability.name.identifier}\n` }
     if(pokemon.level){pokePaste = pokePaste + `Level: ${pokemon.level}\n`}
     if(pokemon.shiny)
     {
       if(pokemon.shiny) {pokePaste = pokePaste + `Shiny: Yes\n`}
     }
-    if(pokemon.teraType){pokePaste = pokePaste + `Tera Type: ${pokemon.teraType.name.fallback}\n`}
+    if(pokemon.teraType){pokePaste = pokePaste + `Tera Type: ${pokemon.teraType.name.identifier}\n`}
     if(pokemon.evs && pokemon.evs.some(e => e.value > 0))
     {
       let evLine = "EVs:";
@@ -114,7 +114,7 @@ export class ParserService {
       evLine = evLine + evs.join("/") + "\n";
       pokePaste = pokePaste + evLine;
     }
-    if(pokemon.nature){pokePaste = pokePaste + `${pokemon.nature.name.fallback} Nature\n`}
+    if(pokemon.nature){pokePaste = pokePaste + `${pokemon.nature.name.identifier} Nature\n`}
     if(pokemon.ivs && pokemon.ivs.some(i => i.value > 0 && i.value !== 31))
     {
       let ivLine = "IVs:";
@@ -130,7 +130,7 @@ export class ParserService {
     {
       pokemon.moves.forEach(move => 
       {
-        pokePaste = pokePaste + `- ${move?.name.fallback}\n`;
+        pokePaste = pokePaste + `- ${move?.name.identifier}\n`;
       });
     }
     return pokePaste;
@@ -139,10 +139,10 @@ export class ParserService {
   getReverseName(pokemon: Pokemon) : string
   {
     let line: string = "";
-    let name: string = pokemon.name?.fallback ?? "";
+    let name: string = pokemon.name?.identifier ?? "";
     if(pokemon.nickname && pokemon.item)
     {
-      line = `${pokemon.nickname} (${name}) @ ${pokemon.item?.name.fallback}` 
+      line = `${pokemon.nickname} (${name}) @ ${pokemon.item?.name.identifier}` 
     }
     else if(pokemon.nickname)
     {
@@ -150,7 +150,7 @@ export class ParserService {
     }
     else if(pokemon.item)
     {
-      line = `${name} @ ${pokemon.item.name?.fallback}` 
+      line = `${name} @ ${pokemon.item.name?.identifier}` 
     }
     else
     {
