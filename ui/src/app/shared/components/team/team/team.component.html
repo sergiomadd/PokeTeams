@@ -51,7 +51,7 @@
           </div>
           <app-tooltip
           [text]="'Unoficial'"
-          [text]="'team.team.unofficial_player-tooltip' | translate"
+          [text]="'team.team.unofficial_player-tooltip' | translate:{ name: team?.player?.username }"
           [side]="'top'"
           ></app-tooltip>
         </div>
@@ -77,7 +77,7 @@
           <span class="no-overflow">{{team?.user?.username}}</span>
         </div>
         <app-tooltip
-        [text]="isPlayerSameAsUser ? ('team.team.uploaded_and_played_by-tooltip' | translate) : ('team.team.uploaded_by-tooltip' | translate)"
+        [text]="isPlayerSameAsUser ? ('team.team.uploaded_and_played_by-tooltip' | translate:{ name: team?.user?.username }) : ('team.team.uploaded_by-tooltip' | translate:{ name: team?.user?.username })"
         [side]="'top'"
         ></app-tooltip>
       </div>
