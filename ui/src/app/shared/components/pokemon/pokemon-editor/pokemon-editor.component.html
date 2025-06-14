@@ -81,6 +81,9 @@
               </ng-template>
             </div>
           </div>
+          <ng-container *ngIf="window.isMobile()">
+            <ng-container *ngTemplateOutlet="natureInput"></ng-container>
+          </ng-container>
           <app-smart-input
           [value]="queryService.getMoveQueryResult(pokemon.moves ? pokemon.moves[0] : undefined)"
           [label]="'team.pokemon_editor.move' | translate:{'index':1}"
@@ -97,15 +100,9 @@
           (selectEvent)="move2SelectEvent($event)"
           class="smart-input-wrapper form-item"
           ></app-smart-input>
-          <app-smart-input
-          [value]="queryService.getNatureQueryResult(pokemon.nature)"
-          [label]="'shared.pokemon.nature' | translate"
-          [keepSelected]="true"
-          [getter]="queryService.queryNatureCallback"
-          [allGetter]="queryService.naturesAllCallback"
-          (selectEvent)="natureSelectEvent($event)"
-          class="smart-input-wrapper form-item"
-          ></app-smart-input>
+          <ng-container *ngIf="!window.isMobile()">
+            <ng-container *ngTemplateOutlet="natureInput"></ng-container>
+          </ng-container>
           <app-smart-input
           [value]="queryService.getMoveQueryResult(pokemon.moves ? pokemon.moves[2] : undefined)"
           [label]="'team.pokemon_editor.move' | translate:{'index':3}"
@@ -130,6 +127,7 @@
           [allGetter]="queryService.teraTypesAllCallback"
           (selectEvent)="teraTypeSelectEvent($event)"
           class="smart-input-wrapper form-item"
+          [ngStyle]="{'grid-column': window.isMobile() ? '1 / 3' : '0'}"
           ></app-smart-input>
         </div>
         <div class="flex-col gap-s w-100">
@@ -318,4 +316,17 @@
       </g>
     </svg>
   </div>
+</ng-template>
+<ng-template #natureInput>
+  <ng-container *ngIf="pokemon">
+    <app-smart-input
+    [value]="queryService.getNatureQueryResult(pokemon.nature)"
+    [label]="'shared.pokemon.nature' | translate"
+    [keepSelected]="true"
+    [getter]="queryService.queryNatureCallback"
+    [allGetter]="queryService.naturesAllCallback"
+    (selectEvent)="natureSelectEvent($event)"
+    class="smart-input-wrapper form-item"
+    ></app-smart-input>
+  </ng-container>
 </ng-template>
