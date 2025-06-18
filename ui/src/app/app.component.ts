@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { SeoService } from './core/helpers/seo.service';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +10,11 @@ export class AppComponent
 {
   title = 'PokeTeams';
   menuOpen: boolean = false;
+  seo = inject(SeoService);
 
   constructor() 
   {
+    this.seo.updateMetaData();
   }
 
   toggleMenu()
