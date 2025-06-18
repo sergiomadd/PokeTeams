@@ -1,9 +1,11 @@
-# PokeTeams
+<h1 align="start">
+  <img src="ui/src/assets/img/logo.png" width="40" height="40" /> PokeTeams
+</h1>
+<a href="https://poketeams.com" target="_blank">poketeams.com</a> is an free and open source website aimed at helping players learn and play with a specific pokemon team. It also allows for saving and sharing your pokemon teams, letting you have your pokepastes stored all in the same place.
+<br></br>
 
-PokeTeams is an free and open source website aimed at helping players learn and play with a specific pokemon team. It also allows for saving and sharing your pokemon teams, letting you have your pokepastes stored all in the same place.
-
-![Website Preview](preview.png)
-
+![Website Preview](media/img/home3.PNG)
+![Website Preview2](media/img/team1.PNG)
 
 ## Contribute
 
