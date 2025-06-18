@@ -49,6 +49,7 @@
     },
     "input":
     {
+      "load": "Load",
       "paste": "Paste",
       "editor": "Editor",
       "example": "Load paste example"
