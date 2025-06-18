@@ -9,6 +9,7 @@ using api.DTOs.PokemonDTOs;
 using Microsoft.AspNetCore.Identity;
 using System.Linq.Expressions;
 using LinqKit;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace api.Services
 {
@@ -328,11 +329,16 @@ namespace api.Services
 
             try
             {
+                if(inputTeam != null && inputTeam.ID != null && inputTeam.ID == "example")
+                {
+                    return await HandleExampleTeam(inputTeam);
+                }
                 //No need to check if id exists (collision virtually imposible)
                 string teamId = Generator.GenerateId(10);
                 newTeam = await BreakTeamDTO(inputTeam, teamId);
                 if (newTeam != null)
                 {
+
                     await _pokeTeamContext.Team.AddAsync(newTeam);
                     await _pokeTeamContext.SaveChangesAsync();
                 }
@@ -343,6 +349,35 @@ namespace api.Services
                 return null;
             }
             return newTeam;
+        }
+
+        //Keep only 1 example team at a time
+        public async Task<Team?> HandleExampleTeam(TeamDTO inputTeam)
+        {
+            Team? team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == inputTeam.ID);
+            if (team != null)
+            {
+                Team? newExampleTeam = await BreakTeamDTO(inputTeam, inputTeam.ID);
+                if (newExampleTeam != null)
+                {
+                    //Remove TeamPokemons from previous team to avoid duplication
+                    await _pokeTeamContext.TeamPokemon.Where(p => p.TeamId == team.Id).ExecuteDeleteAsync();
+                    UpdateTeamProperties(team, newExampleTeam);
+                    await _pokeTeamContext.SaveChangesAsync();
+                    return newExampleTeam;
+                }
+            }
+            else
+            {
+                Team? newExampleTeam = await BreakTeamDTO(inputTeam, inputTeam.ID);
+                if (newExampleTeam != null)
+                {
+                    await _pokeTeamContext.Team.AddAsync(newExampleTeam);
+                    await _pokeTeamContext.SaveChangesAsync();
+                    return newExampleTeam;
+                }
+            }
+            return null;
         }
 
         public async Task<Team?> UpdateTeam(TeamDTO inputTeam, string currentTeamID)
@@ -718,6 +753,10 @@ namespace api.Services
             if (inputTeam.Pokemons == null || inputTeam.Pokemons.Count == 0)
             {
                 return "No pokemons loaded";
+            }
+            if (inputTeam.Pokemons == null || inputTeam.Pokemons.Count > 6)
+            {
+                return "Too many pokemons";
             }
             if (inputTeam.Pokemons != null && inputTeam.Pokemons.Any(p => p != null
                 && ((p.DexNumber != null && p.DexNumber < 1)
