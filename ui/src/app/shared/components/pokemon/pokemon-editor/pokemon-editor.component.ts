@@ -177,7 +177,6 @@ export class PokemonEditorComponent
           gender: value
         }
         this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-
       }
     });
     
@@ -363,7 +362,6 @@ export class PokemonEditorComponent
     }
   }
 
-
   calcIVSliderBackground(currentValue, min, max)
   {
     const ivColor = this.theme.getStatColor("iv");
@@ -485,10 +483,10 @@ export class PokemonEditorComponent
         ...this.pokemon,
         ivs: this.pokemon?.ivs
       }
-      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex); 
       this.currentIVs = this.pokemon.ivs[0].value;
       this.calcIVSliderBackground(this.pokemon.ivs[0].value, 0, 31);
     }
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   resetEVs()
@@ -504,11 +502,11 @@ export class PokemonEditorComponent
         ...this.pokemon,
         evs: this.pokemon?.evs
       }
-      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex); 
       this.currentEVs = this.pokemon.evs[0].value;
       this.remainingEVs = this.maxEVsTotal;
       this.calcEVSliderBackground(this.pokemon.evs[0].value, 0, this.maxEVs);
     }
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async pokemonSelectEvent(event: QueryItem)
@@ -558,8 +556,8 @@ export class PokemonEditorComponent
           this.pokemonPreviewComponent.showStats[0] = false;
         }
       }
-      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async itemSelectEvent(event: QueryItem)
@@ -567,8 +565,8 @@ export class PokemonEditorComponent
     if(this.pokemon)
     {
       this.pokemon = { ...this.pokemon, item: event ? await this.pokemonService.getItemByName(event.name) : undefined }
-      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async abilitySelectEvent(event: QueryItem)
@@ -588,8 +586,8 @@ export class PokemonEditorComponent
       {
         this.pokemon = { ...this.pokemon, ability: undefined }
       }
-      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async move1SelectEvent(event: QueryItem)
@@ -597,8 +595,8 @@ export class PokemonEditorComponent
     if(this.pokemon)
     {
       this.pokemon.moves[0] = event ? await this.pokemonService.getMove(event.name) : undefined;
-      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async move2SelectEvent(event: QueryItem)
@@ -606,8 +604,8 @@ export class PokemonEditorComponent
     if(this.pokemon)
     {
       this.pokemon.moves[1] = event ? await this.pokemonService.getMove(event.name) : undefined;
-      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async move3SelectEvent(event: QueryItem)
@@ -615,8 +613,8 @@ export class PokemonEditorComponent
     if(this.pokemon)
     {
       this.pokemon.moves[2] = event ? await this.pokemonService.getMove(event.name) : undefined;
-      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async move4SelectEvent(event: QueryItem)
@@ -624,8 +622,8 @@ export class PokemonEditorComponent
     if(this.pokemon)
     {
       this.pokemon.moves[3] = event ? await this.pokemonService.getMove(event.name) : undefined;
-      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async natureSelectEvent(event: QueryItem)
@@ -633,8 +631,8 @@ export class PokemonEditorComponent
     if(this.pokemon)
     {
       this.pokemon.nature = event ? await this.pokemonService.getNatureByName(event.name) : undefined;
-      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   async teraTypeSelectEvent(event: QueryItem)
@@ -643,19 +641,20 @@ export class PokemonEditorComponent
     {
       this.pokemon.teraType = event ? await this.pokemonService.getType(event.identifier, true) : undefined;
     }
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   shinySelectEvent(event: boolean)
   {
-    if(this.pokemon)
+    if(this.pokemon && this.pokemon.shiny !== event)
     {
       this.pokemon = 
       { 
         ...this.pokemon,
         shiny: event
       }
-      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
     }
+    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
   genderSelectEvent(event: any)
