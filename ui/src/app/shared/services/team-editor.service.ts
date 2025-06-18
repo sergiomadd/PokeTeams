@@ -17,6 +17,10 @@ export class TeamEditorService
   private team$: BehaviorSubject<Team> = new BehaviorSubject<Team>(<Team>{});
   selectedTeam$ = this.team$.asObservable();
 
+  private _exampleTeamModified$: BehaviorSubject<boolean | undefined> = new BehaviorSubject<boolean | undefined>(undefined);
+  exampleTeamModified$ = this._exampleTeamModified$.asObservable();
+
+
   constructor() 
   {
     this.setEmptyTeam();
@@ -61,6 +65,7 @@ export class TeamEditorService
     {
       this.team$.getValue().pokemons.splice(index, 1)
       this.updatePokemons(this.team$.getValue().pokemons);
+      this.setExampleTeamModified(true);
       return true;
     }
     else { return false }
@@ -74,15 +79,14 @@ export class TeamEditorService
         pokemons: [...updatedPokemons]
       }
     );
-    //no hay problem con hacer next y spread -> 
-    //el problema es que se reemplaza el pokemon entero?
   }
 
-  updatePokemon(pokemon: Pokemon | undefined, index: number)
+  updatePokemon(pokemon: Pokemon | undefined, index: number, firstLoad?: boolean)
   {
     const pokemonsToUpdate: (Pokemon | null | undefined)[] = this.team$.getValue().pokemons;
     pokemonsToUpdate[index] = pokemon;
     this.updatePokemons(pokemonsToUpdate);
+    if(!firstLoad) { this.setExampleTeamModified(true); }
   }
 
   validateTeam(team: Team): string | undefined
@@ -159,5 +163,10 @@ export class TeamEditorService
     }
     
     return options;
+  }
+
+  setExampleTeamModified(value?: boolean)
+  {
+    this._exampleTeamModified$.next(value);
   }
 }

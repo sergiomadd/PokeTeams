@@ -43,7 +43,8 @@
         "player": "El nombre del jugador debe ser menor que {{maxlength}}",
         "tournament": "El nombre del torneo debe ser menor que {{maxlength}}",
         "rental_Code": "El codigo rental debe ser menor que {{maxlength}}",
-        "title": "El título debe ser menor que {{maxlength}}"
+        "title": "El título debe ser menor que {{maxlength}}",
+        "example": "El equipo de ejemplo sera eliminado cuando se genere otro nuevo equipo de ejemplo si no se modifica, para evitar duplicados"
       }
     },
     "input":

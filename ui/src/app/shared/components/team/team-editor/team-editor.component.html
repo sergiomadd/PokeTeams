@@ -166,6 +166,9 @@
     </ng-container>
     <div class="flex flex-col gap-s justify-c-c align-i-c text-center">
       <span class="formFeedbackError">{{feedback}}</span>
+      <ng-container *ngIf="exampleTeamModified === false">
+        <span class="formFeedbackError">{{'team.editor.errors.example' | translate}}</span>
+      </ng-container>
     </div>
   </div>
   <div class="team-holder">

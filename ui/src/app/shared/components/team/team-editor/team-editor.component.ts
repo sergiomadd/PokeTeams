@@ -66,6 +66,7 @@ export class TeamEditorComponent
   tagAlreadyAdded: boolean = false;
   feedback?: string;
   teamPrivateFeedback: boolean = false;
+  exampleTeamModified?: boolean = undefined;
   readonly feedbackColors = FeedbackColors;
 
   @ViewChild('playerInput') playerInput?: SmartInputComponent;
@@ -77,11 +78,27 @@ export class TeamEditorComponent
       this.team = value;
       this.currentTags = value.tags?.length ?? 0;
       this.disableTagInput = this.currentTags >= this.maxTags ? true : false;
-      console.log(this.disableTagInput)
       if(this.teamComponent)
       {
         this.teamComponent.showAllStats = false;
         this.teamComponent.showAllNotes = false;
+      }
+      if(this.team.id === "example")
+      {
+        this.teamEditorService.setExampleTeamModified(false);
+      }
+      else
+      {
+        this.teamEditorService.setExampleTeamModified(undefined);
+      }
+    });
+    //If the example paste team is modified, save it as a new team
+    this.teamEditorService.exampleTeamModified$.subscribe((value) => 
+    {
+      this.exampleTeamModified = value;
+      if(value && this.team && this.team.id)
+      {
+        this.team.id = "";
       }
     });
     this.loggedUser$.subscribe(async (value: User | null) => 
@@ -120,12 +137,14 @@ export class TeamEditorComponent
             registered: false
           };
           this.teamComponent.checkUserToPlayer();
+          this.teamEditorService.setExampleTeamModified(true);
           return;
         }
       }
       else
       {
         this.team.player = undefined
+        this.teamEditorService.setExampleTeamModified(false); 
       }
     })
     this.teamForm.controls.rental.valueChanges.subscribe(value =>
@@ -135,15 +154,18 @@ export class TeamEditorComponent
         if(value.length <= 32)
         {
           this.team.rentalCode = value 
+          this.teamEditorService.setExampleTeamModified(true);
         }
       }
       else
       {
         this.team.rentalCode = undefined;
+        this.teamEditorService.setExampleTeamModified(false); 
       }
     })
     this.teamForm.controls.title.valueChanges.subscribe(value =>
     {
+      this.teamEditorService.setExampleTeamModified(true);
       if(value)
       {
         if(value.length <= 128)
@@ -190,11 +212,13 @@ export class TeamEditorComponent
   async tournamentSelectEvent(event: QueryItem)
   {
     this.team.tournament = event ? await this.teamService.getTournamentByIdentifier(event.identifier) : undefined;
+    if(this.team.tournament) { this.teamEditorService.setExampleTeamModified(true); }
   }
 
   async regulationSelectEvent(event: QueryItem)
   {
     this.team.regulation = event ? await this.teamService.getRegulationByIdentifier(event.identifier) : undefined;
+    if(this.team.regulation) { this.teamEditorService.setExampleTeamModified(true); }
   }
 
   @ViewChild(TagEditorComponent) tagEditorComponent!: TagEditorComponent;
@@ -223,6 +247,7 @@ export class TeamEditorComponent
           this.disableTagSelector();
         }
         this.currentTags = this.team?.tags ? this.team?.tags?.length : 0;
+        this.teamEditorService.setExampleTeamModified(true);
       }
       else if(this.team.tags.some(t => t.identifier == tag.identifier))
       {
@@ -244,6 +269,7 @@ export class TeamEditorComponent
           this.disableTagSelector();
         }
         this.currentTags = this.team?.tags ? this.team?.tags?.length : 0;
+        this.teamEditorService.setExampleTeamModified(true);
       }
       else if(this.team.tags.some(t => t.identifier == tag.identifier))
       {
@@ -289,6 +315,7 @@ export class TeamEditorComponent
 
   showIVsCheckEvent($event: boolean)
   {
+    this.teamEditorService.setExampleTeamModified(true);
     if(this.team.visibility)
     {
       this.team.options.ivsVisibility = $event;
@@ -302,6 +329,7 @@ export class TeamEditorComponent
 
   showEVsCheckEvent($event: boolean)
   {
+    this.teamEditorService.setExampleTeamModified(true);
     if(this.team.visibility)
     {
       this.team.options.evsVisibility = $event;
@@ -315,6 +343,7 @@ export class TeamEditorComponent
 
   showNatureCheckEvent($event: boolean)
   {
+    this.teamEditorService.setExampleTeamModified(true);
     if(this.team.visibility)
     {
       this.team.options.naturesVisibility = $event; 
@@ -328,6 +357,7 @@ export class TeamEditorComponent
 
   teamVisibiltyCheckEvent($event: boolean)
   {
+    this.teamEditorService.setExampleTeamModified(true);
     this.team.visibility = $event; 
     if(!this.team.visibility)
     {
