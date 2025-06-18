@@ -122,6 +122,7 @@ export class PasteInputComponent
     this.pasteHolder = "";
     this.pasteBoxForm.controls.paste.setValue("");
     this.pasteBoxFormSubmitted = false;
+    this.teamEditorService.setEmptyTeam();
   }
 
   loadExamplePaste()
