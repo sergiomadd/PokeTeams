@@ -37,6 +37,7 @@ import { TeamTableComponent } from './components/team/team-table/team-table.comp
 import { TeamComponent } from './components/team/team/team.component';
 import { TournamentPreviewComponent } from './components/team/tournament-preview/tournament-preview.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
+import { AuthFormComponent } from './components/layout/auth-form/auth-form.component';
 
 @NgModule({
   declarations: 
@@ -80,6 +81,7 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
     AboutComponent,
     RegulationPreviewComponent,
     ResetPasswordComponent,
+    AuthFormComponent,
   ],
   imports: 
   [

@@ -1,0 +1,54 @@
+.auth-form
+{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9;
+  background-color: var(--bg-color-1);
+  padding: 2em;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 10px;
+}
+
+.close-button
+{
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+}
+
+.title
+{
+  font-size: 1.4em;
+  font-weight: 700;
+}
+
+.item
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.2em;
+  overflow: hidden;
+  padding: 0.2em;
+  width: 100%;
+  box-sizing: border-box;
+
+  label
+  {
+    font-weight: 500;
+  }
+  
+  input
+  {
+    width: 15em;
+    background-color: var(--bg-color-2);
+  }
+}
+
+.input-feedback
+{
+  min-height: 0.8em;
+}

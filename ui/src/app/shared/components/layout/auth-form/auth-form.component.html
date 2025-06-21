@@ -1,0 +1,201 @@
+<ng-container *ngIf="data$ | async as data">
+  <div class="auth-form flex-col justify-c-c align-i-c gap-m">
+    <button (click)="closeSelf()" class="close-button icon-button icon-l">
+      <svg viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg">
+        <path fill="var(--error)" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"/>
+        <path fill="var(--white)" d="M8.96967 8.96967C9.26256 8.67678 9.73744 8.67678 10.0303 8.96967L12 10.9394L13.9697 8.96969C14.2626 8.6768 14.7374 8.6768 15.0303 8.96969C15.3232 9.26258 15.3232 9.73746 15.0303 10.0304L13.0607 12L15.0303 13.9696C15.3232 14.2625 15.3232 14.7374 15.0303 15.0303C14.7374 15.3232 14.2625 15.3232 13.9696 15.0303L12 13.0607L10.0304 15.0303C9.73746 15.3232 9.26258 15.3232 8.96969 15.0303C8.6768 14.7374 8.6768 14.2626 8.96969 13.9697L10.9394 12L8.96967 10.0303C8.67678 9.73744 8.67678 9.26256 8.96967 8.96967Z"/>
+      </svg>
+    </button>
+    <ng-container *ngIf="login">
+      <form
+      class="user-form flex-col justify-c-c align-i-c gap-l" 
+      [formGroup]="logInForm" 
+      (ngSubmit)="logIn()"
+      >
+        <div class="title text-center">{{'user.form.login' | translate}}</div>
+        <div class="flex-col gap-l pad-m">
+          <div class="item">
+            <input type="text" 
+            class="input-m"
+            formControlName="userNameOrEmail"
+            placeholder="{{'user.form.username-label' | translate}}"
+            [ngClass]="{controlInvalid: isInvalid('userNameOrEmail', 'login')}"
+            >
+            <span *ngIf="isInvalid('userNameOrEmail', 'login')" class="formFeedbackError input-feedback">{{getError('userNameOrEmail', 'login')}}</span>
+          </div>
+          <div class="item">
+            <input type="password" 
+            class="input-m"
+            formControlName="password"
+            placeholder="{{'user.form.password-label' | translate}}"
+            [ngClass]="{controlInvalid: isInvalid('password', 'login')}"
+            >
+            <span *ngIf="isInvalid('password', 'login')" class="formFeedbackError">{{getError('password', 'login')}}</span>
+            <div class="flex justify-c-s align-i-s w-100">
+              <a (click)="showForgotForm()" style="font-size: 0.9em;" class="pointer">Forgot password?</a>
+            </div>
+          </div>
+        </div>
+        <div class="flex-col align-i-c gap-m w-90">
+          <div class="flex justify-c-sb align-i-c gap-m w-100">
+            <button 
+            type="button" 
+            class="button gap-m"
+            [disabled]="data.isSubmitting"
+            (click)="showSignUpForm()"
+            >
+              <svg class="icon-s" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="var(--text-color)" d="M9.2945 18.9112C9.72155 18.7306 10 18.3052 10 17.8333V15H21C21.5523 15 22 14.5523 22 14V10C22 9.44772 21.5523 9 21 9H10V6.1667C10 5.69483 9.72155 5.26942 9.2945 5.08884C8.86744 4.90826 8.37588 5.00808 8.04902 5.34174L2.33474 11.175C1.88842 11.6307 1.88842 12.3693 2.33474 12.825L8.04902 18.6583C8.37588 18.9919 8.86744 19.0917 9.2945 18.9112Z"/>
+              </svg>
+              <span>              
+                {{'user.form.signup' | translate}}
+              </span>
+            </button>
+            <div class="icon-m">
+              <ng-container *ngIf="data.isSubmitting">
+                <div class="pokemon-spinner"></div>
+              </ng-container>
+            </div>
+            <button 
+            type="submit" 
+            class="button-primary"
+            style="font-size: 1em;"
+            [disabled]="data.isSubmitting"
+            >{{'user.form.login' | translate}}</button>
+          </div>
+          <ng-container *ngIf="logInFormSubmitted && data.backendError">
+            <span class="formFeedbackError">{{data.backendError}}</span>
+          </ng-container>
+        </div>
+      </form>
+    </ng-container>
+    <ng-container *ngIf="signup">
+      <form class="user-form flex-col align-i-c gap-l"
+      [formGroup]="signUpForm" 
+      (ngSubmit)="signUp()"
+      >
+        <div class="title text-center">{{'user.form.signup' | translate}}</div>
+        <div class="flex-col gap-l pad-m">
+          <div class="item">
+            <input type="text" 
+            class="input-m"
+            formControlName="username"
+            placeholder="{{'user.form.username-label' | translate}}"
+            [ngClass]="{controlInvalid: isInvalid('username', 'signup')}"
+            >
+            <span *ngIf="userNameAvailable" class="formFeedbackSuccess">{{'user.form.username_available-feedback' | translate}}</span>
+            <span *ngIf="isInvalid('username', 'signup')" class="formFeedbackError">{{getError('username', 'signup')}}</span>
+          </div>
+          <div class="item">
+            <input type="text" 
+            class="input-m"
+            formControlName="email"
+            placeholder="{{'user.form.email-label' | translate}}"
+            [ngClass]="{controlInvalid: isInvalid('email', 'signup')}"
+            >
+            <span *ngIf="emailAvailable" class="formFeedbackSuccess">{{'user.form.email_available-feedback' | translate}}</span>
+            <span *ngIf="isInvalid('email', 'signup')" class="formFeedbackError">{{getError('email', 'signup')}}</span>
+          </div>
+          <div class="item">
+            <input type="password" 
+            class="input-m"
+            formControlName="password"
+            placeholder="{{'user.form.password-label' | translate}}"
+            [ngClass]="{controlInvalid: isInvalid('password', 'signup')}"
+            >
+            <span *ngIf="isInvalid('password', 'signup')" class="formFeedbackError">{{getError('password', 'signup')}}</span>
+          </div>
+          <div class="item">
+            <input type="password" 
+            class="input-m"
+            formControlName="confirmPassword"
+            placeholder="{{'user.form.confirm_password-label' | translate}}"
+            [ngClass]="{controlInvalid: isInvalid('confirmPassword', 'signup')}"
+            >
+            <span *ngIf="isInvalid('confirmPassword', 'signup')" class="formFeedbackError">{{getError('confirmPassword', 'signup')}}</span>
+          </div>
+        </div>
+        <div class="flex-col align-i-c gap-m w-90">
+          <div class="flex justify-c-sb align-i-c w-90 gap-m">
+            <button 
+            type="button" 
+            class="button gap-m"
+            [disabled]="data.isSubmitting"
+            (click)="showLogInForm()"
+            >
+              <svg class="icon-s" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="var(--text-color)" d="M9.2945 18.9112C9.72155 18.7306 10 18.3052 10 17.8333V15H21C21.5523 15 22 14.5523 22 14V10C22 9.44772 21.5523 9 21 9H10V6.1667C10 5.69483 9.72155 5.26942 9.2945 5.08884C8.86744 4.90826 8.37588 5.00808 8.04902 5.34174L2.33474 11.175C1.88842 11.6307 1.88842 12.3693 2.33474 12.825L8.04902 18.6583C8.37588 18.9919 8.86744 19.0917 9.2945 18.9112Z"/>
+              </svg>
+              <span>              
+                {{'user.form.login' | translate}}
+              </span>
+            </button>
+            <ng-container *ngIf="data.isSubmitting">
+              <div class="icon-m">
+                <div class="pokemon-spinner"></div>
+              </div>
+            </ng-container>
+            <button 
+            type="submit" 
+            class="button-primary"
+            [disabled]="data.isSubmitting"
+            >{{'user.form.signup' | translate}}</button>
+          </div>
+          <ng-container *ngIf="signUpFormSubmitted && data.backendError">
+            <span class="formFeedbackError">{{data.backendError}}</span>
+          </ng-container>
+        </div>
+      </form>
+    </ng-container>
+    <ng-container *ngIf="forgot">
+      <form
+      class="user-form flex-col justify-c-c align-i-c gap-l w-100" 
+      [formGroup]="forgotForm" 
+      (ngSubmit)="forgotPassword()"
+      >
+      <div class="title text-center">{{'user.form.reset' | translate}}</div>
+        <div class="flex-col gap-l pad-m">
+          <div class="item">
+            <input type="text" 
+            class="input-m"
+            formControlName="email"
+            placeholder="{{'user.form.email-label' | translate}}"
+            [ngClass]="{controlInvalid: isInvalid('email', 'forgot')}"
+            >
+            <span *ngIf="isInvalid('email', 'forgot')" class="formFeedbackError">{{getError('email', 'forgot')}}</span>
+          </div>
+        </div>
+        <div class="flex-col align-i-c gap-m w-90">
+          <div class="flex justify-c-sb align-i-c w-90 gap-m">
+            <button 
+            type="button" 
+            class="button gap-m"
+            [disabled]="data.isSubmitting"
+            (click)="showLogInForm()"
+            >
+              <svg class="icon-s" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="var(--text-color)" d="M9.2945 18.9112C9.72155 18.7306 10 18.3052 10 17.8333V15H21C21.5523 15 22 14.5523 22 14V10C22 9.44772 21.5523 9 21 9H10V6.1667C10 5.69483 9.72155 5.26942 9.2945 5.08884C8.86744 4.90826 8.37588 5.00808 8.04902 5.34174L2.33474 11.175C1.88842 11.6307 1.88842 12.3693 2.33474 12.825L8.04902 18.6583C8.37588 18.9919 8.86744 19.0917 9.2945 18.9112Z"/>
+              </svg>
+              <span>              
+                {{'user.form.login' | translate}}
+              </span>
+            </button>
+            <ng-container *ngIf="data.isSubmitting">
+              <div class="icon-m">
+                <div class="pokemon-spinner"></div>
+              </div>
+            </ng-container>
+            <button 
+            type="submit" 
+            class="button-primary"
+            [disabled]="data.isSubmitting"
+            >{{'user.form.reset_request' | translate}}</button>
+          </div>
+          <ng-container *ngIf="forgotPasswordSubmitted && data.backendError">
+            <span class="formFeedbackError">{{data.backendError}}</span>
+          </ng-container>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+</ng-container>
