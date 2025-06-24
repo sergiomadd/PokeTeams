@@ -116,7 +116,7 @@
           </div>
         </div>
         <div class="flex-col align-i-c gap-m w-90">
-          <div class="flex justify-c-sb align-i-c w-90 gap-m">
+          <div class="flex justify-c-sb align-i-c w-100 gap-m">
             <button 
             type="button" 
             class="button gap-m"
@@ -138,6 +138,7 @@
             <button 
             type="submit" 
             class="button-primary"
+            style="font-size: 1em;"
             [disabled]="data.isSubmitting"
             >{{'user.form.signup' | translate}}</button>
           </div>
@@ -149,7 +150,7 @@
     </ng-container>
     <ng-container *ngIf="forgot">
       <form
-      class="user-form flex-col justify-c-c align-i-c gap-l w-100" 
+      class="user-form flex-col justify-c-c align-i-c gap-l" 
       [formGroup]="forgotForm" 
       (ngSubmit)="forgotPassword()"
       >
@@ -166,7 +167,7 @@
           </div>
         </div>
         <div class="flex-col align-i-c gap-m w-90">
-          <div class="flex justify-c-sb align-i-c w-90 gap-m">
+          <div class="flex justify-c-sb align-i-c gap-m w-100">
             <button 
             type="button" 
             class="button gap-m"
@@ -188,6 +189,7 @@
             <button 
             type="submit" 
             class="button-primary"
+            style="font-size: 1em;"
             [disabled]="data.isSubmitting"
             >{{'user.form.reset_request' | translate}}</button>
           </div>
