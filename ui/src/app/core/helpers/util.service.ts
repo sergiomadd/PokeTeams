@@ -107,7 +107,7 @@ export class UtilService
         confirmPasswordControl.setErrors(null);
         return null;
       }
-    };
+    }
   }
 
   copyToClipboard(text: string): boolean

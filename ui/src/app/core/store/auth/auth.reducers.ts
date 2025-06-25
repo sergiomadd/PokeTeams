@@ -327,4 +327,10 @@ export const authReducers = createReducer(
       isSubmitting: false,
       error: action.error
     })),
+  on(authActions.toggleAuthForm, (state) => (
+    {
+      ...state,
+      isSubmitting: false,
+      error: null
+    })),
 )

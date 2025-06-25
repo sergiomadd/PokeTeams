@@ -58,8 +58,14 @@ export class AuthFormComponent
       validators: [Validators.required, Validators.email, Validators.maxLength(256)],
       updateOn: 'blur'
     }),
-    password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
+    password: this.formBuilder.control('', {
+      validators: [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()],
+      updateOn: 'change'
+    }),
+    confirmPassword: this.formBuilder.control('', {
+      validators: [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()],
+      updateOn: 'change'
+    }),
   });
   
   forgotFormSubmitted: boolean = false;
@@ -142,6 +148,7 @@ export class AuthFormComponent
     this.login = true;
     this.signup = false;
     this.forgot = false;
+    this.clearLogInForm();
   }
 
   showSignUpForm()
@@ -149,6 +156,8 @@ export class AuthFormComponent
     this.signup = true;
     this.login = false;
     this.forgot = false;
+    this.clearSignUpForm();
+
   }
 
   showForgotForm()
@@ -156,19 +165,31 @@ export class AuthFormComponent
     this.signup = false;
     this.login = false;
     this.forgot = true;
+    this.clearForgotForm();
   }
 
   clearLogInForm()
   {
-    this.logInForm.reset();
+    this.logInForm.reset({ userNameOrEmail: '', password: ''});
+    this.logInFormSubmitted = false;
     this.userNameAvailable = false;
+    this.store.dispatch(authActions.toggleAuthForm());
   }
 
   clearSignUpForm()
   {
-    this.signUpForm.reset();
+    this.signUpForm.reset({ username: '', email: '', password: '', confirmPassword: ''});
+    this.signUpFormSubmitted = false;
     this.userNameAvailable = false;
     this.emailAvailable = false;
+    this.store.dispatch(authActions.toggleAuthForm());
+  }
+
+  clearForgotForm()
+  {
+    this.forgotForm.reset({ email: '' });
+    this.forgotFormSubmitted = false;
+    this.store.dispatch(authActions.toggleAuthForm());
   }
 
   isInvalid(key: string, form: string) : boolean
@@ -207,5 +228,6 @@ export class AuthFormComponent
   closeSelf()
   {
     this.close.emit();
+    this.store.dispatch(authActions.toggleAuthForm());
   }
 }
