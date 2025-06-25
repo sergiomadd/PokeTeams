@@ -5,7 +5,7 @@ import { combineLatest } from 'rxjs';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { authActions } from 'src/app/core/store/auth/auth.actions';
-import { selectError, selectIsSubmitting } from 'src/app/core/store/auth/auth.selectors';
+import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/store/auth/auth.selectors';
 import { LogInDTO } from 'src/app/features/user/models/login.dto';
 import { SignUpDTO } from 'src/app/features/user/models/signup.dto';
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
@@ -25,7 +25,8 @@ export class AuthFormComponent
   data$ = combineLatest(
     {
       isSubmitting: this.store.select(selectIsSubmitting),
-      backendError: this.store.select(selectError)
+      backendError: this.store.select(selectError),
+      success: this.store.select(selectSuccess)
     }
   )
 
@@ -97,6 +98,16 @@ export class AuthFormComponent
         if(!this.emailAvailable) { this.signUpForm.controls.email.setErrors({ "emailTaken": true }); }
       }
     });
+    
+    //Close form when login/signup is completed
+    //Do not close if forgot password is completed
+    this.data$.subscribe(value =>
+    {
+      if(value && value.success && !this.forgot)
+      {
+        this.closeSelf();
+      }
+    })
   }
 
   async logIn()

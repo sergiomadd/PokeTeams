@@ -331,6 +331,7 @@ export const authReducers = createReducer(
     {
       ...state,
       isSubmitting: false,
+      success: false,
       error: null
     })),
 )
