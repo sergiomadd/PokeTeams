@@ -199,7 +199,7 @@
       "login": "Log In",
       "signup": "Sign Up",
       "forgot-question": "Forgot your password?", 
-      "reset": "Send password reset email", 
+      "reset": "Password recovery", 
       "reset_request": "Send", 
       "reset_password": "Reset your password", 
       "reset_password-success": "Your password has been updated, please go home and log in", 

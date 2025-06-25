@@ -198,6 +198,11 @@
     {
       "login": "Iniciar sesión",
       "signup": "Registrarse",
+      "forgot-question": "Olvidastes tu contraseña?", 
+      "reset": "Recuperar contraseña", 
+      "reset_request": "Enviar", 
+      "reset_password": "Restablecer tu contraseña", 
+      "reset_password-success": "Tu contraseña a sido cambiada, por favor vuelve a inicio y inicia sesión", 
       "username-label": "Nombre de usuario",
       "email-label": "Correo",
       "password-label": "Contraseña",
