@@ -19,18 +19,22 @@
             class="input-m"
             formControlName="userNameOrEmail"
             placeholder="{{'user.form.username-label' | translate}}"
-            [ngClass]="{controlInvalid: isInvalid('userNameOrEmail', 'login')}"
+            [ngClass]="{controlInvalid: logInForm.controls.userNameOrEmail.errors | isFormFieldInvalid:logInForm.controls.userNameOrEmail.dirty:logInForm.controls.userNameOrEmail.touched:logInFormSubmitted}"
             >
-            <span *ngIf="isInvalid('userNameOrEmail', 'login')" class="formFeedbackError input-feedback">{{getError('userNameOrEmail', 'login')}}</span>
+            <span *ngIf="logInForm.controls.userNameOrEmail.errors | isFormFieldInvalid:logInForm.controls.userNameOrEmail.dirty:logInForm.controls.userNameOrEmail.touched:logInFormSubmitted" class="formFeedbackError input-feedback">
+              {{getError('userNameOrEmail', 'login')}}
+            </span>
           </div>
           <div class="item">
             <input type="password" 
             class="input-m"
             formControlName="password"
             placeholder="{{'user.form.password-label' | translate}}"
-            [ngClass]="{controlInvalid: isInvalid('password', 'login')}"
+            [ngClass]="{controlInvalid: logInForm.controls.password.errors | isFormFieldInvalid:logInForm.controls.password.dirty:logInForm.controls.password.touched:logInFormSubmitted}"
             >
-            <span *ngIf="isInvalid('password', 'login')" class="formFeedbackError">{{getError('password', 'login')}}</span>
+            <span *ngIf="logInForm.controls.password.errors | isFormFieldInvalid:logInForm.controls.password.dirty:logInForm.controls.password.touched:logInFormSubmitted" class="formFeedbackError">
+              {{getError('password', 'login')}}
+            </span>
             <div class="flex justify-c-s align-i-s w-100">
               <a (click)="showForgotForm()" style="font-size: 0.9em;" class="pointer">Forgot password?</a>
             </div>
@@ -81,38 +85,46 @@
             class="input-m"
             formControlName="username"
             placeholder="{{'user.form.username-label' | translate}}"
-            [ngClass]="{controlInvalid: isInvalid('username', 'signup')}"
+            [ngClass]="{controlInvalid: signUpForm.controls.username.errors | isFormFieldInvalid:signUpForm.controls.username.dirty:signUpForm.controls.username.touched:signUpFormSubmitted}"
             >
             <span *ngIf="userNameAvailable" class="formFeedbackSuccess">{{'user.form.username_available-feedback' | translate}}</span>
-            <span *ngIf="isInvalid('username', 'signup')" class="formFeedbackError">{{getError('username', 'signup')}}</span>
+            <span *ngIf="signUpForm.controls.username.errors | isFormFieldInvalid:signUpForm.controls.username.dirty:signUpForm.controls.username.touched:signUpFormSubmitted" class="formFeedbackError">
+              {{getError('username', 'signup')}}
+            </span>
           </div>
           <div class="item">
             <input type="text" 
             class="input-m"
             formControlName="email"
             placeholder="{{'user.form.email-label' | translate}}"
-            [ngClass]="{controlInvalid: isInvalid('email', 'signup')}"
+            [ngClass]="{controlInvalid: signUpForm.controls.email.errors | isFormFieldInvalid:signUpForm.controls.email.dirty:signUpForm.controls.email.touched:signUpFormSubmitted}"
             >
             <span *ngIf="emailAvailable" class="formFeedbackSuccess">{{'user.form.email_available-feedback' | translate}}</span>
-            <span *ngIf="isInvalid('email', 'signup')" class="formFeedbackError">{{getError('email', 'signup')}}</span>
+            <span *ngIf="signUpForm.controls.email.errors | isFormFieldInvalid:signUpForm.controls.email.dirty:signUpForm.controls.email.touched:signUpFormSubmitted" class="formFeedbackError">
+              {{getError('email', 'signup')}}
+            </span>
           </div>
           <div class="item">
             <input type="password" 
             class="input-m"
             formControlName="password"
             placeholder="{{'user.form.password-label' | translate}}"
-            [ngClass]="{controlInvalid: isInvalid('password', 'signup')}"
+            [ngClass]="{controlInvalid: signUpForm.controls.password.errors | isFormFieldInvalid:signUpForm.controls.password.dirty:signUpForm.controls.password.touched:signUpFormSubmitted}"
             >
-            <span *ngIf="isInvalid('password', 'signup')" class="formFeedbackError">{{getError('password', 'signup')}}</span>
+            <span *ngIf="signUpForm.controls.password.errors | isFormFieldInvalid:signUpForm.controls.password.dirty:signUpForm.controls.password.touched:signUpFormSubmitted" class="formFeedbackError">
+              {{getError('password', 'signup')}}
+            </span>
           </div>
           <div class="item">
             <input type="password" 
             class="input-m"
             formControlName="confirmPassword"
             placeholder="{{'user.form.confirm_password-label' | translate}}"
-            [ngClass]="{controlInvalid: isInvalid('confirmPassword', 'signup')}"
+            [ngClass]="{controlInvalid: signUpForm.controls.confirmPassword.errors | isFormFieldInvalid:signUpForm.controls.confirmPassword.dirty:signUpForm.controls.confirmPassword.touched:signUpFormSubmitted}"
             >
-            <span *ngIf="isInvalid('confirmPassword', 'signup')" class="formFeedbackError">{{getError('confirmPassword', 'signup')}}</span>
+            <span *ngIf="signUpForm.controls.confirmPassword.errors | isFormFieldInvalid:signUpForm.controls.confirmPassword.dirty:signUpForm.controls.confirmPassword.touched:signUpFormSubmitted" class="formFeedbackError">
+              {{getError('confirmPassword', 'signup')}}
+            </span>
           </div>
         </div>
         <div class="flex-col align-i-c gap-m w-90">
@@ -161,9 +173,11 @@
             class="input-m"
             formControlName="email"
             placeholder="{{'user.form.email-label' | translate}}"
-            [ngClass]="{controlInvalid: isInvalid('email', 'forgot')}"
+            [ngClass]="{controlInvalid: forgotForm.controls.email.errors | isFormFieldInvalid:forgotForm.controls.email.dirty:forgotForm.controls.email.touched:forgotFormSubmitted}"
             >
-            <span *ngIf="isInvalid('email', 'forgot')" class="formFeedbackError">{{getError('email', 'forgot')}}</span>
+            <span *ngIf="forgotForm.controls.email.errors | isFormFieldInvalid:forgotForm.controls.email.dirty:forgotForm.controls.email.touched:forgotFormSubmitted" class="formFeedbackError">
+              {{getError('email', 'forgot')}}
+            </span>
           </div>
         </div>
         <div class="flex-col align-i-c gap-m w-90">

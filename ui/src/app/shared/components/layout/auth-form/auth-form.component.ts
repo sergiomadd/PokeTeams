@@ -194,6 +194,7 @@ export class AuthFormComponent
     this.userNameAvailable = false;
     this.emailAvailable = false;
     this.store.dispatch(authActions.toggleAuthForm());
+    this.logInForm.controls.userNameOrEmail.touched
   }
 
   clearForgotForm()
@@ -201,15 +202,6 @@ export class AuthFormComponent
     this.forgotForm.reset({ email: '' });
     this.forgotFormSubmitted = false;
     this.store.dispatch(authActions.toggleAuthForm());
-  }
-
-  isInvalid(key: string, form: string) : boolean
-  {
-    let control = this.getControl(key, form);
-    return (control?.errors
-      && (control?.dirty || control?.touched
-        || (form === "signup" ? this.signUpFormSubmitted : this.logInFormSubmitted))) 
-      ?? false;
   }
 
   getError(key: string, formKey: string) : string
