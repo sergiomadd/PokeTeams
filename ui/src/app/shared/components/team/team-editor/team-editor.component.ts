@@ -83,6 +83,15 @@ export class TeamEditorComponent
         this.teamComponent.showAllStats = false;
         this.teamComponent.showAllNotes = false;
       }
+      if(this.loggedUser && this.team.user == null)
+      {
+        this.team.user = 
+        {
+          username: this.loggedUser.name,
+          picture: this.loggedUser.icon,
+          registered: true
+        };
+      }
       if(this.team.id === "example")
       {
         this.teamEditorService.setExampleTeamModified(false);
