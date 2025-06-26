@@ -22,7 +22,7 @@
             [ngClass]="{controlInvalid: logInForm.controls.userNameOrEmail.errors | isFormFieldInvalid:logInForm.controls.userNameOrEmail.dirty:logInForm.controls.userNameOrEmail.touched:logInFormSubmitted}"
             >
             <span *ngIf="logInForm.controls.userNameOrEmail.errors | isFormFieldInvalid:logInForm.controls.userNameOrEmail.dirty:logInForm.controls.userNameOrEmail.touched:logInFormSubmitted" class="formFeedbackError input-feedback">
-              {{getError('userNameOrEmail', 'login')}}
+              {{logInForm.controls.userNameOrEmail.errors | getFormControlError}}
             </span>
           </div>
           <div class="item">
@@ -33,7 +33,7 @@
             [ngClass]="{controlInvalid: logInForm.controls.password.errors | isFormFieldInvalid:logInForm.controls.password.dirty:logInForm.controls.password.touched:logInFormSubmitted}"
             >
             <span *ngIf="logInForm.controls.password.errors | isFormFieldInvalid:logInForm.controls.password.dirty:logInForm.controls.password.touched:logInFormSubmitted" class="formFeedbackError">
-              {{getError('password', 'login')}}
+              {{logInForm.controls.password.errors | getFormControlError}}
             </span>
             <div class="flex justify-c-s align-i-s w-100">
               <a (click)="showForgotForm()" style="font-size: 0.9em;" class="pointer">Forgot password?</a>
@@ -89,7 +89,7 @@
             >
             <span *ngIf="userNameAvailable" class="formFeedbackSuccess">{{'user.form.username_available-feedback' | translate}}</span>
             <span *ngIf="signUpForm.controls.username.errors | isFormFieldInvalid:signUpForm.controls.username.dirty:signUpForm.controls.username.touched:signUpFormSubmitted" class="formFeedbackError">
-              {{getError('username', 'signup')}}
+              {{signUpForm.controls.username.errors | getFormControlError}}
             </span>
           </div>
           <div class="item">
@@ -101,7 +101,7 @@
             >
             <span *ngIf="emailAvailable" class="formFeedbackSuccess">{{'user.form.email_available-feedback' | translate}}</span>
             <span *ngIf="signUpForm.controls.email.errors | isFormFieldInvalid:signUpForm.controls.email.dirty:signUpForm.controls.email.touched:signUpFormSubmitted" class="formFeedbackError">
-              {{getError('email', 'signup')}}
+              {{signUpForm.controls.email.errors | getFormControlError}}
             </span>
           </div>
           <div class="item">
@@ -112,7 +112,7 @@
             [ngClass]="{controlInvalid: signUpForm.controls.password.errors | isFormFieldInvalid:signUpForm.controls.password.dirty:signUpForm.controls.password.touched:signUpFormSubmitted}"
             >
             <span *ngIf="signUpForm.controls.password.errors | isFormFieldInvalid:signUpForm.controls.password.dirty:signUpForm.controls.password.touched:signUpFormSubmitted" class="formFeedbackError">
-              {{getError('password', 'signup')}}
+              {{signUpForm.controls.password.errors | getFormControlError}}
             </span>
           </div>
           <div class="item">
@@ -123,7 +123,7 @@
             [ngClass]="{controlInvalid: signUpForm.controls.confirmPassword.errors | isFormFieldInvalid:signUpForm.controls.confirmPassword.dirty:signUpForm.controls.confirmPassword.touched:signUpFormSubmitted}"
             >
             <span *ngIf="signUpForm.controls.confirmPassword.errors | isFormFieldInvalid:signUpForm.controls.confirmPassword.dirty:signUpForm.controls.confirmPassword.touched:signUpFormSubmitted" class="formFeedbackError">
-              {{getError('confirmPassword', 'signup')}}
+              {{signUpForm.controls.confirmPassword.errors | getFormControlError}}
             </span>
           </div>
         </div>
@@ -176,7 +176,7 @@
             [ngClass]="{controlInvalid: forgotForm.controls.email.errors | isFormFieldInvalid:forgotForm.controls.email.dirty:forgotForm.controls.email.touched:forgotFormSubmitted}"
             >
             <span *ngIf="forgotForm.controls.email.errors | isFormFieldInvalid:forgotForm.controls.email.dirty:forgotForm.controls.email.touched:forgotFormSubmitted" class="formFeedbackError">
-              {{getError('email', 'forgot')}}
+              {{forgotForm.controls.email.errors | getFormControlError}}
             </span>
           </div>
         </div>
@@ -207,10 +207,10 @@
             [disabled]="data.isSubmitting"
             >{{'user.form.forgot_request' | translate}}</button>
           </div>
-          <ng-container *ngIf="forgotPasswordSubmitted && data.backendError">
+          <ng-container *ngIf="forgotFormSubmitted && data.backendError">
             <span class="formFeedbackError text-center">{{data.backendError}}</span>
           </ng-container>
-          <ng-container *ngIf="forgotPasswordSubmitted && data.success">
+          <ng-container *ngIf="forgotFormSubmitted && data.success">
             <span class="formFeedbackSuccess text-center">{{'user.form.forgot_success' | translate}}</span>
           </ng-container>
         </div>

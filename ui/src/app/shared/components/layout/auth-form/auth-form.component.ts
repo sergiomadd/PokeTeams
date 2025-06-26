@@ -37,7 +37,6 @@ export class AuthFormComponent
   forgot: boolean = false;
   userNameAvailable: boolean = false;
   emailAvailable: boolean = false;
-  forgotPasswordSubmitted: boolean = false;
 
   logInFormSubmitted: boolean = false;
   logInForm = this.formBuilder.group(
@@ -143,7 +142,7 @@ export class AuthFormComponent
 
   forgotPassword()
   {
-    this.forgotPasswordSubmitted = true;
+    this.forgotFormSubmitted = true;
     if(this.forgotForm.valid)
     {
       let updateDTO: UserUpdateDTO = 
@@ -168,7 +167,6 @@ export class AuthFormComponent
     this.login = false;
     this.forgot = false;
     this.clearSignUpForm();
-
   }
 
   showForgotForm()
@@ -194,7 +192,6 @@ export class AuthFormComponent
     this.userNameAvailable = false;
     this.emailAvailable = false;
     this.store.dispatch(authActions.toggleAuthForm());
-    this.logInForm.controls.userNameOrEmail.touched
   }
 
   clearForgotForm()
@@ -202,30 +199,6 @@ export class AuthFormComponent
     this.forgotForm.reset({ email: '' });
     this.forgotFormSubmitted = false;
     this.store.dispatch(authActions.toggleAuthForm());
-  }
-
-  getError(key: string, formKey: string) : string
-  {
-    let control = this.getControl(key, formKey);
-    return this.util.getAuthFormError(control);
-  }
-
-  getControl(key: string, form: string): any
-  {
-    let control;
-    if(form === "signup")
-    {
-      control = this.signUpForm.get(key)
-    }
-    else if(form  === "login")
-    {
-      control = this.logInForm.get(key)
-    }
-    else
-    {
-      control = this.forgotForm.get(key)
-    }
-    return control;
   }
 
   closeSelf()

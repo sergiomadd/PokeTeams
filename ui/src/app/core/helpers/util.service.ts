@@ -81,6 +81,67 @@ export class UtilService
     return "error";
   }
 
+  getAuthFormErrors(errors: ValidationErrors) : string
+  {
+    if(errors['required'])
+    {
+      return this.i18n.translateKey('shared.errors.required');
+    }
+    if(errors['minlength'])
+    {
+      return this.i18n.translateKeyWithParameters('shared.errors.minlength', {"minlength": errors['minlength']['requiredLength']});
+    }
+    if(errors['maxlength'])
+    {
+      return this.i18n.translateKeyWithParameters('shared.errors.maxlength', {"maxlength": errors['maxlength']['requiredLength']});
+    }
+    if(errors['email'])
+    {
+      return this.i18n.translateKey('shared.errors.email');
+    }
+    if(errors['passwordMismatch'])
+    {
+      return this.i18n.translateKey('shared.errors.passwordMismatch');
+    }
+    if(errors['samePassword'])
+    {
+      return this.i18n.translateKey('shared.errors.samePassword');
+    }
+    if(errors['usernameTaken'])
+    {
+      return this.i18n.translateKey('shared.errors.usernameTaken');
+    }
+    if(errors['emailTaken'])
+    {
+      return this.i18n.translateKey('shared.errors.emailTaken');
+    }
+    if(errors['tournamentTaken'])
+    {
+      return this.i18n.translateKey('shared.errors.tournamentTaken');
+    }
+    if(errors['tagTaken'])
+    {
+      return this.i18n.translateKey('shared.errors.tagTaken');
+    }
+    if(errors['notLoggedUserName'])
+    {
+      return this.i18n.translateKey('shared.errors.notLoggedUserName');
+    }
+    if(errors['min'])
+    {
+      return this.i18n.translateKeyWithParameters('shared.errors.min', {"min": errors['min']['min']});
+    }
+    if(errors['max'])
+    {
+      return this.i18n.translateKeyWithParameters('shared.errors.max', {"max": errors['max']['max']});
+    }
+    if(errors['nan'])
+    {
+      return this.i18n.translateKey('shared.errors.nan');
+    }
+    return "error";
+  }
+
   passwordsMatch() : ValidatorFn 
   {
     return (control: AbstractControl): ValidationErrors | null => 

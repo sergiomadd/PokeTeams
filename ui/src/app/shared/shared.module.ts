@@ -38,6 +38,7 @@ import { TeamTableComponent } from './components/team/team-table/team-table.comp
 import { TeamComponent } from './components/team/team/team.component';
 import { TournamentPreviewComponent } from './components/team/tournament-preview/tournament-preview.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
+import { GetFormControlErrorPipe } from './pipes/getFormControlError.pipe';
 import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
 
 @NgModule({
@@ -85,7 +86,8 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     AuthFormComponent,
 
     //Pipes
-    IsFormFieldInvalidPipe
+    IsFormFieldInvalidPipe,
+    GetFormControlErrorPipe
   ],
   imports: 
   [
@@ -142,7 +144,8 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     TooltipComponent,
 
     //Pipes
-    IsFormFieldInvalidPipe
+    IsFormFieldInvalidPipe,
+    GetFormControlErrorPipe
   ],
   providers: [TranslateStore]
 })
