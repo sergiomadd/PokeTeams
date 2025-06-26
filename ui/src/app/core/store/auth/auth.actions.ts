@@ -56,7 +56,8 @@ export const authActions = createActionGroup(
       "forgotPassword failure": props<{error: string}>(),
       resetPassword: props<{request: UserUpdateDTO}>(),
       "resetPassword success": emptyProps(),
-      "resetPassword failure": props<{error: string}>()
+      "resetPassword failure": props<{error: string}>(),
+      toggleAuthForm: emptyProps(),
     },
   }
 )

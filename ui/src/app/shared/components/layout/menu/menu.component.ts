@@ -39,6 +39,7 @@ export class MenuComponent
   selectedLang?: string;
   selectedLangChip?: Chip;
   rotationAngle: number = 0;
+  authFormOpen: boolean = false;
 
   lang = Lang;
   langs = langs;
@@ -121,5 +122,10 @@ export class MenuComponent
     {
       this.toggleMenu();
     }
+  }
+
+  toggleAuthForm()
+  {
+    this.authFormOpen = !this.authFormOpen;
   }
 }
