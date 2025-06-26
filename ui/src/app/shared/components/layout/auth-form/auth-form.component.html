@@ -154,7 +154,7 @@
       [formGroup]="forgotForm" 
       (ngSubmit)="forgotPassword()"
       >
-      <div class="title text-center">{{'user.form.reset' | translate}}</div>
+      <div class="title text-center">{{'user.form.forgot-title' | translate}}</div>
         <div class="flex-col gap-l pad-m">
           <div class="item">
             <input type="text" 
@@ -191,10 +191,13 @@
             class="button-primary"
             style="font-size: 1em;"
             [disabled]="data.isSubmitting"
-            >{{'user.form.reset_request' | translate}}</button>
+            >{{'user.form.forgot_request' | translate}}</button>
           </div>
           <ng-container *ngIf="forgotPasswordSubmitted && data.backendError">
-            <span class="formFeedbackError">{{data.backendError}}</span>
+            <span class="formFeedbackError text-center">{{data.backendError}}</span>
+          </ng-container>
+          <ng-container *ngIf="forgotPasswordSubmitted && data.success">
+            <span class="formFeedbackSuccess text-center">{{'user.form.forgot_success' | translate}}</span>
           </ng-container>
         </div>
       </form>
