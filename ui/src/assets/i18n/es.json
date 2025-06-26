@@ -209,7 +209,9 @@
       "password-label": "Contraseña",
       "confirm_password-label": "Confirmar contraseña",
       "username_available-feedback": "Este nombre de usuario está disponible",
-      "email_available-feedback": "Este correo está disponible"
+      "email_available-feedback": "Este correo está disponible",
+      "show_password": "Mostrar contraseña",
+      "hide_password": "Ocultar contraseña"
     },
     "email_confirmation":
     {

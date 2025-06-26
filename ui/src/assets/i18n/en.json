@@ -209,7 +209,9 @@
       "password-label": "Password",
       "confirm_password-label": "Confirm Password",
       "username_available-feedback": "This username is available",
-      "email_available-feedback": "This email is available"
+      "email_available-feedback": "This email is available",
+      "show_password": "Show password",
+      "hide_password": "Hide password"
     },
     "email_confirmation":
     {

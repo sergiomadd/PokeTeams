@@ -39,6 +39,7 @@ export class AuthFormComponent
   emailAvailable: boolean = false;
 
   logInFormSubmitted: boolean = false;
+  showLogInPassword: boolean = false;
   logInForm = this.formBuilder.group(
   {
     userNameOrEmail: ['', [Validators.required, Validators.maxLength(256)]],
@@ -46,6 +47,8 @@ export class AuthFormComponent
   }, { updateOn: "submit" });
 
   signUpFormSubmitted: boolean = false;
+  showSignUpPassword: boolean = false;
+  showSignUpConfirmPassword: boolean = false;
   signUpForm = this.formBuilder.group(
   {
     username: new FormControl('', 
@@ -205,5 +208,21 @@ export class AuthFormComponent
   {
     this.close.emit();
     this.store.dispatch(authActions.toggleAuthForm());
+  }
+
+  toggleShowPassword(key: string)
+  {
+    switch(key)
+    {
+      case "logInPassword":
+        this.showLogInPassword = !this.showLogInPassword;
+        break;
+      case "signUpPassword":
+        this.showSignUpPassword = !this.showSignUpPassword;
+        break;
+      case "signUpConfirmPassword":
+        this.showSignUpConfirmPassword = !this.showSignUpConfirmPassword;
+        break;
+    }
   }
 }
