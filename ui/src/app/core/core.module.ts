@@ -7,6 +7,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { environment } from 'src/environments/environment';
 import { AuthInterceptorService } from './interceptors/auth-interceptor.service';
 import { ErrorInterceptorService } from './interceptors/error-interceptor.service';
 import { LangInterceptorService } from './interceptors/lang-interceptor.service';
@@ -81,9 +82,7 @@ import { HydrationEffects } from './store/hydration/hydration.effects';
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              '905688052710-qcaplf2dd4e1lqi27loskaktbknc6cdu.apps.googleusercontent.com'
-            )
+            provider: new GoogleLoginProvider(environment.googleId)
           }
         ],
         onError: (err) => {
