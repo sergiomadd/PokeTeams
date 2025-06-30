@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Google.Apis.Auth;
 
 namespace api.Test.Controllers
 {
@@ -1972,6 +1973,142 @@ namespace api.Test.Controllers
 
             //Assert
             response.EnsureSuccessStatusCode();
+        }
+
+        //ExternalLoginGoogle
+
+        [Fact]
+        public async Task ExternalLoginGoogle_ReturnsBadRequest_WrongData()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "signin-google";
+
+            ExternalAuthDTO body = new ExternalAuthDTO()
+            {
+                Provider = "noProvider",
+                IdToken = null
+            };
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Act
+            var response = await client.PostAsJsonAsync(request, body);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsAsync<string>();
+            Assert.Equal("Wrong data", responseString);
+        }
+
+        [Fact]
+        public async Task ExternalLoginGoogle_ReturnsBadRequest_InvalidToken()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "signin-google";
+
+            ExternalAuthDTO body = new ExternalAuthDTO()
+            {
+                Provider = "noProvider",
+                IdToken = "invalidToken"
+            };
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Act
+            var response = await client.PostAsJsonAsync(request, body);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsAsync<string>();
+            Assert.Equal("Invalid External Authentication", responseString);
+        }
+
+        [Fact]
+        public async Task ExternalLoginGoogle_ReturnsOk_CreatesNewUser()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "signin-google";
+            GoogleJsonWebSignature.Payload? payload = await _instance.GenerateGooglePayload();
+
+            ExternalAuthDTO body = new ExternalAuthDTO()
+            {
+                Provider = "GOOGLE",
+                IdToken = "goodToken"
+            };
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Act
+            var response = await client.PostAsJsonAsync(request, body);
+
+            //Assert
+            response.EnsureSuccessStatusCode();
+            string newAccessToken = response.Headers.GetValues("Set-Cookie").ToList()[1].Split(";")[0].Split("=")[1];
+            string newRefreshToken = response.Headers.GetValues("Set-Cookie").ToList()[2].Split(";")[0].Split("=")[1];
+            Assert.NotNull(newAccessToken);
+            Assert.NotNull(newRefreshToken);
+
+            using (var scope = _instance.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<PokeTeamContext>();
+                var user = await context.User.FirstOrDefaultAsync(u => u.Email == payload.Email);
+                Assert.NotNull(user);
+                await context.User.Entry(user).ReloadAsync();
+                Assert.NotNull(user.RefreshToken);
+                Assert.Equal(newRefreshToken, user.RefreshToken);
+            }
+        }
+
+        [Fact]
+        public async Task ExternalLoginGoogle_ReturnsOk_LogsIn()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "signin-google";
+            GoogleJsonWebSignature.Payload? payload = await _instance.GenerateGooglePayload();
+            var authUser = _instance.GetTestAuthLoggedUser();
+            var scope = _instance.Services.CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            await userManager.CreateAsync(authUser);
+
+            ExternalAuthDTO body = new ExternalAuthDTO()
+            {
+                Provider = "GOOGLE",
+                IdToken = "goodToken"
+            };
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Act
+            var response = await client.PostAsJsonAsync(request, body);
+
+            //Assert
+            response.EnsureSuccessStatusCode();
+            string newAccessToken = response.Headers.GetValues("Set-Cookie").ToList()[1].Split(";")[0].Split("=")[1];
+            string newRefreshToken = response.Headers.GetValues("Set-Cookie").ToList()[2].Split(";")[0].Split("=")[1];
+            Assert.NotNull(newAccessToken);
+            Assert.NotNull(newRefreshToken);
+
+            using (scope)
+            {
+                var context = scope.ServiceProvider.GetRequiredService<PokeTeamContext>();
+                var user = await context.User.FirstOrDefaultAsync(u => u.Email == payload.Email);
+                Assert.NotNull(user);
+                await context.User.Entry(user).ReloadAsync();
+                Assert.NotNull(user.RefreshToken);
+                Assert.Equal(newRefreshToken, user.RefreshToken);
+            }
         }
     }
 }
