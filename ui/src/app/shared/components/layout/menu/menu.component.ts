@@ -39,7 +39,7 @@ export class MenuComponent
   selectedLang?: string;
   selectedLangChip?: Chip;
   rotationAngle: number = 0;
-  authFormOpen: boolean = false;
+  authFormOpen: boolean = true;
 
   lang = Lang;
   langs = langs;

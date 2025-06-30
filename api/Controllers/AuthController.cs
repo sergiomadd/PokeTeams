@@ -13,6 +13,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.RateLimiting;
 using api.Middlewares;
 using System.Reflection;
+using NuGet.Common;
+using Google.Apis.Auth;
 
 namespace api.Controllers
 {
@@ -269,6 +271,104 @@ namespace api.Controllers
             _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
 
             return Ok();
+        }
+
+        [AllowAnonymous]
+        [HttpPost("signin-google")]
+        public async Task<ActionResult> ExternalLoginGoogle([FromBody] ExternalAuthDTO request)
+        {
+            if(request == null || request.IdToken == null)
+            {
+                return BadRequest("Wrong data");
+            }
+
+            GoogleJsonWebSignature.Payload? payload = await VerifyGoogleToken(request.IdToken);
+            if (payload == null)
+            {
+                return BadRequest("Invalid External Authentication");
+            }
+
+            UserLoginInfo info = new UserLoginInfo(request.Provider ?? "", payload.Subject, request.Provider);
+            User? user = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+            if (user == null)
+            {
+                user = await _userManager.FindByEmailAsync(payload.Email);
+                if(user == null)
+                {
+                    string usernameBase = payload.Name != null ? payload.Name : payload.Email.Split("@")[0];
+                    string uniqueUsername = await GenerateUniqueUsername(Formatter.RemoveDiacritics(usernameBase));
+                    user = new User
+                    {
+                        UserName = uniqueUsername,
+                        Email = payload.Email,
+                        EmailConfirmed = true,
+                        Picture = "snorlax",
+                        Visibility = true
+                    };
+
+                    var signUpResult = await _userManager.CreateAsync(user);
+                    if (!signUpResult.Succeeded)
+                    {
+                        return BadRequest("Sign up failed");
+                    }
+                    await _userManager.AddLoginAsync(user, info);
+                }
+                else
+                {
+                    await _userManager.AddLoginAsync(user, info);
+                }
+
+            }
+            if (user == null)
+            {
+                return BadRequest("Invalid External Authentication");
+            }
+            await _signInManager.SignInAsync(user, true);
+
+            string token = _tokenGenerator.GenerateAccessToken(user);
+            string refreshToken = _tokenGenerator.GenerateRefreshToken(user);
+
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+            await _userManager.UpdateAsync(user);
+
+            JwtResponseDTO tokens = new JwtResponseDTO { AccessToken = token, RefreshToken = refreshToken };
+            _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
+
+            return Ok();
+        }
+
+        private async Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string idToken)
+        {
+            try
+            {
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new[] { _config["Google:Id"] }
+                };
+
+                return await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
+            }
+            catch (Exception ex)
+            {
+                Printer.Log("Error verifiyng google token ", ex);
+            }
+            return null;
+        }
+
+        private async Task<string> GenerateUniqueUsername(string baseName)
+        {
+            var username = baseName.ToLower().Replace(" ", "").Replace(".", "");
+            var originalUsername = username;
+            int suffix = 1;
+
+            while (await _userManager.FindByNameAsync(username) != null)
+            {
+                username = $"{originalUsername}{suffix}";
+                suffix++;
+            }
+
+            return username;
         }
 
         //Add rate limiting

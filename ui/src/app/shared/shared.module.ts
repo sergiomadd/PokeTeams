@@ -1,3 +1,4 @@
+import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -97,7 +98,8 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     HttpClientModule,
     RouterModule,
     TranslateModule,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    GoogleSigninButtonModule
   ],
   exports: 
   [
@@ -107,6 +109,7 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     ReactiveFormsModule,
     TranslateModule,
     RouterModule,
+    GoogleSigninButtonModule,
 
     //components
     PasteInputComponent,
@@ -142,6 +145,7 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     SwitchComponent,
     TagEditorComponent,
     TooltipComponent,
+    AuthFormComponent,
 
     //Pipes
     IsFormFieldInvalidPipe,

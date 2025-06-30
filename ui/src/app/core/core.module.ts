@@ -1,3 +1,4 @@
+import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -27,6 +28,7 @@ import { HydrationEffects } from './store/hydration/hydration.effects';
   [
     CommonModule,
     HttpClientModule,
+    SocialLoginModule,
     StoreModule.forRoot({}, {metaReducers}),
     EffectsModule.forRoot(HydrationEffects),
 
@@ -47,7 +49,7 @@ import { HydrationEffects } from './store/hydration/hydration.effects';
         useFactory: httpLoaderFactory,
         deps: [HttpClient]
       }
-    }),
+    })
   ],
   providers: 
   [
@@ -71,6 +73,24 @@ import { HydrationEffects } from './store/hydration/hydration.effects';
       useClass: LangInterceptorService, 
       multi: true
     },
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        lang: 'en',
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '905688052710-qcaplf2dd4e1lqi27loskaktbknc6cdu.apps.googleusercontent.com'
+            )
+          }
+        ],
+        onError: (err) => {
+          console.error(err);
+        }
+      } as SocialAuthServiceConfig,
+    }
   ],
   exports: [TranslateModule]
 })
