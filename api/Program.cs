@@ -29,6 +29,7 @@ builder.Services.AddScoped<IPokeTeamContext, PokeTeamContext>();
 
 builder.Services.AddTransient<IIdentityService, IdentityService>();
 builder.Services.AddTransient<Printer>();
+builder.Services.AddTransient<IExternalAuthService, ExternalAuthService>();
 
 builder.Services.AddScoped<IPokemonService, PokemonService>();
 builder.Services.AddScoped<IItemService, ItemService>();

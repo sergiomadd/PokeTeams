@@ -34,6 +34,7 @@ namespace api.Controllers
         private readonly PokeTeamContext _pokeTeamContext;
         private readonly IWebHostEnvironment _env;
         private readonly Printer Printer;
+        private readonly IExternalAuthService _externalAuthService;
         private string baseUrl;
 
         public AuthController(UserManager<User> userManager,
@@ -46,7 +47,8 @@ namespace api.Controllers
             PokeTeamContext pokeTeamContext,
             IConfiguration config,
             IWebHostEnvironment env,
-            Printer printer
+            Printer printer,
+            IExternalAuthService externalAuthService
             )
         {
             _userManager = userManager;
@@ -60,6 +62,7 @@ namespace api.Controllers
             _config = config;
             _env = env;
             Printer = printer;
+            _externalAuthService = externalAuthService;
 
             baseUrl = "";
 
@@ -282,7 +285,7 @@ namespace api.Controllers
                 return BadRequest("Wrong data");
             }
 
-            GoogleJsonWebSignature.Payload? payload = await VerifyGoogleToken(request.IdToken);
+            GoogleJsonWebSignature.Payload? payload = await _externalAuthService.VerifyGoogleToken(request.IdToken);
             if (payload == null)
             {
                 return BadRequest("Invalid External Authentication");
@@ -336,24 +339,6 @@ namespace api.Controllers
             _tokenGenerator.SetTokensInsideCookie(tokens, HttpContext);
 
             return Ok();
-        }
-
-        private async Task<GoogleJsonWebSignature.Payload?> VerifyGoogleToken(string idToken)
-        {
-            try
-            {
-                var settings = new GoogleJsonWebSignature.ValidationSettings()
-                {
-                    Audience = new[] { _config["Google:Id"] }
-                };
-
-                return await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
-            }
-            catch (Exception ex)
-            {
-                Printer.Log("Error verifiyng google token ", ex);
-            }
-            return null;
         }
 
         private async Task<string> GenerateUniqueUsername(string baseName)
