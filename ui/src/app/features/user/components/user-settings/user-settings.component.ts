@@ -1,3 +1,4 @@
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -29,6 +30,7 @@ export class UserSettingsComponent
   userPageService = inject(UserPageService);
   queryService = inject(QueryService);
   window = inject(WindowService);
+  socialAuthService = inject(SocialAuthService);
 
   loggedUser$ = this.store.select(selectLoggedUser);
   isSubmitting$ = this.store.select(selectIsSubmitting);
@@ -258,6 +260,7 @@ export class UserSettingsComponent
   
   logOut()
   {    
+    this.socialAuthService.signOut();
     this.store.dispatch(authActions.logOut());
   }
 

@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace api.Util
 {
@@ -177,6 +179,22 @@ namespace api.Util
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> value)
         {
             return value == null || !value.Any();
+        }
+
+        public static string RemoveDiacritics(string input)
+        {
+            string normalized = input.Normalize(NormalizationForm.FormD);
+            StringBuilder builder = new StringBuilder();
+
+            foreach (char c in normalized)
+            {
+                if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                {
+                    builder.Append(c);
+                }
+            }
+
+            return builder.ToString();
         }
     }
 }

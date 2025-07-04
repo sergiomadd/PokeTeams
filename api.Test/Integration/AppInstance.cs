@@ -15,6 +15,8 @@ using api.Models.DBPoketeamModels;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Google.Apis.Auth;
+using api.Services;
 
 
 namespace api.Test.Integration
@@ -90,6 +92,9 @@ namespace api.Test.Integration
                                .AllowAnyHeader();
                     });
                 });
+
+                services.AddTransient<IExternalAuthService, FakeExternalAuthService>();
+
 
                 //Makes sure the database is deleted before any tests
                 //And initializes it
@@ -173,6 +178,16 @@ namespace api.Test.Integration
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public Task<GoogleJsonWebSignature.Payload?> GenerateGooglePayload()
+        {
+            return Task.FromResult<GoogleJsonWebSignature.Payload?>(new GoogleJsonWebSignature.Payload
+            {
+                Email = "testAuth@gmail.com",
+                Subject = "1234567890",
+                Name = "Test Auth User",
+            });
         }
     }
 }

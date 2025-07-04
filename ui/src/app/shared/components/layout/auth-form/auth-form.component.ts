@@ -1,3 +1,4 @@
+import { GoogleLoginProvider, SocialAuthService } from '@abacritt/angularx-social-login';
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -6,6 +7,7 @@ import { UtilService } from 'src/app/core/helpers/util.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { authActions } from 'src/app/core/store/auth/auth.actions';
 import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/store/auth/auth.selectors';
+import { ExternalAuthDTO } from 'src/app/features/user/models/externalAuth.dto';
 import { LogInDTO } from 'src/app/features/user/models/login.dto';
 import { SignUpDTO } from 'src/app/features/user/models/signup.dto';
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
@@ -21,6 +23,7 @@ export class AuthFormComponent
   formBuilder = inject(FormBuilder);
   store = inject(Store);
   util = inject(UtilService);
+  socialAuthService = inject(SocialAuthService);
 
   data$ = combineLatest(
     {
@@ -83,6 +86,16 @@ export class AuthFormComponent
 
   async ngOnInit()
   {
+    this.socialAuthService.authState.subscribe((user) => 
+    {
+      const externalAuthDTO: ExternalAuthDTO = 
+      {
+        provider: GoogleLoginProvider.PROVIDER_ID,
+        idToken: user.idToken
+      };
+      this.store.dispatch(authActions.externalLogIn({ request: externalAuthDTO }));
+    });
+
     this.signUpForm.controls.username.valueChanges.subscribe(async (value) => 
     {
       if(this.signUpForm.controls.username.valid)

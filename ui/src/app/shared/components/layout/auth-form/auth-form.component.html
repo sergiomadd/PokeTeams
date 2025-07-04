@@ -13,6 +13,7 @@
       (ngSubmit)="logIn()"
       >
         <div class="title text-center">{{'user.form.login' | translate}}</div>
+        <ng-container *ngTemplateOutlet="externalAuth"></ng-container>
         <div class="flex-col gap-l pad-m">
           <div class="item">
             <input type="text" 
@@ -45,7 +46,7 @@
               {{logInForm.controls.password.errors | getFormControlError}}
             </span>
             <div class="flex justify-c-s align-i-s w-100">
-              <a (click)="showForgotForm()" style="font-size: 0.9em;" class="pointer">Forgot password?</a>
+              <a (click)="showForgotForm()" style="font-size: 0.9em;" class="pointer">{{'user.form.forgot-question' | translate}}</a>
             </div>
           </div>
         </div>
@@ -88,6 +89,7 @@
       (ngSubmit)="signUp()"
       >
         <div class="title text-center">{{'user.form.signup' | translate}}</div>
+        <ng-container *ngTemplateOutlet="externalAuth"></ng-container>
         <div class="flex-col gap-l pad-m">
           <div class="item">
             <input type="text" 
@@ -292,4 +294,12 @@
       29 -59 43 -103z"/>
     </g>
  </svg>
+</ng-template>
+<ng-template #externalAuth>
+  <div class="flex justify-c-c align-i-c gap-l">
+    <div class="flex justify-c-c align-i-c" style="min-height: 60px; min-width: 60px;">
+      <asl-google-signin-button type='icon' size='large'></asl-google-signin-button>
+    </div>
+  </div>
+  <div class="w-80" style="border-bottom: 1px solid var(--bg-color-3); padding-bottom: 0.5em;"></div>
 </ng-template>

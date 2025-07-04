@@ -12,6 +12,7 @@ using api.Util;
 using Microsoft.OpenApi.Models;
 using api.Services.PokedexServices;
 using api.Middlewares;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,7 @@ builder.Services.AddScoped<IPokeTeamContext, PokeTeamContext>();
 
 builder.Services.AddTransient<IIdentityService, IdentityService>();
 builder.Services.AddTransient<Printer>();
+builder.Services.AddTransient<IExternalAuthService, ExternalAuthService>();
 
 builder.Services.AddScoped<IPokemonService, PokemonService>();
 builder.Services.AddScoped<IItemService, ItemService>();
@@ -50,6 +52,13 @@ builder.Services.AddAuthentication(option =>
         option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddGoogle("google", opt =>
+    {
+        opt.ClientId = builder.Configuration["Google:Secret"] ?? "";
+        opt.ClientSecret = builder.Configuration["Google:Id"] ?? "";
+        opt.SignInScheme = JwtBearerDefaults.AuthenticationScheme;
+        opt.CallbackPath = "/auth/signin-google";
     })
     .AddJwtBearer(options =>
     {

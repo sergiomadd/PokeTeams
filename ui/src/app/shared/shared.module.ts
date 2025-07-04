@@ -1,3 +1,4 @@
+import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -22,7 +23,6 @@ import { FooterComponent } from './components/layout/footer/footer.component';
 import { MenuComponent } from './components/layout/menu/menu.component';
 import { PrivacyPolicyComponent } from './components/layout/privacy-policy/privacy-policy.component';
 import { ResetPasswordComponent } from './components/layout/reset-password/reset-password.component';
-import { UserFormComponent } from './components/layout/user-form/user-form.component';
 import { EvolutionComponent } from './components/pokemon/evolution/evolution.component';
 import { PokeTooltipComponent } from './components/pokemon/poke-tooltip/poke-tooltip.component';
 import { PokemonCardComponent } from './components/pokemon/pokemon-card/pokemon-card.component';
@@ -46,7 +46,6 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
   [ 
     PasteInputComponent,
     SmartInputComponent,
-    UserFormComponent,
     MenuComponent,
     FooterComponent,
 
@@ -97,7 +96,8 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     HttpClientModule,
     RouterModule,
     TranslateModule,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    GoogleSigninButtonModule
   ],
   exports: 
   [
@@ -107,11 +107,11 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     ReactiveFormsModule,
     TranslateModule,
     RouterModule,
+    GoogleSigninButtonModule,
 
     //components
     PasteInputComponent,
     SmartInputComponent,
-    UserFormComponent,
     MenuComponent,
     FooterComponent,
 
@@ -142,6 +142,7 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     SwitchComponent,
     TagEditorComponent,
     TooltipComponent,
+    AuthFormComponent,
 
     //Pipes
     IsFormFieldInvalidPipe,
