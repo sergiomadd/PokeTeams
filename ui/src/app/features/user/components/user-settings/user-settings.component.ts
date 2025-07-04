@@ -255,6 +255,7 @@ export class UserSettingsComponent
 
   deleteAccount()
   {
+    this.socialAuthService.signOut();
     this.store.dispatch(authActions.deleteAccount()); 
   }
   
