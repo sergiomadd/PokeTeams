@@ -88,14 +88,12 @@ export class AuthFormComponent
   {
     this.socialAuthService.authState.subscribe((user) => 
     {
-      console.log('Google user:', user);
       const externalAuthDTO: ExternalAuthDTO = 
       {
         provider: GoogleLoginProvider.PROVIDER_ID,
         idToken: user.idToken
       };
       this.store.dispatch(authActions.externalLogIn({ request: externalAuthDTO }));
-      // Send `user.idToken` to your backend for verification
     });
 
     this.signUpForm.controls.username.valueChanges.subscribe(async (value) => 

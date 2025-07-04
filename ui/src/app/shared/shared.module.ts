@@ -23,7 +23,6 @@ import { FooterComponent } from './components/layout/footer/footer.component';
 import { MenuComponent } from './components/layout/menu/menu.component';
 import { PrivacyPolicyComponent } from './components/layout/privacy-policy/privacy-policy.component';
 import { ResetPasswordComponent } from './components/layout/reset-password/reset-password.component';
-import { UserFormComponent } from './components/layout/user-form/user-form.component';
 import { EvolutionComponent } from './components/pokemon/evolution/evolution.component';
 import { PokeTooltipComponent } from './components/pokemon/poke-tooltip/poke-tooltip.component';
 import { PokemonCardComponent } from './components/pokemon/pokemon-card/pokemon-card.component';
@@ -47,7 +46,6 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
   [ 
     PasteInputComponent,
     SmartInputComponent,
-    UserFormComponent,
     MenuComponent,
     FooterComponent,
 
@@ -114,7 +112,6 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     //components
     PasteInputComponent,
     SmartInputComponent,
-    UserFormComponent,
     MenuComponent,
     FooterComponent,
 
