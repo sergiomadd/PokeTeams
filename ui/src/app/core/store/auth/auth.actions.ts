@@ -1,4 +1,5 @@
 import { createActionGroup, emptyProps, props } from "@ngrx/store";
+import { ExternalAuthDTO } from "src/app/features/user/models/externalAuth.dto";
 import { LogInDTO } from "src/app/features/user/models/login.dto";
 import { SignUpDTO } from "src/app/features/user/models/signup.dto";
 import { UserUpdateDTO } from "src/app/features/user/models/userUpdate.dto";
@@ -56,7 +57,11 @@ export const authActions = createActionGroup(
       "forgotPassword failure": props<{error: string}>(),
       resetPassword: props<{request: UserUpdateDTO}>(),
       "resetPassword success": emptyProps(),
-      "resetPassword failure": props<{error: string}>()
+      "resetPassword failure": props<{error: string}>(),
+      toggleAuthForm: emptyProps(),
+      externalLogIn: props<{request: ExternalAuthDTO}>(),
+      "externalLogIn success": props<{authResponse: AuthResponseDTO}>(),
+      "externalLogIn failure": props<{error: string}>(),
     },
   }
 )

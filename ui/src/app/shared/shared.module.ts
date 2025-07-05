@@ -1,3 +1,4 @@
+import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -17,11 +18,11 @@ import { SwitchComponent } from './components/dumb/switch/switch.component';
 import { TagEditorComponent } from './components/dumb/tag-editor/tag-editor.component';
 import { TooltipComponent } from './components/dumb/tooltip/tooltip.component';
 import { AboutComponent } from './components/layout/about/about.component';
+import { AuthFormComponent } from './components/layout/auth-form/auth-form.component';
 import { FooterComponent } from './components/layout/footer/footer.component';
 import { MenuComponent } from './components/layout/menu/menu.component';
 import { PrivacyPolicyComponent } from './components/layout/privacy-policy/privacy-policy.component';
 import { ResetPasswordComponent } from './components/layout/reset-password/reset-password.component';
-import { UserFormComponent } from './components/layout/user-form/user-form.component';
 import { EvolutionComponent } from './components/pokemon/evolution/evolution.component';
 import { PokeTooltipComponent } from './components/pokemon/poke-tooltip/poke-tooltip.component';
 import { PokemonCardComponent } from './components/pokemon/pokemon-card/pokemon-card.component';
@@ -37,13 +38,14 @@ import { TeamTableComponent } from './components/team/team-table/team-table.comp
 import { TeamComponent } from './components/team/team/team.component';
 import { TournamentPreviewComponent } from './components/team/tournament-preview/tournament-preview.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
+import { GetFormControlErrorPipe } from './pipes/getFormControlError.pipe';
+import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
 
 @NgModule({
   declarations: 
   [ 
     PasteInputComponent,
     SmartInputComponent,
-    UserFormComponent,
     MenuComponent,
     FooterComponent,
 
@@ -80,6 +82,11 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
     AboutComponent,
     RegulationPreviewComponent,
     ResetPasswordComponent,
+    AuthFormComponent,
+
+    //Pipes
+    IsFormFieldInvalidPipe,
+    GetFormControlErrorPipe
   ],
   imports: 
   [
@@ -89,7 +96,8 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
     HttpClientModule,
     RouterModule,
     TranslateModule,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    GoogleSigninButtonModule
   ],
   exports: 
   [
@@ -99,11 +107,11 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
     ReactiveFormsModule,
     TranslateModule,
     RouterModule,
+    GoogleSigninButtonModule,
 
     //components
     PasteInputComponent,
     SmartInputComponent,
-    UserFormComponent,
     MenuComponent,
     FooterComponent,
 
@@ -134,6 +142,11 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
     SwitchComponent,
     TagEditorComponent,
     TooltipComponent,
+    AuthFormComponent,
+
+    //Pipes
+    IsFormFieldInvalidPipe,
+    GetFormControlErrorPipe
   ],
   providers: [TranslateStore]
 })

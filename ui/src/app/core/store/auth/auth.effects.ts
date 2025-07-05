@@ -518,4 +518,35 @@ export class AuthEffects
       })
     )
   });
+
+  externalLogInEffect = createEffect(() =>
+  {
+    return this.actions$.pipe(
+      ofType(authActions.externalLogIn),
+      switchMap(({request}) =>
+      {
+        return this.authService.externalLogIn(request).pipe(
+          switchMap(async () =>
+          {
+            const loggedUser: User | null = await lastValueFrom(this.authService.getLoggedUser())
+            const authResponse: AuthResponseDTO = 
+            {
+              loggedUser: loggedUser,
+              success: true,
+              error: null
+            }
+            return authActions.externalLogInSuccess({authResponse});
+          }),
+          catchError((error: CustomError) => 
+          {
+            return of(authActions.externalLogInFailure(
+              {
+                error: error.message
+              }
+            ))
+          })
+        )
+      })
+    )
+  });
 }

@@ -138,6 +138,11 @@
     align-items: end;
     gap: 0.8em;
   }
+
+  .preview
+  {
+    height: auto;
+  }
 }
 
 @media (max-width: $mobile) 

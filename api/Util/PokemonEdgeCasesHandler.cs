@@ -52,6 +52,7 @@ namespace api.Util
             return pokemonList;
         }
 
+        //Identifier comes in as lowercase
         public static string HandleFormIdentifierEdgeCases(string identifier)
         {
             //Ogerpon-Cornerstone
@@ -64,13 +65,20 @@ namespace api.Util
             {
                 identifier += "-breed";
             }
+            //Maushold three / maushold four
+            //" Maushold-Four" -> ""
+            if (identifier.Contains("maushold"))
+            {
+                if (identifier.Contains("three")) { identifier = "maushold-family-of-three"; }
+                if (identifier.Contains("four")) { identifier = "maushold-family-of-four"; }
+            }
             /* Female forms that change pokemon identifier
              * "meowstic-female"
              * "indeedee-female"
              * "basculegion-female"
              * "oinkologne-female"
              */
-            if (identifier.ToLower().Contains("(f)") || identifier.ToLower().Contains("-f"))
+            if (identifier.Contains("(f)") || (identifier.Contains("-f") && identifier.EndsWith("-f")))
             {
                 var aux = identifier.Split("-");
                 identifier = aux[0] + "-" + "female";

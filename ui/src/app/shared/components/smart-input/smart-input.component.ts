@@ -176,6 +176,7 @@ export class SmartInputComponent
 
   selectResult(selectedResult: QueryItem)
   {
+    console.log(selectedResult);
     if(this.keepSelected)
     {
       this.selected = selectedResult;
@@ -306,11 +307,6 @@ export class SmartInputComponent
     {
       this.resultsDiv.nativeElement.scrollBy(0, 38);
     }
-  }
-
-  onBlur()
-  {
-    this.showOptions = false;
   }
 
   focusNext(): void 

@@ -368,6 +368,7 @@ export class PokemonCardComponent
           name: stat.name,
           value: this.calculateIV(this.pokemon?.ivs && this.pokemon?.ivs.length > 0 ? this.pokemon.ivs[index].value : 0)
         }
+        console.log("calculating")
         this.calculatedStats.evs[index] = 
         {
           identifier: stat.identifier,
@@ -448,7 +449,7 @@ export class PokemonCardComponent
 
   calculateEV(ev: number) : number
   {
-    return Math.floor((Math.floor(ev / 4) * (this.pokemon?.level ? this.pokemon.level : 50)) / 100);
+    return Math.ceil((Math.floor(ev / 4) * (this.pokemon?.level ? this.pokemon.level : 50)) / 100);
   }
 
   getNatureValue(baseStat?: Stat, nature?: Nature) : number

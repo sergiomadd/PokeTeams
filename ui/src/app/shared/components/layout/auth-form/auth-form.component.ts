@@ -1,44 +1,48 @@
-import { Component, inject } from '@angular/core';
+import { GoogleLoginProvider, SocialAuthService } from '@abacritt/angularx-social-login';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { authActions } from 'src/app/core/store/auth/auth.actions';
-import { selectError, selectIsSubmitting } from 'src/app/core/store/auth/auth.selectors';
+import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/store/auth/auth.selectors';
+import { ExternalAuthDTO } from 'src/app/features/user/models/externalAuth.dto';
 import { LogInDTO } from 'src/app/features/user/models/login.dto';
 import { SignUpDTO } from 'src/app/features/user/models/signup.dto';
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
 
-
 @Component({
-  selector: 'app-user-form',
-  templateUrl: './user-form.component.html',
-  styleUrls: ['./user-form.component.scss']
+  selector: 'app-auth-form',
+  templateUrl: './auth-form.component.html',
+  styleUrl: './auth-form.component.scss'
 })
-
-export class UserFormComponent 
+export class AuthFormComponent 
 {
   userService = inject(UserService);
   formBuilder = inject(FormBuilder);
   store = inject(Store);
   util = inject(UtilService);
+  socialAuthService = inject(SocialAuthService);
 
   data$ = combineLatest(
     {
       isSubmitting: this.store.select(selectIsSubmitting),
-      backendError: this.store.select(selectError)
+      backendError: this.store.select(selectError),
+      success: this.store.select(selectSuccess)
     }
   )
+
+  @Output() close = new EventEmitter();
 
   login: boolean = true;
   signup: boolean = false;
   forgot: boolean = false;
   userNameAvailable: boolean = false;
   emailAvailable: boolean = false;
-  forgotPasswordSubmitted: boolean = false;
 
   logInFormSubmitted: boolean = false;
+  showLogInPassword: boolean = false;
   logInForm = this.formBuilder.group(
   {
     userNameOrEmail: ['', [Validators.required, Validators.maxLength(256)]],
@@ -46,6 +50,8 @@ export class UserFormComponent
   }, { updateOn: "submit" });
 
   signUpFormSubmitted: boolean = false;
+  showSignUpPassword: boolean = false;
+  showSignUpConfirmPassword: boolean = false;
   signUpForm = this.formBuilder.group(
   {
     username: new FormControl('', 
@@ -58,8 +64,14 @@ export class UserFormComponent
       validators: [Validators.required, Validators.email, Validators.maxLength(256)],
       updateOn: 'blur'
     }),
-    password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
+    password: this.formBuilder.control('', {
+      validators: [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()],
+      updateOn: 'change'
+    }),
+    confirmPassword: this.formBuilder.control('', {
+      validators: [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()],
+      updateOn: 'change'
+    }),
   });
   
   forgotFormSubmitted: boolean = false;
@@ -74,6 +86,16 @@ export class UserFormComponent
 
   async ngOnInit()
   {
+    this.socialAuthService.authState.subscribe((user) => 
+    {
+      const externalAuthDTO: ExternalAuthDTO = 
+      {
+        provider: GoogleLoginProvider.PROVIDER_ID,
+        idToken: user.idToken
+      };
+      this.store.dispatch(authActions.externalLogIn({ request: externalAuthDTO }));
+    });
+
     this.signUpForm.controls.username.valueChanges.subscribe(async (value) => 
     {
       if(this.signUpForm.controls.username.valid)
@@ -91,6 +113,16 @@ export class UserFormComponent
         if(!this.emailAvailable) { this.signUpForm.controls.email.setErrors({ "emailTaken": true }); }
       }
     });
+    
+    //Close form when login/signup is completed
+    //Do not close if forgot password is completed
+    this.data$.subscribe(value =>
+    {
+      if(value && value.success && !this.forgot)
+      {
+        this.closeSelf();
+      }
+    })
   }
 
   async logIn()
@@ -126,7 +158,7 @@ export class UserFormComponent
 
   forgotPassword()
   {
-    this.forgotPasswordSubmitted = true;
+    this.forgotFormSubmitted = true;
     if(this.forgotForm.valid)
     {
       let updateDTO: UserUpdateDTO = 
@@ -142,6 +174,7 @@ export class UserFormComponent
     this.login = true;
     this.signup = false;
     this.forgot = false;
+    this.clearLogInForm();
   }
 
   showSignUpForm()
@@ -149,6 +182,7 @@ export class UserFormComponent
     this.signup = true;
     this.login = false;
     this.forgot = false;
+    this.clearSignUpForm();
   }
 
   showForgotForm()
@@ -156,50 +190,52 @@ export class UserFormComponent
     this.signup = false;
     this.login = false;
     this.forgot = true;
+    this.clearForgotForm();
   }
 
   clearLogInForm()
   {
-    this.logInForm.reset();
+    this.logInForm.reset({ userNameOrEmail: '', password: ''});
+    this.logInFormSubmitted = false;
     this.userNameAvailable = false;
+    this.store.dispatch(authActions.toggleAuthForm());
   }
 
   clearSignUpForm()
   {
-    this.signUpForm.reset();
+    this.signUpForm.reset({ username: '', email: '', password: '', confirmPassword: ''});
+    this.signUpFormSubmitted = false;
     this.userNameAvailable = false;
     this.emailAvailable = false;
+    this.store.dispatch(authActions.toggleAuthForm());
   }
 
-  isInvalid(key: string, form: string) : boolean
+  clearForgotForm()
   {
-    let control = this.getControl(key, form);
-    return (control?.errors
-      && (control?.dirty || control?.touched
-        || (form === "signup" ? this.signUpFormSubmitted : this.logInFormSubmitted))) 
-      ?? false;
+    this.forgotForm.reset({ email: '' });
+    this.forgotFormSubmitted = false;
+    this.store.dispatch(authActions.toggleAuthForm());
   }
 
-  getError(key: string, formKey: string) : string
+  closeSelf()
   {
-    let control = this.getControl(key, formKey);
-    return this.util.getAuthFormError(control);
+    this.close.emit();
+    this.store.dispatch(authActions.toggleAuthForm());
   }
 
-  getControl(key: string, form: string): any
+  toggleShowPassword(key: string)
   {
-    let control;
-    if(form === "signup")
+    switch(key)
     {
-      control = this.signUpForm.get(key)
-    }
-    else if(form  === "login")
-    {
-      control = this.logInForm.get(key)
-    }
-    else
-    {
-      control = this.forgotForm.get(key)
+      case "logInPassword":
+        this.showLogInPassword = !this.showLogInPassword;
+        break;
+      case "signUpPassword":
+        this.showSignUpPassword = !this.showSignUpPassword;
+        break;
+      case "signUpConfirmPassword":
+        this.showSignUpConfirmPassword = !this.showSignUpConfirmPassword;
+        break;
     }
   }
 }

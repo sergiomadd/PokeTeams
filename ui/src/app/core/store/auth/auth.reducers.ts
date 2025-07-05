@@ -327,4 +327,32 @@ export const authReducers = createReducer(
       isSubmitting: false,
       error: action.error
     })),
+  on(authActions.toggleAuthForm, (state) => (
+    {
+      ...state,
+      isSubmitting: false,
+      success: false,
+      error: null
+    })),
+  on(authActions.externalLogIn, (state) => (
+    {
+      ...state,
+      isSubmitting: true,
+      error: null,
+      success: false
+    })),
+  on(authActions.externalLogInSuccess, (state, action) => (
+    {
+      ...state,
+      loggedUser: action.authResponse.loggedUser,
+      isAuthenticated: true,
+      isSubmitting: false,
+      success: true
+    })),
+  on(authActions.externalLogInFailure, (state, action) => (
+    {
+      ...state,
+      isSubmitting: false,
+      error: action.error
+    })),
 )

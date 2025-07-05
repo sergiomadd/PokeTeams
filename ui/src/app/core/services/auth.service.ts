@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, timeout } from 'rxjs';
 import { EmailDTO } from 'src/app/features/user/models/email.dto';
+import { ExternalAuthDTO } from 'src/app/features/user/models/externalAuth.dto';
 import { LogInDTO } from 'src/app/features/user/models/login.dto';
 import { SignUpDTO } from 'src/app/features/user/models/signup.dto';
 import { User } from 'src/app/features/user/models/user.model';
@@ -58,6 +59,12 @@ export class AuthService
   {
     let url = this.apiUrl + 'delete';
     return this.http.post<void>(url, null, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+  }
+
+  externalLogIn(data: ExternalAuthDTO) : Observable<void>
+  {
+    let url = this.apiUrl + 'signin-google';
+    return this.http.post<void>(url, data, {withCredentials: true}).pipe(timeout(this.dataTimeout));
   }
 
   changeName(updateDTO: UserUpdateDTO) : Observable<void>
