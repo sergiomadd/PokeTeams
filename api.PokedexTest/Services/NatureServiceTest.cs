@@ -2,9 +2,9 @@
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Models;
+using api.PokedexTest;
 using api.Services.PokedexServices;
 using api.Test.Data;
-using api.Test.Integration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
