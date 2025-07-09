@@ -224,9 +224,9 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 if (!app.Environment.IsEnvironment("Test"))
 {
     app.UseRateLimiter();
+    app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseAuthentication();

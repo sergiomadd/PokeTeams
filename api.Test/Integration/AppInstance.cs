@@ -35,6 +35,7 @@ namespace api.Test.Integration
             builder.ConfigureTestServices(services =>
             {
                 var configuration = new ConfigurationBuilder()
+                    .AddEnvironmentVariables()
                     .AddUserSecrets<AppInstance>()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.Test.json", optional: true, reloadOnChange: true)
@@ -153,6 +154,7 @@ namespace api.Test.Integration
         public string GenerateValidJwtToken(User? user)
         {
             var configuration = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
                 .AddUserSecrets<AppInstance>()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
