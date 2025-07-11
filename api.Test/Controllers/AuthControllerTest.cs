@@ -866,6 +866,37 @@ namespace api.Test.Controllers
         }
 
         [Fact]
+        public async Task GetEmailConfirmationCode_ReturnsBadRequest_SendingError()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "code";
+            var authUser = _instance.GetTestAuthLoggedUser();
+            authUser.Email = "error@gmail.com";
+            var scope = _instance.Services.CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            await userManager.CreateAsync(authUser);
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var validJwtToken = _instance.GenerateValidJwtToken(authUser);
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", validJwtToken);
+            var accessCookie = new CookieHeaderValue("accessToken", validJwtToken);
+            client.DefaultRequestHeaders.Add("Cookie", accessCookie.ToString());
+
+            //Act
+            var response = await client.GetAsync(request);
+
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsAsync<string>();
+            Assert.Equal("Error sending email", responseString);
+        }
+
+        [Fact]
         public async Task GetEmailConfirmationCode_ReturnsOk()
         {
             //Arrange
@@ -1787,6 +1818,37 @@ namespace api.Test.Controllers
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             var responseString = await response.Content.ReadAsAsync<string>();
             Assert.Equal("Wrong data", responseString);
+        }
+
+        [Fact]
+        public async Task ForgotPassword_ReturnsBadRequest_SendingError()
+        {
+            //Arrange
+            var _instance = new AppInstance();
+            var request = "forgot";
+            var authUser = _instance.GetTestAuthLoggedUser();
+            authUser.Email = "error@gmail.com";
+            var scope = _instance.Services.CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            await userManager.CreateAsync(authUser);
+
+            UserUpdateDTO body = new UserUpdateDTO()
+            {
+                CurrentEmail = "error@gmail.com"
+            };
+
+            var client = _instance.CreateClient();
+            client.BaseAddress = _baseAddres;
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //Act
+            var response = await client.PostAsJsonAsync(request, body);
+
+            //Assert
+            //Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            var responseString = await response.Content.ReadAsAsync<string>();
+            Assert.Equal("Error sending email", responseString);
         }
 
         [Fact]

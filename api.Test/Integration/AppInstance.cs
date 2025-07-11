@@ -96,6 +96,8 @@ namespace api.Test.Integration
 
                 services.AddTransient<IExternalAuthService, FakeExternalAuthService>();
 
+                services.RemoveAll(typeof(IEmailService));
+                services.AddTransient<IEmailService, FakeEmailService>();
 
                 //Makes sure the database is deleted before any tests
                 //And initializes it
