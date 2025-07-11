@@ -13,6 +13,7 @@ jobs:
       AWS_HOST: ${{ secrets.AWS_HOST }}
       AWS_USERNAME: ${{ secrets.AWS_USERNAME }}
       DEPLOY_PATH_API: ${{ secrets.DEPLOY_PATH_API }}
+      DEPLOY_PATH_UI: ${{ secrets.DEPLOY_PATH_UI }}
       AWS_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}
 
     services:
@@ -87,3 +88,35 @@ jobs:
             sudo systemctl restart poketeams-api-service.service
           EOF
         shell: bash
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Angular dependencies
+        working-directory: ./ui
+        run: npm ci
+
+      - name: Build Angular app
+        working-directory: ./ui
+        run: npm run build --prod
+
+      - name: Deploy Angular to EC2
+        run: |
+          printf "%s" "$AWS_SSH_KEY" > key.pem
+          chmod 600 key.pem
+
+          echo "Cleaning remote Angular directory..."
+          ssh -o StrictHostKeyChecking=no -i key.pem $AWS_USERNAME@$AWS_HOST << EOF
+            rm -rf $DEPLOY_PATH_UI/*
+          EOF
+
+          echo "Uploading Angular build..."
+          rsync -avz --delete -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
+            ./ui/dist/ui/ $AWS_USERNAME@$AWS_HOST:$DEPLOY_PATH_UI
+
+          echo "Reloading Nginx"
+          ssh -o StrictHostKeyChecking=no -i key.pem $AWS_USERNAME@$AWS_HOST << EOF
+            sudo service nginx restart
+          EOF
