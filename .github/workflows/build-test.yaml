@@ -1,4 +1,4 @@
-name: Build and Test
+name: Prod Build, Test and Deploy
 
 on:
   push:
@@ -8,6 +8,12 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    env:
+      AWS_HOST: ${{ secrets.AWS_HOST }}
+      AWS_USERNAME: ${{ secrets.AWS_USERNAME }}
+      DEPLOY_PATH_API: ${{ secrets.DEPLOY_PATH_API }}
+      AWS_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}
 
     services:
       postgres:
@@ -56,3 +62,28 @@ jobs:
           ConnectionStrings__PostgrePoketeamTest: Host=localhost;Port=5432;Database=poketeam;Username=postgres;Password=postgres
           JWT__SECRET: ${{ secrets.JWT__SECRET }}
         run: dotnet test ./api.Test/api.Test.csproj --verbosity normal
+
+      - name: Publish
+        if: success()
+        run: dotnet publish ./api/api.csproj --configuration Release --output ./api/bin/Release/net9.0/publish
+
+      - name: Deploy to AWS EC2
+        if: success()
+        run: |
+          printf "%s" "$AWS_SSH_KEY" > key.pem
+          chmod 600 key.pem
+
+          echo "Cleaning remote directory (except wwwroot)..."
+          ssh -o StrictHostKeyChecking=no -i key.pem $AWS_USERNAME@$AWS_HOST << EOF
+            find $DEPLOY_PATH_API -mindepth 1 -maxdepth 1 ! -name 'wwwroot' -exec rm -rf {} +
+          EOF
+
+          echo "Uploading files (excluding wwwroot)..."
+          rsync -avz --exclude='wwwroot' -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
+            ./api/bin/Release/net9.0/publish/ $AWS_USERNAME@$AWS_HOST:$DEPLOY_PATH_API
+
+          echo "Restarting service..."
+          ssh -o StrictHostKeyChecking=no -i key.pem $AWS_USERNAME@$AWS_HOST << EOF
+            sudo systemctl restart poketeams-api-service.service
+          EOF
+        shell: bash
