@@ -368,7 +368,6 @@ export class PokemonCardComponent
           name: stat.name,
           value: this.calculateIV(this.pokemon?.ivs && this.pokemon?.ivs.length > 0 ? this.pokemon.ivs[index].value : 0)
         }
-        console.log("calculating")
         this.calculatedStats.evs[index] = 
         {
           identifier: stat.identifier,
