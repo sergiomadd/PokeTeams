@@ -1,0 +1,51 @@
+<div 
+class="flex w-80 mar-auto" 
+style="margin-top: 2em; min-height: 90vh;" 
+[ngClass]="{'flex-col w-100': window.isTabletLandscapeOrLess()}"
+>
+  <ng-container 
+  [ngTemplateOutlet]="teamSection"
+  [ngTemplateOutletContext]="{which: 'A'}"
+  ></ng-container>
+  <ng-container *ngIf="!window.isTabletLandscapeOrLess()">
+    <div style="border-right: 1px solid var(--bg-color-3);" class="mar-m"></div>
+  </ng-container>
+  <ng-container *ngIf="window.isTabletLandscapeOrLess()">
+    <div style="border-bottom: 1px solid var(--bg-color-3);" class="mar-xl"></div>
+  </ng-container>
+  <ng-container 
+  [ngTemplateOutlet]="teamSection"
+  [ngTemplateOutletContext]="{which: 'B'}"
+  ></ng-container>
+</div>
+<ng-template #teamSection let-which="which">
+  <div class="w-80 flex flex-col align-i-c gap-l" style="margin-right: auto; margin-left: auto;">
+    Team {{which}}
+    <form [formGroup]="which === 'A' ? teamAForm : teamBForm">
+      <input 
+      type="text" 
+      class="input-m" 
+      style="width: 20em;"
+      placeholder="Team {{which}} link" 
+      formControlName="{{which === 'A' ? 'idA' : 'idB'}}"
+      >
+    </form>
+    <ng-container *ngIf="which === 'A' ? !teamANotFound : !teamBNotFound; else notFound">
+      <ng-container *ngIf="which === 'A' ? !teamALoading : !teamBLoading; else loading">
+        <ng-container *ngIf="which === 'A' ? teamA : teamB">
+          <app-team-battle [team]="which === 'A' ? teamA : teamB"></app-team-battle>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</ng-template>
+<ng-template #loading>
+  <div class="flex justify-c-c align-i-c text-c-s bg-2 pokemons-placeholder">
+    <div class="dot-pulse"></div>        
+  </div>
+</ng-template>
+<ng-template #notFound>
+  <div class="flex justify-c-c align-i-c text-c-s bg-2 pokemons-placeholder">
+    NOT FOUND     
+  </div>
+</ng-template>
