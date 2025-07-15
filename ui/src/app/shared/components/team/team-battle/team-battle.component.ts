@@ -1,4 +1,4 @@
-import { Component, inject, Input, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { ParserService } from 'src/app/core/helpers/parser.service';
 import { ThemeService } from 'src/app/core/helpers/theme.service';
 import { UtilService } from 'src/app/core/helpers/util.service';
@@ -20,6 +20,7 @@ export class TeamBattleComponent
   theme = inject(ThemeService);
 
   @Input() team?: Team;
+  @Output() selectedIndexesEvent = new EventEmitter<number[]>()
 
   @ViewChildren(PokemonCardComponent) pokemonComponents!:QueryList<PokemonCardComponent>;
 
@@ -72,6 +73,7 @@ export class TeamBattleComponent
     {
       this.closeAllTooltips();
     }
+    this.selectedIndexesEvent.emit([this.selectedPokemonIndex1, this.selectedPokemonIndex2])
   }
 
   clickOptions(index: number)
@@ -103,10 +105,13 @@ export class TeamBattleComponent
 
   closeAllTooltips()
   {
-    this.pokemonComponents.forEach(pokemonComponent => 
-      {
-        pokemonComponent.closeAllTooltips();
-      }
-    );
+    if(this.pokemonComponents)
+    {
+      this.pokemonComponents.forEach(pokemonComponent => 
+        {
+          pokemonComponent.closeAllTooltips();
+        }
+      );
+    }
   }
 }

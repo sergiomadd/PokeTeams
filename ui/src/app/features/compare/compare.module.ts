@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ComparePageComponent } from './compare-page/compare-page.component';
+import { MarginTopPipe } from './margin-top.pipe';
 
 const routes: Routes = 
 [
@@ -12,7 +13,8 @@ const routes: Routes =
 @NgModule({
   declarations: 
   [
-    ComparePageComponent
+    ComparePageComponent,
+    MarginTopPipe
   ],
   imports: 
   [

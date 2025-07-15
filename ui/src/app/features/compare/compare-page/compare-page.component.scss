@@ -1,0 +1,13 @@
+.stat-list
+{
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  min-height: 80vh;
+}
+
+.selectedStat
+{
+  outline: 2px solid var(--text-color);
+}

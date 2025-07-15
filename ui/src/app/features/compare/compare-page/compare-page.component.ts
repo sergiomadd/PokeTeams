@@ -1,8 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ThemeService } from 'src/app/core/helpers/theme.service';
+import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
+import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
+import { Stat } from 'src/app/core/models/pokemon/stat.model';
 import { Team } from 'src/app/core/models/team/team.model';
 import { TeamService } from 'src/app/core/services/team.service';
+
+export interface ComparePokemon
+{
+  pokemon: Pokemon | null | undefined,
+  sourceIndex: number,
+  whichTeam: string
+}
 
 @Component({
   selector: 'app-compare-page',
@@ -14,24 +25,59 @@ export class ComparePageComponent
   formBuilder = inject(FormBuilder);
   teamService = inject(TeamService);
   window = inject(WindowService);
+  theme = inject(ThemeService);
+  util = inject(UtilService);
 
   teamA?: Team;
   teamB?: Team;
+  teamASelectedIndex: number[] = [];
+  teamBSelectedIndex: number[] = [];
 
   teamANotFound: boolean = false;
   teamALoading: boolean = false;
   teamAForm = this.formBuilder.group(
     {
       idA: ["", [Validators.maxLength(10)]],
-    }
+    }, { updateOn: "blur" }
   )
   teamBNotFound: boolean = false;
   teamBLoading: boolean = false;
   teamBForm = this.formBuilder.group(
     {
       idB: ["", [Validators.maxLength(10)]],
-    }
+    }, { updateOn: "blur" }
   )
+
+  statSelectors: Stat[] = 
+  [
+    {
+      identifier: "hp",
+      value: 0
+    },
+    {
+      identifier: "attack",
+      value: 0
+    },
+    {
+      identifier: "defense",
+      value: 0
+    },
+    {
+      identifier: "special-attack",
+      value: 0
+    },
+    {
+      identifier: "special-defense",
+      value: 0
+    },
+    {
+      identifier: "speed",
+      value: 0
+    }
+  ]; 
+  selectedStatIndex: number = 5;
+  selectedStat: Stat = this.statSelectors[this.selectedStatIndex];
+  statList: ComparePokemon[] | undefined = [];
 
   ngOnInit()
   {
@@ -50,13 +96,16 @@ export class ComparePageComponent
                 {
                   this.teamA = response;
                   this.teamALoading = false;
+                  this.calculateStatList(this.selectedStatIndex);
                 }
               },
               error: (err) => 
               {
                 console.log("Team A not found", err)
+                this.teamA = undefined;
                 this.teamANotFound = true;
                 this.teamALoading = false;
+                this.calculateStatList(this.selectedStatIndex);
               },
             }
           )
@@ -66,6 +115,7 @@ export class ComparePageComponent
           this.teamANotFound = false;
           this.teamALoading = false;
           this.teamA = undefined;
+          this.calculateStatList(this.selectedStatIndex);
         }
       })
       this.teamBForm.controls.idB.valueChanges.subscribe(async value => 
@@ -83,13 +133,16 @@ export class ComparePageComponent
                   {
                     this.teamB = response;
                     this.teamBLoading = false;
+                    this.calculateStatList(this.selectedStatIndex);
                   }
                 },
                 error: (err) => 
                 {
                   console.log("Team B not found", err)
+                  this.teamB = undefined;
                   this.teamBNotFound = true;
                   this.teamBLoading = false;
+                  this.calculateStatList(this.selectedStatIndex);
                 },
               }
             )
@@ -99,10 +152,15 @@ export class ComparePageComponent
             this.teamBNotFound = false;
             this.teamBLoading = false;
             this.teamB = undefined;
+            this.calculateStatList(this.selectedStatIndex);
           }
         })
-      this.teamAForm.controls.idA.setValue("http://localhost:4200/2sprxsowcw");
+      this.teamAForm.controls.idA.setValue("example");
       this.teamBForm.controls.idB.setValue("example");
+      //http://localhost:4200/2sprxsowcw
+      //example
+      //https://localhost:7134/f9xw1atocs
+      //https://localhost:7134/zoqijpw43m
   }
 
   tryGetTeamId(value: string)
@@ -123,5 +181,109 @@ export class ComparePageComponent
       team.options.showEVs = true;
       team.options.showNature = true;
     }
+  }
+
+  calculateStatList(statIndex: number)
+  {
+    if((this.teamA?.pokemons || this.teamB?.pokemons) && statIndex !== undefined)
+    {
+      const statListA: ComparePokemon[] | undefined =  this.teamA?.pokemons.map((pokemon, index) => ({pokemon: pokemon, whichTeam: "A", sourceIndex: index}));
+      const statListB: ComparePokemon[] | undefined =  this.teamB?.pokemons.map((pokemon, index) => ({pokemon: pokemon, whichTeam: "B", sourceIndex: index}));
+      if(!statListA && statListB)
+      {
+        this.statList = [...this.handleMismatch(this.sortByStatIndex(statListB?.concat(statListA ?? []), statIndex, false), statIndex)]
+      }
+      else
+      {
+        this.statList = [...this.handleMismatch(this.sortByStatIndex(statListA?.concat(statListB ?? []), statIndex, false), statIndex)]
+      }
+    }
+    else
+    {
+      this.statList = undefined;
+    }
+  }
+
+  sortByStatIndex(statList: ComparePokemon[] | undefined, statIndex: number, ascending: boolean = true): any[] 
+  {
+    if(statList)
+    {
+      return statList.sort((a, b) => 
+      {
+        const valA = a?.pokemon?.stats?.[statIndex]?.value ?? 0;
+        const valB = b?.pokemon?.stats?.[statIndex]?.value ?? 0;
+        
+        return ascending ? valA - valB : valB - valA;
+      });
+    }
+    return [];
+  }
+  
+  //Needed to handle multiple pokemons with same stat value
+  //StatList is sorted already
+  handleMismatch(statList: ComparePokemon[] | undefined, statIndex: number): any[] 
+  {
+    if(statList)
+    {
+      //Gets an array of arrays of the pokemons with the same values
+      let result: ComparePokemon[] = [];
+      let groups: ComparePokemon[][] = [];
+      let i: number = -1;
+      let j: number = 0;
+      for (const pokemon of statList) 
+      {
+        if(groups[i] && groups[i].some(p => p.pokemon?.stats?.[statIndex]?.value === pokemon?.pokemon?.stats?.[statIndex]?.value))
+        {
+          j++;
+          groups[i][j] = pokemon;
+        }
+        else
+        {
+          i++;
+          j = 0;
+          groups[i] = [pokemon];
+        }
+      }
+      //Mismatch the teams so that same value pokemons come after different team pokemon
+      for (const group of groups) 
+      {
+        group.sort((a, b) => 
+        {
+          const valA = a?.sourceIndex ?? 0;
+          const valB = b?.sourceIndex ?? 0;
+
+          return valB - valA ;
+        });
+      }
+      //Turn 2D into 1D array
+      for (const group of groups) 
+      {
+        result = result.concat(group);
+      }
+      return result;
+    }
+    return [];
+  }
+
+  selectIndexes(indexes: number[], whichTeam: string)
+  {
+    if(indexes)
+    {
+      if(whichTeam === 'A')
+      {
+        this.teamASelectedIndex = [...indexes];
+      }
+      else if(whichTeam === 'B')
+      {
+        this.teamBSelectedIndex = [...indexes];
+      }
+    }
+  }
+
+  selectStat(index: number)
+  {
+    this.selectedStatIndex = index;
+    this.selectedStat = this.statSelectors[index];
+    this.calculateStatList(this.selectedStatIndex);
   }
 }
