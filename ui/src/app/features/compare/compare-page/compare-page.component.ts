@@ -242,10 +242,8 @@ export class ComparePageComponent
             }
           }
         })
-
-
-      //this.teamAForm.controls.idA.setValue("http://localhost:4200/2sprxsowcw");
-      //this.teamBForm.controls.idB.setValue("example");
+      this.teamAForm.controls.idA.setValue("http://localhost:4200/2sprxsowcw");
+      this.teamBForm.controls.idB.setValue("example");
       ///http://localhost:4200/2sprxsowcw
       //example
       //https://localhost:7134/f9xw1atocs

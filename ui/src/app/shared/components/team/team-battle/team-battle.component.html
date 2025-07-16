@@ -3,7 +3,7 @@
     <div class="flex justify-c-c gap-m">
       <ng-container *ngFor="let pokemon of team.pokemons; index as i">
         <div 
-        class="selector flex justify-c-c align-i-c bor-rad-20 bor-1-3 pointer no-select"
+        class="selector flex justify-c-c align-i-c bor-rad-20 bor-1-3 pointer no-select bg-1"
         [ngClass]="{selected: selectedPokemonIndex1 == i || selectedPokemonIndex2 == i }"
         (click)="selectPokemon(i)"
         >

@@ -12,7 +12,7 @@
 .selected
 {
   background-color: var(--bg-color-3);
-  border: 1px solid black;
+  border: 1px solid var(--text-color);
 }
 
 .detail
@@ -27,4 +27,9 @@
   text-align: start;
   gap: 0.2em;
   cursor: pointer;
+}
+
+.active
+{
+  outline: 1px solid var(--text-color);
 }

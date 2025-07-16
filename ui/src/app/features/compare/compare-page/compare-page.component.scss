@@ -1,3 +1,16 @@
+@use "/src/app/core/styles/variables.scss" as *;
+
+.team-section
+{
+  width: 40%;
+}
+
+.inputs
+{
+  width: 24em; 
+  min-height: 2.5em;
+}
+
 .stat-list
 {
   position: absolute;
@@ -40,4 +53,26 @@
 .compare-paste-box-toggle-rotate
 {
   transform: rotate(180deg);
+}
+
+@media (max-width: $tabletLandscape)
+{
+  .inputs
+  {
+    width: 20em; 
+    min-height: 2.5em;
+  }  
+
+  .team-section
+  {
+    width: 90%;
+    margin: auto !important;
+  }
+
+  .stat-list
+  {
+    position: static;
+    transform: none;
+    min-height: auto;
+  }
 }
