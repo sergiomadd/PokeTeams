@@ -1,11 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ParserService } from 'src/app/core/helpers/parser.service';
 import { ThemeService } from 'src/app/core/helpers/theme.service';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
 import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
 import { Stat } from 'src/app/core/models/pokemon/stat.model';
 import { Team } from 'src/app/core/models/team/team.model';
+import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { TeamService } from 'src/app/core/services/team.service';
 
 export interface ComparePokemon
@@ -27,6 +29,8 @@ export class ComparePageComponent
   window = inject(WindowService);
   theme = inject(ThemeService);
   util = inject(UtilService);
+  parser = inject(ParserService);
+  pokemonService = inject(PokemonService);
 
   teamA?: Team;
   teamB?: Team;
@@ -35,16 +39,22 @@ export class ComparePageComponent
 
   teamANotFound: boolean = false;
   teamALoading: boolean = false;
+  showPasteAInput: boolean = false;
+  shrinkPasteAInput: boolean = true;
   teamAForm = this.formBuilder.group(
     {
-      idA: ["", [Validators.maxLength(10)]],
+      idA: ["", [Validators.maxLength(64)]],
+      pasteA: ["", [Validators.maxLength(2048)]]
     }, { updateOn: "blur" }
   )
   teamBNotFound: boolean = false;
   teamBLoading: boolean = false;
+  showPasteBInput: boolean = false;
+  shrinkPasteBInput: boolean = true;
   teamBForm = this.formBuilder.group(
     {
-      idB: ["", [Validators.maxLength(10)]],
+      idB: ["", [Validators.maxLength(64)]],
+      pasteB: ["", [Validators.maxLength(2048)]]
     }, { updateOn: "blur" }
   )
 
@@ -77,13 +87,13 @@ export class ComparePageComponent
   ]; 
   selectedStatIndex: number = 5;
   selectedStat: Stat = this.statSelectors[this.selectedStatIndex];
-  statList: ComparePokemon[] | undefined = [];
+  statList: ComparePokemon[] | undefined = undefined;
 
   ngOnInit()
   {
     this.teamAForm.controls.idA.valueChanges.subscribe(async value => 
       {
-        if(value)
+        if(value && this.teamAForm.controls.idA.valid)
         {
           value = this.tryGetTeamId(value)
           this.teamANotFound = false;
@@ -120,7 +130,7 @@ export class ComparePageComponent
       })
       this.teamBForm.controls.idB.valueChanges.subscribe(async value => 
         {
-          if(value)
+          if(value && this.teamBForm.controls.idB.valid)
           {
             value = this.tryGetTeamId(value)
             this.teamBNotFound = false;
@@ -155,9 +165,88 @@ export class ComparePageComponent
             this.calculateStatList(this.selectedStatIndex);
           }
         })
-      this.teamAForm.controls.idA.setValue("example");
-      this.teamBForm.controls.idB.setValue("example");
-      //http://localhost:4200/2sprxsowcw
+
+        this.teamAForm.controls.pasteA.valueChanges.subscribe(async value => 
+        {
+          if(value && this.teamAForm.controls.pasteA.valid)
+          {
+            this.teamA = <Team>{};
+            this.teamA.pokemons = [];
+            this.teamANotFound = false;
+            this.teamALoading = true;
+            let formData = value;
+            let data = this.parser.parsePaste(formData);
+            if(data.pokemons && data.pokemons.length > 0)
+            {
+              for(const dataPokemon in data.pokemons)
+              {
+                this.teamA?.pokemons.push(undefined);
+              }
+              await Promise.all(
+                data.pokemons.map(async (pokePaste, index) => 
+                {
+                  const pokemon = await this.pokemonService.buildPokemon(pokePaste);
+                  if(pokemon && this.teamA)
+                  { 
+                    this.teamA.pokemons[index] = pokemon;
+                    this.teamA = {...this.teamA, pokemons: this.teamA.pokemons}
+                    this.calculateStatList(this.selectedStatIndex);
+                  }
+                })
+              )
+              this.teamALoading = false;
+            }
+            else
+            {
+              this.teamB = undefined;
+              this.teamBNotFound = true;
+              this.teamBLoading = false;
+            }
+          }
+        })
+        this.teamBForm.controls.pasteB.valueChanges.subscribe(async value => 
+        {
+          if(value && this.teamBForm.controls.pasteB.valid)
+          {
+            this.teamB = <Team>{};
+            this.teamB.pokemons = [];
+            this.teamBNotFound = false;
+            this.teamBLoading = true;
+            let formData = value;
+            let data = this.parser.parsePaste(formData);
+            if(data.pokemons && data.pokemons.length > 0)
+            {
+              for(const dataPokemon in data.pokemons)
+              {
+                this.teamB?.pokemons.push(undefined);
+              }
+              await Promise.all(
+                data.pokemons.map(async (pokePaste, index) => 
+                {
+                  const pokemon = await this.pokemonService.buildPokemon(pokePaste);
+                  if(pokemon && this.teamB)
+                  { 
+                    this.teamB.pokemons[index] = pokemon;
+                    this.teamB = {...this.teamB, pokemons: this.teamB.pokemons}
+                    this.calculateStatList(this.selectedStatIndex);
+                  }
+                })
+              )
+              this.teamBLoading = false;
+            }
+            else
+            {
+              this.teamB = undefined;
+              this.teamBNotFound = true;
+              this.teamBLoading = false;
+            }
+          }
+        })
+
+
+      //this.teamAForm.controls.idA.setValue("http://localhost:4200/2sprxsowcw");
+      //this.teamBForm.controls.idB.setValue("example");
+      ///http://localhost:4200/2sprxsowcw
       //example
       //https://localhost:7134/f9xw1atocs
       //https://localhost:7134/zoqijpw43m
@@ -285,5 +374,25 @@ export class ComparePageComponent
     this.selectedStatIndex = index;
     this.selectedStat = this.statSelectors[index];
     this.calculateStatList(this.selectedStatIndex);
+  }
+
+  toggleAInputs()
+  {
+    this.showPasteAInput = !this.showPasteAInput;
+  }
+
+  toggleBInputs()
+  {
+    this.showPasteBInput = !this.showPasteBInput;
+  }
+
+  toggleAPasteInput()
+  {
+    this.shrinkPasteAInput = !this.shrinkPasteAInput;
+  }
+
+  toggleBPasteInput()
+  {
+    this.shrinkPasteBInput = !this.shrinkPasteBInput;
   }
 }

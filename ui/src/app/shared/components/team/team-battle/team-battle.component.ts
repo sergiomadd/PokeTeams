@@ -40,13 +40,28 @@ export class TeamBattleComponent
   {
     if(changes["team"])
     {
-      this.selectPokemon(0);
-      this.selectPokemon(1);
+      this.selectPokemon(0, true, 1);
+      this.selectPokemon(1, true, 2);
     }
   }
 
-  selectPokemon(index)
+  selectPokemon(index, force: boolean = false, indexToForce: number = -1)
   {
+    if(force)
+    {
+      if(indexToForce === 1)
+      {
+        this.selectedPokemonIndex1 = index;
+        this.pokemon1 = this.team?.pokemons[this.selectedPokemonIndex1] ?? undefined;
+      }
+      if(indexToForce === 2)
+      {
+        this.selectedPokemonIndex2 = index;
+        this.pokemon2 = this.team?.pokemons[this.selectedPokemonIndex2] ?? undefined;
+      }
+      this.selectedIndexesEvent.emit([this.selectedPokemonIndex1, this.selectedPokemonIndex2])
+      return;
+    }
     if(index === this.selectedPokemonIndex1)
     {
       this.selectedPokemonIndex1 = -1;
@@ -73,6 +88,7 @@ export class TeamBattleComponent
     {
       this.closeAllTooltips();
     }
+
     this.selectedIndexesEvent.emit([this.selectedPokemonIndex1, this.selectedPokemonIndex2])
   }
 
