@@ -39,6 +39,8 @@ import { TeamTableComponent } from './components/team/team-table/team-table.comp
 import { TeamComponent } from './components/team/team/team.component';
 import { TournamentPreviewComponent } from './components/team/tournament-preview/tournament-preview.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
+import { CalcMoveEffectivenessPipe } from './pipes/calcMoveEffectiveness.pipe';
+import { GetDefenseEffectivenessPipe } from './pipes/getDefenseEffectivenes.pipe';
 import { GetFormControlErrorPipe } from './pipes/getFormControlError.pipe';
 import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
 
@@ -88,7 +90,9 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     //Pipes
     IsFormFieldInvalidPipe,
     GetFormControlErrorPipe,
-    TeamBattleComponent
+    TeamBattleComponent,
+    CalcMoveEffectivenessPipe,
+    GetDefenseEffectivenessPipe
   ],
   imports: 
   [
@@ -149,7 +153,9 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
 
     //Pipes
     IsFormFieldInvalidPipe,
-    GetFormControlErrorPipe
+    GetFormControlErrorPipe,
+    CalcMoveEffectivenessPipe,
+    GetDefenseEffectivenessPipe
   ],
   providers: [TranslateStore]
 })
