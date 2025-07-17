@@ -3,8 +3,9 @@ import { ParserService } from 'src/app/core/helpers/parser.service';
 import { ThemeService } from 'src/app/core/helpers/theme.service';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
-import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
+import { Move } from 'src/app/core/models/pokemon/move.model';
 import { Team } from 'src/app/core/models/team/team.model';
+import { TeamCompareService } from 'src/app/shared/services/team-compare.service';
 import { PokemonCardComponent } from '../../pokemon/pokemon-card/pokemon-card.component';
 
 @Component({
@@ -18,6 +19,7 @@ export class TeamBattleComponent
   util = inject(UtilService);
   window = inject(WindowService);
   theme = inject(ThemeService);
+  compareService = inject(TeamCompareService);
 
   @Input() team?: Team;
   @Input() which?: string;
@@ -34,6 +36,20 @@ export class TeamBattleComponent
   pokemonIndex1: number = -1;
   pokemonIndex2: number = -1;
   order: number = 1;
+  moveA: Move | undefined;
+  moveB: Move | undefined;
+
+  ngOnInit()
+  {
+    this.compareService.selectedMoveA$.subscribe(value => 
+    {
+      this.moveA = value;
+    })
+    this.compareService.selectedMoveB$.subscribe(value => 
+    {
+      this.moveB = value;
+    })
+  }
 
   ngOnChanges(changes: SimpleChanges)
   {

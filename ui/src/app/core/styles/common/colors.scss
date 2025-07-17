@@ -28,3 +28,13 @@
 {
   color: var(--white);
 }
+
+.darken-3
+{
+  filter: brightness(0.3);
+}
+
+.darken-5
+{
+  filter: brightness(0.5);
+}

@@ -8,11 +8,15 @@ import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
 import { FeedbackColors, GenderColors, NatureColors, shinyColor } from 'src/app/core/models/misc/colors';
 import { ProcessedString } from 'src/app/core/models/misc/processedString.model';
+import { Move } from 'src/app/core/models/pokemon/move.model';
 import { Nature } from 'src/app/core/models/pokemon/nature.model';
 import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
 import { Stat } from 'src/app/core/models/pokemon/stat.model';
 import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
 import { selectLang } from 'src/app/core/store/config/config.selectors';
+import { CalcMoveEffectivenessPipe } from 'src/app/shared/pipes/calcMoveEffectiveness.pipe';
+import { GetDefenseEffectivenessPipe } from 'src/app/shared/pipes/getDefenseEffectivenes.pipe';
+import { TeamCompareService } from 'src/app/shared/services/team-compare.service';
 
 
 interface CalculatedStats
@@ -27,7 +31,8 @@ interface CalculatedStats
 @Component({
   selector: 'app-pokemon-card',
   templateUrl: './pokemon-card.component.html',
-  styleUrl: './pokemon-card.component.scss'
+  styleUrl: './pokemon-card.component.scss',
+  providers: [CalcMoveEffectivenessPipe, GetDefenseEffectivenessPipe] 
 })
 export class PokemonCardComponent 
 {
@@ -37,11 +42,15 @@ export class PokemonCardComponent
   theme = inject(ThemeService);
   store = inject(Store);
   window = inject(WindowService);
+  compareService = inject(TeamCompareService);
+  calcMoveEffectivenessPipe = inject(CalcMoveEffectivenessPipe);
+  getDefenseEffectiveness = inject(GetDefenseEffectivenessPipe);
 
   @Input() pokemon?: Pokemon | null;
   @Input() teamOptions?: TeamOptions;
   @Input() showStatsStart?: boolean = false;
   @Input() editorPreview?: boolean = false;
+  @Input() compareTeam?: string;
   @Output() triggerNotesEvent = new EventEmitter<boolean>()
   @Output() updateStats = new EventEmitter();
   @Output() triggerTooltip = new EventEmitter();
@@ -84,6 +93,8 @@ export class PokemonCardComponent
   showNotes: boolean[] = [false]
   tooltipStats: boolean[] = [false, false, false, false, false, false]
 
+  compareEffectiveness?: number;
+
   constructor() 
   {
 
@@ -113,6 +124,25 @@ export class PokemonCardComponent
     if(this.showStatsStart)
     {
       this.showStats[0] = true;
+    }
+
+    if(this.compareTeam)
+    {
+      //Missmatch this compareTeam to the other team results
+      if(this.compareTeam === "A")
+      {
+        this.compareService.selectedMoveB$.subscribe((move?: Move) => 
+        {
+          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon), move);
+        })
+      }
+      else if(this.compareTeam === "B")
+      {
+        this.compareService.selectedMoveA$.subscribe((move?: Move) => 
+        {
+          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon), move);
+        })
+      }
     }
   }
 
@@ -191,6 +221,17 @@ export class PokemonCardComponent
         break;
       case "right":
         list = this.tooltipRight;
+        if(this.compareTeam)
+        {
+          if(!list[index])
+          {
+            this.compareMove(index)
+          }
+          else
+          {
+            this.compareMove(undefined)
+          }
+        }
         break;
       case "rightType":
         event.stopPropagation();
@@ -309,6 +350,35 @@ export class PokemonCardComponent
       return aux.join(':');
     }
     return '';
+  }
+
+  compareMove(moveIndex?: number)
+  {
+    if(moveIndex !== undefined)
+    {
+      if(this.pokemon?.moves[moveIndex])
+      {
+        if(this.compareTeam === "A")
+        {
+          this.compareService.compareMoveA(this.pokemon.moves[moveIndex]);
+        }
+        else if(this.compareTeam === "B")
+        {
+          this.compareService.compareMoveB(this.pokemon.moves[moveIndex]);
+        }
+      }   
+    }
+    else
+    {
+      if(this.compareTeam === "A")
+      {
+        this.compareService.compareMoveA(undefined);
+      }
+      else if(this.compareTeam === "B")
+      {
+        this.compareService.compareMoveB(undefined);
+      }
+    }
   }
 
   //stats
