@@ -20,6 +20,7 @@ export class TeamBattleComponent
   theme = inject(ThemeService);
 
   @Input() team?: Team;
+  @Input() which?: string;
   @Output() selectedIndexesEvent = new EventEmitter<number[]>()
 
   @ViewChildren(PokemonCardComponent) pokemonComponents!:QueryList<PokemonCardComponent>;
@@ -30,10 +31,8 @@ export class TeamBattleComponent
   maxStat: number = 0;
   tooltips: boolean[] = [false, false, false]
 
-  pokemon1?: Pokemon;
-  selectedPokemonIndex1: number = -1;
-  pokemon2?: Pokemon;
-  selectedPokemonIndex2: number = -1;
+  pokemonIndex1: number = -1;
+  pokemonIndex2: number = -1;
   order: number = 1;
 
   ngOnChanges(changes: SimpleChanges)
@@ -51,45 +50,39 @@ export class TeamBattleComponent
     {
       if(indexToForce === 1)
       {
-        this.selectedPokemonIndex1 = index;
-        this.pokemon1 = this.team?.pokemons[this.selectedPokemonIndex1] ?? undefined;
+        this.pokemonIndex1 = index;
       }
       if(indexToForce === 2)
       {
-        this.selectedPokemonIndex2 = index;
-        this.pokemon2 = this.team?.pokemons[this.selectedPokemonIndex2] ?? undefined;
+        this.pokemonIndex2 = index;
       }
-      this.selectedIndexesEvent.emit([this.selectedPokemonIndex1, this.selectedPokemonIndex2])
+      this.selectedIndexesEvent.emit([this.pokemonIndex1, this.pokemonIndex2])
       return;
     }
-    if(index === this.selectedPokemonIndex1)
+    if(index === this.pokemonIndex1)
     {
-      this.selectedPokemonIndex1 = -1;
-      this.pokemon1 = undefined;
+      this.pokemonIndex1 = -1;
     }
-    else if(index === this.selectedPokemonIndex2)
+    else if(index === this.pokemonIndex2)
     {
-      this.selectedPokemonIndex2 = -1;
-      this.pokemon2 = undefined;
+      this.pokemonIndex2 = -1;
     }
-    else if(!this.pokemon1 || this.order === 1)
+    else if(!this.pokemonIndex1 || this.order === 1)
     {
-      this.selectedPokemonIndex1 = index;
-      this.pokemon1 = this.team?.pokemons[this.selectedPokemonIndex1] ?? undefined;
+      this.pokemonIndex1 = index;
       this.order = 2;
     }
-    else if(!this.pokemon2 || this.order === 2)
+    else if(!this.pokemonIndex2 || this.order === 2)
     {
-      this.selectedPokemonIndex2 = index;
-      this.pokemon2 = this.team?.pokemons[this.selectedPokemonIndex2] ?? undefined;
+      this.pokemonIndex2 = index;
       this.order = 1;
     }
-    if(this.pokemon1 && this.pokemon2)
+    if(this.pokemonIndex1 && this.pokemonIndex2)
     {
       this.closeAllTooltips();
     }
 
-    this.selectedIndexesEvent.emit([this.selectedPokemonIndex1, this.selectedPokemonIndex2])
+    this.selectedIndexesEvent.emit([this.pokemonIndex1, this.pokemonIndex2])
   }
 
   clickOptions(index: number)

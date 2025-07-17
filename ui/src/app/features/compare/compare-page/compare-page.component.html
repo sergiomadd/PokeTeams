@@ -152,6 +152,7 @@ style="min-height: 100vh;"
         <ng-container *ngIf="which === 'A' ? teamA : teamB">
           <app-team-battle 
           [team]="which === 'A' ? teamA : teamB"
+          [which]="which"
           (selectedIndexesEvent)="selectIndexes($event, which === 'A' ? 'A' : 'B')"
           ></app-team-battle>
         </ng-container>
