@@ -131,6 +131,13 @@ export class PokemonCardComponent
       //Missmatch this compareTeam to the other team results
       if(this.compareTeam === "A")
       {
+        this.compareService.selectedMoveA$.subscribe((move?: Move) => 
+        {
+          if(move)
+          {
+            this.closeAllProfileTooltips();
+          }
+        })
         this.compareService.selectedMoveB$.subscribe((move?: Move) => 
         {
           this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon), move);
@@ -141,6 +148,13 @@ export class PokemonCardComponent
         this.compareService.selectedMoveA$.subscribe((move?: Move) => 
         {
           this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon), move);
+        })
+        this.compareService.selectedMoveB$.subscribe((move?: Move) => 
+        {
+          if(move)
+          {
+            this.closeAllProfileTooltips();
+          }        
         })
       }
     }
