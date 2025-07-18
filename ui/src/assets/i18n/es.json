@@ -101,7 +101,12 @@
     "color_picker":
     {
       "title": "Elige color"
-    } 
+    },
+    "compare":
+    {
+      "link-placeholder": "Enlace del equipo",
+      "paste-placeholder": "Pokepaste del equipo"
+    }
   },
   "search":
   {
