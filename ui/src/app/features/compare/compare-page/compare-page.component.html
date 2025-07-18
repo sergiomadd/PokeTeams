@@ -29,27 +29,25 @@ style="min-height: 100vh;"
           </div>
           <div class="flex flex-col justify-c-c gap-m" style="width: 10em;">
             <ng-container *ngFor="let item of statList; index as i">
-              <div class="flex gap-s align-i-c bor-rad-5 bor-1-3 pad-s" style="width: 4em;"
-              [ngClass]="
-              {
-                'blue-team': item.whichTeam === 'A' && teamASelectedIndex.includes(item?.sourceIndex ?? 0),
-                'red-team': item.whichTeam === 'B' && teamBSelectedIndex.includes(item?.sourceIndex ?? 0),
-                'justify-c-e': item.whichTeam === 'A',
-                'justify-c-s': item.whichTeam === 'B'
-              }"
-              [ngStyle]="
-              {
-                'flex-direction': item.whichTeam === 'A' ? 'row' : 'row-reverse',
-                'align-self': item.whichTeam === 'A' ? 'flex-start' : 'flex-end',
-                'margin-top': statList | marginTopPipe:item:selectedStatIndex:i
-              }">
-                <ng-container *ngIf="item && item?.pokemon?.stats">
-                  <span class="text-center" style="min-width: 1em;">{{item?.pokemon?.stats![selectedStatIndex]?.value ?? 0}}</span>
-                </ng-container>
-                <ng-container *ngIf="item?.pokemon?.dexNumber && item?.pokemon?.dexNumber !== -1">
-                  <img class="icon-l" src="{{item?.pokemon?.sprite?.base}}" alt="">
-                </ng-container>
-              </div>
+              <ng-container *ngIf="item?.pokemon?.dexNumber && item?.pokemon?.dexNumber !== -1">
+                <div class="flex gap-s align-i-c bor-rad-5 bor-1-3 pad-s" style="width: 4em;"
+                [ngClass]="
+                {
+                  'blue-team': item.whichTeam === 'A' && teamASelectedIndex.includes(item?.sourceIndex ?? 0),
+                  'red-team': item.whichTeam === 'B' && teamBSelectedIndex.includes(item?.sourceIndex ?? 0),
+                  'justify-c-e': item.whichTeam === 'A',
+                  'justify-c-s': item.whichTeam === 'B'
+                }"
+                [ngStyle]="
+                {
+                  'flex-direction': item.whichTeam === 'A' ? 'row' : 'row-reverse',
+                  'align-self': item.whichTeam === 'A' ? 'flex-start' : 'flex-end',
+                  'margin-top': statList | marginTopPipe:item:selectedStatIndex:i
+                }">
+                    <span class="text-center" style="min-width: 1em;">{{item?.pokemon?.stats![selectedStatIndex]?.value ?? 0}}</span>
+                    <img class="icon-l" src="{{item?.pokemon?.sprite?.base}}" alt="">
+                </div>
+              </ng-container>
             </ng-container>
           </div>
         </div>
