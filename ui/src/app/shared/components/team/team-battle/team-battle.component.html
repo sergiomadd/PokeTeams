@@ -3,19 +3,19 @@
     <div class="flex justify-c-c gap-m">
       <ng-container *ngFor="let pokemon of team.pokemons; index as i">
         <div class="relative pointer no-select" (click)="selectPokemon(i)">
-          <div class="selector flex justify-c-c align-i-c bor-rad-20 bor-1-3 bg-1"
-          [ngClass]="{selected: pokemonIndex1 == i || pokemonIndex2 == i, 'darken-5': (pokemon | getDefenseEffectivenessPipe) | calcMoveEffectivenessPipe:(which === 'A' ? moveB : moveA)}"
+          <div class="selector relative flex justify-c-c align-i-c bor-rad-20 bor-1-3 bg-1"
+          [ngClass]="{'teratype-background': teraTypeEnabled[i], selected: pokemonIndex1 == i || pokemonIndex2 == i, 'darken-5': (pokemon | getDefenseEffectivenessPipe:(teraTypeEnabled[i] ? true : false)) | calcMoveEffectivenessPipe:(which === 'A' ? moveB : moveA)}"
           >
             <ng-container *ngIf="pokemon?.dexNumber && pokemon?.dexNumber !== -1; else index">
               <img class="icon-l" src="{{pokemon?.sprite?.base}}" alt="">
             </ng-container>
             <ng-template #index>{{i + 1}}</ng-template>
           </div>
-          <ng-container *ngIf="pokemon?.dexNumber && pokemon?.dexNumber !== -1 && ((pokemon | getDefenseEffectivenessPipe) | calcMoveEffectivenessPipe:(which === 'A' ? moveB : moveA))">
+          <ng-container *ngIf="pokemon?.dexNumber && pokemon?.dexNumber !== -1 && ((pokemon | getDefenseEffectivenessPipe:(teraTypeEnabled[i] ? true : false)) | calcMoveEffectivenessPipe:(which === 'A' ? moveB : moveA))">
             <div class="compare-effectiveness" 
-            [ngStyle]="{'font-size': ((pokemon | getDefenseEffectivenessPipe) | calcMoveEffectivenessPipe:(which === 'A' ? moveB : moveA)) === 0.25 ? '1em' :'1.2em'}"
+            [ngStyle]="{'font-size': ((pokemon | getDefenseEffectivenessPipe:(teraTypeEnabled[i] ? true : false)) | calcMoveEffectivenessPipe:(which === 'A' ? moveB : moveA)) === 0.25 ? '1em' :'1.2em'}"
             >
-              x{{ (pokemon | getDefenseEffectivenessPipe) | calcMoveEffectivenessPipe:(which === 'A' ? moveB : moveA)}}
+              x{{ (pokemon | getDefenseEffectivenessPipe:(teraTypeEnabled[i] ? true : false)) | calcMoveEffectivenessPipe:(which === 'A' ? moveB : moveA)}}
             </div>
           </ng-container>
         </div>

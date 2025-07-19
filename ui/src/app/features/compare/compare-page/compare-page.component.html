@@ -73,7 +73,7 @@ style="min-height: 100vh;"
     <div class="relative">
       <span class="pad-m bor-rad-5" 
       [ngClass]="{'blue-team': which === 'A' ? 'var(--blue-team)' : '', 'red-team': which === 'B' ? 'var(--red-team)' : ''}"
-      >Team {{which}}</span>
+      >{{'shared.team.team' | translate}} {{which}}</span>
     </div>
     <form [formGroup]="which === 'A' ? teamAForm : teamBForm" class="relative inputs">
       <ng-container *ngIf="which === 'A' ? !showPasteAInput : !showPasteBInput">
@@ -82,7 +82,7 @@ style="min-height: 100vh;"
           type="text" 
           class="input-m" 
           style="width: 100%;"
-          placeholder="Team link" 
+          placeholder="{{'team.compare.link-placeholder' | translate}}" 
           formControlName="{{which === 'A' ? 'idA' : 'idB'}}"
           [ngClass]="{controlInvalid: which === 'A'
           ? (teamAForm.controls.idA.errors | isFormFieldInvalid:teamAForm.controls.idA.dirty:teamAForm.controls.idA.touched:true)
@@ -106,7 +106,7 @@ style="min-height: 100vh;"
           formControlName="{{which === 'A' ? 'pasteA' : 'pasteB'}}"
           class="compare-paste-box custom-scrollbar-dark" 
           spellcheck="false"
-          placeholder="Team pokepaste"
+          placeholder="{{'team.compare.paste-placeholder' | translate}}"
           [ngStyle]="{height: which === 'A' ? (shrinkPasteAInput ? '2.5em' : '15em') : (shrinkPasteBInput ? '2.5em' : '15em')}"
           [ngClass]="{controlInvalid: which === 'A'
             ? (teamAForm.controls.pasteA.errors | isFormFieldInvalid:teamAForm.controls.pasteA.dirty:teamAForm.controls.pasteA.touched:true)
@@ -177,7 +177,7 @@ style="min-height: 100vh;"
       </g>
     </svg>
     <app-tooltip
-    [text]="'Link'"
+    [text]="'team.compare.link-placeholder' | translate"
     [side]="'top'"
     ></app-tooltip>
   </div>
@@ -191,7 +191,7 @@ style="min-height: 100vh;"
       </g>
     </svg>
     <app-tooltip
-    [text]="'Pokepaste'"
+    [text]="'team.compare.paste-placeholder' | translate"
     [side]="'top'"
     ></app-tooltip>
   </div>

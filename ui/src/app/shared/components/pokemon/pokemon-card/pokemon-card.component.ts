@@ -94,6 +94,7 @@ export class PokemonCardComponent
   tooltipStats: boolean[] = [false, false, false, false, false, false]
 
   compareEffectiveness?: number;
+  teratypeEnabled: boolean = false;
 
   constructor() 
   {
@@ -140,14 +141,14 @@ export class PokemonCardComponent
         })
         this.compareService.selectedMoveB$.subscribe((move?: Move) => 
         {
-          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon), move);
+          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon, this.teratypeEnabled), move);
         })
       }
       else if(this.compareTeam === "B")
       {
         this.compareService.selectedMoveA$.subscribe((move?: Move) => 
         {
-          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon), move);
+          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon, this.teratypeEnabled), move);
         })
         this.compareService.selectedMoveB$.subscribe((move?: Move) => 
         {
@@ -226,6 +227,18 @@ export class PokemonCardComponent
       break;
       case "types":
         list = this.tooltipTypes;
+        if(this.compareTeam && index === 0)
+        {
+          this.teratypeEnabled = !this.teratypeEnabled;
+          if(this.compareTeam === 'A')
+          {
+            this.compareService.setTeratypeSelectedIndexA(index, this.teratypeEnabled);
+          }
+          else if(this.compareTeam === 'B')
+          {
+            this.compareService.setTeratypeSelectedIndexB(index, this.teratypeEnabled);          
+          }
+        } 
       break;
       case "left":
         list = this.tooltipLeft;
@@ -374,11 +387,11 @@ export class PokemonCardComponent
       {
         if(this.compareTeam === "A")
         {
-          this.compareService.compareMoveA(this.pokemon.moves[moveIndex]);
+          this.compareService.setMoveA(this.pokemon.moves[moveIndex]);
         }
         else if(this.compareTeam === "B")
         {
-          this.compareService.compareMoveB(this.pokemon.moves[moveIndex]);
+          this.compareService.setMoveB(this.pokemon.moves[moveIndex]);
         }
       }   
     }
@@ -386,11 +399,11 @@ export class PokemonCardComponent
     {
       if(this.compareTeam === "A")
       {
-        this.compareService.compareMoveA(undefined);
+        this.compareService.setMoveA(undefined);
       }
       else if(this.compareTeam === "B")
       {
-        this.compareService.compareMoveB(undefined);
+        this.compareService.setMoveB(undefined);
       }
     }
   }

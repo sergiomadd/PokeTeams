@@ -49,3 +49,44 @@
   filter: brightness(1);
   z-index: 5;
 }
+
+.teratype-border {
+  position: relative;
+  background: transparent;
+}
+
+.teratype-border::before {
+  border-radius: 5px;
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    330deg,
+    red,
+    orange,
+    yellow,
+    green,
+    cyan,
+    blue,
+    violet,
+    magenta,
+    red
+  );
+  background-size: 300% 300%;
+  animation: moveGradient 8s linear infinite;
+  filter: brightness(1.1);
+}
+
+
+@keyframes moveGradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}

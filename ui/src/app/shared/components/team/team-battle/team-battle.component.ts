@@ -38,6 +38,7 @@ export class TeamBattleComponent
   order: number = 1;
   moveA: Move | undefined;
   moveB: Move | undefined;
+  teraTypeEnabled: boolean[] = [];
 
   ngOnInit()
   {
@@ -49,6 +50,21 @@ export class TeamBattleComponent
     {
       this.moveB = value;
     })
+
+    if(this.which === 'A')
+    {
+      this.compareService.teratypeEnabledIndexesAObservable$.subscribe(value => 
+      {
+        this.teraTypeEnabled = [...value];
+      })
+    }
+    else if(this.which === 'A')
+    {
+      this.compareService.teratypeEnabledIndexesBObservable$.subscribe(value => 
+      {
+        this.teraTypeEnabled = [...value];
+      })
+    }
   }
 
   ngOnChanges(changes: SimpleChanges)

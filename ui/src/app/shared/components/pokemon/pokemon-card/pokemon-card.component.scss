@@ -28,6 +28,8 @@ $padding: 0.2em;
 .pokemon-card
 {
   position: relative;
+  z-index: 5;
+
 }
 
 .pokemon
@@ -362,9 +364,4 @@ $padding: 0.2em;
   align-items: center;
   color: var(--white);
   filter: brightness(1);
-}
-
-.darkenCard
-{
-  filter: brightness(0.3);
 }
