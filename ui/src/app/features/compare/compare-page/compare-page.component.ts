@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { ParserService } from 'src/app/core/helpers/parser.service';
 import { ThemeService } from 'src/app/core/helpers/theme.service';
 import { UtilService } from 'src/app/core/helpers/util.service';
@@ -31,9 +32,12 @@ export class ComparePageComponent
   util = inject(UtilService);
   parser = inject(ParserService);
   pokemonService = inject(PokemonService);
+  activatedRoute = inject(ActivatedRoute);
 
   teamA?: Team;
   teamB?: Team;
+  teamAId?: string;
+  teamBId?: string;
   teamASelectedIndex: number[] = [];
   teamBSelectedIndex: number[] = [];
 
@@ -91,167 +95,211 @@ export class ComparePageComponent
 
   ngOnInit()
   {
-    this.teamAForm.controls.idA.valueChanges.subscribe(async value => 
+    this.activatedRoute.queryParamMap.subscribe(params => 
+    {
+      this.teamAId = params.get('teamAId') ?? undefined;
+      if(this.teamAId)
       {
-        if(value && this.teamAForm.controls.idA.valid)
+        this.getTeamA(this.teamAId);
+        const url = `https://poketeams.com/${this.teamAId}`;
+        this.teamAForm.controls.idA.setValue(url, { emitEvent: false });
+      }
+      else
+      {
+        this.teamANotFound = false;
+        this.teamALoading = false;
+        this.teamA = undefined;
+        this.calculateStatList(this.selectedStatIndex);
+      }
+
+      this.teamBId = params.get('teamBId') ?? undefined;
+      if(this.teamBId)
+      {
+        this.getTeamB(this.teamBId);
+        const url = `https://poketeams.com/${this.teamBId}`;
+        this.teamBForm.controls.idB.setValue(url, { emitEvent: false });
+      }
+      else
+      {
+        this.teamBNotFound = false;
+        this.teamBLoading = false;
+        this.teamB = undefined;
+        this.calculateStatList(this.selectedStatIndex);
+      }
+    });
+
+    this.teamAForm.controls.idA.valueChanges.subscribe(async value => 
+    {
+      const id = this.tryGetTeamId(value)
+      if(id && this.teamBForm.controls.idB.valid)
+      {
+        this.getTeamA(id);
+      }
+      else
+      {
+        this.teamANotFound = false;
+        this.teamALoading = false;
+        this.teamA = undefined;
+        this.calculateStatList(this.selectedStatIndex);
+      }
+    })
+    this.teamBForm.controls.idB.valueChanges.subscribe(async value => 
+    {
+      const id = this.tryGetTeamId(value)
+      if(id && this.teamBForm.controls.idB.valid)
+      {
+        this.getTeamB(id);
+      }
+      else
+      {
+        this.teamBNotFound = false;
+        this.teamBLoading = false;
+        this.teamB = undefined;
+        this.calculateStatList(this.selectedStatIndex);
+      }
+    })
+
+    this.teamAForm.controls.pasteA.valueChanges.subscribe(async value => 
+    {
+      if(value && this.teamAForm.controls.pasteA.valid)
+      {
+        this.teamA = <Team>{};
+        this.teamA.pokemons = [];
+        this.teamANotFound = false;
+        this.teamALoading = true;
+        let formData = value;
+        let data = this.parser.parsePaste(formData);
+        if(data.pokemons && data.pokemons.length > 0)
         {
-          value = this.tryGetTeamId(value)
-          this.teamANotFound = false;
-          this.teamALoading = true;
-          this.teamService.getTeam(value).subscribe(
+          for(const dataPokemon in data.pokemons)
+          {
+            this.teamA?.pokemons.push(undefined);
+          }
+          await Promise.all(
+            data.pokemons.map(async (pokePaste, index) => 
             {
-              next: (response) =>
-              {
-                if(response)
-                {
-                  this.teamA = response;
-                  this.teamALoading = false;
-                  this.calculateStatList(this.selectedStatIndex);
-                }
-              },
-              error: (err) => 
-              {
-                console.log("Team A not found", err)
-                this.teamA = undefined;
-                this.teamANotFound = true;
-                this.teamALoading = false;
+              const pokemon = await this.pokemonService.buildPokemon(pokePaste);
+              if(pokemon && this.teamA)
+              { 
+                this.teamA.pokemons[index] = pokemon;
+                this.teamA = {...this.teamA, pokemons: this.teamA.pokemons}
                 this.calculateStatList(this.selectedStatIndex);
-              },
-            }
+              }
+            })
           )
+          this.teamALoading = false;
         }
         else
         {
-          this.teamANotFound = false;
-          this.teamALoading = false;
-          this.teamA = undefined;
-          this.calculateStatList(this.selectedStatIndex);
+          this.teamB = undefined;
+          this.teamBNotFound = true;
+          this.teamBLoading = false;
         }
-      })
-      this.teamBForm.controls.idB.valueChanges.subscribe(async value => 
+      }
+    })
+    this.teamBForm.controls.pasteB.valueChanges.subscribe(async value => 
+    {
+      if(value && this.teamBForm.controls.pasteB.valid)
+      {
+        this.teamB = <Team>{};
+        this.teamB.pokemons = [];
+        this.teamBNotFound = false;
+        this.teamBLoading = true;
+        let formData = value;
+        let data = this.parser.parsePaste(formData);
+        if(data.pokemons && data.pokemons.length > 0)
         {
-          if(value && this.teamBForm.controls.idB.valid)
+          for(const dataPokemon in data.pokemons)
           {
-            value = this.tryGetTeamId(value)
-            this.teamBNotFound = false;
-            this.teamBLoading = true;
-            this.teamService.getTeam(value).subscribe(
-              {
-                next: (response) =>
-                {
-                  if(response)
-                  {
-                    this.teamB = response;
-                    this.teamBLoading = false;
-                    this.calculateStatList(this.selectedStatIndex);
-                  }
-                },
-                error: (err) => 
-                {
-                  console.log("Team B not found", err)
-                  this.teamB = undefined;
-                  this.teamBNotFound = true;
-                  this.teamBLoading = false;
-                  this.calculateStatList(this.selectedStatIndex);
-                },
+            this.teamB?.pokemons.push(undefined);
+          }
+          await Promise.all(
+            data.pokemons.map(async (pokePaste, index) => 
+            {
+              const pokemon = await this.pokemonService.buildPokemon(pokePaste);
+              if(pokemon && this.teamB)
+              { 
+                this.teamB.pokemons[index] = pokemon;
+                this.teamB = {...this.teamB, pokemons: this.teamB.pokemons}
+                this.calculateStatList(this.selectedStatIndex);
               }
-            )
-          }
-          else
-          {
-            this.teamBNotFound = false;
-            this.teamBLoading = false;
-            this.teamB = undefined;
-            this.calculateStatList(this.selectedStatIndex);
-          }
-        })
-
-        this.teamAForm.controls.pasteA.valueChanges.subscribe(async value => 
+            })
+          )
+          this.teamBLoading = false;
+        }
+        else
         {
-          if(value && this.teamAForm.controls.pasteA.valid)
-          {
-            this.teamA = <Team>{};
-            this.teamA.pokemons = [];
-            this.teamANotFound = false;
-            this.teamALoading = true;
-            let formData = value;
-            let data = this.parser.parsePaste(formData);
-            if(data.pokemons && data.pokemons.length > 0)
-            {
-              for(const dataPokemon in data.pokemons)
-              {
-                this.teamA?.pokemons.push(undefined);
-              }
-              await Promise.all(
-                data.pokemons.map(async (pokePaste, index) => 
-                {
-                  const pokemon = await this.pokemonService.buildPokemon(pokePaste);
-                  if(pokemon && this.teamA)
-                  { 
-                    this.teamA.pokemons[index] = pokemon;
-                    this.teamA = {...this.teamA, pokemons: this.teamA.pokemons}
-                    this.calculateStatList(this.selectedStatIndex);
-                  }
-                })
-              )
-              this.teamALoading = false;
-            }
-            else
-            {
-              this.teamB = undefined;
-              this.teamBNotFound = true;
-              this.teamBLoading = false;
-            }
-          }
-        })
-        this.teamBForm.controls.pasteB.valueChanges.subscribe(async value => 
-        {
-          if(value && this.teamBForm.controls.pasteB.valid)
-          {
-            this.teamB = <Team>{};
-            this.teamB.pokemons = [];
-            this.teamBNotFound = false;
-            this.teamBLoading = true;
-            let formData = value;
-            let data = this.parser.parsePaste(formData);
-            if(data.pokemons && data.pokemons.length > 0)
-            {
-              for(const dataPokemon in data.pokemons)
-              {
-                this.teamB?.pokemons.push(undefined);
-              }
-              await Promise.all(
-                data.pokemons.map(async (pokePaste, index) => 
-                {
-                  const pokemon = await this.pokemonService.buildPokemon(pokePaste);
-                  if(pokemon && this.teamB)
-                  { 
-                    this.teamB.pokemons[index] = pokemon;
-                    this.teamB = {...this.teamB, pokemons: this.teamB.pokemons}
-                    this.calculateStatList(this.selectedStatIndex);
-                  }
-                })
-              )
-              this.teamBLoading = false;
-            }
-            else
-            {
-              this.teamB = undefined;
-              this.teamBNotFound = true;
-              this.teamBLoading = false;
-            }
-          }
-        })
-      this.teamAForm.controls.idA.setValue("http://localhost:4200/2sprxsowcw");
-      this.teamBForm.controls.idB.setValue("example");
-      ///http://localhost:4200/2sprxsowcw
-      //example
-      //https://localhost:7134/f9xw1atocs
-      //https://localhost:7134/zoqijpw43m
+          this.teamB = undefined;
+          this.teamBNotFound = true;
+          this.teamBLoading = false;
+        }
+      }
+    })
+    //this.teamAForm.controls.idA.setValue("http://localhost:4200/2sprxsowcw");
+    //this.teamBForm.controls.idB.setValue("example");
+    ///http://localhost:4200/2sprxsowcw
+    //example
+    //https://localhost:7134/f9xw1atocs
+    //https://localhost:7134/zoqijpw43m
   }
 
-  tryGetTeamId(value: string)
+  getTeamA(id: string)
   {
+    this.teamANotFound = false;
+    this.teamALoading = true;
+    this.teamService.getTeam(id).subscribe(
+      {
+        next: (response) =>
+        {
+          if(response)
+          {
+            this.teamA = response;
+            this.teamALoading = false;
+            this.calculateStatList(this.selectedStatIndex);
+          }
+        },
+        error: (err) => 
+        {
+          console.log("Team A not found", err)
+          this.teamA = undefined;
+          this.teamANotFound = true;
+          this.teamALoading = false;
+          this.calculateStatList(this.selectedStatIndex);
+        },
+      }
+    )
+  }
+
+  getTeamB(id: string)
+  {
+    this.teamBNotFound = false;
+    this.teamBLoading = true;
+    this.teamService.getTeam(id).subscribe(
+      {
+        next: (response) =>
+        {
+          if(response)
+          {
+            this.teamB = response;
+            this.teamBLoading = false;
+            this.calculateStatList(this.selectedStatIndex);
+          }
+        },
+        error: (err) => 
+        {
+          console.log("Team B not found", err)
+          this.teamB = undefined;
+          this.teamBNotFound = true;
+          this.teamBLoading = false;
+          this.calculateStatList(this.selectedStatIndex);
+        },
+      }
+    )
+  }
+
+  tryGetTeamId(value): string | undefined
+  {
+    if(!value) { return undefined; }
     //Is link
     if(value.includes("/"))
     {
