@@ -10,7 +10,7 @@
             {
               section: pokemon.dexNumber,
               'animated-border': pokemon.dexNumber && !window.isTabletPortraitOrLess(),
-              'poke-tooltip-selected': tooltipEvol[0],
+              'poke-tooltip-selected': tooltipEvol[0] && !compareTeam,
               'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
             }"
             >
@@ -19,7 +19,7 @@
                   <app-poke-tooltip
                   [content]="familyTooltip"
                   [side]="'top'"
-                  [visible]="tooltipEvol[0]"
+                  [visible]="tooltipEvol[0] && (!compareTeam || window.isTabletPortraitOrLess())"
                   [mobileChanged]="window.isTabletPortraitOrLess()"
                   class="tooltip-component"
                   >
@@ -62,7 +62,7 @@
                   <app-poke-tooltip
                   [content]="itemTooltip"
                   [side]="window.isLaptopOrLess() ? 'right' : 'left'"
-                  [visible]="tooltipLeft[0]"
+                  [visible]="tooltipLeft[0] && (!compareTeam || window.isTabletPortraitOrLess())"
                   [mobileChanged]="window.isTabletPortraitOrLess()"
                   class="tooltip-component"
                   >
@@ -129,7 +129,7 @@
                   <app-poke-tooltip
                   [content]="abilityTooltip"
                   [side]="window.isLaptopOrLess() ? 'right' : 'left'"
-                  [visible]="tooltipLeft[1]"
+                  [visible]="tooltipLeft[1] && (!compareTeam || window.isTabletPortraitOrLess())"
                   [mobileChanged]="window.isTabletPortraitOrLess()"
                   class="tooltip-component"
                   >
@@ -343,7 +343,7 @@
                           <app-poke-tooltip
                           [content]="teraTypeTooltip"
                           [side]="'top'"
-                          [visible]="tooltipTypes[0]"
+                          [visible]="tooltipTypes[0] && (!compareTeam || window.isTabletPortraitOrLess())"
                           [mobileChanged]="window.isTabletPortraitOrLess()"
                           class="tooltip-component"
                           >
@@ -418,7 +418,7 @@
                     {
                       section: pokemon.types?.type1?.identifier !== 'error',
                       'animated-border': pokemon.types?.type1?.identifier !== 'error' && !window.isTabletPortraitOrLess(),
-                      'poke-tooltip-selected': tooltipTypes[1],
+                      'poke-tooltip-selected': tooltipTypes[1] && !compareTeam,
                       'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
                     }"
                     >
@@ -427,7 +427,7 @@
                           <app-poke-tooltip
                           [content]="typesTooltip"
                           [side]="'top'"
-                          [visible]="tooltipTypes[1]"
+                          [visible]="tooltipTypes[1] && (!compareTeam || window.isTabletPortraitOrLess())"
                           [mobileChanged]="window.isTabletPortraitOrLess()"
                           class="tooltip-component"
                           >
@@ -617,13 +617,13 @@
                 <div 
                 class="section animated-border poke-tooltip-wrapper"
                 (click)="clickSection(0, 'middle')"
-                [ngClass]="{'poke-tooltip-selected': tooltipMiddle[0]}"
+                [ngClass]="{'poke-tooltip-selected': tooltipMiddle[0] && !compareTeam}"
                 >
                   <div class="section-content">
                     <app-poke-tooltip
                     [content]="levelTooltip"
                     [side]="'top'"
-                    [visible]="tooltipMiddle[0]"
+                    [visible]="tooltipMiddle[0] && (!compareTeam || window.isTabletPortraitOrLess())"
                     [mobileChanged]="window.isTabletPortraitOrLess()"
                     class="tooltip-component"
                     >
@@ -692,7 +692,7 @@
                     <app-poke-tooltip
                     [content]="moveTooltip"
                     [side]="window.isLaptopOrLess() ? 'left' : 'right'"
-                    [visible]="tooltipRight[i]"
+                    [visible]="tooltipRight[i] && (!compareTeam || window.isTabletPortraitOrLess())"
                     [mobileChanged]="window.isTabletPortraitOrLess()"
                     class="tooltip-component"
                     >
@@ -711,7 +711,7 @@
                             <app-poke-tooltip
                             [content]="moveTypeTooltip"
                             [side]="'top'"
-                            [visible]="tooltipRightType[i]"
+                            [visible]="tooltipRightType[i] && (!compareTeam || window.isTabletPortraitOrLess())"
                             class="tooltip-component"
                             >
                             </app-poke-tooltip>
@@ -784,7 +784,7 @@
                             <app-poke-tooltip
                             [content]="moveClassTooltip"
                             [side]="'top'"
-                            [visible]="tooltipRightClass[i]"
+                            [visible]="tooltipRightClass[i] && (!compareTeam || window.isTabletPortraitOrLess())"
                             class="tooltip-component"
                             >
                             </app-poke-tooltip>
@@ -888,12 +888,12 @@
         <div class="flex-col justify-c-sa gap-s pad-s bg-3" style="border-radius: 0 0 5px 5px;">
           <ng-container *ngFor="let stat of pokemon.stats; index as i">
             <div class="no-pad section animated-border poke-tooltip-wrapper" (click)="clickSection(i, 'stat')" 
-            [ngClass]="{'poke-tooltip-selected': tooltipStats[i]}">
+            [ngClass]="{'poke-tooltip-selected': tooltipStats[i] && !compareTeam}">
               <div class="section-content">
                 <app-poke-tooltip
                 [content]="statTooltip"
                 [side]="'top'"
-                [visible]="tooltipStats[i]"
+                [visible]="tooltipStats[i] && (!compareTeam || window.isTabletPortraitOrLess())"
                 class="tooltip-component"
                 >
                 </app-poke-tooltip>
