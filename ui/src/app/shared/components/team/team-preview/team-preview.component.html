@@ -168,6 +168,26 @@
             </button>
           </div>
           <div class="preview-button">
+            <button (click)="compare()" class="button tooltip-wrapper">
+              <svg class="icon-m" fill="var(--text-color)" width="24" height="24" viewBox="0 0 32 32" id="icon" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+                <g id="SVGRepo_iconCarrier">
+                <defs>
+                  <style>.cls-1{fill:none;}</style>
+                </defs>
+                <path d="M28,6H18V4a2,2,0,0,0-2-2H4A2,2,0,0,0,2,4V24a2,2,0,0,0,2,2H14v2a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V8A2,2,0,0,0,28,6ZM4,15h6.17L7.59,17.59,9,19l5-5L9,9,7.59,10.41,10.17,13H4V4H16V24H4ZM16,28V26a2,2,0,0,0,2-2V8H28v9H21.83l2.58-2.59L23,13l-5,5,5,5,1.41-1.41L21.83,19H28v9Z" transform="translate(0)"/>
+                <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></g>
+              </svg>              
+              <ng-container *ngIf="window.isDesktop()">
+                <app-tooltip
+                [text]="'team.preview.compareTeam' | translate"
+                [side]="'top'"
+                ></app-tooltip>
+              </ng-container>
+            </button>
+          </div>
+          <div class="preview-button">
             <button class="button tooltip-wrapper">
               <a [routerLink]="['/', team?.id]" target="_blank">
                 <svg class="icon-m" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M3039 5104 c-64 -19 -141 -90 -169 -156 -48 -113 -20 -240 72 -323 84 -76 79 -75 677 -75 l526 0 -1192 -1192 c-1318 -1319 -1243 -1236 -1243 -1368 0 -206 213 -341 400 -254 48 22 213 182 1248 1217 l1192 1192 0 -526 c0 -598 -1 -593 75 -677 115 -128 305 -127 420 0 79 88 76 36 73 1064 l-3 909 -22 41 c-34 63 -66 97 -125 129 l-53 30 -915 2 c-772 2 -922 0 -961 -13z"/> <path d="M705 4539 c-267 -50 -495 -221 -618 -466 -15 -28 -39 -91 -54 -140 l-28 -88 -3 -1525 c-2 -1045 1 -1547 8 -1594 29 -187 103 -329 245 -471 142 -142 284 -216 471 -245 47 -7 549 -10 1594 -8 l1525 3 88 28 c325 101 548 353 606 681 7 38 11 294 11 692 0 608 -1 635 -20 686 -40 107 -149 181 -266 180 -110 -1 -198 -55 -252 -157 l-27 -50 -5 -645 -5 -645 -23 -47 c-13 -26 -44 -65 -68 -87 -87 -76 33 -71 -1604 -71 -1664 0 -1531 -7 -1623 83 -95 92 -87 -53 -87 1622 0 1642 -5 1522 71 1609 22 24 61 55 87 68 l47 23 640 5 640 5 52 24 c138 62 204 231 144 367 -30 68 -94 130 -159 154 -51 19 -77 20 -695 19 -353 -1 -664 -5 -692 -10z"/> </g> </svg>

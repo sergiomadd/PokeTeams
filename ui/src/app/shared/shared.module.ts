@@ -43,6 +43,7 @@ import { CalcMoveEffectivenessPipe } from './pipes/calcMoveEffectiveness.pipe';
 import { GetDefenseEffectivenessPipe } from './pipes/getDefenseEffectivenes.pipe';
 import { GetFormControlErrorPipe } from './pipes/getFormControlError.pipe';
 import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
+import { PokemonIconsComponent } from './components/pokemon/pokemon-icons/pokemon-icons.component';
 
 @NgModule({
   declarations: 
@@ -92,7 +93,8 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     GetFormControlErrorPipe,
     TeamBattleComponent,
     CalcMoveEffectivenessPipe,
-    GetDefenseEffectivenessPipe
+    GetDefenseEffectivenessPipe,
+    PokemonIconsComponent
   ],
   imports: 
   [

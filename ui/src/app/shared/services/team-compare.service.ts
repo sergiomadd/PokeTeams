@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Move } from 'src/app/core/models/pokemon/move.model';
+import { TeamPreviewToCompare } from 'src/app/core/models/team/teamPreviewToCompare.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,8 @@ export class TeamCompareService
   private teratypeEnabledIndexesB$: BehaviorSubject<boolean[]> = new BehaviorSubject<boolean[]>([])
   teratypeEnabledIndexesBObservable$ = this.teratypeEnabledIndexesA$.asObservable();
 
+  private teamsToCompareSubject$: BehaviorSubject<TeamPreviewToCompare[]> = new BehaviorSubject<TeamPreviewToCompare[]>([])
+  teamsToCompare$ = this.teamsToCompareSubject$.asObservable();
 
   setMoveA(newMove?: Move)
   {
@@ -42,7 +45,36 @@ export class TeamCompareService
   {
     const currentValues = this.teratypeEnabledIndexesB$.getValue();
     const updatedValues = [...currentValues];
-    updatedValues[index] = true;
+    updatedValues[index] = value;
     this.teratypeEnabledIndexesB$.next(updatedValues);
+  }
+
+  addTeamsToCompare(team: TeamPreviewToCompare)
+  {
+    const currentValues = this.teamsToCompareSubject$.getValue();
+    if(currentValues.length > 1)
+    {
+      return false;
+    }
+    const updatedValues = [...currentValues, team];
+    this.teamsToCompareSubject$.next(updatedValues);
+    return true;
+  }
+
+  removeTeamsToCompare(teamId: string)
+  {
+    const currentValues = this.teamsToCompareSubject$.getValue();
+    const indexToRemove = currentValues.findIndex(team => team.teamData.id === teamId);
+    if (indexToRemove === -1) 
+    {
+      return false;
+    }
+    const updatedValues = 
+    [
+      ...currentValues.slice(0, indexToRemove),
+      ...currentValues.slice(indexToRemove + 1)
+    ];
+    this.teamsToCompareSubject$.next(updatedValues);
+    return true;
   }
 }
