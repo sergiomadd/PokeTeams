@@ -158,6 +158,15 @@
   transform: rotate(180deg);
 }
 
+.swap-button
+{
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  background-color: var(--bg-color-3) !important;
+}
+
 @media (max-width: $tabletPortrait) 
 {
   .team-table

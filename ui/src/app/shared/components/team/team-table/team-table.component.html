@@ -121,7 +121,17 @@ class="team-table flex-col align-i-c w-80"
           </ng-container>
         </div>
         <div class="w-100 bor-1-3"></div>
-        <button class="button button-primary" style="font-size: 0.9em;" (click)="compare()">Compare</button>
+        <div class="relative w-100 flex align-i-c justify-c-c">
+          <button class="button button-primary" style="font-size: 0.9em;" (click)="compare()">Compare</button>
+          <ng-container *ngIf="teamsToCompare.length === 2">
+            <button class="swap-button button icon-l pad-s" (click)="swapTeamsToCompare()">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 3.5L8 16.5M8 3.5L3.5 7.83333M8 3.5L12.5 7.83333" stroke="var(--text-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M17 20.5L17 7.5M17 20.5L21.5 16.1667M17 20.5L12.5 16.1667" stroke="var(--text-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </ng-container>
+        </div>
         <ng-container *ngIf="teamsToCompareFeedback">
           <span class="formFeedbackError">{{teamsToCompareFeedback}}</span>
         </ng-container>

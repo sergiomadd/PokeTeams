@@ -216,4 +216,13 @@ export class TeamTableComponent
   {
     this.teamsToCompareOpen = !this.teamsToCompareOpen;
   }
+
+  swapTeamsToCompare()
+  {
+    if (this.teamsToCompare.length === 2) 
+    {
+      const swappedTeamsToCompare = [this.teamsToCompare[1], this.teamsToCompare[0]];
+      this.teamsToCompare = [...swappedTeamsToCompare];
+    }
+  }
 }
