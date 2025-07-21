@@ -224,3 +224,45 @@
 		background-color: #fd0
 	}
 }
+
+.teratype-background 
+{
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+
+  &::before 
+  {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+      from 30deg,
+      hsl(51, 95%, 62%),
+      hsl(37, 93%, 53%),
+      hsl(16, 89%, 55%),
+      hsl(347, 73%, 59%),
+      hsl(301, 43%, 59%),
+      hsl(271, 56%, 54%),
+      hsl(260, 43%, 55%),
+      hsl(229, 23%, 56%),
+      hsl(201, 18%, 60%),
+      hsl(198, 69%, 62%),
+      hsl(195, 80%, 55%),
+      hsl(209, 73%, 52%),
+      hsl(224, 56%, 49%),
+      hsl(192, 44%, 52%),
+      hsl(111, 67%, 59%),
+      hsl(68, 62%, 65%),
+      hsl(67, 42%, 84%),
+      hsl(38, 58%, 77%),
+      hsl(51, 95%, 62%)
+    );
+    animation: spin 8s infinite linear;
+    z-index: -1;
+    border-radius: 50%;
+  }
+}

@@ -89,6 +89,28 @@ export enum Gen9TypeColors
     fairy = "hsl(300, 80%, 69%)"
 }
 
+//Stellar type backgorund types order
+/*
+    yellow = hsl(51, 95%, 62%)
+    orange = hsl(37, 93%, 53%)
+    dark-orange = hsl(16, 89%, 55%)
+    pink = hsl(347, 73%, 59%)
+    purple = hsl(301, 43%, 59%)
+    deep-purple = hsl(271, 56%, 54%)
+    dark-purple = hsl(260, 43%, 55%)
+    grey = hsl(229, 23%, 56%)
+    light-grey = hsl(201, 18%, 60%)
+    light-blue = hsl(198, 69%, 62%)
+    cyan = hsl(195, 80%, 55%)
+    blue = hsl(209, 73%, 52%)
+    dark-blue = hsl(224, 56%, 49%)
+    ocean = hsl(192, 44%, 52%)
+    green = hsl(111, 67%, 59%)
+    ugly-green = hsl(68, 62%, 65%)
+    light-brown = hsl(67, 42%, 84%)
+    brown = hsl(38, 58%, 77%)
+*/
+
 //User for move background
 export enum Gen9TypeColorsLight
 {
