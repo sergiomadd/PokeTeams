@@ -31,6 +31,7 @@ import { PokemonPreviewComponent } from './components/pokemon/pokemon-preview/po
 import { SmartInputComponent } from './components/smart-input/smart-input.component';
 import { PasteInputComponent } from './components/team/paste-input/paste-input.component';
 import { RegulationPreviewComponent } from './components/team/regulation-preview/regulation-preview.component';
+import { TeamBattleComponent } from './components/team/team-battle/team-battle.component';
 import { TeamEditorComponent } from './components/team/team-editor/team-editor.component';
 import { TeamPreviewComponent } from './components/team/team-preview/team-preview.component';
 import { TeamSearchComponent } from './components/team/team-search/team-search.component';
@@ -38,8 +39,11 @@ import { TeamTableComponent } from './components/team/team-table/team-table.comp
 import { TeamComponent } from './components/team/team/team.component';
 import { TournamentPreviewComponent } from './components/team/tournament-preview/tournament-preview.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
+import { CalcMoveEffectivenessPipe } from './pipes/calcMoveEffectiveness.pipe';
+import { GetDefenseEffectivenessPipe } from './pipes/getDefenseEffectivenes.pipe';
 import { GetFormControlErrorPipe } from './pipes/getFormControlError.pipe';
 import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
+import { PokemonIconsComponent } from './components/pokemon/pokemon-icons/pokemon-icons.component';
 
 @NgModule({
   declarations: 
@@ -86,7 +90,11 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
 
     //Pipes
     IsFormFieldInvalidPipe,
-    GetFormControlErrorPipe
+    GetFormControlErrorPipe,
+    TeamBattleComponent,
+    CalcMoveEffectivenessPipe,
+    GetDefenseEffectivenessPipe,
+    PokemonIconsComponent
   ],
   imports: 
   [
@@ -128,6 +136,7 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     TeamEditorComponent,
     TeamSearchComponent,
     TeamTableComponent,
+    TeamBattleComponent,
 
     //dumb
     CheckboxComponent,
@@ -146,7 +155,9 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
 
     //Pipes
     IsFormFieldInvalidPipe,
-    GetFormControlErrorPipe
+    GetFormControlErrorPipe,
+    CalcMoveEffectivenessPipe,
+    GetDefenseEffectivenessPipe
   ],
   providers: [TranslateStore]
 })
