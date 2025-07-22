@@ -69,7 +69,7 @@
                   </app-poke-tooltip>
                 </ng-container>
                 <ng-template #itemTooltip>
-                  <div class="poke-tooltip-content">
+                  <div class="poke-tooltip-content poke-tooltip-content-bound">
                     <div class="poke-tooltip-head">
                       <span class="poke-tooltip-head-text">
                         {{pokemon.item?.name?.content}}
@@ -136,7 +136,7 @@
                   </app-poke-tooltip>
                 </ng-container>
                 <ng-template #abilityTooltip>
-                  <div class="poke-tooltip-content">
+                  <div class="poke-tooltip-content poke-tooltip-content-bound">
                     <div class="poke-tooltip-head" [ngClass]="{'justify-c-sb': pokemon?.ability?.hidden}">
                       <span class="poke-tooltip-head-text">
                         {{pokemon.ability?.name?.content}}
@@ -699,7 +699,7 @@
                     </app-poke-tooltip>
                   </ng-container>
                   <ng-template #moveTooltip>
-                    <div class="poke-tooltip-content">
+                    <div class="poke-tooltip-content poke-tooltip-content-bound">
                       <div class="poke-tooltip-head move-head" 
                       [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.identifier ?? '')}"
                       >
@@ -898,7 +898,7 @@
                 >
                 </app-poke-tooltip>
                 <ng-template #statTooltip>
-                  <div class="poke-tooltip-content">
+                  <div class="poke-tooltip-content" style="max-width: auto;">
                     <div class="poke-tooltip-head" [ngStyle]="{backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat))}">
                       {{stat.name?.content}}
                       <ng-container *ngIf="stat.name?.content && stat.name?.language != (selectedLang$ | async)">
