@@ -16,6 +16,7 @@ import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
 import { selectLang } from 'src/app/core/store/config/config.selectors';
 import { CalcMoveEffectivenessPipe } from 'src/app/shared/pipes/calcMoveEffectiveness.pipe';
 import { GetDefenseEffectivenessPipe } from 'src/app/shared/pipes/getDefenseEffectivenes.pipe';
+import { GetPokemonSpritePathPipe } from 'src/app/shared/pipes/getPokemonSpritePath.pipe';
 import { TeamCompareService } from 'src/app/shared/services/team-compare.service';
 
 
@@ -32,7 +33,7 @@ interface CalculatedStats
   selector: 'app-pokemon-card',
   templateUrl: './pokemon-card.component.html',
   styleUrl: './pokemon-card.component.scss',
-  providers: [CalcMoveEffectivenessPipe, GetDefenseEffectivenessPipe] 
+  providers: [CalcMoveEffectivenessPipe, GetDefenseEffectivenessPipe, GetPokemonSpritePathPipe] 
 })
 export class PokemonCardComponent 
 {
@@ -43,8 +44,10 @@ export class PokemonCardComponent
   store = inject(Store);
   window = inject(WindowService);
   compareService = inject(TeamCompareService);
+
   calcMoveEffectivenessPipe = inject(CalcMoveEffectivenessPipe);
   getDefenseEffectiveness = inject(GetDefenseEffectivenessPipe);
+  getPokemonSpritePath = inject(GetPokemonSpritePathPipe);
 
   @Input() pokemon?: Pokemon | null;
   @Input() teamOptions?: TeamOptions;
@@ -106,14 +109,14 @@ export class PokemonCardComponent
     if(changes['teamOptions'])
     {
       this.teamOptions = changes['teamOptions'].currentValue;
-      this.loadSprite();
+      this.pokemonSpritePath = this.getPokemonSpritePath.transform(this.pokemon);
       this.calculateStats();
       this.calculateMaxStat();
     }
     if(changes['pokemon'])
     {
       this.pokemon = changes['pokemon'].currentValue;
-      this.loadSprite();
+      this.pokemonSpritePath = this.getPokemonSpritePath.transform(this.pokemon);
       this.calculateStats();
       await this.linkify();
       this.calculateMaxStat();
@@ -194,25 +197,6 @@ export class PokemonCardComponent
       this.moveEffectsShort[3] = this.linkifier.linkifyProse(this.pokemon.moves[3].effect.short.content);
       this.moveEffectsLong[3] = this.linkifier.linkifyProse(this.pokemon.moves[3].effect.long.content);
       this.moveTargets[3] = this.linkifier.linkifyProse(this.pokemon.moves[3].target?.description.content);
-    }
-  }
-
-  loadSprite()
-  {
-    if(this.pokemon?.sprite)
-    {
-      if(this.pokemon.gender && this.pokemon.sprite.female)
-      {
-        this.pokemonSpritePath = this.pokemon.shiny ? this.pokemon.sprite.shinyFemale : this.pokemon.sprite.female
-      }
-      else
-      {
-        this.pokemonSpritePath = this.pokemon.shiny ? this.pokemon.sprite.shiny : this.pokemon.sprite.base
-      }
-    }
-    else
-    {
-      this.pokemonSpritePath = "assets/img/error.png"
     }
   }
 

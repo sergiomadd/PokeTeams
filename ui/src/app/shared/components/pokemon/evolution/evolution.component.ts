@@ -36,7 +36,7 @@ export class EvolutionComponent
         evolutions: []
       };
     }
-    this.loadSprite();
+    this.loadEvolutionSprite();
   }
 
   ngOnChanges(changes: SimpleChanges)
@@ -44,17 +44,17 @@ export class EvolutionComponent
     if(changes['sourcePokemon'])
     {
       this.sourcePokemon = changes['sourcePokemon'].currentValue;
-      this.loadSprite();
+      this.loadEvolutionSprite();
     }
 
     if(changes['pokemon'])
     {
       this.pokemon = changes['pokemon'].currentValue;
-      this.loadSprite();
+      this.loadEvolutionSprite();
     }
   }
 
-  loadSprite()
+  loadEvolutionSprite()
   {
     if(this.pokemon?.sprite)
     {

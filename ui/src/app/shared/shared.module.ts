@@ -27,6 +27,7 @@ import { EvolutionComponent } from './components/pokemon/evolution/evolution.com
 import { PokeTooltipComponent } from './components/pokemon/poke-tooltip/poke-tooltip.component';
 import { PokemonCardComponent } from './components/pokemon/pokemon-card/pokemon-card.component';
 import { PokemonEditorComponent } from './components/pokemon/pokemon-editor/pokemon-editor.component';
+import { PokemonIconsComponent } from './components/pokemon/pokemon-icons/pokemon-icons.component';
 import { PokemonPreviewComponent } from './components/pokemon/pokemon-preview/pokemon-preview.component';
 import { SmartInputComponent } from './components/smart-input/smart-input.component';
 import { PasteInputComponent } from './components/team/paste-input/paste-input.component';
@@ -42,8 +43,8 @@ import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { CalcMoveEffectivenessPipe } from './pipes/calcMoveEffectiveness.pipe';
 import { GetDefenseEffectivenessPipe } from './pipes/getDefenseEffectivenes.pipe';
 import { GetFormControlErrorPipe } from './pipes/getFormControlError.pipe';
+import { GetPokemonSpritePathPipe } from './pipes/getPokemonSpritePath.pipe';
 import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
-import { PokemonIconsComponent } from './components/pokemon/pokemon-icons/pokemon-icons.component';
 
 @NgModule({
   declarations: 
@@ -94,7 +95,8 @@ import { PokemonIconsComponent } from './components/pokemon/pokemon-icons/pokemo
     TeamBattleComponent,
     CalcMoveEffectivenessPipe,
     GetDefenseEffectivenessPipe,
-    PokemonIconsComponent
+    PokemonIconsComponent,
+    GetPokemonSpritePathPipe
   ],
   imports: 
   [
@@ -157,7 +159,8 @@ import { PokemonIconsComponent } from './components/pokemon/pokemon-icons/pokemo
     IsFormFieldInvalidPipe,
     GetFormControlErrorPipe,
     CalcMoveEffectivenessPipe,
-    GetDefenseEffectivenessPipe
+    GetDefenseEffectivenessPipe,
+    GetPokemonSpritePathPipe
   ],
   providers: [TranslateStore]
 })
