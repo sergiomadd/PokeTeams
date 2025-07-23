@@ -1,5 +1,6 @@
 import { LocalizedText } from "../misc/localizedText.model"
 import { Ability } from "./ability.model"
+import { CalculatedStats } from "./calculatedStats.model"
 import { Evolution } from "./evolution.model"
 import { Item } from "./item.model"
 import { Move } from "./move.model"
@@ -33,6 +34,7 @@ export interface Pokemon
 	shiny?: boolean,
 	gender?: boolean,
 	sprite?: Sprite,
-	notes?: string
+	notes?: string,
+	calculatedStats?: CalculatedStats
 }
   

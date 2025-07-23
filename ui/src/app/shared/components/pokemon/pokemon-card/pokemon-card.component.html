@@ -358,7 +358,7 @@
                                   <div class="type-category-icons">
                                     <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.superEffective; let i = index; let last = last">
                                       <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.teraType?.effectivenessDefense?.superEffective)}">
+                                      [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                     </ng-container>
                                   </div>
                                 </div>
@@ -374,7 +374,7 @@
                                   <div class="type-category-icons">
                                     <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.notVeryEffective; let i = index; let last = last">
                                       <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.teraType?.effectivenessDefense?.notVeryEffective)}">
+                                      [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                     </ng-container>
                                   </div>
                                 </div>
@@ -392,7 +392,7 @@
                                   <div class="type-category-icons">
                                     <ng-container *ngFor="let type of pokemon.teraType?.effectivenessDefense?.inmune; let i = index; let last = last">
                                       <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                      [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.teraType?.effectivenessDefense?.inmune)}">
+                                      [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                     </ng-container>
                                   </div>
                                 </div>
@@ -449,7 +449,7 @@
                                       <div class="type-category-icons">
                                         <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleSuperEffective; let i = index; let last = last">
                                           <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                          [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.doubleSuperEffective)}">
+                                          [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                         </ng-container>
                                       </div>
                                     </div>
@@ -470,7 +470,7 @@
                                       <div class="type-category-icons">
                                         <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.superEffective; let i = index; let last = last">
                                           <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                          [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.superEffective)}">
+                                          [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                         </ng-container>
                                       </div>
                                     </div>
@@ -491,7 +491,7 @@
                                       <div class="type-category-icons">
                                         <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.notVeryEffective; let i = index; let last = last">
                                           <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                          [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.notVeryEffective)}">
+                                          [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                         </ng-container>
                                       </div>
                                     </div>
@@ -510,7 +510,7 @@
                                       <div class="type-category-icons">
                                         <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.doubleNotVeryEffective; let i = index; let last = last">
                                           <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                          [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.doubleNotVeryEffective)}">
+                                          [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                         </ng-container>
                                       </div>
                                     </div>
@@ -528,7 +528,7 @@
                                       <div class="type-category-icons">
                                         <ng-container *ngFor="let type of pokemon.types?.dualEffectiveness?.inmune; let i = index; let last = last">
                                           <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                          [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.dualEffectiveness?.inmune)}">
+                                          [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                         </ng-container>
                                       </div>
                                     </div>
@@ -543,7 +543,7 @@
                                       <div class="type-category-icons">
                                         <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.superEffective; let i = index; let last = last">
                                           <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                          [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.type1?.effectivenessDefense?.superEffective)}">
+                                          [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                         </ng-container>
                                       </div>
                                     </div>
@@ -559,7 +559,7 @@
                                       <div class="type-category-icons">
                                         <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.notVeryEffective; let i = index; let last = last">
                                           <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                          [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.type1?.effectivenessDefense?.notVeryEffective)}">
+                                          [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                         </ng-container>
                                       </div>
                                     </div>
@@ -577,7 +577,7 @@
                                       <div class="type-category-icons">
                                         <ng-container *ngFor="let type of pokemon.types?.type1?.effectivenessDefense?.inmune; let i = index; let last = last">
                                           <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                          [ngClass]="{lastType: last && shouldBeInMiddle(i, pokemon.types?.type1?.effectivenessDefense?.inmune)}">
+                                          [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                         </ng-container>
                                       </div>
                                     </div>
@@ -725,7 +725,7 @@
                                     <div class="type-category-icons">
                                       <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.superEffective; let i = index; let last = last">
                                         <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                        [ngClass]="{lastType: last && shouldBeInMiddle(i, move?.pokeType?.effectivenessAttack?.superEffective)}">
+                                        [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                       </ng-container>
                                     </div>
                                   </div>
@@ -741,7 +741,7 @@
                                     <div class="type-category-icons">
                                       <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.notVeryEffective; let i = index; let last = last">
                                         <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                        [ngClass]="{lastType: last && shouldBeInMiddle(i, move?.pokeType?.effectivenessAttack?.notVeryEffective)}">
+                                        [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                       </ng-container>
                                     </div>
                                   </div>
@@ -759,7 +759,7 @@
                                     <div class="type-category-icons">
                                       <ng-container *ngFor="let type of move?.pokeType?.effectivenessAttack?.inmune; let i = index; let last = last">
                                         <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                        [ngClass]="{lastType: last && shouldBeInMiddle(i, move?.pokeType?.effectivenessAttack?.inmune)}">
+                                        [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                       </ng-container>
                                     </div>
                                   </div>
@@ -914,12 +914,12 @@
                       <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;" [ngStyle]="{backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat))}">
                         <div>{{'pokemon.stat.base' | translate}}</div>
                         <div>{{stat.value}}</div>
-                        <div>{{calculatedStats.base[i]?.value}}</div>
+                        <div>{{pokemon.calculatedStats ? pokemon.calculatedStats.base[i]?.value : ''}}</div>
                       </div>
                       <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;" [ngStyle]="{backgroundColor: theme.getStatColor('iv')}">
                         <div>IVs</div>
                         <div>{{teamOptions?.ivsVisibility ? pokemon.ivs ? pokemon.ivs[i]?.value : "??" : "??"}}</div>
-                        <div>{{teamOptions?.ivsVisibility ? pokemon.ivs ? calculatedStats.ivs[i]?.value : "??" : "??"}}</div>
+                        <div>{{teamOptions?.ivsVisibility ? pokemon.ivs ? pokemon.calculatedStats ? pokemon.calculatedStats.ivs[i]?.value : '??' : "??" : "??"}}</div>
                       </div>
                       <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;"
                       [ngClass]="{maxed: pokemon.evs && pokemon.evs[i] ? (pokemon.evs[i].value == 252) ? true : false: false}"
@@ -927,7 +927,7 @@
                       >
                         <div>EVs</div>
                         <div>{{teamOptions?.evsVisibility ? pokemon.evs ? pokemon.evs[i]?.value : "??" : "??"}}</div>
-                        <div>{{teamOptions?.evsVisibility ? pokemon.evs ? calculatedStats.evs[i]?.value : '??' : "??"}}</div>
+                        <div>{{teamOptions?.evsVisibility ? pokemon.evs ? pokemon.calculatedStats ? pokemon.calculatedStats.evs[i]?.value : '??' : '??' : "??"}}</div>
                       </div>
                       <div class="flex-col bor-rad-5 pad-s"  style="min-width: 2em;">
                         <div>{{'pokemon.stat.nature' | translate}}</div>
@@ -959,7 +959,7 @@
                       <div class="flex-col bor-rad-5 pad-s"  style="min-width: 2em;">
                         <div>{{'pokemon.stat.total' | translate}}</div>
                         <div>---</div>
-                        <div>{{calculatedStats.total[i].value}}</div>
+                        <div>{{pokemon.calculatedStats ? pokemon.calculatedStats.total[i].value : ''}}</div>
                       </div>
                     </div>
                   </div>
@@ -973,9 +973,9 @@
                     class="bar"
                     [ngStyle]="
                     {
-                      width: getStatSize(calculatedStats.base[i].value),
+                      width: (pokemon.calculatedStats ? pokemon.calculatedStats.base[i].value : undefined) | getPokemonStatSizePipe:teamOptions,
                       backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat)),
-                      borderRadius: getStatBorderRadius(i, 'base')
+                      borderRadius: pokemon | getPokemonStatBorderRadiusPipe:i:'base':teamOptions
                     }"
                     >
                     </div>
@@ -984,9 +984,9 @@
                       class="bar"
                       [ngStyle]="
                       {
-                        width: pokemon.ivs ? getStatSize(calculatedStats.ivs[i]?.value) : 'none',
+                        width: pokemon.ivs ? ((pokemon.calculatedStats ? pokemon.calculatedStats.ivs[i]?.value : undefined) | getPokemonStatSizePipe:teamOptions) : 'none',
                         backgroundColor: theme.getStatColor('iv'),
-                        borderRadius: getStatBorderRadius(i, 'iv')
+                        borderRadius: pokemon | getPokemonStatBorderRadiusPipe:i:'iv':teamOptions
                       }"
                       >
                       </div>
@@ -995,7 +995,7 @@
                       <div class="bar" style="border-radius: 0 15px 15px 0;" 
                       [ngStyle]="
                       {
-                        width: pokemon.evs ? getStatSize(calculatedStats.evs[i]?.value) : 'none',
+                        width: pokemon.evs ? ((pokemon.calculatedStats ? pokemon.calculatedStats.evs[i]?.value : undefined) | getPokemonStatSizePipe:teamOptions) : 'none',
                         backgroundColor: theme.getStatColor('ev'),
                       }"
                       [ngClass]="{maxed: pokemon.evs && pokemon.evs[i] ? pokemon.evs[i].value == 252 ? true : false: false}"
@@ -1024,7 +1024,7 @@
                     </ng-container>
                   </div>
                   <div class="flex justify-c-c" style="width: 2em; margin-left: 0.2em;">
-                    {{calculatedStats.total[i].value}}
+                    {{pokemon.calculatedStats ? pokemon.calculatedStats.total[i].value : ''}}
                   </div>
                 </div>
               </div>

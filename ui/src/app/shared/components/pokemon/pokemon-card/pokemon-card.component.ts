@@ -3,37 +3,31 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { LinkifierService } from 'src/app/core/helpers/linkifier.service';
 import { ParserService } from 'src/app/core/helpers/parser.service';
+import { PokemonStatService } from 'src/app/core/helpers/pokemon-stat.service';
 import { ThemeService } from 'src/app/core/helpers/theme.service';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
 import { FeedbackColors, GenderColors, NatureColors, shinyColor } from 'src/app/core/models/misc/colors';
 import { ProcessedString } from 'src/app/core/models/misc/processedString.model';
 import { Move } from 'src/app/core/models/pokemon/move.model';
-import { Nature } from 'src/app/core/models/pokemon/nature.model';
 import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
-import { Stat } from 'src/app/core/models/pokemon/stat.model';
 import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
 import { selectLang } from 'src/app/core/store/config/config.selectors';
-import { CalcMoveEffectivenessPipe } from 'src/app/shared/pipes/calcMoveEffectiveness.pipe';
-import { GetDefenseEffectivenessPipe } from 'src/app/shared/pipes/getDefenseEffectivenes.pipe';
-import { GetPokemonSpritePathPipe } from 'src/app/shared/pipes/getPokemonSpritePath.pipe';
+import { CalcMoveEffectivenessPipe } from 'src/app/shared/pipes/pokemon-pipes/calcMoveEffectiveness.pipe';
+import { GetDefenseEffectivenessPipe } from 'src/app/shared/pipes/pokemon-pipes/getDefenseEffectivenes.pipe';
+import { GetPokemonSpritePathPipe } from 'src/app/shared/pipes/pokemon-pipes/getPokemonSpritePath.pipe';
 import { TeamCompareService } from 'src/app/shared/services/team-compare.service';
-
-
-interface CalculatedStats
-{
-  base: Stat[],
-  ivs: Stat[],
-  evs: Stat[],
-  natures: Stat[],
-  total: Stat[]
-} 
 
 @Component({
   selector: 'app-pokemon-card',
   templateUrl: './pokemon-card.component.html',
   styleUrl: './pokemon-card.component.scss',
-  providers: [CalcMoveEffectivenessPipe, GetDefenseEffectivenessPipe, GetPokemonSpritePathPipe] 
+  providers: 
+  [
+    CalcMoveEffectivenessPipe,
+    GetDefenseEffectivenessPipe,
+    GetPokemonSpritePathPipe
+  ] 
 })
 export class PokemonCardComponent 
 {
@@ -44,6 +38,7 @@ export class PokemonCardComponent
   store = inject(Store);
   window = inject(WindowService);
   compareService = inject(TeamCompareService);
+  pokemonStatService = inject(PokemonStatService);
 
   calcMoveEffectivenessPipe = inject(CalcMoveEffectivenessPipe);
   getDefenseEffectiveness = inject(GetDefenseEffectivenessPipe);
@@ -68,15 +63,7 @@ export class PokemonCardComponent
   readonly natureColors = NatureColors;
   readonly shinyColor = shinyColor;
   readonly feedbackColors = FeedbackColors;
-
-  calculatedStats: CalculatedStats = 
-  {
-    base: [],
-    ivs: [],
-    evs: [],
-    natures: [],
-    total: []
-  };
+  
   maxStat: number = 0;
 
   abilityProse: ProcessedString[] = [];
@@ -110,16 +97,23 @@ export class PokemonCardComponent
     {
       this.teamOptions = changes['teamOptions'].currentValue;
       this.pokemonSpritePath = this.getPokemonSpritePath.transform(this.pokemon);
-      this.calculateStats();
-      this.calculateMaxStat();
+      this.pokemonStatService.calculateStats(this.pokemon, this.teamOptions);
+      if(this.pokemon)
+      {
+        this.pokemon.calculatedStats = this.pokemonStatService.calculateStats(this.pokemon, this.teamOptions);
+        this.calculateMaxStat();
+      }
     }
     if(changes['pokemon'])
     {
       this.pokemon = changes['pokemon'].currentValue;
       this.pokemonSpritePath = this.getPokemonSpritePath.transform(this.pokemon);
-      this.calculateStats();
       await this.linkify();
-      this.calculateMaxStat();
+      if(this.pokemon)
+      {
+        this.pokemon.calculatedStats = this.pokemonStatService.calculateStats(this.pokemon, this.teamOptions);
+        this.calculateMaxStat();
+      }
     }
   }
 
@@ -392,177 +386,12 @@ export class PokemonCardComponent
     }
   }
 
-  //stats
-
   calculateMaxStat()
   {
-    this.maxStat = Math.max(...this.calculatedStats?.total.map(v => v.value));
-    this.updateStats.emit(this.maxStat);
-  }
-
-  getStatSize(value?: number)
-  {
-    if(value)
+    if(this.pokemon?.calculatedStats)
     {
-      let maxValue: number = this.teamOptions && this.teamOptions?.maxStat > 0 
-      ? this.teamOptions?.maxStat : 700; //the maximun stat value of any pokemons
-      return `${value / maxValue * 100}%`;
+      this.maxStat = Math.max(...this.pokemon.calculatedStats.total.map(v => v.value));
+      this.updateStats.emit(this.maxStat);
     }
-    return "0";
-  }
-
-  getStatBorderRadius(i: number, type: string): string 
-  {
-    const ivs = this.pokemon?.ivs?.[i]?.value ?? 0;
-    const evs = this.pokemon?.evs?.[i]?.value ?? 0;
-  
-    const showIVs = this.teamOptions?.showIVs && ivs / 4 !== 0;
-    const showEVs = this.teamOptions?.showEVs && evs / 4 !== 0;
-
-    if(type === "iv")
-    {
-      return showEVs  ? '0' : '0 15px 15px 0';
-    }
-    if(type === "base")
-    {
-      return (showIVs || showEVs) ? '15px 0 0 15px' : '15px';
-    }
-    return "";
-
-  }
-
-  calculateStats()
-  {
-    if(this.pokemon && this.pokemon.stats)
-    {
-      this.pokemon.stats.forEach((stat, index) => 
-      {
-        this.calculatedStats.base[index] = 
-        {
-          identifier: stat.identifier,
-          name: stat.name,
-          value: this.calculateBaseStat(stat)
-        }
-        this.calculatedStats.ivs[index] = 
-        {
-          identifier: stat.identifier,
-          name: stat.name,
-          value: this.calculateIV(this.pokemon?.ivs && this.pokemon?.ivs.length > 0 ? this.pokemon.ivs[index].value : 0)
-        }
-        this.calculatedStats.evs[index] = 
-        {
-          identifier: stat.identifier,
-          name: stat.name,
-          value: this.calculateEV(this.pokemon?.evs && this.pokemon?.evs.length > 0 ? this.pokemon.evs[index].value : 0)
-        }
-        this.calculatedStats.natures[index] = 
-        {
-          identifier: stat.identifier,
-          name: stat.name,
-          value: this.getNatureValue(stat, this.pokemon?.nature)
-        }
-        this.calculatedStats.total[index] = 
-        {
-          identifier: stat.identifier,
-          name: stat.name,
-          value: this.calculateStat(
-            stat.value, 
-            this.pokemon?.level ? this.pokemon.level : 50,
-            this.teamOptions?.ivsVisibility ? this.pokemon?.ivs && this.pokemon?.ivs.length > 0 ? this.pokemon.ivs[index].value : 0 : 0,
-            this.teamOptions?.evsVisibility ? this.pokemon?.evs && this.pokemon?.evs.length > 0 ? this.pokemon.evs[index].value : 0 : 0, 
-            this.teamOptions?.naturesVisibility ? this.pokemon?.nature ? this.calculatedStats.natures[index].value : 1 : 1,
-            stat.identifier === "hp" ? true : false)
-        }
-      });
-    }
-  }
-
-  calculateTotals()
-  {
-    if(this.pokemon && this.pokemon.stats)
-    {
-      this.pokemon.stats.forEach((stat, index) => 
-      {
-        this.calculatedStats.total[index] = 
-        {
-          identifier: stat.identifier,
-          name: stat.name,
-          value: this.calculateStat(
-            stat.value, 
-            this.pokemon?.level ? this.pokemon.level : 50,
-            this.teamOptions?.ivsVisibility ? this.pokemon?.ivs ? this.pokemon.ivs[index].value : 0 : 0,
-            this.teamOptions?.evsVisibility ? this.pokemon?.evs ? this.pokemon.evs[index].value : 0 : 0, 
-            this.teamOptions?.naturesVisibility ? this.pokemon?.nature ? this.calculatedStats.natures[index].value : 1 : 1,
-            stat.identifier === "hp" ? true : false)
-        }
-      });
-    }
-  }
-  
-  calculateStat(base: number, inlevel: number, iv: number, ev: number, nature: number, hp: boolean) : number
-  {
-    //I hate javascript
-    let level = Number(inlevel)
-    let total: number;
-    //HP: ((2 * base + iv + (ev/4)) * level) / 100) + level + 10
-    if(hp)
-    {
-      total = Math.floor((2 * base + iv + Math.floor(ev / 4)) * level / 100) + level + 10;
-    }
-    //Rest: ((((2 * base + iv + (ev/4)) * level) / 100) + 5) * nature
-    else
-    {
-      total = Math.floor((Math.floor(((2 * base + iv + Math.floor(ev / 4)) * level) / 100) + 5) * nature);
-    }
-    return total;
-  }
-
-  calculateBaseStat(baseStat: Stat) : number
-  {
-    return this.calculateStat(baseStat.value, this.pokemon?.level ? this.pokemon.level : 50, 0, 0, 1, baseStat.identifier === "hp" ? true : false);
-  }
-
-  calculateIV(iv: number) : number
-  {
-    return Math.round((iv * (this.pokemon?.level ? this.pokemon.level : 50)) / 100);
-  }
-
-  calculateEV(ev: number) : number
-  {
-    return Math.ceil((Math.floor(ev / 4) * (this.pokemon?.level ? this.pokemon.level : 50)) / 100);
-  }
-
-  getNatureValue(baseStat?: Stat, nature?: Nature) : number
-  {
-    let natureValue: number;
-    if(baseStat)
-    {
-      if(nature ? nature.increasedStatIdentifier === baseStat.identifier && nature.decreasedStatIdentifier === baseStat.identifier : false)
-      {
-        natureValue = 1;
-      }
-      else if(nature ? nature.increasedStatIdentifier === baseStat.identifier : false)
-      {
-        natureValue = 1.1;
-      }
-      else if(nature ? nature.decreasedStatIdentifier === baseStat.identifier : false)
-      {
-        natureValue = 0.9;
-      }
-      else
-      {
-        natureValue = 1;
-      }
-    }
-    else
-    {
-      natureValue = 1;
-    }
-    return natureValue;
-  }
-
-  shouldBeInMiddle(index, types): boolean 
-  {
-    return types && types.length > 2 && index % 2 === 0;
   }
 }

@@ -40,11 +40,14 @@ import { TeamTableComponent } from './components/team/team-table/team-table.comp
 import { TeamComponent } from './components/team/team/team.component';
 import { TournamentPreviewComponent } from './components/team/tournament-preview/tournament-preview.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
-import { CalcMoveEffectivenessPipe } from './pipes/calcMoveEffectiveness.pipe';
-import { GetDefenseEffectivenessPipe } from './pipes/getDefenseEffectivenes.pipe';
 import { GetFormControlErrorPipe } from './pipes/getFormControlError.pipe';
-import { GetPokemonSpritePathPipe } from './pipes/getPokemonSpritePath.pipe';
 import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
+import { CalcMoveEffectivenessPipe } from './pipes/pokemon-pipes/calcMoveEffectiveness.pipe';
+import { GetDefenseEffectivenessPipe } from './pipes/pokemon-pipes/getDefenseEffectivenes.pipe';
+import { GetPokemonSpritePathPipe } from './pipes/pokemon-pipes/getPokemonSpritePath.pipe';
+import { GetPokemonStatBorderRadiusPipe } from './pipes/pokemon-pipes/getPokemonStatBorderRadius.pipe';
+import { GetPokemonStatSizePipe } from './pipes/pokemon-pipes/getPokemonStatSize.pipe';
+import { ShouldBeInMiddlePipe } from './pipes/pokemon-pipes/shouldBeInMiddle.pipe';
 
 @NgModule({
   declarations: 
@@ -96,7 +99,10 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     CalcMoveEffectivenessPipe,
     GetDefenseEffectivenessPipe,
     PokemonIconsComponent,
-    GetPokemonSpritePathPipe
+    GetPokemonSpritePathPipe,
+    GetPokemonStatSizePipe,
+    GetPokemonStatBorderRadiusPipe,
+    ShouldBeInMiddlePipe
   ],
   imports: 
   [
@@ -160,7 +166,10 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     GetFormControlErrorPipe,
     CalcMoveEffectivenessPipe,
     GetDefenseEffectivenessPipe,
-    GetPokemonSpritePathPipe
+    GetPokemonSpritePathPipe,
+    GetPokemonStatSizePipe,
+    GetPokemonStatBorderRadiusPipe,
+    ShouldBeInMiddlePipe
   ],
   providers: [TranslateStore]
 })
