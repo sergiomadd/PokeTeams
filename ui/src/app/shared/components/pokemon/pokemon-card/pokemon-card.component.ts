@@ -97,7 +97,6 @@ export class PokemonCardComponent
     {
       this.teamOptions = changes['teamOptions'].currentValue;
       this.pokemonSpritePath = this.getPokemonSpritePath.transform(this.pokemon);
-      this.pokemonStatService.calculateStats(this.pokemon, this.teamOptions);
       if(this.pokemon)
       {
         this.pokemon.calculatedStats = this.pokemonStatService.calculateStats(this.pokemon, this.teamOptions);

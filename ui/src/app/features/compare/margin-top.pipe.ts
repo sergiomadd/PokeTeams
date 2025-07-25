@@ -16,33 +16,33 @@ export class MarginTopPipe implements PipeTransform
     {
       //If prev pokemon is from diff team than prevprev pokemon and prev value == prevprev value but prevprevprev value is not same -> do not move
       if(i > 2 && statList[i-1]?.whichTeam !== statList[i-2]?.whichTeam
-        && statList[i-1]?.pokemon?.stats![selectedStatIndex]?.value === statList[i-2]?.pokemon?.stats![selectedStatIndex]?.value
-        && statList[i-2]?.pokemon?.stats![selectedStatIndex]?.value !== statList[i-3]?.pokemon?.stats![selectedStatIndex]?.value)
+        && statList[i-1]?.stats?.total![selectedStatIndex]?.value === statList[i-2]?.stats?.total![selectedStatIndex]?.value
+        && statList[i-2]?.stats?.total![selectedStatIndex]?.value !== statList[i-3]?.stats?.total![selectedStatIndex]?.value)
       {
         return '0';
       }
       //If prev pokemon is from diff team than prevprev pokemon and prev value == prevprev value and is A col -> do not move
       if(comparePokemon.whichTeam === 'A' && i > 1 && statList[i-1]?.whichTeam !== statList[i-2]?.whichTeam
-        && statList[i-1]?.pokemon?.stats![selectedStatIndex]?.value === statList[i-2]?.pokemon?.stats![selectedStatIndex]?.value)
+        && statList[i-1]?.stats?.total![selectedStatIndex]?.value === statList[i-2]?.stats?.total![selectedStatIndex]?.value)
       {
         return '0';
       }
       //If prev pokemon is diff team & prev value is same -> push up to match prev height
       if(i > 0 && statList[i-1]?.whichTeam !== comparePokemon.whichTeam 
-              && statList[i-1]?.pokemon?.stats![selectedStatIndex]?.value === comparePokemon.pokemon?.stats![selectedStatIndex]?.value)
+              && statList[i-1]?.stats?.total![selectedStatIndex]?.value === comparePokemon?.stats?.total![selectedStatIndex]?.value)
       {
         return '-2.9em';
       }
       //If next is not from same team & is same value -> do not move
       if(i > 0 && statList[i+1]?.whichTeam !== comparePokemon.whichTeam 
-              && statList[i+1]?.pokemon?.stats![selectedStatIndex]?.value === comparePokemon.pokemon?.stats![selectedStatIndex]?.value)
+              && statList[i+1]?.stats?.total![selectedStatIndex]?.value === comparePokemon?.stats?.total![selectedStatIndex]?.value)
       {
         return '0';
       }
       //If prev is diff team andASS prev prev is same team and prev & prevprev are same value -> do not move cause prev & prevprev are same position
       if((i > 0 && statList[i-1]?.whichTeam !== comparePokemon.whichTeam) 
       && (i > 1 && statList[i-2]?.whichTeam === comparePokemon.whichTeam) 
-      && (statList[i-1]?.pokemon?.stats![selectedStatIndex]?.value === statList[i-2].pokemon?.stats![selectedStatIndex]?.value))
+      && (statList[i-1]?.stats?.total![selectedStatIndex]?.value === statList[i-2]?.stats?.total![selectedStatIndex]?.value))
       {
         return '0';
       }

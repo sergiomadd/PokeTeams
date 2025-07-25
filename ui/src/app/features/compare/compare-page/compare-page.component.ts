@@ -2,10 +2,13 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ParserService } from 'src/app/core/helpers/parser.service';
+import { PokemonStatService } from 'src/app/core/helpers/pokemon-stat.service';
 import { ThemeService } from 'src/app/core/helpers/theme.service';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
-import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
+import { LocalizedText } from 'src/app/core/models/misc/localizedText.model';
+import { CalculatedStats } from 'src/app/core/models/pokemon/calculatedStats.model';
+import { Sprite } from 'src/app/core/models/pokemon/sprite.model';
 import { Stat } from 'src/app/core/models/pokemon/stat.model';
 import { Team } from 'src/app/core/models/team/team.model';
 import { PokemonService } from 'src/app/core/services/pokemon.service';
@@ -13,7 +16,10 @@ import { TeamService } from 'src/app/core/services/team.service';
 
 export interface ComparePokemon
 {
-  pokemon: Pokemon | null | undefined,
+  dexNumber?: number,
+  pokemonName?: LocalizedText,
+  sprite?: Sprite,
+  stats?: CalculatedStats,
   sourceIndex: number,
   whichTeam: string
 }
@@ -33,6 +39,7 @@ export class ComparePageComponent
   parser = inject(ParserService);
   pokemonService = inject(PokemonService);
   activatedRoute = inject(ActivatedRoute);
+  pokemonStatService = inject(PokemonStatService);
 
   teamA?: Team;
   teamB?: Team;
@@ -109,7 +116,6 @@ export class ComparePageComponent
         this.teamANotFound = false;
         this.teamALoading = false;
         this.teamA = undefined;
-        this.calculateStatList(this.selectedStatIndex);
       }
 
       this.teamBId = params.get('teamBId') ?? undefined;
@@ -124,8 +130,9 @@ export class ComparePageComponent
         this.teamBNotFound = false;
         this.teamBLoading = false;
         this.teamB = undefined;
-        this.calculateStatList(this.selectedStatIndex);
       }
+
+      this.calculateStatList(this.selectedStatIndex);
     });
 
     this.teamAForm.controls.idA.valueChanges.subscribe(async value => 
@@ -314,10 +321,44 @@ export class ComparePageComponent
 
   calculateStatList(statIndex: number)
   {
+    this.teamA?.pokemons.forEach(pokemon => 
+    {
+      if(pokemon)
+      {
+        pokemon.calculatedStats = this.pokemonStatService.calculateStats(pokemon, this.teamA?.options);
+      }
+    });
+    this.teamB?.pokemons.forEach(pokemon => 
+    {
+      if(pokemon)
+      {
+        pokemon.calculatedStats = this.pokemonStatService.calculateStats(pokemon, this.teamB?.options);
+      }
+    });
+    
     if((this.teamA?.pokemons || this.teamB?.pokemons) && statIndex !== undefined)
     {
-      const statListA: ComparePokemon[] | undefined =  this.teamA?.pokemons.map((pokemon, index) => ({pokemon: pokemon, whichTeam: "A", sourceIndex: index}));
-      const statListB: ComparePokemon[] | undefined =  this.teamB?.pokemons.map((pokemon, index) => ({pokemon: pokemon, whichTeam: "B", sourceIndex: index}));
+      const statListA: ComparePokemon[] | undefined =  this.teamA?.pokemons.map((pokemon, index) => (
+      {
+        dexNumber: pokemon?.dexNumber,
+        pokemonName: pokemon?.name,
+        sprite: pokemon?.sprite,
+        stats: pokemon?.calculatedStats,
+        whichTeam: "A",
+        sourceIndex: index
+      }));
+      const statListB: ComparePokemon[] | undefined =  this.teamB?.pokemons.map((pokemon, index) => (
+      {
+        dexNumber: pokemon?.dexNumber,
+        pokemonName: pokemon?.name,
+        sprite: pokemon?.sprite,
+        stats: pokemon?.calculatedStats,
+        whichTeam: "B",
+        sourceIndex: index
+      }));
+      console.log("A", statListA);
+      console.log("B", statListB);
+
       if(!statListA && statListB)
       {
         this.statList = [...this.handleMismatch(this.sortByStatIndex(statListB?.concat(statListA ?? []), statIndex, false), statIndex)]
@@ -331,6 +372,7 @@ export class ComparePageComponent
     {
       this.statList = undefined;
     }
+    console.log(this.statList)
   }
 
   sortByStatIndex(statList: ComparePokemon[] | undefined, statIndex: number, ascending: boolean = true): any[] 
@@ -339,8 +381,8 @@ export class ComparePageComponent
     {
       return statList.sort((a, b) => 
       {
-        const valA = a?.pokemon?.stats?.[statIndex]?.value ?? 0;
-        const valB = b?.pokemon?.stats?.[statIndex]?.value ?? 0;
+        const valA = a?.stats?.total?.[statIndex]?.value ?? 0;
+        const valB = b?.stats?.total?.[statIndex]?.value ?? 0;
         
         return ascending ? valA - valB : valB - valA;
       });
@@ -361,7 +403,7 @@ export class ComparePageComponent
       let j: number = 0;
       for (const pokemon of statList) 
       {
-        if(groups[i] && groups[i].some(p => p.pokemon?.stats?.[statIndex]?.value === pokemon?.pokemon?.stats?.[statIndex]?.value))
+        if(groups[i] && groups[i].some(p => p.stats?.total?.[statIndex]?.value === pokemon?.stats?.total?.[statIndex]?.value))
         {
           j++;
           groups[i][j] = pokemon;

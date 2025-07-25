@@ -29,7 +29,7 @@ style="min-height: 100vh;"
           </div>
           <div class="flex flex-col justify-c-c gap-m" style="width: 10em;">
             <ng-container *ngFor="let item of statList; index as i">
-              <ng-container *ngIf="item?.pokemon?.dexNumber && item?.pokemon?.dexNumber !== -1">
+              <ng-container *ngIf="item?.dexNumber && item?.dexNumber !== -1">
                 <div class="flex gap-s align-i-c bor-rad-5 bor-1-3 pad-s" style="width: 4em;"
                 [ngClass]="
                 {
@@ -44,8 +44,10 @@ style="min-height: 100vh;"
                   'align-self': item.whichTeam === 'A' ? 'flex-start' : 'flex-end',
                   'margin-top': statList | marginTopPipe:item:selectedStatIndex:i
                 }">
-                    <span class="text-center" style="min-width: 1em;">{{item?.pokemon?.stats![selectedStatIndex]?.value ?? 0}}</span>
-                    <img class="icon-l" src="{{item?.pokemon?.sprite?.base}}" alt="">
+                    <span class="text-center" style="min-width: 1em;">
+                      {{ item && item.stats && item.stats.total ? item.stats.total[selectedStatIndex].value : ''}}
+                    </span>
+                    <img class="icon-l" src="{{item?.sprite?.base}}" alt="">
                 </div>
               </ng-container>
             </ng-container>
