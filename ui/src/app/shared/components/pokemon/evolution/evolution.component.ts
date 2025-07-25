@@ -43,15 +43,17 @@ export class EvolutionComponent
   {
     if(changes['sourcePokemon'])
     {
-      this.sourcePokemon = changes['sourcePokemon'].currentValue;
+      this.sourcePokemon = {...changes['sourcePokemon'].currentValue};
+      this.pokemon = {...this.sourcePokemon, evolutions: this.sourcePokemon?.evolutions ?? []};
       this.loadEvolutionSprite();
     }
 
     if(changes['pokemon'])
     {
-      this.pokemon = changes['pokemon'].currentValue;
+      this.pokemon = {...changes['pokemon'].currentValue};
       this.loadEvolutionSprite();
     }
+    
   }
 
   loadEvolutionSprite()
