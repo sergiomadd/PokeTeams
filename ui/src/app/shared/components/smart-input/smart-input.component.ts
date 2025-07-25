@@ -92,19 +92,19 @@ export class SmartInputComponent
       identifier: "",
       type: this.customType ?? "new"
     }
-    if(this.allowCustom)
-    {
-      this.results[0] = 
-      {
-        name: "",
-        identifier: "new",
-        type: this.customType ?? "new"
-      }
-    }
     this.searchForm.controls.key.valueChanges.subscribe(async (value) => 
     {
       if(value)
-      {          
+      {
+        if(this.allowCustom)
+        {
+          this.results[0] = 
+          {
+            name: "",
+            identifier: "new",
+            type: this.customType ?? "new"
+          }
+        }          
         if(this.updateOnChange)
         {
           this.updateEvent.emit(value);

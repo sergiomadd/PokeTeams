@@ -57,7 +57,7 @@ export class TeamSearchComponent
   async queryResultSelectEvent(event: QueryItem)
   {
     this.feedback = undefined;
-    if(!event) {return;}
+    if(!event) { return; }
     if(event.type === "user")
     {
       this.feedback = this.validatePlayer(event.name);
@@ -92,6 +92,7 @@ export class TeamSearchComponent
           type: event.type
         }
         this.chips?.push(chip);
+        this.sortChips();
       }
       this.searchService.setQueryItems(this.chips);
     }
@@ -119,6 +120,10 @@ export class TeamSearchComponent
 
   validatePlayer(player: string): string | undefined
   {
+    if(player.length <= 0)
+    {
+      return "";
+    }
     if(player.length > 32)
     {
       return this.i18n.translateKeyWithParameters('team.editor.errors.player', { maxlength: 32 });
@@ -133,5 +138,17 @@ export class TeamSearchComponent
       return this.i18n.translateKeyWithParameters('team.editor.errors.tournament', { maxlength: 256 });
     }
     return undefined;
+  }
+
+  sortChips()
+  {
+    const customOrder: string[] = ["user", "tournament", "regulation", "tag", "pokemon", "move", "item"];
+
+    this.chips.sort((a, b) => 
+    {
+      const indexA = customOrder.indexOf(a.type ?? 'z');
+      const indexB = customOrder.indexOf(b.type ?? 'z');
+      return indexA - indexB;
+    });
   }
 }
