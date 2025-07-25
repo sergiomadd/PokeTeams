@@ -141,6 +141,10 @@ export class TeamPreviewComponent
             if(this.util.copyToClipboard(this.parser.reversePaste(response)))
             {
               this.copied = true;
+              setTimeout(() => 
+              {
+                this.copied = false;
+              }, 300);
             }
             else
             {

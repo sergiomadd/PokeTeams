@@ -151,6 +151,8 @@
                 [side]="'top'"
                 [loading]="copying"
                 [loadingText]="'shared.copyLoading' | translate"
+                [visible]="copying || copied"
+                [instant]="true"
                 ></app-tooltip>
               </ng-container>
             </button>
@@ -163,6 +165,7 @@
                 [text]="linkCopied ? ('shared.copySuccess' | translate) : ('team.preview.copyLink' | translate)"
                 [side]="'top'"
                 [visible]="linkCopied"
+                [instant]="true"
                 ></app-tooltip>
               </ng-container>
             </button>
