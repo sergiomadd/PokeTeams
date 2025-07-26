@@ -209,7 +209,6 @@ export class TeamViewPageComponent
   {
     if(this.team)
     {
-
       this.team.options.showIVs = true;
       this.team.options.showEVs = true;
       this.team.options.showNature = true;

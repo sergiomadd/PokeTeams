@@ -27,10 +27,12 @@ import { EvolutionComponent } from './components/pokemon/evolution/evolution.com
 import { PokeTooltipComponent } from './components/pokemon/poke-tooltip/poke-tooltip.component';
 import { PokemonCardComponent } from './components/pokemon/pokemon-card/pokemon-card.component';
 import { PokemonEditorComponent } from './components/pokemon/pokemon-editor/pokemon-editor.component';
+import { PokemonIconsComponent } from './components/pokemon/pokemon-icons/pokemon-icons.component';
 import { PokemonPreviewComponent } from './components/pokemon/pokemon-preview/pokemon-preview.component';
 import { SmartInputComponent } from './components/smart-input/smart-input.component';
 import { PasteInputComponent } from './components/team/paste-input/paste-input.component';
 import { RegulationPreviewComponent } from './components/team/regulation-preview/regulation-preview.component';
+import { TeamBattleComponent } from './components/team/team-battle/team-battle.component';
 import { TeamEditorComponent } from './components/team/team-editor/team-editor.component';
 import { TeamPreviewComponent } from './components/team/team-preview/team-preview.component';
 import { TeamSearchComponent } from './components/team/team-search/team-search.component';
@@ -40,6 +42,12 @@ import { TournamentPreviewComponent } from './components/team/tournament-preview
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { GetFormControlErrorPipe } from './pipes/getFormControlError.pipe';
 import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
+import { CalcMoveEffectivenessPipe } from './pipes/pokemon-pipes/calcMoveEffectiveness.pipe';
+import { GetDefenseEffectivenessPipe } from './pipes/pokemon-pipes/getDefenseEffectivenes.pipe';
+import { GetPokemonSpritePathPipe } from './pipes/pokemon-pipes/getPokemonSpritePath.pipe';
+import { GetPokemonStatBorderRadiusPipe } from './pipes/pokemon-pipes/getPokemonStatBorderRadius.pipe';
+import { GetPokemonStatSizePipe } from './pipes/pokemon-pipes/getPokemonStatSize.pipe';
+import { ShouldBeInMiddlePipe } from './pipes/pokemon-pipes/shouldBeInMiddle.pipe';
 
 @NgModule({
   declarations: 
@@ -86,7 +94,15 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
 
     //Pipes
     IsFormFieldInvalidPipe,
-    GetFormControlErrorPipe
+    GetFormControlErrorPipe,
+    TeamBattleComponent,
+    CalcMoveEffectivenessPipe,
+    GetDefenseEffectivenessPipe,
+    PokemonIconsComponent,
+    GetPokemonSpritePathPipe,
+    GetPokemonStatSizePipe,
+    GetPokemonStatBorderRadiusPipe,
+    ShouldBeInMiddlePipe
   ],
   imports: 
   [
@@ -128,6 +144,7 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
     TeamEditorComponent,
     TeamSearchComponent,
     TeamTableComponent,
+    TeamBattleComponent,
 
     //dumb
     CheckboxComponent,
@@ -146,7 +163,13 @@ import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
 
     //Pipes
     IsFormFieldInvalidPipe,
-    GetFormControlErrorPipe
+    GetFormControlErrorPipe,
+    CalcMoveEffectivenessPipe,
+    GetDefenseEffectivenessPipe,
+    GetPokemonSpritePathPipe,
+    GetPokemonStatSizePipe,
+    GetPokemonStatBorderRadiusPipe,
+    ShouldBeInMiddlePipe
   ],
   providers: [TranslateStore]
 })

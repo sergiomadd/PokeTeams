@@ -18,6 +18,10 @@ const routes: Routes =
     path: 'search',
     loadChildren: () => import('./features/search/search.module').then((m) => m.SearchModule),
   },
+  { 
+    path: 'compare',
+    loadChildren: () => import('./features/compare/compare.module').then((m) => m.CompareModule),
+  },
   {
     path: 'user',
     loadChildren: () => import('./features/user/user.module').then((m) => m.UserModule)

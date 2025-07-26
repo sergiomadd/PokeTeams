@@ -1,7 +1,7 @@
 <h1 align="start">
   <img src="ui/src/assets/img/logo.png" width="40" height="40" /> PokeTeams
 </h1>
-<a href="https://poketeams.com" target="_blank">poketeams.com</a> is an free and open source website aimed at helping players learn and play with a specific pokemon team. It also allows for saving and sharing your pokemon teams, letting you have your pokepastes stored all in the same place.
+<a href="https://poketeams.com" target="_blank">poketeams.com</a> is a free and open source website aimed at helping players to learn and play with a specific pokemon team. It also allows for saving and sharing your pokemon teams, letting you have your pokepastes stored all in the same place.
 <br></br>
 
 ![Website Preview](media/img/home3.PNG)

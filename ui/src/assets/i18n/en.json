@@ -86,6 +86,7 @@
       "copyTeam": "Copy team",
       "copyLink": "Copy link",
       "openTeam": "Open team",
+      "compareTeam": "Compare team",
       "editTeam": "Edit team",
       "deleteTeam": "Delete team",
       "deleteTeamDialog": "Are you sure you want to delete this team?"
@@ -101,7 +102,14 @@
     "color_picker":
     {
       "title": "Choose color"
-    } 
+    },
+    "compare":
+    {
+      "link-placeholder": "Team link",
+      "paste-placeholder": "Team pokepaste",
+      "to_compare_too_many": "2 teams already added for comparison",
+      "to_compare_only_one": "2 teams are required for comparison"
+    }
   },
   "search":
   {
@@ -249,6 +257,7 @@
     "yes": "Yes",
     "no": "No",
     "search": "Search",
+    "compare": "Compare",
     "reset": "Reset",
     "team":
     {

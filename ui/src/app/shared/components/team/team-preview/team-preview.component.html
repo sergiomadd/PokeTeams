@@ -151,6 +151,8 @@
                 [side]="'top'"
                 [loading]="copying"
                 [loadingText]="'shared.copyLoading' | translate"
+                [visible]="copying || copied"
+                [instant]="true"
                 ></app-tooltip>
               </ng-container>
             </button>
@@ -163,6 +165,27 @@
                 [text]="linkCopied ? ('shared.copySuccess' | translate) : ('team.preview.copyLink' | translate)"
                 [side]="'top'"
                 [visible]="linkCopied"
+                [instant]="true"
+                ></app-tooltip>
+              </ng-container>
+            </button>
+          </div>
+          <div class="preview-button">
+            <button (click)="compare()" class="button tooltip-wrapper">
+              <svg class="icon-m" fill="var(--text-color)" width="24" height="24" viewBox="0 0 32 32" id="icon" xmlns="http://www.w3.org/2000/svg">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+                <g id="SVGRepo_iconCarrier">
+                <defs>
+                  <style>.cls-1{fill:none;}</style>
+                </defs>
+                <path d="M28,6H18V4a2,2,0,0,0-2-2H4A2,2,0,0,0,2,4V24a2,2,0,0,0,2,2H14v2a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V8A2,2,0,0,0,28,6ZM4,15h6.17L7.59,17.59,9,19l5-5L9,9,7.59,10.41,10.17,13H4V4H16V24H4ZM16,28V26a2,2,0,0,0,2-2V8H28v9H21.83l2.58-2.59L23,13l-5,5,5,5,1.41-1.41L21.83,19H28v9Z" transform="translate(0)"/>
+                <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/></g>
+              </svg>              
+              <ng-container *ngIf="window.isDesktop()">
+                <app-tooltip
+                [text]="'team.preview.compareTeam' | translate"
+                [side]="'top'"
                 ></app-tooltip>
               </ng-container>
             </button>
