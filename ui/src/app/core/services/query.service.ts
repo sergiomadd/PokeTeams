@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, timeout } from 'rxjs';
+import { Observable, of, tap, timeout } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { QueryItem } from '../models/misc/queryResult.model';
 import { Ability } from '../models/pokemon/ability.model';
@@ -19,16 +19,68 @@ export class QueryService
 {
   private apiUrl = environment.apiUrl;
   private dataTimeout = 5000;
-  
+
+  cachedUsers: QueryItem[] = [];
+  cachedCountries: QueryItem[] = [];
+  cachedTournaments: QueryItem[] = [];
+  cachedRegulations: QueryItem[] = [];
+  cachedTags: QueryItem[] = [];
+  cachedPokemon: QueryItem[] = [];
+  cachedItems: QueryItem[] = [];
+  cachedMoves: QueryItem[] = [];
+  cachedAbilities: QueryItem[] = [];
+  cachedNatures: QueryItem[] = [];
+  cachedTeratypes: QueryItem[] = [];
+
   constructor(private http: HttpClient) { }
+
+  tryUseCache(key: string, cachedItems: QueryItem[]): Observable<QueryItem[]> | boolean
+  {
+    if(this.cachedPokemon.length > 0)
+    {
+      const filteredItems: QueryItem[] = this.filterNameStartsWith(key, cachedItems)
+      if(filteredItems.length > 0)
+      {
+        return of(filteredItems);
+      }
+      return of([]);
+    }
+    return false;
+  }
+
+  filterNameStartsWith(name: string, queryItems: QueryItem[]): QueryItem[]
+  {
+    const lowerName = name.toLowerCase();
+    return queryItems.filter(item => item.name.toLowerCase().startsWith(lowerName));
+  }
+
+  filterNameIncludes(name: string, queryItems: QueryItem[]): QueryItem[]
+  {
+    const lowerName = name.toLowerCase();
+    return queryItems.filter(item => item.name.toLowerCase().includes(lowerName));
+  }
 
   //User
  
   queryUser(key: string): Observable<QueryItem[]>
   {
+    if(!key) 
+    {
+      this.cachedUsers = [];
+      return of([]);
+    }
+    if(this.cachedUsers.length > 0)
+    {
+      const filteredItems: QueryItem[] = this.filterNameStartsWith(key, this.cachedUsers)
+      if(filteredItems.length > 0)
+      {
+        return of(filteredItems);
+      }
+      return of([]);
+    }
     let url = this.apiUrl + "user/query";
     let params = new HttpParams().set('key', key);
-    return this.http.get<QueryItem[]>(url, {params: params, withCredentials: true}).pipe(timeout(this.dataTimeout));
+    return this.http.get<QueryItem[]>(url, {params: params, withCredentials: true}).pipe(timeout(this.dataTimeout), tap(data => this.cachedUsers = data));
   }
   queryUserCallback = (args: any): Observable<QueryItem[]> => 
   {
@@ -37,6 +89,19 @@ export class QueryService
 
   queryCountriesByName(key: string) : Observable<QueryItem[]>
   {
+    if(!key) 
+    {
+      return of(this.cachedCountries);
+    }
+    if(this.cachedCountries.length > 0)
+    {
+      const filteredItems: QueryItem[] = this.filterNameIncludes(key, this.cachedCountries)
+      if(filteredItems.length > 0)
+      {
+        return of(filteredItems);
+      }
+      return of([]);
+    }
     let url = this.apiUrl + 'user/countries/query';
     let params = new HttpParams().set('key', key);
     return this.http.get<QueryItem[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
@@ -49,7 +114,7 @@ export class QueryService
   getAllCountries() : Observable<QueryItem[]>
   {
     let url = this.apiUrl + "user/countries/all";
-    return this.http.get<QueryItem[]>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout));
+    return this.http.get<QueryItem[]>(url, {withCredentials: true}).pipe(timeout(this.dataTimeout), tap(data => this.cachedCountries = data));
   }
   countriesAllCallback = (): Observable<QueryItem[]> => 
   {
@@ -58,18 +123,21 @@ export class QueryService
 
   //Team
   
-  queryAllTournaments() : Observable<QueryItem[]>
-  {
-    let url = this.apiUrl + 'tournament/query/all';
-    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout));
-  }
-  tournamentAllCallback = (): Observable<QueryItem[]> => 
-  {
-    return this.queryAllTournaments();
-  }
-
   queryTournamentsByName(key: string) : Observable<QueryItem[]>
   {
+    if(!key) 
+    {
+      return of(this.cachedTournaments);
+    }
+    if(this.cachedTournaments.length > 0)
+    {
+      const filteredItems: QueryItem[] = this.filterNameIncludes(key, this.cachedTournaments)
+      if(filteredItems.length > 0)
+      {
+        return of(filteredItems);
+      }
+      return of([]);
+    }
     let url = this.apiUrl + 'tournament/query';
     let params = new HttpParams().set('key', key);
     return this.http.get<QueryItem[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
@@ -79,15 +147,37 @@ export class QueryService
     return this.queryTournamentsByName(args);
   }
 
-  queryRegulation = (args: any): Observable<QueryItem[]> => 
+  queryAllTournaments() : Observable<QueryItem[]>
   {
-    let url = this.apiUrl + 'regulation/query/all';
-    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), 
-    map((queryResults: QueryItem[]) => queryResults.filter(t => 
+    if(this.cachedTournaments.length > 0)
+    {
+      return of(this.cachedTournaments);
+    }
+    let url = this.apiUrl + 'tournament/query/all';
+    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), tap(data => this.cachedTournaments = data));
+  }
+  tournamentAllCallback = (): Observable<QueryItem[]> => 
+  {
+    return this.queryAllTournaments();
+  }
+
+  queryRegulation(key: string): Observable<QueryItem[]>
+  {
+    if(!key) 
+    {
+      return of(this.cachedRegulations);
+    }
+    if(this.cachedRegulations.length > 0)
+    {
+      const filteredItems: QueryItem[] = this.filterNameIncludes(key, this.cachedRegulations)
+      if(filteredItems.length > 0)
       {
-        return t.name.toLowerCase().includes(args.toLowerCase())
-      }))
-    );
+        return of(filteredItems);
+      }
+      return of([]);
+    }
+    let url = this.apiUrl + 'regulation/query/all';
+    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout))
   }
   queryRegulationCallback = (args: any): Observable<QueryItem[]> => 
   {
@@ -96,23 +186,35 @@ export class QueryService
 
   queryAllRegulations() : Observable<QueryItem[]>
   {
+    if(this.cachedRegulations.length > 0)
+    {
+      return of(this.cachedRegulations);
+    }
     let url = this.apiUrl + 'regulation/query/all';
-    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout));
+    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), tap(data => this.cachedRegulations = data));
   }
   regulationAllCallback = (): Observable<QueryItem[]> => 
   {
     return this.queryAllRegulations();
   }
 
-  queryTags = (args: any): Observable<QueryItem[]> => 
+  queryTags(key: string): Observable<QueryItem[]>
   {
-    let url = this.apiUrl + 'tag/query/all';
-    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), 
-    map((QueryResults: QueryItem[]) => QueryResults.filter(t => 
+    if(!key) 
+    {
+      return of(this.cachedTags);
+    }
+    if(this.cachedTags.length > 0)
+    {
+      const filteredItems: QueryItem[] = this.filterNameIncludes(key, this.cachedTags)
+      if(filteredItems.length > 0)
       {
-        return t.name.toLowerCase().startsWith(args.toLowerCase())
-      }))
-    );
+        return of(filteredItems);
+      }
+      return of([]);
+    }
+    let url = this.apiUrl + 'tag/query/all';
+    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout))
   }
   queryTagCallback = (args: any): Observable<QueryItem[]> => 
   {
@@ -121,8 +223,12 @@ export class QueryService
 
   queryAllTags() : Observable<QueryItem[]>
   {
+    if(this.cachedTags.length > 0)
+    {
+      return of(this.cachedTags);
+    }
     let url = this.apiUrl + 'tag/query/all';
-    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout));
+    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), tap(data => this.cachedTags = data));
   }
   tagAllCallback = (): Observable<QueryItem[]> => 
   {
@@ -131,11 +237,25 @@ export class QueryService
 
   //Pokemon
 
-  queryPokemonsByName(key: string) : Observable<QueryItem[]>
+  queryPokemonsByName(key: string | null) : Observable<QueryItem[]>
   {
+    if(!key) 
+    {
+      this.cachedPokemon = [];
+      return of([]);
+    }
+    if(this.cachedPokemon.length > 0)
+    {
+      const filteredItems: QueryItem[] = this.filterNameStartsWith(key, this.cachedPokemon)
+      if(filteredItems.length > 0)
+      {
+        return of(filteredItems);
+      }
+      return of([]);
+    }
     let url = this.apiUrl + 'pokemon/query';
     let params = new HttpParams().set('key', key);
-    return this.http.get<QueryItem[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
+    return this.http.get<QueryItem[]>(url, {params: params}).pipe(timeout(this.dataTimeout), tap(data => this.cachedPokemon = data));
   }
   queryPokemonCallback = (args: any): Observable<QueryItem[]> => 
   {
@@ -144,9 +264,23 @@ export class QueryService
 
   queryItemsByName(key: string) : Observable<QueryItem[]>
   {
+    if(!key) 
+    {
+      this.cachedItems = [];
+      return of([]);
+    }
+    if(this.cachedItems.length > 0)
+    {
+      const filteredItems: QueryItem[] = this.filterNameStartsWith(key, this.cachedItems)
+      if(filteredItems.length > 0)
+      {
+        return of(filteredItems);
+      }
+      return of([]);
+    }
     let url = this.apiUrl + 'item/query';
     let params = new HttpParams().set('key', key);
-    return this.http.get<QueryItem[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
+    return this.http.get<QueryItem[]>(url, {params: params}).pipe(timeout(this.dataTimeout), tap(data => this.cachedItems = data));
   }
   queryItemCallback = (args: any): Observable<QueryItem[]> => 
   {
@@ -155,9 +289,23 @@ export class QueryService
 
   queryMovesByName(key: string) : Observable<QueryItem[]>
   {
+    if(!key) 
+    {
+      this.cachedMoves = [];
+      return of([]);
+    }
+    if(this.cachedMoves.length > 0)
+    {
+      const filteredItems: QueryItem[] = this.filterNameStartsWith(key, this.cachedMoves)
+      if(filteredItems.length > 0)
+      {
+        return of(filteredItems);
+      }
+      return of([]);
+    }
     let url = this.apiUrl + 'move/query';
     let params = new HttpParams().set('key', key);
-    return this.http.get<QueryItem[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
+    return this.http.get<QueryItem[]>(url, {params: params}).pipe(timeout(this.dataTimeout), tap(data => this.cachedMoves = data));
   }
   queryMoveCallback = (args: any): Observable<QueryItem[]> => 
   {
@@ -166,9 +314,23 @@ export class QueryService
 
   queryAbilitiesByName(key: string) : Observable<QueryItem[]>
   {
+    if(!key) 
+    {
+      this.cachedAbilities = [];
+      return of([]);
+    }
+    if(this.cachedAbilities.length > 0)
+    {
+      const filteredItems: QueryItem[] = this.filterNameStartsWith(key, this.cachedAbilities)
+      if(filteredItems.length > 0)
+      {
+        return of(filteredItems);
+      }
+      return of([]);
+    }
     let url = this.apiUrl + 'ability/query';
     let params = new HttpParams().set('key', key);
-    return this.http.get<QueryItem[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
+    return this.http.get<QueryItem[]>(url, {params: params}).pipe(timeout(this.dataTimeout), tap(data => this.cachedAbilities = data));
   }
   queryAbilityCallback = (args: any): Observable<QueryItem[]> => 
   {
@@ -177,8 +339,12 @@ export class QueryService
 
   queryAllAbilities() : Observable<QueryItem[]>
   {
+    if(this.cachedAbilities.length > 0)
+    {
+      return of(this.cachedAbilities);
+    }
     let url = this.apiUrl + 'ability/all';
-    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout));
+    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), tap(data => this.cachedAbilities = data));
   }
   abilityAllCallback = (): Observable<QueryItem[]> => 
   {
@@ -197,6 +363,19 @@ export class QueryService
   
   queryNaturesByName(key: string) : Observable<QueryItem[]>
   {
+    if(!key) 
+    {
+      return of(this.cachedNatures);
+    }
+    if(this.cachedNatures.length > 0)
+    {
+      const filteredItems: QueryItem[] = this.filterNameIncludes(key, this.cachedNatures)
+      if(filteredItems.length > 0)
+      {
+        return of(filteredItems);
+      }
+      return of([]);
+    }
     let url = this.apiUrl + 'nature/query';
     let params = new HttpParams().set('key', key ?? "");
     return this.http.get<QueryItem[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
@@ -208,8 +387,12 @@ export class QueryService
 
   queryAllNatures() : Observable<QueryItem[]>
   {
+    if(this.cachedNatures.length > 0)
+    {
+      return of(this.cachedNatures);
+    }
     let url = this.apiUrl + 'nature/query/all';
-    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout));
+    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), tap(data => this.cachedNatures = data));
   }
   naturesAllCallback = (): Observable<QueryItem[]> => 
   {
@@ -218,6 +401,10 @@ export class QueryService
 
   queryTeraTypesByName(key: string) : Observable<QueryItem[]>
   {
+    if(this.cachedTeratypes)
+    {
+      return of(this.filterNameStartsWith(key, this.cachedTeratypes));
+    }
     let url = this.apiUrl + 'type/teratype/query';
     let params = new HttpParams().set('key', key ?? "");
     return this.http.get<QueryItem[]>(url, {params: params}).pipe(timeout(this.dataTimeout));
@@ -229,8 +416,12 @@ export class QueryService
 
   queryAllTeraTypes() : Observable<QueryItem[]>
   {
+    if(this.cachedNatures.length > 0)
+    {
+      return of(this.cachedNatures);
+    }
     let url = this.apiUrl + 'type/teratype/query/all';
-    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout));
+    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), tap(data => this.cachedNatures = data));
   }
   teraTypesAllCallback = (): Observable<QueryItem[]> => 
   {
