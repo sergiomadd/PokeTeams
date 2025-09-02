@@ -580,11 +580,11 @@ export class PokemonEditorComponent
         {
           ability.hidden = true;
         }
-        this.pokemon = { ...this.pokemon, ability: event ? ability : undefined }
+        this.pokemon.ability = event ? ability : undefined;
       }
       else
       {
-        this.pokemon = { ...this.pokemon, ability: undefined }
+        this.pokemon.ability = undefined;
       }
     }
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
