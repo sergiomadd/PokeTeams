@@ -15,6 +15,6 @@ export interface PokemonPreview
 	shiny?: boolean,
 	gender?: string,
 	item?: Item,
-	abilityName?: string,
+	abilityName?: LocalizedText,
 	moves?: MovePreview[],
 }
