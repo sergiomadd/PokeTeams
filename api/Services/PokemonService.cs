@@ -604,7 +604,7 @@ namespace api.Services
 
             var formsQueryResults = await formsQuery.ToListAsync();
 
-            queryResults = formsQueryResults.Union(queryResults).DistinctBy(p => p.Identifier).ToList();
+            queryResults = queryResults.Union(formsQueryResults).DistinctBy(p => p.Identifier).ToList();
 
             queryResults.RemoveAll(p => p != null && p.Identifier != null && PokemonEdgeCasesHandler.ArePokemonFormsExcluded(Int32.Parse(p.Identifier)));
 
