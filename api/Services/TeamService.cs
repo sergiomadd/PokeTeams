@@ -640,6 +640,9 @@ namespace api.Services
                             case "item":
                                 expressions.Add(t => t.Pokemons.Any(p => p.ItemIdentifier == query.Identifier));
                                 break;
+                            case "ability":
+                                expressions.Add(t => t.Pokemons.Any(p => p.AbilityIdentifier == query.Identifier));
+                                break;
                         }
                     }
                 }

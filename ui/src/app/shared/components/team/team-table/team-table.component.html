@@ -65,7 +65,7 @@ class="team-table flex-col align-i-c w-80"
     <div class="pagination">
       <div></div>
       <app-pagination
-      [itemsPerPage]="paginationForm.controls.teamsPerPage.valid ? paginationForm.controls.teamsPerPage.value ?? 20 : 20"
+      [itemsPerPage]="paginationForm.controls.teamsPerPage.valid ? paginationForm.controls.teamsPerPage.value ?? defaultTeams : defaultTeams"
       [totalItems]="totalTeams ?? 0"
       (pageChanged)="pageChange($event, results)"
       ></app-pagination>

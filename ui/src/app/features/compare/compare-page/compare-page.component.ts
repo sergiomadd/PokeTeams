@@ -356,8 +356,6 @@ export class ComparePageComponent
         whichTeam: "B",
         sourceIndex: index
       }));
-      console.log("A", statListA);
-      console.log("B", statListB);
 
       if(!statListA && statListB)
       {
@@ -372,7 +370,6 @@ export class ComparePageComponent
     {
       this.statList = undefined;
     }
-    console.log(this.statList)
   }
 
   sortByStatIndex(statList: ComparePokemon[] | undefined, statIndex: number, ascending: boolean = true): any[] 

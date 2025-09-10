@@ -668,10 +668,10 @@
               }"
               >
                 <div class="move section-content gap-m"
-                [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.identifier ?? '')}"
+                [ngStyle]="{'background': move?.pokeType?.identifier ?? '' | getMoveColor:theme.selectedThemeName}"
                 >
                   <div class="pad-s flex justify-c-c align-i-c bor-rad-5" style="margin-left: 0.3em;"
-                  [ngStyle]="{'background': theme.getTypeColor(move?.pokeType?.identifier ?? '')}">
+                  [ngStyle]="{'background': move?.pokeType?.identifier ?? '' | getTypeColor}">
                     <ng-container *ngIf="move?.identifier === 'error'; else moveIcon">
                       <div class="icon-m">
                         <ng-container *ngTemplateOutlet="errorSVG"></ng-container>
@@ -701,7 +701,7 @@
                   <ng-template #moveTooltip>
                     <div class="poke-tooltip-content poke-tooltip-content-bound">
                       <div class="poke-tooltip-head move-head" 
-                      [ngStyle]="{'background': theme.getMoveColor(move?.pokeType?.identifier ?? '')}"
+                      [ngStyle]="{'background': move?.pokeType?.identifier ?? '' | getMoveColor:theme.selectedThemeName}"
                       >
                         <div class="section animated-border poke-tooltip-wrapper"
                         (click)="clickSection(i, 'rightType', $event);"
@@ -899,7 +899,7 @@
                 </app-poke-tooltip>
                 <ng-template #statTooltip>
                   <div class="poke-tooltip-content" style="max-width: auto;">
-                    <div class="poke-tooltip-head" [ngStyle]="{backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat))}">
+                    <div class="poke-tooltip-head" [ngStyle]="{backgroundColor: (stat | getStatShortIdentifier) | getStatColor:theme.selectedThemeName}">
                       {{stat.name?.content}}
                       <ng-container *ngIf="stat.name?.content && stat.name?.language != (selectedLang$ | async)">
                         <app-no-translation></app-no-translation>
@@ -911,19 +911,19 @@
                         <div>{{'pokemon.stat.initial' | translate}}</div>
                         <div><span>LvL({{pokemon.level ?? 50}})</span></div>
                       </div>
-                      <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;" [ngStyle]="{backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat))}">
+                      <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;" [ngStyle]="{backgroundColor: (stat | getStatShortIdentifier) | getStatColor:theme.selectedThemeName}">
                         <div>{{'pokemon.stat.base' | translate}}</div>
                         <div>{{stat.value}}</div>
                         <div>{{pokemon.calculatedStats ? pokemon.calculatedStats.base[i]?.value : ''}}</div>
                       </div>
-                      <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;" [ngStyle]="{backgroundColor: theme.getStatColor('iv')}">
+                      <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;" [ngStyle]="{backgroundColor: 'iv' | getStatColor:theme.selectedThemeName}">
                         <div>IVs</div>
                         <div>{{teamOptions?.ivsVisibility ? pokemon.ivs ? pokemon.ivs[i]?.value : "??" : "??"}}</div>
                         <div>{{teamOptions?.ivsVisibility ? pokemon.ivs ? pokemon.calculatedStats ? pokemon.calculatedStats.ivs[i]?.value : '??' : "??" : "??"}}</div>
                       </div>
                       <div class="flex-col bor-rad-5 pad-s" style="min-width: 2em;"
                       [ngClass]="{maxed: pokemon.evs && pokemon.evs[i] ? (pokemon.evs[i].value == 252) ? true : false: false}"
-                      [ngStyle]="{backgroundColor: theme.getStatColor('ev')}"
+                      [ngStyle]="{backgroundColor: 'ev' | getStatColor:theme.selectedThemeName}"
                       >
                         <div>EVs</div>
                         <div>{{teamOptions?.evsVisibility ? pokemon.evs ? pokemon.evs[i]?.value : "??" : "??"}}</div>
@@ -966,7 +966,7 @@
                 </ng-template>
                 <div class="stat">
                   <div class="flex justify-c-c" style="width: 2em;">
-                    {{util.getStatCode(stat)}}
+                    {{stat | getStatCode}}
                   </div>
                   <div class="flex justify-c-s w-100" style="height: 0.8em;">
                     <div 
@@ -974,7 +974,7 @@
                     [ngStyle]="
                     {
                       width: (pokemon.calculatedStats ? pokemon.calculatedStats.base[i].value : undefined) | getPokemonStatSizePipe:teamOptions,
-                      backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat)),
+                      backgroundColor: (stat | getStatShortIdentifier) | getStatColor:theme.selectedThemeName,
                       borderRadius: pokemon | getPokemonStatBorderRadiusPipe:i:'base':teamOptions
                     }"
                     >
@@ -985,7 +985,7 @@
                       [ngStyle]="
                       {
                         width: pokemon.ivs ? ((pokemon.calculatedStats ? pokemon.calculatedStats.ivs[i]?.value : undefined) | getPokemonStatSizePipe:teamOptions) : 'none',
-                        backgroundColor: theme.getStatColor('iv'),
+                        backgroundColor: 'iv' | getStatColor:theme.selectedThemeName,
                         borderRadius: pokemon | getPokemonStatBorderRadiusPipe:i:'iv':teamOptions
                       }"
                       >
@@ -996,7 +996,7 @@
                       [ngStyle]="
                       {
                         width: pokemon.evs ? ((pokemon.calculatedStats ? pokemon.calculatedStats.evs[i]?.value : undefined) | getPokemonStatSizePipe:teamOptions) : 'none',
-                        backgroundColor: theme.getStatColor('ev'),
+                        backgroundColor: 'ev' | getStatColor:theme.selectedThemeName,
                       }"
                       [ngClass]="{maxed: pokemon.evs && pokemon.evs[i] ? pokemon.evs[i].value == 252 ? true : false: false}"
                       >

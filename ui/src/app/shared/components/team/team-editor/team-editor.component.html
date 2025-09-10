@@ -24,27 +24,29 @@
           </ng-container>
           <div class="smart-input-wrapper fake-smart-input ">
             <label>{{'shared.team.player' | translate}}</label>
-            <input type="text" class="input-m" formControlName="player"
-            [ngClass]="{controlInvalid: isInvalid('player')}"
-            value="{{team.player?.username}}"
-            placeholder="{{'shared.team.player' | translate}}..."
-            >
+            <div class="flex align-i-c justify-c-c">
+              <input type="text" class="input-m" formControlName="player"
+              [ngClass]="{controlInvalid: isInvalid('player')}"
+              value="{{team.player?.username}}"
+              placeholder="{{'shared.team.player' | translate}}..."
+              >
+              <ng-container *ngIf="loggedUser">
+                <button 
+                class="button-secondary tooltip-wrapper" 
+                style="margin: 0 0.2em 0 0.6em; width: 2em;"
+                (click)="matchUserToPlayer()"
+                > 
+                = 
+                <app-tooltip
+                [text]="'team.team.player_same_user-tooltip' | translate"
+                [side]="'top'"
+                ></app-tooltip>
+                </button>
+              </ng-container>
+            </div>
             <span *ngIf="isInvalid('player')" class="formFeedbackError text-center">{{getError('player')}}</span>
           </div>
         </div>
-        <ng-container *ngIf="loggedUser">
-          <button 
-          class="button-secondary tooltip-wrapper" 
-          style="margin: 1.6em 0 0 0.4em; width: 2em;"
-          (click)="matchUserToPlayer()"
-          > 
-          = 
-          <app-tooltip
-          [text]="'team.team.player_same_user-tooltip' | translate"
-          [side]="'top'"
-          ></app-tooltip>
-          </button>
-        </ng-container>
         <div class="editor-input relative flex gap-m" *ngIf="loggedUser">
           <app-smart-input
           #userInput

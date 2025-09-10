@@ -11,15 +11,15 @@
         <span>{{tournament?.city}}</span>
         <div class="flex align-i-c gap-s">
           <ng-container *ngIf="tournament?.countryCode">
-            <img src="{{util.getFlagIconUrl(tournament?.countryCode)}}" alt="" class="icon-m">
+            <img src="{{tournament?.countryCode | getFlagIconUrl}}" alt="" class="icon-m">
           </ng-container>
           <span>{{tournament.countryName}}</span>
         </div>
       </div>
       <div class="flex flex-col gap-m">
-        <span>{{util.customFormatDate(tournament?.startDate)}}</span>
+        <span>{{tournament?.startDate | customFormatDate}}</span>
         <div class="x-divider"></div>
-        <span>{{util.customFormatDate(tournament?.endDate)}}</span>
+        <span>{{tournament?.endDate | customFormatDate}}</span>
       </div>
     </div>
   </div>

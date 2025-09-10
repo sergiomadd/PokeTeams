@@ -52,7 +52,7 @@
           [tooltipText]="tag.description"
           [minWidth]="'100%'"
           [bgColor]="tag.color !== undefined ? tagBackgroundColors[tag.color] : undefined"
-          [textColor]="tag.color !== undefined ? theme.getTagTextColor(tag.color) : undefined"
+          [textColor]="tag.color !== undefined ? (tag.color | getTagTextColor:theme.selectedThemeName) : undefined"
           ></app-chip>
         </div>
         <div style="width: 48%;">

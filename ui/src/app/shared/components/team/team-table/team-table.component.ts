@@ -46,9 +46,10 @@ export class TeamTableComponent
   };
   //pagination
   totalTeams?: number;
+  readonly defaultTeams: number = 10;
   paginationForm = this.formBuilder.group(
     {
-      teamsPerPage: [10, [Validators.min(1), Validators.max(100)]]
+      teamsPerPage: [this.defaultTeams, [Validators.min(1), Validators.max(50)]]
     }, { updateOn: "blur" });
   @ViewChild(PaginationComponent) paginationComponent!: PaginationComponent;
 
@@ -97,8 +98,8 @@ export class TeamTableComponent
         }
         else
         {
-          this.paginationForm.controls.teamsPerPage.setValue(10);
-          this.store.dispatch(configActions.changeTeamsPerPage({request: 10}))
+          this.paginationForm.controls.teamsPerPage.setValue(this.defaultTeams);
+          this.store.dispatch(configActions.changeTeamsPerPage({request: this.defaultTeams}))
         }
       }
     )

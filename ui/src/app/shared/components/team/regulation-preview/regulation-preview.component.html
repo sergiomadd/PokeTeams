@@ -4,7 +4,7 @@
       <span>{{regulation?.name}}</span>
     </div>
     <div class="poke-tooltip-body flex justify-c-sa gap-m">
-      <span>{{util.customFormatDate(regulation?.startDate)}}</span> - <span>{{util.customFormatDate(regulation?.endDate)}}</span>
+      <span>{{regulation?.startDate | customFormatDate}}</span> - <span>{{regulation?.endDate | customFormatDate}}</span>
     </div>
   </div>
 </ng-container>

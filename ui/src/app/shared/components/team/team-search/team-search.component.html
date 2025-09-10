@@ -13,6 +13,7 @@
               [allowCustom]="true"
               [customType]="'user'"
               [getter]="queryService.queryUserCallback"
+              [searchWithEmpty]="true"
               (selectEvent)="queryResultSelectEvent($event)"
               class="item smart-input-wrapper"
               ></app-smart-input>
@@ -23,6 +24,7 @@
             [keepSelected]="false"
             [getter]="queryService.queryTournamentCallback"
             [allGetter]="queryService.tournamentAllCallback"
+            [searchWithEmpty]="true"
             (selectEvent)="queryResultSelectEvent($event)"
             class="item smart-input-wrapper"
             ></app-smart-input>
@@ -32,6 +34,7 @@
             [keepSelected]="false"
             [getter]="queryService.queryRegulationCallback"
             [allGetter]="queryService.regulationAllCallback"
+            [searchWithEmpty]="true"
             (selectEvent)="queryResultSelectEvent($event)"
             class="item smart-input-wrapper"
             ></app-smart-input>
@@ -42,6 +45,7 @@
             [getter]="queryService.queryTagCallback"
             [allGetter]="queryService.tagAllCallback"
             [autoTab]="false"
+            [searchWithEmpty]="true"
             (selectEvent)="queryResultSelectEvent($event)"
             class="item smart-input-wrapper"
             ></app-smart-input>
@@ -52,6 +56,7 @@
               [keepSelected]="false"
               [getter]="queryService.queryPokemonCallback"
               [autoTab]="false"
+              [searchWithEmpty]="true"
               (selectEvent)="queryResultSelectEvent($event)"
               class="item smart-input-wrapper"
               ></app-smart-input>
@@ -61,6 +66,7 @@
               [keepSelected]="false"
               [getter]="queryService.queryMoveCallback"
               [autoTab]="false"
+              [searchWithEmpty]="true"
               (selectEvent)="queryResultSelectEvent($event)"
               class="item smart-input-wrapper"
               ></app-smart-input>
@@ -70,6 +76,18 @@
               [keepSelected]="false"
               [getter]="queryService.queryItemCallback"
               [autoTab]="false"
+              [searchWithEmpty]="true"
+              (selectEvent)="queryResultSelectEvent($event)"
+              class="item smart-input-wrapper"
+              ></app-smart-input>
+              <app-smart-input
+              #abilityInput
+              [label]="'shared.pokemon.ability' | translate"
+              [keepSelected]="false"
+              [getter]="queryService.queryAbilityCallback"
+              [allGetter]="queryService.abilityAllCallback"
+              [autoTab]="false"
+              [searchWithEmpty]="true"
               (selectEvent)="queryResultSelectEvent($event)"
               class="item smart-input-wrapper"
               ></app-smart-input>

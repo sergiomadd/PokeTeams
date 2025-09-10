@@ -1,5 +1,5 @@
 <div class="relative w-100" #smartInput>
-  <form [formGroup]="searchForm" class="flex-col align-i-s w-100 pad-s relative gap-s">
+  <form [formGroup]="searchForm" class="flex-col align-i-s w-100 relative gap-s" style="padding: 0.2em 0 0.2em 0;">
     <ng-container *ngIf="label">
       <label for="">{{label}}</label>
     </ng-container>
@@ -55,7 +55,7 @@
       [disabled]="disabled">+</button>
     </ng-container>
   </form>
-  <ng-container *ngIf="showOptions || results.length > 0">
+  <ng-container *ngIf="showOptions || results">
     <ul
     #resultsDiv
     tabindex="-1"
@@ -137,8 +137,8 @@
           }"
           [ngStyle]="
           {
-            'background-color': result.type === 'tag' && result.icon ? theme.getTagBgColor(result.icon) : '',
-            color: result.type === 'tag' && result.icon ? theme.getTagTextColor(result.icon) : '',
+            'background-color': result.type === 'tag' && result.icon ? (result.icon | getTagBgColor) : '',
+            color: result.type === 'tag' && result.icon ? (result.icon | getTagTextColor:theme.selectedThemeName) : '',
           }"
           [class.active]="activeResult === i"
           (click)="selectResult(result)"
