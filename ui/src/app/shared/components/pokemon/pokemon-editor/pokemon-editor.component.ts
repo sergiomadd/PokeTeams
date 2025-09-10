@@ -13,13 +13,18 @@ import { Team } from 'src/app/core/models/team/team.model';
 import { PokemonService } from 'src/app/core/services/pokemon.service';
 import { QueryService } from 'src/app/core/services/query.service';
 import { TeamService } from 'src/app/core/services/team.service';
+import { GetStatColorPipe } from 'src/app/shared/pipes/color-pipes/getStatColor.pipe';
 import { TeamEditorService } from 'src/app/shared/services/team-editor.service';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 
 @Component({
   selector: 'app-pokemon-editor',
   templateUrl: './pokemon-editor.component.html',
-  styleUrl: './pokemon-editor.component.scss'
+  styleUrl: './pokemon-editor.component.scss',
+  providers: 
+  [
+    GetStatColorPipe
+  ] 
 })
 export class PokemonEditorComponent 
 {
@@ -32,6 +37,8 @@ export class PokemonEditorComponent
   router = inject(Router);
   window = inject(WindowService);
   theme = inject(ThemeService);
+
+  getStatColor = inject(GetStatColorPipe);
 
   teamKey: string = "";
   team: Team = <Team>{};
@@ -364,7 +371,7 @@ export class PokemonEditorComponent
 
   calcIVSliderBackground(currentValue, min, max)
   {
-    const ivColor = this.theme.getStatColor("iv");
+    const ivColor = this.getStatColor.transform("iv", this.theme.selectedThemeName);
     var value = Math.ceil((currentValue-min)/(max-min) * 100);
     //hide edges
     if(value > 70) {value -= 2}
@@ -373,7 +380,7 @@ export class PokemonEditorComponent
 
   calcEVSliderBackground(currentValue, min, max)
   {
-    const evColor = this.theme.getStatColor("ev");
+    const evColor = this.getStatColor.transform("ev", this.theme.selectedThemeName);
     var value = Math.ceil((currentValue-min)/(max-min) * 100);
     if(value > 70) {value -= 2}
     this.evSliders[this.selectedStat] = 'linear-gradient(to right, ' + evColor + ' 0%, ' + evColor + value + '%, var(--bg-color-2)' + value + '%, var(--bg-color-2) 100%)'

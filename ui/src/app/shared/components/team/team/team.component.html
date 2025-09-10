@@ -150,8 +150,8 @@
         <app-chip 
         [name]="tag.name"
         [tooltipText]="tag.description"
-        [bgColor]="tag.color !== undefined ? theme.getTagBgColor(tag.color) : undefined"
-        [textColor]="tag.color !== undefined ? theme.getTagTextColor(tag.color) : undefined"
+        [bgColor]="tag.color !== undefined ? (tag.color | getTagBgColor) : undefined"
+        [textColor]="tag.color !== undefined ? (tag.color | getTagTextColor:theme.selectedThemeName) : undefined"
         [removable]="removableTags ?? false"
         (removeEvent)="removeTag($event)"
         ></app-chip>

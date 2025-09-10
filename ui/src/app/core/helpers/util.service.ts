@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { QueryItem } from '../models/misc/queryResult.model';
-import { Stat } from '../models/pokemon/stat.model';
 import { Tag } from '../models/team/tag.model';
 import { I18nService } from './i18n.service';
 
@@ -229,36 +228,6 @@ export class UtilService
       return [day, month, year].join('/');
     }
     return date;
-
-  }
-
-  getStatCode(stat: Stat)
-  {
-
-    const nameDict = 
-    {
-      "hp": "HP",
-      "attack": "Atk",
-      "defense": "Def",
-      "special-attack": "SpA",
-      "special-defense": "SpD",
-      "speed": "Spe"
-    }
-    return nameDict[stat.identifier];
-  }
-
-  getStatShortIdentifier(stat: Stat)
-  {
-    const nameDict = 
-    {
-      "hp": "hp",
-      "attack": "atk",
-      "defense": "def",
-      "special-attack": "spa",
-      "special-defense": "spd",
-      "speed": "spe"
-    }
-    return nameDict[stat.identifier];
   }
 
   getTypeNameImagePath(typeIconPath: string)

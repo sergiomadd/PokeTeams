@@ -1,8 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, of, throwError } from 'rxjs';
-import { Gen9TypeColors, Gen9TypeColorsDark, Gen9TypeColorsLight, StatColor, StatColorDark } from '../models/misc/colors';
-import { tagBackgroundColors, tagTextColors } from '../models/misc/tagColors.model';
 import { Theme, themeProperties, themes } from '../models/misc/theme.model';
 import { configActions } from '../store/config/config.actions';
 import { selectTheme } from '../store/config/config.selectors';
@@ -17,8 +15,7 @@ export class ThemeService
   store = inject(Store);
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
   selectedTheme?: Theme;
-
-  tagBackgroundColors = tagBackgroundColors;
+  selectedThemeName?: string;
 
   constructor()
   {
@@ -26,6 +23,7 @@ export class ThemeService
     {
       this.selectedTheme$.subscribe((value) =>
       {
+        this.selectedThemeName = value;
         if(value)
         {
           this.selectedTheme = this.getTheme(value);
@@ -74,62 +72,5 @@ export class ThemeService
       {
         document.documentElement.style.setProperty(property, theme.colors[property]);
       })
-  }
-
-  getTagBgColor(color: number | string): string
-  {
-    if(typeof color === "string")
-    {
-      color = +color;
-    }
-    return this.tagBackgroundColors[color];
-  }
-
-  getTagTextColor(color: number | string): string
-  {
-    if(typeof color === "string")
-    {
-      color = +color;
-    }
-    //Dark
-    if(tagTextColors[color])
-    {
-      return this.selectedTheme?.name === themes[1].name ? themes[1].colors['--text-color'] : themes[1].colors['--white'];
-    }
-    //Light
-    else
-    {
-      return themes[0].colors['--text-color'];
-    }
-  }
-
-  getTypeColor(identifier?: string)
-  {
-    return identifier ? Gen9TypeColors[identifier] : "";  
-  }
-
-  getMoveColor(identifier?: string)
-  {
-    if(this.selectedTheme?.name === "light")
-    {
-      return identifier ? Gen9TypeColorsLight[identifier] : "";
-
-    }
-    else
-    {
-      return identifier ? Gen9TypeColorsDark[identifier] : "";
-    }
-  }
-
-  getStatColor(identifier: string)
-  {
-    if(this.selectedTheme?.name === "light")
-    {
-      return identifier ? StatColor[identifier] : "";
-    }
-    else
-    {
-      return identifier ? StatColorDark[identifier] : "";
-    }
   }
 }

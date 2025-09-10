@@ -125,8 +125,8 @@
             <app-chip 
             [name]="tag.name"
             [tooltipText]="tag.description"
-            [bgColor]="tag.color ? theme.getTagBgColor(tag.color) : undefined"
-            [textColor]="tag.color ? theme.getTagTextColor(tag.color) : undefined"
+            [bgColor]="tag.color ? (tag.color | getTagBgColor) : undefined"
+            [textColor]="tag.color ? (tag.color | getTagTextColor:theme.selectedThemeName) : undefined"
             ></app-chip>
           </ng-container>
         </ng-container>

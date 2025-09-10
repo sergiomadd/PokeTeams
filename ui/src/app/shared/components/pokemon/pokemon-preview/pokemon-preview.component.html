@@ -4,7 +4,7 @@
       <div 
       class="move-section pad-m"
       [ngClass]="{'flex-reverse': i % 2 !== 0}"
-      [ngStyle]="{'background': move ? theme.getMoveColor(move?.pokeType?.identifier ?? '') : 'var(--bg-color-3)'}"
+      [ngStyle]="{'background': move ? (move?.pokeType?.identifier ?? '' | getMoveColor:theme.selectedThemeName) : 'var(--bg-color-3)'}"
       >
       <ng-container *ngIf="move">
         <div class="inverted-border"></div>

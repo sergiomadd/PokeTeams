@@ -18,11 +18,11 @@ style="min-height: 100vh;"
             <ng-container *ngFor="let stat of statSelectors; index as i">
               <div class="pad-s bor-rad-5 pointer text-center no-select" (click)="selectStat(i)"
               style="color: white;"
-              [ngStyle]="{backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat))}"
+              [ngStyle]="{backgroundColor: (stat | getStatShortIdentifier) | getStatColor:theme.selectedThemeName}"
               [ngClass]="{selectedStat: selectedStatIndex === i}"
               >
                 <div class="flex justify-c-c align-i-c gap-s text-center" style="width: 2em; height: 1.5em;">
-                  {{util.getStatCode(stat)}}
+                  {{stat | getStatCode}}
                 </div>
               </div>
             </ng-container>

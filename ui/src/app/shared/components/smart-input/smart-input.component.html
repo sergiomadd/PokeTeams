@@ -137,8 +137,8 @@
           }"
           [ngStyle]="
           {
-            'background-color': result.type === 'tag' && result.icon ? theme.getTagBgColor(result.icon) : '',
-            color: result.type === 'tag' && result.icon ? theme.getTagTextColor(result.icon) : '',
+            'background-color': result.type === 'tag' && result.icon ? (result.icon | getTagBgColor) : '',
+            color: result.type === 'tag' && result.icon ? (result.icon | getTagTextColor:theme.selectedThemeName) : '',
           }"
           [class.active]="activeResult === i"
           (click)="selectResult(result)"

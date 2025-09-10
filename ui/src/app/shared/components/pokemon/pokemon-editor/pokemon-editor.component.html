@@ -142,11 +142,11 @@
               <ng-container *ngFor="let stat of pokemon.ivs; index as i">
                 <div class="pad-s bor-rad-5 pointer text-center no-select" (click)="selectStat(i)"
                 style="color: white;"
-                [ngStyle]="{backgroundColor: theme.getStatColor(util.getStatShortIdentifier(stat))}"
+                [ngStyle]="{backgroundColor: (stat | getStatShortIdentifier) | getStatColor:theme.selectedThemeName}"
                 [ngClass]="{selectedStat: selectedStat === i}"
                 >
                   <div class="flex-col justify-c-sb gap-s">
-                    <div>{{util.getStatCode(stat)}}</div>
+                    <div>{{stat | getStatCode}}</div>
                     <div class="flex justify-c-c align-i-c w-100" style="min-width: 3.2em;">
                       <div class="w-50">
                         {{this.pokemon.ivs ? this.pokemon.ivs[i]?.value : '0'}}
@@ -197,7 +197,7 @@
             <div class="flex align-i-c gap-l">
               <button 
               class="button"
-              [ngStyle]="{'background-color': theme.getStatColor('iv')}"
+              [ngStyle]="{'background-color': 'iv' | getStatColor:theme.selectedThemeName}"
               (click)="resetIVs()"
               >
                 <svg class="icon-s" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> 
@@ -211,7 +211,7 @@
               </div>
               <button 
               class="button"
-              [ngStyle]="{'background-color': theme.getStatColor('ev')}"
+              [ngStyle]="{'background-color': 'ev' | getStatColor:theme.selectedThemeName}"
               (click)="resetEVs()"
               >
                 <svg class="icon-s" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> 
