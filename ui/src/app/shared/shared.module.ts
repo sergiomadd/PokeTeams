@@ -45,8 +45,11 @@ import { GetStatColorPipe } from './pipes/color-pipes/getStatColor.pipe';
 import { GetTagBgColorPipe } from './pipes/color-pipes/getTagBgColor.pipe';
 import { GetTagTextColorPipe } from './pipes/color-pipes/getTagTextColor.pipe';
 import { GetTypeColorPipe } from './pipes/color-pipes/getTypeColor.pipe';
+import { CustomFormatDatePipe } from './pipes/converters/customFormatDate.pipe';
+import { FormatCountPipe } from './pipes/converters/formatCount.pipe';
 import { GetStatCodePipe } from './pipes/converters/getStatCode.pipe';
 import { GetStatShortIdentifierPipe } from './pipes/converters/getStatShortIdentifier.pipe';
+import { GetFlagIconUrlPipe } from './pipes/getFlagIconUrl.pipe';
 import { GetFormControlErrorPipe } from './pipes/getFormControlError.pipe';
 import { IsFormFieldInvalidPipe } from './pipes/isFormFieldInvalid.pipe';
 import { CalcMoveEffectivenessPipe } from './pipes/pokemon-pipes/calcMoveEffectiveness.pipe';
@@ -117,6 +120,9 @@ import { ShouldBeInMiddlePipe } from './pipes/pokemon-pipes/shouldBeInMiddle.pip
     GetStatShortIdentifierPipe,
     GetTagBgColorPipe,
     GetTagTextColorPipe,
+    GetFlagIconUrlPipe,
+    CustomFormatDatePipe,
+    FormatCountPipe,
   ],
   imports: 
   [
@@ -191,6 +197,9 @@ import { ShouldBeInMiddlePipe } from './pipes/pokemon-pipes/shouldBeInMiddle.pip
     GetStatShortIdentifierPipe,
     GetTagBgColorPipe,
     GetTagTextColorPipe,
+    GetFlagIconUrlPipe,
+    CustomFormatDatePipe,
+    FormatCountPipe,
   ],
   providers: [TranslateStore]
 })

@@ -134,10 +134,10 @@
       <div class="flex wrap justify-c-e gap-s">
         <div class="detail views">
           <svg class="icon-m" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M2375 3994 c-602 -63 -1116 -314 -1570 -769 -217 -217 -360 -407 -397 -528 -26 -89 -22 -222 11 -309 59 -153 364 -501 621 -707 360 -290 746 -463 1195 -537 154 -26 496 -26 650 0 450 74 826 243 1195 536 255 203 573 569 626 722 28 80 26 253 -5 330 -61 155 -371 509 -621 708 -360 287 -738 459 -1165 531 -116 20 -440 33 -540 23z m495 -339 c569 -95 1065 -412 1463 -934 l72 -94 0 -67 0 -67 -72 -94 c-397 -521 -891 -836 -1468 -936 -140 -24 -471 -24 -610 0 -579 101 -1069 413 -1468 936 l-72 94 0 67 0 67 72 94 c405 531 938 865 1498 938 44 6 94 13 110 15 64 9 385 -4 475 -19z"/> <path d="M2395 3346 c-315 -62 -541 -285 -606 -600 -73 -352 68 -707 346 -875 290 -175 734 -137 973 84 394 365 310 1065 -158 1314 -100 53 -220 82 -360 87 -81 2 -150 -1 -195 -10z m271 -317 c178 -32 315 -167 359 -350 52 -224 -50 -459 -241 -550 -132 -63 -316 -63 -448 0 -191 91 -293 326 -241 550 61 257 294 401 571 350z"/> </g> </svg>
-          <span class="no-overflow">{{team && team?.viewCount ? util.formatCount(team.viewCount) : team?.viewCount}}</span>
+          <span class="no-overflow">{{team && team?.viewCount ? (team.viewCount | formatCount) : team?.viewCount}}</span>
         </div>
         <div class="detail">
-          <span class="no-overflow">{{util.customFormatDate(team?.date!)}}</span>
+          <span class="no-overflow">{{team?.date | customFormatDate}}</span>
         </div>
         <div class="flex justify-c-e gap-s">
           <div class="preview-button">

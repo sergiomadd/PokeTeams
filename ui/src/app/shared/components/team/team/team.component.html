@@ -226,7 +226,7 @@
       </ng-container>
       <ng-container *ngIf="team?.date">
         <div class="detail">
-          <span class="no-overflow">{{util.customFormatDate(team?.date!)}} </span>
+          <span class="no-overflow">{{team?.date | customFormatDate}} </span>
         </div>
       </ng-container>
     </div>
