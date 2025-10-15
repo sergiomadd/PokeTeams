@@ -1,6 +1,6 @@
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -23,76 +23,65 @@ import { ConfigEffects } from './store/config/config.effects';
 import { configReducers } from './store/config/config.reducers';
 import { HydrationEffects } from './store/hydration/hydration.effects';
 
-@NgModule({
-  declarations: [],
-  imports: 
-  [
-    CommonModule,
-    HttpClientModule,
-    SocialLoginModule,
-    StoreModule.forRoot({}, {metaReducers}),
-    EffectsModule.forRoot(HydrationEffects),
-
-    StoreModule.forFeature("auth", authReducers),
-    EffectsModule.forFeature([AuthEffects]),
-
-    StoreModule.forFeature('config', configReducers),
-    EffectsModule.forFeature([ConfigEffects]),
-
-    StoreDevtoolsModule.instrument({
-      maxAge: 25, // Retains last 25 states
-      //logOnly: environment.production, // Restrict extension to log-only mode
-      autoPause: true, // Pauses recording actions and state changes when the extension window is not open
-    }),
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: httpLoaderFactory,
-        deps: [HttpClient]
-      }
-    })
-  ],
-  providers: 
-  [
-    AuthService,
-    PokemonService,
-    TeamService,
-    UserService,
-    QueryService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptorService,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorInterceptorService,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: LangInterceptorService, 
-      multi: true
-    },
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        lang: 'en',
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(environment.googleId)
-          }
-        ],
-        onError: (err) => {
-          console.error(err);
-        }
-      } as SocialAuthServiceConfig,
-    }
-  ],
-  exports: [TranslateModule]
-})
+@NgModule({ declarations: [],
+    exports: [TranslateModule], imports: [CommonModule,
+        SocialLoginModule,
+        StoreModule.forRoot({}, { metaReducers }),
+        EffectsModule.forRoot(HydrationEffects),
+        StoreModule.forFeature("auth", authReducers),
+        EffectsModule.forFeature([AuthEffects]),
+        StoreModule.forFeature('config', configReducers),
+        EffectsModule.forFeature([ConfigEffects]),
+        StoreDevtoolsModule.instrument({
+            maxAge: 25, // Retains last 25 states
+            //logOnly: environment.production, // Restrict extension to log-only mode
+            autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+        }),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: httpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })], providers: [
+        AuthService,
+        PokemonService,
+        TeamService,
+        UserService,
+        QueryService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptorService,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ErrorInterceptorService,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: LangInterceptorService,
+            multi: true
+        },
+        {
+            provide: 'SocialAuthServiceConfig',
+            useValue: {
+                autoLogin: false,
+                lang: 'en',
+                providers: [
+                    {
+                        id: GoogleLoginProvider.PROVIDER_ID,
+                        provider: new GoogleLoginProvider(environment.googleId)
+                    }
+                ],
+                onError: (err) => {
+                    console.error(err);
+                }
+            } as SocialAuthServiceConfig,
+        },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class CoreModule { }
 
 export function httpLoaderFactory(http: HttpClient)

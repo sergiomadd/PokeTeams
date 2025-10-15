@@ -1,6 +1,6 @@
 import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -59,149 +59,130 @@ import { GetPokemonStatBorderRadiusPipe } from './pipes/pokemon-pipes/getPokemon
 import { GetPokemonStatSizePipe } from './pipes/pokemon-pipes/getPokemonStatSize.pipe';
 import { ShouldBeInMiddlePipe } from './pipes/pokemon-pipes/shouldBeInMiddle.pipe';
 
-@NgModule({
-  declarations: 
-  [ 
-    PasteInputComponent,
-    SmartInputComponent,
-    MenuComponent,
-    FooterComponent,
-
-    //pokemon
-    PokemonCardComponent,
-    EvolutionComponent,
-    PokeTooltipComponent,
-    PokemonPreviewComponent,
-    PokemonEditorComponent,
-
-    //team
-    TeamComponent,
-    TeamPreviewComponent,
-    TeamEditorComponent,
-    TeamSearchComponent,
-    TeamTableComponent,
-
-    //dumb
-    CheckboxComponent,
-    ChipComponent,
-    ColorPickerComponent,
-    DialogComponent,
-    DropdownComponent,
-    NoTranslationComponent,
-    NotFoundComponent,
-    PaginationComponent,
-    RadioComponent,
-    SwitchComponent,
-    TagEditorComponent,
-    TooltipComponent,
-    PokemonCardComponent,
-    TournamentPreviewComponent,
-    PrivacyPolicyComponent,
-    AboutComponent,
-    RegulationPreviewComponent,
-    ResetPasswordComponent,
-    AuthFormComponent,
-
-    //Pipes
-    IsFormFieldInvalidPipe,
-    GetFormControlErrorPipe,
-    TeamBattleComponent,
-    CalcMoveEffectivenessPipe,
-    GetDefenseEffectivenessPipe,
-    PokemonIconsComponent,
-    GetPokemonSpritePathPipe,
-    GetPokemonStatSizePipe,
-    GetPokemonStatBorderRadiusPipe,
-    ShouldBeInMiddlePipe,
-    GetTypeColorPipe,
-    GetMoveColorPipe,
-    GetStatColorPipe,
-    GetStatCodePipe,
-    GetStatShortIdentifierPipe,
-    GetTagBgColorPipe,
-    GetTagTextColorPipe,
-    GetFlagIconUrlPipe,
-    CustomFormatDatePipe,
-    FormatCountPipe,
-  ],
-  imports: 
-  [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    RouterModule,
-    TranslateModule,
-    ClickOutsideDirective,
-    GoogleSigninButtonModule
-  ],
-  exports: 
-  [
-    //modules
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    TranslateModule,
-    RouterModule,
-    GoogleSigninButtonModule,
-
-    //components
-    PasteInputComponent,
-    SmartInputComponent,
-    MenuComponent,
-    FooterComponent,
-
-    //pokemon
-    PokemonCardComponent,
-    EvolutionComponent,
-    PokeTooltipComponent,
-    PokemonPreviewComponent,
-    PokemonEditorComponent,
-
-    //team
-    TeamComponent,
-    TeamPreviewComponent,
-    TeamEditorComponent,
-    TeamSearchComponent,
-    TeamTableComponent,
-    TeamBattleComponent,
-
-    //dumb
-    CheckboxComponent,
-    ChipComponent,
-    ColorPickerComponent,
-    DialogComponent,
-    DropdownComponent,
-    NoTranslationComponent,
-    NotFoundComponent,
-    PaginationComponent,
-    RadioComponent,
-    SwitchComponent,
-    TagEditorComponent,
-    TooltipComponent,
-    AuthFormComponent,
-
-    //Pipes
-    IsFormFieldInvalidPipe,
-    GetFormControlErrorPipe,
-    CalcMoveEffectivenessPipe,
-    GetDefenseEffectivenessPipe,
-    GetPokemonSpritePathPipe,
-    GetPokemonStatSizePipe,
-    GetPokemonStatBorderRadiusPipe,
-    ShouldBeInMiddlePipe,
-    GetTypeColorPipe,
-    GetMoveColorPipe,
-    GetStatColorPipe,
-    GetStatCodePipe,
-    GetStatShortIdentifierPipe,
-    GetTagBgColorPipe,
-    GetTagTextColorPipe,
-    GetFlagIconUrlPipe,
-    CustomFormatDatePipe,
-    FormatCountPipe,
-  ],
-  providers: [TranslateStore]
-})
+@NgModule({ declarations: [
+        PasteInputComponent,
+        SmartInputComponent,
+        MenuComponent,
+        FooterComponent,
+        //pokemon
+        PokemonCardComponent,
+        EvolutionComponent,
+        PokeTooltipComponent,
+        PokemonPreviewComponent,
+        PokemonEditorComponent,
+        //team
+        TeamComponent,
+        TeamPreviewComponent,
+        TeamEditorComponent,
+        TeamSearchComponent,
+        TeamTableComponent,
+        //dumb
+        CheckboxComponent,
+        ChipComponent,
+        ColorPickerComponent,
+        DialogComponent,
+        DropdownComponent,
+        NoTranslationComponent,
+        NotFoundComponent,
+        PaginationComponent,
+        RadioComponent,
+        SwitchComponent,
+        TagEditorComponent,
+        TooltipComponent,
+        PokemonCardComponent,
+        TournamentPreviewComponent,
+        PrivacyPolicyComponent,
+        AboutComponent,
+        RegulationPreviewComponent,
+        ResetPasswordComponent,
+        AuthFormComponent,
+        //Pipes
+        IsFormFieldInvalidPipe,
+        GetFormControlErrorPipe,
+        TeamBattleComponent,
+        CalcMoveEffectivenessPipe,
+        GetDefenseEffectivenessPipe,
+        PokemonIconsComponent,
+        GetPokemonSpritePathPipe,
+        GetPokemonStatSizePipe,
+        GetPokemonStatBorderRadiusPipe,
+        ShouldBeInMiddlePipe,
+        GetTypeColorPipe,
+        GetMoveColorPipe,
+        GetStatColorPipe,
+        GetStatCodePipe,
+        GetStatShortIdentifierPipe,
+        GetTagBgColorPipe,
+        GetTagTextColorPipe,
+        GetFlagIconUrlPipe,
+        CustomFormatDatePipe,
+        FormatCountPipe,
+    ],
+    exports: [
+        //modules
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        TranslateModule,
+        RouterModule,
+        GoogleSigninButtonModule,
+        //components
+        PasteInputComponent,
+        SmartInputComponent,
+        MenuComponent,
+        FooterComponent,
+        //pokemon
+        PokemonCardComponent,
+        EvolutionComponent,
+        PokeTooltipComponent,
+        PokemonPreviewComponent,
+        PokemonEditorComponent,
+        //team
+        TeamComponent,
+        TeamPreviewComponent,
+        TeamEditorComponent,
+        TeamSearchComponent,
+        TeamTableComponent,
+        TeamBattleComponent,
+        //dumb
+        CheckboxComponent,
+        ChipComponent,
+        ColorPickerComponent,
+        DialogComponent,
+        DropdownComponent,
+        NoTranslationComponent,
+        NotFoundComponent,
+        PaginationComponent,
+        RadioComponent,
+        SwitchComponent,
+        TagEditorComponent,
+        TooltipComponent,
+        AuthFormComponent,
+        //Pipes
+        IsFormFieldInvalidPipe,
+        GetFormControlErrorPipe,
+        CalcMoveEffectivenessPipe,
+        GetDefenseEffectivenessPipe,
+        GetPokemonSpritePathPipe,
+        GetPokemonStatSizePipe,
+        GetPokemonStatBorderRadiusPipe,
+        ShouldBeInMiddlePipe,
+        GetTypeColorPipe,
+        GetMoveColorPipe,
+        GetStatColorPipe,
+        GetStatCodePipe,
+        GetStatShortIdentifierPipe,
+        GetTagBgColorPipe,
+        GetTagTextColorPipe,
+        GetFlagIconUrlPipe,
+        CustomFormatDatePipe,
+        FormatCountPipe,
+    ], imports: [CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        TranslateModule,
+        ClickOutsideDirective,
+        GoogleSigninButtonModule], providers: [TranslateStore, provideHttpClient(withInterceptorsFromDi())] })
 export class SharedModule { }
 
