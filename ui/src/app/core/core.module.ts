@@ -1,12 +1,12 @@
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { environment } from 'src/environments/environment';
 import { AuthInterceptorService } from './interceptors/auth-interceptor.service';
 import { ErrorInterceptorService } from './interceptors/error-interceptor.service';
@@ -38,11 +38,7 @@ import { HydrationEffects } from './store/hydration/hydration.effects';
             autoPause: true, // Pauses recording actions and state changes when the extension window is not open
         }),
         TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: httpLoaderFactory,
-                deps: [HttpClient]
-            }
+            loader: provideTranslateHttpLoader({prefix:"./assets/i18n/", suffix:".json"}),
         })], providers: [
         AuthService,
         PokemonService,
@@ -83,8 +79,3 @@ import { HydrationEffects } from './store/hydration/hydration.effects';
         provideHttpClient(withInterceptorsFromDi())
     ] })
 export class CoreModule { }
-
-export function httpLoaderFactory(http: HttpClient)
-{
-  return new TranslateHttpLoader(http);
-}
