@@ -114,7 +114,7 @@ jobs:
 
           echo "Uploading Angular build..."
           rsync -avz --delete -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
-            ./ui/dist/ui/ $AWS_USERNAME@$AWS_HOST:$DEPLOY_PATH_UI
+            ./ui/dist/ui/browser/ $AWS_USERNAME@$AWS_HOST:$DEPLOY_PATH_UI
 
           echo "Reloading Nginx"
           ssh -o StrictHostKeyChecking=no -i key.pem $AWS_USERNAME@$AWS_HOST << EOF
