@@ -1,0 +1,200 @@
+<div 
+class="flex" 
+style="min-height: 100vh;" 
+[ngClass]="{'flex-col w-100': window.isTabletLandscapeOrLess()}"
+>
+  <ng-container 
+  [ngTemplateOutlet]="teamSection"
+  [ngTemplateOutletContext]="{which: 'A'}"
+  ></ng-container>
+  <ng-container *ngIf="window.isTabletLandscapeOrLess() && statList">
+    <div style="border-bottom: 1px solid var(--bg-color-3);" class="mar-xl"></div>
+  </ng-container>
+  <ng-container *ngIf="statList && !window.isLaptop()">
+    <div class="relative">
+      <div class="stat-list">
+        <div class="flex flex-col align-i-c gap-m" >
+          <div class="flex wrap justify-c-c gap-l bor-rad-5 pad-l bg-1 bor-1-3" style="width: 10em; margin-bottom: 1em;">
+            <ng-container *ngFor="let stat of statSelectors; index as i">
+              <div class="pad-s bor-rad-5 pointer text-center no-select" (click)="selectStat(i)"
+              style="color: white;"
+              [ngStyle]="{backgroundColor: (stat | getStatShortIdentifier) | getStatColor:theme.selectedThemeName}"
+              [ngClass]="{selectedStat: selectedStatIndex === i}"
+              >
+                <div class="flex justify-c-c align-i-c gap-s text-center" style="width: 2em; height: 1.5em;">
+                  {{stat | getStatCode}}
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <div class="flex flex-col justify-c-c gap-m" style="width: 10em;">
+            <ng-container *ngFor="let item of statList; index as i">
+              <ng-container *ngIf="item?.dexNumber && item?.dexNumber !== -1">
+                <div class="flex gap-s align-i-c bor-rad-5 bor-1-3 pad-s" style="width: 4em;"
+                [ngClass]="
+                {
+                  'blue-team': item.whichTeam === 'A' && teamASelectedIndex.includes(item?.sourceIndex ?? 0),
+                  'red-team': item.whichTeam === 'B' && teamBSelectedIndex.includes(item?.sourceIndex ?? 0),
+                  'justify-c-e': item.whichTeam === 'A',
+                  'justify-c-s': item.whichTeam === 'B'
+                }"
+                [ngStyle]="
+                {
+                  'flex-direction': item.whichTeam === 'A' ? 'row' : 'row-reverse',
+                  'align-self': item.whichTeam === 'A' ? 'flex-start' : 'flex-end',
+                  'margin-top': statList | marginTopPipe:item:selectedStatIndex:i
+                }">
+                    <span class="text-center" style="min-width: 1em;">
+                      {{ item && item.stats && item.stats.total ? item.stats.total[selectedStatIndex].value : ''}}
+                    </span>
+                    <img class="icon-l" src="{{item?.sprite?.base}}" alt="">
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!window.isTabletLandscapeOrLess()">
+    <div style="height: 80vh; width: 1px; margin-left: -1px;" class="bg-3"></div>
+  </ng-container>
+  <ng-container *ngIf="window.isTabletLandscapeOrLess()">
+    <div style="border-bottom: 1px solid var(--bg-color-3);" class="mar-xl"></div>
+  </ng-container>
+  <ng-container 
+  [ngTemplateOutlet]="teamSection"
+  [ngTemplateOutletContext]="{which: 'B'}"
+  ></ng-container>
+</div>
+<ng-template #teamSection let-which="which">
+  <div class="team-section flex flex-col align-i-c gap-l pad-l" 
+  style="margin-right: auto;  padding-top: 2em;"
+  [ngStyle]="{'margin-left': which === 'A' ? 'auto' : '0', 'margin-right': which === 'B' ? 'auto' : '0'}"
+  >
+    <div class="relative">
+      <span class="pad-m bor-rad-5" 
+      [ngClass]="{'blue-team': which === 'A' ? 'var(--blue-team)' : '', 'red-team': which === 'B' ? 'var(--red-team)' : ''}"
+      >{{'shared.team.team' | translate}} {{which}}</span>
+    </div>
+    <form [formGroup]="which === 'A' ? teamAForm : teamBForm" class="relative inputs">
+      <ng-container *ngIf="which === 'A' ? !showPasteAInput : !showPasteBInput">
+        <div class="flex flex-col align-i-c gap-m">
+          <input 
+          type="text" 
+          class="input-m" 
+          style="width: 100%;"
+          placeholder="{{'team.compare.link-placeholder' | translate}}" 
+          formControlName="{{which === 'A' ? 'idA' : 'idB'}}"
+          [ngClass]="{controlInvalid: which === 'A'
+          ? (teamAForm.controls.idA.errors | isFormFieldInvalid:teamAForm.controls.idA.dirty:teamAForm.controls.idA.touched:true)
+          : (teamBForm.controls.idB.errors | isFormFieldInvalid:teamBForm.controls.idB.dirty:teamBForm.controls.idB.touched:true)}"
+          >
+          <ng-container *ngIf="which === 'A'">
+            <span *ngIf="teamAForm.controls.idA.errors | isFormFieldInvalid:teamAForm.controls.idA.dirty:teamAForm.controls.idA.touched:true" class="formFeedbackError input-feedback">
+              {{teamAForm.controls.idA.errors | getFormControlError}}
+            </span>
+          </ng-container>
+          <ng-container *ngIf="which === 'B'">
+            <span *ngIf="teamBForm.controls.idB.errors | isFormFieldInvalid:teamBForm.controls.idB.dirty:teamBForm.controls.idB.touched:true" class="formFeedbackError input-feedback">
+              {{teamBForm.controls.idB.errors | getFormControlError}}
+            </span>
+          </ng-container>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="which === 'A' ? showPasteAInput : showPasteBInput">
+        <div class="relative flex flex-col align-i-c gap-m">
+          <textarea 
+          formControlName="{{which === 'A' ? 'pasteA' : 'pasteB'}}"
+          class="compare-paste-box custom-scrollbar-dark" 
+          spellcheck="false"
+          placeholder="{{'team.compare.paste-placeholder' | translate}}"
+          [ngStyle]="{height: which === 'A' ? (shrinkPasteAInput ? '2.5em' : '15em') : (shrinkPasteBInput ? '2.5em' : '15em')}"
+          [ngClass]="{controlInvalid: which === 'A'
+            ? (teamAForm.controls.pasteA.errors | isFormFieldInvalid:teamAForm.controls.pasteA.dirty:teamAForm.controls.pasteA.touched:true)
+            : (teamBForm.controls.pasteB.errors | isFormFieldInvalid:teamBForm.controls.pasteB.dirty:teamBForm.controls.pasteB.touched:true)}"
+          >
+          </textarea>
+          <ng-container *ngIf="which === 'A'">
+            <span *ngIf="teamAForm.controls.pasteA.errors | isFormFieldInvalid:teamAForm.controls.pasteA.dirty:teamAForm.controls.pasteA.touched:true" class="formFeedbackError input-feedback">
+              {{teamAForm.controls.pasteA.errors | getFormControlError}}
+            </span>
+          </ng-container>
+          <ng-container *ngIf="which === 'B'">
+            <span *ngIf="teamBForm.controls.pasteB.errors | isFormFieldInvalid:teamBForm.controls.pasteB.dirty:teamBForm.controls.pasteB.touched:true" class="formFeedbackError input-feedback">
+              {{teamBForm.controls.pasteB.errors | getFormControlError}}
+            </span>
+          </ng-container>
+          <button type="button" 
+          class="no-shadow button compare-paste-box-toggle icon-m pad-s"
+          [ngClass]="{'compare-paste-box-toggle-rotate': which === 'A' ? shrinkPasteAInput : shrinkPasteBInput}"
+          (click)="which === 'A' ? toggleAPasteInput() : toggleBPasteInput()"
+          >            
+            <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+              <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none">
+                <path d="M1658 2652 c-475 -488 -880 -906 -900 -930 -43 -48 -47 -77 -17 -116 l20 -26 1799 0 1799 0 20 26 c30 39 26 67 -18 118 -22 25 -427 444 -901 931 -848 871 -862 885 -900 885 -38 0 -52 -14 -902 -888z"/>
+              </g>
+            </svg>
+          </button>
+        </div>
+      </ng-container>
+      <app-switch
+      class="input-toggle"
+      [inputState]="which === 'A' ? !showPasteAInput : !showPasteBInput"
+      [leftSVG]="leftSVG"
+      [rightSVG]="rightSVG"
+      [sizeSVG]="'1em'"
+      (checkEvent)="which === 'A' ? toggleAInputs() : toggleBInputs()"
+      ></app-switch>
+    </form>
+    <ng-container *ngIf="which === 'A' ? !teamANotFound : !teamBNotFound; else notFound">
+      <ng-container *ngIf="which === 'A' ? !teamALoading : !teamBLoading; else loading">
+        <ng-container *ngIf="which === 'A' ? teamA : teamB">
+          <app-team-battle 
+          [team]="which === 'A' ? teamA : teamB"
+          [which]="which"
+          (selectedIndexesEvent)="selectIndexes($event, which === 'A' ? 'A' : 'B')"
+          ></app-team-battle>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</ng-template>
+<ng-template #loading>
+  <div class="flex justify-c-c align-i-c text-c-s bg-2 pokemons-placeholder">
+    <div class="dot-pulse"></div>        
+  </div>
+</ng-template>
+<ng-template #notFound>
+  <div class="flex justify-c-c align-i-c text-c-s bg-2 pokemons-placeholder pad-m bor-rad-5">
+    NOT FOUND
+  </div>
+</ng-template>
+<ng-template #leftSVG>
+  <div class="tooltip-wrapper icon">
+    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.000000 512.000000"preserveAspectRatio="xMidYMid meet">
+      <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none">
+      <path d="M3882 5106 c-158 -31 -296 -84 -416 -163 -50 -33 -195 -170 -499 -472 -396 -395 -429 -430 -443 -476 -30 -102 13 -202 107 -249 31 -15 69 -26 93 -26 87 1 110 20 541 449 401 400 412 409 495 450 123 59 193 74 320 68 67 -3 129 -12 170 -26 190 -61 352 -224 413 -416 18 -57 22 -93 22 -195 0 -139 -10 -182 -73 -305 -32 -64 -94 -129 -771 -807 l-736 -736 -95 -45 c-112 -54 -170 -67 -288 -67 -152 0 -289 51 -413 153 -36 30 -76 60 -89 67 -102 55 -232 12 -285 -93 -27 -55 -31 -99 -14 -162 21 -79 213 -233 378 -305 347 -151 760 -104 1060 120 99 73 1529 1512 1577 1585 88 137 141 272 169 432 65 375 -97 780 -408 1014 -106 80 -256 152 -382 185 -125 32 -322 41 -433 20z"/>
+      <path d="M2102 3326 c-177 -34 -333 -101 -461 -197 -107 -80 -1406 -1386 -1457 -1464 -153 -237 -212 -499 -169 -761 20 -127 49 -214 107 -326 185 -355 551 -578 949 -578 212 0 457 82 628 210 36 27 224 208 417 402 348 349 352 354 363 407 13 63 2 117 -36 173 -31 46 -111 88 -167 88 -85 -1 -113 -23 -481 -389 -373 -371 -392 -385 -545 -437 -83 -28 -281 -27 -375 3 -192 61 -355 223 -416 413 -14 41 -23 103 -26 170 -6 127 8 196 68 320 l41 85 677 676 676 677 85 41 c110 53 184 71 291 71 159 0 294 -49 420 -154 85 -71 123 -89 184 -89 89 0 159 46 196 128 22 46 24 92 7 146 -36 122 -307 304 -543 365 -124 32 -321 41 -433 20z"/>
+      </g>
+    </svg>
+    <app-tooltip
+    [text]="'team.compare.link-placeholder' | translate"
+    [side]="'top'"
+    ></app-tooltip>
+  </div>
+</ng-template>
+<ng-template #rightSVG>
+  <div class="tooltip-wrapper icon" style="display: flex; justify-content: center; align-items: center;">
+    <svg fill="var(--text-color)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" preserveAspectRatio="xMidYMid meet">
+      <g class="layer" transform="translate(80, 0)">
+        <path d="m64,0c-35.3,0 -64,28.7 -64,64l0,384c0,35.3 28.7,64 64,64l256,0c35.3,0 64,-28.7 64,-64l0,-288l-128,0c-17.7,0 -32,-14.3 -32,-32l0,-128l-160,0zm192,0l0,128l128,0l-128,-128zm-40,408c0,13.3 -10.7,24 -24,24s-24,-10.7 -24,-24l0,-102.1l-31,31c-9.4,9.4 -24.6,9.4 -33.9,0s-9.4,-24.6 0,-33.9l72,-72c9.4,-9.4 24.6,-9.4 33.9,0l72,72c9.4,9.4 9.4,24.6 0,33.9s-24.6,9.4 -33.9,0l-31,-31l0,102.1l-0.1,0z"/>
+        <rect height="245" id="svg_2" stroke="var(--text-color)" width="238" x="71.5" y="205"/>
+      </g>
+    </svg>
+    <app-tooltip
+    [text]="'team.compare.paste-placeholder' | translate"
+    [side]="'top'"
+    ></app-tooltip>
+  </div>
+</ng-template>

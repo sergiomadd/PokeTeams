@@ -7,6 +7,7 @@ import { ThemeService } from 'src/app/core/helpers/theme.service';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { User } from 'src/app/features/user/models/user.model';
+import { GetFlagIconUrlPipe } from 'src/app/shared/pipes/getFlagIconUrl.pipe';
 import { WindowService } from '../../../../core/helpers/window.service';
 import { Chip } from '../../../../core/models/misc/chip.model';
 import { Device } from '../../../../core/models/misc/device.enum';
@@ -17,7 +18,8 @@ import { selectLang, selectTheme } from '../../../../core/store/config/config.se
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrl: './menu.component.scss'
+  styleUrl: './menu.component.scss',
+  providers: [GetFlagIconUrlPipe]
 })
 export class MenuComponent 
 {
@@ -28,6 +30,8 @@ export class MenuComponent
   i18n = inject(I18nService);
   window = inject(WindowService);
   util = inject(UtilService);
+
+  getFlagIconUrl = inject(GetFlagIconUrlPipe);
 
   @Input() menuOpen: boolean = true;
   @Output() toggleEvent = new EventEmitter();
@@ -61,7 +65,7 @@ export class MenuComponent
           {
             name: `lang.${value}`,
             identifier: value,
-            iconPath: this.util.getFlagIconUrl(flags[langs.indexOf(value)])
+            iconPath: this.getFlagIconUrl.transform(flags[langs.indexOf(value)])
           }
         }
       })
@@ -110,7 +114,7 @@ export class MenuComponent
         {
           name: `lang.${langs[i]}`,
           identifier: langs[i],
-          iconPath: this.util.getFlagIconUrl(flags[i])
+          iconPath: this.getFlagIconUrl.transform(flags[i])
         }
       )
     }

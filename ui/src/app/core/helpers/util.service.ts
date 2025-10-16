@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { QueryItem } from '../models/misc/queryResult.model';
-import { Stat } from '../models/pokemon/stat.model';
 import { Tag } from '../models/team/tag.model';
 import { I18nService } from './i18n.service';
 
@@ -218,54 +217,6 @@ export class UtilService
     return passedTime > milisecondsToPass ? true : false;
   }
 
-  customFormatDate(date?: string)
-  {
-    //Format from backend YYYY-MM-DD
-    if(date)
-    {
-      const day = date.split('-')[2];
-      const month = date.split('-')[1];
-      const year = date.split('-')[0];
-      return [day, month, year].join('/');
-    }
-    return date;
-
-  }
-
-  getStatCode(stat: Stat)
-  {
-
-    const nameDict = 
-    {
-      "hp": "HP",
-      "attack": "Atk",
-      "defense": "Def",
-      "special-attack": "SpA",
-      "special-defense": "SpD",
-      "speed": "Spe"
-    }
-    return nameDict[stat.identifier];
-  }
-
-  getStatShortIdentifier(stat: Stat)
-  {
-    const nameDict = 
-    {
-      "hp": "hp",
-      "attack": "atk",
-      "defense": "def",
-      "special-attack": "spa",
-      "special-defense": "spd",
-      "speed": "spe"
-    }
-    return nameDict[stat.identifier];
-  }
-
-  getTypeNameImagePath(typeIconPath: string)
-  {
-    return typeIconPath ? typeIconPath.replace("ix", "ix_names") : typeIconPath;
-  }
-
   isNaN(value)
   {
     return typeof +value !== "number" || isNaN(+value)
@@ -284,22 +235,6 @@ export class UtilService
     return undefined
   }
 
-  formatCount(count: number)
-  {
-    let formated: string = count.toString();
-    let rounded: number = count;
-    let letter: string = "";
-    const decimals: number = 2;
-    if(count >= 1e3) 
-    {
-      letter = 'K'
-      rounded = count / 1e3
-      formated = rounded.toFixed(decimals)
-    }
-    formated = formated + letter;
-    return formated;
-  }
-
   tagToChip(tag: Tag): QueryItem
   {
     return {
@@ -312,10 +247,5 @@ export class UtilService
   openInNewTab(url) 
   {
     window.open(url, '_blank');
-  }
-
-  getFlagIconUrl(countryCode?: string)
-  {
-    return countryCode ? `${this.url}images/flags/${countryCode}.svg` : countryCode;
   }
 }

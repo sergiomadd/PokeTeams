@@ -33,7 +33,7 @@ export class PasteInputComponent
   pasteBoxFormSubmitted: boolean = false;
   pasteBoxForm = this.formBuilder.group(
     {
-      paste: ["", [Validators.required]]
+      paste: ["", [Validators.required, Validators.maxLength(2048)]]
     });
   pasteHolder: string = "";
 

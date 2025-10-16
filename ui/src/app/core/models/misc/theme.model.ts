@@ -20,7 +20,9 @@ export interface Theme
     '--success': string,
     '--error': string,
     '--white': string,
-    '--black': string
+    '--black': string,
+    '--blue-team': string,
+    '--red-team': string
   }
 }
 
@@ -30,7 +32,8 @@ export const themeProperties: string[] =
 '--bg-color-tooltip',
 '--primary', '--secondary',
 '--text-color', '--text-color-secondary', '--text-color-highlight', '--text-color-link', '--text-color-reverse',
-'--success', '--error', '--white', '--black'
+'--success', '--error', '--white', '--black',
+'--blue-team', '--red-team'
 ]
 
 export const themes: Theme[] = 
@@ -56,7 +59,9 @@ export const themes: Theme[] =
       '--success': 'hsl(140, 80%, 44%)',
       '--error': 'hsl(358, 77%, 52%)',
       '--white': '#ffffff',
-      '--black': '#000000'
+      '--black': '#000000',
+      '--blue-team': 'hsl(240, 75%, 75%)',
+      '--red-team': 'hsl(0, 50%, 65%)'
     }
   },
   {
@@ -80,7 +85,9 @@ export const themes: Theme[] =
       '--success': 'hsl(140, 80%, 34%)',
       '--error': 'hsl(0, 80%, 50%)',
       '--white': '#ffffff',
-      '--black': '#000000'
+      '--black': '#000000',
+      '--blue-team': 'hsl(240, 75%, 63%)',
+      '--red-team': 'hsl(0, 48%, 51%)'
     }
   }
 ]

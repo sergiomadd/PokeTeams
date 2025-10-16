@@ -1,16 +1,20 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, skip, take } from 'rxjs';
+import { I18nService } from 'src/app/core/helpers/i18n.service';
 import { UtilService } from 'src/app/core/helpers/util.service';
 import { WindowService } from 'src/app/core/helpers/window.service';
 import { SortOrder, SortType, SortWay } from 'src/app/core/models/search/sortOrder.model';
 import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
+import { TeamPreviewToCompare } from 'src/app/core/models/team/teamPreviewToCompare.model';
 import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
 import { configActions } from 'src/app/core/store/config/config.actions';
 import { selectTeamsPerPage, selectTheme } from 'src/app/core/store/config/config.selectors';
 import { User } from 'src/app/features/user/models/user.model';
 import { PaginationComponent } from 'src/app/shared/components/dumb/pagination/pagination.component';
+import { TeamCompareService } from 'src/app/shared/services/team-compare.service';
 import { SearchService } from '../../../services/search.service';
 
 @Component({
@@ -25,6 +29,9 @@ export class TeamTableComponent
   searchService = inject(SearchService);
   store = inject(Store);
   window = inject(WindowService);
+  compareService = inject(TeamCompareService);
+  router = inject(Router);
+  i18n = inject(I18nService);
 
   teams: TeamPreviewData[] = [];
   searched: boolean = false;
@@ -39,14 +46,19 @@ export class TeamTableComponent
   };
   //pagination
   totalTeams?: number;
+  readonly defaultTeams: number = 10;
   paginationForm = this.formBuilder.group(
     {
-      teamsPerPage: [10, [Validators.min(1), Validators.max(100)]]
+      teamsPerPage: [this.defaultTeams, [Validators.min(1), Validators.max(50)]]
     }, { updateOn: "blur" });
   @ViewChild(PaginationComponent) paginationComponent!: PaginationComponent;
 
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
   selectedThemeName?: string;
+
+  teamsToCompare: TeamPreviewToCompare[] = [];
+  teamsToCompareFeedback?: string;
+  teamsToCompareOpen: boolean = true;
 
   async ngOnInit()
   {
@@ -86,8 +98,8 @@ export class TeamTableComponent
         }
         else
         {
-          this.paginationForm.controls.teamsPerPage.setValue(10);
-          this.store.dispatch(configActions.changeTeamsPerPage({request: 10}))
+          this.paginationForm.controls.teamsPerPage.setValue(this.defaultTeams);
+          this.store.dispatch(configActions.changeTeamsPerPage({request: this.defaultTeams}))
         }
       }
     )
@@ -109,6 +121,12 @@ export class TeamTableComponent
       this.searchService.setQueryTeamsPerPage(value); // Set query on first load
       this.paginationForm.controls.teamsPerPage.setValue(value); // Set form control on first load
     });
+    
+    this.compareService.teamsToCompare$.subscribe(value =>
+    {
+      this.teamsToCompareFeedback = undefined;
+      this.teamsToCompare = [...value];
+    })
   }
 
   deleteTeam()
@@ -162,5 +180,50 @@ export class TeamTableComponent
   {
     let control: AbstractControl | null =  this.paginationForm.get(key);
     return this.util.getAuthFormError(control);
+  }
+
+  compare()
+  {
+    if(this.teamsToCompare.length === 2)
+    {
+      const queryParams = 
+      {
+        teamAId: this.teamsToCompare[0].teamData.id,
+        teamBId: this.teamsToCompare[1].teamData.id
+      };
+      
+      const url = this.router.serializeUrl(
+        this.router.createUrlTree(['/compare'], { queryParams })
+      );
+      
+      window.open(url, '_blank');
+    }
+    else
+    {
+      this.teamsToCompareFeedback = this.i18n.translateKey('team.compare.to_compare_only_one');
+    }
+  }
+
+  removeTeamToCompare(index: number)
+  {
+    const teamToRemove: TeamPreviewToCompare | undefined = this.teamsToCompare[index];
+    if(teamToRemove)
+    {
+      this.compareService.removeTeamsToCompare(teamToRemove.teamData.id);
+    }
+  }
+
+  toggleTeamsToCompare()
+  {
+    this.teamsToCompareOpen = !this.teamsToCompareOpen;
+  }
+
+  swapTeamsToCompare()
+  {
+    if (this.teamsToCompare.length === 2) 
+    {
+      const swappedTeamsToCompare = [this.teamsToCompare[1], this.teamsToCompare[0]];
+      this.teamsToCompare = [...swappedTeamsToCompare];
+    }
   }
 }

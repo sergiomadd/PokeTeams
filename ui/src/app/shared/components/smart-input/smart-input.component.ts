@@ -31,6 +31,7 @@ export class SmartInputComponent
   @Input() allGetterIndex?: number;
   @Input() disabled?: boolean;
   @Input() autoTab?: boolean = true;
+  @Input() searchWithEmpty?: boolean = false;
 
   @Output() selectEvent = new EventEmitter<QueryItem>();
   @Output() newEvent = new EventEmitter();
@@ -92,19 +93,19 @@ export class SmartInputComponent
       identifier: "",
       type: this.customType ?? "new"
     }
-    if(this.allowCustom)
-    {
-      this.results[0] = 
-      {
-        name: "",
-        identifier: "new",
-        type: this.customType ?? "new"
-      }
-    }
     this.searchForm.controls.key.valueChanges.subscribe(async (value) => 
     {
       if(value)
-      {          
+      {
+        if(this.allowCustom)
+        {
+          this.results[0] = 
+          {
+            name: "",
+            identifier: "new",
+            type: this.customType ?? "new"
+          }
+        }          
         if(this.updateOnChange)
         {
           this.updateEvent.emit(value);
@@ -130,6 +131,10 @@ export class SmartInputComponent
         }
         else
         {
+          if(this.searchWithEmpty)
+          {
+            await this.search(value);
+          }
           this.results = [];
           this.showOptions = false;
         }
@@ -145,7 +150,7 @@ export class SmartInputComponent
     }
   }
 
-  async search(key: string)
+  async search(key: string | null)
   {
     if(this.getter)
     {
@@ -156,7 +161,7 @@ export class SmartInputComponent
           next: (response) => 
           {
             this.results = response;
-            if(this.allowCustom)
+            if(this.allowCustom && key)
             {
               this.customQueryResult.name = key;
               this.customQueryResult.identifier = key;
@@ -176,7 +181,6 @@ export class SmartInputComponent
 
   selectResult(selectedResult: QueryItem)
   {
-    console.log(selectedResult);
     if(this.keepSelected)
     {
       this.selected = selectedResult;
@@ -206,6 +210,7 @@ export class SmartInputComponent
   {
     if(this.allGetter)
     {
+      this.searching = true;
       if(this.allGetterIndex)
       {
         this.allGetter(this.allGetterIndex).subscribe(

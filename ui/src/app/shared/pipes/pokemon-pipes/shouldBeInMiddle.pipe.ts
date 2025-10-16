@@ -1,0 +1,17 @@
+import { Pipe, PipeTransform } from "@angular/core";
+import { Type } from "src/app/core/models/pokemon/type.model";
+
+@Pipe(
+  {
+    name: 'shouldBeInMiddlePipe',
+    pure: true
+  }
+)
+
+export class ShouldBeInMiddlePipe implements PipeTransform
+{
+  transform(index: number, types?: Type[]): boolean | undefined
+  {
+    return types && types.length > 2 && index % 2 === 0;
+  }
+}

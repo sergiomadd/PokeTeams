@@ -12,6 +12,7 @@ export class SwitchComponent
   @Input() rightText?: string;
   @Input() leftSVG?: TemplateRef<any>;
   @Input() rightSVG?: TemplateRef<any>;
+  @Input() sizeSVG?: string;
   @Output() checkEvent = new EventEmitter<boolean>();
 
   state: boolean = false;

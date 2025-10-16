@@ -9,5 +9,5 @@ export const initialConfigState: ConfigState =
 {
   theme: "light",
   lang: "en",
-  teamsPerPage: 20
+  teamsPerPage: 10
 };

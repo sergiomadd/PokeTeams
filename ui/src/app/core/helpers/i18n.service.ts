@@ -19,7 +19,7 @@ export class I18nService
   constructor() 
   {
     this.translate.addLangs([Lang.en, Lang.es])
-    this.translate.setDefaultLang(Lang.en);
+    this.translate.setFallbackLang(Lang.en);
     this.selectedLang$.subscribe((value) =>
     {
       this.selectedLang = value;

@@ -11,13 +11,16 @@ import { SetOperation } from 'src/app/core/models/search/setOperation.enum';
 import { QueryService } from 'src/app/core/services/query.service';
 import { TeamService } from 'src/app/core/services/team.service';
 import { selectTheme } from 'src/app/core/store/config/config.selectors';
+import { GetTagBgColorPipe } from 'src/app/shared/pipes/color-pipes/getTagBgColor.pipe';
+import { GetTagTextColorPipe } from 'src/app/shared/pipes/color-pipes/getTagTextColor.pipe';
 import { SearchService } from 'src/app/shared/services/search.service';
 
 
 @Component({
   selector: 'app-team-search',
   templateUrl: './team-search.component.html',
-  styleUrl: './team-search.component.scss'
+  styleUrl: './team-search.component.scss',
+  providers: [GetTagBgColorPipe, GetTagTextColorPipe]
 })
 export class TeamSearchComponent 
 {
@@ -29,6 +32,9 @@ export class TeamSearchComponent
   teamService = inject(TeamService);
   theme = inject(ThemeService);
   i18n = inject(I18nService);
+
+  getTagBgColor = inject(GetTagBgColorPipe);
+  getTagTextColor = inject(GetTagTextColorPipe);
 
   @Input() userSearch: boolean = false;
 
@@ -57,7 +63,7 @@ export class TeamSearchComponent
   async queryResultSelectEvent(event: QueryItem)
   {
     this.feedback = undefined;
-    if(!event) {return;}
+    if(!event) { return; }
     if(event.type === "user")
     {
       this.feedback = this.validatePlayer(event.name);
@@ -76,8 +82,8 @@ export class TeamSearchComponent
         {
           name: event.name,
           identifier: event.identifier,
-          color: event.icon ? this.theme.getTagBgColor(event.icon) : undefined,
-          textColor: event.icon ? this.theme.getTagTextColor(event.icon) : undefined,
+          color: event.icon ? this.getTagBgColor.transform(event.icon) : undefined,
+          textColor: event.icon ? this.getTagTextColor.transform(event.icon) : undefined,
           type: event.type
         }
         this.chips?.push(chip);
@@ -92,6 +98,7 @@ export class TeamSearchComponent
           type: event.type
         }
         this.chips?.push(chip);
+        this.sortChips();
       }
       this.searchService.setQueryItems(this.chips);
     }
@@ -119,6 +126,10 @@ export class TeamSearchComponent
 
   validatePlayer(player: string): string | undefined
   {
+    if(player.length <= 0)
+    {
+      return "";
+    }
     if(player.length > 32)
     {
       return this.i18n.translateKeyWithParameters('team.editor.errors.player', { maxlength: 32 });
@@ -133,5 +144,17 @@ export class TeamSearchComponent
       return this.i18n.translateKeyWithParameters('team.editor.errors.tournament', { maxlength: 256 });
     }
     return undefined;
+  }
+
+  sortChips()
+  {
+    const customOrder: string[] = ["user", "tournament", "regulation", "tag", "pokemon", "move", "item"];
+
+    this.chips.sort((a, b) => 
+    {
+      const indexA = customOrder.indexOf(a.type ?? 'z');
+      const indexB = customOrder.indexOf(b.type ?? 'z');
+      return indexA - indexB;
+    });
   }
 }
