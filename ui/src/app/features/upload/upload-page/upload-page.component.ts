@@ -10,9 +10,10 @@ import { TeamEditorService } from '../../../shared/services/team-editor.service'
 import { User } from '../../user/models/user.model';
 
 @Component({
-  selector: 'app-upload-page',
-  templateUrl: './upload-page.component.html',
-  styleUrl: './upload-page.component.scss'
+    selector: 'app-upload-page',
+    templateUrl: './upload-page.component.html',
+    styleUrl: './upload-page.component.scss',
+    standalone: false
 })
 export class UploadPageComponent 
 {

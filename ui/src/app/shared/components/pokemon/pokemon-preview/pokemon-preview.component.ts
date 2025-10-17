@@ -4,9 +4,10 @@ import { WindowService } from 'src/app/core/helpers/window.service';
 import { PokemonPreview } from 'src/app/core/models/pokemon/pokemonPreview.model';
 
 @Component({
-  selector: 'app-pokemon-preview',
-  templateUrl: './pokemon-preview.component.html',
-  styleUrls: ['./pokemon-preview.component.scss']
+    selector: 'app-pokemon-preview',
+    templateUrl: './pokemon-preview.component.html',
+    styleUrls: ['./pokemon-preview.component.scss'],
+    standalone: false
 })
 export class PokemonPreviewComponent 
 {

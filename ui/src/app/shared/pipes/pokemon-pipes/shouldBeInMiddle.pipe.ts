@@ -4,8 +4,9 @@ import { Type } from "src/app/core/models/pokemon/type.model";
 @Pipe(
   {
     name: 'shouldBeInMiddlePipe',
-    pure: true
-  }
+    pure: true,
+    standalone: false
+}
 )
 
 export class ShouldBeInMiddlePipe implements PipeTransform

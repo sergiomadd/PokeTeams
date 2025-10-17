@@ -10,9 +10,10 @@ import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/sto
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
 
 @Component({
-  selector: 'app-reset-password',
-  templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.scss'
+    selector: 'app-reset-password',
+    templateUrl: './reset-password.component.html',
+    styleUrl: './reset-password.component.scss',
+    standalone: false
 })
 export class ResetPasswordComponent 
 {

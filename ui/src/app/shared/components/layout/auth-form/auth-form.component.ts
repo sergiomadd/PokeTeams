@@ -13,9 +13,10 @@ import { SignUpDTO } from 'src/app/features/user/models/signup.dto';
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
 
 @Component({
-  selector: 'app-auth-form',
-  templateUrl: './auth-form.component.html',
-  styleUrl: './auth-form.component.scss'
+    selector: 'app-auth-form',
+    templateUrl: './auth-form.component.html',
+    styleUrl: './auth-form.component.scss',
+    standalone: false
 })
 export class AuthFormComponent 
 {

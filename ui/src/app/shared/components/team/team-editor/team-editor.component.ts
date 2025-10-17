@@ -23,9 +23,10 @@ import { SmartInputComponent } from '../../smart-input/smart-input.component';
 import { TeamComponent } from '../team/team.component';
 
 @Component({
-  selector: 'app-team-editor',
-  templateUrl: './team-editor.component.html',
-  styleUrls: ['./team-editor.component.scss']
+    selector: 'app-team-editor',
+    templateUrl: './team-editor.component.html',
+    styleUrls: ['./team-editor.component.scss'],
+    standalone: false
 })
 
 export class TeamEditorComponent 

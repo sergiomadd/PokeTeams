@@ -9,9 +9,10 @@ import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
 import { PokemonCardComponent } from '../../pokemon/pokemon-card/pokemon-card.component';
 
 @Component({
-  selector: 'app-team',
-  templateUrl: './team.component.html',
-  styleUrls: ['./team.component.scss']
+    selector: 'app-team',
+    templateUrl: './team.component.html',
+    styleUrls: ['./team.component.scss'],
+    standalone: false
 })
 export class TeamComponent 
 {

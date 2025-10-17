@@ -16,10 +16,11 @@ import { configActions } from '../../../../core/store/config/config.actions';
 import { selectLang, selectTheme } from '../../../../core/store/config/config.selectors';
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrl: './menu.component.scss',
-  providers: [GetFlagIconUrlPipe]
+    selector: 'app-menu',
+    templateUrl: './menu.component.html',
+    styleUrl: './menu.component.scss',
+    providers: [GetFlagIconUrlPipe],
+    standalone: false
 })
 export class MenuComponent 
 {

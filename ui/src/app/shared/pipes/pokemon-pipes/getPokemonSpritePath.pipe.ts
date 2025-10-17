@@ -4,8 +4,9 @@ import { Pokemon } from "src/app/core/models/pokemon/pokemon.model";
 @Pipe(
   {
     name: 'getPokemonSpritePathPipe',
-    pure: true
-  }
+    pure: true,
+    standalone: false
+}
 )
 
 //Rename to calculate effectiveness

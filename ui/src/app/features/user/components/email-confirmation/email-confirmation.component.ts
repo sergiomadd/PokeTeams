@@ -7,9 +7,10 @@ import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/sto
 import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
 
 @Component({
-  selector: 'app-email-confirmation',
-  templateUrl: './email-confirmation.component.html',
-  styleUrl: './email-confirmation.component.scss'
+    selector: 'app-email-confirmation',
+    templateUrl: './email-confirmation.component.html',
+    styleUrl: './email-confirmation.component.scss',
+    standalone: false
 })
 export class EmailConfirmationComponent 
 {

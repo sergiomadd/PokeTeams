@@ -17,9 +17,10 @@ import { environment } from 'src/environments/environment';
 import { User } from '../../user/models/user.model';
 
 @Component({
-  selector: 'app-team-view-page',
-  templateUrl: './team-view-page.component.html',
-  styleUrl: './team-view-page.component.scss'
+    selector: 'app-team-view-page',
+    templateUrl: './team-view-page.component.html',
+    styleUrl: './team-view-page.component.scss',
+    standalone: false
 })
 export class TeamViewPageComponent 
 {

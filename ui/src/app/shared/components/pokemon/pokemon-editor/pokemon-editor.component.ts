@@ -18,13 +18,13 @@ import { TeamEditorService } from 'src/app/shared/services/team-editor.service';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 
 @Component({
-  selector: 'app-pokemon-editor',
-  templateUrl: './pokemon-editor.component.html',
-  styleUrl: './pokemon-editor.component.scss',
-  providers: 
-  [
-    GetStatColorPipe
-  ] 
+    selector: 'app-pokemon-editor',
+    templateUrl: './pokemon-editor.component.html',
+    styleUrl: './pokemon-editor.component.scss',
+    providers: [
+        GetStatColorPipe
+    ],
+    standalone: false
 })
 export class PokemonEditorComponent 
 {

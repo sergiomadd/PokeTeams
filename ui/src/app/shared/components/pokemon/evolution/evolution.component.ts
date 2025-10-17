@@ -5,9 +5,10 @@ import { PokemonForm } from 'src/app/core/models/pokemon/pokemonForm.model';
 import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
 
 @Component({
-  selector: 'app-evolution',
-  templateUrl: './evolution.component.html',
-  styleUrls: ['../pokemon-card/pokemon-card.component.scss']
+    selector: 'app-evolution',
+    templateUrl: './evolution.component.html',
+    styleUrls: ['../pokemon-card/pokemon-card.component.scss'],
+    standalone: false
 })
 export class EvolutionComponent 
 {

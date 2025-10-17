@@ -8,9 +8,10 @@ import { Tag } from 'src/app/core/models/team/tag.model';
 import { TeamService } from 'src/app/core/services/team.service';
 
 @Component({
-  selector: 'app-tag-editor',
-  templateUrl: './tag-editor.component.html',
-  styleUrl: './tag-editor.component.scss'
+    selector: 'app-tag-editor',
+    templateUrl: './tag-editor.component.html',
+    styleUrl: './tag-editor.component.scss',
+    standalone: false
 })
 export class TagEditorComponent 
 {

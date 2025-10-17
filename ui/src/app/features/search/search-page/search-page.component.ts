@@ -8,9 +8,10 @@ import { SearchService } from '../../../shared/services/search.service';
 import { User } from '../../user/models/user.model';
 
 @Component({
-  selector: 'app-search-page',
-  templateUrl: './search-page.component.html',
-  styleUrl: './search-page.component.scss'
+    selector: 'app-search-page',
+    templateUrl: './search-page.component.html',
+    styleUrl: './search-page.component.scss',
+    standalone: false
 })
 export class SearchPageComponent 
 {

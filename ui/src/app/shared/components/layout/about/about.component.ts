@@ -2,8 +2,9 @@ import { Component, inject } from '@angular/core';
 import { SeoService } from 'src/app/core/helpers/seo.service';
 
 @Component({
-  selector: 'app-about',
-  templateUrl: './about.component.html'
+    selector: 'app-about',
+    templateUrl: './about.component.html',
+    standalone: false
 })
 export class AboutComponent 
 {

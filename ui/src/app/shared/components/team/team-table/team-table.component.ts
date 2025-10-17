@@ -18,9 +18,10 @@ import { TeamCompareService } from 'src/app/shared/services/team-compare.service
 import { SearchService } from '../../../services/search.service';
 
 @Component({
-  selector: 'app-team-table',
-  templateUrl: './team-table.component.html',
-  styleUrl: './team-table.component.scss'
+    selector: 'app-team-table',
+    templateUrl: './team-table.component.html',
+    styleUrl: './team-table.component.scss',
+    standalone: false
 })
 export class TeamTableComponent 
 {

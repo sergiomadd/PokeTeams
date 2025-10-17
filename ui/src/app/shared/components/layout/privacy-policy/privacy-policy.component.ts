@@ -2,8 +2,9 @@ import { Component, inject } from '@angular/core';
 import { SeoService } from 'src/app/core/helpers/seo.service';
 
 @Component({
-  selector: 'app-privacy-policy',
-  templateUrl: './privacy-policy.component.html'
+    selector: 'app-privacy-policy',
+    templateUrl: './privacy-policy.component.html',
+    standalone: false
 })
 export class PrivacyPolicyComponent 
 {

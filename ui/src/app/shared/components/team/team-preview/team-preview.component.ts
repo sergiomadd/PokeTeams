@@ -20,9 +20,10 @@ import { environment } from 'src/environments/environment';
 import { PokemonPreviewComponent } from '../../pokemon/pokemon-preview/pokemon-preview.component';
 
 @Component({
-  selector: 'app-team-preview',
-  templateUrl: './team-preview.component.html',
-  styleUrls: ['./team-preview.component.scss']
+    selector: 'app-team-preview',
+    templateUrl: './team-preview.component.html',
+    styleUrls: ['./team-preview.component.scss'],
+    standalone: false
 })
 export class TeamPreviewComponent 
 {

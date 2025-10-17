@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output, input } from '@angular/core';
 
 @Component({
-  selector: 'app-dialog',
-  templateUrl: './dialog.component.html',
-  styleUrl: './dialog.component.scss'
+    selector: 'app-dialog',
+    templateUrl: './dialog.component.html',
+    styleUrl: './dialog.component.scss',
+    standalone: false
 })
 export class DialogComponent 
 {

@@ -3,8 +3,9 @@ import { UtilService } from 'src/app/core/helpers/util.service';
 import { Regulation } from 'src/app/core/models/team/regulation.model';
 
 @Component({
-  selector: 'app-regulation-preview',
-  templateUrl: './regulation-preview.component.html'
+    selector: 'app-regulation-preview',
+    templateUrl: './regulation-preview.component.html',
+    standalone: false
 })
 export class RegulationPreviewComponent 
 {

@@ -25,9 +25,10 @@ export interface ComparePokemon
 }
 
 @Component({
-  selector: 'app-compare-page',
-  templateUrl: './compare-page.component.html',
-  styleUrl: './compare-page.component.scss'
+    selector: 'app-compare-page',
+    templateUrl: './compare-page.component.html',
+    styleUrl: './compare-page.component.scss',
+    standalone: false
 })
 export class ComparePageComponent 
 {

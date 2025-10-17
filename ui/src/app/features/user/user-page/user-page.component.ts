@@ -12,9 +12,10 @@ import { User } from '../models/user.model';
 import { UserPageService } from '../services/user-page.service';
 
 @Component({
-  selector: 'app-user-page',
-  templateUrl: './user-page.component.html',
-  styleUrl: './user-page.component.scss'
+    selector: 'app-user-page',
+    templateUrl: './user-page.component.html',
+    styleUrl: './user-page.component.scss',
+    standalone: false
 })
 export class UserPageComponent 
 {

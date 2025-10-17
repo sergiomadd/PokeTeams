@@ -5,8 +5,9 @@ import { Pokemon } from "src/app/core/models/pokemon/pokemon.model";
 @Pipe(
   {
     name: 'getDefenseEffectivenessPipe',
-    pure: true
-  }
+    pure: true,
+    standalone: false
+}
 )
 
 //Rename to calculate effectiveness

@@ -5,8 +5,9 @@ import { TeamOptions } from "src/app/core/models/team/teamOptions.model";
 @Pipe(
   {
     name: 'getPokemonStatBorderRadiusPipe',
-    pure: true
-  }
+    pure: true,
+    standalone: false
+}
 )
 
 export class GetPokemonStatBorderRadiusPipe implements PipeTransform

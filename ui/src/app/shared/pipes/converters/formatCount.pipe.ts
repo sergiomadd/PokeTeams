@@ -1,6 +1,9 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
-@Pipe({ name: 'formatCount'})
+@Pipe({
+    name: 'formatCount',
+    standalone: false
+})
 
 export class FormatCountPipe implements PipeTransform
 {

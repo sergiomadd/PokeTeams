@@ -11,9 +11,10 @@ import { selectLang } from 'src/app/core/store/config/config.selectors';
 import { TeamEditorService } from '../../../shared/services/team-editor.service';
 
 @Component({
-  selector: 'app-team-edit-page',
-  templateUrl: './team-edit-page.component.html',
-  styleUrl: './team-edit-page.component.scss'
+    selector: 'app-team-edit-page',
+    templateUrl: './team-edit-page.component.html',
+    styleUrl: './team-edit-page.component.scss',
+    standalone: false
 })
 export class TeamEditPageComponent 
 {

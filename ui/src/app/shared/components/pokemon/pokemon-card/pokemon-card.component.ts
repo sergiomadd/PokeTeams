@@ -19,15 +19,15 @@ import { GetPokemonSpritePathPipe } from 'src/app/shared/pipes/pokemon-pipes/get
 import { TeamCompareService } from 'src/app/shared/services/team-compare.service';
 
 @Component({
-  selector: 'app-pokemon-card',
-  templateUrl: './pokemon-card.component.html',
-  styleUrl: './pokemon-card.component.scss',
-  providers: 
-  [
-    CalcMoveEffectivenessPipe,
-    GetDefenseEffectivenessPipe,
-    GetPokemonSpritePathPipe
-  ] 
+    selector: 'app-pokemon-card',
+    templateUrl: './pokemon-card.component.html',
+    styleUrl: './pokemon-card.component.scss',
+    providers: [
+        CalcMoveEffectivenessPipe,
+        GetDefenseEffectivenessPipe,
+        GetPokemonSpritePathPipe
+    ],
+    standalone: false
 })
 export class PokemonCardComponent 
 {

@@ -5,8 +5,9 @@ import { Move } from "src/app/core/models/pokemon/move.model";
 @Pipe(
   {
     name: 'calcMoveEffectivenessPipe',
-    pure: true
-  }
+    pure: true,
+    standalone: false
+}
 )
 
 //Rename to calculate effectiveness

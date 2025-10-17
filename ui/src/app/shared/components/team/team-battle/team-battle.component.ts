@@ -9,9 +9,10 @@ import { TeamCompareService } from 'src/app/shared/services/team-compare.service
 import { PokemonCardComponent } from '../../pokemon/pokemon-card/pokemon-card.component';
 
 @Component({
-  selector: 'app-team-battle',
-  templateUrl: './team-battle.component.html',
-  styleUrl: './team-battle.component.scss'
+    selector: 'app-team-battle',
+    templateUrl: './team-battle.component.html',
+    styleUrl: './team-battle.component.scss',
+    standalone: false
 })
 export class TeamBattleComponent 
 {

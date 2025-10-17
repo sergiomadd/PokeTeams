@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-user-teams',
-  templateUrl: './user-teams.component.html',
-  styleUrl: './user-teams.component.scss'
+    selector: 'app-user-teams',
+    templateUrl: './user-teams.component.html',
+    styleUrl: './user-teams.component.scss',
+    standalone: false
 })
 export class UserTeamsComponent 
 {

@@ -4,8 +4,9 @@ import { TeamOptions } from "src/app/core/models/team/teamOptions.model";
 @Pipe(
   {
     name: 'getPokemonStatSizePipe',
-    pure: true
-  }
+    pure: true,
+    standalone: false
+}
 )
 
 export class GetPokemonStatSizePipe implements PipeTransform

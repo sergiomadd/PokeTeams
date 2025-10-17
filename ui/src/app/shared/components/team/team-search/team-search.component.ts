@@ -17,10 +17,11 @@ import { SearchService } from 'src/app/shared/services/search.service';
 
 
 @Component({
-  selector: 'app-team-search',
-  templateUrl: './team-search.component.html',
-  styleUrl: './team-search.component.scss',
-  providers: [GetTagBgColorPipe, GetTagTextColorPipe]
+    selector: 'app-team-search',
+    templateUrl: './team-search.component.html',
+    styleUrl: './team-search.component.scss',
+    providers: [GetTagBgColorPipe, GetTagTextColorPipe],
+    standalone: false
 })
 export class TeamSearchComponent 
 {

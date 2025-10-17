@@ -13,9 +13,10 @@ import { TeamEditorService } from 'src/app/shared/services/team-editor.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-paste-input',
-  templateUrl: './paste-input.component.html',
-  styleUrl: './paste-input.component.scss'
+    selector: 'app-paste-input',
+    templateUrl: './paste-input.component.html',
+    styleUrl: './paste-input.component.scss',
+    standalone: false
 })
 export class PasteInputComponent 
 {
