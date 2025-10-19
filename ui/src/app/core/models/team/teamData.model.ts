@@ -1,8 +1,8 @@
-import { UserPreview } from "src/app/core/models/team/userPreview.model";
 import { Regulation } from "./regulation.model";
 import { Tag } from "./tag.model";
 import { TeamOptions } from "./teamOptions.model";
 import { Tournament } from "./tournament.model";
+import { UserPreview } from "./userPreview.model";
 
 export interface TeamData
 {

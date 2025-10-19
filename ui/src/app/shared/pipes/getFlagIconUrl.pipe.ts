@@ -1,7 +1,10 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { environment } from "src/environments/environment";
+import { environment } from "../../../environments/environment.development";
 
-@Pipe({ name: 'getFlagIconUrl'})
+@Pipe({
+    name: 'getFlagIconUrl',
+    standalone: false
+})
 
 export class GetFlagIconUrlPipe implements PipeTransform
 {

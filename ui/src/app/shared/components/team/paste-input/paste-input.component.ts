@@ -2,20 +2,21 @@ import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { ParserService } from 'src/app/core/helpers/parser.service';
-import { TestService } from 'src/app/core/helpers/test.service';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { Team } from 'src/app/core/models/team/team.model';
-import { PokemonService } from 'src/app/core/services/pokemon.service';
-import { selectLang } from 'src/app/core/store/config/config.selectors';
-import { TeamEditorService } from 'src/app/shared/services/team-editor.service';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../../environments/environment.development';
+import { ParserService } from '../../../../core/helpers/parser.service';
+import { TestService } from '../../../../core/helpers/test.service';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { WindowService } from '../../../../core/helpers/window.service';
+import { Team } from '../../../../core/models/team/team.model';
+import { PokemonService } from '../../../../core/services/pokemon.service';
+import { selectLang } from '../../../../core/store/config/config.selectors';
+import { TeamEditorService } from '../../../services/team-editor.service';
 
 @Component({
-  selector: 'app-paste-input',
-  templateUrl: './paste-input.component.html',
-  styleUrl: './paste-input.component.scss'
+    selector: 'app-paste-input',
+    templateUrl: './paste-input.component.html',
+    styleUrl: './paste-input.component.scss',
+    standalone: false
 })
 export class PasteInputComponent 
 {

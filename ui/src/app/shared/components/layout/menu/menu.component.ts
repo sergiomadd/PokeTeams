@@ -2,24 +2,25 @@ import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { I18nService } from 'src/app/core/helpers/i18n.service';
-import { ThemeService } from 'src/app/core/helpers/theme.service';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
-import { User } from 'src/app/features/user/models/user.model';
-import { GetFlagIconUrlPipe } from 'src/app/shared/pipes/getFlagIconUrl.pipe';
+import { I18nService } from '../../../../core/helpers/i18n.service';
+import { ThemeService } from '../../../../core/helpers/theme.service';
+import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
 import { Chip } from '../../../../core/models/misc/chip.model';
 import { Device } from '../../../../core/models/misc/device.enum';
 import { flags, Lang, langs } from '../../../../core/models/misc/lang.enum';
+import { selectLoggedUser } from '../../../../core/store/auth/auth.selectors';
 import { configActions } from '../../../../core/store/config/config.actions';
 import { selectLang, selectTheme } from '../../../../core/store/config/config.selectors';
+import { User } from '../../../../features/user/models/user.model';
+import { GetFlagIconUrlPipe } from '../../../pipes/getFlagIconUrl.pipe';
 
 @Component({
-  selector: 'app-menu',
-  templateUrl: './menu.component.html',
-  styleUrl: './menu.component.scss',
-  providers: [GetFlagIconUrlPipe]
+    selector: 'app-menu',
+    templateUrl: './menu.component.html',
+    styleUrl: './menu.component.scss',
+    providers: [GetFlagIconUrlPipe],
+    standalone: false
 })
 export class MenuComponent 
 {

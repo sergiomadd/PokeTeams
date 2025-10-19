@@ -2,23 +2,24 @@ import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Component, inject } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { FeedbackColors } from 'src/app/core/models/misc/colors';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { QueryService } from 'src/app/core/services/query.service';
-import { authActions } from 'src/app/core/store/auth/auth.actions';
-import { selectError, selectIsSubmitting, selectLoggedUser, selectSuccess } from 'src/app/core/store/auth/auth.selectors';
-import { Country } from 'src/app/features/user/models/country.dto';
-import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { WindowService } from '../../../../core/helpers/window.service';
+import { FeedbackColors } from '../../../../core/models/misc/colors';
+import { AuthService } from '../../../../core/services/auth.service';
+import { QueryService } from '../../../../core/services/query.service';
 import { UserService } from '../../../../core/services/user.service';
+import { authActions } from '../../../../core/store/auth/auth.actions';
+import { selectError, selectIsSubmitting, selectLoggedUser, selectSuccess } from '../../../../core/store/auth/auth.selectors';
+import { Country } from '../../models/country.dto';
 import { User } from '../../models/user.model';
+import { UserUpdateDTO } from '../../models/userUpdate.dto';
 import { UserPageService } from '../../services/user-page.service';
 
 @Component({
-  selector: 'app-user-settings',
-  templateUrl: './user-settings.component.html',
-  styleUrl: './user-settings.component.scss'
+    selector: 'app-user-settings',
+    templateUrl: './user-settings.component.html',
+    styleUrl: './user-settings.component.scss',
+    standalone: false
 })
 export class UserSettingsComponent 
 {

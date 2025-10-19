@@ -1,4 +1,4 @@
-import { TeamPreviewData } from "src/app/core/models/team/teamPreviewData.model";
+import { TeamPreviewData } from "../team/teamPreviewData.model";
 
 export interface SearchQueryResponseDTO
 {

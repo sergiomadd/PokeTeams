@@ -2,19 +2,20 @@ import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, skip } from 'rxjs';
-import { SeoService } from 'src/app/core/helpers/seo.service';
-import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
-import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
-import { selectLang } from 'src/app/core/store/config/config.selectors';
-import { SearchService } from 'src/app/shared/services/search.service';
+import { SeoService } from '../../../core/helpers/seo.service';
+import { TeamPreviewData } from '../../../core/models/team/teamPreviewData.model';
 import { UserService } from '../../../core/services/user.service';
+import { selectLoggedUser } from '../../../core/store/auth/auth.selectors';
+import { selectLang } from '../../../core/store/config/config.selectors';
+import { SearchService } from '../../../shared/services/search.service';
 import { User } from '../models/user.model';
 import { UserPageService } from '../services/user-page.service';
 
 @Component({
-  selector: 'app-user-page',
-  templateUrl: './user-page.component.html',
-  styleUrl: './user-page.component.scss'
+    selector: 'app-user-page',
+    templateUrl: './user-page.component.html',
+    styleUrl: './user-page.component.scss',
+    standalone: false
 })
 export class UserPageComponent 
 {

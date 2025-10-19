@@ -2,24 +2,25 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { ParserService } from 'src/app/core/helpers/parser.service';
-import { SeoService } from 'src/app/core/helpers/seo.service';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { CustomError } from 'src/app/core/models/misc/customError.model';
-import { Team } from 'src/app/core/models/team/team.model';
-import { TeamData } from 'src/app/core/models/team/teamData.model';
-import { PokemonService } from 'src/app/core/services/pokemon.service';
-import { TeamService } from 'src/app/core/services/team.service';
-import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
-import { selectLang } from 'src/app/core/store/config/config.selectors';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment.development';
+import { ParserService } from '../../../core/helpers/parser.service';
+import { SeoService } from '../../../core/helpers/seo.service';
+import { UtilService } from '../../../core/helpers/util.service';
+import { WindowService } from '../../../core/helpers/window.service';
+import { CustomError } from '../../../core/models/misc/customError.model';
+import { Team } from '../../../core/models/team/team.model';
+import { TeamData } from '../../../core/models/team/teamData.model';
+import { PokemonService } from '../../../core/services/pokemon.service';
+import { TeamService } from '../../../core/services/team.service';
+import { selectLoggedUser } from '../../../core/store/auth/auth.selectors';
+import { selectLang } from '../../../core/store/config/config.selectors';
 import { User } from '../../user/models/user.model';
 
 @Component({
-  selector: 'app-team-view-page',
-  templateUrl: './team-view-page.component.html',
-  styleUrl: './team-view-page.component.scss'
+    selector: 'app-team-view-page',
+    templateUrl: './team-view-page.component.html',
+    styleUrl: './team-view-page.component.scss',
+    standalone: false
 })
 export class TeamViewPageComponent 
 {

@@ -1,17 +1,18 @@
 import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
-import { ParserService } from 'src/app/core/helpers/parser.service';
-import { ThemeService } from 'src/app/core/helpers/theme.service';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { Move } from 'src/app/core/models/pokemon/move.model';
-import { Team } from 'src/app/core/models/team/team.model';
-import { TeamCompareService } from 'src/app/shared/services/team-compare.service';
+import { ParserService } from '../../../../core/helpers/parser.service';
+import { ThemeService } from '../../../../core/helpers/theme.service';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { WindowService } from '../../../../core/helpers/window.service';
+import { Move } from '../../../../core/models/pokemon/move.model';
+import { Team } from '../../../../core/models/team/team.model';
+import { TeamCompareService } from '../../../services/team-compare.service';
 import { PokemonCardComponent } from '../../pokemon/pokemon-card/pokemon-card.component';
 
 @Component({
-  selector: 'app-team-battle',
-  templateUrl: './team-battle.component.html',
-  styleUrl: './team-battle.component.scss'
+    selector: 'app-team-battle',
+    templateUrl: './team-battle.component.html',
+    styleUrl: './team-battle.component.scss',
+    standalone: false
 })
 export class TeamBattleComponent 
 {

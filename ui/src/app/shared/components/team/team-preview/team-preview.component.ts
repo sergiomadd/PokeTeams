@@ -1,28 +1,29 @@
 import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { forkJoin, Observable } from 'rxjs';
-import { I18nService } from 'src/app/core/helpers/i18n.service';
-import { ParserService } from 'src/app/core/helpers/parser.service';
-import { ThemeService } from 'src/app/core/helpers/theme.service';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { FeedbackColors } from 'src/app/core/models/misc/colors';
-import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
-import { PokemonPreview } from 'src/app/core/models/pokemon/pokemonPreview.model';
-import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
-import { TeamPreviewToCompare } from 'src/app/core/models/team/teamPreviewToCompare.model';
-import { PokemonService } from 'src/app/core/services/pokemon.service';
-import { TeamService } from 'src/app/core/services/team.service';
-import { selectTheme } from 'src/app/core/store/config/config.selectors';
-import { User } from 'src/app/features/user/models/user.model';
-import { TeamCompareService } from 'src/app/shared/services/team-compare.service';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../../environments/environment.development';
+import { I18nService } from '../../../../core/helpers/i18n.service';
+import { ParserService } from '../../../../core/helpers/parser.service';
+import { ThemeService } from '../../../../core/helpers/theme.service';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { WindowService } from '../../../../core/helpers/window.service';
+import { FeedbackColors } from '../../../../core/models/misc/colors';
+import { Pokemon } from '../../../../core/models/pokemon/pokemon.model';
+import { PokemonPreview } from '../../../../core/models/pokemon/pokemonPreview.model';
+import { TeamPreviewData } from '../../../../core/models/team/teamPreviewData.model';
+import { TeamPreviewToCompare } from '../../../../core/models/team/teamPreviewToCompare.model';
+import { PokemonService } from '../../../../core/services/pokemon.service';
+import { TeamService } from '../../../../core/services/team.service';
+import { selectTheme } from '../../../../core/store/config/config.selectors';
+import { User } from '../../../../features/user/models/user.model';
+import { TeamCompareService } from '../../../services/team-compare.service';
 import { PokemonPreviewComponent } from '../../pokemon/pokemon-preview/pokemon-preview.component';
 
 @Component({
-  selector: 'app-team-preview',
-  templateUrl: './team-preview.component.html',
-  styleUrls: ['./team-preview.component.scss']
+    selector: 'app-team-preview',
+    templateUrl: './team-preview.component.html',
+    styleUrls: ['./team-preview.component.scss'],
+    standalone: false
 })
 export class TeamPreviewComponent 
 {

@@ -1,11 +1,12 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { Pokemon } from "src/app/core/models/pokemon/pokemon.model";
+import { Pokemon } from "../../../core/models/pokemon/pokemon.model";
 
 @Pipe(
   {
     name: 'getPokemonSpritePathPipe',
-    pure: true
-  }
+    pure: true,
+    standalone: false
+}
 )
 
 //Rename to calculate effectiveness
