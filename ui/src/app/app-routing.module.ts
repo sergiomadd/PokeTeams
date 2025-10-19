@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
-
 import { NotFoundComponent } from './shared/components/dumb/not-found/not-found.component';
 import { AboutComponent } from './shared/components/layout/about/about.component';
 import { PrivacyPolicyComponent } from './shared/components/layout/privacy-policy/privacy-policy.component';

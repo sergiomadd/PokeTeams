@@ -2,12 +2,12 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { CustomError } from 'src/app/core/models/misc/customError.model';
-import { Team } from 'src/app/core/models/team/team.model';
-import { TeamData } from 'src/app/core/models/team/teamData.model';
-import { PokemonService } from 'src/app/core/services/pokemon.service';
-import { TeamService } from 'src/app/core/services/team.service';
-import { selectLang } from 'src/app/core/store/config/config.selectors';
+import { CustomError } from '../../../core/models/misc/customError.model';
+import { Team } from '../../../core/models/team/team.model';
+import { TeamData } from '../../../core/models/team/teamData.model';
+import { PokemonService } from '../../../core/services/pokemon.service';
+import { TeamService } from '../../../core/services/team.service';
+import { selectLang } from '../../../core/store/config/config.selectors';
 import { TeamEditorService } from '../../../shared/services/team-editor.service';
 
 @Component({

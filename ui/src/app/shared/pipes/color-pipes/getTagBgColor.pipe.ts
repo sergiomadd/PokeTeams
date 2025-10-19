@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { tagBackgroundColors } from "src/app/core/models/misc/tagColors.model";
+import { tagBackgroundColors } from "../../../core/models/misc/tagColors.model";
 
 @Pipe({
     name: 'getTagBgColor',

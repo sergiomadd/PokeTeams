@@ -3,19 +3,19 @@ import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, skip, take } from 'rxjs';
-import { I18nService } from 'src/app/core/helpers/i18n.service';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { SortOrder, SortType, SortWay } from 'src/app/core/models/search/sortOrder.model';
-import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
-import { TeamPreviewToCompare } from 'src/app/core/models/team/teamPreviewToCompare.model';
-import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
-import { configActions } from 'src/app/core/store/config/config.actions';
-import { selectTeamsPerPage, selectTheme } from 'src/app/core/store/config/config.selectors';
-import { User } from 'src/app/features/user/models/user.model';
-import { PaginationComponent } from 'src/app/shared/components/dumb/pagination/pagination.component';
-import { TeamCompareService } from 'src/app/shared/services/team-compare.service';
+import { I18nService } from '../../../../core/helpers/i18n.service';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { WindowService } from '../../../../core/helpers/window.service';
+import { SortOrder, SortType, SortWay } from '../../../../core/models/search/sortOrder.model';
+import { TeamPreviewData } from '../../../../core/models/team/teamPreviewData.model';
+import { TeamPreviewToCompare } from '../../../../core/models/team/teamPreviewToCompare.model';
+import { selectLoggedUser } from '../../../../core/store/auth/auth.selectors';
+import { configActions } from '../../../../core/store/config/config.actions';
+import { selectTeamsPerPage, selectTheme } from '../../../../core/store/config/config.selectors';
+import { User } from '../../../../features/user/models/user.model';
 import { SearchService } from '../../../services/search.service';
+import { TeamCompareService } from '../../../services/team-compare.service';
+import { PaginationComponent } from '../../dumb/pagination/pagination.component';
 
 @Component({
     selector: 'app-team-table',

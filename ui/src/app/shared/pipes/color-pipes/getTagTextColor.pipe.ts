@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { tagTextColors } from "src/app/core/models/misc/tagColors.model";
-import { themes } from "src/app/core/models/misc/theme.model";
+import { tagTextColors } from "../../../core/models/misc/tagColors.model";
+import { themes } from "../../../core/models/misc/theme.model";
+
 
 @Pipe({
     name: 'getTagTextColor',

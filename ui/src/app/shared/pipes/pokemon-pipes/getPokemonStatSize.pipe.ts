@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { TeamOptions } from "src/app/core/models/team/teamOptions.model";
+import { TeamOptions } from "../../../core/models/team/teamOptions.model";
 
 @Pipe(
   {

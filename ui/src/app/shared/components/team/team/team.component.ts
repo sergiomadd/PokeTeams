@@ -1,11 +1,11 @@
 import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
-import { ParserService } from 'src/app/core/helpers/parser.service';
-import { ThemeService } from 'src/app/core/helpers/theme.service';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { Tag } from 'src/app/core/models/team/tag.model';
-import { Team } from 'src/app/core/models/team/team.model';
-import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
+import { ParserService } from '../../../../core/helpers/parser.service';
+import { ThemeService } from '../../../../core/helpers/theme.service';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { WindowService } from '../../../../core/helpers/window.service';
+import { Tag } from '../../../../core/models/team/tag.model';
+import { Team } from '../../../../core/models/team/team.model';
+import { TeamOptions } from '../../../../core/models/team/teamOptions.model';
 import { PokemonCardComponent } from '../../pokemon/pokemon-card/pokemon-card.component';
 
 @Component({

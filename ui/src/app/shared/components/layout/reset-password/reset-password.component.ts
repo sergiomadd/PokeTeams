@@ -2,12 +2,12 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { FeedbackColors } from 'src/app/core/models/misc/colors';
-import { authActions } from 'src/app/core/store/auth/auth.actions';
-import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/store/auth/auth.selectors';
-import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { WindowService } from '../../../../core/helpers/window.service';
+import { FeedbackColors } from '../../../../core/models/misc/colors';
+import { authActions } from '../../../../core/store/auth/auth.actions';
+import { selectError, selectIsSubmitting, selectSuccess } from '../../../../core/store/auth/auth.selectors';
+import { UserUpdateDTO } from '../../../../features/user/models/userUpdate.dto';
 
 @Component({
     selector: 'app-reset-password',

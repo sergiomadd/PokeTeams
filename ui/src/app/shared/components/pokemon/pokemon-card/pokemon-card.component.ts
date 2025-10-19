@@ -1,22 +1,22 @@
 import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { LinkifierService } from 'src/app/core/helpers/linkifier.service';
-import { ParserService } from 'src/app/core/helpers/parser.service';
-import { PokemonStatService } from 'src/app/core/helpers/pokemon-stat.service';
-import { ThemeService } from 'src/app/core/helpers/theme.service';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { FeedbackColors, GenderColors, NatureColors, shinyColor } from 'src/app/core/models/misc/colors';
-import { ProcessedString } from 'src/app/core/models/misc/processedString.model';
-import { Move } from 'src/app/core/models/pokemon/move.model';
-import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
-import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
-import { selectLang } from 'src/app/core/store/config/config.selectors';
-import { CalcMoveEffectivenessPipe } from 'src/app/shared/pipes/pokemon-pipes/calcMoveEffectiveness.pipe';
-import { GetDefenseEffectivenessPipe } from 'src/app/shared/pipes/pokemon-pipes/getDefenseEffectivenes.pipe';
-import { GetPokemonSpritePathPipe } from 'src/app/shared/pipes/pokemon-pipes/getPokemonSpritePath.pipe';
-import { TeamCompareService } from 'src/app/shared/services/team-compare.service';
+import { LinkifierService } from '../../../../core/helpers/linkifier.service';
+import { ParserService } from '../../../../core/helpers/parser.service';
+import { PokemonStatService } from '../../../../core/helpers/pokemon-stat.service';
+import { ThemeService } from '../../../../core/helpers/theme.service';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { WindowService } from '../../../../core/helpers/window.service';
+import { FeedbackColors, GenderColors, NatureColors, shinyColor } from '../../../../core/models/misc/colors';
+import { ProcessedString } from '../../../../core/models/misc/processedString.model';
+import { Move } from '../../../../core/models/pokemon/move.model';
+import { Pokemon } from '../../../../core/models/pokemon/pokemon.model';
+import { TeamOptions } from '../../../../core/models/team/teamOptions.model';
+import { selectLang } from '../../../../core/store/config/config.selectors';
+import { CalcMoveEffectivenessPipe } from '../../../pipes/pokemon-pipes/calcMoveEffectiveness.pipe';
+import { GetDefenseEffectivenessPipe } from '../../../pipes/pokemon-pipes/getDefenseEffectivenes.pipe';
+import { GetPokemonSpritePathPipe } from '../../../pipes/pokemon-pipes/getPokemonSpritePath.pipe';
+import { TeamCompareService } from '../../../services/team-compare.service';
 
 @Component({
     selector: 'app-pokemon-card',

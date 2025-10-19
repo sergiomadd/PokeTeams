@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { Type } from "src/app/core/models/pokemon/type.model";
+import { Type } from "../../../core/models/pokemon/type.model";
 
 @Pipe(
   {

@@ -1,18 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ParserService } from 'src/app/core/helpers/parser.service';
-import { PokemonStatService } from 'src/app/core/helpers/pokemon-stat.service';
-import { ThemeService } from 'src/app/core/helpers/theme.service';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { LocalizedText } from 'src/app/core/models/misc/localizedText.model';
-import { CalculatedStats } from 'src/app/core/models/pokemon/calculatedStats.model';
-import { Sprite } from 'src/app/core/models/pokemon/sprite.model';
-import { Stat } from 'src/app/core/models/pokemon/stat.model';
-import { Team } from 'src/app/core/models/team/team.model';
-import { PokemonService } from 'src/app/core/services/pokemon.service';
-import { TeamService } from 'src/app/core/services/team.service';
+import { ParserService } from '../../../core/helpers/parser.service';
+import { PokemonStatService } from '../../../core/helpers/pokemon-stat.service';
+import { ThemeService } from '../../../core/helpers/theme.service';
+import { UtilService } from '../../../core/helpers/util.service';
+import { WindowService } from '../../../core/helpers/window.service';
+import { LocalizedText } from '../../../core/models/misc/localizedText.model';
+import { CalculatedStats } from '../../../core/models/pokemon/calculatedStats.model';
+import { Sprite } from '../../../core/models/pokemon/sprite.model';
+import { Stat } from '../../../core/models/pokemon/stat.model';
+import { Team } from '../../../core/models/team/team.model';
+import { PokemonService } from '../../../core/services/pokemon.service';
+import { TeamService } from '../../../core/services/team.service';
+
 
 export interface ComparePokemon
 {

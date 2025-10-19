@@ -1,20 +1,19 @@
 import { Component, inject, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { I18nService } from 'src/app/core/helpers/i18n.service';
-import { ThemeService } from 'src/app/core/helpers/theme.service';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { Chip } from 'src/app/core/models/misc/chip.model';
-import { QueryItem } from 'src/app/core/models/misc/queryResult.model';
-import { SetOperation } from 'src/app/core/models/search/setOperation.enum';
-import { QueryService } from 'src/app/core/services/query.service';
-import { TeamService } from 'src/app/core/services/team.service';
-import { selectTheme } from 'src/app/core/store/config/config.selectors';
-import { GetTagBgColorPipe } from 'src/app/shared/pipes/color-pipes/getTagBgColor.pipe';
-import { GetTagTextColorPipe } from 'src/app/shared/pipes/color-pipes/getTagTextColor.pipe';
-import { SearchService } from 'src/app/shared/services/search.service';
-
+import { I18nService } from '../../../../core/helpers/i18n.service';
+import { ThemeService } from '../../../../core/helpers/theme.service';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { WindowService } from '../../../../core/helpers/window.service';
+import { Chip } from '../../../../core/models/misc/chip.model';
+import { QueryItem } from '../../../../core/models/misc/queryResult.model';
+import { SetOperation } from '../../../../core/models/search/setOperation.enum';
+import { QueryService } from '../../../../core/services/query.service';
+import { TeamService } from '../../../../core/services/team.service';
+import { selectTheme } from '../../../../core/store/config/config.selectors';
+import { GetTagBgColorPipe } from '../../../pipes/color-pipes/getTagBgColor.pipe';
+import { GetTagTextColorPipe } from '../../../pipes/color-pipes/getTagTextColor.pipe';
+import { SearchService } from '../../../services/search.service';
 
 @Component({
     selector: 'app-team-search',

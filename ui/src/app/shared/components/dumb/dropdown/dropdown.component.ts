@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Chip } from 'src/app/core/models/misc/chip.model';
-
+import { Chip } from '../../../../core/models/misc/chip.model';
 
 @Component({
     selector: 'app-dropdown',

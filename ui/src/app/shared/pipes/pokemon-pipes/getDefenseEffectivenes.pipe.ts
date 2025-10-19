@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { Effectiveness } from "src/app/core/models/pokemon/effectiveness.model";
-import { Pokemon } from "src/app/core/models/pokemon/pokemon.model";
+import { Effectiveness } from "../../../core/models/pokemon/effectiveness.model";
+import { Pokemon } from "../../../core/models/pokemon/pokemon.model";
 
 @Pipe(
   {

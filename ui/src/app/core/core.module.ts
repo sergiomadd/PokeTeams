@@ -7,7 +7,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TranslateModule } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment.development';
 import { AuthInterceptorService } from './interceptors/auth-interceptor.service';
 import { ErrorInterceptorService } from './interceptors/error-interceptor.service';
 import { LangInterceptorService } from './interceptors/lang-interceptor.service';

@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { FeedbackColors } from 'src/app/core/models/misc/colors';
-import { authActions } from 'src/app/core/store/auth/auth.actions';
-import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/store/auth/auth.selectors';
-import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
+import { FeedbackColors } from '../../../../core/models/misc/colors';
+import { authActions } from '../../../../core/store/auth/auth.actions';
+import { selectError, selectIsSubmitting, selectSuccess } from '../../../../core/store/auth/auth.selectors';
+import { UserUpdateDTO } from '../../models/userUpdate.dto';
 
 @Component({
     selector: 'app-email-confirmation',

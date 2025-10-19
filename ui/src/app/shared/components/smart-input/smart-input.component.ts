@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, inject, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { ThemeService } from 'src/app/core/helpers/theme.service';
-import { QueryItem } from 'src/app/core/models/misc/queryResult.model';
+import { ThemeService } from '../../../core/helpers/theme.service';
+import { QueryItem } from '../../../core/models/misc/queryResult.model';
 
 @Component({
     selector: 'app-smart-input',

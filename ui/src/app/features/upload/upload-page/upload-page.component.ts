@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { SeoService } from 'src/app/core/helpers/seo.service';
-import { CustomError } from 'src/app/core/models/misc/customError.model';
-import { Team } from 'src/app/core/models/team/team.model';
-import { TeamService } from 'src/app/core/services/team.service';
-import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
+import { SeoService } from '../../../core/helpers/seo.service';
+import { CustomError } from '../../../core/models/misc/customError.model';
+import { Team } from '../../../core/models/team/team.model';
+import { TeamService } from '../../../core/services/team.service';
+import { selectLoggedUser } from '../../../core/store/auth/auth.selectors';
 import { TeamEditorService } from '../../../shared/services/team-editor.service';
 import { User } from '../../user/models/user.model';
 

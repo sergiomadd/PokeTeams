@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { Regulation } from 'src/app/core/models/team/regulation.model';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { Regulation } from '../../../../core/models/team/regulation.model';
 
 @Component({
     selector: 'app-regulation-preview',

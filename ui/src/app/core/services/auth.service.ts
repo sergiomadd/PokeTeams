@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, timeout } from 'rxjs';
-import { EmailDTO } from 'src/app/features/user/models/email.dto';
-import { ExternalAuthDTO } from 'src/app/features/user/models/externalAuth.dto';
-import { LogInDTO } from 'src/app/features/user/models/login.dto';
-import { SignUpDTO } from 'src/app/features/user/models/signup.dto';
-import { User } from 'src/app/features/user/models/user.model';
-import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment.development';
+import { EmailDTO } from '../../features/user/models/email.dto';
+import { ExternalAuthDTO } from '../../features/user/models/externalAuth.dto';
+import { LogInDTO } from '../../features/user/models/login.dto';
+import { SignUpDTO } from '../../features/user/models/signup.dto';
+import { User } from '../../features/user/models/user.model';
+import { UserUpdateDTO } from '../../features/user/models/userUpdate.dto';
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { SeoService } from 'src/app/core/helpers/seo.service';
+import { SeoService } from '../../../../core/helpers/seo.service';
 
 @Component({
     selector: 'app-about',

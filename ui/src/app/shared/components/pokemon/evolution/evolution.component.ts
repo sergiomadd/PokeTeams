@@ -1,8 +1,8 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { Evolution } from 'src/app/core/models/pokemon/evolution.model';
-import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
-import { PokemonForm } from 'src/app/core/models/pokemon/pokemonForm.model';
-import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
+import { Evolution } from '../../../../core/models/pokemon/evolution.model';
+import { Pokemon } from '../../../../core/models/pokemon/pokemon.model';
+import { PokemonForm } from '../../../../core/models/pokemon/pokemonForm.model';
+import { TeamOptions } from '../../../../core/models/team/teamOptions.model';
 
 @Component({
     selector: 'app-evolution',

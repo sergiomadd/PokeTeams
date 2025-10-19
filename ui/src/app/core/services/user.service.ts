@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, lastValueFrom, Observable, timeout } from 'rxjs';
-import { TeamService } from 'src/app/core/services/team.service';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { User } from '../../features/user/models/user.model';
+import { TeamService } from './team.service';
 
 @Injectable({
   providedIn: 'root'

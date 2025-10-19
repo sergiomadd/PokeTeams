@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { QueryItem } from 'src/app/core/models/misc/queryResult.model';
-import { SearchQueryResponseDTO } from 'src/app/core/models/search/searchQueryResponse.dto';
-import { SetOperation } from 'src/app/core/models/search/setOperation.enum';
-import { SortOrder, SortType, SortWay } from 'src/app/core/models/search/sortOrder.model';
-import { TeamPreviewData } from 'src/app/core/models/team/teamPreviewData.model';
-import { TeamService } from 'src/app/core/services/team.service';
+import { QueryItem } from '../../core/models/misc/queryResult.model';
 import { SearchQueryDTO } from '../../core/models/search/searchQuery.dto';
+import { SearchQueryResponseDTO } from '../../core/models/search/searchQueryResponse.dto';
+import { SetOperation } from '../../core/models/search/setOperation.enum';
+import { SortOrder, SortType, SortWay } from '../../core/models/search/sortOrder.model';
+import { TeamPreviewData } from '../../core/models/team/teamPreviewData.model';
+import { TeamService } from '../../core/services/team.service';
 
 @Injectable({
   providedIn: 'root'

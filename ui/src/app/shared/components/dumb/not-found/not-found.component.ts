@@ -1,5 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
-import { WindowService } from 'src/app/core/helpers/window.service';
+import { WindowService } from '../../../../core/helpers/window.service';
 
 @Component({
     selector: 'app-not-found',

@@ -1,8 +1,8 @@
 import { createActionGroup, emptyProps, props } from "@ngrx/store";
-import { ExternalAuthDTO } from "src/app/features/user/models/externalAuth.dto";
-import { LogInDTO } from "src/app/features/user/models/login.dto";
-import { SignUpDTO } from "src/app/features/user/models/signup.dto";
-import { UserUpdateDTO } from "src/app/features/user/models/userUpdate.dto";
+import { ExternalAuthDTO } from "../../../features/user/models/externalAuth.dto";
+import { LogInDTO } from "../../../features/user/models/login.dto";
+import { SignUpDTO } from "../../../features/user/models/signup.dto";
+import { UserUpdateDTO } from "../../../features/user/models/userUpdate.dto";
 import { AuthResponseDTO } from "./authResponse.dto";
 
 export const authActions = createActionGroup(

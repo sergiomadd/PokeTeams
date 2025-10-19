@@ -1,11 +1,11 @@
 import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { ThemeService } from 'src/app/core/helpers/theme.service';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { tagBackgroundColors } from 'src/app/core/models/misc/tagColors.model';
-import { Tag } from 'src/app/core/models/team/tag.model';
-import { TeamService } from 'src/app/core/services/team.service';
+import { ThemeService } from '../../../../core/helpers/theme.service';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { WindowService } from '../../../../core/helpers/window.service';
+import { tagBackgroundColors } from '../../../../core/models/misc/tagColors.model';
+import { Tag } from '../../../../core/models/team/tag.model';
+import { TeamService } from '../../../../core/services/team.service';
 
 @Component({
     selector: 'app-tag-editor',
