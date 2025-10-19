@@ -2,11 +2,11 @@ import { Injectable, inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { catchError, lastValueFrom, map, of, switchMap, tap } from "rxjs";
-import { LocalStorageService } from "src/app/core/interceptors/local-storage.service";
-import { UserService } from "src/app/core/services/user.service";
-import { User } from "src/app/features/user/models/user.model";
+import { User } from "../../../features/user/models/user.model";
+import { LocalStorageService } from "../../interceptors/local-storage.service";
 import { CustomError } from "../../models/misc/customError.model";
 import { AuthService } from "../../services/auth.service";
+import { UserService } from "../../services/user.service";
 import { authActions } from "./auth.actions";
 import { AuthResponseDTO } from "./authResponse.dto";
 

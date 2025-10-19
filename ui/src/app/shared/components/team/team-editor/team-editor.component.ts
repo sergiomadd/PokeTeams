@@ -4,28 +4,29 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { ThemeService } from 'src/app/core/helpers/theme.service';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { FeedbackColors } from 'src/app/core/models/misc/colors';
-import { QueryItem } from 'src/app/core/models/misc/queryResult.model';
-import { Tag } from 'src/app/core/models/team/tag.model';
-import { Team } from 'src/app/core/models/team/team.model';
-import { QueryService } from 'src/app/core/services/query.service';
-import { TeamService } from 'src/app/core/services/team.service';
-import { UserService } from 'src/app/core/services/user.service';
-import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
-import { selectTheme } from 'src/app/core/store/config/config.selectors';
-import { User } from 'src/app/features/user/models/user.model';
-import { TeamEditorService } from 'src/app/shared/services/team-editor.service';
+import { ThemeService } from '../../../../core/helpers/theme.service';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { WindowService } from '../../../../core/helpers/window.service';
+import { FeedbackColors } from '../../../../core/models/misc/colors';
+import { QueryItem } from '../../../../core/models/misc/queryResult.model';
+import { Tag } from '../../../../core/models/team/tag.model';
+import { Team } from '../../../../core/models/team/team.model';
+import { QueryService } from '../../../../core/services/query.service';
+import { TeamService } from '../../../../core/services/team.service';
+import { UserService } from '../../../../core/services/user.service';
+import { selectLoggedUser } from '../../../../core/store/auth/auth.selectors';
+import { selectTheme } from '../../../../core/store/config/config.selectors';
+import { User } from '../../../../features/user/models/user.model';
+import { TeamEditorService } from '../../../services/team-editor.service';
 import { TagEditorComponent } from '../../dumb/tag-editor/tag-editor.component';
 import { SmartInputComponent } from '../../smart-input/smart-input.component';
 import { TeamComponent } from '../team/team.component';
 
 @Component({
-  selector: 'app-team-editor',
-  templateUrl: './team-editor.component.html',
-  styleUrls: ['./team-editor.component.scss']
+    selector: 'app-team-editor',
+    templateUrl: './team-editor.component.html',
+    styleUrls: ['./team-editor.component.scss'],
+    standalone: false
 })
 
 export class TeamEditorComponent 

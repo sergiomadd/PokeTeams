@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Move } from 'src/app/core/models/pokemon/move.model';
-import { TeamPreviewToCompare } from 'src/app/core/models/team/teamPreviewToCompare.model';
+import { Move } from '../../core/models/pokemon/move.model';
+import { TeamPreviewToCompare } from '../../core/models/team/teamPreviewToCompare.model';
 
 @Injectable({
   providedIn: 'root'

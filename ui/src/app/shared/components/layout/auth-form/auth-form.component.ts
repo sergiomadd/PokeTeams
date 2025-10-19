@@ -3,19 +3,20 @@ import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { UserService } from 'src/app/core/services/user.service';
-import { authActions } from 'src/app/core/store/auth/auth.actions';
-import { selectError, selectIsSubmitting, selectSuccess } from 'src/app/core/store/auth/auth.selectors';
-import { ExternalAuthDTO } from 'src/app/features/user/models/externalAuth.dto';
-import { LogInDTO } from 'src/app/features/user/models/login.dto';
-import { SignUpDTO } from 'src/app/features/user/models/signup.dto';
-import { UserUpdateDTO } from 'src/app/features/user/models/userUpdate.dto';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { UserService } from '../../../../core/services/user.service';
+import { authActions } from '../../../../core/store/auth/auth.actions';
+import { selectError, selectIsSubmitting, selectSuccess } from '../../../../core/store/auth/auth.selectors';
+import { ExternalAuthDTO } from '../../../../features/user/models/externalAuth.dto';
+import { LogInDTO } from '../../../../features/user/models/login.dto';
+import { SignUpDTO } from '../../../../features/user/models/signup.dto';
+import { UserUpdateDTO } from '../../../../features/user/models/userUpdate.dto';
 
 @Component({
-  selector: 'app-auth-form',
-  templateUrl: './auth-form.component.html',
-  styleUrl: './auth-form.component.scss'
+    selector: 'app-auth-form',
+    templateUrl: './auth-form.component.html',
+    styleUrl: './auth-form.component.scss',
+    standalone: false
 })
 export class AuthFormComponent 
 {

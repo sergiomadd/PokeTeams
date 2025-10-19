@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { SharedModule } from '../../shared/shared.module';
 import { EmailConfirmationComponent } from './components/email-confirmation/email-confirmation.component';
 import { UserSettingsComponent } from './components/user-settings/user-settings.component';
 import { UserTeamsComponent } from './components/user-teams/user-teams.component';

@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { I18nService } from 'src/app/core/helpers/i18n.service';
-import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
-import { Team } from 'src/app/core/models/team/team.model';
-import { TeamOptions } from 'src/app/core/models/team/teamOptions.model';
+import { I18nService } from '../../core/helpers/i18n.service';
+import { Pokemon } from '../../core/models/pokemon/pokemon.model';
+import { Team } from '../../core/models/team/team.model';
+import { TeamOptions } from '../../core/models/team/teamOptions.model';
 import { PokemonService } from '../../core/services/pokemon.service';
 
 @Injectable({

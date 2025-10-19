@@ -1,12 +1,13 @@
 import { Component, inject, Input, SimpleChanges } from '@angular/core';
-import { ThemeService } from 'src/app/core/helpers/theme.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { PokemonPreview } from 'src/app/core/models/pokemon/pokemonPreview.model';
+import { ThemeService } from '../../../../core/helpers/theme.service';
+import { WindowService } from '../../../../core/helpers/window.service';
+import { PokemonPreview } from '../../../../core/models/pokemon/pokemonPreview.model';
 
 @Component({
-  selector: 'app-pokemon-preview',
-  templateUrl: './pokemon-preview.component.html',
-  styleUrls: ['./pokemon-preview.component.scss']
+    selector: 'app-pokemon-preview',
+    templateUrl: './pokemon-preview.component.html',
+    styleUrls: ['./pokemon-preview.component.scss'],
+    standalone: false
 })
 export class PokemonPreviewComponent 
 {

@@ -1,4 +1,4 @@
-import { QueryItem } from "src/app/core/models/misc/queryResult.model";
+import { QueryItem } from "../misc/queryResult.model";
 import { SetOperation } from "./setOperation.enum";
 import { SortOrder } from "./sortOrder.model";
 

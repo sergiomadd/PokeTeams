@@ -1,10 +1,11 @@
 import { Component, inject, Input } from '@angular/core';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { Tournament } from 'src/app/core/models/team/tournament.model';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { Tournament } from '../../../../core/models/team/tournament.model';
 
 @Component({
-  selector: 'app-tournament-preview',
-  templateUrl: './tournament-preview.component.html'
+    selector: 'app-tournament-preview',
+    templateUrl: './tournament-preview.component.html',
+    standalone: false
 })
 export class TournamentPreviewComponent 
 {

@@ -1,16 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, skip } from 'rxjs';
-import { SeoService } from 'src/app/core/helpers/seo.service';
-import { selectLoggedUser } from 'src/app/core/store/auth/auth.selectors';
-import { selectLang } from 'src/app/core/store/config/config.selectors';
+import { SeoService } from '../../../core/helpers/seo.service';
+import { selectLoggedUser } from '../../../core/store/auth/auth.selectors';
+import { selectLang } from '../../../core/store/config/config.selectors';
 import { SearchService } from '../../../shared/services/search.service';
 import { User } from '../../user/models/user.model';
 
 @Component({
-  selector: 'app-search-page',
-  templateUrl: './search-page.component.html',
-  styleUrl: './search-page.component.scss'
+    selector: 'app-search-page',
+    templateUrl: './search-page.component.html',
+    styleUrl: './search-page.component.scss',
+    standalone: false
 })
 export class SearchPageComponent 
 {

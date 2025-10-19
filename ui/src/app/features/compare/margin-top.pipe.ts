@@ -4,8 +4,9 @@ import { ComparePokemon } from "./compare-page/compare-page.component";
 @Pipe(
   {
     name: 'marginTopPipe',
-    pure: true
-  }
+    pure: true,
+    standalone: false
+}
 )
 
 export class MarginTopPipe implements PipeTransform

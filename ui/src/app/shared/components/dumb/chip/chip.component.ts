@@ -1,11 +1,12 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { ThemeService } from 'src/app/core/helpers/theme.service';
-import { QueryItem } from 'src/app/core/models/misc/queryResult.model';
+import { ThemeService } from '../../../../core/helpers/theme.service';
+import { QueryItem } from '../../../../core/models/misc/queryResult.model';
 
 @Component({
-  selector: 'app-chip',
-  templateUrl: './chip.component.html',
-  styleUrl: './chip.component.scss'
+    selector: 'app-chip',
+    templateUrl: './chip.component.html',
+    styleUrl: './chip.component.scss',
+    standalone: false
 })
 export class ChipComponent 
 {

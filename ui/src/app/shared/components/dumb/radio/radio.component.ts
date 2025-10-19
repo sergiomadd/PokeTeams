@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 
 @Component({
-  selector: 'app-radio',
-  templateUrl: './radio.component.html',
-  styleUrl: './radio.component.scss'
+    selector: 'app-radio',
+    templateUrl: './radio.component.html',
+    styleUrl: './radio.component.scss',
+    standalone: false
 })
 export class RadioComponent 
 {

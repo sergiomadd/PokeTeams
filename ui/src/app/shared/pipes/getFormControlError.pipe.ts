@@ -1,7 +1,10 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { UtilService } from "src/app/core/helpers/util.service";
+import { UtilService } from "../../core/helpers/util.service";
 
-@Pipe({ name: 'getFormControlError'})
+@Pipe({
+    name: 'getFormControlError',
+    standalone: false
+})
 
 export class GetFormControlErrorPipe implements PipeTransform
 {

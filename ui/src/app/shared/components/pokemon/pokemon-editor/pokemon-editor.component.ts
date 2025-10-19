@@ -1,30 +1,30 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ThemeService } from 'src/app/core/helpers/theme.service';
-import { UtilService } from 'src/app/core/helpers/util.service';
-import { WindowService } from 'src/app/core/helpers/window.service';
-import { GenderColors, shinyColor } from 'src/app/core/models/misc/colors';
-import { QueryItem } from 'src/app/core/models/misc/queryResult.model';
-import { Pokemon } from 'src/app/core/models/pokemon/pokemon.model';
-import { PokemonData } from 'src/app/core/models/pokemon/pokemonData.dto';
-import { Stat } from 'src/app/core/models/pokemon/stat.model';
-import { Team } from 'src/app/core/models/team/team.model';
-import { PokemonService } from 'src/app/core/services/pokemon.service';
-import { QueryService } from 'src/app/core/services/query.service';
-import { TeamService } from 'src/app/core/services/team.service';
-import { GetStatColorPipe } from 'src/app/shared/pipes/color-pipes/getStatColor.pipe';
-import { TeamEditorService } from 'src/app/shared/services/team-editor.service';
+import { ThemeService } from '../../../../core/helpers/theme.service';
+import { UtilService } from '../../../../core/helpers/util.service';
+import { WindowService } from '../../../../core/helpers/window.service';
+import { GenderColors, shinyColor } from '../../../../core/models/misc/colors';
+import { QueryItem } from '../../../../core/models/misc/queryResult.model';
+import { Pokemon } from '../../../../core/models/pokemon/pokemon.model';
+import { PokemonData } from '../../../../core/models/pokemon/pokemonData.dto';
+import { Stat } from '../../../../core/models/pokemon/stat.model';
+import { Team } from '../../../../core/models/team/team.model';
+import { PokemonService } from '../../../../core/services/pokemon.service';
+import { QueryService } from '../../../../core/services/query.service';
+import { TeamService } from '../../../../core/services/team.service';
+import { GetStatColorPipe } from '../../../pipes/color-pipes/getStatColor.pipe';
+import { TeamEditorService } from '../../../services/team-editor.service';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 
 @Component({
-  selector: 'app-pokemon-editor',
-  templateUrl: './pokemon-editor.component.html',
-  styleUrl: './pokemon-editor.component.scss',
-  providers: 
-  [
-    GetStatColorPipe
-  ] 
+    selector: 'app-pokemon-editor',
+    templateUrl: './pokemon-editor.component.html',
+    styleUrl: './pokemon-editor.component.scss',
+    providers: [
+        GetStatColorPipe
+    ],
+    standalone: false
 })
 export class PokemonEditorComponent 
 {
