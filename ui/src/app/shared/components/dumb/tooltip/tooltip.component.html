@@ -1,5 +1,5 @@
-<div 
-class="tooltip"
+<div
+  class="tooltip"
 [ngClass]="
 {
   top: side === 'top',
@@ -9,8 +9,8 @@ class="tooltip"
   'tooltip-visible': visible,
   'transition': !instant && visible
 }"
->
-  <span 
+  >
+  <span
   [ngClass]="
   {
     arrowbottom: side === 'top',
@@ -19,13 +19,15 @@ class="tooltip"
     arrowright: side === 'left'
   }"
   ></span>
-  <ng-container *ngIf="loading === true">
-    <ng-container *ngIf="loadingText">{{loadingText}}</ng-container>
+  @if (loading === true) {
+    @if (loadingText) {
+      {{loadingText}}
+    }
     <span class="loading"></span>
-  </ng-container>
-  <ng-container *ngIf="!loading">
+  }
+  @if (!loading) {
     <div class="text">
       {{text}}
     </div>
-  </ng-container>
+  }
 </div>

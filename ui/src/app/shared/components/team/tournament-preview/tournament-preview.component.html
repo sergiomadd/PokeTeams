@@ -1,18 +1,18 @@
-<ng-container *ngIf="tournament">
+@if (tournament) {
   <div class="poke-tooltip-content">
     <div class="poke-tooltip-head">
-      <ng-container *ngIf="tournament?.icon">
+      @if (tournament?.icon) {
         <img src="{{tournament?.icon}}" alt="" class="icon-xl">
-      </ng-container>
+      }
       <span>{{tournament?.name}}</span>
     </div>
     <div class="poke-tooltip-body flex justify-c-sa gap-m">
       <div class="flex flex-col align-i-c">
         <span>{{tournament?.city}}</span>
         <div class="flex align-i-c gap-s">
-          <ng-container *ngIf="tournament?.countryCode">
+          @if (tournament?.countryCode) {
             <img src="{{tournament?.countryCode | getFlagIconUrl}}" alt="" class="icon-m">
-          </ng-container>
+          }
           <span>{{tournament.countryName}}</span>
         </div>
       </div>
@@ -23,4 +23,4 @@
       </div>
     </div>
   </div>
-</ng-container>
+}

@@ -1,7 +1,7 @@
 
-<div 
-#pokeTooltip
-class="poke-tooltip"
+<div
+  #pokeTooltip
+  class="poke-tooltip"
 [ngClass]="
 {
   top: side === 'top',
@@ -11,18 +11,18 @@ class="poke-tooltip"
   'poke-tooltip-visible': visible,
   mobile: mobileChanged && window.isTabletPortraitOrLess()
 }"
->
-  <ng-container *ngIf="content">
-    <ng-container *ngIf="!window.isTabletPortraitOrLess() || visible">
-      <ng-container *ngIf="!window.isTabletPortraitOrLess()">
+  >
+  @if (content) {
+    @if (!window.isTabletPortraitOrLess() || visible) {
+      @if (!window.isTabletPortraitOrLess()) {
         <span
         [ngClass]="{
           'poke-arrow-bottom': side === 'top', 'poke-arrow-left': side === 'right', 
           'poke-arrow-top': side === 'bottom', 'poke-arrow-right': side === 'left'}"
-        >
-        </span> 
-      </ng-container>
+          >
+        </span>
+      }
       <ng-container [ngTemplateOutlet]="content"></ng-container>
-    </ng-container>
-  </ng-container>
+    }
+  }
 </div>

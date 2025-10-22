@@ -1,134 +1,132 @@
 <div class="relative w-100" #smartInput>
   <form [formGroup]="searchForm" class="flex-col align-i-s w-100 relative gap-s" style="padding: 0.2em 0 0.2em 0;">
-    <ng-container *ngIf="label">
+    @if (label) {
       <label for="">{{label}}</label>
-    </ng-container>
-    <ng-container *ngIf="!selected; else keep">
-      <input 
-      #input
-      type="text" 
-      [placeholder]="'shared.smart_input_placeholder' | translate" 
-      formControlName="key"
-      value="result"
-      class="input-m flex align-i-c no-overflow w-100"
-      (focus)="onFocus()"
-      (keyup.enter)="selectResult(results[activeResult])"
-      [attr.disabled]="disabled ? '' : null"
-      [readonly]="disabled"
-      [ngClass]="{disabled: disabled, controlInvalid: error}"
-      >
-    </ng-container>
-    <ng-template #keep>
-      <div class="input-m flex align-i-c selected">
-        <div class="flex align-i-c gap-s text">
-          <ng-container *ngIf="selected?.icon">
-            <ng-container *ngIf="selected?.icon === 'hidden'; else icon">
-              <svg class="icon-s" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> 
-                    <g fill="var(--text-color)" fill-rule="nonzero"> 
-                      <path d="M17.5,11.75 C20.1233526,11.75 22.25,13.8766474 22.25,16.5 C22.25,19.1233526 20.1233526,21.25 17.5,21.25 C15.4019872,21.25 13.6216629,19.8898135 12.9927596,18.0031729 L11.0072404,18.0031729 C10.3783371,19.8898135 8.59801283,21.25 6.5,21.25 C3.87664744,21.25 1.75,19.1233526 1.75,16.5 C1.75,13.8766474 3.87664744,11.75 6.5,11.75 C8.9545808,11.75 10.9743111,13.6118164 11.224028,16.0002862 L12.775972,16.0002862 C13.0256889,13.6118164 15.0454192,11.75 17.5,11.75 Z M6.5,13.75 C4.98121694,13.75 3.75,14.9812169 3.75,16.5 C3.75,18.0187831 4.98121694,19.25 6.5,19.25 C8.01878306,19.25 9.25,18.0187831 9.25,16.5 C9.25,14.9812169 8.01878306,13.75 6.5,13.75 Z M17.5,13.75 C15.9812169,13.75 14.75,14.9812169 14.75,16.5 C14.75,18.0187831 15.9812169,19.25 17.5,19.25 C19.0187831,19.25 20.25,18.0187831 20.25,16.5 C20.25,14.9812169 19.0187831,13.75 17.5,13.75 Z M15.5119387,3 C16.7263613,3 17.7969992,3.79658742 18.145961,4.95979331 L19.1520701,8.31093387 C19.944619,8.44284508 20.7202794,8.59805108 21.4790393,8.77658283 C22.0166428,8.90307776 22.3499121,9.44143588 22.2234172,9.9790393 C22.0969222,10.5166428 21.5585641,10.8499121 21.0209607,10.7234172 C18.2654221,10.0750551 15.258662,9.75 12,9.75 C8.74133802,9.75 5.73457794,10.0750551 2.97903933,10.7234172 C2.44143588,10.8499121 1.90307776,10.5166428 1.77658283,9.9790393 C1.6500879,9.44143588 1.98335721,8.90307776 2.52096067,8.77658283 C3.27940206,8.59812603 4.05472975,8.4429754 4.8469317,8.31110002 L5.85403902,4.95979331 C6.20300079,3.79658742 7.2736387,3 8.4880613,3 L15.5119387,3 Z" id="🎨-Color"> </path> 
-                    </g> 
-                  </g> 
-                </g>
-              </svg>
-            </ng-container>
-            <ng-template #icon>
-              <img [attr.src]="selected?.icon" [alt]="selected?.type" fill loading="lazy" [ngClass]="{'icon-s': selected?.type === 'move', 'icon-l': selected?.type !== 'move'}">
-            </ng-template>
-          </ng-container>
-          {{selected?.name}}
-        </div>
-        <ng-container *ngIf="!disableRemove">
-          <div class="remove flex align-i-c icon-xs pointer pad-s bor-rad-5" (click)="removeSelected()">
-            <svg class="icon-s" [attr.fill]="'var(--text-color)'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+    }
+    @if (!selected) {
+      <input
+        #input
+        type="text"
+        [placeholder]="'shared.smart_input_placeholder' | translate"
+        formControlName="key"
+        value="result"
+        class="input-m flex align-i-c no-overflow w-100"
+        (focus)="onFocus()"
+        (keyup.enter)="selectResult(results[activeResult])"
+        [attr.disabled]="disabled ? '' : null"
+        [readonly]="disabled"
+        [ngClass]="{disabled: disabled, controlInvalid: error}"
+        >
+      } @else {
+        <div class="input-m flex align-i-c selected">
+          <div class="flex align-i-c gap-s text">
+            @if (selected?.icon) 
+            {
+              @if (selected?.icon === 'hidden') 
+              {
+                <svg class="icon-s" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000">
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                      <g fill="var(--text-color)" fill-rule="nonzero">
+                        <path d="M17.5,11.75 C20.1233526,11.75 22.25,13.8766474 22.25,16.5 C22.25,19.1233526 20.1233526,21.25 17.5,21.25 C15.4019872,21.25 13.6216629,19.8898135 12.9927596,18.0031729 L11.0072404,18.0031729 C10.3783371,19.8898135 8.59801283,21.25 6.5,21.25 C3.87664744,21.25 1.75,19.1233526 1.75,16.5 C1.75,13.8766474 3.87664744,11.75 6.5,11.75 C8.9545808,11.75 10.9743111,13.6118164 11.224028,16.0002862 L12.775972,16.0002862 C13.0256889,13.6118164 15.0454192,11.75 17.5,11.75 Z M6.5,13.75 C4.98121694,13.75 3.75,14.9812169 3.75,16.5 C3.75,18.0187831 4.98121694,19.25 6.5,19.25 C8.01878306,19.25 9.25,18.0187831 9.25,16.5 C9.25,14.9812169 8.01878306,13.75 6.5,13.75 Z M17.5,13.75 C15.9812169,13.75 14.75,14.9812169 14.75,16.5 C14.75,18.0187831 15.9812169,19.25 17.5,19.25 C19.0187831,19.25 20.25,18.0187831 20.25,16.5 C20.25,14.9812169 19.0187831,13.75 17.5,13.75 Z M15.5119387,3 C16.7263613,3 17.7969992,3.79658742 18.145961,4.95979331 L19.1520701,8.31093387 C19.944619,8.44284508 20.7202794,8.59805108 21.4790393,8.77658283 C22.0166428,8.90307776 22.3499121,9.44143588 22.2234172,9.9790393 C22.0969222,10.5166428 21.5585641,10.8499121 21.0209607,10.7234172 C18.2654221,10.0750551 15.258662,9.75 12,9.75 C8.74133802,9.75 5.73457794,10.0750551 2.97903933,10.7234172 C2.44143588,10.8499121 1.90307776,10.5166428 1.77658283,9.9790393 C1.6500879,9.44143588 1.98335721,8.90307776 2.52096067,8.77658283 C3.27940206,8.59812603 4.05472975,8.4429754 4.8469317,8.31110002 L5.85403902,4.95979331 C6.20300079,3.79658742 7.2736387,3 8.4880613,3 L15.5119387,3 Z" id="🎨-Color"> </path>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+              } @else {
+                <img [attr.src]="selected?.icon" [alt]="selected?.type" fill loading="lazy" [ngClass]="{'icon-s': selected?.type === 'move', 'icon-l': selected?.type !== 'move'}">
+              }
+            }
+            {{selected?.name}}
           </div>
-        </ng-container>
-      </div>
-    </ng-template>
-    <ng-container *ngIf="allowNew && !selected">
-      <button 
-      class="new button-secondary"
-      [ngClass]="{disabled: disabled}"
-      (click)="newClick()" 
-      [disabled]="disabled">+</button>
-    </ng-container>
-  </form>
-  <ng-container *ngIf="showOptions || results">
-    <ul
-    #resultsDiv
-    tabindex="-1"
-    class="results custom-scrollbar"
+          @if (!disableRemove) {
+            <div class="remove flex align-i-c icon-xs pointer pad-s bor-rad-5" (click)="removeSelected()">
+              <svg class="icon-s" [attr.fill]="'var(--text-color)'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+            </div>
+          }
+        </div>
+      }
+      @if (allowNew && !selected) {
+        <button
+          class="new button-secondary"
+          [ngClass]="{disabled: disabled}"
+          (click)="newClick()"
+        [disabled]="disabled">+</button>
+      }
+    </form>
+    @if (showOptions || results) {
+      <ul
+        #resultsDiv
+        tabindex="-1"
+        class="results custom-scrollbar"
     [ngClass]="
     {
       'results-visible': showOptions && results,
       searching: searching
     }"
-    >
-      <ng-container *ngIf="allowCustom; else all">
-        <li 
-        class="result"
-        [ngClass]="{'result-hovered': activeResult === 0}"
-        [class.active]="activeResult === 0"
-        (click)="selectResult(results[0])"
         >
-          <ng-container *ngIf="results[0]?.icon">
-            <img [attr.src]="results[0]?.icon" alt="" class="icon-s" fill>
-          </ng-container>
-          {{results[0]?.name}}
-        </li>    
-        <div class="divider"></div>
-        <div class="count">
-          {{'shared.smart_input_results' | translate}}: {{results.length - 1}}
-        </div>
-        <ng-container *ngFor="let result of results; index as i">
-          <ng-container *ngIf="i > 0;">
-            <li 
+        @if (allowCustom) {
+          <li
             class="result"
-            [ngClass]="{'result-hovered': activeResult === i}"
-            [class.active]="activeResult === i"
-            (click)="selectResult(result)"
+            [ngClass]="{'result-hovered': activeResult === 0}"
+            [class.active]="activeResult === 0"
+            (click)="selectResult(results[0])"
             >
-              <ng-container *ngIf="result.icon">
-                <ng-container *ngIf="result.icon === 'hidden'; else icon">
-                  <svg class="icon-m" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000">
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                    <g id="SVGRepo_iconCarrier">
-                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> 
-                        <g fill="var(--text-color)" fill-rule="nonzero"> 
-                          <path d="M17.5,11.75 C20.1233526,11.75 22.25,13.8766474 22.25,16.5 C22.25,19.1233526 20.1233526,21.25 17.5,21.25 C15.4019872,21.25 13.6216629,19.8898135 12.9927596,18.0031729 L11.0072404,18.0031729 C10.3783371,19.8898135 8.59801283,21.25 6.5,21.25 C3.87664744,21.25 1.75,19.1233526 1.75,16.5 C1.75,13.8766474 3.87664744,11.75 6.5,11.75 C8.9545808,11.75 10.9743111,13.6118164 11.224028,16.0002862 L12.775972,16.0002862 C13.0256889,13.6118164 15.0454192,11.75 17.5,11.75 Z M6.5,13.75 C4.98121694,13.75 3.75,14.9812169 3.75,16.5 C3.75,18.0187831 4.98121694,19.25 6.5,19.25 C8.01878306,19.25 9.25,18.0187831 9.25,16.5 C9.25,14.9812169 8.01878306,13.75 6.5,13.75 Z M17.5,13.75 C15.9812169,13.75 14.75,14.9812169 14.75,16.5 C14.75,18.0187831 15.9812169,19.25 17.5,19.25 C19.0187831,19.25 20.25,18.0187831 20.25,16.5 C20.25,14.9812169 19.0187831,13.75 17.5,13.75 Z M15.5119387,3 C16.7263613,3 17.7969992,3.79658742 18.145961,4.95979331 L19.1520701,8.31093387 C19.944619,8.44284508 20.7202794,8.59805108 21.4790393,8.77658283 C22.0166428,8.90307776 22.3499121,9.44143588 22.2234172,9.9790393 C22.0969222,10.5166428 21.5585641,10.8499121 21.0209607,10.7234172 C18.2654221,10.0750551 15.258662,9.75 12,9.75 C8.74133802,9.75 5.73457794,10.0750551 2.97903933,10.7234172 C2.44143588,10.8499121 1.90307776,10.5166428 1.77658283,9.9790393 C1.6500879,9.44143588 1.98335721,8.90307776 2.52096067,8.77658283 C3.27940206,8.59812603 4.05472975,8.4429754 4.8469317,8.31110002 L5.85403902,4.95979331 C6.20300079,3.79658742 7.2736387,3 8.4880613,3 L15.5119387,3 Z" id="🎨-Color"> </path> 
-                        </g> 
-                      </g> 
-                    </g>
-                  </svg>
-                </ng-container>
-                <ng-template #icon>
-                  <img [attr.src]="result.icon" alt="" class="icon-l" fill loading="lazy">
-                </ng-template>
-              </ng-container>
-              {{result.name}}
-            </li>
-          </ng-container>
-        </ng-container>
-      </ng-container>
-      <ng-template #all>
-        <ng-container *ngIf="searching">
-          <div class="results-loader">
-            <div class="dot-pulse"></div>        
+            @if (results[0]?.icon) {
+              <img [attr.src]="results[0]?.icon" alt="" class="icon-s" fill>
+            }
+            {{results[0]?.name}}
+          </li>
+          <div class="divider"></div>
+          <div class="count">
+            {{'shared.smart_input_results' | translate}}: {{results.length - 1}}
           </div>
-        </ng-container>
-        <div class="count">
-          {{'shared.smart_input_results' | translate}}: {{results.length}}
-        </div>
-        <ng-container *ngIf="results.length === 0">
-          <div class="dummy-result">
-            <div class="no-results"></div>
+          @for (result of results; track result; let i = $index) {
+            @if (i > 0;) {
+              <li
+                class="result"
+                [ngClass]="{'result-hovered': activeResult === i}"
+                [class.active]="activeResult === i"
+                (click)="selectResult(result)"
+                >
+                @if (result.icon) {
+                  @if (result.icon === 'hidden') {
+                    <svg class="icon-m" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000">
+                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                      <g id="SVGRepo_iconCarrier">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                          <g fill="var(--text-color)" fill-rule="nonzero">
+                            <path d="M17.5,11.75 C20.1233526,11.75 22.25,13.8766474 22.25,16.5 C22.25,19.1233526 20.1233526,21.25 17.5,21.25 C15.4019872,21.25 13.6216629,19.8898135 12.9927596,18.0031729 L11.0072404,18.0031729 C10.3783371,19.8898135 8.59801283,21.25 6.5,21.25 C3.87664744,21.25 1.75,19.1233526 1.75,16.5 C1.75,13.8766474 3.87664744,11.75 6.5,11.75 C8.9545808,11.75 10.9743111,13.6118164 11.224028,16.0002862 L12.775972,16.0002862 C13.0256889,13.6118164 15.0454192,11.75 17.5,11.75 Z M6.5,13.75 C4.98121694,13.75 3.75,14.9812169 3.75,16.5 C3.75,18.0187831 4.98121694,19.25 6.5,19.25 C8.01878306,19.25 9.25,18.0187831 9.25,16.5 C9.25,14.9812169 8.01878306,13.75 6.5,13.75 Z M17.5,13.75 C15.9812169,13.75 14.75,14.9812169 14.75,16.5 C14.75,18.0187831 15.9812169,19.25 17.5,19.25 C19.0187831,19.25 20.25,18.0187831 20.25,16.5 C20.25,14.9812169 19.0187831,13.75 17.5,13.75 Z M15.5119387,3 C16.7263613,3 17.7969992,3.79658742 18.145961,4.95979331 L19.1520701,8.31093387 C19.944619,8.44284508 20.7202794,8.59805108 21.4790393,8.77658283 C22.0166428,8.90307776 22.3499121,9.44143588 22.2234172,9.9790393 C22.0969222,10.5166428 21.5585641,10.8499121 21.0209607,10.7234172 C18.2654221,10.0750551 15.258662,9.75 12,9.75 C8.74133802,9.75 5.73457794,10.0750551 2.97903933,10.7234172 C2.44143588,10.8499121 1.90307776,10.5166428 1.77658283,9.9790393 C1.6500879,9.44143588 1.98335721,8.90307776 2.52096067,8.77658283 C3.27940206,8.59812603 4.05472975,8.4429754 4.8469317,8.31110002 L5.85403902,4.95979331 C6.20300079,3.79658742 7.2736387,3 8.4880613,3 L15.5119387,3 Z" id="🎨-Color"> </path>
+                          </g>
+                        </g>
+                      </g>
+                    </svg>
+                  } @else {
+                    <img [attr.src]="result.icon" alt="" class="icon-l" fill loading="lazy">
+                  }
+                }
+                {{result.name}}
+              </li>
+            }
+          }
+        } @else {
+          @if (searching) {
+            <div class="results-loader">
+              <div class="dot-pulse"></div>
+            </div>
+          }
+          <div class="count">
+            {{'shared.smart_input_results' | translate}}: {{results.length}}
           </div>
-        </ng-container>
-        <ng-container *ngFor="let result of results; index as i">
-          <li 
-          class="result"
+          @if (results.length === 0) {
+            <div class="dummy-result">
+              <div class="no-results"></div>
+            </div>
+          }
+          @for (result of results; track result; let i = $index) {
+            <li
+              class="result"
           [ngClass]="
           {
             'result-hovered': activeResult === i,
@@ -140,32 +138,31 @@
             'background-color': result.type === 'tag' && result.icon ? (result.icon | getTagBgColor) : '',
             color: result.type === 'tag' && result.icon ? (result.icon | getTagTextColor:theme.selectedThemeName) : '',
           }"
-          [class.active]="activeResult === i"
-          (click)="selectResult(result)"
-          >
-            <ng-container *ngIf="result.icon">
-              <ng-container *ngIf="result.icon === 'hidden'; else icon">
-                <svg class="icon-m" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000">
-                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                  <g id="SVGRepo_iconCarrier">
-                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> 
-                      <g fill="var(--text-color)" fill-rule="nonzero"> 
-                        <path d="M17.5,11.75 C20.1233526,11.75 22.25,13.8766474 22.25,16.5 C22.25,19.1233526 20.1233526,21.25 17.5,21.25 C15.4019872,21.25 13.6216629,19.8898135 12.9927596,18.0031729 L11.0072404,18.0031729 C10.3783371,19.8898135 8.59801283,21.25 6.5,21.25 C3.87664744,21.25 1.75,19.1233526 1.75,16.5 C1.75,13.8766474 3.87664744,11.75 6.5,11.75 C8.9545808,11.75 10.9743111,13.6118164 11.224028,16.0002862 L12.775972,16.0002862 C13.0256889,13.6118164 15.0454192,11.75 17.5,11.75 Z M6.5,13.75 C4.98121694,13.75 3.75,14.9812169 3.75,16.5 C3.75,18.0187831 4.98121694,19.25 6.5,19.25 C8.01878306,19.25 9.25,18.0187831 9.25,16.5 C9.25,14.9812169 8.01878306,13.75 6.5,13.75 Z M17.5,13.75 C15.9812169,13.75 14.75,14.9812169 14.75,16.5 C14.75,18.0187831 15.9812169,19.25 17.5,19.25 C19.0187831,19.25 20.25,18.0187831 20.25,16.5 C20.25,14.9812169 19.0187831,13.75 17.5,13.75 Z M15.5119387,3 C16.7263613,3 17.7969992,3.79658742 18.145961,4.95979331 L19.1520701,8.31093387 C19.944619,8.44284508 20.7202794,8.59805108 21.4790393,8.77658283 C22.0166428,8.90307776 22.3499121,9.44143588 22.2234172,9.9790393 C22.0969222,10.5166428 21.5585641,10.8499121 21.0209607,10.7234172 C18.2654221,10.0750551 15.258662,9.75 12,9.75 C8.74133802,9.75 5.73457794,10.0750551 2.97903933,10.7234172 C2.44143588,10.8499121 1.90307776,10.5166428 1.77658283,9.9790393 C1.6500879,9.44143588 1.98335721,8.90307776 2.52096067,8.77658283 C3.27940206,8.59812603 4.05472975,8.4429754 4.8469317,8.31110002 L5.85403902,4.95979331 C6.20300079,3.79658742 7.2736387,3 8.4880613,3 L15.5119387,3 Z" id="🎨-Color"> </path> 
-                      </g> 
-                    </g> 
-                  </g>
-                </svg>
-              </ng-container>
-              <ng-template #icon>
-                <ng-container *ngIf="result.type !== 'tag'">
-                  <img [attr.src]="result.icon" alt="" class="icon-l" fill loading="lazy">
-                </ng-container>
-              </ng-template>
-            </ng-container>
-            {{result.name}}
-          </li>
-        </ng-container>
-      </ng-template>
-    </ul>
-  </ng-container>
-</div>
+              [class.active]="activeResult === i"
+              (click)="selectResult(result)"
+              >
+              @if (result.icon) {
+                @if (result.icon === 'hidden') {
+                  <svg class="icon-m" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g fill="var(--text-color)" fill-rule="nonzero">
+                          <path d="M17.5,11.75 C20.1233526,11.75 22.25,13.8766474 22.25,16.5 C22.25,19.1233526 20.1233526,21.25 17.5,21.25 C15.4019872,21.25 13.6216629,19.8898135 12.9927596,18.0031729 L11.0072404,18.0031729 C10.3783371,19.8898135 8.59801283,21.25 6.5,21.25 C3.87664744,21.25 1.75,19.1233526 1.75,16.5 C1.75,13.8766474 3.87664744,11.75 6.5,11.75 C8.9545808,11.75 10.9743111,13.6118164 11.224028,16.0002862 L12.775972,16.0002862 C13.0256889,13.6118164 15.0454192,11.75 17.5,11.75 Z M6.5,13.75 C4.98121694,13.75 3.75,14.9812169 3.75,16.5 C3.75,18.0187831 4.98121694,19.25 6.5,19.25 C8.01878306,19.25 9.25,18.0187831 9.25,16.5 C9.25,14.9812169 8.01878306,13.75 6.5,13.75 Z M17.5,13.75 C15.9812169,13.75 14.75,14.9812169 14.75,16.5 C14.75,18.0187831 15.9812169,19.25 17.5,19.25 C19.0187831,19.25 20.25,18.0187831 20.25,16.5 C20.25,14.9812169 19.0187831,13.75 17.5,13.75 Z M15.5119387,3 C16.7263613,3 17.7969992,3.79658742 18.145961,4.95979331 L19.1520701,8.31093387 C19.944619,8.44284508 20.7202794,8.59805108 21.4790393,8.77658283 C22.0166428,8.90307776 22.3499121,9.44143588 22.2234172,9.9790393 C22.0969222,10.5166428 21.5585641,10.8499121 21.0209607,10.7234172 C18.2654221,10.0750551 15.258662,9.75 12,9.75 C8.74133802,9.75 5.73457794,10.0750551 2.97903933,10.7234172 C2.44143588,10.8499121 1.90307776,10.5166428 1.77658283,9.9790393 C1.6500879,9.44143588 1.98335721,8.90307776 2.52096067,8.77658283 C3.27940206,8.59812603 4.05472975,8.4429754 4.8469317,8.31110002 L5.85403902,4.95979331 C6.20300079,3.79658742 7.2736387,3 8.4880613,3 L15.5119387,3 Z" id="🎨-Color"> </path>
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                } @else {
+                  @if (result.type !== 'tag') {
+                    <img [attr.src]="result.icon" alt="" class="icon-l" fill loading="lazy">
+                  }
+                }
+              }
+              {{result.name}}
+            </li>
+          }
+        }
+      </ul>
+    }
+  </div>

@@ -1,4 +1,4 @@
-<ng-container *ngIf="regulation">
+@if (regulation) {
   <div class="poke-tooltip-content">
     <div class="poke-tooltip-head">
       <span>{{regulation?.name}}</span>
@@ -7,4 +7,4 @@
       <span>{{regulation?.startDate | customFormatDate}}</span> - <span>{{regulation?.endDate | customFormatDate}}</span>
     </div>
   </div>
-</ng-container>
+}

@@ -1,22 +1,24 @@
 <div class="flex gap-m pad-s">
-  <ng-container *ngFor="let option of options; index as i">
-    <div class="option tooltip-wrapper" (click)="select(i)" 
+  @for (option of options; track option; let i = $index) {
+    <div class="option tooltip-wrapper" (click)="select(i)"
     [ngClass]="{'selected-background': selectedIndex == i && !(optionIcons[i] || optionSVGs[i]),
     'selected-border': selectedIndex == i && (optionIcons[i] || optionSVGs[i])}"
-    >
-      <ng-container *ngIf="optionIcons[i]">
+      >
+      @if (optionIcons[i]) {
         <img src="{{optionIcons[i]}}" alt="{{optionNames[i]}}" class="big-icon">
-      </ng-container>
-      <ng-container *ngIf="optionSVGs[i]" [ngTemplateOutlet]="optionSVGs[i]"></ng-container>
-      <ng-container *ngIf="!optionIcons[i] && !optionSVGs[i]">
+      }
+      @if (optionSVGs[i]) {
+        <ng-container [ngTemplateOutlet]="optionSVGs[i]"></ng-container>
+      }
+      @if (!optionIcons[i] && !optionSVGs[i]) {
         {{optionNames[i]}}
-      </ng-container>
-      <ng-container *ngIf="tooltipTexts && tooltipTexts[i]">
+      }
+      @if (tooltipTexts && tooltipTexts[i]) {
         <app-tooltip
-        [text]="tooltipTexts[i]"
-        [side]="'top'"
+          [text]="tooltipTexts[i]"
+          [side]="'top'"
         ></app-tooltip>
-      </ng-container>
+      }
     </div>
-  </ng-container>
+  }
 </div>

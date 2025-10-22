@@ -4,17 +4,17 @@
   <div class="flex-col justify-i-c align-i-c gap-s">
     <div class="flex justify-i-c align-i-c relative">
       <button
-      (click)="saveTeam()"
-      class="button-primary"
+        (click)="saveTeam()"
+        class="button-primary"
       >{{'team.edit.save_team-button' | translate}}</button>
     </div>
-    <ng-container *ngIf="teamSubmitted">
+    @if (teamSubmitted) {
       <div class="spinner-wrapper">
         <div class="pokemon-spinner"></div>
       </div>
-    </ng-container>
-    <ng-container *ngIf="feedback">
+    }
+    @if (feedback) {
       <span class="formFeedbackError text-center">{{feedback}}</span>
-    </ng-container>
+    }
   </div>
 </div>
