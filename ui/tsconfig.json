@@ -23,7 +23,6 @@
       "dom"
     ],
     "noImplicitAny": false,
-    "allowSyntheticDefaultImports": true,
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
