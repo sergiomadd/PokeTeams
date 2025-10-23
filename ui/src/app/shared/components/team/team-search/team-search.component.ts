@@ -60,7 +60,7 @@ export class TeamSearchComponent
     this.searchService.defaultSearch();
   }
 
-  async queryResultSelectEvent(event: QueryItem)
+  async queryResultSelectEvent(event?: QueryItem)
   {
     this.feedback = undefined;
     if(!event) { return; }

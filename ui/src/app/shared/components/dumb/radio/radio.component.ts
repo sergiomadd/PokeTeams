@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, TemplateRef, input, model } from '@angular/core';
+import { Component, TemplateRef, input, model, output } from '@angular/core';
 
 @Component({
     selector: 'app-radio',
@@ -14,7 +14,7 @@ export class RadioComponent
   readonly optionSVGs = input<TemplateRef<any>[]>([]);
   readonly tooltipTexts = input<string[] | undefined>([]);
   readonly selectedIndex = model<number>();
-  @Output() selectEvent = new EventEmitter<number>();
+  readonly selectEvent = output<number>();
 
   select($event: number)
   {

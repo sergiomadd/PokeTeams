@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, input, model, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, inject, input, model, QueryList, SimpleChanges, ViewChildren, output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { forkJoin, Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
@@ -40,8 +40,8 @@ export class TeamPreviewComponent
   readonly team = input<TeamPreviewData>();
   readonly pokemons = model<PokemonPreview[] | null>([]);
   readonly logged = input<User>();
-  @Output() deleteEvent = new EventEmitter();
-  @Output() compareEvent = new EventEmitter<TeamPreviewToCompare>();
+  readonly deleteEvent = output();
+  readonly compareEvent = output<TeamPreviewToCompare>();
   
   @ViewChildren(PokemonPreviewComponent) pokemonPreviewsComponents!: QueryList<PokemonPreviewComponent>;
 

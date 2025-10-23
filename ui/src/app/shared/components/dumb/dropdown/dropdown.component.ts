@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Chip } from '../../../../core/models/misc/chip.model';
 
 @Component({
@@ -14,7 +14,7 @@ export class DropdownComponent
   readonly onlyIcon = input<boolean>();
   readonly disable = input<boolean>();
   
-  @Output() selectEvent = new EventEmitter<Chip>();
+  readonly selectEvent = output<Chip>();
 
   showOptions?: boolean = false;
 

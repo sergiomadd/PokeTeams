@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output, QueryList, SimpleChanges, ViewChildren, input } from '@angular/core';
+import { Component, inject, QueryList, SimpleChanges, ViewChildren, input, output } from '@angular/core';
 import { ParserService } from '../../../../core/helpers/parser.service';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -24,7 +24,7 @@ export class TeamBattleComponent
 
   readonly team = input<Team>();
   readonly which = input<string>();
-  @Output() selectedIndexesEvent = new EventEmitter<number[]>()
+  readonly selectedIndexesEvent = output<number[]>();
 
   @ViewChildren(PokemonCardComponent) pokemonComponents!:QueryList<PokemonCardComponent>;
 

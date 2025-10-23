@@ -219,13 +219,13 @@ export class TeamEditorComponent
     }
   }
 
-  async tournamentSelectEvent(event: QueryItem)
+  async tournamentSelectEvent(event?: QueryItem)
   {
     this.team.tournament = event ? await this.teamService.getTournamentByIdentifier(event.identifier) : undefined;
     if(this.team.tournament) { this.teamEditorService.setExampleTeamModified(true); }
   }
 
-  async regulationSelectEvent(event: QueryItem)
+  async regulationSelectEvent(event?: QueryItem)
   {
     this.team.regulation = event ? await this.teamService.getRegulationByIdentifier(event.identifier) : undefined;
     if(this.team.regulation) { this.teamEditorService.setExampleTeamModified(true); }
@@ -243,25 +243,28 @@ export class TeamEditorComponent
     }
   }
 
-  async tagSelectEvent(queryItem: QueryItem)
+  async tagSelectEvent(queryItem?: QueryItem)
   {
     this.feedback = undefined;
-    let tag: Tag = await this.teamService.getTagByIdentifier(queryItem.identifier);
-    if(this.team.tags && tag)
+    if(queryItem)
     {
-      if(this.team.tags.length < 3 && !this.team.tags.some(t => t.identifier == tag.identifier))
+      let tag: Tag = await this.teamService.getTagByIdentifier(queryItem.identifier);
+      if(this.team.tags && tag)
       {
-        this.team.tags = [...this.team.tags, tag];
-        if(this.team.tags.length === 3)
+        if(this.team.tags.length < 3 && !this.team.tags.some(t => t.identifier == tag.identifier))
         {
-          this.disableTagSelector();
+          this.team.tags = [...this.team.tags, tag];
+          if(this.team.tags.length === 3)
+          {
+            this.disableTagSelector();
+          }
+          this.currentTags = this.team?.tags ? this.team?.tags?.length : 0;
+          this.teamEditorService.setExampleTeamModified(true);
         }
-        this.currentTags = this.team?.tags ? this.team?.tags?.length : 0;
-        this.teamEditorService.setExampleTeamModified(true);
-      }
-      else if(this.team.tags.some(t => t.identifier == tag.identifier))
-      {
-        this.feedback = this.translateSergice.instant("team.editor.tag_input-feedback");
+        else if(this.team.tags.some(t => t.identifier == tag.identifier))
+        {
+          this.feedback = this.translateSergice.instant("team.editor.tag_input-feedback");
+        }
       }
     }
   }

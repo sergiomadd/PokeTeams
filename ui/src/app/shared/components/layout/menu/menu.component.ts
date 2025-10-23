@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output, input } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -35,7 +35,7 @@ export class MenuComponent
   getFlagIconUrl = inject(GetFlagIconUrlPipe);
 
   readonly menuOpen = input<boolean>(true);
-  @Output() toggleEvent = new EventEmitter();
+  readonly toggleEvent = output();
 
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
   loggedUser$: Observable<User | null> = this.store.select(selectLoggedUser);

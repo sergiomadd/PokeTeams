@@ -1,6 +1,5 @@
-import { Component, EventEmitter, inject, Output, input } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { ThemeService } from '../../../../core/helpers/theme.service';
-import { QueryItem } from '../../../../core/models/misc/queryResult.model';
 
 @Component({
     selector: 'app-chip',
@@ -20,7 +19,7 @@ export class ChipComponent
   readonly minWidth = input<string>();
   readonly bgColor = input<string>();
   readonly textColor = input<string>();
-  @Output() removeEvent = new EventEmitter<QueryItem>()
+  readonly removeEvent = output();
 
   getRemoveColor()
   {
@@ -29,6 +28,7 @@ export class ChipComponent
 
   remove()
   {
+    // TODO: The 'emit' function requires a mandatory QueryItem argument
     this.removeEvent.emit();
   }
 }

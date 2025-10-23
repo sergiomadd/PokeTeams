@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, input, model, Output, SimpleChanges } from '@angular/core';
+import { Component, inject, input, model, output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { LinkifierService } from '../../../../core/helpers/linkifier.service';
@@ -49,9 +49,9 @@ export class PokemonCardComponent
   readonly showStatsStart = input<boolean | undefined>(false);
   readonly editorPreview = input<boolean | undefined>(false);
   readonly compareTeam = input<string>();
-  @Output() triggerNotesEvent = new EventEmitter<boolean>()
-  @Output() updateStats = new EventEmitter();
-  @Output() triggerTooltip = new EventEmitter();
+  readonly triggerNotesEvent = output<boolean>();
+  readonly updateStats = output<number>();
+  readonly triggerTooltip = output();
 
   selectedLang$: Observable<string> = this.store.select(selectLang);
   selectedLang?: string;

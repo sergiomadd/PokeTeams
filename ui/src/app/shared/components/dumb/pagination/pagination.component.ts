@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, input, model } from '@angular/core';
+import { Component, input, model, output } from '@angular/core';
 
 @Component({
     selector: 'app-pagination',
@@ -11,7 +11,7 @@ export class PaginationComponent
   currentPage = model<number>(1);
   readonly itemsPerPage = input.required<number>();
   readonly totalItems = input.required<number>();
-  @Output() pageChanged: EventEmitter<number> = new EventEmitter();
+  readonly pageChanged = output<number>();
 
   get totalPages(): number
   {

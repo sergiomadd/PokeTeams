@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, SimpleChanges, TemplateRef, input } from '@angular/core';
+import { Component, SimpleChanges, TemplateRef, input, output } from '@angular/core';
 
 @Component({
     selector: 'app-switch',
@@ -14,7 +14,7 @@ export class SwitchComponent
   readonly leftSVG = input<TemplateRef<any> | null>(null);
   readonly rightSVG = input<TemplateRef<any> | null>(null);
   readonly sizeSVG = input<string>();
-  @Output() checkEvent = new EventEmitter<boolean>();
+  readonly checkEvent = output<boolean>();
 
   state: boolean = false;
 

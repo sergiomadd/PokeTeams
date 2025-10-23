@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, inject, input, model, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, input, model, output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ThemeService } from '../../../core/helpers/theme.service';
@@ -34,9 +34,9 @@ export class SmartInputComponent
   readonly autoTab = input<boolean | undefined>(true);
   readonly searchWithEmpty = input<boolean | undefined>(false);
 
-  @Output() selectEvent = new EventEmitter<QueryItem>();
-  @Output() newEvent = new EventEmitter();
-  @Output() updateEvent = new EventEmitter<string>();
+  readonly selectEvent = output<QueryItem | undefined>();
+  readonly newEvent = output();
+  readonly updateEvent = output<string | undefined>();
 
   @ViewChild('smartInput') smartInput!: ElementRef;
   @ViewChild('input') input!: ElementRef;

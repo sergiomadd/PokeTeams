@@ -88,7 +88,7 @@
                 [allGetter]="queryService.abilityAllCallback"
                 [autoTab]="false"
                 [searchWithEmpty]="true"
-                (selectEvent)="queryResultSelectEvent($event)"
+                (selectEvent)="$event ? queryResultSelectEvent($event) : ''"
                 class="item smart-input-wrapper"
               ></app-smart-input>
             </ng-template>

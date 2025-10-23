@@ -1,5 +1,5 @@
 import { GoogleLoginProvider, SocialAuthService } from '@abacritt/angularx-social-login';
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
@@ -34,7 +34,7 @@ export class AuthFormComponent
     }
   )
 
-  @Output() close = new EventEmitter();
+  readonly close = output();
 
   login: boolean = true;
   signup: boolean = false;

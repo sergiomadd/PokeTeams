@@ -1,9 +1,8 @@
-import { Component, EventEmitter, inject, input, model, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, inject, input, model, output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { ParserService } from '../../../../core/helpers/parser.service';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
-import { Tag } from '../../../../core/models/team/tag.model';
 import { Team } from '../../../../core/models/team/team.model';
 import { TeamOptions } from '../../../../core/models/team/teamOptions.model';
 import { PokemonCardComponent } from '../../pokemon/pokemon-card/pokemon-card.component';
@@ -180,13 +179,14 @@ export class TeamComponent
     );
   }
 
-  @Output() removeEvent = new EventEmitter<Tag>()
+  readonly removeEvent = output();
 
   removeTag(index)
   {
     if(this.removableTags())
     {
       this.team()?.tags?.splice(index, 1);
+      // TODO: The 'emit' function requires a mandatory Tag argument
       this.removeEvent.emit();
     }
   }

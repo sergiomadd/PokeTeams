@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, inject, Output, ViewChild, input } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, input, output } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -23,8 +23,8 @@ export class TagEditorComponent
   theme = inject(ThemeService);
 
   readonly visible = input<boolean>(false);
-  @Output() addEvent = new EventEmitter<Tag>();
-  @Output() closeEvent = new EventEmitter();
+  readonly addEvent = output<Tag>();
+  readonly closeEvent = output();
 
   @ViewChild('inputName') nameInputComponent!: ElementRef;
   @ViewChild('colorCode') colorCodeInputComponent!: ElementRef;

@@ -516,7 +516,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async pokemonSelectEvent(event: QueryItem)
+  async pokemonSelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -567,7 +567,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async itemSelectEvent(event: QueryItem)
+  async itemSelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -576,7 +576,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async abilitySelectEvent(event: QueryItem)
+  async abilitySelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -597,7 +597,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async move1SelectEvent(event: QueryItem)
+  async move1SelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -606,7 +606,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async move2SelectEvent(event: QueryItem)
+  async move2SelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -615,7 +615,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async move3SelectEvent(event: QueryItem)
+  async move3SelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -624,7 +624,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async move4SelectEvent(event: QueryItem)
+  async move4SelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -633,7 +633,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async natureSelectEvent(event: QueryItem)
+  async natureSelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -642,7 +642,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async teraTypeSelectEvent(event: QueryItem)
+  async teraTypeSelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -664,7 +664,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  genderSelectEvent(event: any)
+  genderSelectEvent(event?: any)
   {
     if(this.pokemon)
     {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
     selector: 'app-dialog',
@@ -13,7 +13,7 @@ export class DialogComponent
   readonly trueButtonText = input<string>();
   readonly falseButtonText = input<string>();
   readonly visible = input<boolean>();
-  @Output() choose = new EventEmitter<boolean>();
+  readonly choose = output<boolean>();
 
   accept()
   {

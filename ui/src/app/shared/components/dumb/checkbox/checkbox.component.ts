@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, TemplateRef, input, model } from '@angular/core';
+import { Component, TemplateRef, input, model, output } from '@angular/core';
 
 @Component({
     selector: 'app-checkbox',
@@ -14,7 +14,7 @@ export class CheckboxComponent
   readonly svg = input<TemplateRef<any> | null>(null);
   readonly tooltipText = input<string>();
   readonly lock = input<boolean>(false);
-  @Output() checkEvent = new EventEmitter<boolean>();
+  readonly checkEvent = output<boolean>();
   
   clickEvent()
   {
