@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output, input } from '@angular/core';
 import { WindowService } from '../../../../core/helpers/window.service';
 
 @Component({
@@ -11,8 +11,8 @@ export class ColorPickerComponent
 {
   window = inject(WindowService);
 
-  @Input() colors: string[] = [];
-  @Input() visible: boolean = false;
+  readonly colors = input<string[]>([]);
+  readonly visible = input<boolean>(false);
   @Output() chooseEvent = new EventEmitter<number>();
 
   choose(colorIndex: number)

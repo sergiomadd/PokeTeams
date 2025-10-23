@@ -11,7 +11,7 @@
       </g>
     </svg>
   </div>
-  @if (!noTooltip) {
+  @if (!noTooltip()) {
     <app-tooltip
       [text]="'shared.no_translation' | translate"
       [side]="'right'"

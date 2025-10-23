@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Output, TemplateRef, input, model } from '@angular/core';
 
 @Component({
     selector: 'app-radio',
@@ -8,17 +8,17 @@ import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/co
 })
 export class RadioComponent 
 {
-  @Input() options: any[] = [];
-  @Input() optionNames: string[] = [];
-  @Input() optionIcons: string[] = [];
-  @Input() optionSVGs: TemplateRef<any>[] = [];
-  @Input() tooltipTexts?: string[] = [];
-  @Input() selectedIndex?: number;
+  readonly options = input<any[]>([]);
+  readonly optionNames = input<string[]>([]);
+  readonly optionIcons = input<string[]>([]);
+  readonly optionSVGs = input<TemplateRef<any>[]>([]);
+  readonly tooltipTexts = input<string[] | undefined>([]);
+  readonly selectedIndex = model<number>();
   @Output() selectEvent = new EventEmitter<number>();
 
   select($event: number)
   {
-    this.selectedIndex = $event;
-    this.selectEvent.emit(this.options[this.selectedIndex]);
+    this.selectedIndex.set($event);
+    this.selectEvent.emit(this.options()[this.selectedIndex() ?? 0]);
   }
 }

@@ -1,10 +1,10 @@
-@if (regulation) {
+@if (regulation()) {
   <div class="poke-tooltip-content">
     <div class="poke-tooltip-head">
-      <span>{{regulation?.name}}</span>
+      <span>{{regulation()?.name}}</span>
     </div>
     <div class="poke-tooltip-body flex justify-c-sa gap-m">
-      <span>{{regulation?.startDate | customFormatDate}}</span> - <span>{{regulation?.endDate | customFormatDate}}</span>
+      <span>{{regulation()?.startDate | customFormatDate}}</span> - <span>{{regulation()?.endDate | customFormatDate}}</span>
     </div>
   </div>
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output, input } from '@angular/core';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { QueryItem } from '../../../../core/models/misc/queryResult.model';
 
@@ -12,19 +12,19 @@ export class ChipComponent
 {
   themeService = inject(ThemeService);
 
-  @Input() name?: string;
-  @Input() type?: string;
-  @Input() iconPath?: string;
-  @Input() tooltipText?: string;
-  @Input() removable: boolean = false;
-  @Input() minWidth?: string;
-  @Input() bgColor?: string;
-  @Input() textColor?: string;
+  readonly name = input<string>();
+  readonly type = input<string>();
+  readonly iconPath = input<string>();
+  readonly tooltipText = input<string>();
+  readonly removable = input<boolean>(false);
+  readonly minWidth = input<string>();
+  readonly bgColor = input<string>();
+  readonly textColor = input<string>();
   @Output() removeEvent = new EventEmitter<QueryItem>()
 
   getRemoveColor()
   {
-    return this.textColor ?? 'var(--text-color)';
+    return this.textColor() ?? 'var(--text-color)';
   }
 
   remove()

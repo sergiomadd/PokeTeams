@@ -1,7 +1,7 @@
 <div class="tag-editor"
 [ngClass]="
 {
-  'tag-editor-visible': visible,
+  'tag-editor-visible': visible(),
   'tag-editor-right': !window.isTabletLandscapeOrLess(),
   'tag-editor-top': window.isTabletLandscapeOrLess()
 }">

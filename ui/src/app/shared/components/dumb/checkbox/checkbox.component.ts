@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Output, TemplateRef, input, model } from '@angular/core';
 
 @Component({
     selector: 'app-checkbox',
@@ -8,20 +8,20 @@ import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/co
 })
 export class CheckboxComponent 
 {
-  @Input() checked: boolean = false;
-  @Input() label?: string = "";
-  @Input() icon?: string;
-  @Input() svg?: TemplateRef<any>;
-  @Input() tooltipText?: string;
-  @Input() lock: boolean = false;
+  checked = model<boolean>(false);
+  readonly label = input<string | undefined>("");
+  readonly icon = input<string>();
+  readonly svg = input<TemplateRef<any> | null>(null);
+  readonly tooltipText = input<string>();
+  readonly lock = input<boolean>(false);
   @Output() checkEvent = new EventEmitter<boolean>();
   
   clickEvent()
   {
-    if(!this.lock)
+    if(!this.lock())
     {
-      this.checked = !this.checked;
+      this.checked.set(this.checked());
     }
-    this.checkEvent.emit(this.checked);
+    this.checkEvent.emit(this.checked());
   }
 }

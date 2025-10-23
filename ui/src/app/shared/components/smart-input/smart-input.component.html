@@ -1,7 +1,7 @@
 <div class="relative w-100" #smartInput>
   <form [formGroup]="searchForm" class="flex-col align-i-s w-100 relative gap-s" style="padding: 0.2em 0 0.2em 0;">
-    @if (label) {
-      <label for="">{{label}}</label>
+    @if (label()) {
+      <label for="">{{label()}}</label>
     }
     @if (!selected) {
       <input
@@ -13,9 +13,9 @@
         class="input-m flex align-i-c no-overflow w-100"
         (focus)="onFocus()"
         (keyup.enter)="selectResult(results[activeResult])"
-        [attr.disabled]="disabled ? '' : null"
-        [readonly]="disabled"
-        [ngClass]="{disabled: disabled, controlInvalid: error}"
+        [attr.disabled]="disabled() ? '' : null"
+        [readonly]="disabled()"
+        [ngClass]="{disabled: disabled(), controlInvalid: error()}"
         >
       } @else {
         <div class="input-m flex align-i-c selected">
@@ -40,19 +40,19 @@
             }
             {{selected?.name}}
           </div>
-          @if (!disableRemove) {
+          @if (!disableRemove()) {
             <div class="remove flex align-i-c icon-xs pointer pad-s bor-rad-5" (click)="removeSelected()">
               <svg class="icon-s" [attr.fill]="'var(--text-color)'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
             </div>
           }
         </div>
       }
-      @if (allowNew && !selected) {
+      @if (allowNew() && !selected) {
         <button
           class="new button-secondary"
-          [ngClass]="{disabled: disabled}"
+          [ngClass]="{disabled: disabled()}"
           (click)="newClick()"
-        [disabled]="disabled">+</button>
+        [disabled]="disabled()">+</button>
       }
     </form>
     @if (showOptions || results) {
@@ -66,7 +66,7 @@
       searching: searching
     }"
         >
-        @if (allowCustom) {
+        @if (allowCustom()) {
           <li
             class="result"
             [ngClass]="{'result-hovered': activeResult === 0}"

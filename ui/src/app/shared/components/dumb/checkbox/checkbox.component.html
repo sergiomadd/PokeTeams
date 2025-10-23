@@ -1,20 +1,20 @@
 <div
   class="checkbox tooltip-wrapper"
   (click)="clickEvent()"
-  [ngClass]="{'checked-border': checked}"
+  [ngClass]="{'checked-border': checked()}"
   >
-  @if (icon) {
-    <img src="{{icon}}" alt="{{label}}" class="big-icon">
+  @if (icon()) {
+    <img src="{{icon()}}" alt="{{label()}}" class="big-icon">
   }
-  @if (svg) {
-    <ng-container [ngTemplateOutlet]="svg"></ng-container>
+  @if (svg()) {
+    <ng-container [ngTemplateOutlet]="svg()"></ng-container>
   }
-  @if (!icon && !svg) {
-    {{label}}
+  @if (!icon() && !svg()) {
+    {{label()}}
   }
-  @if (tooltipText) {
+  @if (tooltipText()) {
     <app-tooltip
-      [text]="tooltipText"
+      [text]="tooltipText()"
       [side]="'top'"
     ></app-tooltip>
   }

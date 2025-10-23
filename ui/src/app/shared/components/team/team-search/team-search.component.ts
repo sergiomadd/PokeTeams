@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { I18nService } from '../../../../core/helpers/i18n.service';
@@ -36,7 +36,7 @@ export class TeamSearchComponent
   getTagBgColor = inject(GetTagBgColorPipe);
   getTagTextColor = inject(GetTagTextColorPipe);
 
-  @Input() userSearch: boolean = false;
+  readonly userSearch = input<boolean>(false);
 
   chips: Chip[] = [];
   unionType: SetOperation = SetOperation.intersection;

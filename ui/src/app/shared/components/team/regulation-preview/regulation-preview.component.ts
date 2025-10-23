@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { Regulation } from '../../../../core/models/team/regulation.model';
 
@@ -11,7 +11,7 @@ export class RegulationPreviewComponent
 {
   util = inject(UtilService);
 
-  @Input() regulation?: Regulation | null;
+  readonly regulation = input<Regulation | null>();
 
   loading: boolean = false;
 }

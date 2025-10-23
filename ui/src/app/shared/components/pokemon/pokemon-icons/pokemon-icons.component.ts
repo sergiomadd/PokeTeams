@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { PokemonPreview } from '../../../../core/models/pokemon/pokemonPreview.model';
 
 @Component({
@@ -9,7 +9,7 @@ import { PokemonPreview } from '../../../../core/models/pokemon/pokemonPreview.m
 })
 export class PokemonIconsComponent 
 {
-  @Input() pokemons: PokemonPreview[] = [];
+  readonly pokemons = input<PokemonPreview[]>([]);
 
 
   

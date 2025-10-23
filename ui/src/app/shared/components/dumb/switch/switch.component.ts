@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, Output, SimpleChanges, TemplateRef, input } from '@angular/core';
 
 @Component({
     selector: 'app-switch',
@@ -8,19 +8,20 @@ import { Component, EventEmitter, Input, Output, SimpleChanges, TemplateRef } fr
 })
 export class SwitchComponent 
 {
-  @Input() inputState?: boolean;
-  @Input() leftText?: string;
-  @Input() rightText?: string;
-  @Input() leftSVG?: TemplateRef<any>;
-  @Input() rightSVG?: TemplateRef<any>;
-  @Input() sizeSVG?: string;
+  readonly inputState = input<boolean>();
+  readonly leftText = input<string>();
+  readonly rightText = input<string>();
+  readonly leftSVG = input<TemplateRef<any> | null>(null);
+  readonly rightSVG = input<TemplateRef<any> | null>(null);
+  readonly sizeSVG = input<string>();
   @Output() checkEvent = new EventEmitter<boolean>();
 
   state: boolean = false;
 
   ngOnInit() 
   {
-    if(this.inputState) {this.state = this.inputState}
+    const inputState = this.inputState();
+    if(inputState) {this.state = inputState}
   }
 
   ngOnChanges(changes: SimpleChanges) 

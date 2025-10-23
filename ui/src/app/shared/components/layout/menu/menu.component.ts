@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -34,7 +34,7 @@ export class MenuComponent
 
   getFlagIconUrl = inject(GetFlagIconUrlPipe);
 
-  @Input() menuOpen: boolean = true;
+  readonly menuOpen = input<boolean>(true);
   @Output() toggleEvent = new EventEmitter();
 
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
@@ -86,12 +86,12 @@ export class MenuComponent
   toggleMenu()
   {
     this.toggleEvent.emit()
-    this.rotationAngle += this.menuOpen ? 180 : 180;
+    this.rotationAngle += this.menuOpen() ? 180 : 180;
   }
 
   clickNavigate()
   {
-    if(this.window.isMobile() && this.menuOpen)
+    if(this.window.isMobile() && this.menuOpen())
     {
       this.toggleMenu();
     }
@@ -123,7 +123,7 @@ export class MenuComponent
 
   onClickOutside()
   {
-    if(this.window.isMobile() && this.menuOpen)
+    if(this.window.isMobile() && this.menuOpen())
     {
       this.toggleMenu();
     }

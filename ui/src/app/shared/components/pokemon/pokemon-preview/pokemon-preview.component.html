@@ -1,6 +1,6 @@
 <div class="flex flex-col align-i-c pad-s">
   <div class='moves-section relative'>
-    @for (move of pokemon?.moves; track move; let i = $index) {
+    @for (move of pokemon()?.moves; track move; let i = $index) {
       <div
         class="move-section pad-m"
         [ngClass]="{'flex-reverse': i % 2 !== 0}"
@@ -26,25 +26,25 @@
         <div class='center'>
           <div class="pointer tooltip-wrapper">
             <img [src]="pokemonSpritePath"
-              [alt]="pokemon?.name?.content"
+              [alt]="pokemon()?.name?.content"
           [ngClass]="
           {
             'sprite-small': window.isSmallMobile(),
             'sprite-m': !window.isSmallMobile()
           }">
               <app-tooltip
-                [text]="pokemon?.name?.content"
+                [text]="pokemon()?.name?.content"
               [side]="'top'"></app-tooltip>
             </div>
-            @if (pokemon?.teraType) {
+            @if (pokemon()?.teraType) {
               <div class="teratype w-fit h-fit bor-rad-20 bg-2 tooltip-wrapper"
           [ngClass]="
           {
             'icon-s': window.isSmallMobile(),
             'icon-m': !window.isSmallMobile()
           }">
-                <img [src]="pokemon?.teraType?.iconPath"
-                  [title]="pokemon?.teraType?.name?.content"
+                <img [src]="pokemon()?.teraType?.iconPath"
+                  [title]="pokemon()?.teraType?.name?.content"
             [ngClass]="
             {
               'icon-s': window.isSmallMobile(),
@@ -52,28 +52,28 @@
             }">
                 </div>
               }
-              @if (pokemon?.item) {
+              @if (pokemon()?.item) {
                 <div class="item bor-rad-20 bg-2 pointer tooltip-wrapper"
           [ngClass]="
           {
             'icon-s': window.isSmallMobile(),
             'icon-m': !window.isSmallMobile()
           }">
-                  <img [src]="pokemon?.item?.iconPath"
+                  <img [src]="pokemon()?.item?.iconPath"
             [ngClass]="
             {
               'icon-s': window.isSmallMobile(),
               'icon-m': !window.isSmallMobile()
             }">
-                    <app-tooltip [text]="pokemon?.item?.name?.content" [side]="'top'"></app-tooltip>
+                    <app-tooltip [text]="pokemon()?.item?.name?.content" [side]="'top'"></app-tooltip>
                   </div>
                 }
               </div>
             </div>
           </div>
-          @if (pokemon?.abilityName) {
+          @if (pokemon()?.abilityName) {
             <div class="ability">
-              {{pokemon?.abilityName?.content}}
+              {{pokemon()?.abilityName?.content}}
             </div>
           }
         </div>

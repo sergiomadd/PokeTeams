@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
     selector: 'app-no-translation',
@@ -8,5 +8,5 @@ import { Component, Input } from '@angular/core';
 })
 export class NoTranslationComponent 
 {
-  @Input() noTooltip?: boolean = false;
+  readonly noTooltip = input<boolean | undefined>(false);
 }

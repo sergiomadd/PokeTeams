@@ -1,6 +1,6 @@
-<div class="menu" [ngClass]="{opened: menuOpen, closed: !menuOpen}" clickOutside (outSideClick)="onClickOutside()">
+<div class="menu" [ngClass]="{opened: menuOpen(), closed: !menuOpen()}" clickOutside (outSideClick)="onClickOutside()">
   <div (click)="toggleMenu()">
-    <svg class="toggler" [ngClass]="{togglerOpen: menuOpen}" [style.transform]="'rotate(' + rotationAngle + 'deg)'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="toggler" [ngClass]="{togglerOpen: menuOpen()}" [style.transform]="'rotate(' + rotationAngle + 'deg)'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
       <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
       <g id="SVGRepo_iconCarrier">
@@ -11,7 +11,7 @@
     <div class="flex-col align-i-s gap-l no-overflow h-90" style="margin-top: 0.4em;">
       <a
         class="tab no-hover"
-        [ngClass]="{'open-tab': menuOpen}"
+        [ngClass]="{'open-tab': menuOpen()}"
         >
         <img src="assets/img/logo.png" alt="" class="icon-l">
         <div class="title main-title">
@@ -21,7 +21,7 @@
       <span class="x-divider"></span>
       <a
         class="tab"
-        [ngClass]="{'open-tab': menuOpen}"
+        [ngClass]="{'open-tab': menuOpen()}"
         [routerLink]="['/']"
         (click)="clickNavigate()"
         routerLinkActive="active"
@@ -38,7 +38,7 @@
       </a>
       <a
         class="tab"
-        [ngClass]="{'open-tab': menuOpen}"
+        [ngClass]="{'open-tab': menuOpen()}"
         [routerLink]="['/search']"
         (click)="clickNavigate()"
         routerLinkActive="active"
@@ -52,7 +52,7 @@
       </a>
       <a
         class="tab"
-        [ngClass]="{'open-tab': menuOpen}"
+        [ngClass]="{'open-tab': menuOpen()}"
         [routerLink]="['/compare']"
         (click)="clickNavigate()"
         routerLinkActive="active"
@@ -75,7 +75,7 @@
       </a>
       <div
         class="tab"
-        [ngClass]="{'open-tab': menuOpen}"
+        [ngClass]="{'open-tab': menuOpen()}"
         (click)="toggleTheme()"
         >
         <div class="icon">
@@ -91,13 +91,13 @@
       </div>
       <div
         class="tab"
-        [ngClass]="{'open-tab': menuOpen}"
+        [ngClass]="{'open-tab': menuOpen()}"
         >
         <div class="w-100 relative">
           <app-dropdown
             [options]="langChips"
             [selectedOption]="selectedLangChip"
-            [onlyIcon]="!menuOpen"
+            [onlyIcon]="!menuOpen()"
             (selectEvent)="selectLang($event)"
           ></app-dropdown>
         </div>
@@ -106,7 +106,7 @@
       @if (loggedUser) {
         <a
           class="tab"
-          [ngClass]="{'open-tab': menuOpen}"
+          [ngClass]="{'open-tab': menuOpen()}"
           [routerLink]="['/user', loggedUser?.username]"
           (click)="clickNavigate()"
           routerLinkActive="active"
@@ -121,7 +121,7 @@
       } @else {
         <a
           class="tab last"
-          [ngClass]="{'open-tab': menuOpen}"
+          [ngClass]="{'open-tab': menuOpen()}"
           (click)="toggleAuthForm()"
           >
           <div class="icon">

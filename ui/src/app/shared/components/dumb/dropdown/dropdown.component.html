@@ -1,24 +1,24 @@
 <div
   class="dropdown"
-  [ngClass]="{'disabled': disable}"
+  [ngClass]="{'disabled': disable()}"
   >
   <div
     class="selector"
   [ngClass]="
   {
-    'only-icon-options': onlyIcon
+    'only-icon-options': onlyIcon()
   }"
     (click)="toggleOptions()"
     >
     <div
       class="option selected"
       >
-      @if (selectedOption?.iconPath) {
-        <img [attr.src]="selectedOption?.iconPath" alt="selectedOption?.name" class="icon" fill>
+      @if (selectedOption()?.iconPath) {
+        <img [attr.src]="selectedOption()?.iconPath" alt="selectedOption?.name" class="icon" fill>
       }
-      {{selectedOption ? (selectedOption.name | translate) : ''}}
+      {{selectedOption() ? (selectedOption()?.name | translate) : ''}}
     </div>
-    @if (!onlyIcon) {
+    @if (!onlyIcon()) {
       <div
         class="dropdown-arrow"
         >
@@ -30,20 +30,20 @@
     class="options"
   [ngClass]="
   {
-    'options-visible': showOptions && !disable,
-    'only-icon-options': onlyIcon
+    'options-visible': showOptions && !disable(),
+    'only-icon-options': onlyIcon()
   }"
     >
-    @for (option of options; track option) {
+    @for (option of options(); track option) {
       <div
         class="option"
-        [ngClass]="{'only-icon-option': onlyIcon}"
+        [ngClass]="{'only-icon-option': onlyIcon()}"
         (click)="onSelect(option)"
         >
         @if (option.iconPath) {
           <img [attr.src]="option.iconPath" alt="" class="icon-small" fill>
         }
-        @if (!onlyIcon) {
+        @if (!onlyIcon()) {
           {{option.name | translate}}
         }
       </div>

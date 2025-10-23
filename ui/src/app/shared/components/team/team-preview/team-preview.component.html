@@ -1,19 +1,19 @@
 <div class="relative" [ngClass]="{deleting: deleteDialog}">
-  @if (team?.title) {
-    <h3 class="title">{{team?.title}}</h3>
+  @if (team()?.title) {
+    <h3 class="title">{{team()?.title}}</h3>
   }
   <div class="flex-col pad-s gap-s bor-rad-5 bg-3">
     <div class="flex justify-c-sb w-100">
       <div class="flex justify-c-s gap-s wrap">
-        @if (logged) {
-          @if (!team?.visibility) {
+        @if (logged()) {
+          @if (!team()?.visibility) {
             <div class="detail pointer">
               <svg class="icon-m" fill="var(--text-color)" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M800 384h-32V261.872C768 115.024 661.744 0 510.816 0 359.28 0 256 117.472 256 261.872V384h-32c-70.592 0-128 57.408-128 128v384c0 70.592 57.408 128 128 128h576c70.592 0 128-57.408 128-128V512c0-70.592-57.408-128-128-128zM320 261.872C320 152.784 394.56 64 510.816 64 625.872 64 704 150.912 704 261.872V384H320V261.872zM864.001 896c0 35.28-28.72 64-64 64h-576c-35.28 0-64-28.72-64-64V512c0-35.28 28.72-64 64-64h576c35.28 0 64 28.72 64 64v384zm-352-320c-35.344 0-64 28.656-64 64 0 23.632 12.96 44.032 32 55.12V800c0 17.664 14.336 32 32 32s32-14.336 32-32V695.12c19.04-11.088 32-31.504 32-55.12 0-35.344-28.656-64-64-64z"></path></g></svg>
             </div>
           }
         }
         @if (!isPlayerSameAsUser) {
-          @if (team?.player) {
+          @if (team()?.player) {
             <div class="tooltip-wrapper">
               <div class="detail pointer flex align-i-c unregisteredPlayer">
                 <div class="row-center">
@@ -23,10 +23,10 @@
                     </g>
                   </svg>
                 </div>
-                <span class="no-overflow">{{team?.player?.username}}</span>
+                <span class="no-overflow">{{team()?.player?.username}}</span>
               </div>
               <app-tooltip
-                [text]="'team.team.unofficial_player-tooltip' | translate:{ name: team?.player?.username }"
+                [text]="'team.team.unofficial_player-tooltip' | translate:{ name: team()?.player?.username }"
                 [side]="'top'"
               ></app-tooltip>
             </div>
@@ -42,21 +42,21 @@
             </div>
           }
         }
-        @if (team?.user) {
+        @if (team()?.user) {
           <div class="tooltip-wrapper">
-            <div class="detail pointer flex align-i-c" (click)="util.openInNewTab('user/'+team?.user?.username)">
-              @if (team?.user?.picture) {
-                <img src="{{team?.user?.picture}}" alt="" class="icon-m">
+            <div class="detail pointer flex align-i-c" (click)="util.openInNewTab('user/'+team()?.user?.username)">
+              @if (team()?.user?.picture) {
+                <img src="{{team()?.user?.picture}}" alt="" class="icon-m">
               }
-              <span class="no-overflow">{{team?.user?.username}}</span>
+              <span class="no-overflow">{{team()?.user?.username}}</span>
             </div>
             <app-tooltip
-              [text]="isPlayerSameAsUser ? ('team.team.uploaded_and_played_by-tooltip' | translate:{ name: team?.user?.username }) : ('team.team.uploaded_by-tooltip' | translate:{ name: team?.user?.username })"
+              [text]="isPlayerSameAsUser ? ('team.team.uploaded_and_played_by-tooltip' | translate:{ name: team()?.user?.username }) : ('team.team.uploaded_by-tooltip' | translate:{ name: team()?.user?.username })"
               [side]="'top'"
             ></app-tooltip>
           </div>
         }
-        @if (team?.tournament) {
+        @if (team()?.tournament) {
           <div
             (click)="clickSection(1)"
           [ngClass]="
@@ -68,10 +68,10 @@
             >
             <div class="section-content">
               <div class="detail pointer">
-                @if (team?.tournament?.icon) {
-                  <img src="{{team?.tournament?.icon}}" alt="{{team?.tournament?.name}}" class="icon-m">
+                @if (team()?.tournament?.icon) {
+                  <img src="{{team()?.tournament?.icon}}" alt="{{team()?.tournament?.name}}" class="icon-m">
                 }
-                <span class="no-overflow">{{team?.tournament?.name}}</span>
+                <span class="no-overflow">{{team()?.tournament?.name}}</span>
               </div>
               <app-poke-tooltip
                 [content]="tournamentPreview"
@@ -82,14 +82,14 @@
                 >
                 <ng-template #tournamentPreview>
                   <app-tournament-preview
-                    [tournament]="team?.tournament"
+                    [tournament]="team()?.tournament"
                   ></app-tournament-preview>
                 </ng-template>
               </app-poke-tooltip>
             </div>
           </div>
         }
-        @if (team?.regulation) {
+        @if (team()?.regulation) {
           <div
             (click)="clickSection(2)"
           [ngClass]="
@@ -101,7 +101,7 @@
             >
             <div class="section-content">
               <div class="detail pointer">
-                {{team?.regulation?.identifier}}
+                {{team()?.regulation?.identifier}}
               </div>
               <app-poke-tooltip
                 [content]="regulationPreview"
@@ -112,15 +112,15 @@
                 >
                 <ng-template #regulationPreview>
                   <app-regulation-preview
-                    [regulation]="team?.regulation"
+                    [regulation]="team()?.regulation"
                   ></app-regulation-preview>
                 </ng-template>
               </app-poke-tooltip>
             </div>
           </div>
         }
-        @if (team?.tags && team?.tags!.length > 0) {
-          @for (tag of team?.tags; track tag) {
+        @if (team()?.tags && team()?.tags!.length > 0) {
+          @for (tag of team()?.tags; track tag) {
             <app-chip
               [name]="tag.name"
               [tooltipText]="tag.description"
@@ -133,10 +133,10 @@
       <div class="flex wrap justify-c-e gap-s">
         <div class="detail views">
           <svg class="icon-m" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M2375 3994 c-602 -63 -1116 -314 -1570 -769 -217 -217 -360 -407 -397 -528 -26 -89 -22 -222 11 -309 59 -153 364 -501 621 -707 360 -290 746 -463 1195 -537 154 -26 496 -26 650 0 450 74 826 243 1195 536 255 203 573 569 626 722 28 80 26 253 -5 330 -61 155 -371 509 -621 708 -360 287 -738 459 -1165 531 -116 20 -440 33 -540 23z m495 -339 c569 -95 1065 -412 1463 -934 l72 -94 0 -67 0 -67 -72 -94 c-397 -521 -891 -836 -1468 -936 -140 -24 -471 -24 -610 0 -579 101 -1069 413 -1468 936 l-72 94 0 67 0 67 72 94 c405 531 938 865 1498 938 44 6 94 13 110 15 64 9 385 -4 475 -19z"/> <path d="M2395 3346 c-315 -62 -541 -285 -606 -600 -73 -352 68 -707 346 -875 290 -175 734 -137 973 84 394 365 310 1065 -158 1314 -100 53 -220 82 -360 87 -81 2 -150 -1 -195 -10z m271 -317 c178 -32 315 -167 359 -350 52 -224 -50 -459 -241 -550 -132 -63 -316 -63 -448 0 -191 91 -293 326 -241 550 61 257 294 401 571 350z"/> </g> </svg>
-          <span class="no-overflow">{{team && team?.viewCount ? (team.viewCount | formatCount) : team?.viewCount}}</span>
+          <span class="no-overflow">{{team() && team()?.viewCount ? (team()?.viewCount ?? 0 | formatCount) : team()?.viewCount}}</span>
         </div>
         <div class="detail">
-          <span class="no-overflow">{{team?.date | customFormatDate}}</span>
+          <span class="no-overflow">{{team()?.date | customFormatDate}}</span>
         </div>
         <div class="flex justify-c-e gap-s">
           <div class="preview-button">
@@ -191,7 +191,7 @@
           </div>
           <div class="preview-button">
             <button class="button tooltip-wrapper">
-              <a [routerLink]="['/', team?.id]" target="_blank">
+              <a [routerLink]="['/', team()?.id]" target="_blank">
                 <svg class="icon-m" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M3039 5104 c-64 -19 -141 -90 -169 -156 -48 -113 -20 -240 72 -323 84 -76 79 -75 677 -75 l526 0 -1192 -1192 c-1318 -1319 -1243 -1236 -1243 -1368 0 -206 213 -341 400 -254 48 22 213 182 1248 1217 l1192 1192 0 -526 c0 -598 -1 -593 75 -677 115 -128 305 -127 420 0 79 88 76 36 73 1064 l-3 909 -22 41 c-34 63 -66 97 -125 129 l-53 30 -915 2 c-772 2 -922 0 -961 -13z"/> <path d="M705 4539 c-267 -50 -495 -221 -618 -466 -15 -28 -39 -91 -54 -140 l-28 -88 -3 -1525 c-2 -1045 1 -1547 8 -1594 29 -187 103 -329 245 -471 142 -142 284 -216 471 -245 47 -7 549 -10 1594 -8 l1525 3 88 28 c325 101 548 353 606 681 7 38 11 294 11 692 0 608 -1 635 -20 686 -40 107 -149 181 -266 180 -110 -1 -198 -55 -252 -157 l-27 -50 -5 -645 -5 -645 -23 -47 c-13 -26 -44 -65 -68 -87 -87 -76 33 -71 -1604 -71 -1664 0 -1531 -7 -1623 83 -95 92 -87 -53 -87 1622 0 1642 -5 1522 71 1609 22 24 61 55 87 68 l47 23 640 5 640 5 52 24 c138 62 204 231 144 367 -30 68 -94 130 -159 154 -51 19 -77 20 -695 19 -353 -1 -664 -5 -692 -10z"/> </g> </svg>
               </a>
               @if (window.isDesktop()) {
@@ -202,10 +202,10 @@
               }
             </button>
           </div>
-          @if (logged && logged.username == team?.user?.username && team?.user?.registered) {
+          @if (logged() && logged()?.username == team()?.user?.username && team()?.user?.registered) {
             <div class="preview-button">
               <button class="button-secondary tooltip-wrapper">
-                <a [routerLink]="['/edit/', team?.id]" target="_blank">
+                <a [routerLink]="['/edit/', team()?.id]" target="_blank">
                   <svg class="icon-m" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--white)"  stroke="none"> <path d="M4253 5080 c-78 -20 -114 -37 -183 -83 -44 -29 -2323 -2296 -2361 -2349 -21 -29 -329 -1122 -329 -1168 0 -56 65 -120 122 -120 44 0 1138 309 1166 329 15 11 543 536 1174 1168 837 838 1157 1165 1187 1212 74 116 105 270 82 407 -7 39 -30 105 -53 154 -36 76 -55 99 -182 226 -127 127 -150 145 -226 182 -135 65 -260 78 -397 42z m290 -272 c55 -27 258 -231 288 -288 20 -38 24 -60 24 -140 0 -121 -18 -160 -132 -279 l-82 -86 -303 303 -303 303 88 84 c49 46 108 93 132 105 87 42 203 41 288 -2z m-383 -673 l295 -295 -933 -932 -932 -933 -295 295 c-162 162 -295 299 -295 305 0 13 1842 1855 1855 1855 6 0 143 -133 305 -295z m-1822 -2284 c-37 -12 -643 -179 -645 -178 -1 1 30 115 68 252 38 138 79 285 91 329 l21 78 238 -238 c132 -132 233 -241 227 -243z"/> <path d="M480 4584 c-209 -56 -370 -206 -444 -414 l-31 -85 0 -1775 c0 -1693 1 -1778 18 -1834 37 -120 77 -187 167 -277 63 -63 104 -95 157 -121 146 -73 3 -69 2113 -66 l1895 3 67 26 c197 77 336 218 401 409 22 64 22 74 25 710 3 579 2 648 -13 676 -21 40 -64 64 -114 64 -33 0 -49 -7 -79 -34 l-37 -34 -5 -634 c-5 -631 -5 -633 -28 -690 -41 -102 -118 -179 -220 -220 l-57 -23 -1834 -3 c-1211 -1 -1853 1 -1890 8 -120 22 -227 104 -277 213 l-29 62 0 1760 0 1760 29 63 c37 80 122 161 203 194 l58 23 630 5 c704 6 664 1 700 77 23 48 13 95 -31 138 l-35 35 -642 -1 c-533 0 -651 -3 -697 -15z"/> </g> </svg>
                 </a>
                 @if (window.isDesktop()) {
@@ -238,18 +238,18 @@
           {{feedback}}
         </div>
       }
-      @if (pokemons && pokemons.length > 0) {
+      @if ((pokemons() ?? [])!.length > 0) {
         <div
           class="bg-2 flex wrap justify-c-sa gap-m"
           (mouseenter)="expand()"
           (mouseleave)="expand()"
           >
-          @for (pokemon of pokemons; track pokemon) {
+          @for (pokemon of pokemons(); track pokemon) {
             <app-pokemon-preview [pokemon]="pokemon"></app-pokemon-preview>
           }
         </div>
       } @else {
-        @if (pokemons === null) {
+        @if (pokemons() === null) {
           <div class="flex justify-c-c align-i-c w-100 text-c bg-2 pokemons-placeholder">
             <svg class="sprite-m" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>

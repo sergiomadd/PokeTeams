@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output, input, model } from '@angular/core';
 
 @Component({
     selector: 'app-pagination',
@@ -8,21 +8,21 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class PaginationComponent 
 {
-  @Input() currentPage: number = 1;
-  @Input() itemsPerPage!: number;
-  @Input() totalItems!: number;
+  currentPage = model<number>(1);
+  readonly itemsPerPage = input.required<number>();
+  readonly totalItems = input.required<number>();
   @Output() pageChanged: EventEmitter<number> = new EventEmitter();
 
   get totalPages(): number
   {
-    return Math.ceil(this.totalItems / this.itemsPerPage);
+    return Math.ceil(this.totalItems() / this.itemsPerPage());
   }
 
   changePage(page: number): void 
   {
     if (page >= 1 && page <= this.totalPages) 
     {
-      this.currentPage = page;
+      this.currentPage.set(page);
       this.pageChanged.emit(page);
     }
   }

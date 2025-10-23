@@ -79,7 +79,7 @@ export class TeamTableComponent
         this.searched = value;
         if(this.searched && this.paginationComponent)
         {
-          this.paginationComponent.currentPage = this.searchService.getCurrentPage();
+          this.paginationComponent.currentPage.set(this.searchService.getCurrentPage());
         }
       }
     );

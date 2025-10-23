@@ -1,87 +1,87 @@
 
 <div class="m-auto w-fit flex align-i-c gap-m">
-  @if (totalItems > 0) {
+  @if (totalItems() > 0) {
     <button
       (click)="changePage(1)"
-      [disabled]="currentPage === 1"
+      [disabled]="currentPage() === 1"
       class="page"
     > << </button>
     <button
-      (click)="changePage(currentPage - 1)"
-      [disabled]="currentPage === 1"
+      (click)="changePage(currentPage() - 1)"
+      [disabled]="currentPage() === 1"
       class="page"
     > < </button>
     <div class="flex justify-i-c gap-m">
-      @if (currentPage <= 3) {
-        <button class="page" (click)="changePage(1)" [ngClass]="{selected: currentPage == 1}">
+      @if (currentPage() <= 3) {
+        <button class="page" (click)="changePage(1)" [ngClass]="{selected: currentPage() == 1}">
           1
         </button>
         @if (totalPages > 1) {
-          <button class="page" (click)="changePage(2)" [ngClass]="{selected: currentPage == 2}">
+          <button class="page" (click)="changePage(2)" [ngClass]="{selected: currentPage() == 2}">
             2
           </button>
         }
         @if (totalPages > 2) {
-          <button class="page" (click)="changePage(3)" [ngClass]="{selected: currentPage == 3}">
+          <button class="page" (click)="changePage(3)" [ngClass]="{selected: currentPage() == 3}">
             3
           </button>
         }
         @if (totalPages > 3) {
-          <button class="page" (click)="changePage(4)" [ngClass]="{selected: currentPage == 4}">
+          <button class="page" (click)="changePage(4)" [ngClass]="{selected: currentPage() == 4}">
             4
           </button>
         }
         @if (totalPages > 4) {
-          <button class="page" (click)="changePage(5)" [ngClass]="{selected: currentPage == 5}">
+          <button class="page" (click)="changePage(5)" [ngClass]="{selected: currentPage() == 5}">
             5
           </button>
         }
       }
-      @if (currentPage > 3 && (currentPage <= totalPages - 3)) {
+      @if (currentPage() > 3 && (currentPage() <= totalPages - 3)) {
         <button class="page"
-          (click)="changePage(currentPage - 2)">
-          {{currentPage - 2}}
+          (click)="changePage(currentPage() - 2)">
+          {{currentPage() - 2}}
         </button>
         <button class="page"
-          (click)="changePage(currentPage - 1)">
-          {{currentPage - 1}}
+          (click)="changePage(currentPage() - 1)">
+          {{currentPage() - 1}}
         </button>
         <button class="page selected">
-          {{currentPage}}
+          {{currentPage()}}
         </button>
-        <button class="page" (click)="changePage(currentPage + 1)">
-          {{currentPage + 1}}
+        <button class="page" (click)="changePage(currentPage() + 1)">
+          {{currentPage() + 1}}
         </button>
-        <button class="page" (click)="changePage(currentPage + 2)">
-          {{currentPage + 2}}
+        <button class="page" (click)="changePage(currentPage() + 2)">
+          {{currentPage() + 2}}
         </button>
       }
-      @if (currentPage > 3 && currentPage > totalPages - 3) {
-        <button class="page" (click)="changePage(totalPages - 4)" [ngClass]="{selected: currentPage == totalPages - 4}">
+      @if (currentPage() > 3 && currentPage() > totalPages - 3) {
+        <button class="page" (click)="changePage(totalPages - 4)" [ngClass]="{selected: currentPage() == totalPages - 4}">
           {{totalPages - 4}}
         </button>
-        <button class="page" (click)="changePage(totalPages - 3)" [ngClass]="{selected: currentPage == totalPages - 3}">
+        <button class="page" (click)="changePage(totalPages - 3)" [ngClass]="{selected: currentPage() == totalPages - 3}">
           {{totalPages - 3}}
         </button>
-        <button class="page" (click)="changePage(totalPages - 2)" [ngClass]="{selected: currentPage == totalPages - 2}">
+        <button class="page" (click)="changePage(totalPages - 2)" [ngClass]="{selected: currentPage() == totalPages - 2}">
           {{totalPages - 2}}
         </button>
-        <button class="page" (click)="changePage(totalPages - 1)" [ngClass]="{selected: currentPage == totalPages - 1}">
+        <button class="page" (click)="changePage(totalPages - 1)" [ngClass]="{selected: currentPage() == totalPages - 1}">
           {{totalPages - 1}}
         </button>
-        <button class="page" (click)="changePage(totalPages)" [ngClass]="{selected: currentPage == totalPages}">
+        <button class="page" (click)="changePage(totalPages)" [ngClass]="{selected: currentPage() == totalPages}">
           {{totalPages}}
         </button>
       }
     </div>
     <button
-      (click)="changePage(currentPage + 1)"
-      [disabled]="currentPage === totalPages"
+      (click)="changePage(currentPage() + 1)"
+      [disabled]="currentPage() === totalPages"
       class="page"
     > > </button>
     <button
       (click)="changePage(totalPages)"
-      [disabled]="currentPage === totalPages"
+      [disabled]="currentPage() === totalPages"
       class="page"
     > >> </button>
   }

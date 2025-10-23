@@ -2,32 +2,32 @@
   class="tooltip"
 [ngClass]="
 {
-  top: side === 'top',
-  right: side === 'right', 
-  bottom: side === 'bottom',
-  left: side === 'left',
-  'tooltip-visible': visible,
-  'transition': !instant && visible
+  top: side() === 'top',
+  right: side() === 'right', 
+  bottom: side() === 'bottom',
+  left: side() === 'left',
+  'tooltip-visible': visible(),
+  'transition': !instant() && visible()
 }"
   >
   <span
   [ngClass]="
   {
-    arrowbottom: side === 'top',
-    arrowleft: side === 'right', 
-    arrowtop: side === 'bottom',
-    arrowright: side === 'left'
+    arrowbottom: side() === 'top',
+    arrowleft: side() === 'right', 
+    arrowtop: side() === 'bottom',
+    arrowright: side() === 'left'
   }"
   ></span>
-  @if (loading === true) {
-    @if (loadingText) {
-      {{loadingText}}
+  @if (loading() === true) {
+    @if (loadingText()) {
+      {{loadingText()}}
     }
     <span class="loading"></span>
   }
-  @if (!loading) {
+  @if (!loading()) {
     <div class="text">
-      {{text}}
+      {{text()}}
     </div>
   }
 </div>

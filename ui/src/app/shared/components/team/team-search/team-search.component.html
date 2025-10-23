@@ -5,7 +5,7 @@
         <div class="m-auto w-fit">
           <div class="flex gap-m justify-c-c"
             [ngClass]="{'wrap': window.isTabletLandscapeOrLess()}">
-            @if (!userSearch) {
+            @if (!userSearch()) {
               <app-smart-input
                 #userInput
                 [label]="'shared.team.player' | translate"

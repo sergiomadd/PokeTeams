@@ -291,14 +291,14 @@ export class TeamEditorComponent
   enableTagSelector()
   {
     this.tagSmartInput.searchForm.controls.key.enable();
-    this.tagSmartInput.disabled = false;
+    this.tagSmartInput.disabled.set(false);
   }
 
   disableTagSelector()
   {
     this.tagEditorCloseEvent();
     this.tagSmartInput.searchForm.controls.key.disable();
-    this.tagSmartInput.disabled = true;
+    this.tagSmartInput.disabled.set(true);
   }
 
   removeTag()

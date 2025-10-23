@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Output, ViewChild, input } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -22,7 +22,7 @@ export class TagEditorComponent
   window = inject(WindowService);
   theme = inject(ThemeService);
 
-  @Input() visible: boolean = false;
+  readonly visible = input<boolean>(false);
   @Output() addEvent = new EventEmitter<Tag>();
   @Output() closeEvent = new EventEmitter();
 

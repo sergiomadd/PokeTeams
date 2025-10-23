@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
     selector: 'app-tooltip',
@@ -8,10 +8,10 @@ import { Component, Input } from '@angular/core';
 })
 export class TooltipComponent 
 {
-  @Input() text?: string;
-  @Input() side: string = "left";
-  @Input() visible?: boolean = false;
-  @Input() instant?: boolean = false;
-  @Input() loading?: boolean = false;
-  @Input() loadingText?: string;
+  readonly text = input<string | undefined>('');
+  readonly side = input<string>("left");
+  readonly visible = input<boolean | undefined>(false);
+  readonly instant = input<boolean | undefined>(false);
+  readonly loading = input<boolean | undefined>(false);
+  readonly loadingText = input<string>();
 }

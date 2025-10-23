@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, input } from '@angular/core';
+import { Component, EventEmitter, Output, input } from '@angular/core';
 
 @Component({
     selector: 'app-dialog',
@@ -8,11 +8,11 @@ import { Component, EventEmitter, Input, Output, input } from '@angular/core';
 })
 export class DialogComponent 
 {
-  @Input() title?: string;
-  @Input() body?: string;
-  @Input() trueButtonText?: string;
-  @Input() falseButtonText?: string;
-  @Input() visible?: boolean;
+  readonly title = input<string>();
+  readonly body = input<string>();
+  readonly trueButtonText = input<string>();
+  readonly falseButtonText = input<string>();
+  readonly visible = input<boolean>();
   @Output() choose = new EventEmitter<boolean>();
 
   accept()

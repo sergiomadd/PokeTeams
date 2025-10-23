@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, inject, Output, QueryList, SimpleChanges, ViewChildren, input } from '@angular/core';
 import { ParserService } from '../../../../core/helpers/parser.service';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -22,8 +22,8 @@ export class TeamBattleComponent
   theme = inject(ThemeService);
   compareService = inject(TeamCompareService);
 
-  @Input() team?: Team;
-  @Input() which?: string;
+  readonly team = input<Team>();
+  readonly which = input<string>();
   @Output() selectedIndexesEvent = new EventEmitter<number[]>()
 
   @ViewChildren(PokemonCardComponent) pokemonComponents!:QueryList<PokemonCardComponent>;
@@ -52,14 +52,15 @@ export class TeamBattleComponent
       this.moveB = value;
     })
 
-    if(this.which === 'A')
+    const which = this.which();
+    if(which === 'A')
     {
       this.compareService.teratypeEnabledIndexesAObservable$.subscribe(value => 
       {
         this.teraTypeEnabled = [...value];
       })
     }
-    else if(this.which === 'A')
+    else if(which === 'A')
     {
       this.compareService.teratypeEnabledIndexesBObservable$.subscribe(value => 
       {
@@ -133,7 +134,7 @@ export class TeamBattleComponent
         this.showAllNotes = !this.showAllNotes;
         this.pokemonComponents.forEach(pokemon => 
         {
-          if(pokemon.pokemon?.notes)
+          if(pokemon.pokemon()?.notes)
           {
             pokemon.showNotes[0] = this.showAllNotes;
           }

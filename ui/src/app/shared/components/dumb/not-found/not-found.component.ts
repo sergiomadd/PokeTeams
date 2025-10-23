@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { WindowService } from '../../../../core/helpers/window.service';
 
 @Component({
@@ -11,5 +11,5 @@ export class NotFoundComponent
 {
   window = inject(WindowService);
 
-  @Input() resourceName?: string;
+  readonly resourceName = input<string>();
 }

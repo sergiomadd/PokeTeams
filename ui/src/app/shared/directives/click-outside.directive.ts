@@ -1,4 +1,4 @@
-import { Directive, ElementRef, EventEmitter, inject, Input, Output, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, inject, Output, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[clickOutside]',
@@ -9,7 +9,6 @@ export class ClickOutsideDirective
   element = inject(ElementRef);
   private renderer = inject(Renderer2);
 
-  @Input() appOutSideClick!: boolean;
   @Output() outSideClick: EventEmitter<void> = new EventEmitter();
 
   private listener: (() => void) | undefined;

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, input, model, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { LinkifierService } from '../../../../core/helpers/linkifier.service';
@@ -44,11 +44,11 @@ export class PokemonCardComponent
   getDefenseEffectiveness = inject(GetDefenseEffectivenessPipe);
   getPokemonSpritePath = inject(GetPokemonSpritePathPipe);
 
-  @Input() pokemon?: Pokemon | null;
-  @Input() teamOptions?: TeamOptions;
-  @Input() showStatsStart?: boolean = false;
-  @Input() editorPreview?: boolean = false;
-  @Input() compareTeam?: string;
+  readonly pokemon = model<Pokemon | null>();
+  readonly teamOptions = model<TeamOptions>();
+  readonly showStatsStart = input<boolean | undefined>(false);
+  readonly editorPreview = input<boolean | undefined>(false);
+  readonly compareTeam = input<string>();
   @Output() triggerNotesEvent = new EventEmitter<boolean>()
   @Output() updateStats = new EventEmitter();
   @Output() triggerTooltip = new EventEmitter();
@@ -93,24 +93,25 @@ export class PokemonCardComponent
 
   async ngOnChanges(changes: SimpleChanges)
   {
+    const pokemon = this.pokemon();
     if(changes['teamOptions'])
     {
-      this.teamOptions = changes['teamOptions'].currentValue;
-      this.pokemonSpritePath = this.getPokemonSpritePath.transform(this.pokemon);
-      if(this.pokemon)
+      this.teamOptions.set(changes['teamOptions'].currentValue);
+      this.pokemonSpritePath = this.getPokemonSpritePath.transform(this.pokemon());
+      if(pokemon)
       {
-        this.pokemon.calculatedStats = this.pokemonStatService.calculateStats(this.pokemon, this.teamOptions);
+        pokemon.calculatedStats = this.pokemonStatService.calculateStats(pokemon, this.teamOptions());
         this.calculateMaxStat();
       }
     }
     if(changes['pokemon'])
     {
-      this.pokemon = changes['pokemon'].currentValue;
-      this.pokemonSpritePath = this.getPokemonSpritePath.transform(this.pokemon);
+      this.pokemon.set(changes['pokemon'].currentValue);
+      this.pokemonSpritePath = this.getPokemonSpritePath.transform(pokemon);
       await this.linkify();
-      if(this.pokemon)
+      if(pokemon)
       {
-        this.pokemon.calculatedStats = this.pokemonStatService.calculateStats(this.pokemon, this.teamOptions);
+        pokemon.calculatedStats = this.pokemonStatService.calculateStats(pokemon, this.teamOptions());
         this.calculateMaxStat();
       }
     }
@@ -118,15 +119,16 @@ export class PokemonCardComponent
 
   async ngOnInit()
   {
-    if(this.showStatsStart)
+    if(this.showStatsStart())
     {
       this.showStats[0] = true;
     }
 
-    if(this.compareTeam)
+    const compareTeam = this.compareTeam();
+    if(compareTeam)
     {
       //Missmatch this compareTeam to the other team results
-      if(this.compareTeam === "A")
+      if(compareTeam === "A")
       {
         this.compareService.selectedMoveA$.subscribe((move?: Move) => 
         {
@@ -137,14 +139,14 @@ export class PokemonCardComponent
         })
         this.compareService.selectedMoveB$.subscribe((move?: Move) => 
         {
-          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon, this.teratypeEnabled), move);
+          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon(), this.teratypeEnabled), move);
         })
       }
-      else if(this.compareTeam === "B")
+      else if(compareTeam === "B")
       {
         this.compareService.selectedMoveA$.subscribe((move?: Move) => 
         {
-          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon, this.teratypeEnabled), move);
+          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon(), this.teratypeEnabled), move);
         })
         this.compareService.selectedMoveB$.subscribe((move?: Move) => 
         {
@@ -159,37 +161,38 @@ export class PokemonCardComponent
 
   async linkify()
   {
-    if(this.pokemon?.ability?.prose)
+    const pokemon = this.pokemon();
+    if(pokemon?.ability?.prose)
     {
-      this.abilityProse = this.linkifier.linkifyProse(this.pokemon.ability?.prose.content);
+      this.abilityProse = this.linkifier.linkifyProse(pokemon.ability?.prose.content);
     }
-    if(this.pokemon?.item?.prose)
+    if(pokemon?.item?.prose)
     {
-      this.itemProse = this.linkifier.linkifyProse(this.pokemon.item?.prose.content);
+      this.itemProse = this.linkifier.linkifyProse(pokemon.item?.prose.content);
     }
-    if(this.pokemon?.moves && this.pokemon.moves[0] && this.pokemon.moves[0].effect)
+    if(pokemon?.moves && pokemon.moves[0] && pokemon.moves[0].effect)
     {
-      this.moveEffectsShort[0] = this.linkifier.linkifyProse(this.pokemon.moves[0].effect.short.content);
-      this.moveEffectsLong[0] = this.linkifier.linkifyProse(this.pokemon.moves[0].effect.long.content);
-      this.moveTargets[0] = this.linkifier.linkifyProse(this.pokemon.moves[0].target?.description.content);
+      this.moveEffectsShort[0] = this.linkifier.linkifyProse(pokemon.moves[0].effect.short.content);
+      this.moveEffectsLong[0] = this.linkifier.linkifyProse(pokemon.moves[0].effect.long.content);
+      this.moveTargets[0] = this.linkifier.linkifyProse(pokemon.moves[0].target?.description.content);
     }
-    if(this.pokemon?.moves && this.pokemon.moves[1] && this.pokemon.moves[1].effect)
+    if(pokemon?.moves && pokemon.moves[1] && pokemon.moves[1].effect)
     {
-      this.moveEffectsShort[1] = this.linkifier.linkifyProse(this.pokemon.moves[1].effect.short.content);
-      this.moveEffectsLong[1] = this.linkifier.linkifyProse(this.pokemon.moves[1].effect.long.content);
-      this.moveTargets[1] = this.linkifier.linkifyProse(this.pokemon.moves[1].target?.description.content);
+      this.moveEffectsShort[1] = this.linkifier.linkifyProse(pokemon.moves[1].effect.short.content);
+      this.moveEffectsLong[1] = this.linkifier.linkifyProse(pokemon.moves[1].effect.long.content);
+      this.moveTargets[1] = this.linkifier.linkifyProse(pokemon.moves[1].target?.description.content);
     }
-    if(this.pokemon?.moves && this.pokemon.moves[2] && this.pokemon.moves[2].effect)
+    if(pokemon?.moves && pokemon.moves[2] && pokemon.moves[2].effect)
     {
-      this.moveEffectsShort[2] = this.linkifier.linkifyProse(this.pokemon.moves[2].effect.short.content);
-      this.moveEffectsLong[2] = this.linkifier.linkifyProse(this.pokemon.moves[2].effect.long.content);
-      this.moveTargets[2] = this.linkifier.linkifyProse(this.pokemon.moves[2].target?.description.content);
+      this.moveEffectsShort[2] = this.linkifier.linkifyProse(pokemon.moves[2].effect.short.content);
+      this.moveEffectsLong[2] = this.linkifier.linkifyProse(pokemon.moves[2].effect.long.content);
+      this.moveTargets[2] = this.linkifier.linkifyProse(pokemon.moves[2].target?.description.content);
     }
-    if(this.pokemon?.moves && this.pokemon.moves[3] && this.pokemon.moves[3].effect)
+    if(pokemon?.moves && pokemon.moves[3] && pokemon.moves[3].effect)
     {
-      this.moveEffectsShort[3] = this.linkifier.linkifyProse(this.pokemon.moves[3].effect.short.content);
-      this.moveEffectsLong[3] = this.linkifier.linkifyProse(this.pokemon.moves[3].effect.long.content);
-      this.moveTargets[3] = this.linkifier.linkifyProse(this.pokemon.moves[3].target?.description.content);
+      this.moveEffectsShort[3] = this.linkifier.linkifyProse(pokemon.moves[3].effect.short.content);
+      this.moveEffectsLong[3] = this.linkifier.linkifyProse(pokemon.moves[3].effect.long.content);
+      this.moveTargets[3] = this.linkifier.linkifyProse(pokemon.moves[3].target?.description.content);
     }
   }
 
@@ -197,6 +200,7 @@ export class PokemonCardComponent
   clickSection(index: number, type: string, event?)
   {
     let list: boolean[] = [];
+    const compareTeam = this.compareTeam();
     switch(type)
     {
       case "evol":
@@ -204,14 +208,14 @@ export class PokemonCardComponent
       break;
       case "types":
         list = this.tooltipTypes;
-        if(this.compareTeam && index === 0)
+        if(compareTeam && index === 0)
         {
           this.teratypeEnabled = !this.teratypeEnabled;
-          if(this.compareTeam === 'A')
+          if(compareTeam === 'A')
           {
             this.compareService.setTeratypeSelectedIndexA(index, this.teratypeEnabled);
           }
-          else if(this.compareTeam === 'B')
+          else if(compareTeam === 'B')
           {
             this.compareService.setTeratypeSelectedIndexB(index, this.teratypeEnabled);          
           }
@@ -225,7 +229,7 @@ export class PokemonCardComponent
         break;
       case "right":
         list = this.tooltipRight;
-        if(this.compareTeam)
+        if(this.compareTeam())
         {
           if(!list[index])
           {
@@ -287,11 +291,12 @@ export class PokemonCardComponent
 
   triggerStats()
   {
-    if(this.pokemon && this.pokemon.stats.length > 0)
+    const pokemon = this.pokemon();
+    if(pokemon && pokemon.stats.length > 0)
     {
       if(this.showStats[0]) { this.tooltipStats = this.tooltipStats.fill(false); }
       this.showStats[0] = !this.showStats[0];
-      if(this.editorPreview && this.showNotes[0] ) 
+      if(this.editorPreview() && this.showNotes[0] ) 
       {
         this.showNotes[0] = false; 
         this.triggerNotesEvent.emit(this.showNotes[0]);
@@ -301,11 +306,13 @@ export class PokemonCardComponent
 
   triggerNotes()
   {
-    if((this.pokemon && this.pokemon.notes) || this.editorPreview)
+    const pokemon = this.pokemon();
+    const editorPreview = this.editorPreview();
+    if((pokemon && pokemon.notes) || editorPreview)
     {
       this.showNotes[0] = !this.showNotes[0];
       this.triggerNotesEvent.emit(this.showNotes[0]);
-      if(this.editorPreview && this.showStats[0] ) { this.showStats[0] = false; }
+      if(editorPreview && this.showStats[0] ) { this.showStats[0] = false; }
     }
   }
 
@@ -330,7 +337,8 @@ export class PokemonCardComponent
 
   copyPokemon()
   {
-    if(this.pokemon && this.util.copyToClipboard(this.parser.reverseParsePokemon(this.pokemon)))
+    const pokemon = this.pokemon();
+    if(pokemon && this.util.copyToClipboard(this.parser.reverseParsePokemon(pokemon)))
     {
       this.copied = true;
     }
@@ -360,25 +368,28 @@ export class PokemonCardComponent
   {
     if(moveIndex !== undefined)
     {
-      if(this.pokemon?.moves[moveIndex])
+      const pokemon = this.pokemon();
+      if(pokemon?.moves[moveIndex])
       {
-        if(this.compareTeam === "A")
+        const compareTeam = this.compareTeam();
+        if(compareTeam === "A")
         {
-          this.compareService.setMoveA(this.pokemon.moves[moveIndex]);
+          this.compareService.setMoveA(pokemon.moves[moveIndex]);
         }
-        else if(this.compareTeam === "B")
+        else if(compareTeam === "B")
         {
-          this.compareService.setMoveB(this.pokemon.moves[moveIndex]);
+          this.compareService.setMoveB(pokemon.moves[moveIndex]);
         }
       }   
     }
     else
     {
-      if(this.compareTeam === "A")
+      const compareTeam = this.compareTeam();
+      if(compareTeam === "A")
       {
         this.compareService.setMoveA(undefined);
       }
-      else if(this.compareTeam === "B")
+      else if(compareTeam === "B")
       {
         this.compareService.setMoveB(undefined);
       }
@@ -387,9 +398,10 @@ export class PokemonCardComponent
 
   calculateMaxStat()
   {
-    if(this.pokemon?.calculatedStats)
+    const pokemon = this.pokemon();
+    if(pokemon?.calculatedStats)
     {
-      this.maxStat = Math.max(...this.pokemon.calculatedStats.total.map(v => v.value));
+      this.maxStat = Math.max(...pokemon.calculatedStats.total.map(v => v.value));
       this.updateStats.emit(this.maxStat);
     }
   }

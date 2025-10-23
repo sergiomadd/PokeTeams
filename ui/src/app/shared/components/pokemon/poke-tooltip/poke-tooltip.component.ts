@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, input, TemplateRef, ViewChild } from '@angular/core';
 import { WindowService } from '../../../../core/helpers/window.service';
 
 @Component({
@@ -11,16 +11,16 @@ export class PokeTooltipComponent
 {
   window = inject(WindowService);
 
-  @Input() content?: TemplateRef<any>;
-  @Input() side: string = "left";
-  @Input() visible: boolean = false;
-  @Input() mobileChanged: boolean = false;
+  readonly content = input<TemplateRef<any> | null>(null);
+  readonly side = input<string>("left");
+  readonly visible = input<boolean>(false);
+  readonly mobileChanged = input<boolean>(false);
 
   @ViewChild("pokeTooltip") pokeTooltip?: ElementRef;
 
   ngOnChanges(changes)
   {
-    if(this.mobileChanged && changes['visible'])
+    if(this.mobileChanged() && changes['visible'])
     {
       if(changes['visible'].currentValue)
       {
