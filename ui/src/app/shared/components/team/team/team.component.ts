@@ -1,4 +1,4 @@
-import { Component, inject, input, model, output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, inject, input, model, output, SimpleChanges, viewChildren } from '@angular/core';
 import { ParserService } from '../../../../core/helpers/parser.service';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -23,7 +23,7 @@ export class TeamComponent
   readonly team = model<Team>();
   readonly removableTags = input<boolean | undefined>(false);
 
-  @ViewChildren(PokemonCardComponent) pokemonComponents!:QueryList<PokemonCardComponent>;
+  readonly pokemonComponents = viewChildren(PokemonCardComponent);
 
   showAllStats: boolean = false;
   showAllNotes: boolean = false;
@@ -140,14 +140,14 @@ export class TeamComponent
     {
       case 0:
         this.showAllStats = !this.showAllStats;
-        this.pokemonComponents.forEach(pokemon => 
+        this.pokemonComponents().forEach(pokemon => 
         {
           pokemon.showStats[0] = this.showAllStats;
         });
       break;
       case 1:
         this.showAllNotes = !this.showAllNotes;
-        this.pokemonComponents.forEach(pokemon => 
+        this.pokemonComponents().forEach(pokemon => 
         {
           if(pokemon.pokemon()?.notes)
           {
@@ -163,7 +163,7 @@ export class TeamComponent
 
   closeAllTooltips()
   {
-    this.pokemonComponents.forEach(pokemonComponent => 
+    this.pokemonComponents().forEach(pokemonComponent => 
       {
         pokemonComponent.closeAllTooltips();
       }
@@ -172,7 +172,7 @@ export class TeamComponent
 
   closeAllProfileTooltips()
   {
-    this.pokemonComponents.forEach(pokemonComponent => 
+    this.pokemonComponents().forEach(pokemonComponent => 
       {
         pokemonComponent.closeAllProfileTooltips();
       }

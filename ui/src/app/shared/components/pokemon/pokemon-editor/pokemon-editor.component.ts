@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, viewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../../../core/helpers/theme.service';
@@ -47,7 +47,7 @@ export class PokemonEditorComponent
   readonly genderColors = GenderColors;
   readonly shinyColor = shinyColor;
 
-  @ViewChild(PokemonCardComponent) pokemonPreviewComponent?: PokemonCardComponent;
+  readonly pokemonPreviewComponent = viewChild(PokemonCardComponent);
   allAbilities: boolean = false;
   showNotes: boolean = false;
   pokemonFormSubmitted: boolean = false;
@@ -72,7 +72,7 @@ export class PokemonEditorComponent
     value: 0
   };
 
-  @ViewChild('evSlider') evSlider!: ElementRef;
+  readonly evSlider = viewChild.required<ElementRef>('evSlider');
 
   selectedStat: number = 0;
   currentIVs: number = 0;
@@ -400,7 +400,7 @@ export class PokemonEditorComponent
     //Selected more EVs than available
     if(this.remainingEVs == 0 && newEVs >= this.currentEVs)
     {
-      this.evSlider.nativeElement.value = this.currentEVs;
+      this.evSlider().nativeElement.value = this.currentEVs;
       return false;
     }
     
@@ -418,7 +418,7 @@ export class PokemonEditorComponent
       this.currentEVs = this.currentEVs + this.remainingEVs;
       this.remainingEVs = 0;
     }
-    this.evSlider.nativeElement.value = this.currentEVs;
+    this.evSlider().nativeElement.value = this.currentEVs;
     return true;
   }
 
@@ -451,10 +451,11 @@ export class PokemonEditorComponent
         this.pokemonForm.controls.ivs.setValue(this.currentIVs);
         this.currentEVs = this.pokemon.evs[index].value;
         this.pokemonForm.controls.evs.setValue(this.currentEVs);
-        this.evSlider.nativeElement.value = this.currentEVs;
-       if(this.pokemonPreviewComponent)
+        this.evSlider().nativeElement.value = this.currentEVs;
+       const pokemonPreviewComponent = this.pokemonPreviewComponent();
+       if(pokemonPreviewComponent)
         {
-          this.pokemonPreviewComponent.showStats[0] = true;
+          pokemonPreviewComponent.showStats[0] = true;
         }
       }
       this.calcIVSliderBackground(this.pokemon.ivs[index].value, 0, 31);
@@ -473,7 +474,7 @@ export class PokemonEditorComponent
       this.pokemonForm.controls.ivs.setValue(this.currentIVs);
       this.currentEVs = this.pokemon.evs[0].value;
       this.pokemonForm.controls.evs.setValue(this.currentEVs);
-      this.evSlider.nativeElement.value = this.currentEVs;
+      this.evSlider().nativeElement.value = this.currentEVs;
     }
   }
 
@@ -537,9 +538,10 @@ export class PokemonEditorComponent
           forms: data.forms,
           stats: [...data.stats]
         };
-        if(this.pokemonPreviewComponent)
+        const pokemonPreviewComponent = this.pokemonPreviewComponent();
+        if(pokemonPreviewComponent)
         {
-          this.pokemonPreviewComponent.showStats[0] = true;
+          pokemonPreviewComponent.showStats[0] = true;
         }
       }
       else
@@ -558,9 +560,10 @@ export class PokemonEditorComponent
           forms: undefined,
           stats: []
         }
-        if(this.pokemonPreviewComponent)
+        const pokemonPreviewComponent = this.pokemonPreviewComponent();
+        if(pokemonPreviewComponent)
         {
-          this.pokemonPreviewComponent.showStats[0] = false;
+          pokemonPreviewComponent.showStats[0] = false;
         }
       }
     }

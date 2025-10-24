@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, viewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -43,7 +43,7 @@ export class TeamEditorComponent
   theme = inject(ThemeService);
   util = inject(UtilService);
 
-  @ViewChild(TeamComponent) teamComponent!: TeamComponent;
+  readonly teamComponent = viewChild.required(TeamComponent);
 
   loggedUser$ = this.store.select(selectLoggedUser);
   loggedUser?: QueryItem;
@@ -70,7 +70,7 @@ export class TeamEditorComponent
   exampleTeamModified?: boolean = undefined;
   readonly feedbackColors = FeedbackColors;
 
-  @ViewChild('playerInput') playerInput?: SmartInputComponent;
+  readonly playerInput = viewChild<SmartInputComponent>('playerInput');
 
   async ngOnInit() 
   {
@@ -79,10 +79,11 @@ export class TeamEditorComponent
       this.team = value;
       this.currentTags = value.tags?.length ?? 0;
       this.disableTagInput = this.currentTags >= this.maxTags ? true : false;
-      if(this.teamComponent)
+      const teamComponent = this.teamComponent();
+      if(teamComponent)
       {
-        this.teamComponent.showAllStats = false;
-        this.teamComponent.showAllNotes = false;
+        teamComponent.showAllStats = false;
+        teamComponent.showAllNotes = false;
       }
       if(this.loggedUser && this.team.user == null)
       {
@@ -146,7 +147,7 @@ export class TeamEditorComponent
             picture: undefined,
             registered: false
           };
-          this.teamComponent.checkUserToPlayer();
+          this.teamComponent().checkUserToPlayer();
           this.teamEditorService.setExampleTeamModified(true);
           return;
         }
@@ -211,10 +212,11 @@ export class TeamEditorComponent
     if(this.loggedUser && this.team.user)
     {
       this.team.player = this.team.user;
-      this.teamComponent.checkUserToPlayer();
-      if(this.playerInput && this.team.user.username)
+      this.teamComponent().checkUserToPlayer();
+      const playerInput = this.playerInput();
+      if(playerInput && this.team.user.username)
       {
-        this.playerInput.setInputValue(this.team.user.username)
+        playerInput.setInputValue(this.team.user.username)
       }
     }
   }
@@ -231,15 +233,15 @@ export class TeamEditorComponent
     if(this.team.regulation) { this.teamEditorService.setExampleTeamModified(true); }
   }
 
-  @ViewChild(TagEditorComponent) tagEditorComponent!: TagEditorComponent;
-  @ViewChild("tagInput") tagSmartInput!: SmartInputComponent;
+  readonly tagEditorComponent = viewChild.required(TagEditorComponent);
+  readonly tagSmartInput = viewChild.required<SmartInputComponent>("tagInput");
   toggleTagEditor()
   {
     if(this.showTagEditor) { this.tagEditorCloseEvent(); }
     else { this.showTagEditor = true; }
     if(this.showTagEditor)
     {
-      this.tagEditorComponent.setName(this.tagSmartInput.input.nativeElement.value)
+      this.tagEditorComponent().setName(this.tagSmartInput().input().nativeElement.value)
     }
   }
 
@@ -293,15 +295,15 @@ export class TeamEditorComponent
 
   enableTagSelector()
   {
-    this.tagSmartInput.searchForm.controls.key.enable();
-    this.tagSmartInput.disabled.set(false);
+    this.tagSmartInput().searchForm.controls.key.enable();
+    this.tagSmartInput().disabled.set(false);
   }
 
   disableTagSelector()
   {
     this.tagEditorCloseEvent();
-    this.tagSmartInput.searchForm.controls.key.disable();
-    this.tagSmartInput.disabled.set(true);
+    this.tagSmartInput().searchForm.controls.key.disable();
+    this.tagSmartInput().disabled.set(true);
   }
 
   removeTag()
@@ -312,9 +314,10 @@ export class TeamEditorComponent
 
   tagEditorCloseEvent()
   {
-    if(this.tagEditorComponent.colorPickerOpen)
+    const tagEditorComponent = this.tagEditorComponent();
+    if(tagEditorComponent.colorPickerOpen)
     {
-      this.tagEditorComponent.colorPickerOpen = false;
+      tagEditorComponent.colorPickerOpen = false;
       //Wait for color picker transition to finish
       setTimeout(() => {  this.showTagEditor = false; }, 400);
     }

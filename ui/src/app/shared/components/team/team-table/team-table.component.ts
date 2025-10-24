@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, viewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -52,7 +52,7 @@ export class TeamTableComponent
     {
       teamsPerPage: [this.defaultTeams, [Validators.min(1), Validators.max(50)]]
     }, { updateOn: "blur" });
-  @ViewChild(PaginationComponent) paginationComponent!: PaginationComponent;
+  readonly paginationComponent = viewChild.required(PaginationComponent);
 
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
   selectedThemeName?: string;
@@ -77,9 +77,10 @@ export class TeamTableComponent
     this.searchService.searched.subscribe((value: boolean) =>
       {
         this.searched = value;
-        if(this.searched && this.paginationComponent)
+        const paginationComponent = this.paginationComponent();
+        if(this.searched && paginationComponent)
         {
-          this.paginationComponent.currentPage.set(this.searchService.getCurrentPage());
+          paginationComponent.currentPage.set(this.searchService.getCurrentPage());
         }
       }
     );

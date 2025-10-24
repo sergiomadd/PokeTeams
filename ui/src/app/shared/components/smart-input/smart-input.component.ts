@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, input, model, output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, input, model, output, SimpleChanges, viewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ThemeService } from '../../../core/helpers/theme.service';
@@ -38,14 +38,15 @@ export class SmartInputComponent
   readonly newEvent = output();
   readonly updateEvent = output<string | undefined>();
 
-  @ViewChild('smartInput') smartInput!: ElementRef;
-  @ViewChild('input') input!: ElementRef;
-  @ViewChild('resultsDiv') resultsDiv!: ElementRef;
+  readonly smartInput = viewChild.required<ElementRef>('smartInput');
+  readonly input = viewChild.required<ElementRef>('input');
+  readonly resultsDiv = viewChild.required<ElementRef>('resultsDiv');
 
   @HostListener('document:keydown.arrowup') 
   arrowUp() 
   {
-    if(this.input && this.input.nativeElement === document.activeElement
+    const inputValue = this.input();
+    if(inputValue && inputValue.nativeElement === document.activeElement
       && this.showOptions)
     {
       this.hoverUp();
@@ -55,7 +56,8 @@ export class SmartInputComponent
   @HostListener('document:keydown.arrowdown') 
   arrowDown() 
   {
-    if(this.input && this.input.nativeElement === document.activeElement
+    const inputValue = this.input();
+    if(inputValue && inputValue.nativeElement === document.activeElement
       && this.showOptions)
     {
       this.hoverDown();
@@ -66,7 +68,7 @@ export class SmartInputComponent
   onDocumentClicked(event: MouseEvent, targetElement: HTMLElement) 
   {
     if (targetElement && document.body.contains(targetElement) 
-      && !this.smartInput.nativeElement.contains(targetElement)) 
+      && !this.smartInput().nativeElement.contains(targetElement)) 
     {
       this.showOptions = false;
     }
@@ -189,7 +191,7 @@ export class SmartInputComponent
     }
     this.searchForm.controls.key.setValue("");
     this.showOptions = false;
-    this.input.nativeElement.blur();
+    this.input().nativeElement.blur();
     this.selectEvent.emit(selectedResult);
     this.focusNext();
   }
@@ -200,9 +202,10 @@ export class SmartInputComponent
     this.searchForm.controls.key.setValue("");
     setTimeout(() => 
     {
-      if (this.input) 
+      const inputValue = this.input();
+      if (inputValue) 
       {
-        this.input.nativeElement.focus();
+        inputValue.nativeElement.focus();
       }
     });
     this.selectEvent.emit(undefined);
@@ -298,7 +301,7 @@ export class SmartInputComponent
     }
     if(this.position === 0)
     {
-      this.resultsDiv.nativeElement.scrollBy(0, -38);
+      this.resultsDiv().nativeElement.scrollBy(0, -38);
     }
   }
 
@@ -314,7 +317,7 @@ export class SmartInputComponent
     }
     if(this.position === 9)
     {
-      this.resultsDiv.nativeElement.scrollBy(0, 38);
+      this.resultsDiv().nativeElement.scrollBy(0, 38);
     }
   }
 
@@ -322,7 +325,7 @@ export class SmartInputComponent
   {
     if(this.autoTab())
     {
-      const smartInputComponent = this.smartInput.nativeElement.parentElement;
+      const smartInputComponent = this.smartInput().nativeElement.parentElement;
       let next = smartInputComponent?.nextElementSibling as HTMLElement | null;
       const input = next?.querySelector('input') as HTMLInputElement | null;
       if(input)
@@ -354,7 +357,7 @@ export class SmartInputComponent
     {
       if(!this.keepSelected())
       {
-        this.input.nativeElement.focus();
+        this.input().nativeElement.focus();
       }
     }
   }

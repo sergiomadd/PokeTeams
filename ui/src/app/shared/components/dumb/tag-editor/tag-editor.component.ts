@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild, input, output } from '@angular/core';
+import { Component, ElementRef, inject, input, output, viewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -26,8 +26,8 @@ export class TagEditorComponent
   readonly addEvent = output<Tag>();
   readonly closeEvent = output();
 
-  @ViewChild('inputName') nameInputComponent!: ElementRef;
-  @ViewChild('colorCode') colorCodeInputComponent!: ElementRef;
+  readonly nameInputComponent = viewChild.required<ElementRef>('inputName');
+  readonly colorCodeInputComponent = viewChild.required<ElementRef>('colorCode');
 
   form = this.formBuilder.group(
   {
@@ -113,7 +113,7 @@ export class TagEditorComponent
     if(preName)
     {
       this.form.controls.name.setValue(preName);
-      this.nameInputComponent.nativeElement.value = preName;        
+      this.nameInputComponent().nativeElement.value = preName;        
     }
   }
 

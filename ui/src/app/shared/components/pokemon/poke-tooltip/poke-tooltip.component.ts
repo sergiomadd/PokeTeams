@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, input, TemplateRef, viewChild } from '@angular/core';
 import { WindowService } from '../../../../core/helpers/window.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class PokeTooltipComponent
   readonly visible = input<boolean>(false);
   readonly mobileChanged = input<boolean>(false);
 
-  @ViewChild("pokeTooltip") pokeTooltip?: ElementRef;
+  readonly pokeTooltip = viewChild<ElementRef>("pokeTooltip");
 
   ngOnChanges(changes)
   {
@@ -35,20 +35,21 @@ export class PokeTooltipComponent
 
   checkOutofViewport()
   {
-    const rect: DOMRect = this.pokeTooltip?.nativeElement.getBoundingClientRect();
+    const pokeTooltip = this.pokeTooltip();
+    const rect: DOMRect = pokeTooltip?.nativeElement.getBoundingClientRect();
     if(rect)
     {
       if(rect.top - 200 < 0)
       {
-        this.pokeTooltip?.nativeElement.classList.remove("mobile")
-        this.pokeTooltip?.nativeElement.classList.add("bottom")
+        pokeTooltip?.nativeElement.classList.remove("mobile")
+        pokeTooltip?.nativeElement.classList.add("bottom")
       }
     }
   }
 
   reset()
   {
-    this.pokeTooltip?.nativeElement.classList.remove("bottom")
-    this.pokeTooltip?.nativeElement.classList.add("mobile")
+    this.pokeTooltip()?.nativeElement.classList.remove("bottom")
+    this.pokeTooltip()?.nativeElement.classList.add("mobile")
   }
 }

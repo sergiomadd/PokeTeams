@@ -1,4 +1,4 @@
-import { Component, inject, QueryList, SimpleChanges, ViewChildren, input, output } from '@angular/core';
+import { Component, inject, SimpleChanges, input, output, viewChildren } from '@angular/core';
 import { ParserService } from '../../../../core/helpers/parser.service';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -26,7 +26,7 @@ export class TeamBattleComponent
   readonly which = input<string>();
   readonly selectedIndexesEvent = output<number[]>();
 
-  @ViewChildren(PokemonCardComponent) pokemonComponents!:QueryList<PokemonCardComponent>;
+  readonly pokemonComponents = viewChildren(PokemonCardComponent);
 
   showAllStats: boolean = false;
   showAllNotes: boolean = false;
@@ -125,14 +125,14 @@ export class TeamBattleComponent
     {
       case 0:
         this.showAllStats = !this.showAllStats;
-        this.pokemonComponents.forEach(pokemon => 
+        this.pokemonComponents().forEach(pokemon => 
         {
           pokemon.showStats[0] = this.showAllStats;
         });
       break;
       case 1:
         this.showAllNotes = !this.showAllNotes;
-        this.pokemonComponents.forEach(pokemon => 
+        this.pokemonComponents().forEach(pokemon => 
         {
           if(pokemon.pokemon()?.notes)
           {
@@ -148,9 +148,10 @@ export class TeamBattleComponent
 
   closeAllTooltips()
   {
-    if(this.pokemonComponents)
+    const pokemonComponents = this.pokemonComponents();
+    if(pokemonComponents)
     {
-      this.pokemonComponents.forEach(pokemonComponent => 
+      pokemonComponents.forEach(pokemonComponent => 
         {
           pokemonComponent.closeAllTooltips();
         }

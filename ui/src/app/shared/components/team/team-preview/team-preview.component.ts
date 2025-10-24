@@ -1,4 +1,4 @@
-import { Component, inject, input, model, QueryList, SimpleChanges, ViewChildren, output } from '@angular/core';
+import { Component, inject, input, model, SimpleChanges, output, viewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { forkJoin, Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
@@ -43,7 +43,7 @@ export class TeamPreviewComponent
   readonly deleteEvent = output();
   readonly compareEvent = output<TeamPreviewToCompare>();
   
-  @ViewChildren(PokemonPreviewComponent) pokemonPreviewsComponents!: QueryList<PokemonPreviewComponent>;
+  readonly pokemonPreviewsComponents = viewChildren(PokemonPreviewComponent);
 
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
   selectedThemeName?: string;
@@ -120,7 +120,7 @@ export class TeamPreviewComponent
 
   expand()
   {
-    this.pokemonPreviewsComponents.forEach(pokemon => 
+    this.pokemonPreviewsComponents().forEach(pokemon => 
     {
       pokemon.expand();
     });
