@@ -1,5 +1,5 @@
 import { Component, inject, viewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, skip, take } from 'rxjs';
@@ -16,12 +16,16 @@ import { User } from '../../../../features/user/models/user.model';
 import { SearchService } from '../../../services/search.service';
 import { TeamCompareService } from '../../../services/team-compare.service';
 import { PaginationComponent } from '../../dumb/pagination/pagination.component';
+import { NgClass, NgStyle } from '@angular/common';
+import { TeamPreviewComponent } from '../team-preview/team-preview.component';
+import { PokemonIconsComponent } from '../../pokemon/pokemon-icons/pokemon-icons.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-team-table',
     templateUrl: './team-table.component.html',
     styleUrl: './team-table.component.scss',
-    standalone: false
+    imports: [NgClass, TeamPreviewComponent, PaginationComponent, FormsModule, ReactiveFormsModule, NgStyle, PokemonIconsComponent, TranslatePipe]
 })
 export class TeamTableComponent 
 {

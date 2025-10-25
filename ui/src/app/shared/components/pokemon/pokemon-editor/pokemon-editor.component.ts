@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, viewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -16,6 +16,14 @@ import { TeamService } from '../../../../core/services/team.service';
 import { GetStatColorPipe } from '../../../pipes/color-pipes/getStatColor.pipe';
 import { TeamEditorService } from '../../../services/team-editor.service';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
+import { NgClass, NgTemplateOutlet, NgStyle } from '@angular/common';
+import { SmartInputComponent } from '../../smart-input/smart-input.component';
+import { CheckboxComponent } from '../../dumb/checkbox/checkbox.component';
+import { RadioComponent } from '../../dumb/radio/radio.component';
+import { TranslatePipe } from '@ngx-translate/core';
+import { GetPokemonSpritePathPipe } from '../../../pipes/pokemon-pipes/getPokemonSpritePath.pipe';
+import { GetStatCodePipe } from '../../../pipes/converters/getStatCode.pipe';
+import { GetStatShortIdentifierPipe } from '../../../pipes/converters/getStatShortIdentifier.pipe';
 
 @Component({
     selector: 'app-pokemon-editor',
@@ -24,7 +32,7 @@ import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
     providers: [
         GetStatColorPipe
     ],
-    standalone: false
+    imports: [NgClass, FormsModule, ReactiveFormsModule, SmartInputComponent, CheckboxComponent, NgTemplateOutlet, NgStyle, RadioComponent, PokemonCardComponent, TranslatePipe, GetPokemonSpritePathPipe, GetStatColorPipe, GetStatCodePipe, GetStatShortIdentifierPipe]
 })
 export class PokemonEditorComponent 
 {

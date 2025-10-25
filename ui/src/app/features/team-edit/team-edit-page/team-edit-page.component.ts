@@ -9,12 +9,15 @@ import { PokemonService } from '../../../core/services/pokemon.service';
 import { TeamService } from '../../../core/services/team.service';
 import { selectLang } from '../../../core/store/config/config.selectors';
 import { TeamEditorService } from '../../../shared/services/team-editor.service';
+import { PokemonEditorComponent } from '../../../shared/components/pokemon/pokemon-editor/pokemon-editor.component';
+import { TeamEditorComponent } from '../../../shared/components/team/team-editor/team-editor.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-team-edit-page',
     templateUrl: './team-edit-page.component.html',
     styleUrl: './team-edit-page.component.scss',
-    standalone: false
+    imports: [PokemonEditorComponent, TeamEditorComponent, TranslatePipe]
 })
 export class TeamEditPageComponent 
 {

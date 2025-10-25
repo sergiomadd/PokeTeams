@@ -2,13 +2,10 @@ import { Pipe, PipeTransform } from "@angular/core";
 import { Effectiveness } from "../../../core/models/pokemon/effectiveness.model";
 import { Move } from "../../../core/models/pokemon/move.model";
 
-@Pipe(
-  {
+@Pipe({
     name: 'calcMoveEffectivenessPipe',
-    pure: true,
-    standalone: false
-}
-)
+    pure: true
+})
 
 //Rename to calculate effectiveness
 export class CalcMoveEffectivenessPipe implements PipeTransform

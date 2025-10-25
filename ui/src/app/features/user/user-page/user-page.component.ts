@@ -10,12 +10,17 @@ import { selectLang } from '../../../core/store/config/config.selectors';
 import { SearchService } from '../../../shared/services/search.service';
 import { User } from '../models/user.model';
 import { UserPageService } from '../services/user-page.service';
+import { NgClass } from '@angular/common';
+import { UserTeamsComponent } from '../components/user-teams/user-teams.component';
+import { UserSettingsComponent } from '../components/user-settings/user-settings.component';
+import { NotFoundComponent } from '../../../shared/components/dumb/not-found/not-found.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-user-page',
     templateUrl: './user-page.component.html',
     styleUrl: './user-page.component.scss',
-    standalone: false
+    imports: [NgClass, UserTeamsComponent, UserSettingsComponent, NotFoundComponent, TranslatePipe]
 })
 export class UserPageComponent 
 {

@@ -1,11 +1,12 @@
 import { Component, ElementRef, inject, input, TemplateRef, viewChild } from '@angular/core';
 import { WindowService } from '../../../../core/helpers/window.service';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 
 @Component({
     selector: 'app-poke-tooltip',
     templateUrl: './poke-tooltip.component.html',
     styleUrl: './poke-tooltip.component.scss',
-    standalone: false
+    imports: [NgClass, NgTemplateOutlet]
 })
 export class PokeTooltipComponent 
 {

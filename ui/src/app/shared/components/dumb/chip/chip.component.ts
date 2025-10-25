@@ -1,11 +1,13 @@
 import { Component, inject, input, output } from '@angular/core';
 import { ThemeService } from '../../../../core/helpers/theme.service';
+import { NgClass, NgStyle } from '@angular/common';
+import { TooltipComponent } from '../tooltip/tooltip.component';
 
 @Component({
     selector: 'app-chip',
     templateUrl: './chip.component.html',
     styleUrl: './chip.component.scss',
-    standalone: false
+    imports: [NgClass, NgStyle, TooltipComponent]
 })
 export class ChipComponent 
 {

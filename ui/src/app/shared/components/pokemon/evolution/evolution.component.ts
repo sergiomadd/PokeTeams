@@ -7,8 +7,7 @@ import { TeamOptions } from '../../../../core/models/team/teamOptions.model';
 @Component({
     selector: 'app-evolution',
     templateUrl: './evolution.component.html',
-    styleUrls: ['../pokemon-card/pokemon-card.component.scss'],
-    standalone: false
+    styleUrls: ['../pokemon-card/pokemon-card.component.scss']
 })
 export class EvolutionComponent 
 {

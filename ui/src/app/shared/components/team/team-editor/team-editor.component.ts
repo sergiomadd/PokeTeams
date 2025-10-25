@@ -1,8 +1,8 @@
 import { Component, inject, viewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -21,12 +21,15 @@ import { TeamEditorService } from '../../../services/team-editor.service';
 import { TagEditorComponent } from '../../dumb/tag-editor/tag-editor.component';
 import { SmartInputComponent } from '../../smart-input/smart-input.component';
 import { TeamComponent } from '../team/team.component';
+import { NgClass } from '@angular/common';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { CheckboxComponent } from '../../dumb/checkbox/checkbox.component';
 
 @Component({
     selector: 'app-team-editor',
     templateUrl: './team-editor.component.html',
     styleUrls: ['./team-editor.component.scss'],
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, NgClass, TooltipComponent, SmartInputComponent, TagEditorComponent, CheckboxComponent, TeamComponent, TranslatePipe]
 })
 
 export class TeamEditorComponent 

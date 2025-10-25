@@ -1,10 +1,11 @@
 import { Component, SimpleChanges, TemplateRef, input, output } from '@angular/core';
+import { NgStyle, NgClass, NgTemplateOutlet } from '@angular/common';
 
 @Component({
     selector: 'app-switch',
     templateUrl: './switch.component.html',
     styleUrls: ['./switch.component.scss'],
-    standalone: false
+    imports: [NgStyle, NgClass, NgTemplateOutlet]
 })
 export class SwitchComponent 
 {

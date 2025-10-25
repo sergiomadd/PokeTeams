@@ -8,8 +8,8 @@ describe('NoTranslationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NoTranslationComponent]
-    })
+    imports: [NoTranslationComponent]
+})
     .compileComponents();
     
     fixture = TestBed.createComponent(NoTranslationComponent);

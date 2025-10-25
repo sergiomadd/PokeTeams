@@ -1,10 +1,11 @@
 import { Component, input, model, output } from '@angular/core';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-pagination',
     templateUrl: './pagination.component.html',
     styleUrl: './pagination.component.scss',
-    standalone: false
+    imports: [NgClass]
 })
 export class PaginationComponent 
 {

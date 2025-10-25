@@ -18,12 +18,25 @@ import { selectTheme } from '../../../../core/store/config/config.selectors';
 import { User } from '../../../../features/user/models/user.model';
 import { TeamCompareService } from '../../../services/team-compare.service';
 import { PokemonPreviewComponent } from '../../pokemon/pokemon-preview/pokemon-preview.component';
+import { NgClass } from '@angular/common';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { PokeTooltipComponent } from '../../pokemon/poke-tooltip/poke-tooltip.component';
+import { TournamentPreviewComponent } from '../tournament-preview/tournament-preview.component';
+import { RegulationPreviewComponent } from '../regulation-preview/regulation-preview.component';
+import { ChipComponent } from '../../dumb/chip/chip.component';
+import { RouterLink } from '@angular/router';
+import { DialogComponent } from '../../dumb/dialog/dialog.component';
+import { TranslatePipe } from '@ngx-translate/core';
+import { GetTagBgColorPipe } from '../../../pipes/color-pipes/getTagBgColor.pipe';
+import { GetTagTextColorPipe } from '../../../pipes/color-pipes/getTagTextColor.pipe';
+import { CustomFormatDatePipe } from '../../../pipes/converters/customFormatDate.pipe';
+import { FormatCountPipe } from '../../../pipes/converters/formatCount.pipe';
 
 @Component({
     selector: 'app-team-preview',
     templateUrl: './team-preview.component.html',
     styleUrls: ['./team-preview.component.scss'],
-    standalone: false
+    imports: [NgClass, TooltipComponent, PokeTooltipComponent, TournamentPreviewComponent, RegulationPreviewComponent, ChipComponent, RouterLink, PokemonPreviewComponent, DialogComponent, TranslatePipe, GetTagBgColorPipe, GetTagTextColorPipe, CustomFormatDatePipe, FormatCountPipe]
 })
 export class TeamPreviewComponent 
 {

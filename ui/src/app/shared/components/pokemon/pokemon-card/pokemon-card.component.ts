@@ -17,6 +17,19 @@ import { CalcMoveEffectivenessPipe } from '../../../pipes/pokemon-pipes/calcMove
 import { GetDefenseEffectivenessPipe } from '../../../pipes/pokemon-pipes/getDefenseEffectivenes.pipe';
 import { GetPokemonSpritePathPipe } from '../../../pipes/pokemon-pipes/getPokemonSpritePath.pipe';
 import { TeamCompareService } from '../../../services/team-compare.service';
+import { NgClass, NgTemplateOutlet, NgStyle, AsyncPipe } from '@angular/common';
+import { PokeTooltipComponent } from '../poke-tooltip/poke-tooltip.component';
+import { EvolutionComponent } from '../evolution/evolution.component';
+import { NoTranslationComponent } from '../../dumb/no-translation/no-translation.component';
+import { TranslatePipe } from '@ngx-translate/core';
+import { GetPokemonStatSizePipe } from '../../../pipes/pokemon-pipes/getPokemonStatSize.pipe';
+import { GetPokemonStatBorderRadiusPipe } from '../../../pipes/pokemon-pipes/getPokemonStatBorderRadius.pipe';
+import { ShouldBeInMiddlePipe } from '../../../pipes/pokemon-pipes/shouldBeInMiddle.pipe';
+import { GetTypeColorPipe } from '../../../pipes/color-pipes/getTypeColor.pipe';
+import { GetMoveColorPipe } from '../../../pipes/color-pipes/getMoveColor.pipe';
+import { GetStatColorPipe } from '../../../pipes/color-pipes/getStatColor.pipe';
+import { GetStatCodePipe } from '../../../pipes/converters/getStatCode.pipe';
+import { GetStatShortIdentifierPipe } from '../../../pipes/converters/getStatShortIdentifier.pipe';
 
 @Component({
     selector: 'app-pokemon-card',
@@ -27,7 +40,7 @@ import { TeamCompareService } from '../../../services/team-compare.service';
         GetDefenseEffectivenessPipe,
         GetPokemonSpritePathPipe
     ],
-    standalone: false
+    imports: [NgClass, PokeTooltipComponent, EvolutionComponent, NoTranslationComponent, NgTemplateOutlet, NgStyle, AsyncPipe, TranslatePipe, GetPokemonStatSizePipe, GetPokemonStatBorderRadiusPipe, ShouldBeInMiddlePipe, GetTypeColorPipe, GetMoveColorPipe, GetStatColorPipe, GetStatCodePipe, GetStatShortIdentifierPipe]
 })
 export class PokemonCardComponent 
 {

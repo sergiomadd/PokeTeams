@@ -8,12 +8,15 @@ import { TeamService } from '../../../core/services/team.service';
 import { selectLoggedUser } from '../../../core/store/auth/auth.selectors';
 import { TeamEditorService } from '../../../shared/services/team-editor.service';
 import { User } from '../../user/models/user.model';
+import { PasteInputComponent } from '../../../shared/components/team/paste-input/paste-input.component';
+import { TeamEditorComponent } from '../../../shared/components/team/team-editor/team-editor.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-upload-page',
     templateUrl: './upload-page.component.html',
     styleUrl: './upload-page.component.scss',
-    standalone: false
+    imports: [PasteInputComponent, TeamEditorComponent, TranslatePipe]
 })
 export class UploadPageComponent 
 {

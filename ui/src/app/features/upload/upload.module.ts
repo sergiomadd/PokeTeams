@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SharedModule } from '../../shared/shared.module';
 import { UploadPageComponent } from './upload-page/upload-page.component';
 
 const routes: Routes = 
@@ -10,16 +9,11 @@ const routes: Routes =
 ];
 
 @NgModule({
-  declarations: 
-  [
-    UploadPageComponent
-  ],
-  imports: 
-  [
-    CommonModule,
-    SharedModule,
-    RouterModule.forChild(routes)
-  ],
-  exports: [RouterModule]
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        UploadPageComponent
+    ],
+    exports: [RouterModule]
 })
 export class UploadModule { }

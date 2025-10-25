@@ -8,8 +8,8 @@ describe('ComparePageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ComparePageComponent]
-    })
+    imports: [ComparePageComponent]
+})
     .compileComponents();
     
     fixture = TestBed.createComponent(ComparePageComponent);

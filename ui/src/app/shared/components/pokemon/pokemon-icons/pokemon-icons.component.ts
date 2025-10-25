@@ -4,8 +4,7 @@ import { PokemonPreview } from '../../../../core/models/pokemon/pokemonPreview.m
 @Component({
     selector: 'app-pokemon-icons',
     templateUrl: './pokemon-icons.component.html',
-    styleUrl: './pokemon-icons.component.scss',
-    standalone: false
+    styleUrl: './pokemon-icons.component.scss'
 })
 export class PokemonIconsComponent 
 {

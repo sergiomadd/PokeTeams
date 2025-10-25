@@ -1,10 +1,7 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { Stat } from "../../../core/models/pokemon/stat.model";
 
-@Pipe({
-    name: 'getStatShortIdentifier',
-    standalone: false
-})
+@Pipe({ name: 'getStatShortIdentifier' })
 
 export class GetStatShortIdentifierPipe implements PipeTransform 
 {

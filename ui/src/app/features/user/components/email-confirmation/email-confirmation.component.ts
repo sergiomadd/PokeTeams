@@ -1,16 +1,18 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FeedbackColors } from '../../../../core/models/misc/colors';
 import { authActions } from '../../../../core/store/auth/auth.actions';
 import { selectError, selectIsSubmitting, selectSuccess } from '../../../../core/store/auth/auth.selectors';
 import { UserUpdateDTO } from '../../models/userUpdate.dto';
+import { AsyncPipe } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-email-confirmation',
     templateUrl: './email-confirmation.component.html',
     styleUrl: './email-confirmation.component.scss',
-    standalone: false
+    imports: [RouterLink, AsyncPipe, TranslatePipe]
 })
 export class EmailConfirmationComponent 
 {

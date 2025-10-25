@@ -1,10 +1,12 @@
 import { Component, TemplateRef, input, model, output } from '@angular/core';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { TooltipComponent } from '../tooltip/tooltip.component';
 
 @Component({
     selector: 'app-checkbox',
     templateUrl: './checkbox.component.html',
     styleUrl: './checkbox.component.scss',
-    standalone: false
+    imports: [NgClass, NgTemplateOutlet, TooltipComponent]
 })
 export class CheckboxComponent 
 {

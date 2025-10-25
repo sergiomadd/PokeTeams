@@ -3,8 +3,7 @@ import { SeoService } from '../../../../core/helpers/seo.service';
 
 @Component({
     selector: 'app-about',
-    templateUrl: './about.component.html',
-    standalone: false
+    templateUrl: './about.component.html'
 })
 export class AboutComponent 
 {

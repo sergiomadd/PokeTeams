@@ -1,10 +1,11 @@
 import { Component, input } from '@angular/core';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-tooltip',
     templateUrl: './tooltip.component.html',
     styleUrl: './tooltip.component.scss',
-    standalone: false
+    imports: [NgClass]
 })
 export class TooltipComponent 
 {

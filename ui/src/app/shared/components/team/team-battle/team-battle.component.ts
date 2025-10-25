@@ -7,12 +7,18 @@ import { Move } from '../../../../core/models/pokemon/move.model';
 import { Team } from '../../../../core/models/team/team.model';
 import { TeamCompareService } from '../../../services/team-compare.service';
 import { PokemonCardComponent } from '../../pokemon/pokemon-card/pokemon-card.component';
+import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { TranslatePipe } from '@ngx-translate/core';
+import { CalcMoveEffectivenessPipe } from '../../../pipes/pokemon-pipes/calcMoveEffectiveness.pipe';
+import { GetDefenseEffectivenessPipe } from '../../../pipes/pokemon-pipes/getDefenseEffectivenes.pipe';
+import { GetPokemonSpritePathPipe } from '../../../pipes/pokemon-pipes/getPokemonSpritePath.pipe';
 
 @Component({
     selector: 'app-team-battle',
     templateUrl: './team-battle.component.html',
     styleUrl: './team-battle.component.scss',
-    standalone: false
+    imports: [NgClass, NgStyle, NgTemplateOutlet, PokemonCardComponent, TooltipComponent, TranslatePipe, CalcMoveEffectivenessPipe, GetDefenseEffectivenessPipe, GetPokemonSpritePathPipe]
 })
 export class TeamBattleComponent 
 {

@@ -2,12 +2,15 @@ import { Component, inject, SimpleChanges, input } from '@angular/core';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { WindowService } from '../../../../core/helpers/window.service';
 import { PokemonPreview } from '../../../../core/models/pokemon/pokemonPreview.model';
+import { NgClass, NgStyle } from '@angular/common';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { GetMoveColorPipe } from '../../../pipes/color-pipes/getMoveColor.pipe';
 
 @Component({
     selector: 'app-pokemon-preview',
     templateUrl: './pokemon-preview.component.html',
     styleUrls: ['./pokemon-preview.component.scss'],
-    standalone: false
+    imports: [NgClass, NgStyle, TooltipComponent, GetMoveColorPipe]
 })
 export class PokemonPreviewComponent 
 {

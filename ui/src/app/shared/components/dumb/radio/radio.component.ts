@@ -1,10 +1,12 @@
 import { Component, TemplateRef, input, model, output } from '@angular/core';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { TooltipComponent } from '../tooltip/tooltip.component';
 
 @Component({
     selector: 'app-radio',
     templateUrl: './radio.component.html',
     styleUrl: './radio.component.scss',
-    standalone: false
+    imports: [NgClass, NgTemplateOutlet, TooltipComponent]
 })
 export class RadioComponent 
 {

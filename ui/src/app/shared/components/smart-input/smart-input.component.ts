@@ -1,15 +1,19 @@
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, input, model, output, SimpleChanges, viewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ThemeService } from '../../../core/helpers/theme.service';
 import { QueryItem } from '../../../core/models/misc/queryResult.model';
+import { NgClass, NgStyle } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
+import { GetTagBgColorPipe } from '../../pipes/color-pipes/getTagBgColor.pipe';
+import { GetTagTextColorPipe } from '../../pipes/color-pipes/getTagTextColor.pipe';
 
 @Component({
     selector: 'app-smart-input',
     templateUrl: './smart-input.component.html',
     styleUrl: './smart-input.component.scss',
     changeDetection: ChangeDetectionStrategy.Default,
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, NgClass, NgStyle, TranslatePipe, GetTagBgColorPipe, GetTagTextColorPipe]
 })
 
 export class SmartInputComponent 

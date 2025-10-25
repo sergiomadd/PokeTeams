@@ -1,5 +1,5 @@
 import { Component, inject, input, output } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLinkActive, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { I18nService } from '../../../../core/helpers/i18n.service';
@@ -14,13 +14,18 @@ import { configActions } from '../../../../core/store/config/config.actions';
 import { selectLang, selectTheme } from '../../../../core/store/config/config.selectors';
 import { User } from '../../../../features/user/models/user.model';
 import { GetFlagIconUrlPipe } from '../../../pipes/getFlagIconUrl.pipe';
+import { ClickOutsideDirective } from '../../../directives/click-outside.directive';
+import { NgClass, AsyncPipe } from '@angular/common';
+import { DropdownComponent } from '../../dumb/dropdown/dropdown.component';
+import { AuthFormComponent } from '../auth-form/auth-form.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-menu',
     templateUrl: './menu.component.html',
     styleUrl: './menu.component.scss',
     providers: [GetFlagIconUrlPipe],
-    standalone: false
+    imports: [ClickOutsideDirective, NgClass, RouterLinkActive, RouterLink, DropdownComponent, AuthFormComponent, AsyncPipe, TranslatePipe]
 })
 export class MenuComponent 
 {

@@ -6,12 +6,14 @@ import { selectLoggedUser } from '../../../core/store/auth/auth.selectors';
 import { selectLang } from '../../../core/store/config/config.selectors';
 import { SearchService } from '../../../shared/services/search.service';
 import { User } from '../../user/models/user.model';
+import { TeamSearchComponent } from '../../../shared/components/team/team-search/team-search.component';
+import { TeamTableComponent } from '../../../shared/components/team/team-table/team-table.component';
 
 @Component({
     selector: 'app-search-page',
     templateUrl: './search-page.component.html',
     styleUrl: './search-page.component.scss',
-    standalone: false
+    imports: [TeamSearchComponent, TeamTableComponent]
 })
 export class SearchPageComponent 
 {

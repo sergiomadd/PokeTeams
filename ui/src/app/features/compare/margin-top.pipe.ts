@@ -1,13 +1,10 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { ComparePokemon } from "./compare-page/compare-page.component";
 
-@Pipe(
-  {
+@Pipe({
     name: 'marginTopPipe',
-    pure: true,
-    standalone: false
-}
-)
+    pure: true
+})
 
 export class MarginTopPipe implements PipeTransform
 {

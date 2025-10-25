@@ -1,10 +1,7 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { tagBackgroundColors } from "../../../core/models/misc/tagColors.model";
 
-@Pipe({
-    name: 'getTagBgColor',
-    standalone: false
-})
+@Pipe({ name: 'getTagBgColor' })
 
 export class GetTagBgColorPipe implements PipeTransform 
 {

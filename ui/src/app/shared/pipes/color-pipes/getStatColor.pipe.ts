@@ -1,10 +1,7 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { StatColor, StatColorDark } from "../../../core/models/misc/colors";
 
-@Pipe({
-    name: 'getStatColor',
-    standalone: false
-})
+@Pipe({ name: 'getStatColor' })
 
 export class GetStatColorPipe implements PipeTransform 
 {

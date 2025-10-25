@@ -1,6 +1,8 @@
+import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ParserService } from '../../../core/helpers/parser.service';
 import { PokemonStatService } from '../../../core/helpers/pokemon-stat.service';
 import { ThemeService } from '../../../core/helpers/theme.service';
@@ -13,7 +15,15 @@ import { Stat } from '../../../core/models/pokemon/stat.model';
 import { Team } from '../../../core/models/team/team.model';
 import { PokemonService } from '../../../core/services/pokemon.service';
 import { TeamService } from '../../../core/services/team.service';
-
+import { SwitchComponent } from '../../../shared/components/dumb/switch/switch.component';
+import { TooltipComponent } from '../../../shared/components/dumb/tooltip/tooltip.component';
+import { TeamBattleComponent } from '../../../shared/components/team/team-battle/team-battle.component';
+import { GetStatColorPipe } from '../../../shared/pipes/color-pipes/getStatColor.pipe';
+import { GetStatCodePipe } from '../../../shared/pipes/converters/getStatCode.pipe';
+import { GetStatShortIdentifierPipe } from '../../../shared/pipes/converters/getStatShortIdentifier.pipe';
+import { GetFormControlErrorPipe } from '../../../shared/pipes/getFormControlError.pipe';
+import { IsFormFieldInvalidPipe } from '../../../shared/pipes/isFormFieldInvalid.pipe';
+import { MarginTopPipe } from '../margin-top.pipe';
 
 export interface ComparePokemon
 {
@@ -29,7 +39,7 @@ export interface ComparePokemon
     selector: 'app-compare-page',
     templateUrl: './compare-page.component.html',
     styleUrl: './compare-page.component.scss',
-    standalone: false
+    imports: [NgClass, NgTemplateOutlet, NgStyle, FormsModule, ReactiveFormsModule, SwitchComponent, TeamBattleComponent, TooltipComponent, TranslatePipe, IsFormFieldInvalidPipe, GetFormControlErrorPipe, GetStatColorPipe, GetStatCodePipe, GetStatShortIdentifierPipe, MarginTopPipe]
 })
 export class ComparePageComponent 
 {

@@ -6,12 +6,22 @@ import { WindowService } from '../../../../core/helpers/window.service';
 import { Team } from '../../../../core/models/team/team.model';
 import { TeamOptions } from '../../../../core/models/team/teamOptions.model';
 import { PokemonCardComponent } from '../../pokemon/pokemon-card/pokemon-card.component';
+import { NgTemplateOutlet, NgClass } from '@angular/common';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { PokeTooltipComponent } from '../../pokemon/poke-tooltip/poke-tooltip.component';
+import { TournamentPreviewComponent } from '../tournament-preview/tournament-preview.component';
+import { RegulationPreviewComponent } from '../regulation-preview/regulation-preview.component';
+import { ChipComponent } from '../../dumb/chip/chip.component';
+import { TranslatePipe } from '@ngx-translate/core';
+import { GetTagBgColorPipe } from '../../../pipes/color-pipes/getTagBgColor.pipe';
+import { GetTagTextColorPipe } from '../../../pipes/color-pipes/getTagTextColor.pipe';
+import { CustomFormatDatePipe } from '../../../pipes/converters/customFormatDate.pipe';
 
 @Component({
     selector: 'app-team',
     templateUrl: './team.component.html',
     styleUrls: ['./team.component.scss'],
-    standalone: false
+    imports: [NgTemplateOutlet, NgClass, TooltipComponent, PokeTooltipComponent, TournamentPreviewComponent, RegulationPreviewComponent, ChipComponent, PokemonCardComponent, TranslatePipe, GetTagBgColorPipe, GetTagTextColorPipe, CustomFormatDatePipe]
 })
 export class TeamComponent 
 {

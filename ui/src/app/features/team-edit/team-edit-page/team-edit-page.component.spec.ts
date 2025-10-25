@@ -8,8 +8,8 @@ describe('TeamEditPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TeamEditPageComponent]
-    })
+    imports: [TeamEditPageComponent]
+})
     .compileComponents();
     
     fixture = TestBed.createComponent(TeamEditPageComponent);

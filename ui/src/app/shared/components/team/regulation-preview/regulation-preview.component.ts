@@ -1,11 +1,12 @@
 import { Component, inject, input } from '@angular/core';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { Regulation } from '../../../../core/models/team/regulation.model';
+import { CustomFormatDatePipe } from '../../../pipes/converters/customFormatDate.pipe';
 
 @Component({
     selector: 'app-regulation-preview',
     templateUrl: './regulation-preview.component.html',
-    standalone: false
+    imports: [CustomFormatDatePipe]
 })
 export class RegulationPreviewComponent 
 {

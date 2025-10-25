@@ -3,10 +3,7 @@ import { tagTextColors } from "../../../core/models/misc/tagColors.model";
 import { themes } from "../../../core/models/misc/theme.model";
 
 
-@Pipe({
-    name: 'getTagTextColor',
-    standalone: false
-})
+@Pipe({ name: 'getTagTextColor' })
 
 export class GetTagTextColorPipe implements PipeTransform 
 {

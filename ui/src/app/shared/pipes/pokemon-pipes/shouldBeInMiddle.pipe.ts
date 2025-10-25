@@ -1,13 +1,10 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { Type } from "../../../core/models/pokemon/type.model";
 
-@Pipe(
-  {
+@Pipe({
     name: 'shouldBeInMiddlePipe',
-    pure: true,
-    standalone: false
-}
-)
+    pure: true
+})
 
 export class ShouldBeInMiddlePipe implements PipeTransform
 {

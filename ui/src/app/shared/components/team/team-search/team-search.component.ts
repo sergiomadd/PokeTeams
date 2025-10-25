@@ -14,13 +14,19 @@ import { selectTheme } from '../../../../core/store/config/config.selectors';
 import { GetTagBgColorPipe } from '../../../pipes/color-pipes/getTagBgColor.pipe';
 import { GetTagTextColorPipe } from '../../../pipes/color-pipes/getTagTextColor.pipe';
 import { SearchService } from '../../../services/search.service';
+import { NgClass, NgTemplateOutlet, NgStyle } from '@angular/common';
+import { SmartInputComponent } from '../../smart-input/smart-input.component';
+import { RadioComponent } from '../../dumb/radio/radio.component';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { ChipComponent } from '../../dumb/chip/chip.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-team-search',
     templateUrl: './team-search.component.html',
     styleUrl: './team-search.component.scss',
     providers: [GetTagBgColorPipe, GetTagTextColorPipe],
-    standalone: false
+    imports: [NgClass, SmartInputComponent, NgTemplateOutlet, NgStyle, RadioComponent, TooltipComponent, ChipComponent, TranslatePipe]
 })
 export class TeamSearchComponent 
 {

@@ -3,8 +3,7 @@ import { SeoService } from '../../../../core/helpers/seo.service';
 
 @Component({
     selector: 'app-privacy-policy',
-    templateUrl: './privacy-policy.component.html',
-    standalone: false
+    templateUrl: './privacy-policy.component.html'
 })
 export class PrivacyPolicyComponent 
 {
