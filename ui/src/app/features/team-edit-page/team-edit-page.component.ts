@@ -1,17 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { CustomError } from '../../../core/models/misc/customError.model';
-import { Team } from '../../../core/models/team/team.model';
-import { TeamData } from '../../../core/models/team/teamData.model';
-import { PokemonService } from '../../../core/services/pokemon.service';
-import { TeamService } from '../../../core/services/team.service';
-import { selectLang } from '../../../core/store/config/config.selectors';
-import { TeamEditorService } from '../../../shared/services/team-editor.service';
-import { PokemonEditorComponent } from '../../../shared/components/pokemon/pokemon-editor/pokemon-editor.component';
-import { TeamEditorComponent } from '../../../shared/components/team/team-editor/team-editor.component';
 import { TranslatePipe } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
+import { CustomError } from '../../core/models/misc/customError.model';
+import { Team } from '../../core/models/team/team.model';
+import { TeamData } from '../../core/models/team/teamData.model';
+import { PokemonService } from '../../core/services/pokemon.service';
+import { TeamService } from '../../core/services/team.service';
+import { selectLang } from '../../core/store/config/config.selectors';
+import { PokemonEditorComponent } from '../../shared/components/pokemon/pokemon-editor/pokemon-editor.component';
+import { TeamEditorComponent } from '../../shared/components/team/team-editor/team-editor.component';
+import { TeamEditorService } from '../../shared/services/team-editor.service';
 
 @Component({
     selector: 'app-team-edit-page',

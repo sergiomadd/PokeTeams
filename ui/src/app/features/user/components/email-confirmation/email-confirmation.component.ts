@@ -1,12 +1,12 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslatePipe } from '@ngx-translate/core';
 import { FeedbackColors } from '../../../../core/models/misc/colors';
 import { authActions } from '../../../../core/store/auth/auth.actions';
 import { selectError, selectIsSubmitting, selectSuccess } from '../../../../core/store/auth/auth.selectors';
 import { UserUpdateDTO } from '../../models/userUpdate.dto';
-import { AsyncPipe } from '@angular/common';
-import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-email-confirmation',

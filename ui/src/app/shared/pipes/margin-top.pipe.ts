@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { ComparePokemon } from "./compare-page/compare-page.component";
+import { ComparePokemon } from "../../features/compare-page/compare-page.component";
 
 @Pipe({
     name: 'marginTopPipe',
