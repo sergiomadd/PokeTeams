@@ -4,7 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { ParserService } from '../../core/helpers/parser.service';
 import { SeoService } from '../../core/helpers/seo.service';
 import { UtilService } from '../../core/helpers/util.service';

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, timeout } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { EmailDTO } from '../models/user/email.dto';
 import { ExternalAuthDTO } from '../models/user/externalAuth.dto';
 import { LogInDTO } from '../models/user/login.dto';
