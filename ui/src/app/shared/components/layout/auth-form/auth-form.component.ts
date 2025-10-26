@@ -1,21 +1,21 @@
-import { GoogleLoginProvider, SocialAuthService, GoogleSigninButtonDirective } from '@abacritt/angularx-social-login';
+import { GoogleLoginProvider, GoogleSigninButtonDirective, SocialAuthService } from '@abacritt/angularx-social-login';
+import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { Component, inject, output } from '@angular/core';
-import { FormBuilder, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { TranslatePipe } from '@ngx-translate/core';
 import { combineLatest } from 'rxjs';
 import { UtilService } from '../../../../core/helpers/util.service';
+import { ExternalAuthDTO } from '../../../../core/models/user/externalAuth.dto';
+import { LogInDTO } from '../../../../core/models/user/login.dto';
+import { SignUpDTO } from '../../../../core/models/user/signup.dto';
+import { UserUpdateDTO } from '../../../../core/models/user/userUpdate.dto';
 import { UserService } from '../../../../core/services/user.service';
 import { authActions } from '../../../../core/store/auth/auth.actions';
 import { selectError, selectIsSubmitting, selectSuccess } from '../../../../core/store/auth/auth.selectors';
-import { ExternalAuthDTO } from '../../../../features/user/models/externalAuth.dto';
-import { LogInDTO } from '../../../../features/user/models/login.dto';
-import { SignUpDTO } from '../../../../features/user/models/signup.dto';
-import { UserUpdateDTO } from '../../../../features/user/models/userUpdate.dto';
-import { NgTemplateOutlet, NgClass, AsyncPipe } from '@angular/common';
-import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
-import { TranslatePipe } from '@ngx-translate/core';
-import { IsFormFieldInvalidPipe } from '../../../pipes/isFormFieldInvalid.pipe';
 import { GetFormControlErrorPipe } from '../../../pipes/getFormControlError.pipe';
+import { IsFormFieldInvalidPipe } from '../../../pipes/isFormFieldInvalid.pipe';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
 
 @Component({
     selector: 'app-auth-form',

@@ -1,7 +1,9 @@
+import { NgClass, NgStyle } from '@angular/common';
 import { Component, inject, viewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Observable, skip, take } from 'rxjs';
 import { I18nService } from '../../../../core/helpers/i18n.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -9,17 +11,15 @@ import { WindowService } from '../../../../core/helpers/window.service';
 import { SortOrder, SortType, SortWay } from '../../../../core/models/search/sortOrder.model';
 import { TeamPreviewData } from '../../../../core/models/team/teamPreviewData.model';
 import { TeamPreviewToCompare } from '../../../../core/models/team/teamPreviewToCompare.model';
+import { User } from '../../../../core/models/user/user.model';
 import { selectLoggedUser } from '../../../../core/store/auth/auth.selectors';
 import { configActions } from '../../../../core/store/config/config.actions';
 import { selectTeamsPerPage, selectTheme } from '../../../../core/store/config/config.selectors';
-import { User } from '../../../../features/user/models/user.model';
 import { SearchService } from '../../../services/search.service';
 import { TeamCompareService } from '../../../services/team-compare.service';
 import { PaginationComponent } from '../../dumb/pagination/pagination.component';
-import { NgClass, NgStyle } from '@angular/common';
-import { TeamPreviewComponent } from '../team-preview/team-preview.component';
 import { PokemonIconsComponent } from '../../pokemon/pokemon-icons/pokemon-icons.component';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TeamPreviewComponent } from '../team-preview/team-preview.component';
 
 @Component({
     selector: 'app-team-table',

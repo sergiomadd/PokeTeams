@@ -2,12 +2,12 @@ import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, skip } from 'rxjs';
 import { SeoService } from '../../core/helpers/seo.service';
+import { User } from '../../core/models/user/user.model';
 import { selectLoggedUser } from '../../core/store/auth/auth.selectors';
 import { selectLang } from '../../core/store/config/config.selectors';
 import { TeamSearchComponent } from '../../shared/components/team/team-search/team-search.component';
 import { TeamTableComponent } from '../../shared/components/team/team-table/team-table.component';
 import { SearchService } from '../../shared/services/search.service';
-import { User } from '../user/models/user.model';
 
 @Component({
     selector: 'app-search-page',

@@ -1,5 +1,8 @@
-import { Component, inject, input, model, SimpleChanges, output, viewChildren } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { Component, inject, input, model, output, SimpleChanges, viewChildren } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslatePipe } from '@ngx-translate/core';
 import { forkJoin, Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
 import { I18nService } from '../../../../core/helpers/i18n.service';
@@ -12,25 +15,22 @@ import { Pokemon } from '../../../../core/models/pokemon/pokemon.model';
 import { PokemonPreview } from '../../../../core/models/pokemon/pokemonPreview.model';
 import { TeamPreviewData } from '../../../../core/models/team/teamPreviewData.model';
 import { TeamPreviewToCompare } from '../../../../core/models/team/teamPreviewToCompare.model';
+import { User } from '../../../../core/models/user/user.model';
 import { PokemonService } from '../../../../core/services/pokemon.service';
 import { TeamService } from '../../../../core/services/team.service';
 import { selectTheme } from '../../../../core/store/config/config.selectors';
-import { User } from '../../../../features/user/models/user.model';
-import { TeamCompareService } from '../../../services/team-compare.service';
-import { PokemonPreviewComponent } from '../../pokemon/pokemon-preview/pokemon-preview.component';
-import { NgClass } from '@angular/common';
-import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
-import { PokeTooltipComponent } from '../../pokemon/poke-tooltip/poke-tooltip.component';
-import { TournamentPreviewComponent } from '../tournament-preview/tournament-preview.component';
-import { RegulationPreviewComponent } from '../regulation-preview/regulation-preview.component';
-import { ChipComponent } from '../../dumb/chip/chip.component';
-import { RouterLink } from '@angular/router';
-import { DialogComponent } from '../../dumb/dialog/dialog.component';
-import { TranslatePipe } from '@ngx-translate/core';
 import { GetTagBgColorPipe } from '../../../pipes/color-pipes/getTagBgColor.pipe';
 import { GetTagTextColorPipe } from '../../../pipes/color-pipes/getTagTextColor.pipe';
 import { CustomFormatDatePipe } from '../../../pipes/converters/customFormatDate.pipe';
 import { FormatCountPipe } from '../../../pipes/converters/formatCount.pipe';
+import { TeamCompareService } from '../../../services/team-compare.service';
+import { ChipComponent } from '../../dumb/chip/chip.component';
+import { DialogComponent } from '../../dumb/dialog/dialog.component';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { PokeTooltipComponent } from '../../pokemon/poke-tooltip/poke-tooltip.component';
+import { PokemonPreviewComponent } from '../../pokemon/pokemon-preview/pokemon-preview.component';
+import { RegulationPreviewComponent } from '../regulation-preview/regulation-preview.component';
+import { TournamentPreviewComponent } from '../tournament-preview/tournament-preview.component';
 
 @Component({
     selector: 'app-team-preview',
