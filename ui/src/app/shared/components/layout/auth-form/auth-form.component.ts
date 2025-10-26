@@ -1,6 +1,6 @@
-import { GoogleLoginProvider, SocialAuthService } from '@abacritt/angularx-social-login';
-import { Component, EventEmitter, inject, Output } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { GoogleLoginProvider, SocialAuthService, GoogleSigninButtonDirective } from '@abacritt/angularx-social-login';
+import { Component, inject, output } from '@angular/core';
+import { FormBuilder, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { combineLatest } from 'rxjs';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -11,12 +11,17 @@ import { ExternalAuthDTO } from '../../../../features/user/models/externalAuth.d
 import { LogInDTO } from '../../../../features/user/models/login.dto';
 import { SignUpDTO } from '../../../../features/user/models/signup.dto';
 import { UserUpdateDTO } from '../../../../features/user/models/userUpdate.dto';
+import { NgTemplateOutlet, NgClass, AsyncPipe } from '@angular/common';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { TranslatePipe } from '@ngx-translate/core';
+import { IsFormFieldInvalidPipe } from '../../../pipes/isFormFieldInvalid.pipe';
+import { GetFormControlErrorPipe } from '../../../pipes/getFormControlError.pipe';
 
 @Component({
     selector: 'app-auth-form',
     templateUrl: './auth-form.component.html',
     styleUrl: './auth-form.component.scss',
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, NgTemplateOutlet, NgClass, TooltipComponent, GoogleSigninButtonDirective, AsyncPipe, TranslatePipe, IsFormFieldInvalidPipe, GetFormControlErrorPipe]
 })
 export class AuthFormComponent 
 {
@@ -34,7 +39,7 @@ export class AuthFormComponent
     }
   )
 
-  @Output() close = new EventEmitter();
+  readonly close = output();
 
   login: boolean = true;
   signup: boolean = false;

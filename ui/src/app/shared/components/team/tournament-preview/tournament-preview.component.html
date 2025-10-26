@@ -1,26 +1,26 @@
-<ng-container *ngIf="tournament">
+@if (tournament()) {
   <div class="poke-tooltip-content">
     <div class="poke-tooltip-head">
-      <ng-container *ngIf="tournament?.icon">
-        <img src="{{tournament?.icon}}" alt="" class="icon-xl">
-      </ng-container>
-      <span>{{tournament?.name}}</span>
+      @if (tournament()?.icon) {
+        <img src="{{tournament()?.icon}}" alt="" class="icon-xl">
+      }
+      <span>{{tournament()?.name}}</span>
     </div>
     <div class="poke-tooltip-body flex justify-c-sa gap-m">
       <div class="flex flex-col align-i-c">
-        <span>{{tournament?.city}}</span>
+        <span>{{tournament()?.city}}</span>
         <div class="flex align-i-c gap-s">
-          <ng-container *ngIf="tournament?.countryCode">
-            <img src="{{tournament?.countryCode | getFlagIconUrl}}" alt="" class="icon-m">
-          </ng-container>
-          <span>{{tournament.countryName}}</span>
+          @if (tournament()?.countryCode) {
+            <img src="{{tournament()?.countryCode | getFlagIconUrl}}" alt="" class="icon-m">
+          }
+          <span>{{tournament()?.countryName}}</span>
         </div>
       </div>
       <div class="flex flex-col gap-m">
-        <span>{{tournament?.startDate | customFormatDate}}</span>
+        <span>{{tournament()?.startDate | customFormatDate}}</span>
         <div class="x-divider"></div>
-        <span>{{tournament?.endDate | customFormatDate}}</span>
+        <span>{{tournament()?.endDate | customFormatDate}}</span>
       </div>
     </div>
   </div>
-</ng-container>
+}

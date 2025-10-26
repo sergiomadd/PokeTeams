@@ -1,26 +1,27 @@
-import { Component, ElementRef, inject, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, input, TemplateRef, viewChild } from '@angular/core';
 import { WindowService } from '../../../../core/helpers/window.service';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 
 @Component({
     selector: 'app-poke-tooltip',
     templateUrl: './poke-tooltip.component.html',
     styleUrl: './poke-tooltip.component.scss',
-    standalone: false
+    imports: [NgClass, NgTemplateOutlet]
 })
 export class PokeTooltipComponent 
 {
   window = inject(WindowService);
 
-  @Input() content?: TemplateRef<any>;
-  @Input() side: string = "left";
-  @Input() visible: boolean = false;
-  @Input() mobileChanged: boolean = false;
+  readonly content = input<TemplateRef<any> | null>(null);
+  readonly side = input<string>("left");
+  readonly visible = input<boolean>(false);
+  readonly mobileChanged = input<boolean>(false);
 
-  @ViewChild("pokeTooltip") pokeTooltip?: ElementRef;
+  readonly pokeTooltip = viewChild<ElementRef>("pokeTooltip");
 
   ngOnChanges(changes)
   {
-    if(this.mobileChanged && changes['visible'])
+    if(this.mobileChanged() && changes['visible'])
     {
       if(changes['visible'].currentValue)
       {
@@ -35,20 +36,21 @@ export class PokeTooltipComponent
 
   checkOutofViewport()
   {
-    const rect: DOMRect = this.pokeTooltip?.nativeElement.getBoundingClientRect();
+    const pokeTooltip = this.pokeTooltip();
+    const rect: DOMRect = pokeTooltip?.nativeElement.getBoundingClientRect();
     if(rect)
     {
       if(rect.top - 200 < 0)
       {
-        this.pokeTooltip?.nativeElement.classList.remove("mobile")
-        this.pokeTooltip?.nativeElement.classList.add("bottom")
+        pokeTooltip?.nativeElement.classList.remove("mobile")
+        pokeTooltip?.nativeElement.classList.add("bottom")
       }
     }
   }
 
   reset()
   {
-    this.pokeTooltip?.nativeElement.classList.remove("bottom")
-    this.pokeTooltip?.nativeElement.classList.add("mobile")
+    this.pokeTooltip()?.nativeElement.classList.remove("bottom")
+    this.pokeTooltip()?.nativeElement.classList.add("mobile")
   }
 }

@@ -2,13 +2,10 @@ import { Pipe, PipeTransform } from "@angular/core";
 import { Pokemon } from "../../../core/models/pokemon/pokemon.model";
 import { TeamOptions } from "../../../core/models/team/teamOptions.model";
 
-@Pipe(
-  {
+@Pipe({
     name: 'getPokemonStatBorderRadiusPipe',
-    pure: true,
-    standalone: false
-}
-)
+    pure: true
+})
 
 export class GetPokemonStatBorderRadiusPipe implements PipeTransform
 {

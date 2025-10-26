@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
@@ -11,12 +11,16 @@ import { Team } from '../../../../core/models/team/team.model';
 import { PokemonService } from '../../../../core/services/pokemon.service';
 import { selectLang } from '../../../../core/store/config/config.selectors';
 import { TeamEditorService } from '../../../services/team-editor.service';
+import { NgClass } from '@angular/common';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { PokemonEditorComponent } from '../../pokemon/pokemon-editor/pokemon-editor.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-paste-input',
     templateUrl: './paste-input.component.html',
     styleUrl: './paste-input.component.scss',
-    standalone: false
+    imports: [NgClass, FormsModule, ReactiveFormsModule, TooltipComponent, PokemonEditorComponent, TranslatePipe]
 })
 export class PasteInputComponent 
 {

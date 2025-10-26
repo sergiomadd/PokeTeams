@@ -1,17 +1,22 @@
-import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { Component, ElementRef, inject, input, output, viewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
 import { tagBackgroundColors } from '../../../../core/models/misc/tagColors.model';
 import { Tag } from '../../../../core/models/team/tag.model';
 import { TeamService } from '../../../../core/services/team.service';
+import { NgClass } from '@angular/common';
+import { ColorPickerComponent } from '../color-picker/color-picker.component';
+import { ChipComponent } from '../chip/chip.component';
+import { TranslatePipe } from '@ngx-translate/core';
+import { GetTagTextColorPipe } from '../../../pipes/color-pipes/getTagTextColor.pipe';
 
 @Component({
     selector: 'app-tag-editor',
     templateUrl: './tag-editor.component.html',
     styleUrl: './tag-editor.component.scss',
-    standalone: false
+    imports: [NgClass, ColorPickerComponent, FormsModule, ReactiveFormsModule, ChipComponent, TranslatePipe, GetTagTextColorPipe]
 })
 export class TagEditorComponent 
 {
@@ -22,12 +27,12 @@ export class TagEditorComponent
   window = inject(WindowService);
   theme = inject(ThemeService);
 
-  @Input() visible: boolean = false;
-  @Output() addEvent = new EventEmitter<Tag>();
-  @Output() closeEvent = new EventEmitter();
+  readonly visible = input<boolean>(false);
+  readonly addEvent = output<Tag>();
+  readonly closeEvent = output();
 
-  @ViewChild('inputName') nameInputComponent!: ElementRef;
-  @ViewChild('colorCode') colorCodeInputComponent!: ElementRef;
+  readonly nameInputComponent = viewChild.required<ElementRef>('inputName');
+  readonly colorCodeInputComponent = viewChild.required<ElementRef>('colorCode');
 
   form = this.formBuilder.group(
   {
@@ -113,7 +118,7 @@ export class TagEditorComponent
     if(preName)
     {
       this.form.controls.name.setValue(preName);
-      this.nameInputComponent.nativeElement.value = preName;        
+      this.nameInputComponent().nativeElement.value = preName;        
     }
   }
 

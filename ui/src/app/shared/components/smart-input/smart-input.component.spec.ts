@@ -8,8 +8,8 @@ describe('SmartInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SmartInputComponent]
-    })
+    imports: [SmartInputComponent]
+})
     .compileComponents();
     
     fixture = TestBed.createComponent(SmartInputComponent);

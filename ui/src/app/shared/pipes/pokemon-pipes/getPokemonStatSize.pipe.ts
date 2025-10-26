@@ -1,13 +1,10 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { TeamOptions } from "../../../core/models/team/teamOptions.model";
 
-@Pipe(
-  {
+@Pipe({
     name: 'getPokemonStatSizePipe',
-    pure: true,
-    standalone: false
-}
-)
+    pure: true
+})
 
 export class GetPokemonStatSizePipe implements PipeTransform
 {

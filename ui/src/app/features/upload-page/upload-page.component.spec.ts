@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TeamEditPageComponent } from './team-edit-page.component';
+import { UploadPageComponent } from './upload-page.component';
 
-describe('TeamEditPageComponent', () => {
-  let component: TeamEditPageComponent;
-  let fixture: ComponentFixture<TeamEditPageComponent>;
+describe('UploadPageComponent', () => {
+  let component: UploadPageComponent;
+  let fixture: ComponentFixture<UploadPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TeamEditPageComponent]
-    })
+    imports: [UploadPageComponent]
+})
     .compileComponents();
     
-    fixture = TestBed.createComponent(TeamEditPageComponent);
+    fixture = TestBed.createComponent(UploadPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

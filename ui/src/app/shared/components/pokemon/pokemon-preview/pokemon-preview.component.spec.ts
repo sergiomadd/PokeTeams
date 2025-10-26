@@ -8,8 +8,8 @@ describe('PokemonPreviewComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PokemonPreviewComponent]
-    });
+    imports: [PokemonPreviewComponent]
+});
     fixture = TestBed.createComponent(PokemonPreviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,0 +1,82 @@
+@if (loading) {
+  <div class="spinner-wrapper">
+    <div class="pokemon-spinner"></div>
+  </div>
+} @else {
+  @if (!unauthorized) {
+    @if (team) {
+      <div class="m-auto flex-col justify-c-c align-i-c gap-m" [ngStyle]="{'margin-top': window.isTabletPortraitOrLess() ? '0.8em' : team.title ? '3.3em' : '8em'}">
+        <app-team [team]="team"></app-team>
+        <div class="buttons flex justify-c-c gap-s w-100">
+          <button
+            class="button relative"
+            (click)="copyPaste()"
+            >
+            {{"team.view.copy_paste-button" | translate}}
+            <app-tooltip
+              [text]="'shared.copySuccess' | translate"
+              [side]="'top'"
+              [visible]="pasteCopied"
+              [instant]="!window.isTabletLandscapeOrLess()"
+            ></app-tooltip>
+          </button>
+          @if (loggedUser?.username && team.user?.username === loggedUser?.username) {
+            <button
+              class="button relative"
+              (click)="editTeam()"
+              [routerLink]="['/edit/', teamKey]"
+              >
+              {{"team.view.edit-button" | translate}}
+            </button>
+            <button
+              class="button-primary relative"
+              (click)="tryDelete()"
+              >
+              {{"team.preview.deleteTeam" | translate}}
+            </button>
+          }
+          <button
+            class="button relative"
+            (click)="copyLink()"
+            >
+            {{"team.view.copy_link-button" | translate}}
+            <app-tooltip
+              [text]="'shared.copySuccess' | translate"
+              [side]="'top'"
+              [visible]="linkCopied"
+              [instant]="!window.isTabletLandscapeOrLess()"
+            ></app-tooltip>
+          </button>
+        </div>
+        @if (feedback) {
+          <div class="formFeedbackError">
+            {{feedback}}
+          </div>
+        }
+        @if (!window.isTabletLandscapeOrLess()) {
+          <div style="color: var(--text-color-secondary); margin-top: 2.5em; opacity: 0.8; font-size: 0.8em;">
+            {{"team.view.help" | translate}}
+          </div>
+        }
+      </div>
+    } @else {
+      <app-not-found></app-not-found>
+    }
+  } @else {
+    <div class="flex justify-c-c align-i-c pad-m" style="font-size: x-large; margin-top: 8em;">
+      <div class="flex-col justify-c-c align-i-c gap-s">
+        <svg fill="var(--text-color)" height="100px" width="100px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M800 384h-32V261.872C768 115.024 661.744 0 510.816 0 359.28 0 256 117.472 256 261.872V384h-32c-70.592 0-128 57.408-128 128v384c0 70.592 57.408 128 128 128h576c70.592 0 128-57.408 128-128V512c0-70.592-57.408-128-128-128zM320 261.872C320 152.784 394.56 64 510.816 64 625.872 64 704 150.912 704 261.872V384H320V261.872zM864.001 896c0 35.28-28.72 64-64 64h-576c-35.28 0-64-28.72-64-64V512c0-35.28 28.72-64 64-64h576c35.28 0 64 28.72 64 64v384zm-352-320c-35.344 0-64 28.656-64 64 0 23.632 12.96 44.032 32 55.12V800c0 17.664 14.336 32 32 32s32-14.336 32-32V695.12c19.04-11.088 32-31.504 32-55.12 0-35.344-28.656-64-64-64z"></path></g></svg>
+        {{'shared.team.unauthorized' | translate}}
+      </div>
+    </div>
+  }
+}
+@if (deleteDialog) {
+  <app-dialog
+    [title]="'team.preview.deleteTeamDialog' | translate"
+    [trueButtonText]="'shared.no' | translate"
+    [falseButtonText]="'shared.yes' | translate"
+    [visible]="deleteDialog"
+    (choose)="deleteChooseEvent($event)"
+  ></app-dialog>
+}

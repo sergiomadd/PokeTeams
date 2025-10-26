@@ -1,19 +1,21 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { WindowService } from '../../../../core/helpers/window.service';
+import { NgClass, NgStyle } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-color-picker',
     templateUrl: './color-picker.component.html',
     styleUrl: './color-picker.component.scss',
-    standalone: false
+    imports: [NgClass, NgStyle, TranslatePipe]
 })
 export class ColorPickerComponent 
 {
   window = inject(WindowService);
 
-  @Input() colors: string[] = [];
-  @Input() visible: boolean = false;
-  @Output() chooseEvent = new EventEmitter<number>();
+  readonly colors = input<string[]>([]);
+  readonly visible = input<boolean>(false);
+  readonly chooseEvent = output<number>();
 
   choose(colorIndex: number)
   {

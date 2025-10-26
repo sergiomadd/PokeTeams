@@ -1,26 +1,32 @@
+import { NgStyle } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment.development';
-import { ParserService } from '../../../core/helpers/parser.service';
-import { SeoService } from '../../../core/helpers/seo.service';
-import { UtilService } from '../../../core/helpers/util.service';
-import { WindowService } from '../../../core/helpers/window.service';
-import { CustomError } from '../../../core/models/misc/customError.model';
-import { Team } from '../../../core/models/team/team.model';
-import { TeamData } from '../../../core/models/team/teamData.model';
-import { PokemonService } from '../../../core/services/pokemon.service';
-import { TeamService } from '../../../core/services/team.service';
-import { selectLoggedUser } from '../../../core/store/auth/auth.selectors';
-import { selectLang } from '../../../core/store/config/config.selectors';
-import { User } from '../../user/models/user.model';
+import { environment } from '../../../environments/environment.development';
+import { ParserService } from '../../core/helpers/parser.service';
+import { SeoService } from '../../core/helpers/seo.service';
+import { UtilService } from '../../core/helpers/util.service';
+import { WindowService } from '../../core/helpers/window.service';
+import { CustomError } from '../../core/models/misc/customError.model';
+import { Team } from '../../core/models/team/team.model';
+import { TeamData } from '../../core/models/team/teamData.model';
+import { PokemonService } from '../../core/services/pokemon.service';
+import { TeamService } from '../../core/services/team.service';
+import { selectLoggedUser } from '../../core/store/auth/auth.selectors';
+import { selectLang } from '../../core/store/config/config.selectors';
+import { DialogComponent } from '../../shared/components/dumb/dialog/dialog.component';
+import { NotFoundComponent } from '../../shared/components/dumb/not-found/not-found.component';
+import { TooltipComponent } from '../../shared/components/dumb/tooltip/tooltip.component';
+import { TeamComponent } from '../../shared/components/team/team/team.component';
+import { User } from '../user/models/user.model';
 
 @Component({
     selector: 'app-team-view-page',
     templateUrl: './team-view-page.component.html',
     styleUrl: './team-view-page.component.scss',
-    standalone: false
+    imports: [NgStyle, TeamComponent, TooltipComponent, RouterLink, NotFoundComponent, DialogComponent, TranslatePipe]
 })
 export class TeamViewPageComponent 
 {

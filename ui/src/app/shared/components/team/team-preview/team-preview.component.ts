@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, inject, input, model, SimpleChanges, output, viewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { forkJoin, Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment.development';
@@ -18,12 +18,25 @@ import { selectTheme } from '../../../../core/store/config/config.selectors';
 import { User } from '../../../../features/user/models/user.model';
 import { TeamCompareService } from '../../../services/team-compare.service';
 import { PokemonPreviewComponent } from '../../pokemon/pokemon-preview/pokemon-preview.component';
+import { NgClass } from '@angular/common';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { PokeTooltipComponent } from '../../pokemon/poke-tooltip/poke-tooltip.component';
+import { TournamentPreviewComponent } from '../tournament-preview/tournament-preview.component';
+import { RegulationPreviewComponent } from '../regulation-preview/regulation-preview.component';
+import { ChipComponent } from '../../dumb/chip/chip.component';
+import { RouterLink } from '@angular/router';
+import { DialogComponent } from '../../dumb/dialog/dialog.component';
+import { TranslatePipe } from '@ngx-translate/core';
+import { GetTagBgColorPipe } from '../../../pipes/color-pipes/getTagBgColor.pipe';
+import { GetTagTextColorPipe } from '../../../pipes/color-pipes/getTagTextColor.pipe';
+import { CustomFormatDatePipe } from '../../../pipes/converters/customFormatDate.pipe';
+import { FormatCountPipe } from '../../../pipes/converters/formatCount.pipe';
 
 @Component({
     selector: 'app-team-preview',
     templateUrl: './team-preview.component.html',
     styleUrls: ['./team-preview.component.scss'],
-    standalone: false
+    imports: [NgClass, TooltipComponent, PokeTooltipComponent, TournamentPreviewComponent, RegulationPreviewComponent, ChipComponent, RouterLink, PokemonPreviewComponent, DialogComponent, TranslatePipe, GetTagBgColorPipe, GetTagTextColorPipe, CustomFormatDatePipe, FormatCountPipe]
 })
 export class TeamPreviewComponent 
 {
@@ -37,13 +50,13 @@ export class TeamPreviewComponent
   compareService = inject(TeamCompareService);
   i18n = inject(I18nService);
 
-  @Input() team?: TeamPreviewData;
-  @Input() pokemons?: PokemonPreview[] | null = undefined;
-  @Input() logged?: User;
-  @Output() deleteEvent = new EventEmitter();
-  @Output() compareEvent = new EventEmitter<TeamPreviewToCompare>();
+  readonly team = input<TeamPreviewData>();
+  readonly pokemons = model<PokemonPreview[] | null>([]);
+  readonly logged = input<User>();
+  readonly deleteEvent = output();
+  readonly compareEvent = output<TeamPreviewToCompare>();
   
-  @ViewChildren(PokemonPreviewComponent) pokemonPreviewsComponents!: QueryList<PokemonPreviewComponent>;
+  readonly pokemonPreviewsComponents = viewChildren(PokemonPreviewComponent);
 
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
   selectedThemeName?: string;
@@ -72,9 +85,10 @@ export class TeamPreviewComponent
   {
     if(changes["team"])
     {
-      if(this.team && this.team?.pokemonIDs && this.team?.pokemonIDs.length > 0)
+      const team = this.team();
+      if(team && team?.pokemonIDs && team?.pokemonIDs.length > 0)
       {
-        this.loadPokemons(this.team?.id)
+        this.loadPokemons(team?.id)
       }
       this.checkUserToPlayer()
     }
@@ -82,19 +96,20 @@ export class TeamPreviewComponent
 
   checkUserToPlayer()
   {
-    if(this.team && this.team.player?.username && this.team.user
-        && (this.team.player.username === this.team.user.username 
-          || this.team.player.username === this.team.user.name))
+    const team = this.team();
+    if(team && team.player?.username && team.user
+        && (team.player.username === team.user.username 
+          || team.player.username === team.user.name))
     {
       this.isPlayerSameAsUser = true;
-      if(this.team.user.picture)
+      if(team.user.picture)
       {
-        this.team.player.picture = this.team.user.picture;
+        team.player.picture = team.user.picture;
       }
       return;
     }
     this.isPlayerSameAsUser = false;
-    if(this.team?.player) { this.team.player.picture = undefined; }
+    if(team?.player) { team.player.picture = undefined; }
   }  
 
   loadPokemons(teamId: string)
@@ -105,12 +120,12 @@ export class TeamPreviewComponent
         {
           if(response)
           {
-            this.pokemons = response;
+            this.pokemons.set(response);
           }
         },
         error: () => 
         {
-          this.pokemons = null;
+          this.pokemons.set(null);
         }
       }
     );
@@ -118,7 +133,7 @@ export class TeamPreviewComponent
 
   expand()
   {
-    this.pokemonPreviewsComponents.forEach(pokemon => 
+    this.pokemonPreviewsComponents().forEach(pokemon => 
     {
       pokemon.expand();
     });
@@ -128,10 +143,11 @@ export class TeamPreviewComponent
   {
     this.copying = true;
     this.copied = undefined;
-    if(this.team?.pokemonIDs)
+    const team = this.team();
+    if(team?.pokemonIDs)
     {
       let pokemonObservables: Observable<Pokemon>[] = [];
-      for (const id of this.team?.pokemonIDs) 
+      for (const id of team?.pokemonIDs) 
       {
         pokemonObservables.push(this.pokemonService.getPokemonByIdNoLang(id));
       }
@@ -165,9 +181,10 @@ export class TeamPreviewComponent
   copyLink()
   {
     this.linkCopied = true;
-    if(this.team)
+    const team = this.team();
+    if(team)
     {
-      this.util.copyToClipboard(environment.url + this.team.id);
+      this.util.copyToClipboard(environment.url + team.id);
       setTimeout(()=>
       {
         this.linkCopied = false;
@@ -195,12 +212,14 @@ export class TeamPreviewComponent
 
   delete()
   {
-    if(this.team 
-      && this.team?.user?.registered
-      && this.logged 
-      && this.logged.username == this.team?.user?.username) 
+    const team = this.team();
+    const logged = this.logged();
+    if(team 
+      && team?.user?.registered
+      && logged 
+      && logged.username == team?.user?.username) 
     {
-      this.teamService.deleteTeam(this.team?.id).subscribe(
+      this.teamService.deleteTeam(team?.id).subscribe(
         {
           next: (response) =>
           {
@@ -214,11 +233,11 @@ export class TeamPreviewComponent
         }
       )
     }
-    else if(!this.team?.user?.registered)
+    else if(!team?.user?.registered)
     {
       this.feedback = "Unauthorized";
     }
-    else if(!this.logged || (this.logged && this.logged.username != this.team?.user?.username))
+    else if(!logged || (logged && logged.username != team?.user?.username))
     {
       this.feedback = "Unauthorized";
     }
@@ -243,9 +262,11 @@ export class TeamPreviewComponent
   compare()
   {
     this.feedback = undefined;
-    if(this.team?.id && this.pokemons)
+    const team = this.team();
+    const pokemons = this.pokemons();
+    if(team?.id && pokemons)
     {
-      const compareTeam: TeamPreviewToCompare = {teamData: this.team, pokemonPreviews: this.pokemons ?? []}
+      const compareTeam: TeamPreviewToCompare = {teamData: team, pokemonPreviews: pokemons ?? []}
       const compareAddResult: boolean = this.compareService.addTeamsToCompare(compareTeam);
       if(!compareAddResult)
       {

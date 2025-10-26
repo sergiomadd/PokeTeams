@@ -1,28 +1,29 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, model, output } from '@angular/core';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-pagination',
     templateUrl: './pagination.component.html',
     styleUrl: './pagination.component.scss',
-    standalone: false
+    imports: [NgClass]
 })
 export class PaginationComponent 
 {
-  @Input() currentPage: number = 1;
-  @Input() itemsPerPage!: number;
-  @Input() totalItems!: number;
-  @Output() pageChanged: EventEmitter<number> = new EventEmitter();
+  currentPage = model<number>(1);
+  readonly itemsPerPage = input.required<number>();
+  readonly totalItems = input.required<number>();
+  readonly pageChanged = output<number>();
 
   get totalPages(): number
   {
-    return Math.ceil(this.totalItems / this.itemsPerPage);
+    return Math.ceil(this.totalItems() / this.itemsPerPage());
   }
 
   changePage(page: number): void 
   {
     if (page >= 1 && page <= this.totalPages) 
     {
-      this.currentPage = page;
+      this.currentPage.set(page);
       this.pageChanged.emit(page);
     }
   }

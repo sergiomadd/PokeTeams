@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, inject, SimpleChanges, input, output, viewChildren } from '@angular/core';
 import { ParserService } from '../../../../core/helpers/parser.service';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -7,12 +7,18 @@ import { Move } from '../../../../core/models/pokemon/move.model';
 import { Team } from '../../../../core/models/team/team.model';
 import { TeamCompareService } from '../../../services/team-compare.service';
 import { PokemonCardComponent } from '../../pokemon/pokemon-card/pokemon-card.component';
+import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { TranslatePipe } from '@ngx-translate/core';
+import { CalcMoveEffectivenessPipe } from '../../../pipes/pokemon-pipes/calcMoveEffectiveness.pipe';
+import { GetDefenseEffectivenessPipe } from '../../../pipes/pokemon-pipes/getDefenseEffectivenes.pipe';
+import { GetPokemonSpritePathPipe } from '../../../pipes/pokemon-pipes/getPokemonSpritePath.pipe';
 
 @Component({
     selector: 'app-team-battle',
     templateUrl: './team-battle.component.html',
     styleUrl: './team-battle.component.scss',
-    standalone: false
+    imports: [NgClass, NgStyle, NgTemplateOutlet, PokemonCardComponent, TooltipComponent, TranslatePipe, CalcMoveEffectivenessPipe, GetDefenseEffectivenessPipe, GetPokemonSpritePathPipe]
 })
 export class TeamBattleComponent 
 {
@@ -22,11 +28,11 @@ export class TeamBattleComponent
   theme = inject(ThemeService);
   compareService = inject(TeamCompareService);
 
-  @Input() team?: Team;
-  @Input() which?: string;
-  @Output() selectedIndexesEvent = new EventEmitter<number[]>()
+  readonly team = input<Team>();
+  readonly which = input<string>();
+  readonly selectedIndexesEvent = output<number[]>();
 
-  @ViewChildren(PokemonCardComponent) pokemonComponents!:QueryList<PokemonCardComponent>;
+  readonly pokemonComponents = viewChildren(PokemonCardComponent);
 
   showAllStats: boolean = false;
   showAllNotes: boolean = false;
@@ -52,14 +58,15 @@ export class TeamBattleComponent
       this.moveB = value;
     })
 
-    if(this.which === 'A')
+    const which = this.which();
+    if(which === 'A')
     {
       this.compareService.teratypeEnabledIndexesAObservable$.subscribe(value => 
       {
         this.teraTypeEnabled = [...value];
       })
     }
-    else if(this.which === 'A')
+    else if(which === 'A')
     {
       this.compareService.teratypeEnabledIndexesBObservable$.subscribe(value => 
       {
@@ -124,16 +131,16 @@ export class TeamBattleComponent
     {
       case 0:
         this.showAllStats = !this.showAllStats;
-        this.pokemonComponents.forEach(pokemon => 
+        this.pokemonComponents().forEach(pokemon => 
         {
           pokemon.showStats[0] = this.showAllStats;
         });
       break;
       case 1:
         this.showAllNotes = !this.showAllNotes;
-        this.pokemonComponents.forEach(pokemon => 
+        this.pokemonComponents().forEach(pokemon => 
         {
-          if(pokemon.pokemon?.notes)
+          if(pokemon.pokemon()?.notes)
           {
             pokemon.showNotes[0] = this.showAllNotes;
           }
@@ -147,9 +154,10 @@ export class TeamBattleComponent
 
   closeAllTooltips()
   {
-    if(this.pokemonComponents)
+    const pokemonComponents = this.pokemonComponents();
+    if(pokemonComponents)
     {
-      this.pokemonComponents.forEach(pokemonComponent => 
+      pokemonComponents.forEach(pokemonComponent => 
         {
           pokemonComponent.closeAllTooltips();
         }

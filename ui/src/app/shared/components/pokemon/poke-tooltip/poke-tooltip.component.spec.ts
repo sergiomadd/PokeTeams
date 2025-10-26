@@ -8,8 +8,8 @@ describe('PokeTooltipComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PokeTooltipComponent]
-    })
+    imports: [PokeTooltipComponent]
+})
     .compileComponents();
     
     fixture = TestBed.createComponent(PokeTooltipComponent);

@@ -1,5 +1,5 @@
-import { Component, inject, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { Component, inject, viewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, skip, take } from 'rxjs';
@@ -16,12 +16,16 @@ import { User } from '../../../../features/user/models/user.model';
 import { SearchService } from '../../../services/search.service';
 import { TeamCompareService } from '../../../services/team-compare.service';
 import { PaginationComponent } from '../../dumb/pagination/pagination.component';
+import { NgClass, NgStyle } from '@angular/common';
+import { TeamPreviewComponent } from '../team-preview/team-preview.component';
+import { PokemonIconsComponent } from '../../pokemon/pokemon-icons/pokemon-icons.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-team-table',
     templateUrl: './team-table.component.html',
     styleUrl: './team-table.component.scss',
-    standalone: false
+    imports: [NgClass, TeamPreviewComponent, PaginationComponent, FormsModule, ReactiveFormsModule, NgStyle, PokemonIconsComponent, TranslatePipe]
 })
 export class TeamTableComponent 
 {
@@ -52,7 +56,7 @@ export class TeamTableComponent
     {
       teamsPerPage: [this.defaultTeams, [Validators.min(1), Validators.max(50)]]
     }, { updateOn: "blur" });
-  @ViewChild(PaginationComponent) paginationComponent!: PaginationComponent;
+  readonly paginationComponent = viewChild.required(PaginationComponent);
 
   selectedTheme$: Observable<string> = this.store.select(selectTheme);
   selectedThemeName?: string;
@@ -77,9 +81,10 @@ export class TeamTableComponent
     this.searchService.searched.subscribe((value: boolean) =>
       {
         this.searched = value;
-        if(this.searched && this.paginationComponent)
+        const paginationComponent = this.paginationComponent();
+        if(this.searched && paginationComponent)
         {
-          this.paginationComponent.currentPage = this.searchService.getCurrentPage();
+          paginationComponent.currentPage.set(this.searchService.getCurrentPage());
         }
       }
     );

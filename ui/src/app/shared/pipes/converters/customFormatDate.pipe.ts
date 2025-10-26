@@ -1,9 +1,6 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
-@Pipe({
-    name: 'customFormatDate',
-    standalone: false
-})
+@Pipe({ name: 'customFormatDate' })
 
 export class CustomFormatDatePipe implements PipeTransform
 {

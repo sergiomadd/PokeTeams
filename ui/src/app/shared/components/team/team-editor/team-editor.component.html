@@ -2,182 +2,190 @@
   <div class="flex-col gap-l" style="margin-top: 1em;">
     <form class="flex-col justify-c-c align-i-c" [formGroup]="teamForm">
       <div class="team-editor-inputs-wrapper flex wrap justify-c-c align-i-c gap-m"
-      [ngClass]="{'team-editor-inputs-wrapper-user': loggedUser}"
-      >
+        [ngClass]="{'team-editor-inputs-wrapper-user': loggedUser}"
+        >
         <div class="editor-input relative">
-          <ng-container *ngIf="!loggedUser">
+          @if (!loggedUser) {
             <div class="icon-m pointer tooltip-wrapper anon-warning">
               <svg class="feedback" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier"> 
-                  <path fill="var(--bg-color-3)" d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"></path> 
-                  <path fill="var(--text-color)" d="M12 6.25C12.4142 6.25 12.75 6.58579 12.75 7V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V7C11.25 6.58579 11.5858 6.25 12 6.25Z"></path> 
-                  <path fill="var(--text-color)" d="M12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z"></path> 
+                <g id="SVGRepo_iconCarrier">
+                  <path fill="var(--bg-color-3)" d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z"></path>
+                  <path fill="var(--text-color)" d="M12 6.25C12.4142 6.25 12.75 6.58579 12.75 7V13C12.75 13.4142 12.4142 13.75 12 13.75C11.5858 13.75 11.25 13.4142 11.25 13V7C11.25 6.58579 11.5858 6.25 12 6.25Z"></path>
+                  <path fill="var(--text-color)" d="M12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z"></path>
                 </g>
               </svg>
               <app-tooltip
-              [text]="'team.editor.not_logged-warning' | translate"
-              [side]="'left'"
+                [text]="'team.editor.not_logged-warning' | translate"
+                [side]="'left'"
               ></app-tooltip>
             </div>
-          </ng-container>
+          }
           <div class="smart-input-wrapper fake-smart-input ">
             <label>{{'shared.team.player' | translate}}</label>
             <div class="flex align-i-c justify-c-c">
               <input type="text" class="input-m" formControlName="player"
-              [ngClass]="{controlInvalid: isInvalid('player')}"
-              value="{{team.player?.username}}"
-              placeholder="{{'shared.team.player' | translate}}..."
-              >
-              <ng-container *ngIf="loggedUser">
-                <button 
-                class="button-secondary tooltip-wrapper" 
-                style="margin: 0 0.2em 0 0.6em; width: 2em;"
-                (click)="matchUserToPlayer()"
-                > 
-                = 
-                <app-tooltip
-                [text]="'team.team.player_same_user-tooltip' | translate"
-                [side]="'top'"
-                ></app-tooltip>
-                </button>
-              </ng-container>
+                [ngClass]="{controlInvalid: isInvalid('player')}"
+                value="{{team.player?.username}}"
+                placeholder="{{'shared.team.player' | translate}}..."
+                >
+                @if (loggedUser) {
+                  <button
+                    class="button-secondary tooltip-wrapper"
+                    style="margin: 0 0.2em 0 0.6em; width: 2em;"
+                    (click)="matchUserToPlayer()"
+                    >
+                    =
+                    <app-tooltip
+                      [text]="'team.team.player_same_user-tooltip' | translate"
+                      [side]="'top'"
+                    ></app-tooltip>
+                  </button>
+                }
+              </div>
+              @if (isInvalid('player')) {
+                <span class="formFeedbackError text-center">{{getError('player')}}</span>
+              }
             </div>
-            <span *ngIf="isInvalid('player')" class="formFeedbackError text-center">{{getError('player')}}</span>
+          </div>
+          @if (loggedUser) {
+            <div class="editor-input relative flex gap-m">
+              <app-smart-input
+                #userInput
+                [label]="'shared.team.user' | translate"
+                [value]="loggedUser"
+                [disableRemove]="true"
+                class="smart-input-wrapper input-m"
+              ></app-smart-input>
+            </div>
+          }
+          <div class="editor-input relative">
+            <app-smart-input
+              #tournamentInput
+              [value]="queryService.getTournamentQueryResult(team.tournament)"
+              [label]="'shared.team.tournament' | translate"
+              [keepSelected]="true"
+              [getter]="queryService.queryTournamentCallback"
+              [allGetter]="queryService.tournamentAllCallback"
+              [autoTab]="false"
+              (selectEvent)="tournamentSelectEvent($event)"
+              class="smart-input-wrapper input-m"
+            ></app-smart-input>
+          </div>
+          <div class="editor-input relative">
+            <app-smart-input
+              #regulationInput
+              [value]="queryService.getRegulationQueryResult(team.regulation)"
+              [label]="'shared.team.regulation' | translate"
+              [keepSelected]="true"
+              [getter]="queryService.queryRegulationCallback"
+              [allGetter]="queryService.regulationAllCallback"
+              [autoTab]="false"
+              (selectEvent)="regulationSelectEvent($event)"
+              class="smart-input-wrapper input-m"
+            ></app-smart-input>
+          </div>
+          <div class="editor-input relative">
+            <div class="smart-input-wrapper fake-smart-input ">
+              <label>{{'shared.team.rental_code' | translate}}</label>
+              <input type="text" class="input-m" formControlName="rental"
+                [ngClass]="{controlInvalid: isInvalid('rental')}"
+                value="{{team.rentalCode}}"
+                placeholder="{{'shared.team.rental_code' | translate}}..."
+                >
+                @if (isInvalid('rental')) {
+                  <span class="formFeedbackError text-center">{{getError('rental')}}</span>
+                }
+              </div>
+            </div>
+            <div class="editor-input relative">
+              <app-smart-input
+                #tagInput
+                [disabled]="disableTagInput"
+                [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
+                [allowNew]="true"
+                [getter]="queryService.queryTagCallback"
+                [allGetter]="queryService.tagAllCallback"
+                [autoTab]="false"
+                (selectEvent)="tagSelectEvent($event)"
+                (newEvent)="toggleTagEditor()"
+                class="smart-input-wrapper input-m"
+              ></app-smart-input>
+              <div class="tag-editor-wrapper">
+                <app-tag-editor
+                  [visible]="showTagEditor"
+                  (addEvent)="tagAddNewEvent($event)"
+                  (closeEvent)="tagEditorCloseEvent()"
+                ></app-tag-editor>
+              </div>
+            </div>
+          </div>
+          <div class="title-input relative">
+            <div class="smart-input-wrapper fake-smart-input ">
+              <label>{{'team.editor.title-label' | translate}}</label>
+              <input type="text" class="input-m" formControlName="title"
+                [ngClass]="{controlInvalid: isInvalid('title')}"
+                value="{{team.title}}"
+                placeholder="{{'team.editor.title-label' | translate}}..."
+                >
+                @if (isInvalid('title')) {
+                  <span class="formFeedbackError text-center">{{getError('title')}}</span>
+                }
+              </div>
+            </div>
+          </form>
+          @if (loggedUser) {
+            <div class="flex-col justify-c-c  align-i-c gap-s">
+              <div>
+                {{'team.editor.visibility-label' | translate}}
+              </div>
+              <div class="flex justify-c-c gap-s">
+                <app-checkbox
+                  [checked]="team.options.ivsVisibility"
+                  [label]="'IVs'"
+                  [lock]="!this.team.visibility"
+                  (checkEvent)="showIVsCheckEvent($event)"
+                ></app-checkbox>
+                <app-checkbox
+                  [checked]="team.options.evsVisibility"
+                  [label]="'EVs'"
+                  [lock]="!this.team.visibility"
+                  (checkEvent)="showEVsCheckEvent($event)"
+                ></app-checkbox>
+                <app-checkbox
+                  [checked]="team.options.naturesVisibility"
+                  [label]="'shared.pokemon.nature' | translate"
+                  [lock]="!this.team.visibility"
+                  (checkEvent)="showNatureCheckEvent($event)"
+                ></app-checkbox>
+                <app-checkbox
+                  [checked]="team.visibility"
+                  [label]="'shared.team.team' | translate"
+                  (checkEvent)="teamVisibiltyCheckEvent($event)"
+                ></app-checkbox>
+              </div>
+              @if (teamPrivateFeedback) {
+                <div class="text-center">
+                  <span class="formFeedbackError text-center">
+                    {{'team.editor.visibility_false-feedback' | translate}}
+                  </span>
+                </div>
+              }
+            </div>
+          }
+          <div class="flex flex-col gap-s justify-c-c align-i-c text-center">
+            <span class="formFeedbackError">{{feedback}}</span>
+            @if (exampleTeamModified === false) {
+              <span class="formFeedbackError">{{'team.editor.errors.example' | translate}}</span>
+            }
           </div>
         </div>
-        <div class="editor-input relative flex gap-m" *ngIf="loggedUser">
-          <app-smart-input
-          #userInput
-          [label]="'shared.team.user' | translate"
-          [value]="loggedUser"
-          [disableRemove]="true"
-          class="smart-input-wrapper input-m"
-          ></app-smart-input>
-        </div>
-        <div class="editor-input relative">
-          <app-smart-input
-          #tournamentInput
-          [value]="queryService.getTournamentQueryResult(team.tournament)"
-          [label]="'shared.team.tournament' | translate"
-          [keepSelected]="true"
-          [getter]="queryService.queryTournamentCallback"
-          [allGetter]="queryService.tournamentAllCallback"
-          [autoTab]="false"
-          (selectEvent)="tournamentSelectEvent($event)"
-          class="smart-input-wrapper input-m"
-          ></app-smart-input>
-        </div>
-        <div class="editor-input relative">
-          <app-smart-input
-          #regulationInput
-          [value]="queryService.getRegulationQueryResult(team.regulation)"
-          [label]="'shared.team.regulation' | translate"
-          [keepSelected]="true"
-          [getter]="queryService.queryRegulationCallback"
-          [allGetter]="queryService.regulationAllCallback"
-          [autoTab]="false"
-          (selectEvent)="regulationSelectEvent($event)"
-          class="smart-input-wrapper input-m"
-          ></app-smart-input>
-        </div>
-        <div class="editor-input relative">
-          <div class="smart-input-wrapper fake-smart-input ">
-            <label>{{'shared.team.rental_code' | translate}}</label>
-            <input type="text" class="input-m" formControlName="rental"
-            [ngClass]="{controlInvalid: isInvalid('rental')}"
-            value="{{team.rentalCode}}"
-            placeholder="{{'shared.team.rental_code' | translate}}..."
-            >
-            <span *ngIf="isInvalid('rental')" class="formFeedbackError text-center">{{getError('rental')}}</span>
-          </div>
-        </div>
-        <div class="editor-input relative">
-          <app-smart-input
-          #tagInput
-          [disabled]="disableTagInput"
-          [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
-          [allowNew]="true"
-          [getter]="queryService.queryTagCallback"
-          [allGetter]="queryService.tagAllCallback"
-          [autoTab]="false"
-          (selectEvent)="tagSelectEvent($event)"
-          (newEvent)="toggleTagEditor()"
-          class="smart-input-wrapper input-m"
-          ></app-smart-input>
-          <div class="tag-editor-wrapper">
-            <app-tag-editor 
-            [visible]="showTagEditor"
-            (addEvent)="tagAddNewEvent($event)"
-            (closeEvent)="tagEditorCloseEvent()"
-            ></app-tag-editor>
-          </div>
+        <div class="team-holder">
+          <app-team
+            [team]="team"
+            [removableTags]="true"
+            (removeEvent)="removeTag()"
+          ></app-team>
         </div>
       </div>
-      <div class="title-input relative">
-        <div class="smart-input-wrapper fake-smart-input ">
-          <label>{{'team.editor.title-label' | translate}}</label>
-          <input type="text" class="input-m" formControlName="title"
-          [ngClass]="{controlInvalid: isInvalid('title')}"
-          value="{{team.title}}"
-          placeholder="{{'team.editor.title-label' | translate}}..."
-          >
-          <span *ngIf="isInvalid('title')" class="formFeedbackError text-center">{{getError('title')}}</span>
-        </div>
-      </div>
-    </form>
-    <ng-container *ngIf="loggedUser">
-      <div class="flex-col justify-c-c  align-i-c gap-s">
-        <div>
-          {{'team.editor.visibility-label' | translate}}
-        </div>
-        <div class="flex justify-c-c gap-s">
-          <app-checkbox
-          [checked]="team.options.ivsVisibility"
-          [label]="'IVs'"
-          [lock]="!this.team.visibility"
-          (checkEvent)="showIVsCheckEvent($event)"
-          ></app-checkbox>
-          <app-checkbox
-          [checked]="team.options.evsVisibility"
-          [label]="'EVs'"
-          [lock]="!this.team.visibility"
-          (checkEvent)="showEVsCheckEvent($event)"
-          ></app-checkbox>
-          <app-checkbox
-          [checked]="team.options.naturesVisibility"
-          [label]="'shared.pokemon.nature' | translate"
-          [lock]="!this.team.visibility"
-          (checkEvent)="showNatureCheckEvent($event)"
-          ></app-checkbox>
-          <app-checkbox
-          [checked]="team.visibility"
-          [label]="'shared.team.team' | translate"
-          (checkEvent)="teamVisibiltyCheckEvent($event)"
-          ></app-checkbox>
-        </div>
-        <ng-container *ngIf="teamPrivateFeedback">
-          <div class="text-center">
-            <span class="formFeedbackError text-center">
-              {{'team.editor.visibility_false-feedback' | translate}}
-            </span>
-          </div>
-        </ng-container>
-      </div>
-    </ng-container>
-    <div class="flex flex-col gap-s justify-c-c align-i-c text-center">
-      <span class="formFeedbackError">{{feedback}}</span>
-      <ng-container *ngIf="exampleTeamModified === false">
-        <span class="formFeedbackError">{{'team.editor.errors.example' | translate}}</span>
-      </ng-container>
-    </div>
-  </div>
-  <div class="team-holder">
-    <app-team 
-    [team]="team" 
-    [removableTags]="true" 
-    (removeEvent)="removeTag()"
-    ></app-team>
-  </div>
-</div> 

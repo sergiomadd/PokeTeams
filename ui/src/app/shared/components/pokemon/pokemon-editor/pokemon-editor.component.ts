@@ -1,5 +1,5 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { Component, ElementRef, inject, viewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -16,6 +16,14 @@ import { TeamService } from '../../../../core/services/team.service';
 import { GetStatColorPipe } from '../../../pipes/color-pipes/getStatColor.pipe';
 import { TeamEditorService } from '../../../services/team-editor.service';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
+import { NgClass, NgTemplateOutlet, NgStyle } from '@angular/common';
+import { SmartInputComponent } from '../../smart-input/smart-input.component';
+import { CheckboxComponent } from '../../dumb/checkbox/checkbox.component';
+import { RadioComponent } from '../../dumb/radio/radio.component';
+import { TranslatePipe } from '@ngx-translate/core';
+import { GetPokemonSpritePathPipe } from '../../../pipes/pokemon-pipes/getPokemonSpritePath.pipe';
+import { GetStatCodePipe } from '../../../pipes/converters/getStatCode.pipe';
+import { GetStatShortIdentifierPipe } from '../../../pipes/converters/getStatShortIdentifier.pipe';
 
 @Component({
     selector: 'app-pokemon-editor',
@@ -24,7 +32,7 @@ import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
     providers: [
         GetStatColorPipe
     ],
-    standalone: false
+    imports: [NgClass, FormsModule, ReactiveFormsModule, SmartInputComponent, CheckboxComponent, NgTemplateOutlet, NgStyle, RadioComponent, PokemonCardComponent, TranslatePipe, GetPokemonSpritePathPipe, GetStatColorPipe, GetStatCodePipe, GetStatShortIdentifierPipe]
 })
 export class PokemonEditorComponent 
 {
@@ -47,7 +55,7 @@ export class PokemonEditorComponent
   readonly genderColors = GenderColors;
   readonly shinyColor = shinyColor;
 
-  @ViewChild(PokemonCardComponent) pokemonPreviewComponent?: PokemonCardComponent;
+  readonly pokemonPreviewComponent = viewChild(PokemonCardComponent);
   allAbilities: boolean = false;
   showNotes: boolean = false;
   pokemonFormSubmitted: boolean = false;
@@ -72,7 +80,7 @@ export class PokemonEditorComponent
     value: 0
   };
 
-  @ViewChild('evSlider') evSlider!: ElementRef;
+  readonly evSlider = viewChild.required<ElementRef>('evSlider');
 
   selectedStat: number = 0;
   currentIVs: number = 0;
@@ -400,7 +408,7 @@ export class PokemonEditorComponent
     //Selected more EVs than available
     if(this.remainingEVs == 0 && newEVs >= this.currentEVs)
     {
-      this.evSlider.nativeElement.value = this.currentEVs;
+      this.evSlider().nativeElement.value = this.currentEVs;
       return false;
     }
     
@@ -418,7 +426,7 @@ export class PokemonEditorComponent
       this.currentEVs = this.currentEVs + this.remainingEVs;
       this.remainingEVs = 0;
     }
-    this.evSlider.nativeElement.value = this.currentEVs;
+    this.evSlider().nativeElement.value = this.currentEVs;
     return true;
   }
 
@@ -451,10 +459,11 @@ export class PokemonEditorComponent
         this.pokemonForm.controls.ivs.setValue(this.currentIVs);
         this.currentEVs = this.pokemon.evs[index].value;
         this.pokemonForm.controls.evs.setValue(this.currentEVs);
-        this.evSlider.nativeElement.value = this.currentEVs;
-       if(this.pokemonPreviewComponent)
+        this.evSlider().nativeElement.value = this.currentEVs;
+       const pokemonPreviewComponent = this.pokemonPreviewComponent();
+       if(pokemonPreviewComponent)
         {
-          this.pokemonPreviewComponent.showStats[0] = true;
+          pokemonPreviewComponent.showStats[0] = true;
         }
       }
       this.calcIVSliderBackground(this.pokemon.ivs[index].value, 0, 31);
@@ -473,7 +482,7 @@ export class PokemonEditorComponent
       this.pokemonForm.controls.ivs.setValue(this.currentIVs);
       this.currentEVs = this.pokemon.evs[0].value;
       this.pokemonForm.controls.evs.setValue(this.currentEVs);
-      this.evSlider.nativeElement.value = this.currentEVs;
+      this.evSlider().nativeElement.value = this.currentEVs;
     }
   }
 
@@ -516,7 +525,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async pokemonSelectEvent(event: QueryItem)
+  async pokemonSelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -537,9 +546,10 @@ export class PokemonEditorComponent
           forms: data.forms,
           stats: [...data.stats]
         };
-        if(this.pokemonPreviewComponent)
+        const pokemonPreviewComponent = this.pokemonPreviewComponent();
+        if(pokemonPreviewComponent)
         {
-          this.pokemonPreviewComponent.showStats[0] = true;
+          pokemonPreviewComponent.showStats[0] = true;
         }
       }
       else
@@ -558,16 +568,17 @@ export class PokemonEditorComponent
           forms: undefined,
           stats: []
         }
-        if(this.pokemonPreviewComponent)
+        const pokemonPreviewComponent = this.pokemonPreviewComponent();
+        if(pokemonPreviewComponent)
         {
-          this.pokemonPreviewComponent.showStats[0] = false;
+          pokemonPreviewComponent.showStats[0] = false;
         }
       }
     }
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async itemSelectEvent(event: QueryItem)
+  async itemSelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -576,7 +587,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async abilitySelectEvent(event: QueryItem)
+  async abilitySelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -597,7 +608,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async move1SelectEvent(event: QueryItem)
+  async move1SelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -606,7 +617,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async move2SelectEvent(event: QueryItem)
+  async move2SelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -615,7 +626,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async move3SelectEvent(event: QueryItem)
+  async move3SelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -624,7 +635,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async move4SelectEvent(event: QueryItem)
+  async move4SelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -633,7 +644,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async natureSelectEvent(event: QueryItem)
+  async natureSelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -642,7 +653,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  async teraTypeSelectEvent(event: QueryItem)
+  async teraTypeSelectEvent(event?: QueryItem)
   {
     if(this.pokemon)
     {
@@ -664,7 +675,7 @@ export class PokemonEditorComponent
     this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
   }
 
-  genderSelectEvent(event: any)
+  genderSelectEvent(event?: any)
   {
     if(this.pokemon)
     {

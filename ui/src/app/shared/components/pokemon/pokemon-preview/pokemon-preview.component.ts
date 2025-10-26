@@ -1,20 +1,23 @@
-import { Component, inject, Input, SimpleChanges } from '@angular/core';
+import { Component, inject, SimpleChanges, input } from '@angular/core';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { WindowService } from '../../../../core/helpers/window.service';
 import { PokemonPreview } from '../../../../core/models/pokemon/pokemonPreview.model';
+import { NgClass, NgStyle } from '@angular/common';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { GetMoveColorPipe } from '../../../pipes/color-pipes/getMoveColor.pipe';
 
 @Component({
     selector: 'app-pokemon-preview',
     templateUrl: './pokemon-preview.component.html',
     styleUrls: ['./pokemon-preview.component.scss'],
-    standalone: false
+    imports: [NgClass, NgStyle, TooltipComponent, GetMoveColorPipe]
 })
 export class PokemonPreviewComponent 
 {
   theme = inject(ThemeService);
   window = inject(WindowService);
 
-  @Input() pokemon?: PokemonPreview;
+  readonly pokemon = input<PokemonPreview>();
 
   expanded: boolean = false;
   pokemonSpritePath: string | undefined = undefined;
@@ -35,20 +38,21 @@ export class PokemonPreviewComponent
 
   getMoveNameRows(index: number)
   {
-    if(this.pokemon?.moves && this.pokemon?.moves[index] 
-      && this.pokemon?.moves[index].name?.content)
+    const pokemon = this.pokemon();
+    if(pokemon?.moves && pokemon?.moves[index] 
+      && pokemon?.moves[index].name?.content)
     {
-      if(this.pokemon?.moves[index].name?.content.split(" ").length === 1)
+      if(pokemon?.moves[index].name?.content.split(" ").length === 1)
       {
-        const rowOne = this.pokemon?.moves[index].name?.content.substring(0, 7);
-        const rowTwo = this.pokemon?.moves[index].name?.content.substring(7);
-        if(index > 1 && this.pokemon?.moves[index].name?.content.length <= 7)
+        const rowOne = pokemon?.moves[index].name?.content.substring(0, 7);
+        const rowTwo = pokemon?.moves[index].name?.content.substring(7);
+        if(index > 1 && pokemon?.moves[index].name?.content.length <= 7)
         {
           return [rowTwo, rowOne];
         }
         return [rowOne, rowTwo];
       }
-      return this.pokemon?.moves[index].name?.content.split(" ");
+      return pokemon?.moves[index].name?.content.split(" ");
     }
     return [];
   }
@@ -60,13 +64,14 @@ export class PokemonPreviewComponent
 
   getSprite()
   {
-      if(this.pokemon?.gender === "female")
+      const pokemon = this.pokemon();
+      if(pokemon?.gender === "female")
       {
-        this.pokemonSpritePath = this.pokemon?.shiny ? this.pokemon?.sprite?.shinyFemale : this.pokemon?.sprite?.female
+        this.pokemonSpritePath = pokemon?.shiny ? pokemon?.sprite?.shinyFemale : pokemon?.sprite?.female
       }
       else
       {
-        this.pokemonSpritePath = this.pokemon?.shiny ? this.pokemon?.sprite?.shiny : this.pokemon?.sprite?.base
+        this.pokemonSpritePath = pokemon?.shiny ? pokemon?.sprite?.shiny : pokemon?.sprite?.base
       }
   }
 }

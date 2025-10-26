@@ -1,9 +1,6 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
-@Pipe({
-    name: 'isFormFieldInvalid',
-    standalone: false
-})
+@Pipe({ name: 'isFormFieldInvalid' })
 
 export class IsFormFieldInvalidPipe implements PipeTransform
 {

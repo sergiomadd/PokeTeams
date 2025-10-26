@@ -1,15 +1,15 @@
-<div class="tag-editor" 
+<div class="tag-editor"
 [ngClass]="
 {
-  'tag-editor-visible': visible,
+  'tag-editor-visible': visible(),
   'tag-editor-right': !window.isTabletLandscapeOrLess(),
   'tag-editor-top': window.isTabletLandscapeOrLess()
 }">
   <div class="color-picker-wrapper">
-    <app-color-picker 
-    [colors]="tagBackgroundColors" 
-    [visible]="colorPickerOpen"
-    (chooseEvent)="chooseColor($event)"
+    <app-color-picker
+      [colors]="tagBackgroundColors"
+      [visible]="colorPickerOpen"
+      (chooseEvent)="chooseColor($event)"
     ></app-color-picker>
   </div>
   <div class="tag-editor-content">
@@ -25,46 +25,50 @@
     <form class="flex-col gap-m" [formGroup]="form">
       <div class="flex-col gap-s">
         <label for="">{{"team.tag_editor.name" | translate}}</label>
-        <input 
-        #inputName 
-        type="text" 
-        formControlName="name" 
-        class="input-s"
-        [ngClass]="{controlInvalid: isInvalid('name')}"
-        >
-        <span *ngIf="isInvalid('name')" class="formFeedbackError">{{getError('name')}}</span>
-      </div>
-      <div class="flex-col gap-s">
-        <label for="">{{"team.tag_editor.description" | translate}}</label>
-        <textarea 
-          class="custom-scrollbar-dark" 
-          rows="3" 
-          formControlName="desc"
-          spellcheck="false"
-          [ngClass]="{controlInvalid: isInvalid('desc')}"
+        <input
+          #inputName
+          type="text"
+          formControlName="name"
+          class="input-s"
+          [ngClass]="{controlInvalid: isInvalid('name')}"
+          >
+          @if (isInvalid('name')) {
+            <span class="formFeedbackError">{{getError('name')}}</span>
+          }
+        </div>
+        <div class="flex-col gap-s">
+          <label for="">{{"team.tag_editor.description" | translate}}</label>
+          <textarea
+            class="custom-scrollbar-dark"
+            rows="3"
+            formControlName="desc"
+            spellcheck="false"
+            [ngClass]="{controlInvalid: isInvalid('desc')}"
           ></textarea>
-        <span *ngIf="isInvalid('desc')" class="formFeedbackError">{{getError('desc')}}</span>
-      </div>
-      <div class="flex justify-c-sb align-i-c">
-        <div class="tag-preview bor-rad-5 no-overflow" style="width: 48%;">
-          <app-chip 
-          [name]="tag.name"
-          [tooltipText]="tag.description"
-          [minWidth]="'100%'"
-          [bgColor]="tag.color !== undefined ? tagBackgroundColors[tag.color] : undefined"
-          [textColor]="tag.color !== undefined ? (tag.color | getTagTextColor:theme.selectedThemeName) : undefined"
-          ></app-chip>
+          @if (isInvalid('desc')) {
+            <span class="formFeedbackError">{{getError('desc')}}</span>
+          }
         </div>
-        <div style="width: 48%;">
-          <button class="button-secondary" 
-          (click)="toggleColorPicker()"
-          >{{"team.tag_editor.show_colors" | translate}}</button>
+        <div class="flex justify-c-sb align-i-c">
+          <div class="tag-preview bor-rad-5 no-overflow" style="width: 48%;">
+            <app-chip
+              [name]="tag.name"
+              [tooltipText]="tag.description"
+              [minWidth]="'100%'"
+              [bgColor]="tag.color !== undefined ? tagBackgroundColors[tag.color] : undefined"
+              [textColor]="tag.color !== undefined ? (tag.color | getTagTextColor:theme.selectedThemeName) : undefined"
+            ></app-chip>
+          </div>
+          <div style="width: 48%;">
+            <button class="button-secondary"
+              (click)="toggleColorPicker()"
+            >{{"team.tag_editor.show_colors" | translate}}</button>
+          </div>
         </div>
-      </div>
-      <div class="flex justify-c-c gap-m">
-        <button class="button-primary w-60" (click)="add()">{{"team.tag_editor.add" | translate}}</button>
-      </div>
-    </form>
+        <div class="flex justify-c-c gap-m">
+          <button class="button-primary w-60" (click)="add()">{{"team.tag_editor.add" | translate}}</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 

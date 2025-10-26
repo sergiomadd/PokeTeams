@@ -1,26 +1,28 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges, TemplateRef } from '@angular/core';
+import { Component, SimpleChanges, TemplateRef, input, output } from '@angular/core';
+import { NgStyle, NgClass, NgTemplateOutlet } from '@angular/common';
 
 @Component({
     selector: 'app-switch',
     templateUrl: './switch.component.html',
     styleUrls: ['./switch.component.scss'],
-    standalone: false
+    imports: [NgStyle, NgClass, NgTemplateOutlet]
 })
 export class SwitchComponent 
 {
-  @Input() inputState?: boolean;
-  @Input() leftText?: string;
-  @Input() rightText?: string;
-  @Input() leftSVG?: TemplateRef<any>;
-  @Input() rightSVG?: TemplateRef<any>;
-  @Input() sizeSVG?: string;
-  @Output() checkEvent = new EventEmitter<boolean>();
+  readonly inputState = input<boolean>();
+  readonly leftText = input<string>();
+  readonly rightText = input<string>();
+  readonly leftSVG = input<TemplateRef<any> | null>(null);
+  readonly rightSVG = input<TemplateRef<any> | null>(null);
+  readonly sizeSVG = input<string>();
+  readonly checkEvent = output<boolean>();
 
   state: boolean = false;
 
   ngOnInit() 
   {
-    if(this.inputState) {this.state = this.inputState}
+    const inputState = this.inputState();
+    if(inputState) {this.state = inputState}
   }
 
   ngOnChanges(changes: SimpleChanges) 

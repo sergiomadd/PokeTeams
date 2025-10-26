@@ -1,52 +1,52 @@
-<div 
-class="dropdown"
-[ngClass]="{'disabled': disable}"
->
-  <div 
-  class="selector"
+<div
+  class="dropdown"
+  [ngClass]="{'disabled': disable()}"
+  >
+  <div
+    class="selector"
   [ngClass]="
   {
-    'only-icon-options': onlyIcon
+    'only-icon-options': onlyIcon()
   }"
-  (click)="toggleOptions()"
-  >
-    <div
-    class="option selected"
+    (click)="toggleOptions()"
     >
-      <ng-container *ngIf="selectedOption?.iconPath">
-        <img [attr.src]="selectedOption?.iconPath" alt="selectedOption?.name" class="icon" fill>
-      </ng-container>
-      {{selectedOption ? (selectedOption.name | translate) : ''}}
-    </div>
-    <ng-container *ngIf="!onlyIcon">
-      <div 
-      class="dropdown-arrow"
+    <div
+      class="option selected"
       >
-        <svg class="icon arrow" [ngClass]="{up: showOptions}" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M783 3543 c-29 -6 -63 -49 -63 -79 0 -15 20 -46 52 -81 29 -32 434 -451 901 -930 834 -858 849 -873 887 -873 38 0 53 15 887 873 467 479 872 898 901 930 59 65 64 91 28 134 l-24 28 -1774 1 c-975 1 -1783 -1 -1795 -3z"/> </g> </svg> 
+      @if (selectedOption()?.iconPath) {
+        <img [attr.src]="selectedOption()?.iconPath" alt="selectedOption?.name" class="icon" fill>
+      }
+      {{selectedOption() ? (selectedOption()?.name | translate) : ''}}
+    </div>
+    @if (!onlyIcon()) {
+      <div
+        class="dropdown-arrow"
+        >
+        <svg class="icon arrow" [ngClass]="{up: showOptions}" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M783 3543 c-29 -6 -63 -49 -63 -79 0 -15 20 -46 52 -81 29 -32 434 -451 901 -930 834 -858 849 -873 887 -873 38 0 53 15 887 873 467 479 872 898 901 930 59 65 64 91 28 134 l-24 28 -1774 1 c-975 1 -1783 -1 -1795 -3z"/> </g> </svg>
       </div>
-    </ng-container>
+    }
   </div>
-  <div 
-  class="options"
+  <div
+    class="options"
   [ngClass]="
   {
-    'options-visible': showOptions && !disable,
-    'only-icon-options': onlyIcon
+    'options-visible': showOptions && !disable(),
+    'only-icon-options': onlyIcon()
   }"
-  >
-    <ng-container *ngFor="let option of options">
+    >
+    @for (option of options(); track option) {
       <div
-      class="option"
-      [ngClass]="{'only-icon-option': onlyIcon}"
-      (click)="onSelect(option)"
-      >
-        <ng-container *ngIf="option.iconPath">
+        class="option"
+        [ngClass]="{'only-icon-option': onlyIcon()}"
+        (click)="onSelect(option)"
+        >
+        @if (option.iconPath) {
           <img [attr.src]="option.iconPath" alt="" class="icon-small" fill>
-        </ng-container>
-        <ng-container *ngIf="!onlyIcon">
+        }
+        @if (!onlyIcon()) {
           {{option.name | translate}}
-        </ng-container>
+        }
       </div>
-    </ng-container>
+    }
   </div>
 </div>

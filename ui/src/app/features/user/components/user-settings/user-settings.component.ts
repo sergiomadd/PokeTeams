@@ -1,6 +1,6 @@
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
@@ -14,12 +14,18 @@ import { Country } from '../../models/country.dto';
 import { User } from '../../models/user.model';
 import { UserUpdateDTO } from '../../models/userUpdate.dto';
 import { UserPageService } from '../../services/user-page.service';
+import { NgClass, NgTemplateOutlet, AsyncPipe } from '@angular/common';
+import { SmartInputComponent } from '../../../../shared/components/smart-input/smart-input.component';
+import { SwitchComponent } from '../../../../shared/components/dumb/switch/switch.component';
+import { TooltipComponent } from '../../../../shared/components/dumb/tooltip/tooltip.component';
+import { DialogComponent } from '../../../../shared/components/dumb/dialog/dialog.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-user-settings',
     templateUrl: './user-settings.component.html',
     styleUrl: './user-settings.component.scss',
-    standalone: false
+    imports: [NgClass, NgTemplateOutlet, SmartInputComponent, SwitchComponent, FormsModule, ReactiveFormsModule, TooltipComponent, DialogComponent, AsyncPipe, TranslatePipe]
 })
 export class UserSettingsComponent 
 {

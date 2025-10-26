@@ -1,29 +1,28 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { UploadPageComponent } from './features/upload-page/upload-page.component';
 import { NotFoundComponent } from './shared/components/dumb/not-found/not-found.component';
 import { AboutComponent } from './shared/components/layout/about/about.component';
 import { PrivacyPolicyComponent } from './shared/components/layout/privacy-policy/privacy-policy.component';
 import { ResetPasswordComponent } from './shared/components/layout/reset-password/reset-password.component';
 
-const routes: Routes = 
+export const routes: Routes = 
 [
   { 
     path: '',
-    loadChildren: () => import('./features/upload/upload.module').then((m) => m.UploadModule),
-    pathMatch: 'full'
+    component: UploadPageComponent
   },
   { 
     path: 'search',
-    loadChildren: () => import('./features/search/search.module').then((m) => m.SearchModule),
+    loadComponent: () => import('./features/search-page/search-page.component').then((c) => c.SearchPageComponent),
   },
   { 
     path: 'compare',
-    loadChildren: () => import('./features/compare/compare.module').then((m) => m.CompareModule),
+    loadComponent: () => import('./features/compare-page/compare-page.component').then((c) => c.ComparePageComponent),
   },
   {
     path: 'user',
-    loadChildren: () => import('./features/user/user.module').then((m) => m.UserModule)
+    loadChildren: () => import('./features/user/user.routes').then((r) => r.userRoutes),
   },
   {
     path: 'privacy-policy',
@@ -39,23 +38,14 @@ const routes: Routes =
   },
   { 
     path: 'edit/:id',
-    loadChildren: () => import('./features/team-edit/team-edit.module').then((m) => m.TeamEditModule),
+    loadComponent: () => import('./features/team-edit-page/team-edit-page.component').then((c) => c.TeamEditPageComponent),
     canActivate: [authGuard]  
   },
   { 
     path: ':id',
-    loadChildren: () => import('./features/team-view/team-view.module').then((m) => m.TeamViewModule),
+    loadComponent: () => import('./features/team-view-page/team-view-page.component').then((c) => c.TeamViewPageComponent),
   },
   {
     path: '**', component: NotFoundComponent
   }
 ];
-
-@NgModule({
-  imports: 
-  [
-    RouterModule.forRoot(routes, { bindToComponentInputs: true })
-  ],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }

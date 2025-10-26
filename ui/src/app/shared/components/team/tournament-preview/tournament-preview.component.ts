@@ -1,17 +1,19 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { Tournament } from '../../../../core/models/team/tournament.model';
+import { GetFlagIconUrlPipe } from '../../../pipes/getFlagIconUrl.pipe';
+import { CustomFormatDatePipe } from '../../../pipes/converters/customFormatDate.pipe';
 
 @Component({
     selector: 'app-tournament-preview',
     templateUrl: './tournament-preview.component.html',
-    standalone: false
+    imports: [GetFlagIconUrlPipe, CustomFormatDatePipe]
 })
 export class TournamentPreviewComponent 
 {
   util = inject(UtilService);
 
-  @Input() tournament?: Tournament | null;
+  readonly tournament = input<Tournament | null>();
 
   loading: boolean = false;
 

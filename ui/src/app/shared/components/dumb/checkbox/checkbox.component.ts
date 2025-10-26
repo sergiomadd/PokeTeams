@@ -1,27 +1,29 @@
-import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
+import { Component, TemplateRef, input, model, output } from '@angular/core';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { TooltipComponent } from '../tooltip/tooltip.component';
 
 @Component({
     selector: 'app-checkbox',
     templateUrl: './checkbox.component.html',
     styleUrl: './checkbox.component.scss',
-    standalone: false
+    imports: [NgClass, NgTemplateOutlet, TooltipComponent]
 })
 export class CheckboxComponent 
 {
-  @Input() checked: boolean = false;
-  @Input() label?: string = "";
-  @Input() icon?: string;
-  @Input() svg?: TemplateRef<any>;
-  @Input() tooltipText?: string;
-  @Input() lock: boolean = false;
-  @Output() checkEvent = new EventEmitter<boolean>();
+  checked = model<boolean>(false);
+  readonly label = input<string | undefined>("");
+  readonly icon = input<string>();
+  readonly svg = input<TemplateRef<any> | null>(null);
+  readonly tooltipText = input<string>();
+  readonly lock = input<boolean>(false);
+  readonly checkEvent = output<boolean>();
   
   clickEvent()
   {
-    if(!this.lock)
+    if(!this.lock())
     {
-      this.checked = !this.checked;
+      this.checked.set(this.checked());
     }
-    this.checkEvent.emit(this.checked);
+    this.checkEvent.emit(this.checked());
   }
 }

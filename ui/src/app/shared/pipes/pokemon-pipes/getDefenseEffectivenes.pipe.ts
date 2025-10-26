@@ -2,13 +2,10 @@ import { Pipe, PipeTransform } from "@angular/core";
 import { Effectiveness } from "../../../core/models/pokemon/effectiveness.model";
 import { Pokemon } from "../../../core/models/pokemon/pokemon.model";
 
-@Pipe(
-  {
+@Pipe({
     name: 'getDefenseEffectivenessPipe',
-    pure: true,
-    standalone: false
-}
-)
+    pure: true
+})
 
 //Rename to calculate effectiveness
 export class GetDefenseEffectivenessPipe implements PipeTransform

@@ -1,34 +1,36 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { ThemeService } from '../../../../core/helpers/theme.service';
-import { QueryItem } from '../../../../core/models/misc/queryResult.model';
+import { NgClass, NgStyle } from '@angular/common';
+import { TooltipComponent } from '../tooltip/tooltip.component';
 
 @Component({
     selector: 'app-chip',
     templateUrl: './chip.component.html',
     styleUrl: './chip.component.scss',
-    standalone: false
+    imports: [NgClass, NgStyle, TooltipComponent]
 })
 export class ChipComponent 
 {
   themeService = inject(ThemeService);
 
-  @Input() name?: string;
-  @Input() type?: string;
-  @Input() iconPath?: string;
-  @Input() tooltipText?: string;
-  @Input() removable: boolean = false;
-  @Input() minWidth?: string;
-  @Input() bgColor?: string;
-  @Input() textColor?: string;
-  @Output() removeEvent = new EventEmitter<QueryItem>()
+  readonly name = input<string>();
+  readonly type = input<string>();
+  readonly iconPath = input<string>();
+  readonly tooltipText = input<string>();
+  readonly removable = input<boolean>(false);
+  readonly minWidth = input<string>();
+  readonly bgColor = input<string>();
+  readonly textColor = input<string>();
+  readonly removeEvent = output();
 
   getRemoveColor()
   {
-    return this.textColor ?? 'var(--text-color)';
+    return this.textColor() ?? 'var(--text-color)';
   }
 
   remove()
   {
+    // TODO: The 'emit' function requires a mandatory QueryItem argument
     this.removeEvent.emit();
   }
 }

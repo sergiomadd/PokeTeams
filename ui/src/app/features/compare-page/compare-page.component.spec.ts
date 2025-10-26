@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UploadPageComponent } from './upload-page.component';
+import { ComparePageComponent } from './compare-page.component';
 
-describe('UploadPageComponent', () => {
-  let component: UploadPageComponent;
-  let fixture: ComponentFixture<UploadPageComponent>;
+describe('ComparePageComponent', () => {
+  let component: ComparePageComponent;
+  let fixture: ComponentFixture<ComparePageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UploadPageComponent]
-    })
+    imports: [ComparePageComponent]
+})
     .compileComponents();
     
-    fixture = TestBed.createComponent(UploadPageComponent);
+    fixture = TestBed.createComponent(ComparePageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

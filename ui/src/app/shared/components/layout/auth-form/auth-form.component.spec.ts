@@ -8,8 +8,8 @@ describe('AuthFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AuthFormComponent]
-    })
+    imports: [AuthFormComponent]
+})
     .compileComponents();
     
     fixture = TestBed.createComponent(AuthFormComponent);

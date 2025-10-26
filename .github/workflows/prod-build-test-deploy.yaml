@@ -100,7 +100,7 @@ jobs:
 
       - name: Build Angular app
         working-directory: ./ui
-        run: npm run build --prod
+        run: npm run build:prod
 
       - name: Deploy Angular to EC2
         run: |

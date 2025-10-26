@@ -8,8 +8,8 @@ describe('PasteInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PasteInputComponent]
-    })
+    imports: [PasteInputComponent]
+})
     .compileComponents();
     
     fixture = TestBed.createComponent(PasteInputComponent);

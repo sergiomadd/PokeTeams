@@ -1,15 +1,19 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, inject, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, input, model, output, SimpleChanges, viewChild } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ThemeService } from '../../../core/helpers/theme.service';
 import { QueryItem } from '../../../core/models/misc/queryResult.model';
+import { NgClass, NgStyle } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
+import { GetTagBgColorPipe } from '../../pipes/color-pipes/getTagBgColor.pipe';
+import { GetTagTextColorPipe } from '../../pipes/color-pipes/getTagTextColor.pipe';
 
 @Component({
     selector: 'app-smart-input',
     templateUrl: './smart-input.component.html',
     styleUrl: './smart-input.component.scss',
     changeDetection: ChangeDetectionStrategy.Default,
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, NgClass, NgStyle, TranslatePipe, GetTagBgColorPipe, GetTagTextColorPipe]
 })
 
 export class SmartInputComponent 
@@ -17,35 +21,36 @@ export class SmartInputComponent
   formBuilder = inject(FormBuilder);
   theme = inject(ThemeService);
 
-  @Input() value?: QueryItem;
-  @Input() label?: string;
-  @Input() keepSelected?: boolean = false;
-  @Input() disableSearch?: boolean = false;
-  @Input() disableRemove?: boolean = false;
-  @Input() updateOnChange?: boolean;
-  @Input() allowCustom?: boolean;
-  @Input() customType?: string;
-  @Input() allowNew?: boolean;
-  @Input() error?: boolean = false;
-  @Input() getter?: (args: any) => Observable<QueryItem[]>
-  @Input() allGetter?: (args?: any) => Observable<QueryItem[]>
-  @Input() allGetterIndex?: number;
-  @Input() disabled?: boolean;
-  @Input() autoTab?: boolean = true;
-  @Input() searchWithEmpty?: boolean = false;
+  readonly value = input<QueryItem>();
+  readonly label = input<string>();
+  readonly keepSelected = input<boolean | undefined>(false);
+  readonly disableSearch = input<boolean | undefined>(false);
+  readonly disableRemove = input<boolean | undefined>(false);
+  readonly updateOnChange = input<boolean>();
+  readonly allowCustom = input<boolean>();
+  readonly customType = input<string>();
+  readonly allowNew = input<boolean>();
+  readonly error = input<boolean | undefined>(false);
+  readonly getter = input<(args: any) => Observable<QueryItem[]>>();
+  readonly allGetter = input<(args?: any) => Observable<QueryItem[]>>();
+  readonly allGetterIndex = input<number>();
+  disabled = model<boolean>();
+  readonly autoTab = input<boolean | undefined>(true);
+  readonly searchWithEmpty = input<boolean | undefined>(false);
 
-  @Output() selectEvent = new EventEmitter<QueryItem>();
-  @Output() newEvent = new EventEmitter();
-  @Output() updateEvent = new EventEmitter<string>();
+  readonly selectEvent = output<QueryItem | undefined>();
+  readonly newEvent = output();
+  readonly updateEvent = output<string | undefined>();
 
-  @ViewChild('smartInput') smartInput!: ElementRef;
-  @ViewChild('input') input!: ElementRef;
-  @ViewChild('resultsDiv') resultsDiv!: ElementRef;
+  readonly smartInput = viewChild.required<ElementRef>('smartInput');
+  readonly input = viewChild.required<ElementRef>('input');
+  readonly resultsDiv = viewChild.required<ElementRef>('resultsDiv');
 
   @HostListener('document:keydown.arrowup') 
   arrowUp() 
   {
-    if(this.input && this.input.nativeElement === document.activeElement
+    const inputValue = this.input();
+    if(inputValue && inputValue.nativeElement === document.activeElement
       && this.showOptions)
     {
       this.hoverUp();
@@ -55,7 +60,8 @@ export class SmartInputComponent
   @HostListener('document:keydown.arrowdown') 
   arrowDown() 
   {
-    if(this.input && this.input.nativeElement === document.activeElement
+    const inputValue = this.input();
+    if(inputValue && inputValue.nativeElement === document.activeElement
       && this.showOptions)
     {
       this.hoverDown();
@@ -66,7 +72,7 @@ export class SmartInputComponent
   onDocumentClicked(event: MouseEvent, targetElement: HTMLElement) 
   {
     if (targetElement && document.body.contains(targetElement) 
-      && !this.smartInput.nativeElement.contains(targetElement)) 
+      && !this.smartInput().nativeElement.contains(targetElement)) 
     {
       this.showOptions = false;
     }
@@ -92,22 +98,22 @@ export class SmartInputComponent
     {
       name: "",
       identifier: "",
-      type: this.customType ?? "new"
+      type: this.customType() ?? "new"
     }
     this.searchForm.controls.key.valueChanges.subscribe(async (value) => 
     {
       if(value)
       {
-        if(this.allowCustom)
+        if(this.allowCustom())
         {
           this.results[0] = 
           {
             name: "",
             identifier: "new",
-            type: this.customType ?? "new"
+            type: this.customType() ?? "new"
           }
         }          
-        if(this.updateOnChange)
+        if(this.updateOnChange())
         {
           this.updateEvent.emit(value);
         }
@@ -115,24 +121,24 @@ export class SmartInputComponent
         {
           await this.search(value);
         }
-        if(this.disableSearch){return;}
+        if(this.disableSearch()){return;}
         this.activeResult = 0;
         this.position = 0;
       }
       else
       {
-        if(this.updateOnChange)
+        if(this.updateOnChange())
         {
           this.updateEvent.emit(undefined);
         }
-        if(this.disableSearch){return;}
-        if(this.allGetter)
+        if(this.disableSearch()){return;}
+        if(this.allGetter())
         {
           this.getAllResults();
         }
         else
         {
-          if(this.searchWithEmpty)
+          if(this.searchWithEmpty())
           {
             await this.search(value);
           }
@@ -147,22 +153,23 @@ export class SmartInputComponent
   {
     if(changes["value"] && changes["value"].currentValue?.name !== changes["value"].previousValue?.name)
     {
-      this.selected = this.value;
+      this.selected = this.value();
     }
   }
 
   async search(key: string | null)
   {
-    if(this.getter)
+    const getter = this.getter();
+    if(getter)
     {
       this.searching = true;
       this.showOptions = true;
-      this.getter(key).subscribe(
+      getter(key).subscribe(
         {
           next: (response) => 
           {
             this.results = response;
-            if(this.allowCustom && key)
+            if(this.allowCustom() && key)
             {
               this.customQueryResult.name = key;
               this.customQueryResult.identifier = key;
@@ -182,13 +189,13 @@ export class SmartInputComponent
 
   selectResult(selectedResult: QueryItem)
   {
-    if(this.keepSelected)
+    if(this.keepSelected())
     {
       this.selected = selectedResult;
     }
     this.searchForm.controls.key.setValue("");
     this.showOptions = false;
-    this.input.nativeElement.blur();
+    this.input().nativeElement.blur();
     this.selectEvent.emit(selectedResult);
     this.focusNext();
   }
@@ -199,9 +206,10 @@ export class SmartInputComponent
     this.searchForm.controls.key.setValue("");
     setTimeout(() => 
     {
-      if (this.input) 
+      const inputValue = this.input();
+      if (inputValue) 
       {
-        this.input.nativeElement.focus();
+        inputValue.nativeElement.focus();
       }
     });
     this.selectEvent.emit(undefined);
@@ -209,17 +217,19 @@ export class SmartInputComponent
 
   async getAllResults()
   {
-    if(this.allGetter)
+    const allGetter = this.allGetter();
+    if(allGetter)
     {
       this.searching = true;
-      if(this.allGetterIndex)
+      const allGetterIndex = this.allGetterIndex();
+      if(allGetterIndex)
       {
-        this.allGetter(this.allGetterIndex).subscribe(
+        allGetter(allGetterIndex).subscribe(
           {
             next: (response) => 
             {
               this.results = response;
-              if(this.allowCustom)
+              if(this.allowCustom())
               {
                 this.results = [this.customQueryResult].concat(this.results);
               }
@@ -235,12 +245,12 @@ export class SmartInputComponent
       }
       else
       {
-        this.allGetter().subscribe(
+        allGetter().subscribe(
           {
             next: (response) => 
             {
               this.results = response;
-              if(this.allowCustom)
+              if(this.allowCustom())
               {
                 this.results = [this.customQueryResult].concat(this.results);
               }
@@ -263,14 +273,14 @@ export class SmartInputComponent
 
   async onFocus()
   {
-    if(!this.disabled && !this.disableSearch)
+    if(!this.disabled() && !this.disableSearch())
     {
-      if((this.results.length > 0 && (this.allowCustom || this.results.length > 1)) 
+      if((this.results.length > 0 && (this.allowCustom() || this.results.length > 1)) 
         || this.searchForm.controls.key.value)
       {
         this.showOptions = true;
       }
-      else if(this.allGetter)
+      else if(this.allGetter())
       {
         this.getAllResults();
         this.showOptions = true;
@@ -295,7 +305,7 @@ export class SmartInputComponent
     }
     if(this.position === 0)
     {
-      this.resultsDiv.nativeElement.scrollBy(0, -38);
+      this.resultsDiv().nativeElement.scrollBy(0, -38);
     }
   }
 
@@ -311,15 +321,15 @@ export class SmartInputComponent
     }
     if(this.position === 9)
     {
-      this.resultsDiv.nativeElement.scrollBy(0, 38);
+      this.resultsDiv().nativeElement.scrollBy(0, 38);
     }
   }
 
   focusNext(): void 
   {
-    if(this.autoTab)
+    if(this.autoTab())
     {
-      const smartInputComponent = this.smartInput.nativeElement.parentElement;
+      const smartInputComponent = this.smartInput().nativeElement.parentElement;
       let next = smartInputComponent?.nextElementSibling as HTMLElement | null;
       const input = next?.querySelector('input') as HTMLInputElement | null;
       if(input)
@@ -349,9 +359,9 @@ export class SmartInputComponent
     }
     else
     {
-      if(!this.keepSelected)
+      if(!this.keepSelected())
       {
-        this.input.nativeElement.focus();
+        this.input().nativeElement.focus();
       }
     }
   }

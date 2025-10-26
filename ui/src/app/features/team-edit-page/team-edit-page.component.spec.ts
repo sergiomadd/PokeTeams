@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ComparePageComponent } from './compare-page.component';
+import { TeamEditPageComponent } from './team-edit-page.component';
 
-describe('ComparePageComponent', () => {
-  let component: ComparePageComponent;
-  let fixture: ComponentFixture<ComparePageComponent>;
+describe('TeamEditPageComponent', () => {
+  let component: TeamEditPageComponent;
+  let fixture: ComponentFixture<TeamEditPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ComparePageComponent]
-    })
+    imports: [TeamEditPageComponent]
+})
     .compileComponents();
     
-    fixture = TestBed.createComponent(ComparePageComponent);
+    fixture = TestBed.createComponent(TeamEditPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -8,8 +8,8 @@ describe('SwitchComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SwitchComponent]
-    });
+    imports: [SwitchComponent]
+});
     fixture = TestBed.createComponent(SwitchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

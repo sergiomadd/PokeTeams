@@ -1,21 +1,20 @@
 <div class="font-m flex justify-c-c align-i-c w-100 h-100v">
   <div class="flex justify-c-c align-i-c gap-m" [ngClass]="{'flex-col': window.isMobile()}">
-    <ng-container *ngIf="window.isMobile()">
+    @if (window.isMobile()) {
       <img src="assets/img/notfound.webp" alt="">
-    </ng-container>
+    }
     <div class="flex-col align-i-c gap-m">
-      <ng-container *ngIf="resourceName; else noname">
-        {{'shared.user_not_found' | translate:{resourceName} }}
-      </ng-container>
-      <ng-template #noname>
+      @if (resourceName()) {
+        {{'shared.user_not_found' | translate:{resourceName: resourceName()} }}
+      } @else {
         {{'shared.page_not_found' | translate}}
-      </ng-template>
+      }
       <button class="button-primary w-fit pad-0">
         <a class="pad-m button-link" [routerLink]="['']" style="color: var(--white)">{{'shared.go_home-button' | translate}}</a>
       </button>
     </div>
-    <ng-container *ngIf="!window.isMobile()">
+    @if (!window.isMobile()) {
       <img src="assets/img/notfound.webp" alt="">
-    </ng-container>
+    }
   </div>
 </div>

@@ -1,9 +1,9 @@
-<ng-container *ngIf="pokemons && pokemons.length > 0">
+@if (pokemons() && pokemons().length > 0) {
   <div class="flex wrap gap-l bg-2">
-    <ng-container *ngFor="let pokemon of pokemons">
+    @for (pokemon of pokemons(); track pokemon) {
       <div class="bg-3 bor-rad-5 icon-l pad-s">
         <img src="{{pokemon.sprite?.base}}" alt="{{pokemon.name}}" class="icon-l">
       </div>
-    </ng-container>
+    }
   </div>
-</ng-container>
+}

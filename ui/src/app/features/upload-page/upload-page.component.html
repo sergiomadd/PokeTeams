@@ -7,17 +7,17 @@
   <div class="flex-col justify-c-c align-i-c gap-s">
     <div class="flex justify-c-c align-i-c relative">
       <button
-      (click)="saveTeam()"
-      class="button-primary"
+        (click)="saveTeam()"
+        class="button-primary"
       >{{"team.upload.save-button" | translate}}</button>
     </div>
-    <ng-container *ngIf="teamSubmitted">
+    @if (teamSubmitted) {
       <div class="spinner-wrapper">
         <div class="pokemon-spinner"></div>
       </div>
-    </ng-container>
-    <ng-container *ngIf="feedback">
+    }
+    @if (feedback) {
       <span class="formFeedbackError text-center">{{feedback}}</span>
-    </ng-container>
+    }
   </div>
 </div>

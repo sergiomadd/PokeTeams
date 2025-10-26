@@ -8,8 +8,8 @@ describe('TeamPreviewComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TeamPreviewComponent]
-    });
+    imports: [TeamPreviewComponent]
+});
     fixture = TestBed.createComponent(TeamPreviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

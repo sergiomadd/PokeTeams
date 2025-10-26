@@ -1,8 +1,8 @@
-import { Component, inject, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
+import { Component, inject, viewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -21,12 +21,15 @@ import { TeamEditorService } from '../../../services/team-editor.service';
 import { TagEditorComponent } from '../../dumb/tag-editor/tag-editor.component';
 import { SmartInputComponent } from '../../smart-input/smart-input.component';
 import { TeamComponent } from '../team/team.component';
+import { NgClass } from '@angular/common';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { CheckboxComponent } from '../../dumb/checkbox/checkbox.component';
 
 @Component({
     selector: 'app-team-editor',
     templateUrl: './team-editor.component.html',
     styleUrls: ['./team-editor.component.scss'],
-    standalone: false
+    imports: [FormsModule, ReactiveFormsModule, NgClass, TooltipComponent, SmartInputComponent, TagEditorComponent, CheckboxComponent, TeamComponent, TranslatePipe]
 })
 
 export class TeamEditorComponent 
@@ -43,7 +46,7 @@ export class TeamEditorComponent
   theme = inject(ThemeService);
   util = inject(UtilService);
 
-  @ViewChild(TeamComponent) teamComponent!: TeamComponent;
+  readonly teamComponent = viewChild.required(TeamComponent);
 
   loggedUser$ = this.store.select(selectLoggedUser);
   loggedUser?: QueryItem;
@@ -70,7 +73,7 @@ export class TeamEditorComponent
   exampleTeamModified?: boolean = undefined;
   readonly feedbackColors = FeedbackColors;
 
-  @ViewChild('playerInput') playerInput?: SmartInputComponent;
+  readonly playerInput = viewChild<SmartInputComponent>('playerInput');
 
   async ngOnInit() 
   {
@@ -79,10 +82,11 @@ export class TeamEditorComponent
       this.team = value;
       this.currentTags = value.tags?.length ?? 0;
       this.disableTagInput = this.currentTags >= this.maxTags ? true : false;
-      if(this.teamComponent)
+      const teamComponent = this.teamComponent();
+      if(teamComponent)
       {
-        this.teamComponent.showAllStats = false;
-        this.teamComponent.showAllNotes = false;
+        teamComponent.showAllStats = false;
+        teamComponent.showAllNotes = false;
       }
       if(this.loggedUser && this.team.user == null)
       {
@@ -146,7 +150,7 @@ export class TeamEditorComponent
             picture: undefined,
             registered: false
           };
-          this.teamComponent.checkUserToPlayer();
+          this.teamComponent().checkUserToPlayer();
           this.teamEditorService.setExampleTeamModified(true);
           return;
         }
@@ -211,57 +215,61 @@ export class TeamEditorComponent
     if(this.loggedUser && this.team.user)
     {
       this.team.player = this.team.user;
-      this.teamComponent.checkUserToPlayer();
-      if(this.playerInput && this.team.user.username)
+      this.teamComponent().checkUserToPlayer();
+      const playerInput = this.playerInput();
+      if(playerInput && this.team.user.username)
       {
-        this.playerInput.setInputValue(this.team.user.username)
+        playerInput.setInputValue(this.team.user.username)
       }
     }
   }
 
-  async tournamentSelectEvent(event: QueryItem)
+  async tournamentSelectEvent(event?: QueryItem)
   {
     this.team.tournament = event ? await this.teamService.getTournamentByIdentifier(event.identifier) : undefined;
     if(this.team.tournament) { this.teamEditorService.setExampleTeamModified(true); }
   }
 
-  async regulationSelectEvent(event: QueryItem)
+  async regulationSelectEvent(event?: QueryItem)
   {
     this.team.regulation = event ? await this.teamService.getRegulationByIdentifier(event.identifier) : undefined;
     if(this.team.regulation) { this.teamEditorService.setExampleTeamModified(true); }
   }
 
-  @ViewChild(TagEditorComponent) tagEditorComponent!: TagEditorComponent;
-  @ViewChild("tagInput") tagSmartInput!: SmartInputComponent;
+  readonly tagEditorComponent = viewChild.required(TagEditorComponent);
+  readonly tagSmartInput = viewChild.required<SmartInputComponent>("tagInput");
   toggleTagEditor()
   {
     if(this.showTagEditor) { this.tagEditorCloseEvent(); }
     else { this.showTagEditor = true; }
     if(this.showTagEditor)
     {
-      this.tagEditorComponent.setName(this.tagSmartInput.input.nativeElement.value)
+      this.tagEditorComponent().setName(this.tagSmartInput().input().nativeElement.value)
     }
   }
 
-  async tagSelectEvent(queryItem: QueryItem)
+  async tagSelectEvent(queryItem?: QueryItem)
   {
     this.feedback = undefined;
-    let tag: Tag = await this.teamService.getTagByIdentifier(queryItem.identifier);
-    if(this.team.tags && tag)
+    if(queryItem)
     {
-      if(this.team.tags.length < 3 && !this.team.tags.some(t => t.identifier == tag.identifier))
+      let tag: Tag = await this.teamService.getTagByIdentifier(queryItem.identifier);
+      if(this.team.tags && tag)
       {
-        this.team.tags = [...this.team.tags, tag];
-        if(this.team.tags.length === 3)
+        if(this.team.tags.length < 3 && !this.team.tags.some(t => t.identifier == tag.identifier))
         {
-          this.disableTagSelector();
+          this.team.tags = [...this.team.tags, tag];
+          if(this.team.tags.length === 3)
+          {
+            this.disableTagSelector();
+          }
+          this.currentTags = this.team?.tags ? this.team?.tags?.length : 0;
+          this.teamEditorService.setExampleTeamModified(true);
         }
-        this.currentTags = this.team?.tags ? this.team?.tags?.length : 0;
-        this.teamEditorService.setExampleTeamModified(true);
-      }
-      else if(this.team.tags.some(t => t.identifier == tag.identifier))
-      {
-        this.feedback = this.translateSergice.instant("team.editor.tag_input-feedback");
+        else if(this.team.tags.some(t => t.identifier == tag.identifier))
+        {
+          this.feedback = this.translateSergice.instant("team.editor.tag_input-feedback");
+        }
       }
     }
   }
@@ -290,15 +298,15 @@ export class TeamEditorComponent
 
   enableTagSelector()
   {
-    this.tagSmartInput.searchForm.controls.key.enable();
-    this.tagSmartInput.disabled = false;
+    this.tagSmartInput().searchForm.controls.key.enable();
+    this.tagSmartInput().disabled.set(false);
   }
 
   disableTagSelector()
   {
     this.tagEditorCloseEvent();
-    this.tagSmartInput.searchForm.controls.key.disable();
-    this.tagSmartInput.disabled = true;
+    this.tagSmartInput().searchForm.controls.key.disable();
+    this.tagSmartInput().disabled.set(true);
   }
 
   removeTag()
@@ -309,9 +317,10 @@ export class TeamEditorComponent
 
   tagEditorCloseEvent()
   {
-    if(this.tagEditorComponent.colorPickerOpen)
+    const tagEditorComponent = this.tagEditorComponent();
+    if(tagEditorComponent.colorPickerOpen)
     {
-      this.tagEditorComponent.colorPickerOpen = false;
+      tagEditorComponent.colorPickerOpen = false;
       //Wait for color picker transition to finish
       setTimeout(() => {  this.showTagEditor = false; }, 400);
     }

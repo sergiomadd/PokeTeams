@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearchPageComponent } from './search-page.component';
+import { TeamViewPageComponent } from './team-view-page.component';
 
-describe('SearchPageComponent', () => {
-  let component: SearchPageComponent;
-  let fixture: ComponentFixture<SearchPageComponent>;
+describe('TeamViewPageComponent', () => {
+  let component: TeamViewPageComponent;
+  let fixture: ComponentFixture<TeamViewPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SearchPageComponent]
-    })
+    imports: [TeamViewPageComponent]
+})
     .compileComponents();
     
-    fixture = TestBed.createComponent(SearchPageComponent);
+    fixture = TestBed.createComponent(TeamViewPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

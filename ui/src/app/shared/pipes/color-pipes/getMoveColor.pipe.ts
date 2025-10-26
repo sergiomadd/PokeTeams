@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from "@angular/core";
 import { Gen9TypeColorsDark, Gen9TypeColorsLight } from "../../../core/models/misc/colors";
 
-@Pipe({ name: 'getMoveColor', standalone: false })
+@Pipe({ name: 'getMoveColor' })
 
 export class GetMoveColorPipe implements PipeTransform 
 {
