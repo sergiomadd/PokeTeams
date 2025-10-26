@@ -1,6 +1,8 @@
+import { AsyncPipe, NgClass } from '@angular/common';
 import { Component, inject, input, output } from '@angular/core';
-import { Router, RouterLinkActive, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { I18nService } from '../../../../core/helpers/i18n.service';
 import { ThemeService } from '../../../../core/helpers/theme.service';
@@ -9,16 +11,14 @@ import { WindowService } from '../../../../core/helpers/window.service';
 import { Chip } from '../../../../core/models/misc/chip.model';
 import { Device } from '../../../../core/models/misc/device.enum';
 import { flags, Lang, langs } from '../../../../core/models/misc/lang.enum';
+import { User } from '../../../../core/models/user/user.model';
 import { selectLoggedUser } from '../../../../core/store/auth/auth.selectors';
 import { configActions } from '../../../../core/store/config/config.actions';
 import { selectLang, selectTheme } from '../../../../core/store/config/config.selectors';
-import { User } from '../../../../features/user/models/user.model';
-import { GetFlagIconUrlPipe } from '../../../pipes/getFlagIconUrl.pipe';
 import { ClickOutsideDirective } from '../../../directives/click-outside.directive';
-import { NgClass, AsyncPipe } from '@angular/common';
+import { GetFlagIconUrlPipe } from '../../../pipes/getFlagIconUrl.pipe';
 import { DropdownComponent } from '../../dumb/dropdown/dropdown.component';
 import { AuthFormComponent } from '../auth-form/auth-form.component';
-import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-menu',

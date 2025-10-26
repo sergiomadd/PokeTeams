@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { EmailDTO } from '../../../core/models/user/email.dto';
+import { User } from '../../../core/models/user/user.model';
 import { AuthService } from '../../../core/services/auth.service';
-import { EmailDTO } from '../models/email.dto';
-import { User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'

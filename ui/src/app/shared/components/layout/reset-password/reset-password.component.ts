@@ -1,15 +1,15 @@
+import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslatePipe } from '@ngx-translate/core';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
 import { FeedbackColors } from '../../../../core/models/misc/colors';
+import { UserUpdateDTO } from '../../../../core/models/user/userUpdate.dto';
 import { authActions } from '../../../../core/store/auth/auth.actions';
 import { selectError, selectIsSubmitting, selectSuccess } from '../../../../core/store/auth/auth.selectors';
-import { UserUpdateDTO } from '../../../../features/user/models/userUpdate.dto';
-import { NgClass, NgTemplateOutlet, AsyncPipe } from '@angular/common';
-import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-reset-password',

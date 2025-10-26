@@ -1,8 +1,9 @@
+import { NgClass } from '@angular/common';
 import { Component, inject, viewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslateService, TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -11,19 +12,18 @@ import { FeedbackColors } from '../../../../core/models/misc/colors';
 import { QueryItem } from '../../../../core/models/misc/queryResult.model';
 import { Tag } from '../../../../core/models/team/tag.model';
 import { Team } from '../../../../core/models/team/team.model';
+import { User } from '../../../../core/models/user/user.model';
 import { QueryService } from '../../../../core/services/query.service';
 import { TeamService } from '../../../../core/services/team.service';
 import { UserService } from '../../../../core/services/user.service';
 import { selectLoggedUser } from '../../../../core/store/auth/auth.selectors';
 import { selectTheme } from '../../../../core/store/config/config.selectors';
-import { User } from '../../../../features/user/models/user.model';
 import { TeamEditorService } from '../../../services/team-editor.service';
+import { CheckboxComponent } from '../../dumb/checkbox/checkbox.component';
 import { TagEditorComponent } from '../../dumb/tag-editor/tag-editor.component';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
 import { SmartInputComponent } from '../../smart-input/smart-input.component';
 import { TeamComponent } from '../team/team.component';
-import { NgClass } from '@angular/common';
-import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
-import { CheckboxComponent } from '../../dumb/checkbox/checkbox.component';
 
 @Component({
     selector: 'app-team-editor',

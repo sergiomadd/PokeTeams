@@ -1,25 +1,25 @@
 import { SocialAuthService } from '@abacritt/angularx-social-login';
+import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { TranslatePipe } from '@ngx-translate/core';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
 import { FeedbackColors } from '../../../../core/models/misc/colors';
+import { Country } from '../../../../core/models/user/country.dto';
+import { User } from '../../../../core/models/user/user.model';
+import { UserUpdateDTO } from '../../../../core/models/user/userUpdate.dto';
 import { AuthService } from '../../../../core/services/auth.service';
 import { QueryService } from '../../../../core/services/query.service';
 import { UserService } from '../../../../core/services/user.service';
 import { authActions } from '../../../../core/store/auth/auth.actions';
 import { selectError, selectIsSubmitting, selectLoggedUser, selectSuccess } from '../../../../core/store/auth/auth.selectors';
-import { Country } from '../../models/country.dto';
-import { User } from '../../models/user.model';
-import { UserUpdateDTO } from '../../models/userUpdate.dto';
-import { UserPageService } from '../../services/user-page.service';
-import { NgClass, NgTemplateOutlet, AsyncPipe } from '@angular/common';
-import { SmartInputComponent } from '../../../../shared/components/smart-input/smart-input.component';
+import { DialogComponent } from '../../../../shared/components/dumb/dialog/dialog.component';
 import { SwitchComponent } from '../../../../shared/components/dumb/switch/switch.component';
 import { TooltipComponent } from '../../../../shared/components/dumb/tooltip/tooltip.component';
-import { DialogComponent } from '../../../../shared/components/dumb/dialog/dialog.component';
-import { TranslatePipe } from '@ngx-translate/core';
+import { SmartInputComponent } from '../../../../shared/components/smart-input/smart-input.component';
+import { UserPageService } from '../../services/user-page.service';
 
 @Component({
     selector: 'app-user-settings',

@@ -4,9 +4,9 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { FeedbackColors } from '../../../../core/models/misc/colors';
+import { UserUpdateDTO } from '../../../../core/models/user/userUpdate.dto';
 import { authActions } from '../../../../core/store/auth/auth.actions';
 import { selectError, selectIsSubmitting, selectSuccess } from '../../../../core/store/auth/auth.selectors';
-import { UserUpdateDTO } from '../../models/userUpdate.dto';
 
 @Component({
     selector: 'app-email-confirmation',

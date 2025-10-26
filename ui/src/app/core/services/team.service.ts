@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Observable, lastValueFrom, timeout } from "rxjs";
-import { environment } from "../../../environments/environment.development";
+import { environment } from "../../../environments/environment";
 import { UtilService } from "../helpers/util.service";
 import { SearchQueryDTO } from "../models/search/searchQuery.dto";
 import { SearchQueryResponseDTO } from "../models/search/searchQueryResponse.dto";

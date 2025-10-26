@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, catchError, lastValueFrom, timeout } from "rxjs";
-import { environment } from "../../../environments/environment.development";
+import { environment } from "../../../environments/environment";
 import { Ability, defaultAbility } from "../models/pokemon/ability.model";
 import { Item, defaultItem } from "../models/pokemon/item.model";
 import { Move, defaultMove } from "../models/pokemon/move.model";

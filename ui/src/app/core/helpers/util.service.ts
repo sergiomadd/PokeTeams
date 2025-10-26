@@ -1,7 +1,7 @@
 
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { QueryItem } from '../models/misc/queryResult.model';
 import { Tag } from '../models/team/tag.model';
 import { I18nService } from './i18n.service';

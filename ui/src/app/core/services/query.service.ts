@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, tap, timeout } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { QueryItem } from '../models/misc/queryResult.model';
 import { Ability } from '../models/pokemon/ability.model';
 import { Item } from '../models/pokemon/item.model';
