@@ -14,7 +14,7 @@ export const appConfig: ApplicationConfig =
     provideCore(),
     importProvidersFrom(SocialLoginModule),
     {
-      provide: 'SocialAuthServiceConfig',
+      provide: 'SOCIAL_AUTH_CONFIG',
       useValue: {
         autoLogin: false,
         lang: 'en',
