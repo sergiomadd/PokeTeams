@@ -1,5 +1,4 @@
 // core/core.providers.ts
-import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
@@ -8,7 +7,6 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TranslateModule } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
-import { environment } from '../../environments/environment';
 import { AuthInterceptorService } from './interceptors/auth-interceptor.service';
 import { ErrorInterceptorService } from './interceptors/error-interceptor.service';
 import { LangInterceptorService } from './interceptors/lang-interceptor.service';
@@ -29,7 +27,6 @@ export function provideCore() {
   return [
     importProvidersFrom(
       CommonModule,
-      SocialLoginModule,
       StoreModule.forRoot({}, { metaReducers }),
       EffectsModule.forRoot(HydrationEffects),
       StoreModule.forFeature('auth', authReducers),
@@ -66,20 +63,6 @@ export function provideCore() {
       provide: HTTP_INTERCEPTORS,
       useClass: LangInterceptorService,
       multi: true,
-    },
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        lang: 'en',
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(environment.googleId),
-          },
-        ],
-        onError: (err: unknown) => console.error(err),
-      } as SocialAuthServiceConfig,
     },
     provideHttpClient(withInterceptorsFromDi()),
   ];
