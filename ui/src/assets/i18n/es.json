@@ -107,7 +107,9 @@
       "link-placeholder": "Enlace del equipo",
       "paste-placeholder": "Pokepaste del equipo",
       "to_compare_too_many": "Ya hay dos equipos añadidos para comparar",
-      "to_compare_only_one": "Hacen falta 2 equipo para comparar"
+      "to_compare_only_one": "Hacen falta 2 equipo para comparar",
+      "popup_title": "Equipos a comparar ({{teamsToCompare}}",
+      "popup_button": "Comparar"
     }
   },
   "search":

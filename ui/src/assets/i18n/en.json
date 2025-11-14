@@ -108,7 +108,9 @@
       "link-placeholder": "Team link",
       "paste-placeholder": "Team pokepaste",
       "to_compare_too_many": "2 teams already added for comparison",
-      "to_compare_only_one": "2 teams are required for comparison"
+      "to_compare_only_one": "2 teams are required for comparison",
+      "popup_title": "Teams to compare ({{teamsToCompare}}",
+      "popup_button": "Compare"
     }
   },
   "search":
