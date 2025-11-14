@@ -8,7 +8,10 @@
     "build:prod": "ng build --configuration production",
     "build:dev": "ng build --configuration development",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:watchAll": "jest --watchAll",
+    "test:coverage": "jest --coverage"
   },
   "private": true,
   "dependencies": {
@@ -39,6 +42,7 @@
     "@angular/cli": "^20.3.6",
     "@angular/compiler-cli": "^20.3.6",
     "@types/jest": "^30.0.0",
+    "jest-environment-jsdom": "^30.2.0",
     "jest-preset-angular": "^15.0.3",
     "ts-node": "^10.9.2",
     "typescript": "5.9.3"
