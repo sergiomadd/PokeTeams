@@ -38,6 +38,9 @@
     "@angular/build": "^20.3.6",
     "@angular/cli": "^20.3.6",
     "@angular/compiler-cli": "^20.3.6",
+    "@types/jest": "^30.0.0",
+    "jest-preset-angular": "^15.0.3",
+    "ts-node": "^10.9.2",
     "typescript": "5.9.3"
   }
 }
