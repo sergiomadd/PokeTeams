@@ -153,7 +153,7 @@ export class PokemonService
     return nature;
   }
 
-  async getMoves(movesData: string[]) : Promise<Move[]>
+  async getMoves(movesData: (string | undefined)[]) : Promise<Move[]>
   {
     const movePromises: Promise<Move>[] = [];
     for (const moveData of movesData)
@@ -163,7 +163,7 @@ export class PokemonService
     return await Promise.all(movePromises);
   }
 
-  async getMove(name: string) : Promise<Move>
+  async getMove(name: (string | undefined)) : Promise<Move>
   {
     let move: Move = <Move>{}
     let url = this.apiUrl + 'move/' + name;
@@ -179,7 +179,7 @@ export class PokemonService
     return type;
   }
 
-  getStats(statsData: string[][]) : Stat[]
+  getStats(statsData: (string | number)[][]) : Stat[]
   {
     const stats: Stat[] = [];
     for (const statData of statsData)
@@ -189,10 +189,10 @@ export class PokemonService
     return stats;
   }
 
-  createStat(statData: string[]) : Stat
+  createStat(statData: (string | number)[]) : Stat
   {
     let stat: Stat = <Stat>{};
-    stat.identifier = statData[0];
+    stat.identifier = statData[0] + "";
     stat.name = undefined;
     stat.value = Number(statData[1]);
     return stat;
