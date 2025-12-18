@@ -159,10 +159,11 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-var apiCorsPolicy = "_apiCorsPolicy";
+var devCors = "DevCorsPolicy";
+var prodCors = "ProdCorsPolicy";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: apiCorsPolicy,
+    options.AddPolicy(devCors,
         builder =>
         {
             builder.WithOrigins("http://localhost:4200", "https://localhost:7134/")
@@ -170,6 +171,15 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowCredentials();
         });
+
+    options.AddPolicy(prodCors,
+    builder =>
+    {
+        builder.WithOrigins("https://poketeams.com", "https://poketeams.com/")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
+    });
 });
 
 builder.Services.AddCustomRateLimiters();
@@ -216,7 +226,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
-    app.UseCors(apiCorsPolicy);
+    app.UseCors(devCors);
+}
+else
+{
+    app.UseCors(prodCors);
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
