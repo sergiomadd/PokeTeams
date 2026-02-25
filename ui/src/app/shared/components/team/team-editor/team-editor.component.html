@@ -22,10 +22,10 @@
               ></app-tooltip>
             </div>
           }
-          <div class="smart-input-wrapper fake-smart-input ">
+          <div class="smart-input-wrapper fake-smart-input">
             <label>{{'shared.team.player' | translate}}</label>
             <div class="flex align-i-c justify-c-c">
-              <input type="text" class="input-m" formControlName="player"
+              <input type="text" class="input-m" formControlName="player" data-testid="player-name-input"
                 [ngClass]="{controlInvalid: isInvalid('player')}"
                 value="{{team.player?.username}}"
                 placeholder="{{'shared.team.player' | translate}}..."
@@ -33,6 +33,7 @@
                 @if (loggedUser) {
                   <button
                     class="button-secondary tooltip-wrapper"
+                    data-testid="match-user-button"
                     style="margin: 0 0.2em 0 0.6em; width: 2em;"
                     (click)="matchUserToPlayer()"
                     >
@@ -45,12 +46,12 @@
                 }
               </div>
               @if (isInvalid('player')) {
-                <span class="formFeedbackError text-center">{{getError('player')}}</span>
+                <span class="formFeedbackError text-center" data-testid="player-name-input-error">{{getError('player')}}</span>
               }
             </div>
           </div>
           @if (loggedUser) {
-            <div class="editor-input relative flex gap-m">
+            <div class="editor-input relative flex gap-m" data-testid="loggeduser-input">
               <app-smart-input
                 #userInput
                 [label]="'shared.team.user' | translate"
@@ -89,7 +90,7 @@
           <div class="editor-input relative">
             <div class="smart-input-wrapper fake-smart-input ">
               <label>{{'shared.team.rental_code' | translate}}</label>
-              <input type="text" class="input-m" formControlName="rental"
+              <input type="text" class="input-m" formControlName="rental" data-testid="rental-code-input"
                 [ngClass]="{controlInvalid: isInvalid('rental')}"
                 value="{{team.rentalCode}}"
                 placeholder="{{'shared.team.rental_code' | translate}}..."
@@ -124,7 +125,7 @@
           <div class="title-input relative">
             <div class="smart-input-wrapper fake-smart-input ">
               <label>{{'team.editor.title-label' | translate}}</label>
-              <input type="text" class="input-m" formControlName="title"
+              <input type="text" class="input-m" formControlName="title" data-testid="title-input"
                 [ngClass]="{controlInvalid: isInvalid('title')}"
                 value="{{team.title}}"
                 placeholder="{{'team.editor.title-label' | translate}}..."
@@ -136,7 +137,7 @@
             </div>
           </form>
           @if (loggedUser) {
-            <div class="flex-col justify-c-c  align-i-c gap-s">
+            <div class="flex-col justify-c-c  align-i-c gap-s" data-testid="team-option-buttons">
               <div>
                 {{'team.editor.visibility-label' | translate}}
               </div>
