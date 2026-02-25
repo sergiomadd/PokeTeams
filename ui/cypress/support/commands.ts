@@ -1,43 +1,43 @@
-// ***********************************************
-// This example namespace declaration will help
-// with Intellisense and code completion in your
-// IDE or Text Editor.
-// ***********************************************
-// declare namespace Cypress {
-//   interface Chainable<Subject = any> {
-//     customCommand(param: any): typeof customCommand;
-//   }
-// }
-//
-// function customCommand(param: any): void {
-//   console.warn(param);
-// }
-//
-// NOTE: You can use it like so:
-// Cypress.Commands.add('customCommand', customCommand);
-//
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+// cypress/support/commands.ts
+import { User } from '../../src/app/core/models/user/user.model';
+import { AppState } from '../../src/app/core/store/app.state';
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      login(user?: Partial<User>): void;
+    }
+  }
+}
+
+Cypress.Commands.add('login', (user?: Partial<User>) => {
+  const fakeUser: User = {
+    name: user?.name ?? 'TestName',
+    username: user?.username ?? 'testusername',
+    picture: user?.picture ?? '	https://poketeams.com/images/profile-pics/snorlax.png',
+    country: user?.country,
+    visibility: user?.visibility ?? true,
+    email: user?.email ?? 'test@email.com',
+    emailConfirmed: user?.emailConfirmed ?? true,
+  };
+
+  const fakeStore: AppState = {
+    auth: {
+      loggedUser: fakeUser,
+      error: null,
+      isAuthenticated: true,
+      isSubmitting: false,
+      success: true,
+    },
+    config: { theme: 'light', lang: 'en', teamsPerPage: 10 },
+  };
+
+  cy.visit('/', {
+    onBeforeLoad(win) {
+      win.localStorage.setItem('state', JSON.stringify(fakeStore));
+    },
+  });
+});
+
+export { };
+
