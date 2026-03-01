@@ -8,7 +8,7 @@ export default defineConfig({
       runMode: 0,
       openMode: 0,
     },
+    viewportWidth: 1920,
+    viewportHeight: 1080,
   },
-  
-  
 })

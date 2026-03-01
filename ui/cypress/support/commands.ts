@@ -14,7 +14,7 @@ Cypress.Commands.add('login', (user?: Partial<User>) => {
   const fakeUser: User = {
     name: user?.name ?? 'TestName',
     username: user?.username ?? 'testusername',
-    picture: user?.picture ?? '	https://poketeams.com/images/profile-pics/snorlax.png',
+    picture: user?.picture ?? 'https://poketeams.com/images/profile-pics/snorlax.png',
     country: user?.country,
     visibility: user?.visibility ?? true,
     email: user?.email ?? 'test@email.com',
