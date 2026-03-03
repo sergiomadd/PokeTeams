@@ -18,9 +18,13 @@ export class TestService
     return this.http.get<string>(url, {withCredentials: true});
   }
 
-  getTestPaste(key: string): Observable<string>
+  getTestPaste(key: string): Observable<string> 
   {
-    let url = this.apiUrl + "paste/" + key;
-    return this.http.get<string>(url, {withCredentials: true});
+    const url = this.apiUrl + "paste/" + key;
+
+    return this.http.get(url, {
+      withCredentials: true,
+      responseType: 'text'
+    }) as Observable<string>;
   }
 }
