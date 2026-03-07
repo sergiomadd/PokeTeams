@@ -101,11 +101,10 @@
           "builder": "@angular-builders/jest:run",
           "options": {
             "polyfills": [
-              "zone.js",
-              "zone.js/testing"
+              "zone.js"
             ],
             "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
+            "inlineStyleLanguage": ["scss"],
             "assets": [
               "src/favicon.ico",
               "src/assets"
