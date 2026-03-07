@@ -298,8 +298,8 @@ export class ParserService {
   {
     let newValue: string = value;
 
-    if(options?.leftParen){ newValue = value.replace("(", "") }
-    if(options?.rightParen){ newValue = value.replace(")", "") }
+    if(options?.leftParen){ newValue = newValue.replace("(", "") }
+    if(options?.rightParen){ newValue = newValue.replace(")", "") }
     if(options?.whiteSpace){ newValue = newValue.replaceAll(" ", "");}
     if(options?.onlyOneWhiteSpace)
     {

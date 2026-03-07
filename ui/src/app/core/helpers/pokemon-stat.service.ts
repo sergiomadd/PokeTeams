@@ -84,6 +84,7 @@ export class PokemonStatService
     return total;
   }
 
+  //Calculate base stat value at a given level
   calculateBaseStat(baseStat: Stat, level?: number) : number
   {
     return this.calculateStat(baseStat.value, level ? level : 50, 0, 0, 1, baseStat.identifier === "hp" ? true : false);

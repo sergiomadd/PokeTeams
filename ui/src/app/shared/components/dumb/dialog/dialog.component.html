@@ -11,10 +11,12 @@
     <button 
     class="button button-primary"
     (click)="decline()"
+    data-testid="dialog-confirm-no"
     >{{trueButtonText()}}</button>
     <button 
     class="button button-primary-clear"
     (click)="accept()"
+    data-testid="dialog-confirm-yes"
     >{{falseButtonText()}}</button>
   </div>
 </div>

@@ -1,5 +1,5 @@
-import { Component, TemplateRef, input, model, output } from '@angular/core';
 import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { Component, TemplateRef, input, model, output } from '@angular/core';
 import { TooltipComponent } from '../tooltip/tooltip.component';
 
 @Component({
@@ -22,7 +22,7 @@ export class CheckboxComponent
   {
     if(!this.lock())
     {
-      this.checked.set(this.checked());
+      this.checked.set(!this.checked());
     }
     this.checkEvent.emit(this.checked());
   }
