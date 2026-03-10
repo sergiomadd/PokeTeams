@@ -6,6 +6,10 @@ export class FormatCountPipe implements PipeTransform
 {
   transform(count: number) : string
   {
+    if (!isFinite(count)) {
+      return count.toString();
+    }
+
     let formated: string = count.toString();
     let rounded: number = count;
     let letter: string = "";
@@ -14,6 +18,9 @@ export class FormatCountPipe implements PipeTransform
     {
       letter = 'K'
       rounded = count / 1e3
+      if (count >= 1e6) {
+        rounded = Math.floor(rounded);
+      }
       formated = rounded.toFixed(decimals)
     }
     formated = formated + letter;
