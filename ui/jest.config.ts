@@ -1,11 +1,10 @@
-import type { Config } from "jest";
+import type { Config } from 'jest';
 
-const config: Config = 
-{
-  preset: 'jest-preset-angular', //Adapt jest to use angular templating and testbed
-  moduleDirectories: ['node_modules', '<rootDir>'], //Tell jest to search on these modules
-  testMatch: ['**/+(*.)+(spec).+(ts)'], //Tell jest which files to execute as unit tests
-  testEnvironment: "jest-environment-jsdom",
-}
+const config: Config = {
+  preset: 'jest-preset-angular',
+  setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
+  moduleDirectories: ['node_modules', '<rootDir>'],
+  testMatch: ['**/+(*.)+(spec).+(ts)'],
+};
 
 export default config;
