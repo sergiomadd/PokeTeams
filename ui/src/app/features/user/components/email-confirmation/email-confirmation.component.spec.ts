@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { authActions } from '../../../../core/store/auth/auth.actions';
 import {
@@ -34,7 +35,7 @@ describe('EmailConfirmationComponent (Host)', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HostComponent],
+      imports: [HostComponent, TranslateModule.forRoot()],
       providers: [
         provideMockStore({
           selectors: [
