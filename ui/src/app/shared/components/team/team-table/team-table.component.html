@@ -89,7 +89,7 @@
     @if (teamsToCompare && teamsToCompare.length > 0) {
       <div class="to-compare">
         <div class="relative w-100 flex justify-c-c align-i-c pointer" (click)="toggleTeamsToCompare()">
-          <span class="no-select">{{'team.compare.popup_title' | translate:{ teamsToCompare: teamsToCompare.length/2 }</span>
+          <span class="no-select">{{'team.compare.popup_title' | translate:{ teamsToCompare: teamsToCompare.length } }}</span>
           <button type="button"
             class="no-shadow button to-compare-toggle icon-m pad-s"
             [ngClass]="{'to-compare-toggle-rotate': !teamsToCompareOpen}"
