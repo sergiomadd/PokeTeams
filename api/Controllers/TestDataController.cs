@@ -35,7 +35,8 @@ namespace api.Controllers
 
             var json = System.IO.File.ReadAllText(path);
             JsonElement data = JsonSerializer.Deserialize<JsonElement>(json);
-            return Ok(data.GetProperty(key).GetString());
+            string value = data.GetProperty(key).GetString() ?? "";
+            return Content(value, "text/plain");
         }
 
         [HttpGet, Route("forms")]
