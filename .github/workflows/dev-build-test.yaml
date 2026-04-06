@@ -70,4 +70,4 @@ jobs:
 
       - name: Run Angular Jest tests
         working-directory: ui
-        run: npx ng test --watch=false
+        run: npx jest --watch=false
