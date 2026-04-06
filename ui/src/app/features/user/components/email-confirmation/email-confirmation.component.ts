@@ -14,7 +14,7 @@ import { selectError, selectIsSubmitting, selectSuccess } from '../../../../core
     styleUrl: './email-confirmation.component.scss',
     imports: [RouterLink, AsyncPipe, TranslatePipe]
 })
-export class EmailConfirmationComponent 
+export class EmailConfirmationComponent
 {
   route = inject(ActivatedRoute);
   store = inject(Store);

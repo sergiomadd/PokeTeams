@@ -416,12 +416,12 @@ export class QueryService
 
   queryAllTeraTypes() : Observable<QueryItem[]>
   {
-    if(this.cachedNatures.length > 0)
+    if(this.cachedTeratypes.length > 0)
     {
-      return of(this.cachedNatures);
+      return of(this.cachedTeratypes);
     }
     let url = this.apiUrl + 'type/teratype/query/all';
-    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), tap(data => this.cachedNatures = data));
+    return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), tap(data => this.cachedTeratypes = data));
   }
   teraTypesAllCallback = (): Observable<QueryItem[]> => 
   {

@@ -27,7 +27,7 @@
                   </app-poke-tooltip>
                 }
                 <ng-template #familyTooltip>
-                  <app-evolution [sourcePokemon]="pokemon" [teamOptions]="teamOptions()"></app-evolution>
+                  <app-evolution [sourcePokemon]="pokemon"></app-evolution>
                 </ng-template>
                 <div class="relative flex align-i-c h-100 w-100">
                   <div class="no-overflow row">
@@ -685,13 +685,13 @@
                                   @if (move) {
                                     <div
                                       (click)="move?.identifier !== 'error' ? clickSection(i, 'right') : false"
-              [ngClass]="
-              {
-                section: move?.identifier !== 'error',
-                'animated-border': move?.identifier !== 'error' && !window.isTabletPortraitOrLess(),
-                'poke-tooltip-selected': tooltipRight[i],
-                'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
-              }"
+                                      [ngClass]="
+                                      {
+                                        section: move?.identifier !== 'error',
+                                        'animated-border': move?.identifier !== 'error' && !window.isTabletPortraitOrLess(),
+                                        'poke-tooltip-selected': tooltipRight[i],
+                                        'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
+                                      }"
                                       >
                                       <div class="move section-content gap-m"
                                         [ngStyle]="{'background': move?.pokeType?.identifier ?? '' | getMoveColor:theme.selectedThemeName}"

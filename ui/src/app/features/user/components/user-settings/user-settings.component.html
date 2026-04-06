@@ -16,7 +16,7 @@
       }
       <img src="{{user?.picture}}" alt="" class="picture">
       <div class="flex justify-c-c align-i-c relative">
-        <button type="submit" (click)="clickPictureSelector()">{{'user.settings.change-button' | translate}}</button>
+        <button type="submit" (click)="clickPictureSelector()" data-testid="picture-change-btn">{{'user.settings.change-button' | translate}}</button>
         <div class="catalog-wrapper" [ngClass]="{catalogShow: showCatalog}">
           <div class="catalog custom-scrollbar">
             @for (pic of pictures; track pic) {
@@ -57,6 +57,7 @@
         [allGetter]="queryService.countriesAllCallback"
         (selectEvent)="changeCountry($event)"
         class="smart-input-custom-wrapper"
+        data-testid="country-selector"
       ></app-smart-input>
       @if (changeCountrySubmitted) {
         <ng-container *ngTemplateOutlet="feedback"></ng-container>
@@ -89,6 +90,7 @@
         [rightSVG]="rightSVG"
         [sizeSVG]="'1.5em'"
         (checkEvent)="changeVisibility($event)"
+        data-testid="visibility-switch"
       ></app-switch>
       @if (changeVisibilitySubmitted) {
         <ng-container *ngTemplateOutlet="feedback"></ng-container>
@@ -125,9 +127,10 @@
             class="input-m"
             [placeholder]="'user.settings.name-input_placeholder' | translate"
             formControlName="newName"
+            data-testid="name-input"
             [ngClass]="{controlInvalid: isInvalid('newName', 'changeNameForm')}"
             >
-            <button type="submit">{{'user.settings.change-button' | translate}}</button>
+            <button type="submit" data-testid="name-submit">{{'user.settings.change-button' | translate}}</button>
             @if (changeNameSubmitted) {
               <ng-container *ngTemplateOutlet="feedback"></ng-container>
             }
@@ -160,9 +163,10 @@
               class="input-m"
               [placeholder]="'user.settings.username-input_placeholder' | translate"
               formControlName="newUserName"
+              data-testid="username-input"
               [ngClass]="{controlInvalid: isInvalid('newUserName', 'changeUserNameForm')}"
               >
-              <button type="submit">{{'user.settings.change-button' | translate}}</button>
+              <button type="submit" data-testid="username-submit">{{'user.settings.change-button' | translate}}</button>
               @if (changeUserNameSubmitted) {
                 <ng-container *ngTemplateOutlet="feedback"></ng-container>
               }
@@ -218,9 +222,10 @@
                 class="input-m"
                 [placeholder]="'user.settings.email-input_placeholder' | translate"
                 formControlName="newEmail"
+                data-testid="email-input"
                 [ngClass]="{controlInvalid: isInvalid('newEmail', 'changeEmailForm')}"
                 >
-                <button type="submit">{{'user.settings.change-button' | translate}}</button>
+                <button type="submit" data-testid="email-submit">{{'user.settings.change-button' | translate}}</button>
                 @if (changeEmailSubmitted) {
                   <ng-container *ngTemplateOutlet="feedback"></ng-container>
                 }
@@ -264,6 +269,7 @@
                 class="input-m"
                 [placeholder]="'user.settings.current_password-input_placeholder' | translate"
                 formControlName="currentPassword"
+                data-testid="password-current"
                 [ngClass]="{controlInvalid: isInvalid('currentPassword', 'changePasswordForm')}"
                 >
                 @if (isInvalid('currentPassword', 'changePasswordForm')) {
@@ -276,6 +282,7 @@
                   class="input-m"
                   [placeholder]="'user.settings.new_password-input_placeholder' | translate"
                   formControlName="password"
+                  data-testid="password-new"
                   [ngClass]="{controlInvalid: isInvalid('password', 'changePasswordForm')}"
                   >
                   @if (isInvalid('password', 'changePasswordForm')) {
@@ -288,13 +295,14 @@
                     class="input-m"
                     [placeholder]="'user.settings.new_repeat_password-input_placeholder' | translate"
                     formControlName="confirmPassword"
+                    data-testid="password-confirm"
                     [ngClass]="{controlInvalid: isInvalid('confirmPassword', 'changePasswordForm')}"
                     >
                     @if (isInvalid('confirmPassword', 'changePasswordForm')) {
                       <div class="formFeedbackError passwordFeedback">{{getError('confirmPassword', 'changePasswordForm')}}</div>
                     }
                   </div>
-                  <button type="submit">{{'user.settings.change-button' | translate}}</button>
+                  <button type="submit" data-testid="password-submit">{{'user.settings.change-button' | translate}}</button>
                   @if (changePasswordSubmitted) {
                     <ng-container *ngTemplateOutlet="feedback"></ng-container>
                   }
@@ -302,10 +310,10 @@
               </div>
               <div class="buttons">
                 <div class="logout">
-                  <button (click)="logOut()" class="button">{{'user.settings.logout-button' | translate}}</button>
+                  <button (click)="logOut()" class="button" data-testid="logout-settings-btn">{{'user.settings.logout-button' | translate}}</button>
                 </div>
                 <div class="delete">
-                  <button (click)="tryDeleteAccout()" class="button-primary">{{'user.settings.delete-button' | translate}}</button>
+                  <button (click)="tryDeleteAccout()" class="button-primary" data-testid="delete-account-btn">{{'user.settings.delete-button' | translate}}</button>
                 </div>
               </div>
             </div>
@@ -317,6 +325,7 @@
                 [falseButtonText]="'Yes'"
                 [visible]="deleteDialog"
                 (choose)="chooseEvent($event)"
+                data-testid="delete-confirm-dialog"
               ></app-dialog>
             }
             <ng-template #feedback>

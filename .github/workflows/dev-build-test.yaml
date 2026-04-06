@@ -56,3 +56,18 @@ jobs:
           ConnectionStrings__PostgrePoketeamTest: Host=localhost;Port=5432;Database=poketeam;Username=postgres;Password=postgres
           JWT__SECRET: ${{ secrets.JWT__SECRET }}
         run: dotnet test ./api.Test/api.Test.csproj --verbosity normal
+      
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: ui/package-lock.json
+
+      - name: Install UI dependencies
+        working-directory: ui
+        run: npm ci
+
+      - name: Run Angular Jest tests
+        working-directory: ui
+        run: npx jest --watch=false

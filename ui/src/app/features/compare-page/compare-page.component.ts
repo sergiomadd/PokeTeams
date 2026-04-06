@@ -2,7 +2,9 @@ import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
 import { ParserService } from '../../core/helpers/parser.service';
 import { PokemonStatService } from '../../core/helpers/pokemon-stat.service';
 import { ThemeService } from '../../core/helpers/theme.service';
@@ -15,6 +17,7 @@ import { Stat } from '../../core/models/pokemon/stat.model';
 import { Team } from '../../core/models/team/team.model';
 import { PokemonService } from '../../core/services/pokemon.service';
 import { TeamService } from '../../core/services/team.service';
+import { selectLang } from '../../core/store/config/config.selectors';
 import { SwitchComponent } from '../../shared/components/dumb/switch/switch.component';
 import { TooltipComponent } from '../../shared/components/dumb/tooltip/tooltip.component';
 import { TeamBattleComponent } from '../../shared/components/team/team-battle/team-battle.component';
@@ -52,6 +55,7 @@ export class ComparePageComponent
   pokemonService = inject(PokemonService);
   activatedRoute = inject(ActivatedRoute);
   pokemonStatService = inject(PokemonStatService);
+  store = inject(Store);
 
   teamA?: Team;
   teamB?: Team;
@@ -111,6 +115,7 @@ export class ComparePageComponent
   selectedStatIndex: number = 5;
   selectedStat: Stat = this.statSelectors[this.selectedStatIndex];
   statList: ComparePokemon[] | undefined = undefined;
+  selectedLang$: Observable<string> = this.store.select(selectLang);
 
   ngOnInit()
   {
@@ -254,6 +259,18 @@ export class ComparePageComponent
         }
       }
     })
+
+    this.selectedLang$.subscribe(value =>
+    {
+      if(this.teamAId)
+      {
+        this.getTeamA(this.teamAId);
+      }
+      if(this.teamBId)
+      {
+        this.getTeamB(this.teamBId);
+      }
+    });
   }
 
   getTeamA(id: string)
