@@ -1,10 +1,10 @@
+import { NgClass, NgStyle } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, input, model, output, SimpleChanges, viewChild } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { ThemeService } from '../../../core/helpers/theme.service';
 import { QueryItem } from '../../../core/models/misc/queryResult.model';
-import { NgClass, NgStyle } from '@angular/common';
-import { TranslatePipe } from '@ngx-translate/core';
 import { GetTagBgColorPipe } from '../../pipes/color-pipes/getTagBgColor.pipe';
 import { GetTagTextColorPipe } from '../../pipes/color-pipes/getTagTextColor.pipe';
 
@@ -68,9 +68,10 @@ export class SmartInputComponent
     }
   }
 
-  @HostListener('document:click', ['$event', '$event.target'])
-  onDocumentClicked(event: MouseEvent, targetElement: HTMLElement) 
+  @HostListener('document:click', ['$event'])
+  onDocumentClicked(event: MouseEvent) 
   {
+    const targetElement = event.target as HTMLElement | null;
     if (targetElement && document.body.contains(targetElement) 
       && !this.smartInput().nativeElement.contains(targetElement)) 
     {
