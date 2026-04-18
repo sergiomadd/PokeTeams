@@ -20,9 +20,9 @@
       } @else {
         <div class="input-m flex align-i-c selected">
           <div class="flex align-i-c gap-s text">
-            @if (selected?.icon) 
+            @if (selected.icon) 
             {
-              @if (selected?.icon === 'hidden') 
+              @if (selected.icon === 'hidden') 
               {
                 <svg class="icon-s" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000">
                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -35,10 +35,10 @@
                   </g>
                 </svg>
               } @else {
-                <img [attr.src]="selected?.icon" [alt]="selected?.type" fill loading="lazy" [ngClass]="{'icon-s': selected?.type === 'move', 'icon-l': selected?.type !== 'move'}">
+                <img [attr.src]="selected.icon" [alt]="selected.type" fill loading="lazy" [ngClass]="{'icon-s': selected.type === 'move', 'icon-l': selected.type !== 'move'}">
               }
             }
-            {{selected?.name}}
+            {{selected.name}}
           </div>
           @if (!disableRemove()) {
             <div class="remove flex align-i-c icon-xs pointer pad-s bor-rad-5" (click)="removeSelected()">

@@ -107,16 +107,16 @@
         <a
           class="tab"
           [ngClass]="{'open-tab': menuOpen()}"
-          [routerLink]="['/user', loggedUser?.username]"
+          [routerLink]="['/user', loggedUser.username]"
           (click)="clickNavigate()"
           routerLinkActive="active"
           data-testid="user-profile-link"
           >
           <div class="icon">
-            <img src="{{loggedUser?.picture}}" alt="" class="icon">
+            <img src="{{loggedUser.picture}}" alt="" class="icon">
           </div>
           <div class="title">
-            {{loggedUser?.username}}
+            {{loggedUser.username}}
           </div>
         </a>
       } @else {

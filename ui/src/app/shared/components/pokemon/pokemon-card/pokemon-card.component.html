@@ -35,8 +35,8 @@
                       @if (pokemon.nickname && teamOptions()?.showNickname) {
                         {{pokemon.nickname}}
                       } @else {
-                        {{pokemon.name?.content}}
-                        @if (pokemon.name?.content && pokemon.name?.language != (selectedLang$ | async)) {
+                        {{pokemon.name.content}}
+                        @if (pokemon.name.content && pokemon.name.language != (selectedLang$ | async)) {
                           <app-no-translation [noTooltip]="true"></app-no-translation>
                         }
                       }
@@ -50,17 +50,17 @@
           }
           @if (pokemon.item) {
             <div
-              (click)="pokemon.item?.identifier !== 'error' ? clickSection(0, 'left') : false"
+              (click)="pokemon.item.identifier !== 'error' ? clickSection(0, 'left') : false"
             [ngClass]="
             {
-              section: pokemon.item?.identifier !== 'error',
-              'animated-border': pokemon.item?.identifier !== 'error' && !window.isTabletPortraitOrLess(),
+              section: pokemon.item.identifier !== 'error',
+              'animated-border': pokemon.item.identifier !== 'error' && !window.isTabletPortraitOrLess(),
               'poke-tooltip-selected': tooltipLeft[0],
               'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
             }"
               >
               <div class="section-content">
-                @if (pokemon.item?.identifier !== 'error') {
+                @if (pokemon.item.identifier !== 'error') {
                   <app-poke-tooltip
                     [content]="itemTooltip"
                     [side]="window.isLaptopOrLess() ? 'right' : 'left'"
@@ -74,8 +74,8 @@
                   <div class="poke-tooltip-content poke-tooltip-content-bound">
                     <div class="poke-tooltip-head">
                       <span class="poke-tooltip-head-text">
-                        {{pokemon.item?.name?.content}}
-                        @if (pokemon.item?.name?.content && pokemon.item?.name?.language != (selectedLang$ | async)) {
+                        {{pokemon.item.name.content}}
+                        @if (pokemon.item.name.content && pokemon.item.name.language != (selectedLang$ | async)) {
                           <app-no-translation></app-no-translation>
                         }
                       </span>
@@ -94,7 +94,7 @@
                           }
                         }
                       }
-                      @if (pokemon.item?.prose?.content && pokemon.item?.prose?.language != (selectedLang$ | async)) {
+                      @if (pokemon.item.prose.content && pokemon.item.prose.language != (selectedLang$ | async)) {
                         <app-no-translation></app-no-translation>
                       }
                     </div>
@@ -103,17 +103,17 @@
                 <div class="grid-force">
                   <div class="flex align-i-c gap-s no-overflow">
                     <div class="space-nowrap no-overflow">
-                      {{pokemon.item?.name?.content}}
+                      {{pokemon.item.name.content}}
                     </div>
-                    @if (pokemon.item?.name && pokemon.item?.name?.language != (selectedLang$ | async)) {
+                    @if (pokemon.item.name && pokemon.item.name.language != (selectedLang$ | async)) {
                       <app-no-translation [noTooltip]="true"></app-no-translation>
                     }
-                    @if (pokemon.item?.identifier === 'error') {
+                    @if (pokemon.item.identifier === 'error') {
                       <div class="icon-m">
                         <ng-container *ngTemplateOutlet="errorSVG"></ng-container>
                       </div>
                     } @else {
-                      <img src="{{pokemon.item?.iconPath}}" alt="" class="icon-m">
+                      <img src="{{pokemon.item.iconPath}}" alt="" class="icon-m">
                     }
                   </div>
                 </div>
@@ -124,17 +124,17 @@
           }
           @if (pokemon.ability) {
             <div
-              (click)="pokemon.ability?.identifier !== 'error' ? clickSection(1, 'left') : false"
+              (click)="pokemon.ability.identifier !== 'error' ? clickSection(1, 'left') : false"
             [ngClass]="
             {
-              section: pokemon.ability?.identifier !== 'error',
-              'animated-border': pokemon.ability?.identifier !== 'error' && !window.isTabletPortraitOrLess(),
+              section: pokemon.ability.identifier !== 'error',
+              'animated-border': pokemon.ability.identifier !== 'error' && !window.isTabletPortraitOrLess(),
               'poke-tooltip-selected': tooltipLeft[1],
               'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
             }"
               >
               <div class="section-content align-c-c grid-force">
-                @if (pokemon.ability?.identifier !== 'error') {
+                @if (pokemon.ability.identifier !== 'error') {
                   <app-poke-tooltip
                     [content]="abilityTooltip"
                     [side]="window.isLaptopOrLess() ? 'right' : 'left'"
@@ -148,8 +148,8 @@
                   <div class="poke-tooltip-content poke-tooltip-content-bound">
                     <div class="poke-tooltip-head" [ngClass]="{'justify-c-sb': pokemon?.ability?.hidden}">
                       <span class="poke-tooltip-head-text">
-                        {{pokemon.ability?.name?.content}}
-                        @if (pokemon.ability?.name?.content && pokemon.ability?.name?.language != (selectedLang$ | async)) {
+                        {{pokemon.ability.name.content}}
+                        @if (pokemon.ability.name.content && pokemon.ability.name.language != (selectedLang$ | async)) {
                           <app-no-translation></app-no-translation>
                         }
                       </span>
@@ -168,7 +168,7 @@
                           }
                         }
                       }
-                      @if (pokemon.ability?.prose?.content && pokemon.ability?.prose?.language != (selectedLang$ | async)) {
+                      @if (pokemon.ability.prose.content && pokemon.ability.prose.language != (selectedLang$ | async)) {
                         <app-no-translation></app-no-translation>
                       }
                       @if (pokemon?.ability?.hidden) {
@@ -204,9 +204,9 @@
                 <div class="grid-force">
                   <div class="flex align-i-c gap-s no-overflow">
                     <div class="space-nowrap no-overflow">
-                      {{pokemon.ability?.name?.content}}
+                      {{pokemon.ability.name.content}}
                     </div>
-                    @if (pokemon.ability?.name?.content && pokemon.ability?.name?.language != (selectedLang$ | async)) {
+                    @if (pokemon.ability.name.content && pokemon.ability.name.language != (selectedLang$ | async)) {
                       <app-no-translation [noTooltip]="true"></app-no-translation>
                     }
                     @if (pokemon?.ability?.hidden) {
@@ -340,19 +340,19 @@
               }
               <div class="flex">
                 @if (pokemon.teraType) {
-                  @if (pokemon.teraType?.identifier !== 'error') {
+                  @if (pokemon.teraType.identifier !== 'error') {
                     <div
                       (click)="clickSection(0, 'types')"
                     [ngClass]="
                     {
-                      section: pokemon.teraType?.identifier !== 'error',
-                      'animated-border': pokemon.teraType?.identifier !== 'error' && !window.isTabletPortraitOrLess() && pokemon.teraType?.identifier !== 'stellar',
-                      'poke-tooltip-selected': tooltipTypes[0] && pokemon.teraType?.identifier !== 'stellar',
+                      section: pokemon.teraType.identifier !== 'error',
+                      'animated-border': pokemon.teraType.identifier !== 'error' && !window.isTabletPortraitOrLess() && pokemon.teraType.identifier !== 'stellar',
+                      'poke-tooltip-selected': tooltipTypes[0] && pokemon.teraType.identifier !== 'stellar',
                       'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
                     }"
                       >
                       <div class="section-content type">
-                        @if (pokemon.teraType?.effectivenessAttack || pokemon.teraType?.effectivenessDefense) {
+                        @if (pokemon.teraType.effectivenessAttack || pokemon.teraType.effectivenessDefense) {
                           <app-poke-tooltip
                             [content]="teraTypeTooltip"
                             [side]="'top'"
@@ -363,15 +363,15 @@
                           </app-poke-tooltip>
                           <ng-template #teraTypeTooltip>
                             <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
-                              @if (pokemon.teraType?.effectivenessDefense?.superEffective?.length ?? false) {
+                              @if (pokemon.teraType.effectivenessDefense.superEffective?.length ?? false) {
                                 <div class="type-category">
                                   <div class="type-category-text">
                                     <span class="bold">x2</span>
                                   </div>
                                   <div class="type-category-icons">
-                                    @for (type of pokemon.teraType?.effectivenessDefense?.superEffective; track type; let i = $index; let last = $last) {
-                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                        [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
+                                    @for (type of pokemon.teraType.effectivenessDefense.superEffective; track type; let i = $index; let last = $last) {
+                                      <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
+                                        [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType.effectivenessDefense.superEffective)}">
                                       }
                                     </div>
                                   </div>
@@ -379,33 +379,33 @@
                                     <div class="divider"></div>
                                   </div>
                                 }
-                                @if (pokemon.teraType?.effectivenessDefense?.notVeryEffective?.length ?? false) {
+                                @if (pokemon.teraType.effectivenessDefense.notVeryEffective?.length ?? false) {
                                   <div class="type-category">
                                     <div class="type-category-text">
                                       <span class="bold">x0.5</span>
                                     </div>
                                     <div class="type-category-icons">
-                                      @for (type of pokemon.teraType?.effectivenessDefense?.notVeryEffective; track type; let i = $index; let last = $last) {
-                                        <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                          [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
+                                      @for (type of pokemon.teraType.effectivenessDefense.notVeryEffective; track type; let i = $index; let last = $last) {
+                                        <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
+                                          [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType.effectivenessDefense.superEffective)}">
                                         }
                                       </div>
                                     </div>
-                                    @if (pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false) {
+                                    @if (pokemon.teraType.effectivenessDefense.inmune?.length ?? false) {
                                       <div class="flex align-i-c">
                                         <div class="divider"></div>
                                       </div>
                                     }
                                   }
-                                  @if (pokemon.teraType?.effectivenessDefense?.inmune?.length ?? false) {
+                                  @if (pokemon.teraType.effectivenessDefense.inmune?.length ?? false) {
                                     <div class="type-category">
                                       <div class="type-category-text">
                                         <span class="bold">x0</span>
                                       </div>
                                       <div class="type-category-icons">
-                                        @for (type of pokemon.teraType?.effectivenessDefense?.inmune; track type; let i = $index; let last = $last) {
-                                          <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
-                                            [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
+                                        @for (type of pokemon.teraType.effectivenessDefense.inmune; track type; let i = $index; let last = $last) {
+                                          <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
+                                            [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType.effectivenessDefense.superEffective)}">
                                           }
                                         </div>
                                       </div>
@@ -414,7 +414,7 @@
                                 </ng-template>
                               }
                               <div class="icon-s relative"  [ngClass]="{'teratype-background': teratypeEnabled}">
-                                <img src="{{pokemon.teraType.iconPath}}" title="{{pokemon.teraType.name?.content}}" alt="{{pokemon.teraType.name?.content}}" class="icon-s">
+                                <img src="{{pokemon.teraType.iconPath}}" title="{{pokemon.teraType.name.content}}" alt="{{pokemon.teraType.name.content}}" class="icon-s">
                               </div>
                             </div>
                           </div>
@@ -426,19 +426,19 @@
                         </div>
                       }
                       @if (pokemon.types) {
-                        @if (pokemon.types?.type1?.identifier !== 'error') {
+                        @if (pokemon.types.type1?.identifier !== 'error') {
                           <div
                             (click)="clickSection(1, 'types')"
                     [ngClass]="
                     {
-                      section: pokemon.types?.type1?.identifier !== 'error',
-                      'animated-border': pokemon.types?.type1?.identifier !== 'error' && !window.isTabletPortraitOrLess(),
+                      section: pokemon.types.type1?.identifier !== 'error',
+                      'animated-border': pokemon.types.type1?.identifier !== 'error' && !window.isTabletPortraitOrLess(),
                       'poke-tooltip-selected': tooltipTypes[1] && !compareTeam(),
                       'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
                     }"
                             >
                             <div class="section-content type icon-s">
-                              @if (pokemon.types?.type1?.effectivenessAttack || pokemon.types?.type1?.effectivenessDefense || pokemon.types?.dualEffectiveness) {
+                              @if (pokemon.types.type1?.effectivenessAttack || pokemon.types.type1?.effectivenessDefense || pokemon.types.dualEffectiveness) {
                                 <app-poke-tooltip
                                   [content]="typesTooltip"
                                   [side]="'top'"
@@ -448,115 +448,115 @@
                                   >
                                 </app-poke-tooltip>
                                 <ng-template #typesTooltip>
-                            <div [ngClass]="
-                            {
-                              'single-type': !pokemon.types?.dualEffectiveness,
-                              'dual-type': pokemon.types?.dualEffectiveness,
-                            }"
+                                  <div [ngClass]="
+                                  {
+                                    'single-type': !pokemon.types.dualEffectiveness,
+                                    'dual-type': pokemon.types.dualEffectiveness,
+                                  }"
                                     >
                                     <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
-                                      @if (pokemon.types?.dualEffectiveness ?? false) {
-                                        @if (pokemon.types?.dualEffectiveness?.doubleSuperEffective?.length ?? false) {
+                                      @if (pokemon.types.dualEffectiveness ?? false) {
+                                        @if (pokemon.types.dualEffectiveness?.doubleSuperEffective?.length ?? false) {
                                           <div class="type-category">
                                             <div class="type-category-text">
                                               <span class="bold">x4</span>
                                             </div>
                                             <div class="type-category-icons">
-                                              @for (type of pokemon.types?.dualEffectiveness?.doubleSuperEffective; track type; let i = $index; let last = $last) {
-                                                <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                              @for (type of pokemon.types.dualEffectiveness?.doubleSuperEffective; track type; let i = $index; let last = $last) {
+                                                <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
                                                   [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                                 }
                                               </div>
                                             </div>
-                                            @if (pokemon.types?.dualEffectiveness?.superEffective?.length
-                                              || pokemon.types?.dualEffectiveness?.notVeryEffective?.length
-                                              || pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
-                                              || pokemon.types?.dualEffectiveness?.inmune?.length ?? false) {
+                                            @if (pokemon.types.dualEffectiveness?.superEffective?.length
+                                              || pokemon.types.dualEffectiveness?.notVeryEffective?.length
+                                              || pokemon.types.dualEffectiveness?.doubleNotVeryEffective?.length
+                                              || (pokemon.types.dualEffectiveness?.inmune?.length ?? false)) {
                                               <div class="flex align-i-c">
                                                 <div class="divider"></div>
                                               </div>
                                             }
                                           }
-                                          @if (pokemon.types?.dualEffectiveness?.superEffective?.length ?? false) {
+                                          @if (pokemon.types.dualEffectiveness?.superEffective?.length ?? false) {
                                             <div class="type-category">
                                               <div class="type-category-text">
                                                 <span class="bold">x2</span>
                                               </div>
                                               <div class="type-category-icons">
-                                                @for (type of pokemon.types?.dualEffectiveness?.superEffective; track type; let i = $index; let last = $last) {
-                                                  <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                                @for (type of pokemon.types.dualEffectiveness?.superEffective; track type; let i = $index; let last = $last) {
+                                                  <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
                                                     [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                                   }
                                                 </div>
                                               </div>
-                                              @if (pokemon.types?.dualEffectiveness?.notVeryEffective?.length
-                                                || pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
-                                                || pokemon.types?.dualEffectiveness?.inmune?.length ?? false) {
+                                              @if (pokemon.types.dualEffectiveness?.notVeryEffective?.length
+                                                || pokemon.types.dualEffectiveness?.doubleNotVeryEffective?.length
+                                                || (pokemon.types.dualEffectiveness?.inmune?.length ?? false)) {
                                                 <div></div>
                                                 <div class="flex align-i-c">
                                                   <div class="divider"></div>
                                                 </div>
                                               }
                                             }
-                                            @if (pokemon.types?.dualEffectiveness?.notVeryEffective?.length ?? false) {
+                                            @if (pokemon.types.dualEffectiveness?.notVeryEffective?.length ?? false) {
                                               <div class="type-category">
                                                 <div class="type-category-text">
                                                   <span class="bold">x0.5</span>
                                                 </div>
                                                 <div class="type-category-icons">
-                                                  @for (type of pokemon.types?.dualEffectiveness?.notVeryEffective; track type; let i = $index; let last = $last) {
-                                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                                  @for (type of pokemon.types.dualEffectiveness?.notVeryEffective; track type; let i = $index; let last = $last) {
+                                                    <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
                                                       [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                                     }
                                                   </div>
                                                 </div>
-                                                @if (pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length
-                                                  || pokemon.types?.dualEffectiveness?.inmune?.length ?? false) {
+                                                @if (pokemon.types.dualEffectiveness?.doubleNotVeryEffective?.length
+                                                  || (pokemon.types.dualEffectiveness?.inmune?.length ?? false)) {
                                                   <div class="flex align-i-c">
                                                     <div class="divider"></div>
                                                   </div>
                                                 }
                                               }
-                                              @if (pokemon.types?.dualEffectiveness?.doubleNotVeryEffective?.length ?? false) {
+                                              @if (pokemon.types.dualEffectiveness?.doubleNotVeryEffective?.length ?? false) {
                                                 <div class="type-category">
                                                   <div class="type-category-text">
                                                     <span class="bold">x0.25</span>
                                                   </div>
                                                   <div class="type-category-icons">
-                                                    @for (type of pokemon.types?.dualEffectiveness?.doubleNotVeryEffective; track type; let i = $index; let last = $last) {
-                                                      <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                                    @for (type of pokemon.types.dualEffectiveness?.doubleNotVeryEffective; track type; let i = $index; let last = $last) {
+                                                      <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
                                                         [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                                       }
                                                     </div>
                                                   </div>
-                                                  @if (pokemon.types?.dualEffectiveness?.inmune?.length ?? false) {
+                                                  @if (pokemon.types.dualEffectiveness?.inmune?.length ?? false) {
                                                     <div class="flex align-i-c">
                                                       <div class="divider"></div>
                                                     </div>
                                                   }
                                                 }
-                                                @if (pokemon.types?.dualEffectiveness?.inmune?.length ?? false) {
+                                                @if (pokemon.types.dualEffectiveness?.inmune?.length ?? false) {
                                                   <div class="type-category">
                                                     <div class="type-category-text">
                                                       <span class="bold">x0</span>
                                                     </div>
                                                     <div class="type-category-icons">
-                                                      @for (type of pokemon.types?.dualEffectiveness?.inmune; track type; let i = $index; let last = $last) {
-                                                        <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                                      @for (type of pokemon.types.dualEffectiveness?.inmune; track type; let i = $index; let last = $last) {
+                                                        <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
                                                           [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                                         }
                                                       </div>
                                                     </div>
                                                   }
                                                 } @else {
-                                                  @if (pokemon.types?.type1?.effectivenessDefense?.superEffective?.length ?? false) {
+                                                  @if (pokemon.types.type1?.effectivenessDefense?.superEffective?.length ?? false) {
                                                     <div class="type-category">
                                                       <div class="type-category-text">
                                                         <span class="bold">x2</span>
                                                       </div>
                                                       <div class="type-category-icons">
-                                                        @for (type of pokemon.types?.type1?.effectivenessDefense?.superEffective; track type; let i = $index; let last = $last) {
-                                                          <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                                        @for (type of pokemon.types.type1?.effectivenessDefense?.superEffective; track type; let i = $index; let last = $last) {
+                                                          <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
                                                             [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                                           }
                                                         </div>
@@ -565,32 +565,32 @@
                                                         <div class="divider"></div>
                                                       </div>
                                                     }
-                                                    @if (pokemon.types?.type1?.effectivenessDefense?.notVeryEffective?.length ?? false) {
+                                                    @if (pokemon.types.type1?.effectivenessDefense?.notVeryEffective?.length ?? false) {
                                                       <div class="type-category">
                                                         <div class="type-category-text">
                                                           <span class="bold">x0.5</span>
                                                         </div>
                                                         <div class="type-category-icons">
-                                                          @for (type of pokemon.types?.type1?.effectivenessDefense?.notVeryEffective; track type; let i = $index; let last = $last) {
-                                                            <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                                          @for (type of pokemon.types.type1?.effectivenessDefense?.notVeryEffective; track type; let i = $index; let last = $last) {
+                                                            <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
                                                               [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                                             }
                                                           </div>
                                                         </div>
-                                                        @if (pokemon.types?.type1?.effectivenessDefense?.inmune?.length ?? false) {
+                                                        @if (pokemon.types.type1?.effectivenessDefense?.inmune?.length ?? false) {
                                                           <div class="flex align-i-c">
                                                             <div class="divider"></div>
                                                           </div>
                                                         }
                                                       }
-                                                      @if (pokemon.types?.type1?.effectivenessDefense?.inmune?.length ?? false) {
+                                                      @if (pokemon.types.type1?.effectivenessDefense?.inmune?.length ?? false) {
                                                         <div class="type-category">
                                                           <div class="text">
                                                             <span class="bold">x0</span>
                                                           </div>
                                                           <div class="type-category-icons">
-                                                            @for (type of pokemon.types?.type1?.effectivenessDefense?.inmune; track type; let i = $index; let last = $last) {
-                                                              <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                                            @for (type of pokemon.types.type1?.effectivenessDefense?.inmune; track type; let i = $index; let last = $last) {
+                                                              <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
                                                                 [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                                               }
                                                             </div>
@@ -601,11 +601,11 @@
                                                   </div>
                                                 </ng-template>
                                               }
-                                              @if (pokemon.types?.dualEffectiveness ?? false) {
-                                                <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon-s">
-                                                <img src="{{pokemon.types?.type2?.iconPath}}" title="{{pokemon.types?.type2?.name?.content}}" alt="{{pokemon.types?.type2?.name?.content}}" class="icon-s">
+                                              @if (pokemon.types.dualEffectiveness ?? false) {
+                                                <img src="{{pokemon.types.type1?.iconPath}}" title="{{pokemon.types.type1?.name?.content}}" alt="{{pokemon.types.type1?.name?.content}}" class="icon-s">
+                                                <img src="{{pokemon.types.type2?.iconPath}}" title="{{pokemon.types.type2?.name?.content}}" alt="{{pokemon.types.type2?.name?.content}}" class="icon-s">
                                               } @else {
-                                                <img src="{{pokemon.types?.type1?.iconPath}}" title="{{pokemon.types?.type1?.name?.content}}" alt="{{pokemon.types?.type1?.name?.content}}" class="icon-s">
+                                                <img src="{{pokemon.types.type1?.iconPath}}" title="{{pokemon.types.type1?.name?.content}}" alt="{{pokemon.types.type1?.name?.content}}" class="icon-s">
                                               }
                                             </div>
                                           </div>
@@ -749,7 +749,7 @@
                                                             </div>
                                                             <div class="type-category-icons">
                                                               @for (type of move?.pokeType?.effectivenessAttack?.superEffective; track type; let i = $index; let last = $last) {
-                                                                <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                                                <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
                                                                   [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                                                 }
                                                               </div>
@@ -765,7 +765,7 @@
                                                               </div>
                                                               <div class="type-category-icons">
                                                                 @for (type of move?.pokeType?.effectivenessAttack?.notVeryEffective; track type; let i = $index; let last = $last) {
-                                                                  <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                                                  <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
                                                                     [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                                                   }
                                                                 </div>
@@ -783,7 +783,7 @@
                                                                 </div>
                                                                 <div class="type-category-icons">
                                                                   @for (type of move?.pokeType?.effectivenessAttack?.inmune; track type; let i = $index; let last = $last) {
-                                                                    <img src="{{type.iconPath}}" title="{{type.name?.content}}" alt="{{type.name?.content}}" class="icon-s"
+                                                                    <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
                                                                       [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:pokemon.teraType?.effectivenessDefense?.superEffective)}">
                                                                     }
                                                                   </div>
@@ -975,7 +975,7 @@
                                                       </div>
                                                       <div class="flex-col bor-rad-5 pad-s"  style="min-width: 2em;">
                                                         <div>{{'pokemon.stat.nature' | translate}}</div>
-                                                        <div>{{teamOptions()?.naturesVisibility ? pokemon.nature ? pokemon.nature.name?.content : '---' : "??"}}</div>
+                                                        <div>{{teamOptions()?.naturesVisibility ? pokemon.nature ? pokemon.nature.name.content : '---' : "??"}}</div>
                                                         <div>
                                                           @if (teamOptions()?.naturesVisibility) {
                                                             @if (!(stat.identifier===pokemon?.nature?.increasedStatIdentifier

@@ -76,7 +76,7 @@
                   [value]="queryService.getAbilityQueryResult(pokemon.ability)"
                   [keepSelected]="true"
                   [allGetter]="queryService.pokemonAbilitiesCallback"
-                  [allGetterIndex]="this.pokemon?.dexNumber"
+                  [allGetterIndex]="this.pokemon.dexNumber"
                   (selectEvent)="abilitySelectEvent($event)"
                   class="smart-input-wrapper form-item"
                 ></app-smart-input>
@@ -286,7 +286,7 @@
                     </div>
                     <app-pokemon-card
                       [pokemon]="pokemon"
-                      [teamOptions]="team?.options"
+                      [teamOptions]="team.options"
                       [showStatsStart]="true"
                       [editorPreview] = "true"
                       (triggerNotesEvent)="triggerNotes($event)"
