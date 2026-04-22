@@ -85,7 +85,7 @@
         }
       }
       <app-switch
-        [inputState]="user?.visibility"
+        [state]="user?.visibility ?? false"
         [leftSVG]="leftSVG"
         [rightSVG]="rightSVG"
         [sizeSVG]="'1.5em'"

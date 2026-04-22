@@ -1,9 +1,9 @@
 <div class="switch">
   <div class="selector option"
     [ngStyle]="{width: sizeSVG(), height: sizeSVG()}"
-    [ngClass]="{selectedLeft: !state, selectedRight: state}"
+    [ngClass]="{selectedLeft: !state(), selectedRight: state()}"
   ></div>
-  <div class="option left" [ngClass]="{selected: state}" (click)="onClick()">
+  <div class="option left" [ngClass]="{selected: state()}" (click)="onClick()">
     @if (leftText()) {
       <span class="option">{{leftText()}}</span>
     }
@@ -11,7 +11,7 @@
       <ng-container [ngTemplateOutlet]="leftSVG()"></ng-container>
     }
   </div>
-  <div class="option right" [ngClass]="{selected: !state}" (click)="onClick()">
+  <div class="option right" [ngClass]="{selected: !state()}" (click)="onClick()">
     @if (rightText()) {
       <span class="option">{{rightText()}}</span>
     }

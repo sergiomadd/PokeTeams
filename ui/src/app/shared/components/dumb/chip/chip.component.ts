@@ -1,6 +1,5 @@
-import { Component, inject, input, output } from '@angular/core';
-import { ThemeService } from '../../../../core/helpers/theme.service';
 import { NgClass, NgStyle } from '@angular/common';
+import { Component, input, output } from '@angular/core';
 import { TooltipComponent } from '../tooltip/tooltip.component';
 
 @Component({
@@ -11,8 +10,6 @@ import { TooltipComponent } from '../tooltip/tooltip.component';
 })
 export class ChipComponent 
 {
-  themeService = inject(ThemeService);
-
   readonly name = input<string>();
   readonly type = input<string>();
   readonly iconPath = input<string>();
@@ -30,7 +27,6 @@ export class ChipComponent
 
   remove()
   {
-    // TODO: The 'emit' function requires a mandatory QueryItem argument
     this.removeEvent.emit();
   }
 }
