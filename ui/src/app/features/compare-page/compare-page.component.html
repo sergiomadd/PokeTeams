@@ -7,10 +7,10 @@
     [ngTemplateOutlet]="teamSection"
     [ngTemplateOutletContext]="{which: 'A'}"
   ></ng-container>
-  @if (window.isTabletLandscapeOrLess() && statList) {
+  @if (window.isTabletLandscapeOrLess() && statList()) {
     <div style="border-bottom: 1px solid var(--bg-color-3);" class="mar-xl"></div>
   }
-  @if (statList && !window.isLaptop()) {
+  @if (statList() && !window.isLaptop()) {
     <div class="relative">
       <div class="stat-list">
         <div class="flex flex-col align-i-c gap-m" >
@@ -28,13 +28,13 @@
             }
           </div>
           <div class="flex flex-col justify-c-c gap-m" style="width: 10em;">
-            @for (item of statList; track item; let i = $index) {
+            @for (item of statList(); track item; let i = $index) {
               @if (item?.dexNumber && item?.dexNumber !== -1) {
                 <div class="flex gap-s align-i-c bor-rad-5 bor-1-3 pad-s" style="width: 4em;"
                 [ngClass]="
                 {
-                  'blue-team': item.whichTeam === 'A' && teamASelectedIndex.includes(item?.sourceIndex ?? 0),
-                  'red-team': item.whichTeam === 'B' && teamBSelectedIndex.includes(item?.sourceIndex ?? 0),
+                  'blue-team': item.whichTeam === 'A' && teamASelectedIndex().includes(item.sourceIndex),
+                  'red-team': item.whichTeam === 'B' && teamBSelectedIndex().includes(item.sourceIndex),
                   'justify-c-e': item.whichTeam === 'A',
                   'justify-c-s': item.whichTeam === 'B'
                 }"
@@ -42,7 +42,7 @@
                 {
                   'flex-direction': item.whichTeam === 'A' ? 'row' : 'row-reverse',
                   'align-self': item.whichTeam === 'A' ? 'flex-start' : 'flex-end',
-                  'margin-top': statList | marginTopPipe:item:selectedStatIndex:i
+                  'margin-top': statList() | marginTopPipe:item:selectedStatIndex:i
                 }">
                   <span class="text-center" style="min-width: 1em;">
                     {{ item && item.stats && item.stats.total ? item.stats.total[selectedStatIndex].value : ''}}
@@ -113,7 +113,7 @@
               class="compare-paste-box custom-scrollbar-dark"
               spellcheck="false"
               placeholder="{{'team.compare.paste-placeholder' | translate}}"
-              [ngStyle]="{height: which === 'A' ? (shrinkPasteAInput ? '2.5em' : '15em') : (shrinkPasteBInput ? '2.5em' : '15em')}"
+              [ngStyle]="{height: which === 'A' ? (shrinkPasteAInput() ? '2.5em' : '15em') : (shrinkPasteBInput() ? '2.5em' : '15em')}"
           [ngClass]="{controlInvalid: which === 'A'
             ? (teamAForm.controls.pasteA.errors | isFormFieldInvalid:teamAForm.controls.pasteA.dirty:teamAForm.controls.pasteA.touched:true)
             : (teamBForm.controls.pasteB.errors | isFormFieldInvalid:teamBForm.controls.pasteB.dirty:teamBForm.controls.pasteB.touched:true)}"
@@ -148,7 +148,7 @@
         }
         <app-switch
           class="input-toggle"
-          [inputState]="which === 'A' ? !showPasteAInput : !showPasteBInput"
+          [state]="which === 'A' ? !showPasteAInput : !showPasteBInput"
           [leftSVG]="leftSVG"
           [rightSVG]="rightSVG"
           [sizeSVG]="'1em'"
@@ -159,7 +159,7 @@
         @if (which === 'A' ? !teamALoading : !teamBLoading) {
           @if (which === 'A' ? teamA : teamB) {
             <app-team-battle
-              [team]="which === 'A' ? teamA : teamB"
+              [team]="which === 'A' ? teamA() : teamB()"
               [which]="which"
               (selectedIndexesEvent)="selectIndexes($event, which === 'A' ? 'A' : 'B')"
             ></app-team-battle>
