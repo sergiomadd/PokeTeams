@@ -66,7 +66,7 @@ jobs:
 
       - name: Install UI dependencies
         working-directory: ui
-        run: npm ci --audit=false
+        run: npm install --no-audit
 
       - name: Run Angular Jest tests
         working-directory: ui
