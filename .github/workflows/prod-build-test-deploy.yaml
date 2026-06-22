@@ -65,11 +65,11 @@ jobs:
         run: dotnet test ./api.Test/api.Test.csproj --verbosity normal
 
       - name: Publish
-        if: success()
+        if: false
         run: dotnet publish ./api/api.csproj --configuration Release --output ./api/bin/Release/net9.0/publish
 
       - name: Deploy to AWS EC2
-        if: success()
+        if: false
         run: |
           printf "%s" "$AWS_SSH_KEY" > key.pem
           chmod 600 key.pem
@@ -103,6 +103,7 @@ jobs:
         run: npm run build:prod
 
       - name: Deploy Angular to EC2
+        if: false
         run: |
           printf "%s" "$AWS_SSH_KEY" > key.pem
           chmod 600 key.pem
