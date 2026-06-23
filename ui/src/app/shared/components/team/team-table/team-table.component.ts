@@ -1,10 +1,10 @@
 import { NgClass, NgStyle } from '@angular/common';
-import { Component, inject, viewChild } from '@angular/core';
+import { Component, effect, inject, signal, viewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Observable, skip, take } from 'rxjs';
+import { first, Observable, skip, take } from 'rxjs';
 import { I18nService } from '../../../../core/helpers/i18n.service';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
@@ -20,6 +20,7 @@ import { TeamCompareService } from '../../../services/team-compare.service';
 import { PaginationComponent } from '../../dumb/pagination/pagination.component';
 import { PokemonIconsComponent } from '../../pokemon/pokemon-icons/pokemon-icons.component';
 import { TeamPreviewComponent } from '../team-preview/team-preview.component';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-team-table',
@@ -38,10 +39,9 @@ export class TeamTableComponent
   router = inject(Router);
   i18n = inject(I18nService);
 
-  teams: TeamPreviewData[] = [];
-  searched: boolean = false;
-  loggedUser$ = this.store.select(selectLoggedUser);
-  logged?: User;
+  teams = toSignal(this.searchService.teams);
+  searched = toSignal(this.searchService.searched);
+  loggedUser = this.store.selectSignal(selectLoggedUser);
 
   sortTypeIds: string[] = ["date", "views"];
   sortOrder: SortOrder = 
@@ -50,88 +50,69 @@ export class TeamTableComponent
     way: SortWay.descending
   };
   //pagination
-  totalTeams?: number;
+  totalTeams = toSignal(this.searchService.totalTeams);
   readonly defaultTeams: number = 10;
   paginationForm = this.formBuilder.group(
     {
       teamsPerPage: [this.defaultTeams, [Validators.min(1), Validators.max(50)]]
     }, { updateOn: "blur" });
-  readonly paginationComponent = viewChild.required(PaginationComponent);
+  paginationComponent = viewChild.required(PaginationComponent);
+  formTeamsPerPage = toSignal(this.paginationForm.controls.teamsPerPage.valueChanges);
 
-  selectedTheme$: Observable<string> = this.store.select(selectTheme);
-  selectedThemeName?: string;
+  selectedTheme = this.store.selectSignal(selectTheme);
 
-  teamsToCompare: TeamPreviewToCompare[] = [];
-  teamsToCompareFeedback?: string;
-  teamsToCompareOpen: boolean = true;
+  teamsToCompare = toSignal(this.compareService.teamsToCompare$)
+  teamsToCompareFeedback = signal<string | undefined>(undefined);
+  teamsToCompareOpen = signal<boolean>(false);
 
-  async ngOnInit()
+  firstLoad = true;
+  teamsPerPage = this.store.selectSignal(selectTeamsPerPage);
+
+  constructor()
   {
-    this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
-      {
-        this.teams = value;
-      }
-    );
-    this.searchService.totalTeams.subscribe((value: number) =>
-      {
-        this.totalTeams = value;
-      }
-    );
-
-    this.searchService.searched.subscribe((value: boolean) =>
-      {
-        this.searched = value;
-        const paginationComponent = this.paginationComponent();
-        if(this.searched && paginationComponent)
-        {
-          paginationComponent.currentPage.set(this.searchService.getCurrentPage());
-        }
-      }
-    );
-
-    this.paginationForm.controls.teamsPerPage.valueChanges.subscribe(value =>
-      {
-        if(value)
-        {
-          if(this.util.isNaN(value))
-          {
-            this.paginationForm.controls.teamsPerPage.setErrors({ "nan": true });
-          }
-          if(this.paginationForm.controls.teamsPerPage.valid)
-          {
-            this.store.dispatch(configActions.changeTeamsPerPage({request: value}))
-          }
-        }
-        else
-        {
-          this.paginationForm.controls.teamsPerPage.setValue(this.defaultTeams);
-          this.store.dispatch(configActions.changeTeamsPerPage({request: this.defaultTeams}))
-        }
-      }
-    )
-    this.loggedUser$.subscribe(value =>
+    effect(() => 
     {
-      this.logged = value ?? undefined;
+      if(this.searched() && this.paginationComponent())
+      {
+        this.paginationComponent.(pc => pc && pc.currentPage.set(this.searchService.getCurrentPage()))
+      }
     })
-    
-    //Only search when value changes after first load
-    this.store.select(selectTeamsPerPage).pipe(skip(1)).subscribe(value => 
+
+    effect(() => 
     {
-      this.searchService.setQueryTeamsPerPage(value); // Set query on every change
+      const teamsPerPage = this.formTeamsPerPage();
+      if(teamsPerPage)
+      {
+        if(this.util.isNaN(teamsPerPage))
+        {
+          this.paginationForm.controls.teamsPerPage.setErrors({ "nan": true });
+        }
+        if(this.paginationForm.controls.teamsPerPage.valid)
+        {
+          this.store.dispatch(configActions.changeTeamsPerPage({request: teamsPerPage}))
+        }
+      }
+      else
+      {
+        this.paginationForm.controls.teamsPerPage.setValue(this.defaultTeams);
+        this.store.dispatch(configActions.changeTeamsPerPage({request: this.defaultTeams}))
+      }
+    })
+
+    effect(() => 
+    {
+      this.teamsToCompare();
+      this.teamsToCompareFeedback.set(undefined);
+    })
+
+    effect(() => 
+    {
+      const teamsPerPage = this.teamsPerPage();
+      //Only search when value changes after first load
+      if(this.firstLoad) { this.firstLoad = false; return; }
+      this.searchService.setQueryTeamsPerPage(teamsPerPage); // Set query on every change
       this.searchService.defaultSearch(); // Perform default search on value change
-    });
-    
-    //Set the query on the first load
-    this.store.select(selectTeamsPerPage).pipe(take(1)).subscribe(value => 
-    {
-      this.searchService.setQueryTeamsPerPage(value); // Set query on first load
-      this.paginationForm.controls.teamsPerPage.setValue(value); // Set form control on first load
-    });
-    
-    this.compareService.teamsToCompare$.subscribe(value =>
-    {
-      this.teamsToCompareFeedback = undefined;
-      this.teamsToCompare = [...value];
+
     })
   }
 
@@ -206,7 +187,7 @@ export class TeamTableComponent
     }
     else
     {
-      this.teamsToCompareFeedback = this.i18n.translateKey('team.compare.to_compare_only_one');
+      this.teamsToCompareFeedback.set(this.i18n.translateKey('team.compare.to_compare_only_one'));
     }
   }
 
@@ -221,15 +202,17 @@ export class TeamTableComponent
 
   toggleTeamsToCompare()
   {
-    this.teamsToCompareOpen = !this.teamsToCompareOpen;
+    this.teamsToCompareOpen.update(value => !value);
   }
 
   swapTeamsToCompare()
   {
-    if (this.teamsToCompare.length === 2) 
+    let teamsToCompare = this.teamsToCompare();
+    if (teamsToCompare && teamsToCompare.length === 2) 
     {
-      const swappedTeamsToCompare = [this.teamsToCompare[1], this.teamsToCompare[0]];
-      this.teamsToCompare = [...swappedTeamsToCompare];
+      const swappedTeamsToCompare = [teamsToCompare[1], teamsToCompare[0]];
+      this.teamsToCompare.set([...swappedTeamsToCompare]);
+      this.compareService.teamsToCompare$ //need to set this?
     }
   }
 }
