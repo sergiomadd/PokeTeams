@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject, linkedSignal, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -15,6 +15,7 @@ import { selectLang } from '../../../../core/store/config/config.selectors';
 import { TeamEditorService } from '../../../services/team-editor.service';
 import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
 import { PokemonEditorComponent } from '../../pokemon/pokemon-editor/pokemon-editor.component';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-paste-input',
@@ -33,49 +34,43 @@ export class PasteInputComponent
   store = inject(Store);
   testService = inject(TestService);
 
-  selectedLang$: Observable<string> = this.store.select(selectLang);
+  selectedLang = this.store.selectSignal(selectLang);
+  selectedTeam = toSignal(this.teamEditorService.selectedTeam$);
 
-  pasteBoxFormSubmitted: boolean = false;
+  pasteHolder = signal<string>("");
+  pasteBoxFormSubmitted = signal<boolean>(false);
   pasteBoxForm = this.formBuilder.group(
     {
       paste: ["", [Validators.required, Validators.maxLength(2048)]]
     });
-  pasteHolder: string = "";
+  formPaste = toSignal(this.pasteBoxForm.controls.paste.valueChanges, { initialValue: this.pasteBoxForm.controls.paste.value})
 
-  team: Team = <Team>{};
-  selectedPokemonIndex: number = 0;
-  tabs: boolean[] = [true, false];
+  team = linkedSignal(() => this.selectedTeam());
+  selectedPokemonIndex = signal<number>(0);
+  tabs = signal<boolean[]>([true, false]);
 
   constructor()
   {
-    
-  }
-
-  ngOnInit() 
-  {
-    this.teamEditorService.selectedTeam$.subscribe((value) => 
+    effect(() => 
     {
-      this.team = value;
+      this.selectedLang();
+      {
+        this.load();
+      }
     })
-    this.pasteBoxForm.controls.paste.valueChanges.subscribe(value => 
+    effect(() =>
+    {
+      const formPaste = this.formPaste();
+      if(formPaste && this.pasteBoxFormSubmitted())
       {
-        if(value && this.pasteBoxFormSubmitted)
-        {
-          this.pasteBoxFormSubmitted = false;
-        }
-      })
-    this.selectedLang$.subscribe(value =>
-      {
-        if(this.pasteBoxForm.controls.paste.value)
-        {
-          this.load();
-        }
-      });
+        this.pasteBoxFormSubmitted.set(false);
+      }
+    })    
   }
 
   async load()
   {
-    this.pasteBoxFormSubmitted = true;
+    this.pasteBoxFormSubmitted.set(true);
     if(this.pasteBoxForm.valid)
     {
       let formData = this.pasteBoxForm.controls.paste.value ?? "";
@@ -110,8 +105,8 @@ export class PasteInputComponent
   isInvalid(key: string) : boolean
   {
     var control = this.pasteBoxForm.get(key);
-    let invalid = (control?.errors
-      && this.pasteBoxFormSubmitted)
+    let invalid: boolean = (control?.errors
+      && this.pasteBoxFormSubmitted())
       ?? false;
     return invalid;
   }
@@ -124,9 +119,9 @@ export class PasteInputComponent
 
   reset()
   {
-    this.pasteHolder = "";
+    this.pasteHolder.set("");
     this.pasteBoxForm.controls.paste.setValue("");
-    this.pasteBoxFormSubmitted = false;
+    this.pasteBoxFormSubmitted.set(false);
     this.teamEditorService.setEmptyTeam();
   }
 
@@ -136,9 +131,8 @@ export class PasteInputComponent
     {
       this.pasteBoxForm.controls.paste.setValue(this.examplePaste);
       this.load();
-      this.team.title = "Example team";
       //Place the same id for all example teams to avoid duplication
-      this.team.id = "example";
+      this.team.update(team => team && { ...team, title: "Example team", id: "example"})
     }
     else
     {
@@ -152,8 +146,8 @@ export class PasteInputComponent
     */
     this.testService.getTestPaste("testPaste").subscribe(value => 
       {
-        this.pasteHolder = value;
-        this.pasteBoxForm.controls.paste.setValue(this.pasteHolder);
+        this.pasteHolder.set(value);
+        this.pasteBoxForm.controls.paste.setValue(this.pasteHolder());
       })
     }
   }

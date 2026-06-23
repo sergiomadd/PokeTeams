@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, viewChild } from '@angular/core';
+import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -24,6 +24,7 @@ import { TagEditorComponent } from '../../dumb/tag-editor/tag-editor.component';
 import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
 import { SmartInputComponent } from '../../smart-input/smart-input.component';
 import { TeamComponent } from '../team/team.component';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-team-editor',
@@ -48,29 +49,42 @@ export class TeamEditorComponent
 
   readonly teamComponent = viewChild.required(TeamComponent);
 
-  loggedUser$ = this.store.select(selectLoggedUser);
-  loggedUser?: QueryItem;
+  loggedUser = this.store.selectSignal(selectLoggedUser);
+  loggedUserItem = computed(() => 
+    {
+      const user = this.loggedUser();
+      if(!user) { return undefined; }
+      const userItem: QueryItem = 
+      {
+        identifier: user.username,
+        name: user.username,
+        icon: user.picture,
+        type: "user"
+      }
+      return { } 
+    }); //make query item
 
-  selectedTheme$: Observable<string> = this.store.select(selectTheme);
-  selectedThemeName?: string;
+  selectedTheme = this.store.selectSignal(selectTheme);
 
-  teamFormSubmitted: boolean = false;
+  teamFormSubmitted = signal<boolean>(false);
   teamForm = this.formBuilder.group(
     {
       player: ["", [Validators.maxLength(32)]],
       rental: ["", [Validators.maxLength(32)]],
       title: ["", [Validators.maxLength(128)]],
     });
+  formPlayer = toSignal(this.teamForm.controls.player.value)
 
-  team: Team = <Team>{};
-  currentTags: number = 0;
-  maxTags: number = 3;
-  disableTagInput: boolean = false;
-  showTagEditor: boolean = false;
-  tagAlreadyAdded: boolean = false;
+
+  team = signal<Team>(<Team>{});
+  currentTags = signal<number>(0);
+  maxTags = signal<number>(3);
+  disableTagInput = signal<boolean>(false);
+  showTagEditor = signal<boolean>(false);
+  tagAlreadyAdded = signal<boolean>(false);
   feedback?: string;
-  teamPrivateFeedback: boolean = false;
-  exampleTeamModified?: boolean = undefined;
+  teamPrivateFeedback = signal<boolean>(false);
+  exampleTeamModified = signal<boolean | undefined>(undefined);
   readonly feedbackColors = FeedbackColors;
 
   readonly playerInput = viewChild<SmartInputComponent>('playerInput');
