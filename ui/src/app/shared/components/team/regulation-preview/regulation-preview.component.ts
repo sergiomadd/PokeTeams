@@ -11,8 +11,5 @@ import { CustomFormatDatePipe } from '../../../pipes/converters/customFormatDate
 export class RegulationPreviewComponent 
 {
   util = inject(UtilService);
-
   readonly regulation = input<Regulation | null>();
-
-  loading: boolean = false;
 }

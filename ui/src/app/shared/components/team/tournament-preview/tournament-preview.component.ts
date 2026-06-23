@@ -12,10 +12,5 @@ import { CustomFormatDatePipe } from '../../../pipes/converters/customFormatDate
 export class TournamentPreviewComponent 
 {
   util = inject(UtilService);
-
   readonly tournament = input<Tournament | null>();
-
-  loading: boolean = false;
-
-
 }
