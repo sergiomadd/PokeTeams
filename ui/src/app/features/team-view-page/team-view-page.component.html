@@ -1,12 +1,12 @@
-@if (loading) {
+@if (loading()) {
   <div class="spinner-wrapper">
     <div class="pokemon-spinner"></div>
   </div>
 } @else {
-  @if (!unauthorized) {
-    @if (team) {
-      <div class="m-auto flex-col justify-c-c align-i-c gap-m" [ngStyle]="{'margin-top': window.isTabletPortraitOrLess() ? '0.8em' : team.title ? '3.3em' : '8em'}">
-        <app-team [team]="team"></app-team>
+  @if (!unauthorized()) {
+    @if (team()) {
+      <div class="m-auto flex-col justify-c-c align-i-c gap-m" [ngStyle]="{'margin-top': window.isTabletPortraitOrLess() ? '0.8em' : team()?.title ? '3.3em' : '8em'}">
+        <app-team [team]="team()"></app-team>
         <div class="buttons flex justify-c-c gap-s w-100">
           <button
             class="button relative"
@@ -16,11 +16,11 @@
             <app-tooltip
               [text]="'shared.copySuccess' | translate"
               [side]="'top'"
-              [visible]="pasteCopied"
+              [visible]="pasteCopied()"
               [instant]="!window.isTabletLandscapeOrLess()"
             ></app-tooltip>
           </button>
-          @if (loggedUser?.username && team.user?.username === loggedUser?.username) {
+          @if (loggedUser()?.username && team()?.user?.username === loggedUser()?.username) {
             <button
               class="button relative"
               (click)="editTeam()"
@@ -43,14 +43,14 @@
             <app-tooltip
               [text]="'shared.copySuccess' | translate"
               [side]="'top'"
-              [visible]="linkCopied"
+              [visible]="linkCopied()"
               [instant]="!window.isTabletLandscapeOrLess()"
             ></app-tooltip>
           </button>
         </div>
-        @if (feedback) {
+        @if (feedback()) {
           <div class="formFeedbackError">
-            {{feedback}}
+            {{feedback()}}
           </div>
         }
         @if (!window.isTabletLandscapeOrLess()) {
@@ -71,12 +71,12 @@
     </div>
   }
 }
-@if (deleteDialog) {
+@if (deleteDialog()) {
   <app-dialog
     [title]="'team.preview.deleteTeamDialog' | translate"
     [trueButtonText]="'shared.no' | translate"
     [falseButtonText]="'shared.yes' | translate"
-    [visible]="deleteDialog"
+    [visible]="deleteDialog()"
     (choose)="deleteChooseEvent($event)"
   ></app-dialog>
 }

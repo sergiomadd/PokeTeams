@@ -1,9 +1,10 @@
 import { NgStyle } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, effect, inject, signal } from '@angular/core';
+import { Router, RouterLink, NavigationEnd } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
+import { filter, map, Observable, startWith } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ParserService } from '../../core/helpers/parser.service';
 import { SeoService } from '../../core/helpers/seo.service';
@@ -21,6 +22,7 @@ import { DialogComponent } from '../../shared/components/dumb/dialog/dialog.comp
 import { NotFoundComponent } from '../../shared/components/dumb/not-found/not-found.component';
 import { TooltipComponent } from '../../shared/components/dumb/tooltip/tooltip.component';
 import { TeamComponent } from '../../shared/components/team/team/team.component';
+import { TeamOptions } from '../../core/models/team/teamOptions.model';
 
 @Component({
     selector: 'app-team-view-page',
@@ -39,87 +41,89 @@ export class TeamViewPageComponent
   window = inject(WindowService);
   seo = inject(SeoService);
 
-  loggedUser$: Observable<User | null> = this.store.select(selectLoggedUser);
-  loggedUser?: User;
-  selectedLang$: Observable<string> = this.store.select(selectLang);
+  loggedUser = this.store.selectSignal(selectLoggedUser)
+  selectedLang = this.store.selectSignal(selectLang)
 
-  teamKey: string = "";
-  team?: Team;
-  teamData?: TeamData;
-  loading: boolean = false;
-  viewIncrementCooldown: number = 1;
-  feedback: string | undefined = undefined;
+  url = toSignal(this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd), map(() => this.router.url), startWith(this.router.url)), { initialValue: this.router.url})
+  teamKey = signal<string>(this.router.url.slice(1));
+  team = signal<Team | undefined>(undefined);
+  teamData = signal<TeamData | undefined>(undefined);
+  loading = signal<boolean>(false);
+  viewIncrementCooldown = signal<number>(1);
+  feedback = signal<string | undefined>(undefined);
 
-  pasteCopied: boolean = false;
-  linkCopied: boolean = false;
-  unauthorized: boolean = false;
-  deleteDialog: boolean = false;
+  pasteCopied = signal<boolean>(false);
+  linkCopied = signal<boolean>(false);
+  unauthorized = signal<boolean>(false);
+  deleteDialog = signal<boolean>(false);
 
-  async ngOnInit()
+  constructor()
   {
-    this.teamKey = this.router.url.slice(1);
-
-    this.seo.updateMetaData({
-      title: `${this.team?.title || 'PokeTeam'}`,
-      description: 'Display the pokemon team information in a visually engaging ui. With the option to copy the pokepaste of the team.',
-      slug: this.teamKey,
-    });
-
-    this.loggedUser$.subscribe(value =>
-      {
-        this.loggedUser = value ?? undefined;
-      });
-    this.selectedLang$.subscribe(value =>
-      {
-        this.loadTeam();
-      });
-
     this.triggerViewCount();
+
+    effect(() => 
+    {
+      const teamKey = this.router.url.slice(1); 
+      this.teamKey.set(teamKey);
+
+      this.seo.updateMetaData({
+        title: `${this.team()?.title || 'PokeTeam'}`,
+        description: 'Display the pokemon team information in a visually engaging ui. With the option to copy the pokepaste of the team.',
+        slug: this.teamKey(),
+      });
+    })
+
+    effect(() => 
+    {
+      this.selectedLang();
+      this.loadTeam();
+    })
   }
 
   loadTeam()
   {
-    this.loading = true;
-    this.teamService.getTeamData(this.teamKey).subscribe(
+    this.loading.set(true);
+    this.teamService.getTeamData(this.teamKey()).subscribe(
       {
         next: (response) => 
         {
-          this.teamData = response;
-          if(this.teamData)
+          this.teamData.set(response);
+          const teamData = this.teamData();
+          if(teamData)
           {
-            this.team = 
+            this.team.set( 
             {
               ...this.team,
               pokemons: [],
-              id: this.teamData.id,
-              options: this.teamData.options,
-              player: this.teamData.player,
-              user: this.teamData.user,
-              title: this.teamData.title,
-              tournament: this.teamData.tournament,
-              regulation: this.teamData.regulation,
-              rentalCode: this.teamData.rentalCode,
-              viewCount: this.teamData.viewCount,
-              date: this.teamData.date,
-              visibility: this.teamData.visibility,
-              tags: this.teamData.tags,
-            };
+              id: teamData.id,
+              options: teamData.options,
+              player: teamData.player,
+              user: teamData.user,
+              title: teamData.title,
+              tournament: teamData.tournament,
+              regulation: teamData.regulation,
+              rentalCode: teamData.rentalCode,
+              viewCount: teamData.viewCount,
+              date: teamData.date,
+              visibility: teamData.visibility,
+              tags: teamData.tags,
+            });
             this.initOptions();
-            this.loadPokemonPlaceholders(this.teamData.pokemonIDs)
-            this.loadPokemons(this.teamData.pokemonIDs);
+            this.loadPokemonPlaceholders(teamData.pokemonIDs)
+            this.loadPokemons(teamData.pokemonIDs);
           }
         },
         error: (error: CustomError) =>
         {
-          this.loading = false;
+          this.loading.set(false);
           if(error.status === 401)
           {
-            this.unauthorized = true;
+            this.unauthorized.set(true);
           }
         },
         complete: () => 
         {
-          this.loading = false;
+          this.loading.set(false);
         }
       }
     );
@@ -127,83 +131,81 @@ export class TeamViewPageComponent
 
   loadPokemonPlaceholders(pokemonIDs: number[])
   {
-    for (const pokemonID in pokemonIDs) 
+    let team = this.team();
+    if(team)
     {
-      this.team?.pokemons.push(undefined);
+      for (const pokemonID in pokemonIDs) 
+      {
+        team.pokemons.push(undefined);
+      }
     }
   }
 
   async loadPokemons(pokemonIDs: number[])
   {
-    if(this.team)
+    pokemonIDs.map(async (pokemonID, index) => 
     {
-      pokemonIDs.map(async (pokemonID, index) => 
-      {
-        this.pokemonService.getPokemonById(pokemonID).subscribe(
+      this.pokemonService.getPokemonById(pokemonID).subscribe(
+        {
+          next: (response) =>
           {
-            next: (response) =>
-            {
-              if(this.team && response) 
-              { 
-                this.team.pokemons[index] = response;
-                this.team = {...this.team, pokemons: this.team.pokemons}
-              }
-            },
-            error: () =>
-            {
-              if(this.team) 
-              { 
-                this.team.pokemons[index] = null;
-                this.team = {...this.team, pokemons: this.team.pokemons}
-              }            
+            if(response) 
+            { 
+              this.team.update(team => team && { ...team, pokemons: team.pokemons.map((pokemon, pokemonIndex) =>
+                pokemonIndex === index ? response : pokemon )})
             }
+          },
+          error: () =>
+          {
+            this.team.update(team => team && { ...team, pokemons: team.pokemons.map((pokemon, pokemonIndex) =>
+              pokemonIndex === index ? null : pokemon )})
           }
-        );
-      })
-    }
+        }
+      );
+    })
   }
 
   triggerViewCount()
   {
-    const item = sessionStorage.getItem(this.teamKey);
+    const item = sessionStorage.getItem(this.teamKey());
     if(item)
     {
       const lastTime = parseInt(item);
-      if(this.util.haveMinutesPassed(lastTime, this.viewIncrementCooldown))
+      if(this.util.haveMinutesPassed(lastTime, this.viewIncrementCooldown()))
       {
-        this.teamService.incrementViewCount(this.teamKey);
+        this.teamService.incrementViewCount(this.teamKey());
         const time = new Date().getTime();
-        sessionStorage.setItem(this.teamKey, time.toString());
+        sessionStorage.setItem(this.teamKey(), time.toString());
       }
     }
     else
     {
-      this.teamService.incrementViewCount(this.teamKey);
+      this.teamService.incrementViewCount(this.teamKey());
       const time = new Date().getTime();
-      sessionStorage.setItem(this.teamKey, time.toString());
+      sessionStorage.setItem(this.teamKey(), time.toString());
     }
   }
 
   copyPaste()
   {
-    this.pasteCopied = true;
-    if(this.team && this.team.pokemons)
+    this.pasteCopied.set(true);
+    if(this.team()?.pokemons)
     {
-      this.util.copyToClipboard(this.parser.reversePaste(this.team.pokemons ?? []));
+      this.util.copyToClipboard(this.parser.reversePaste(this.team()?.pokemons ?? []));
       setTimeout(()=>
       {
-        this.pasteCopied = false;
+        this.pasteCopied.set(false);
       }, 1000);
     }
   }
 
   copyLink()
   {
-    this.linkCopied = true;
+    this.linkCopied.set(true);
     this.util.copyToClipboard(environment.url + this.teamKey);
     setTimeout(()=>
     {
-      this.linkCopied = false;
+      this.linkCopied.set(false);
     }, 1000);
   }
 
@@ -214,17 +216,12 @@ export class TeamViewPageComponent
 
   initOptions()
   {
-    if(this.team)
-    {
-      this.team.options.showIVs = true;
-      this.team.options.showEVs = true;
-      this.team.options.showNature = true;
-    }
+    this.team.update(team => team && { ...team, options: { ...team.options, showIVs: false, showEVs: false, showNature: true }})
   }
 
   tryDelete()
   {
-    this.deleteDialog = !this.deleteDialog;
+    this.deleteDialog.update(value => !value);
   }
 
   deleteChooseEvent($event)
@@ -232,20 +229,17 @@ export class TeamViewPageComponent
     if($event)
     {
       this.delete();
-      this.deleteDialog = !this.deleteDialog;
     }
-    else
-    {
-      this.deleteDialog = !this.deleteDialog;
-    }
+    this.deleteDialog.update(value => !value);
   }
 
   delete()
   {
-    if(this.team && this.team?.user?.registered
-      && this.loggedUser && this.loggedUser.username == this.team?.user?.username) 
+    const team = this.team();
+    if(!team) { return; }
+    if(team.user?.registered && this.loggedUser()?.username == team.user?.username) 
     {
-      this.teamService.deleteTeam(this.team?.id).subscribe(
+      this.teamService.deleteTeam(team.id).subscribe(
         {
           next: () =>
           {
@@ -259,13 +253,13 @@ export class TeamViewPageComponent
         }
       )
     }
-    else if(!this.team?.user?.registered)
+    else if(!team.user?.registered)
     {
-      this.feedback = "Unauthorized";
+      this.feedback.set("Unauthorized");
     }
-    else if(!this.loggedUser || (this.loggedUser && this.loggedUser.username != this.team?.user?.username))
+    else if(!this.loggedUser() || (this.loggedUser() && this.loggedUser()?.username != team.user?.username))
     {
-      this.feedback = "Unauthorized";
+      this.feedback.set("Unauthorized");
     }
   }
 }
