@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, effect, inject, input, linkedSignal, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { I18nService } from '../../../../core/helpers/i18n.service';
@@ -20,6 +20,7 @@ import { RadioComponent } from '../../dumb/radio/radio.component';
 import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
 import { ChipComponent } from '../../dumb/chip/chip.component';
 import { TranslatePipe } from '@ngx-translate/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-team-search',
@@ -44,19 +45,18 @@ export class TeamSearchComponent
 
   readonly userSearch = input<boolean>(false);
 
-  chips: Chip[] = [];
+  chips = signal<Chip[]>([]);
   unionType: SetOperation = SetOperation.intersection;
-  unionTypeSettings: SetOperation[] = [SetOperation.intersection, SetOperation.union];
-  feedback?: string;
+  unionTypeSettings = signal<SetOperation[]>([SetOperation.intersection, SetOperation.union]);
+  selectedTheme = this.store.selectSignal(selectTheme);
+  searchError = toSignal(this.searchService.searchError);
+  feedback = linkedSignal<string | undefined>(() => this.searchError());
 
-  selectedTheme$: Observable<string> = this.store.select(selectTheme);
-  selectedThemeName?: string;
-
-  ngOnInit()
+  constructor()
   {
-    this.searchService.searchError.subscribe((value) => 
+    effect(() => 
     {
-      this.feedback = value;
+
     })
   }
 
@@ -68,19 +68,19 @@ export class TeamSearchComponent
 
   async queryResultSelectEvent(event?: QueryItem)
   {
-    this.feedback = undefined;
+    this.feedback.set(undefined);
     if(!event) { return; }
     if(event.type === "user")
     {
-      this.feedback = this.validatePlayer(event.name);
-      if(this.feedback) { return; }
+      this.feedback.set(this.validatePlayer(event.name));
+      if(this.feedback()) { return; }
     }
     if(event.type === "tournament")
     {
-      this.feedback = this.validateTournament(event.name);
-      if(this.feedback) { return; }
+      this.feedback.set(this.validateTournament(event.name));
+      if(this.feedback()) { return; }
     }
-    if(!this.chips.find(t => t.identifier === event.identifier)) 
+    if(!this.chips().find(t => t.identifier === event.identifier)) 
     {
       if(event.type === "tag")
       {
@@ -92,7 +92,7 @@ export class TeamSearchComponent
           textColor: event.icon ? this.getTagTextColor.transform(event.icon) : undefined,
           type: event.type
         }
-        this.chips?.push(chip);
+        this.chips.update(chips => [...chips, chip]);
       }
       else
       {
@@ -103,18 +103,18 @@ export class TeamSearchComponent
           iconPath: event.icon,
           type: event.type
         }
-        this.chips?.push(chip);
+        this.chips.update(chips => [...chips, chip]);
         this.sortChips();
       }
-      this.searchService.setQueryItems(this.chips);
+      this.searchService.setQueryItems(this.chips());
     }
-    else { this.feedback =  this.i18n.translateKey('search.team_search.duplicate-feedback')}
+    else { this.feedback.set(this.i18n.translateKey('search.team_search.duplicate-feedback')) }
   }
 
   chipRemoveEvent($event)
   {
-    this.chips.splice($event, 1);
-    this.searchService.setQueryItems(this.chips);
+    this.chips.update(chips => chips.slice($event, 1))
+    this.searchService.setQueryItems(this.chips());
   }
 
   querySettingsSelectEvent($event)
@@ -125,7 +125,7 @@ export class TeamSearchComponent
 
   reset()
   {
-    this.chips = [];
+    this.chips.set([]);
     this.searchService.setQueryItems([]);
     this.searchService.defaultSearch();
   }
@@ -155,12 +155,11 @@ export class TeamSearchComponent
   sortChips()
   {
     const customOrder: string[] = ["user", "tournament", "regulation", "tag", "pokemon", "move", "item"];
-
-    this.chips.sort((a, b) => 
+    this.chips.update(chips => chips.sort((a, b) => 
     {
       const indexA = customOrder.indexOf(a.type ?? 'z');
       const indexB = customOrder.indexOf(b.type ?? 'z');
       return indexA - indexB;
-    });
+    }));
   }
 }

@@ -107,7 +107,7 @@
         [ngStyle]="{'margin-top': window.isLaptopOrLess() ? '3em' : 'auto'}">
         <div class="storage-settings flex justify-c-c">
           <app-radio
-            [options]="unionTypeSettings"
+            [options]="unionTypeSettings()"
             [optionSVGs]="[intersectionSVG, unionSVG]"
             [optionNames]="['intersection', 'union']"
             [tooltipTexts]="['search.team_search.intersection' | translate, 'search.team_search.union' | translate]"
@@ -132,8 +132,8 @@
           </button>
         </div>
         <div class="flex wrap gap-m pad-m bor-rad-5">
-          @if (chips && chips.length > 0) {
-            @for (chip of chips; track chip; let i = $index) {
+          @if (chips() && chips.length > 0) {
+            @for (chip of chips(); track chip; let i = $index) {
               <app-chip
                 [name]="chip.name"
                 [type]="chip.type"
