@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, input, model, output, SimpleChanges, viewChildren } from '@angular/core';
+import { Component, computed, inject, input, model, output, signal, SimpleChanges, viewChildren } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -58,28 +58,16 @@ export class TeamPreviewComponent
   
   readonly pokemonPreviewsComponents = viewChildren(PokemonPreviewComponent);
 
-  selectedTheme$: Observable<string> = this.store.select(selectTheme);
-  selectedThemeName?: string;
+  selectedTheme = this.store.selectSignal<string | undefined>(selectTheme);
 
-  feedback: string | undefined = undefined;
+  feedback = signal<string | undefined>(undefined);
   readonly feedbackColors = FeedbackColors;
-  deleteDialog: boolean = false;
-  copying?: boolean;
-  copied?: boolean;
-  linkCopied: boolean = false;
-  tooltips: boolean[] = [false, false, false]
-  isPlayerSameAsUser: boolean = false;
-
-  async ngOnInit()
-  {
-    this.selectedTheme$.subscribe((value) =>
-    {
-      if(value)
-      {
-        this.selectedThemeName = value;
-      }
-    })
-  }
+  deleteDialog = signal<boolean>(false);
+  copying = signal<boolean | undefined>(undefined);
+  copied = signal<boolean | undefined>(undefined);
+  linkCopied = signal<boolean>(false);
+  tooltips = signal<boolean[]>([false, false, false]);
+  isPlayerSameAsUser = signal<boolean>(false);
 
   ngOnChanges(changes: SimpleChanges)
   {
@@ -98,17 +86,16 @@ export class TeamPreviewComponent
   {
     const team = this.team();
     if(team && team.player?.username && team.user
-        && (team.player.username === team.user.username 
-          || team.player.username === team.user.name))
+        && (team.player.username === team.user.username || team.player.username === team.user.name))
     {
-      this.isPlayerSameAsUser = true;
+      this.isPlayerSameAsUser.set(true);
       if(team.user.picture)
       {
         team.player.picture = team.user.picture;
       }
       return;
     }
-    this.isPlayerSameAsUser = false;
+    this.isPlayerSameAsUser.set(false);
     if(team?.player) { team.player.picture = undefined; }
   }  
 
@@ -141,8 +128,8 @@ export class TeamPreviewComponent
   
   async copyPaste()
   {
-    this.copying = true;
-    this.copied = undefined;
+    this.copying.set(true);
+    this.copied.set(undefined);
     const team = this.team();
     if(team?.pokemonIDs)
     {
@@ -157,22 +144,22 @@ export class TeamPreviewComponent
           {
             if(this.util.copyToClipboard(this.parser.reversePaste(response)))
             {
-              this.copied = true;
+              this.copied.set(true);
               setTimeout(() => 
               {
-                this.copied = false;
+                this.copied.set(false);
               }, 300);
             }
             else
             {
-              this.copied = false;
+              this.copied.set(false);
             }
-            this.copying = false;
+            this.copying.set(false);
           },
           error: () => 
           {
-            this.copied = false;
-            this.copying = false;
+            this.copied.set(false);
+            this.copying.set(false);
           }
         });
     }
@@ -180,21 +167,21 @@ export class TeamPreviewComponent
 
   copyLink()
   {
-    this.linkCopied = true;
+    this.linkCopied.set(true);
     const team = this.team();
     if(team)
     {
       this.util.copyToClipboard(environment.url + team.id);
       setTimeout(()=>
       {
-        this.linkCopied = false;
+        this.linkCopied.set(false);
       }, 300);
     }
   }
 
   tryDelete()
   {
-    this.deleteDialog = !this.deleteDialog;
+    this.deleteDialog.update(value => !value);
   }
 
   deleteChooseEvent($event)
@@ -202,22 +189,15 @@ export class TeamPreviewComponent
     if($event)
     {
       this.delete();
-      this.deleteDialog = !this.deleteDialog;
     }
-    else
-    {
-      this.deleteDialog = !this.deleteDialog;
-    }
+    this.deleteDialog.update(value => !value);
   }
 
   delete()
   {
     const team = this.team();
     const logged = this.logged();
-    if(team 
-      && team?.user?.registered
-      && logged 
-      && logged.username == team?.user?.username) 
+    if(team && team?.user?.registered && logged && logged.username == team?.user?.username) 
     {
       this.teamService.deleteTeam(team?.id).subscribe(
         {
@@ -235,11 +215,11 @@ export class TeamPreviewComponent
     }
     else if(!team?.user?.registered)
     {
-      this.feedback = "Unauthorized";
+      this.feedback.set("Unauthorized");
     }
     else if(!logged || (logged && logged.username != team?.user?.username))
     {
-      this.feedback = "Unauthorized";
+      this.feedback.set("Unauthorized");
     }
   }
 
@@ -261,7 +241,7 @@ export class TeamPreviewComponent
 
   compare()
   {
-    this.feedback = undefined;
+    this.feedback.set(undefined);
     const team = this.team();
     const pokemons = this.pokemons();
     if(team?.id && pokemons)
@@ -270,7 +250,7 @@ export class TeamPreviewComponent
       const compareAddResult: boolean = this.compareService.addTeamsToCompare(compareTeam);
       if(!compareAddResult)
       {
-        this.feedback = this.i18n.translateKey('team.compare.to_compare_too_many');
+        this.feedback.set(this.i18n.translateKey('team.compare.to_compare_too_many'));
       }
     }
   }

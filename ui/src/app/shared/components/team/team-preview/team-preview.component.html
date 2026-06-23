@@ -12,7 +12,7 @@
             </div>
           }
         }
-        @if (!isPlayerSameAsUser) {
+        @if (!isPlayerSameAsUser()) {
           @if (team()?.player) {
             <div class="tooltip-wrapper">
               <div class="detail pointer flex align-i-c unregisteredPlayer">
@@ -51,7 +51,7 @@
               <span class="no-overflow">{{team()?.user?.username}}</span>
             </div>
             <app-tooltip
-              [text]="isPlayerSameAsUser ? ('team.team.uploaded_and_played_by-tooltip' | translate:{ name: team()?.user?.username }) : ('team.team.uploaded_by-tooltip' | translate:{ name: team()?.user?.username })"
+              [text]="isPlayerSameAsUser() ? ('team.team.uploaded_and_played_by-tooltip' | translate:{ name: team()?.user?.username }) : ('team.team.uploaded_by-tooltip' | translate:{ name: team()?.user?.username })"
               [side]="'top'"
             ></app-tooltip>
           </div>
@@ -142,15 +142,15 @@
           <div class="preview-button">
             <button (click)="copyPaste()"
               class="button tooltip-wrapper"
-              (mouseleave)="copied = undefined">
+              (mouseleave)="copied() == undefined">
               <svg class="icon-m" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M1390 4747 c-172 -58 -303 -203 -345 -379 -8 -35 -15 -111 -15 -170 l0 -108 -107 0 c-126 0 -209 -17 -295 -61 -75 -38 -181 -142 -220 -215 -61 -113 -58 -35 -58 -1599 0 -1281 2 -1437 16 -1486 52 -177 186 -311 363 -363 49 -14 205 -16 1486 -16 1564 0 1486 -3 1599 58 73 39 177 145 215 220 44 86 61 169 61 295 l0 107 108 0 c125 0 208 17 294 61 75 38 181 142 220 215 61 113 58 35 58 1599 0 1281 -2 1437 -16 1486 -52 176 -187 311 -363 363 -49 14 -205 16 -1495 16 l-1441 -1 -65 -22z m2943 -311 c39 -17 92 -71 106 -109 8 -20 11 -466 11 -1430 l0 -1402 -23 -40 c-12 -21 -42 -53 -65 -70 -41 -28 -50 -30 -158 -34 l-114 -3 -2 1163 -3 1164 -22 57 c-70 185 -219 315 -397 347 -40 8 -426 11 -1188 11 l-1128 0 0 93 c0 50 5 109 10 129 13 47 52 93 99 118 35 19 76 19 1439 20 1171 0 1408 -2 1435 -14z m-687 -685 c23 -10 53 -32 68 -47 60 -65 57 22 54 -1506 l-3 -1396 -30 -44 c-17 -23 -49 -53 -70 -65 l-40 -23 -1416 3 -1415 2 -36 24 c-19 13 -46 40 -59 59 l-24 36 -3 1413 c-2 1375 -2 1414 17 1451 24 46 56 76 101 96 31 13 206 15 1425 15 1335 1 1392 0 1431 -18z"/> </g> </svg>
               @if (window.isDesktop()) {
                 <app-tooltip
-                  [text]="copied === undefined ? ('team.preview.copyTeam' | translate) : copied ? ('shared.copySuccess' | translate) : ('shared.copyError' | translate)"
+                  [text]="copied === undefined ? ('team.preview.copyTeam' | translate) : copied() ? ('shared.copySuccess' | translate) : ('shared.copyError' | translate)"
                   [side]="'top'"
-                  [loading]="copying"
+                  [loading]="copying()"
                   [loadingText]="'shared.copyLoading' | translate"
-                  [visible]="copying || copied"
+                  [visible]="copying() || copied()"
                   [instant]="true"
                 ></app-tooltip>
               }
@@ -161,9 +161,9 @@
               <svg class="icon-m" version="1.0" xmlns="http://www.w3.org/2000/svg" width="512.000000pt" height="512.000000pt" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet"> <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none"> <path d="M3882 5106 c-158 -31 -296 -84 -416 -163 -50 -33 -195 -170 -499 -472 -396 -395 -429 -430 -443 -476 -30 -102 13 -202 107 -249 31 -15 69 -26 93 -26 87 1 110 20 541 449 401 400 412 409 495 450 123 59 193 74 320 68 67 -3 129 -12 170 -26 190 -61 352 -224 413 -416 18 -57 22 -93 22 -195 0 -139 -10 -182 -73 -305 -32 -64 -94 -129 -771 -807 l-736 -736 -95 -45 c-112 -54 -170 -67 -288 -67 -152 0 -289 51 -413 153 -36 30 -76 60 -89 67 -102 55 -232 12 -285 -93 -27 -55 -31 -99 -14 -162 21 -79 213 -233 378 -305 347 -151 760 -104 1060 120 99 73 1529 1512 1577 1585 88 137 141 272 169 432 65 375 -97 780 -408 1014 -106 80 -256 152 -382 185 -125 32 -322 41 -433 20z"/> <path d="M2102 3326 c-177 -34 -333 -101 -461 -197 -107 -80 -1406 -1386 -1457 -1464 -153 -237 -212 -499 -169 -761 20 -127 49 -214 107 -326 185 -355 551 -578 949 -578 212 0 457 82 628 210 36 27 224 208 417 402 348 349 352 354 363 407 13 63 2 117 -36 173 -31 46 -111 88 -167 88 -85 -1 -113 -23 -481 -389 -373 -371 -392 -385 -545 -437 -83 -28 -281 -27 -375 3 -192 61 -355 223 -416 413 -14 41 -23 103 -26 170 -6 127 8 196 68 320 l41 85 677 676 676 677 85 41 c110 53 184 71 291 71 159 0 294 -49 420 -154 85 -71 123 -89 184 -89 89 0 159 46 196 128 22 46 24 92 7 146 -36 122 -307 304 -543 365 -124 32 -321 41 -433 20z"/> </g> </svg>
               @if (window.isDesktop()) {
                 <app-tooltip
-                  [text]="linkCopied ? ('shared.copySuccess' | translate) : ('team.preview.copyLink' | translate)"
+                  [text]="linkCopied() ? ('shared.copySuccess' | translate) : ('team.preview.copyLink' | translate)"
                   [side]="'top'"
-                  [visible]="linkCopied"
+                  [visible]="linkCopied()"
                   [instant]="true"
                 ></app-tooltip>
               }
@@ -233,9 +233,9 @@
           </div>
         </div>
       </div>
-      @if (feedback) {
+      @if (feedback()) {
         <div class="errors">
-          {{feedback}}
+          {{feedback()}}
         </div>
       }
       @if ((pokemons() ?? [])!.length > 0) {
@@ -269,12 +269,12 @@
       }
     </div>
   </div>
-  @if (deleteDialog) {
+  @if (deleteDialog()) {
     <app-dialog
       [title]="'team.preview.deleteTeamDialog' | translate"
       [trueButtonText]="'shared.no' | translate"
       [falseButtonText]="'shared.yes' | translate"
-      [visible]="deleteDialog"
+      [visible]="deleteDialog()"
       (choose)="deleteChooseEvent($event)"
     ></app-dialog>
   }
