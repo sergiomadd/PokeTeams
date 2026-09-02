@@ -1,80 +1,73 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 import { Move } from '../../core/models/pokemon/move.model';
 import { TeamPreviewToCompare } from '../../core/models/team/teamPreviewToCompare.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TeamCompareService 
+export class TeamCompareService
 {
-  private moveA$: BehaviorSubject<Move | undefined> = new BehaviorSubject<Move | undefined>(undefined)
-  selectedMoveA$ = this.moveA$.asObservable();
+  selectedMoveA = signal<Move | undefined>(undefined);
+  selectedMoveB = signal<Move | undefined>(undefined);
 
-  private moveB$: BehaviorSubject<Move | undefined> = new BehaviorSubject<Move | undefined>(undefined)
-  selectedMoveB$ = this.moveB$.asObservable();
+  teratypeEnabledIndexesA = signal<boolean[]>([]);
+  teratypeEnabledIndexesB = signal<boolean[]>([]);
 
-  private teratypeEnabledIndexesA$: BehaviorSubject<boolean[]> = new BehaviorSubject<boolean[]>([])
-  teratypeEnabledIndexesAObservable$ = this.teratypeEnabledIndexesA$.asObservable();
-
-  private teratypeEnabledIndexesB$: BehaviorSubject<boolean[]> = new BehaviorSubject<boolean[]>([])
-  teratypeEnabledIndexesBObservable$ = this.teratypeEnabledIndexesA$.asObservable();
-
-  private teamsToCompareSubject$: BehaviorSubject<TeamPreviewToCompare[]> = new BehaviorSubject<TeamPreviewToCompare[]>([])
-  teamsToCompare$ = this.teamsToCompareSubject$.asObservable();
+  teamsToCompare = signal<TeamPreviewToCompare[]>([]);
 
   setMoveA(newMove?: Move)
   {
-    this.moveA$.next(newMove);
+    this.selectedMoveA.set(newMove);
   }
 
   setMoveB(newMove?: Move)
   {
-    this.moveB$.next(newMove);
+    this.selectedMoveB.set(newMove);
   }
 
   setTeratypeSelectedIndexA(index: number, value: boolean)
   {
-    const currentValues = this.teratypeEnabledIndexesA$.getValue();
-    const updatedValues = [...currentValues];
-    updatedValues[index] = value;
-    this.teratypeEnabledIndexesA$.next(updatedValues);
+    this.teratypeEnabledIndexesA.update(current =>
+    {
+      const updatedValues = [...current];
+      updatedValues[index] = value;
+      return updatedValues;
+    });
   }
 
   setTeratypeSelectedIndexB(index: number, value: boolean)
   {
-    const currentValues = this.teratypeEnabledIndexesB$.getValue();
-    const updatedValues = [...currentValues];
-    updatedValues[index] = value;
-    this.teratypeEnabledIndexesB$.next(updatedValues);
+    this.teratypeEnabledIndexesB.update(current =>
+    {
+      const updatedValues = [...current];
+      updatedValues[index] = value;
+      return updatedValues;
+    });
   }
 
   addTeamsToCompare(team: TeamPreviewToCompare)
   {
-    const currentValues = this.teamsToCompareSubject$.getValue();
-    if(currentValues.length > 1)
+    if(this.teamsToCompare().length > 1)
     {
       return false;
     }
-    const updatedValues = [...currentValues, team];
-    this.teamsToCompareSubject$.next(updatedValues);
+    this.teamsToCompare.update(current => [...current, team]);
     return true;
   }
 
   removeTeamsToCompare(teamId: string)
   {
-    const currentValues = this.teamsToCompareSubject$.getValue();
+    const currentValues = this.teamsToCompare();
     const indexToRemove = currentValues.findIndex(team => team.teamData.id === teamId);
-    if (indexToRemove === -1) 
+    if (indexToRemove === -1)
     {
       return false;
     }
-    const updatedValues = 
+    this.teamsToCompare.update(current =>
     [
-      ...currentValues.slice(0, indexToRemove),
-      ...currentValues.slice(indexToRemove + 1)
-    ];
-    this.teamsToCompareSubject$.next(updatedValues);
+      ...current.slice(0, indexToRemove),
+      ...current.slice(indexToRemove + 1)
+    ]);
     return true;
   }
 }

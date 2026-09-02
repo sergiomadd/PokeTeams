@@ -13,7 +13,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { CalcMoveEffectivenessPipe } from '../../../pipes/pokemon-pipes/calcMoveEffectiveness.pipe';
 import { GetDefenseEffectivenessPipe } from '../../../pipes/pokemon-pipes/getDefenseEffectivenes.pipe';
 import { GetPokemonSpritePathPipe } from '../../../pipes/pokemon-pipes/getPokemonSpritePath.pipe';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-team-battle',
@@ -44,28 +43,21 @@ export class TeamBattleComponent
   pokemonIndex1 = signal<number>(-1);
   pokemonIndex2 = signal<number>(-1);
   order = signal<number>(1);
-  selectedMoveA = toSignal(this.compareService.selectedMoveA$);
-  selectedMoveB = toSignal(this.compareService.selectedMoveB$);
+  selectedMoveA = this.compareService.selectedMoveA;
+  selectedMoveB = this.compareService.selectedMoveB;
   teraTypeEnabled = signal<boolean[]>([]);
 
   constructor()
   {
-    effect(() => 
+    effect(() =>
     {
       const which = this.which();
-      if(which === 'A')
+      const value = which === 'A' ? this.compareService.teratypeEnabledIndexesA()
+        : which === 'B' ? this.compareService.teratypeEnabledIndexesB()
+        : undefined;
+      if(value)
       {
-        this.compareService.teratypeEnabledIndexesAObservable$.subscribe(value => 
-        {
-          this.teraTypeEnabled.set([...value]);
-        })
-      }
-      else if(which === 'B')
-      {
-        this.compareService.teratypeEnabledIndexesBObservable$.subscribe(value => 
-        {
-          this.teraTypeEnabled.set([...value]);
-        })
+        this.teraTypeEnabled.set([...value]);
       }
     })
 

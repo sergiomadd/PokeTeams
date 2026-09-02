@@ -58,7 +58,7 @@ export class TeamTableComponent
 
   selectedTheme = this.store.selectSignal(selectTheme);
 
-  teamsToCompare = toSignal(this.compareService.teamsToCompare$)
+  teamsToCompare = this.compareService.teamsToCompare;
   teamsToCompareFeedback = signal<string | undefined>(undefined);
   teamsToCompareOpen = signal<boolean>(false);
 
@@ -168,12 +168,12 @@ export class TeamTableComponent
 
   compare()
   {
-    if(this.teamsToCompare.length === 2)
+    if(this.teamsToCompare().length === 2)
     {
-      const queryParams = 
+      const queryParams =
       {
-        teamAId: this.teamsToCompare[0].teamData.id,
-        teamBId: this.teamsToCompare[1].teamData.id
+        teamAId: this.teamsToCompare()[0].teamData.id,
+        teamBId: this.teamsToCompare()[1].teamData.id
       };
       
       const url = this.router.serializeUrl(
@@ -190,7 +190,7 @@ export class TeamTableComponent
 
   removeTeamToCompare(index: number)
   {
-    const teamToRemove: TeamPreviewToCompare | undefined = this.teamsToCompare[index];
+    const teamToRemove: TeamPreviewToCompare | undefined = this.teamsToCompare()[index];
     if(teamToRemove)
     {
       this.compareService.removeTeamsToCompare(teamToRemove.teamData.id);
@@ -205,12 +205,10 @@ export class TeamTableComponent
   swapTeamsToCompare()
   {
     let teamsToCompare = this.teamsToCompare();
-    if (teamsToCompare && teamsToCompare.length === 2) 
+    if (teamsToCompare && teamsToCompare.length === 2)
     {
       const swappedTeamsToCompare = [teamsToCompare[1], teamsToCompare[0]];
-      //this.teamsToCompare.set([...swappedTeamsToCompare]);
-      // need to update observable in service to signal
-      this.compareService.teamsToCompare$ //need to set this?
+      this.compareService.teamsToCompare.set(swappedTeamsToCompare);
     }
   }
 }

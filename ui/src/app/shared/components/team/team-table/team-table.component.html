@@ -1,7 +1,7 @@
 <div
   class="team-table flex-col align-i-c w-80"
   #results
-  [ngClass]="{searching: searched}"
+  [ngClass]="{searching: searched()}"
   >
   <div class="bar w-100 pad-m flex justify-c-sb">
     <div class="flex justify-c-c gap-m">
@@ -86,13 +86,13 @@
         }
       </div>
     </div>
-    @if (teamsToCompare()) {
+    @if (teamsToCompare().length) {
       <div class="to-compare">
         <div class="relative w-100 flex justify-c-c align-i-c pointer" (click)="toggleTeamsToCompare()">
-          <span class="no-select">{{'team.compare.popup_title' | translate:{ teamsToCompare: teamsToCompare.length } }}</span>
+          <span class="no-select">{{'team.compare.popup_title' | translate:{ teamsToCompare: teamsToCompare().length } }}</span>
           <button type="button"
             class="no-shadow button to-compare-toggle icon-m pad-s"
-            [ngClass]="{'to-compare-toggle-rotate': !teamsToCompareOpen}"
+            [ngClass]="{'to-compare-toggle-rotate': !teamsToCompareOpen()}"
             >
             <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
               <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none">
@@ -102,7 +102,7 @@
           </button>
         </div>
         <div class="flex flex-col justify-c-c align-i-c gap-l to-compare-content"
-          [ngClass]="{'to-compare-content-closed': !teamsToCompareOpen}"
+          [ngClass]="{'to-compare-content-closed': !teamsToCompareOpen()}"
           >
           <div class="flex flex-col justify-c-c align-i-c gap-l" style="margin-top: 0.8em;">
             @for (team of teamsToCompare(); track team; let i = $index) {
