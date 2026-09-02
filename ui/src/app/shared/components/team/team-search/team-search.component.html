@@ -132,7 +132,7 @@
           </button>
         </div>
         <div class="flex wrap gap-m pad-m bor-rad-5">
-          @if (chips() && chips.length > 0) {
+          @if (chips().length > 0) {
             @for (chip of chips(); track chip; let i = $index) {
               <app-chip
                 [name]="chip.name"

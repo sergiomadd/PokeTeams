@@ -1,6 +1,8 @@
+import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { Component, effect, inject, input, linkedSignal, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { TranslatePipe } from '@ngx-translate/core';
 import { I18nService } from '../../../../core/helpers/i18n.service';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -14,13 +16,10 @@ import { selectTheme } from '../../../../core/store/config/config.selectors';
 import { GetTagBgColorPipe } from '../../../pipes/color-pipes/getTagBgColor.pipe';
 import { GetTagTextColorPipe } from '../../../pipes/color-pipes/getTagTextColor.pipe';
 import { SearchService } from '../../../services/search.service';
-import { NgClass, NgTemplateOutlet, NgStyle } from '@angular/common';
-import { SmartInputComponent } from '../../smart-input/smart-input.component';
+import { ChipComponent } from '../../dumb/chip/chip.component';
 import { RadioComponent } from '../../dumb/radio/radio.component';
 import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
-import { ChipComponent } from '../../dumb/chip/chip.component';
-import { TranslatePipe } from '@ngx-translate/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { SmartInputComponent } from '../../smart-input/smart-input.component';
 
 @Component({
     selector: 'app-team-search',
@@ -56,7 +55,11 @@ export class TeamSearchComponent
   {
     effect(() => 
     {
-
+      let searchError = this.searchError();
+      if(searchError)
+      {
+        this.feedback.set(searchError);
+      }
     })
   }
 
@@ -113,7 +116,7 @@ export class TeamSearchComponent
 
   chipRemoveEvent($event)
   {
-    this.chips.update(chips => chips.slice($event, 1))
+    this.chips.update(chips => chips.filter((chip, i) => i !== $event))
     this.searchService.setQueryItems(this.chips());
   }
 
