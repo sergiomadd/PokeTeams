@@ -1,5 +1,4 @@
-import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
 import { I18nService } from '../../core/helpers/i18n.service';
 import { Pokemon } from '../../core/models/pokemon/pokemon.model';
 import { Team } from '../../core/models/team/team.model';
@@ -14,12 +13,8 @@ export class TeamEditorService
   pokemonService = inject(PokemonService);
   i18n = inject(I18nService);
 
-  private team$: BehaviorSubject<Team> = new BehaviorSubject<Team>(<Team>{});
-  selectedTeam$ = this.team$.asObservable();
-
-  private _exampleTeamModified$: BehaviorSubject<boolean | undefined> = new BehaviorSubject<boolean | undefined>(undefined);
-  exampleTeamModified$ = this._exampleTeamModified$.asObservable();
-
+  team = signal<Team>(<Team>{});
+  exampleTeamModified = signal<boolean | undefined>(undefined);
 
   constructor() 
   {
@@ -28,17 +23,12 @@ export class TeamEditorService
 
   setTeam(newTeam: Team)
   {
-    this.team$.next(newTeam);
+    this.team.set(newTeam);
   }
 
   addPokemon(pokemon: Pokemon | undefined)
   {
-    this.team$.next(
-      {
-        ...this.team$.getValue(),
-        pokemons: [...this.team$.getValue().pokemons, pokemon]
-      }
-    );
+    this.team.update(team => team && { ...team, pokemons: [...team.pokemons, pokemon]})
   }
 
   addPokemonPlaceholders(amount: number)
@@ -61,10 +51,9 @@ export class TeamEditorService
 
   deletePokemon(index: number): boolean
   {
-    if(this.team$.getValue().pokemons[index])
+    if(this.team().pokemons[index])
     {
-      this.team$.getValue().pokemons.splice(index, 1)
-      this.updatePokemons(this.team$.getValue().pokemons);
+      this.team.update(team => team && ({ ...team, pokemons: team.pokemons.filter((p, i) => i !== index) }));
       this.setExampleTeamModified(true);
       return true;
     }
@@ -73,19 +62,12 @@ export class TeamEditorService
 
   updatePokemons(updatedPokemons: (Pokemon | null | undefined)[])
   {
-    this.team$.next(
-      {
-        ...this.team$.getValue(),
-        pokemons: [...updatedPokemons]
-      }
-    );
+    this.team.update(team => team && { ...team, pokemons: [...updatedPokemons]})
   }
 
   updatePokemon(pokemon: Pokemon | undefined, index: number, firstLoad?: boolean)
   {
-    const pokemonsToUpdate: (Pokemon | null | undefined)[] = this.team$.getValue().pokemons;
-    pokemonsToUpdate[index] = pokemon;
-    this.updatePokemons(pokemonsToUpdate);
+    this.team.update(team => team && { ...team, pokemons: team.pokemons.map((p, i) => i === index ? pokemon : p) })
     if(!firstLoad) { this.setExampleTeamModified(true); }
   }
 
@@ -131,7 +113,7 @@ export class TeamEditorService
 
   setEmptyTeam()
   {
-    this.team$.next(
+    this.team.set(
     {
       id: '',
       pokemons: [],
@@ -167,6 +149,6 @@ export class TeamEditorService
 
   setExampleTeamModified(value?: boolean)
   {
-    this._exampleTeamModified$.next(value);
+    this.exampleTeamModified.set(value);
   }
 }

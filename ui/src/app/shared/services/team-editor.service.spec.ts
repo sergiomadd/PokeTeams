@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
+import { linkedSignal } from '@angular/core';
 import { I18nService } from '../../core/helpers/i18n.service';
 import { Pokemon } from '../../core/models/pokemon/pokemon.model';
 import { Team } from '../../core/models/team/team.model';
@@ -38,8 +39,7 @@ describe('TeamEditorService', () => {
 
   it('should initiate with empty team', () => 
   {
-    let currentTeam: Team | undefined;
-
+    const currentTeam = linkedSignal(() => service.team());
     const emptyTeam: Team = 
     {
       id: '',
@@ -65,21 +65,14 @@ describe('TeamEditorService', () => {
       visibility: true,
       tags: []
     }
-
-    service.selectedTeam$.subscribe(value => 
-    {
-      currentTeam = value
-    })
-
-    expect(currentTeam).toStrictEqual(emptyTeam);
+    expect(currentTeam()).toStrictEqual(emptyTeam);
   })
 
   describe("setTeam()", () => 
   {
     it('should set the team to new one', () => 
     {
-      let currentTeam: Team | undefined;
-
+      const currentTeam = linkedSignal(() => service.team());
       const newTeam: Team = 
       {
         id: 'newSetTeam',
@@ -101,15 +94,8 @@ describe('TeamEditorService', () => {
         visibility: true,
         tags: []
       }
-
-      service.selectedTeam$.subscribe(value => 
-      {
-        currentTeam = value
-      })
-
       service.setTeam(newTeam);
-
-      expect(currentTeam).toStrictEqual(newTeam);
+      expect(currentTeam()).toStrictEqual(newTeam);
     })
   })
 
@@ -117,13 +103,7 @@ describe('TeamEditorService', () => {
   {
     it('should add the correct pokemon', () => 
     {
-      let currentTeam: Team | undefined;
-
-      service.selectedTeam$.subscribe(value => 
-      {
-        currentTeam = value
-      })
-
+      const currentTeam = linkedSignal(() => service.team());
       const newPokemon: Pokemon = 
       {
         name: 
@@ -142,25 +122,19 @@ describe('TeamEditorService', () => {
         stats: []
       };
       
-      expect(currentTeam?.pokemons.length).toBe(0);
+      expect(currentTeam().pokemons.length).toBe(0);
 
       const newPokemons: Pokemon[] = [newPokemon]
 
       service.addPokemon(newPokemon);
 
-      expect(currentTeam?.pokemons.length).toBe(1);
-      expect(currentTeam?.pokemons).toStrictEqual(newPokemons);
+      expect(currentTeam().pokemons.length).toBe(1);
+      expect(currentTeam().pokemons).toStrictEqual(newPokemons);
     })
 
     it('should add an undefined pokemon', () => 
     {
-      let currentTeam: Team | undefined;
-
-      service.selectedTeam$.subscribe(value => 
-      {
-        currentTeam = value
-      })
-
+      const currentTeam = linkedSignal(() => service.team());
       const newPokemon: Pokemon = 
       {
         name: 
@@ -179,7 +153,7 @@ describe('TeamEditorService', () => {
         stats: []
       };
 
-      expect(currentTeam?.pokemons.length).toBe(0);
+      expect(currentTeam().pokemons.length).toBe(0);
 
       const newPokemons: (Pokemon | undefined)[] = [newPokemon, newPokemon, undefined]
 
@@ -187,8 +161,8 @@ describe('TeamEditorService', () => {
       service.addPokemon(newPokemon);
       service.addPokemon(undefined);
 
-      expect(currentTeam?.pokemons.length).toBe(3);
-      expect(currentTeam?.pokemons).toStrictEqual(newPokemons);
+      expect(currentTeam().pokemons.length).toBe(3);
+      expect(currentTeam().pokemons).toStrictEqual(newPokemons);
     })
   })
 
@@ -196,13 +170,7 @@ describe('TeamEditorService', () => {
   {
     it('should delete the correct pokemon and return true', () => 
     {
-      let currentTeam: Team | undefined;
-
-      service.selectedTeam$.subscribe(value => 
-      {
-        currentTeam = value
-      })
-
+      const currentTeam = linkedSignal(() => service.team());
       const pokemon1: Pokemon = 
       {
         name: 
@@ -239,36 +207,26 @@ describe('TeamEditorService', () => {
         stats: []
       };
 
-
-      expect(currentTeam?.pokemons.length).toBe(0);
+      expect(currentTeam().pokemons.length).toBe(0);
 
       service.addPokemon(pokemon1);
       service.addPokemon(pokemon2);
       service.addPokemon(undefined);
 
       const pokemons: (Pokemon | undefined)[] = [pokemon1, pokemon2, undefined]
-
-      expect(currentTeam?.pokemons.length).toBe(3);
-      expect(currentTeam?.pokemons).toStrictEqual(pokemons);
+      expect(currentTeam().pokemons.length).toBe(3);
+      expect(currentTeam().pokemons).toStrictEqual(pokemons);
 
       const deleted = service.deletePokemon(1);
-
       const pokemonsAfterDelete: (Pokemon | undefined)[] = [pokemon1, undefined]
-
-      expect(currentTeam?.pokemons.length).toBe(2);
-      expect(currentTeam?.pokemons).toStrictEqual(pokemonsAfterDelete);
+      expect(currentTeam().pokemons.length).toBe(2);
+      expect(currentTeam().pokemons).toStrictEqual(pokemonsAfterDelete);
       expect(deleted).toBe(true);
     })
 
     it('should not delete any pokemon and return false', () => 
     {
-      let currentTeam: Team | undefined;
-
-      service.selectedTeam$.subscribe(value => 
-      {
-        currentTeam = value
-      })
-
+      const currentTeam = linkedSignal(() => service.team());
       const pokemon1: Pokemon = 
       {
         name: 
@@ -306,7 +264,7 @@ describe('TeamEditorService', () => {
       };
 
 
-      expect(currentTeam?.pokemons.length).toBe(0);
+      expect(currentTeam().pokemons.length).toBe(0);
 
       service.addPokemon(pokemon1);
       service.addPokemon(pokemon2);
@@ -315,15 +273,15 @@ describe('TeamEditorService', () => {
 
       const pokemons: (Pokemon | undefined)[] = [pokemon1, pokemon2, undefined]
 
-      expect(currentTeam?.pokemons.length).toBe(3);
-      expect(currentTeam?.pokemons).toStrictEqual(pokemons);
+      expect(currentTeam().pokemons.length).toBe(3);
+      expect(currentTeam().pokemons).toStrictEqual(pokemons);
 
       const deleted = service.deletePokemon(2);
 
       const pokemonsAfterDelete: (Pokemon | undefined)[] = [pokemon1, pokemon2, undefined]
 
-      expect(currentTeam?.pokemons.length).toBe(3);
-      expect(currentTeam?.pokemons).toStrictEqual(pokemonsAfterDelete);
+      expect(currentTeam().pokemons.length).toBe(3);
+      expect(currentTeam().pokemons).toStrictEqual(pokemonsAfterDelete);
       expect(deleted).toBe(false);
     })
   })
@@ -332,13 +290,7 @@ describe('TeamEditorService', () => {
   {
     it('should update the correct pokemon with another pokemon', () => 
     {
-      let currentTeam: Team | undefined;
-
-      service.selectedTeam$.subscribe(value => 
-      {
-        currentTeam = value
-      })
-
+      const currentTeam = linkedSignal(() => service.team());
       const pokemon: Pokemon = 
       {
         name: 
@@ -375,7 +327,7 @@ describe('TeamEditorService', () => {
         stats: []
       };
 
-      expect(currentTeam?.pokemons.length).toBe(0);
+      expect(currentTeam().pokemons.length).toBe(0);
 
       service.addPokemon(pokemon);
       service.addPokemon(pokemon);
@@ -383,27 +335,21 @@ describe('TeamEditorService', () => {
 
       const pokemons: (Pokemon | undefined)[] = [pokemon, pokemon, undefined]
 
-      expect(currentTeam?.pokemons.length).toBe(3);
-      expect(currentTeam?.pokemons).toStrictEqual(pokemons);
+      expect(currentTeam().pokemons.length).toBe(3);
+      expect(currentTeam().pokemons).toStrictEqual(pokemons);
 
       service.updatePokemon(updatedPokemon, 1);
 
       const pokemonsAfterDelete: (Pokemon | undefined)[] = [pokemon, updatedPokemon, undefined]
 
-      expect(currentTeam?.pokemons.length).toBe(3);
-      expect(currentTeam?.pokemons).toStrictEqual(pokemonsAfterDelete);
-      expect(currentTeam?.pokemons[1]).toStrictEqual(updatedPokemon);
+      expect(currentTeam().pokemons.length).toBe(3);
+      expect(currentTeam().pokemons).toStrictEqual(pokemonsAfterDelete);
+      expect(currentTeam().pokemons[1]).toStrictEqual(updatedPokemon);
     })
 
     it('should update undefined with a pokemon', () => 
     {
-      let currentTeam: Team | undefined;
-
-      service.selectedTeam$.subscribe(value => 
-      {
-        currentTeam = value
-      })
-
+      const currentTeam = linkedSignal(() => service.team());
       const pokemon: Pokemon = 
       {
         name: 
@@ -440,7 +386,7 @@ describe('TeamEditorService', () => {
         stats: []
       };
 
-      expect(currentTeam?.pokemons.length).toBe(0);
+      expect(currentTeam().pokemons.length).toBe(0);
 
       service.addPokemon(pokemon);
       service.addPokemon(updatedPokemon);
@@ -448,27 +394,21 @@ describe('TeamEditorService', () => {
 
       const pokemons: (Pokemon | undefined)[] = [pokemon, updatedPokemon, undefined]
 
-      expect(currentTeam?.pokemons.length).toBe(3);
-      expect(currentTeam?.pokemons).toStrictEqual(pokemons);
+      expect(currentTeam().pokemons.length).toBe(3);
+      expect(currentTeam().pokemons).toStrictEqual(pokemons);
 
       service.updatePokemon(updatedPokemon, 2);
 
       const pokemonsAfterDelete: (Pokemon | undefined)[] = [pokemon, updatedPokemon, updatedPokemon]
 
-      expect(currentTeam?.pokemons.length).toBe(3);
-      expect(currentTeam?.pokemons).toStrictEqual(pokemonsAfterDelete);
-      expect(currentTeam?.pokemons[2]).toStrictEqual(updatedPokemon);
+      expect(currentTeam().pokemons.length).toBe(3);
+      expect(currentTeam().pokemons).toStrictEqual(pokemonsAfterDelete);
+      expect(currentTeam().pokemons[2]).toStrictEqual(updatedPokemon);
     })
 
     it('should update correct pokemon with undefined', () => 
     {
-      let currentTeam: Team | undefined;
-
-      service.selectedTeam$.subscribe(value => 
-      {
-        currentTeam = value
-      })
-
+      const currentTeam = linkedSignal(() => service.team());
       const pokemon: Pokemon = 
       {
         name: 
@@ -505,7 +445,7 @@ describe('TeamEditorService', () => {
         stats: []
       };
 
-      expect(currentTeam?.pokemons.length).toBe(0);
+      expect(currentTeam().pokemons.length).toBe(0);
 
       service.addPokemon(pokemon);
       service.addPokemon(updatedPokemon);
@@ -513,16 +453,16 @@ describe('TeamEditorService', () => {
 
       const pokemons: (Pokemon | undefined)[] = [pokemon, updatedPokemon, undefined]
 
-      expect(currentTeam?.pokemons.length).toBe(3);
-      expect(currentTeam?.pokemons).toStrictEqual(pokemons);
+      expect(currentTeam().pokemons.length).toBe(3);
+      expect(currentTeam().pokemons).toStrictEqual(pokemons);
 
       service.updatePokemon(undefined, 0);
 
       const pokemonsAfterDelete: (Pokemon | undefined)[] = [undefined, updatedPokemon, undefined]
 
-      expect(currentTeam?.pokemons.length).toBe(3);
-      expect(currentTeam?.pokemons).toStrictEqual(pokemonsAfterDelete);
-      expect(currentTeam?.pokemons[0]).toBe(undefined);
+      expect(currentTeam().pokemons.length).toBe(3);
+      expect(currentTeam().pokemons).toStrictEqual(pokemonsAfterDelete);
+      expect(currentTeam().pokemons[0]).toBe(undefined);
     })
   })
 });
