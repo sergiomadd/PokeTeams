@@ -1,17 +1,15 @@
 import { NgClass, NgStyle } from '@angular/common';
 import { Component, effect, inject, signal, viewChild } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { first, Observable, skip, take } from 'rxjs';
 import { I18nService } from '../../../../core/helpers/i18n.service';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
 import { SortOrder, SortType, SortWay } from '../../../../core/models/search/sortOrder.model';
-import { TeamPreviewData } from '../../../../core/models/team/teamPreviewData.model';
 import { TeamPreviewToCompare } from '../../../../core/models/team/teamPreviewToCompare.model';
-import { User } from '../../../../core/models/user/user.model';
 import { selectLoggedUser } from '../../../../core/store/auth/auth.selectors';
 import { configActions } from '../../../../core/store/config/config.actions';
 import { selectTeamsPerPage, selectTheme } from '../../../../core/store/config/config.selectors';
@@ -20,7 +18,6 @@ import { TeamCompareService } from '../../../services/team-compare.service';
 import { PaginationComponent } from '../../dumb/pagination/pagination.component';
 import { PokemonIconsComponent } from '../../pokemon/pokemon-icons/pokemon-icons.component';
 import { TeamPreviewComponent } from '../team-preview/team-preview.component';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-team-table',
@@ -74,7 +71,7 @@ export class TeamTableComponent
     {
       if(this.searched() && this.paginationComponent())
       {
-        this.paginationComponent.(pc => pc && pc.currentPage.set(this.searchService.getCurrentPage()))
+        this.paginationComponent().currentPage.set(this.searchService.getCurrentPage());
       }
     })
 
@@ -211,7 +208,8 @@ export class TeamTableComponent
     if (teamsToCompare && teamsToCompare.length === 2) 
     {
       const swappedTeamsToCompare = [teamsToCompare[1], teamsToCompare[0]];
-      this.teamsToCompare.set([...swappedTeamsToCompare]);
+      //this.teamsToCompare.set([...swappedTeamsToCompare]);
+      // need to update observable in service to signal
       this.compareService.teamsToCompare$ //need to set this?
     }
   }

@@ -1,21 +1,19 @@
 import { NgClass } from '@angular/common';
-import { Component, effect, inject, linkedSignal, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { ParserService } from '../../../../core/helpers/parser.service';
 import { TestService } from '../../../../core/helpers/test.service';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
-import { Team } from '../../../../core/models/team/team.model';
 import { PokemonService } from '../../../../core/services/pokemon.service';
 import { selectLang } from '../../../../core/store/config/config.selectors';
 import { TeamEditorService } from '../../../services/team-editor.service';
 import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
 import { PokemonEditorComponent } from '../../pokemon/pokemon-editor/pokemon-editor.component';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-paste-input',
@@ -35,7 +33,6 @@ export class PasteInputComponent
   testService = inject(TestService);
 
   selectedLang = this.store.selectSignal(selectLang);
-  selectedTeam = toSignal(this.teamEditorService.selectedTeam$);
 
   pasteHolder = signal<string>("");
   pasteBoxFormSubmitted = signal<boolean>(false);
@@ -45,9 +42,11 @@ export class PasteInputComponent
     });
   formPaste = toSignal(this.pasteBoxForm.controls.paste.valueChanges, { initialValue: this.pasteBoxForm.controls.paste.value})
 
-  team = linkedSignal(() => this.selectedTeam());
+  team = this.teamEditorService.team;
   selectedPokemonIndex = signal<number>(0);
   tabs = signal<boolean[]>([true, false]);
+
+  firstRun: boolean = true;
 
   constructor()
   {
@@ -55,6 +54,7 @@ export class PasteInputComponent
     {
       this.selectedLang();
       {
+        if(this.firstRun) { this.firstRun = false; return; }
         this.load();
       }
     })
@@ -95,19 +95,14 @@ export class PasteInputComponent
 
   selectTab(index)
   {
-    for(let i=0;i<this.tabs.length;i++)
-    {
-      this.tabs[i] = false;
-    }
-    this.tabs[index] = true;
+    this.tabs.update(tabs => tabs.map((tab, i) => i === index ? true : false))
+    console.log(this.tabs())
   }
 
   isInvalid(key: string) : boolean
   {
     var control = this.pasteBoxForm.get(key);
-    let invalid: boolean = (control?.errors
-      && this.pasteBoxFormSubmitted())
-      ?? false;
+    let invalid: boolean = (control?.errors && this.pasteBoxFormSubmitted()) ?? false;
     return invalid;
   }
 
