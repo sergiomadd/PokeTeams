@@ -1,11 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { SeoService } from '../../core/helpers/seo.service';
 import { CustomError } from '../../core/models/misc/customError.model';
-import { Team } from '../../core/models/team/team.model';
-import { User } from '../../core/models/user/user.model';
 import { TeamService } from '../../core/services/team.service';
 import { selectLoggedUser } from '../../core/store/auth/auth.selectors';
 import { PasteInputComponent } from '../../shared/components/team/paste-input/paste-input.component';
@@ -26,50 +24,45 @@ export class UploadPageComponent
   store = inject(Store);
   seo = inject(SeoService);
 
-  loggedUser: User | null = null;
-  user$ = this.store.select(selectLoggedUser);
+  loggedUser = this.store.selectSignal(selectLoggedUser);
 
-  team: Team = <Team>{};
-  feedback?: string;
-  teamSubmitted: boolean = false;
+  team = this.teamEditorService.team;
+  feedback = signal<string | undefined>(undefined);
+  teamSubmitted = signal<boolean>(false);
 
-  async ngOnInit() 
+  constructor()
   {
     this.seo.updateMetaData();
-    this.teamEditorService.selectedTeam$.subscribe((value) => 
-    {
-      this.team = value;
-    });
-    this.user$.subscribe((value) => 
-    {
-      this.loggedUser = value;
-    });
   }
 
   async saveTeam()
   {
-    this.feedback = this.teamEditorService.validateTeam(this.team);
-    if(!this.feedback)
+    const team = this.team();
+    if(!team) { return; }
+    const feedback = this.teamEditorService.validateTeam(team);
+    this.feedback.set(feedback);
+    if(feedback)
     {
-      this.teamSubmitted = true;
-      this.teamService.saveTeam(this.team).subscribe(
+      return;
+    }
+    this.teamSubmitted.set(true)
+      this.teamService.saveTeam(team).subscribe(
         {
           next: (response: string) =>
           {
-            this.teamSubmitted = false;
+            this.teamSubmitted.set(false);
             if(response)
             {
               this.router.navigate(['/', response])
             }
-            this.feedback = undefined;
+            this.feedback.set(undefined);
           },
           error: (error: CustomError) => 
           {
-            this.teamSubmitted = false;
-            this.feedback = error.message;
+            this.teamSubmitted.set(false);
+            this.feedback.set(error.message);
           }
         }
       )
-    }
   }
 }
