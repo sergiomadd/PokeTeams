@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, computed, inject, input, model, output, signal, SimpleChanges, viewChildren } from '@angular/core';
+import { Component, effect, inject, input, model, output, signal, viewChildren } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -69,9 +69,9 @@ export class TeamPreviewComponent
   tooltips = signal<boolean[]>([false, false, false]);
   isPlayerSameAsUser = signal<boolean>(false);
 
-  ngOnChanges(changes: SimpleChanges)
+  constructor()
   {
-    if(changes["team"])
+    effect(() => 
     {
       const team = this.team();
       if(team && team?.pokemonIDs && team?.pokemonIDs.length > 0)
@@ -79,7 +79,7 @@ export class TeamPreviewComponent
         this.loadPokemons(team?.id)
       }
       this.checkUserToPlayer()
-    }
+    })
   }
 
   checkUserToPlayer()
