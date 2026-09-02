@@ -5,7 +5,7 @@
         [ngClass]="{'team-editor-inputs-wrapper-user': loggedUser}"
         >
         <div class="editor-input relative">
-          @if (!loggedUser) {
+          @if (!loggedUser()) {
             <div class="icon-m pointer tooltip-wrapper anon-warning">
               <svg class="feedback" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -27,10 +27,10 @@
             <div class="flex align-i-c justify-c-c">
               <input type="text" class="input-m" formControlName="player" data-testid="player-name-input"
                 [ngClass]="{controlInvalid: isInvalid('player')}"
-                value="{{team.player?.username}}"
+                value="{{team().player?.username}}"
                 placeholder="{{'shared.team.player' | translate}}..."
                 >
-                @if (loggedUser) {
+                @if (loggedUser()) {
                   <button
                     class="button-secondary tooltip-wrapper"
                     data-testid="match-user-button"
@@ -50,12 +50,12 @@
               }
             </div>
           </div>
-          @if (loggedUser) {
+          @if (loggedUserItem()) {
             <div class="editor-input relative flex gap-m" data-testid="loggeduser-input">
               <app-smart-input
                 #userInput
                 [label]="'shared.team.user' | translate"
-                [value]="loggedUser"
+                [value]="loggedUserItem()"
                 [disableRemove]="true"
                 class="smart-input-wrapper input-m"
               ></app-smart-input>
@@ -64,7 +64,7 @@
           <div class="editor-input relative">
             <app-smart-input
               #tournamentInput
-              [value]="queryService.getTournamentQueryResult(team.tournament)"
+              [value]="queryService.getTournamentQueryResult(team().tournament)"
               [label]="'shared.team.tournament' | translate"
               [keepSelected]="true"
               [getter]="queryService.queryTournamentCallback"
@@ -77,7 +77,7 @@
           <div class="editor-input relative">
             <app-smart-input
               #regulationInput
-              [value]="queryService.getRegulationQueryResult(team.regulation)"
+              [value]="queryService.getRegulationQueryResult(team().regulation)"
               [label]="'shared.team.regulation' | translate"
               [keepSelected]="true"
               [getter]="queryService.queryRegulationCallback"
@@ -92,7 +92,7 @@
               <label>{{'shared.team.rental_code' | translate}}</label>
               <input type="text" class="input-m" formControlName="rental" data-testid="rental-code-input"
                 [ngClass]="{controlInvalid: isInvalid('rental')}"
-                value="{{team.rentalCode}}"
+                value="{{team().rentalCode}}"
                 placeholder="{{'shared.team.rental_code' | translate}}..."
                 >
                 @if (isInvalid('rental')) {
@@ -103,8 +103,8 @@
             <div class="editor-input relative">
               <app-smart-input
                 #tagInput
-                [disabled]="disableTagInput"
-                [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags, 'maxTags':maxTags}"
+                [disabled]="disableTagInput()"
+                [label]="'team.editor.tag_input-label' | translate:{'currentTags': currentTags(), 'maxTags':maxTags()}"
                 [allowNew]="true"
                 [getter]="queryService.queryTagCallback"
                 [allGetter]="queryService.tagAllCallback"
@@ -115,7 +115,7 @@
               ></app-smart-input>
               <div class="tag-editor-wrapper">
                 <app-tag-editor
-                  [visible]="showTagEditor"
+                  [visible]="showTagEditor()"
                   (addEvent)="tagAddNewEvent($event)"
                   (closeEvent)="tagEditorCloseEvent()"
                 ></app-tag-editor>
@@ -127,7 +127,7 @@
               <label>{{'team.editor.title-label' | translate}}</label>
               <input type="text" class="input-m" formControlName="title" data-testid="title-input"
                 [ngClass]="{controlInvalid: isInvalid('title')}"
-                value="{{team.title}}"
+                value="{{team().title}}"
                 placeholder="{{'team.editor.title-label' | translate}}..."
                 >
                 @if (isInvalid('title')) {
@@ -136,37 +136,37 @@
               </div>
             </div>
           </form>
-          @if (loggedUser) {
+          @if (loggedUser()) {
             <div class="flex-col justify-c-c  align-i-c gap-s" data-testid="team-option-buttons">
               <div>
                 {{'team.editor.visibility-label' | translate}}
               </div>
               <div class="flex justify-c-c gap-s">
                 <app-checkbox
-                  [checked]="team.options.ivsVisibility"
+                  [checked]="team().options.ivsVisibility"
                   [label]="'IVs'"
-                  [lock]="!this.team.visibility"
+                  [lock]="!team().visibility"
                   (checkEvent)="showIVsCheckEvent($event)"
                 ></app-checkbox>
                 <app-checkbox
-                  [checked]="team.options.evsVisibility"
+                  [checked]="team().options.evsVisibility"
                   [label]="'EVs'"
-                  [lock]="!this.team.visibility"
+                  [lock]="!team().visibility"
                   (checkEvent)="showEVsCheckEvent($event)"
                 ></app-checkbox>
                 <app-checkbox
-                  [checked]="team.options.naturesVisibility"
+                  [checked]="team().options.naturesVisibility"
                   [label]="'shared.pokemon.nature' | translate"
-                  [lock]="!this.team.visibility"
+                  [lock]="!team().visibility"
                   (checkEvent)="showNatureCheckEvent($event)"
                 ></app-checkbox>
                 <app-checkbox
-                  [checked]="team.visibility"
+                  [checked]="team().visibility"
                   [label]="'shared.team.team' | translate"
                   (checkEvent)="teamVisibiltyCheckEvent($event)"
                 ></app-checkbox>
               </div>
-              @if (teamPrivateFeedback) {
+              @if (teamPrivateFeedback()) {
                 <div class="text-center">
                   <span class="formFeedbackError text-center">
                     {{'team.editor.visibility_false-feedback' | translate}}
@@ -177,14 +177,14 @@
           }
           <div class="flex flex-col gap-s justify-c-c align-i-c text-center">
             <span class="formFeedbackError">{{feedback}}</span>
-            @if (exampleTeamModified === false) {
+            @if (exampleTeamModified() === false) {
               <span class="formFeedbackError">{{'team.editor.errors.example' | translate}}</span>
             }
           </div>
         </div>
         <div class="team-holder">
           <app-team
-            [team]="team"
+            [team]="team()"
             [removableTags]="true"
             (removeEvent)="removeTag()"
           ></app-team>
