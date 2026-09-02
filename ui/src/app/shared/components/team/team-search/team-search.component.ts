@@ -1,6 +1,5 @@
 import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { Component, effect, inject, input, linkedSignal, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
 import { I18nService } from '../../../../core/helpers/i18n.service';
@@ -48,7 +47,7 @@ export class TeamSearchComponent
   unionType: SetOperation = SetOperation.intersection;
   unionTypeSettings = signal<SetOperation[]>([SetOperation.intersection, SetOperation.union]);
   selectedTheme = this.store.selectSignal(selectTheme);
-  searchError = toSignal(this.searchService.searchError);
+  searchError = this.searchService.searchError;
   feedback = linkedSignal<string | undefined>(() => this.searchError());
 
   constructor()

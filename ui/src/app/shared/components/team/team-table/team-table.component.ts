@@ -36,8 +36,8 @@ export class TeamTableComponent
   router = inject(Router);
   i18n = inject(I18nService);
 
-  teams = toSignal(this.searchService.teams);
-  searched = toSignal(this.searchService.searched);
+  teams = this.searchService.teams;
+  searched = this.searchService.searched;
   loggedUser = this.store.selectSignal(selectLoggedUser);
 
   sortTypeIds: string[] = ["date", "views"];
@@ -47,7 +47,7 @@ export class TeamTableComponent
     way: SortWay.descending
   };
   //pagination
-  totalTeams = toSignal(this.searchService.totalTeams);
+  totalTeams = this.searchService.totalTeams;
   readonly defaultTeams: number = 10;
   paginationForm = this.formBuilder.group(
     {
