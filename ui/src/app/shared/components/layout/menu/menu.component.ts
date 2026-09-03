@@ -1,9 +1,8 @@
-import { AsyncPipe, NgClass } from '@angular/common';
-import { Component, inject, input, output } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
 import { I18nService } from '../../../../core/helpers/i18n.service';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -11,7 +10,6 @@ import { WindowService } from '../../../../core/helpers/window.service';
 import { Chip } from '../../../../core/models/misc/chip.model';
 import { Device } from '../../../../core/models/misc/device.enum';
 import { flags, Lang, langs } from '../../../../core/models/misc/lang.enum';
-import { User } from '../../../../core/models/user/user.model';
 import { selectLoggedUser } from '../../../../core/store/auth/auth.selectors';
 import { configActions } from '../../../../core/store/config/config.actions';
 import { selectLang, selectTheme } from '../../../../core/store/config/config.selectors';
@@ -25,9 +23,9 @@ import { AuthFormComponent } from '../auth-form/auth-form.component';
     templateUrl: './menu.component.html',
     styleUrl: './menu.component.scss',
     providers: [GetFlagIconUrlPipe],
-    imports: [ClickOutsideDirective, NgClass, RouterLinkActive, RouterLink, DropdownComponent, AuthFormComponent, AsyncPipe, TranslatePipe]
+    imports: [ClickOutsideDirective, NgClass, RouterLinkActive, RouterLink, DropdownComponent, AuthFormComponent, TranslatePipe]
 })
-export class MenuComponent 
+export class MenuComponent
 {
   router = inject(Router)
   store = inject(Store);
@@ -42,48 +40,38 @@ export class MenuComponent
   readonly menuOpen = input<boolean>(true);
   readonly toggleEvent = output();
 
-  selectedTheme$: Observable<string> = this.store.select(selectTheme);
-  loggedUser$: Observable<User | null> = this.store.select(selectLoggedUser);
-  loggedUser?: User;
-  selectedLang$: Observable<string> = this.store.select(selectLang);
-  selectedLang?: string;
-  selectedLangChip?: Chip;
-  rotationAngle: number = 0;
-  authFormOpen: boolean = false;
+  selectedTheme = this.store.selectSignal(selectTheme);
+  loggedUser = this.store.selectSignal(selectLoggedUser);
+  selectedLang = this.store.selectSignal(selectLang);
+  selectedLangChip = computed<Chip | undefined>(() =>
+  {
+    const lang = this.selectedLang();
+    if(!lang) { return undefined; }
+    return {
+      name: `lang.${lang}`,
+      identifier: lang,
+      iconPath: this.getFlagIconUrl.transform(flags[langs.indexOf(lang)])
+    }
+  });
+  rotationAngle = signal<number>(0);
+  authFormOpen = signal<boolean>(false);
 
   lang = Lang;
   langs = langs;
-  langChips: Chip[] = []
+  langChips = signal<Chip[]>([]);
 
-  ngOnInit()
-  { 
+  constructor()
+  {
     this.loadLangsTags();
-    this.loggedUser$.subscribe(value =>
+    this.window.currentDevice$.subscribe(value =>
       {
-        this.loggedUser = value ?? undefined;
-      });
-    this.selectedLang$.subscribe(value => 
-      {
-        this.selectedLang = value;
-        if(value)
+        if(value === Device.mobile || value === Device.smallMobile)
         {
-          this.selectedLangChip = 
-          {
-            name: `lang.${value}`,
-            identifier: value,
-            iconPath: this.getFlagIconUrl.transform(flags[langs.indexOf(value)])
-          }
-        }
-      })
-    this.window.currentDevice$.subscribe(value => 
-      {
-        if(value === Device.mobile || Device.smallMobile)
-        {
-          this.rotationAngle = 0;
+          this.rotationAngle.set(0);
         }
         if(value === Device.desktop)
         {
-          this.rotationAngle = 180;
+          this.rotationAngle.set(180);
         }
       })
   }
@@ -91,7 +79,7 @@ export class MenuComponent
   toggleMenu()
   {
     this.toggleEvent.emit()
-    this.rotationAngle += this.menuOpen() ? 180 : 180;
+    this.rotationAngle.update(angle => angle + 180);
   }
 
   clickNavigate()
@@ -111,18 +99,18 @@ export class MenuComponent
   {
     this.store.dispatch(configActions.changeLang({request: event.identifier}))
   }
-  
+
   loadLangsTags()
   {
     for(let i = 0; i < langs.length; i++)
     {
-      this.langChips.push(
+      this.langChips.update(chips => [...chips,
         {
           name: `lang.${langs[i]}`,
           identifier: langs[i],
           iconPath: this.getFlagIconUrl.transform(flags[i])
         }
-      )
+      ])
     }
   }
 
@@ -136,6 +124,6 @@ export class MenuComponent
 
   toggleAuthForm()
   {
-    this.authFormOpen = !this.authFormOpen;
+    this.authFormOpen.update(value => !value);
   }
 }
