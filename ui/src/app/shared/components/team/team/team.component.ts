@@ -203,11 +203,11 @@ export class TeamComponent
 
   statsUpdated(newMax)
   {
-    if(newMax > this.maxStat) 
+    if(newMax > this.maxStat())
     {
-      this.maxStat = newMax;
+      this.maxStat.set(newMax);
       const team = this.team();
-      if(team && team.options) 
+      if(team && team.options)
       {
         team.options = {...team.options, maxStat: this.maxStat()}
       }
@@ -256,18 +256,11 @@ export class TeamComponent
   }
 
   clickSection(index: number)
-  {    
-    if(this.tooltips[index])
+  {
+    this.tooltips.update(tooltips =>
     {
-      this.tooltips[index] = false;
-    }
-    else
-    {
-      for(var i = 0; i < this.tooltips.length; i++) 
-      {
-        this.tooltips[i] = false;
-      }
-      this.tooltips[index] = true;
-    }
+      const wasOpen = tooltips[index];
+      return tooltips.map((_, i) => i === index ? !wasOpen : false);
+    });
   }
 }
