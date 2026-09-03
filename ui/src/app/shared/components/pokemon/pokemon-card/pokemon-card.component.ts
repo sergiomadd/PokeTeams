@@ -1,4 +1,4 @@
-import { Component, inject, input, model, output, SimpleChanges } from '@angular/core';
+import { Component, effect, inject, input, model, output, SimpleChanges, untracked } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { LinkifierService } from '../../../../core/helpers/linkifier.service';
@@ -9,7 +9,6 @@ import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
 import { FeedbackColors, GenderColors, NatureColors, shinyColor } from '../../../../core/models/misc/colors';
 import { ProcessedString } from '../../../../core/models/misc/processedString.model';
-import { Move } from '../../../../core/models/pokemon/move.model';
 import { Pokemon } from '../../../../core/models/pokemon/pokemon.model';
 import { TeamOptions } from '../../../../core/models/team/teamOptions.model';
 import { selectLang } from '../../../../core/store/config/config.selectors';
@@ -99,9 +98,43 @@ export class PokemonCardComponent
   compareEffectiveness?: number;
   teratypeEnabled: boolean = false;
 
-  constructor() 
+  constructor()
   {
+    effect(() =>
+    {
+      const moveA = this.compareService.selectedMoveA();
+      const compareTeam = untracked(() => this.compareTeam());
+      if(compareTeam === "A")
+      {
+        if(moveA)
+        {
+          this.closeAllProfileTooltips();
+        }
+      }
+      else if(compareTeam === "B")
+      {
+        this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(
+          this.getDefenseEffectiveness.transform(untracked(() => this.pokemon()), this.teratypeEnabled), moveA);
+      }
+    });
 
+    effect(() =>
+    {
+      const moveB = this.compareService.selectedMoveB();
+      const compareTeam = untracked(() => this.compareTeam());
+      if(compareTeam === "A")
+      {
+        this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(
+          this.getDefenseEffectiveness.transform(untracked(() => this.pokemon()), this.teratypeEnabled), moveB);
+      }
+      else if(compareTeam === "B")
+      {
+        if(moveB)
+        {
+          this.closeAllProfileTooltips();
+        }
+      }
+    });
   }
 
   async ngOnChanges(changes: SimpleChanges)
@@ -135,40 +168,6 @@ export class PokemonCardComponent
     if(this.showStatsStart())
     {
       this.showStats[0] = true;
-    }
-
-    const compareTeam = this.compareTeam();
-    if(compareTeam)
-    {
-      //Missmatch this compareTeam to the other team results
-      if(compareTeam === "A")
-      {
-        this.compareService.selectedMoveA$.subscribe((move?: Move) => 
-        {
-          if(move)
-          {
-            this.closeAllProfileTooltips();
-          }
-        })
-        this.compareService.selectedMoveB$.subscribe((move?: Move) => 
-        {
-          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon(), this.teratypeEnabled), move);
-        })
-      }
-      else if(compareTeam === "B")
-      {
-        this.compareService.selectedMoveA$.subscribe((move?: Move) => 
-        {
-          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon(), this.teratypeEnabled), move);
-        })
-        this.compareService.selectedMoveB$.subscribe((move?: Move) => 
-        {
-          if(move)
-          {
-            this.closeAllProfileTooltips();
-          }        
-        })
-      }
     }
   }
 

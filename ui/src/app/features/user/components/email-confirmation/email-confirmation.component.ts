@@ -27,7 +27,7 @@ export class EmailConfirmationComponent
   email = signal<string | undefined>(undefined);
   token = signal<string | undefined>(undefined);
 
-  ngOnInit()
+  constructor()
   {
     this.confirmEmail();
   }
