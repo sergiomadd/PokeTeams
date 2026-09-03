@@ -1,9 +1,9 @@
 <div class="gap-l flex-col justify-i-c relative" style="min-height: 4em;">
   <div class="flex justify-c-c gap-m">
-    @for (pokemon of team.pokemons; track pokemon; let i = $index) {
+    @for (pokemon of team().pokemons; track i; let i = $index) {
       <div
         class="selector flex justify-c-c align-i-c bor-rad-20 bor-1-3 pointer no-select"
-        [ngClass]="{selected: selectedPokemonIndex == i}"
+        [ngClass]="{selected: selectedPokemonIndex() == i}"
         (click)="selectPokemon(i)"
         >
         @if (pokemon?.dexNumber && pokemon?.dexNumber !== -1) {
@@ -13,13 +13,13 @@
         }
       </div>
     }
-    @if (team.pokemons && team.pokemons!.length < 6) {
+    @if (team().pokemons!.length < 6) {
       <div class="selector flex justify-c-c align-i-c bor-rad-20 bor-1-3 pointer no-select" (click)="addEmptyPokemon()">
         +
       </div>
     }
   </div>
-  @if (pokemon) {
+  @if (pokemon(); as pokemon) {
     <div class="flex align-i-c gap-l" [ngClass]="{'flex-col': window.isTabletPortraitOrLess()}">
       <form class="flex-col" [formGroup]="pokemonForm"
       [ngClass]="
@@ -56,13 +56,13 @@
                 </div>
                 <div class="font-s">
                   <app-checkbox
-                    [checked]="allAbilities"
+                    [checked]="allAbilities()"
                     [label]="'team.pokemon_editor.show_all' | translate"
                     (checkEvent)="allAbilitiesSwitch()"
                   ></app-checkbox>
                 </div>
               </div>
-              @if (allAbilities) {
+              @if (allAbilities()) {
                 <app-smart-input
                   [value]="queryService.getAbilityQueryResult(pokemon.ability)"
                   [keepSelected]="true"
@@ -76,7 +76,7 @@
                   [value]="queryService.getAbilityQueryResult(pokemon.ability)"
                   [keepSelected]="true"
                   [allGetter]="queryService.pokemonAbilitiesCallback"
-                  [allGetterIndex]="this.pokemon.dexNumber"
+                  [allGetterIndex]="pokemon.dexNumber"
                   (selectEvent)="abilitySelectEvent($event)"
                   class="smart-input-wrapper form-item"
                 ></app-smart-input>
@@ -143,16 +143,16 @@
                 <div class="pad-s bor-rad-5 pointer text-center no-select" (click)="selectStat(i)"
                   style="color: white;"
                   [ngStyle]="{backgroundColor: (stat | getStatShortIdentifier) | getStatColor:theme.selectedThemeName}"
-                  [ngClass]="{selectedStat: selectedStat === i}"
+                  [ngClass]="{selectedStat: selectedStat() === i}"
                   >
                   <div class="flex-col justify-c-sb gap-s">
                     <div>{{stat | getStatCode}}</div>
                     <div class="flex justify-c-c align-i-c w-100" style="min-width: 3.2em;">
                       <div class="w-50">
-                        {{this.pokemon.ivs ? this.pokemon.ivs[i]?.value : '0'}}
+                        {{pokemon.ivs ? pokemon.ivs[i]?.value : '0'}}
                       </div>
                       <div class="w-50">
-                        {{this.pokemon.evs ? this.pokemon.evs[i]?.value : '0'}}
+                        {{pokemon.evs ? pokemon.evs[i]?.value : '0'}}
                       </div>
                     </div>
                   </div>
@@ -175,27 +175,27 @@
             <div class="range">
               <label for="" class="text-center">IV</label>
               <input type="range" min="0" max="31"
-                value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat]?.value : ''}}"
+                value="{{pokemon.ivs ? pokemon.ivs[selectedStat()]?.value : ''}}"
                 class="slider" id="myRange" formControlName="ivs"
-                [ngStyle]="{background: ivSliders[this.selectedStat]}">
+                [ngStyle]="{background: ivSliders()[selectedStat()]}">
                 <input
                   type="text"
                   class="level text-center"
                   formControlName="ivs"
-                  value="{{this.pokemon.ivs ? this.pokemon.ivs[selectedStat]?.value : ''}}"
+                  value="{{pokemon.ivs ? pokemon.ivs[selectedStat()]?.value : ''}}"
                   [ngClass]="{controlInvalid: isInvalid('ivs')}">
                 </div>
                 <div class="range">
                   <label for="" class="text-center">EV</label>
                   <input #evSlider type="range" min="0" max="252"
-                    value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat]?.value : '0'}}"
+                    value="{{pokemon.evs ? pokemon.evs[selectedStat()]?.value : '0'}}"
                     class="slider" id="myRange" formControlName="evs"
-                    [ngStyle]="{background: evSliders[this.selectedStat]}">
+                    [ngStyle]="{background: evSliders()[selectedStat()]}">
                     <input
                       type="text"
                       class="level text-center"
                       formControlName="evs"
-                      value="{{this.pokemon.evs ? this.pokemon.evs[selectedStat]?.value : '0'}}"
+                      value="{{pokemon.evs ? pokemon.evs[selectedStat()]?.value : '0'}}"
                       [ngClass]="{controlInvalid: isInvalid('evs')}">
                     </div>
                     <div class="flex align-i-c gap-l">
@@ -211,7 +211,7 @@
                         </svg>
                       </button>
                       <div class="text-center">
-                        {{"team.pokemon_editor.remaining_evs" | translate}} {{remainingEVs}}
+                        {{"team.pokemon_editor.remaining_evs" | translate}} {{remainingEVs()}}
                       </div>
                       <button
                         class="button"
@@ -286,12 +286,12 @@
                     </div>
                     <app-pokemon-card
                       [pokemon]="pokemon"
-                      [teamOptions]="team.options"
+                      [teamOptions]="team().options"
                       [showStatsStart]="true"
                       [editorPreview] = "true"
                       (triggerNotesEvent)="triggerNotes($event)"
                     ></app-pokemon-card>
-                    @if (showNotes) {
+                    @if (showNotes()) {
                       <form [formGroup]="pokemonForm" class="notes-editor">
                         <textarea
                           class="custom-scrollbar-dark"
@@ -334,7 +334,7 @@
               </div>
             </ng-template>
             <ng-template #natureInput>
-              @if (pokemon) {
+              @if (pokemon(); as pokemon) {
                 <app-smart-input
                   [value]="queryService.getNatureQueryResult(pokemon.nature)"
                   [label]="'shared.pokemon.nature' | translate"

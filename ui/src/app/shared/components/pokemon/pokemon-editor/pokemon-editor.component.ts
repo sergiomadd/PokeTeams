@@ -1,6 +1,9 @@
-import { Component, ElementRef, inject, viewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { Component, effect, ElementRef, inject, signal, untracked, viewChild } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
@@ -9,21 +12,18 @@ import { QueryItem } from '../../../../core/models/misc/queryResult.model';
 import { Pokemon } from '../../../../core/models/pokemon/pokemon.model';
 import { PokemonData } from '../../../../core/models/pokemon/pokemonData.dto';
 import { Stat } from '../../../../core/models/pokemon/stat.model';
-import { Team } from '../../../../core/models/team/team.model';
 import { PokemonService } from '../../../../core/services/pokemon.service';
 import { QueryService } from '../../../../core/services/query.service';
 import { TeamService } from '../../../../core/services/team.service';
 import { GetStatColorPipe } from '../../../pipes/color-pipes/getStatColor.pipe';
-import { TeamEditorService } from '../../../services/team-editor.service';
-import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
-import { NgClass, NgTemplateOutlet, NgStyle } from '@angular/common';
-import { SmartInputComponent } from '../../smart-input/smart-input.component';
-import { CheckboxComponent } from '../../dumb/checkbox/checkbox.component';
-import { RadioComponent } from '../../dumb/radio/radio.component';
-import { TranslatePipe } from '@ngx-translate/core';
-import { GetPokemonSpritePathPipe } from '../../../pipes/pokemon-pipes/getPokemonSpritePath.pipe';
 import { GetStatCodePipe } from '../../../pipes/converters/getStatCode.pipe';
 import { GetStatShortIdentifierPipe } from '../../../pipes/converters/getStatShortIdentifier.pipe';
+import { GetPokemonSpritePathPipe } from '../../../pipes/pokemon-pipes/getPokemonSpritePath.pipe';
+import { TeamEditorService } from '../../../services/team-editor.service';
+import { CheckboxComponent } from '../../dumb/checkbox/checkbox.component';
+import { RadioComponent } from '../../dumb/radio/radio.component';
+import { SmartInputComponent } from '../../smart-input/smart-input.component';
+import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 
 @Component({
     selector: 'app-pokemon-editor',
@@ -48,17 +48,16 @@ export class PokemonEditorComponent
 
   getStatColor = inject(GetStatColorPipe);
 
-  teamKey: string = "";
-  team: Team = <Team>{};
-  pokemon?: Pokemon;
-  selectedPokemonIndex: number = 0;
+  team = this.teamEditorService.team;
+  pokemon = signal<Pokemon | undefined>(undefined)
+  selectedPokemonIndex = signal<number>(0);
   readonly genderColors = GenderColors;
   readonly shinyColor = shinyColor;
 
   readonly pokemonPreviewComponent = viewChild(PokemonCardComponent);
-  allAbilities: boolean = false;
-  showNotes: boolean = false;
-  pokemonFormSubmitted: boolean = false;
+  allAbilities = signal<boolean>(false);
+  showNotes = signal<boolean>(false);
+  pokemonFormSubmitted = signal<boolean>(false);
   pokemonForm = this.formBuilder.group(
     {
       nickname: ["", [Validators.minLength(1), Validators.maxLength(16)]],
@@ -68,6 +67,13 @@ export class PokemonEditorComponent
       evs: [0, [Validators.min(0), Validators.max(252)]],
       notes: [""]
     });
+
+  formNickname = toSignal(this.pokemonForm.controls.nickname.valueChanges)
+  formGender = toSignal(this.pokemonForm.controls.gender.valueChanges)
+  formLevel = toSignal(this.pokemonForm.controls.level.valueChanges)
+  formIVs = toSignal(this.pokemonForm.controls.ivs.valueChanges)
+  formEVs = toSignal(this.pokemonForm.controls.evs.valueChanges)
+  formNotes = toSignal(this.pokemonForm.controls.notes.valueChanges)
 
   emptyStat: Stat =   
   {
@@ -82,168 +88,159 @@ export class PokemonEditorComponent
 
   readonly evSlider = viewChild.required<ElementRef>('evSlider');
 
-  selectedStat: number = 0;
-  currentIVs: number = 0;
-  currentEVs: number = 0;
+  selectedStat = signal<number>(0);
+  currentIVs = signal<number>(0);
+  currentEVs = signal<number>(0);
   readonly maxEVs: number = 252;
   readonly maxEVsTotal: number = 510;
-  remainingEVs: number = this.maxEVsTotal;
-  ivSliders: string[] = [];
-  evSliders: string[] = [];
+  remainingEVs = signal<number>(this.maxEVsTotal);
+  ivSliders = signal<string[]>([]);
+  evSliders = signal<string[]>([]);
 
-  calcRemainigEVs(pokemon: Pokemon)
+  selectedTheme = toSignal(this.theme.selectedTheme$);
+
+  constructor()
   {
-    if(pokemon.evs)
+    effect(() =>
     {
-      for (const ev of pokemon.evs) 
-      {
-        this.remainingEVs-= ev.value;  
-      }
-    }
-  }
+      this.pokemon();
+      this.calcRemainigEVs();
+    })
 
-  async ngOnInit()
-  {
-    this.teamEditorService.selectedTeam$.subscribe((value) => 
+    effect(() =>
     {
-      this.team = value;
-      this.pokemon = this.team.pokemons[this.selectedPokemonIndex] ?? undefined
-      if(this.pokemon)
+      const team = this.team();
+      if(!team) { return; }
+      const pokemon = team.pokemons[this.selectedPokemonIndex()] ?? undefined;
+      this.pokemon.set(pokemon)
+      if(pokemon)
       {
-        this.selectPokemon(this.selectedPokemonIndex);
-        this.pokemonForm.controls.nickname.setValue(this.pokemon.nickname ?? "", {emitEvent:false});
-        this.pokemonForm.controls.level.setValue(this.pokemon.level ?? 0, {emitEvent:false});
-        if(this.pokemon.ivs[this.selectedStat] && this.pokemon.ivs[this.selectedStat].value != this.pokemonForm.controls.ivs.value)
+        //this.selectPokemon(this.selectedPokemonIndex());
+        if((pokemon.nickname ?? "") !== this.pokemonForm.controls.nickname.value)
         {
-          this.pokemonForm.controls.ivs.setValue(this.pokemon.ivs[0].value, {emitEvent:false});
-          this.currentIVs = this.pokemon.ivs[this.selectedStat].value;
-          this.calcIVSliderBackground(this.pokemon.ivs[0].value, 0, 31);
+          this.pokemonForm.controls.nickname.setValue(pokemon.nickname ?? "", {emitEvent:false});
         }
-        if(this.pokemon.evs[this.selectedStat] && this.pokemon.evs[this.selectedStat].value != this.pokemonForm.controls.evs.value)
+        if((pokemon.level ?? 0) !== this.pokemonForm.controls.level.value)
         {
-          this.pokemonForm.controls.evs.setValue(this.pokemon.evs[0].value, {emitEvent:false});
-          this.currentEVs = this.pokemon.evs[this.selectedStat].value;
-          this.calcEVSliderBackground(this.pokemon.evs[0].value, 0, this.maxEVs);
+          this.pokemonForm.controls.level.setValue(pokemon.level ?? 0, {emitEvent:false});
+        }
+        if(pokemon.ivs[this.selectedStat()] && pokemon.ivs[this.selectedStat()].value != this.pokemonForm.controls.ivs.value)
+        {
+          this.pokemonForm.controls.ivs.setValue(pokemon.ivs[this.selectedStat()].value, {emitEvent:false});
+          this.currentIVs.set(pokemon.ivs[this.selectedStat()].value);
+          this.calcIVSliderBackground(pokemon.ivs[this.selectedStat()].value, 0, 31);
+        }
+        if(pokemon.evs[this.selectedStat()] && pokemon.evs[this.selectedStat()].value != this.pokemonForm.controls.evs.value)
+        {
+          this.pokemonForm.controls.evs.setValue(pokemon.evs[this.selectedStat()].value, {emitEvent:false});
+          this.currentEVs.set(pokemon.evs[this.selectedStat()].value);
+          this.calcEVSliderBackground(pokemon.evs[this.selectedStat()].value, 0, this.maxEVs);
         }
       }
-    });
+    })
 
-    this.pokemonForm.controls.nickname.valueChanges.subscribe(async (value) => 
+    effect(() =>
     {
-      if(this.pokemon && this.pokemonForm.controls.nickname.valid)
+      const nickname = this.formNickname();
+      if(this.pokemonForm.controls.nickname.valid && untracked(() => this.pokemon()?.nickname) !== (nickname ?? undefined))
       {
-        this.pokemon.nickname = value ?? undefined;
-        this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+        this.pokemon.update(pokemon =>
+        {
+          if(!pokemon) { return undefined; }
+          return {
+            ...pokemon,
+            nickname: nickname ?? undefined
+          }
+        });
+        untracked(() => this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex()));
       }
-    });
+    })
 
-    this.pokemonForm.controls.level.valueChanges.subscribe(async (value) => 
+    effect(() =>
     {
-      if(this.pokemon && value)
+      const level = this.formLevel();
+      if(level)
       {
-        if(!this.util.isNaN(value))
+        if(!this.util.isNaN(level))
         {
           if(this.pokemonForm.controls.level.valid)
           {
-            this.pokemon = 
+            if(untracked(() => this.pokemon()?.level) !== Number(level))
             {
-              ...this.pokemon,
-              level: value ?? 50
+              this.pokemon.update(pokemon => pokemon && { ...pokemon, level: Number(level) });
+              untracked(() => this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex()));
             }
-            this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
           }
           else
           {
-            if(value > 100) 
+            if(level > 100)
             {
-              this.pokemon = 
-              {
-                ...this.pokemon,
-                level: 100
-              }
-              this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+              this.pokemon.update(pokemon => pokemon && { ...pokemon, level: 100 });
+              untracked(() => this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex()));
             }
-            else if(value < 0) 
+            else if(level < 0)
             {
-              this.pokemon = 
-              {
-                ...this.pokemon,
-                level: 1
-              }
-              this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+              this.pokemon.update(pokemon => pokemon && { ...pokemon, level: 1 });
+              untracked(() => this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex()));
             }
           }
         }
         else
         {
           this.pokemonForm.controls.level.setErrors({ "nan": true });
-          this.pokemon.level = 50;
+          this.pokemon.update(pokemon => pokemon && { ...pokemon, level: 50 });
         }
       }
-    });
+    })
 
-    this.pokemonForm.controls.gender.valueChanges.subscribe(async (value) => 
+    effect(() =>
     {
-      if(this.pokemon && value)
+      const gender = this.formGender();
+      if(gender && untracked(() => this.pokemon()?.gender) !== gender)
       {
-        this.pokemon = 
-        { 
-          ...this.pokemon,
-          gender: value
-        }
-        this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+        this.pokemon.update(pokemon => pokemon && { ...pokemon, gender: gender });
+        untracked(() => this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex()));
       }
-    });
-    
-    this.pokemonForm.controls.ivs.valueChanges.subscribe(async (value) => 
+    })
+
+    effect(() => 
     {
-      if(this.pokemon && value != undefined
-        && (this.pokemon.ivs[this.selectedStat] && this.pokemon.ivs[this.selectedStat].value != value))
+      let ivs = this.formIVs();
+      let pokemon = this.pokemon();
+      if(pokemon && ivs != undefined && (pokemon.ivs[this.selectedStat()] && pokemon.ivs[this.selectedStat()].value != ivs))
       {
-        if(!this.util.isNaN(value))
+        if(!this.util.isNaN(ivs))
         {
           if(this.pokemonForm.controls.ivs.valid)
           {
-            this.currentIVs = Number(value);
-            let ivs = this.pokemon.ivs;
-            ivs[this.selectedStat].value = this.currentIVs;
-            this.pokemon = 
-            { 
-              ...this.pokemon,
-              ivs: ivs
-            }
-            this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-            this.calcIVSliderBackground(this.currentIVs, 0, 31);
+            this.currentIVs.set(Number(ivs));
+            let pokemonIVs = pokemon.ivs;
+            pokemonIVs[this.selectedStat()].value = this.currentIVs();
+            this.pokemon.update(pokemon => pokemon && { ...pokemon, ivs: pokemonIVs })
+            this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
+            this.calcIVSliderBackground(this.currentIVs(), 0, 31);
           }
           else
           {
-            if(value > 31) 
+            if(ivs > 31) 
             {
-              value = 31;
-              this.currentIVs = value;
-              let ivs = this.pokemon.ivs;
-              ivs[this.selectedStat].value = value;
-              this.pokemon = 
-              { 
-                ...this.pokemon,
-                ivs: ivs
-              }
-              this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-              this.calcIVSliderBackground(value, 0, 31);
+              ivs = 31;
+              this.currentIVs.set(31);
+              let pokemonIVs = pokemon.ivs;
+              pokemonIVs[this.selectedStat()].value = this.currentIVs();
+              this.pokemon.update(pokemon => pokemon && { ...pokemon, ivs: pokemonIVs })
+              this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
+              this.calcIVSliderBackground(ivs, 0, 31);
             }
-            else if(value < 0) 
+            else if(ivs < 0) 
             {
-              value = 0;
-              this.currentIVs = value;
-              let ivs = this.pokemon.ivs;
-              ivs[this.selectedStat].value = value;
-              this.pokemon = 
-              { 
-                ...this.pokemon,
-                ivs: ivs
-              }
-              this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-              this.calcIVSliderBackground(value, 0, 31);
+              ivs = 0;
+              this.currentIVs.set(0);
+              let pokemonIVs = pokemon.ivs;
+              pokemonIVs[this.selectedStat()].value = this.currentIVs();
+              this.pokemon.update(pokemon => pokemon && { ...pokemon, ivs: pokemonIVs })
+              this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
+              this.calcIVSliderBackground(ivs, 0, 31);
             }
           }
         }
@@ -253,60 +250,50 @@ export class PokemonEditorComponent
         }
       }
     });
-    this.pokemonForm.controls.evs.valueChanges.subscribe(async (value) => 
+
+    effect(() => 
     {
-      if(this.pokemon && value != undefined 
-        && (this.pokemon.evs[this.selectedStat] && this.pokemon.evs[this.selectedStat].value != value ))
+      let evs = this.formEVs();
+      let pokemon = this.pokemon();
+      if(pokemon && evs != undefined && (pokemon.evs[this.selectedStat()] && pokemon.evs[this.selectedStat()].value != evs ))
       {
-        if(!this.util.isNaN(value))
+        if(!this.util.isNaN(evs))
         {
           if(this.pokemonForm.controls.evs.valid)
           {
-            if(this.calculateAvailableEVs(Number(value)))
+            if(this.calculateAvailableEVs(Number(evs)))
             {
-              let evs = this.pokemon.evs;
-              evs[this.selectedStat].value = this.currentEVs;
-              this.pokemon = 
-              { 
-                ...this.pokemon,
-                evs: evs
-              }
-              this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-              this.calcEVSliderBackground(this.currentEVs, 0, this.maxEVs);
+              let pokemonEVs = pokemon.evs;
+              pokemonEVs[this.selectedStat()].value = this.currentEVs();
+              this.pokemon.update(pokemon => pokemon && { ...pokemon, evs: pokemonEVs })
+              this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
+              this.calcEVSliderBackground(this.currentEVs(), 0, this.maxEVs);
             }
           }
           else
           {
-            if(value > 252) 
+            if(evs > 252)
             {
-              value = 252;
-              if(this.calculateAvailableEVs(value))
+              evs = 252;
+              if(this.calculateAvailableEVs(evs))
               {
-                let evs = this.pokemon.evs;
-                evs[this.selectedStat].value = this.currentEVs;
-                this.pokemon = 
-                { 
-                  ...this.pokemon,
-                  evs: evs
-                }
-                this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-                this.calcEVSliderBackground(this.currentEVs, 0, this.maxEVs);
+                let pokemonEVs = pokemon.evs;
+                pokemonEVs[this.selectedStat()].value = this.currentEVs();
+                this.pokemon.update(pokemon => pokemon && { ...pokemon, evs: pokemonEVs })
+                this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
+                this.calcEVSliderBackground(this.currentEVs(), 0, this.maxEVs);
               }
             }
-            else if(value < 0) 
+            else if(evs < 0)
             {
-              value = 0;
-              if(this.calculateAvailableEVs(value))
+              evs = 0;
+              if(this.calculateAvailableEVs(evs))
               {
-                let evs = this.pokemon.evs;
-                evs[this.selectedStat].value = this.currentEVs;
-                this.pokemon = 
-                { 
-                  ...this.pokemon,
-                  evs: evs
-                }
-                this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-                this.calcEVSliderBackground(this.currentEVs, 0, this.maxEVs);
+                let pokemonEVs = pokemon.evs;
+                pokemonEVs[this.selectedStat()].value = this.currentEVs();
+                this.pokemon.update(pokemon => pokemon && { ...pokemon, evs: pokemonEVs })
+                this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
+                this.calcEVSliderBackground(this.currentEVs(), 0, this.maxEVs);
               }
             }
           }
@@ -316,64 +303,74 @@ export class PokemonEditorComponent
           this.pokemonForm.controls.evs.setErrors({ "nan": true });
         }
       }
-    });
+    })
 
-    this.pokemonForm.controls.notes.valueChanges.subscribe(value =>
-      {
-        if(this.pokemon && value && this.pokemonForm.controls.notes.valid)
-        {
-          this.pokemon = { ...this.pokemon, notes: value }
-          this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-        }
-      })
-
-    this.theme.selectedTheme$.subscribe(() =>
-      {
-        if(this.pokemon)
-        {
-          if(this.pokemon.ivs && this.pokemon.ivs[this.selectedStat])
-          {
-            this.calcIVSliderBackground(this.pokemon.ivs[this.selectedStat].value, 0, 31);
-          }
-          if(this.pokemon.evs && this.pokemon.evs[this.selectedStat])
-          {
-            this.calcEVSliderBackground(this.pokemon.evs[this.selectedStat].value, 0, this.maxEVs);
-          }
-        }
-      })
-    if(this.pokemon)
+    effect(() =>
     {
-      this.calcRemainigEVs(this.pokemon);
+      const notes = this.formNotes();
+      if(notes && this.pokemonForm.controls.notes.valid && untracked(() => this.pokemon()?.notes) !== notes)
+      {
+        this.pokemon.update(pokemon => pokemon && { ...pokemon, notes: notes })
+        untracked(() => this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex()));
+      }
+    })
+
+    effect(() =>
+    {
+      this.selectedTheme();
+      const pokemon = this.pokemon();
+      if(pokemon)
+      {
+        if(pokemon.ivs && pokemon.ivs[this.selectedStat()])
+        {
+          this.calcIVSliderBackground(pokemon.ivs[this.selectedStat()].value, 0, 31);
+        }
+        if(pokemon.evs && pokemon.evs[this.selectedStat()])
+        {
+          this.calcEVSliderBackground(pokemon.evs[this.selectedStat()].value, 0, this.maxEVs);
+        }
+      }
+    })
+  }
+
+  calcRemainigEVs()
+  {
+    let remaining = this.maxEVsTotal;
+    let pokemon = this.pokemon();
+    if(pokemon && pokemon.evs)
+    {
+      for (const ev of pokemon.evs)
+      {
+        remaining -= ev.value;
+      }
     }
+    this.remainingEVs.set(remaining);
   }
 
   selectPokemon(index: number)
   {
-    if(index != this.selectedPokemonIndex)
+    if(index != this.selectedPokemonIndex())
     {
-      this.selectedPokemonIndex = index;
-      this.pokemon = this.team.pokemons[this.selectedPokemonIndex] ?? undefined;
+      this.selectedPokemonIndex.set(index);
+      this.pokemon.set(this.team().pokemons[this.selectedPokemonIndex()] ?? undefined);
       this.resetStatPicker();
-      this.remainingEVs = this.maxEVsTotal;
-      if(this.pokemon)
-      {
-        this.calcRemainigEVs(this.pokemon);
-      }
+      this.remainingEVs.set(this.maxEVsTotal);
+      this.calcRemainigEVs();
     }
   }
 
   addEmptyPokemon()
   {
     this.teamEditorService.addEmptyPokemon();
-    this.selectPokemon(this.team.pokemons.length - 1);
+    this.selectPokemon(this.team().pokemons.length - 1);
   }
 
   deletePokemon()
   {
-    this.teamEditorService.deletePokemon(this.selectedPokemonIndex);
-    if(this.selectedPokemonIndex > 0)
+    this.teamEditorService.deletePokemon(this.selectedPokemonIndex());
+    if(this.selectedPokemonIndex() > 0)
     {
-      this.selectPokemon(this.selectedPokemonIndex - 1);
+      this.selectPokemon(this.selectedPokemonIndex() - 1);
     }
   }
 
@@ -383,7 +380,13 @@ export class PokemonEditorComponent
     var value = Math.ceil((currentValue-min)/(max-min) * 100);
     //hide edges
     if(value > 70) {value -= 2}
-    this.ivSliders[this.selectedStat] = 'linear-gradient(to right, ' + ivColor + ' 0%, ' + ivColor + value + '%, var(--bg-color-2) ' + value + '%, var(--bg-color-2) 100%)'
+    const gradient = 'linear-gradient(to right, ' + ivColor + ' 0%, ' + ivColor + value + '%, var(--bg-color-2) ' + value + '%, var(--bg-color-2) 100%)';
+    this.ivSliders.update(sliders =>
+    {
+      const updated = [...sliders];
+      updated[this.selectedStat()] = gradient;
+      return updated;
+    });
   }
 
   calcEVSliderBackground(currentValue, min, max)
@@ -391,54 +394,60 @@ export class PokemonEditorComponent
     const evColor = this.getStatColor.transform("ev", this.theme.selectedThemeName);
     var value = Math.ceil((currentValue-min)/(max-min) * 100);
     if(value > 70) {value -= 2}
-    this.evSliders[this.selectedStat] = 'linear-gradient(to right, ' + evColor + ' 0%, ' + evColor + value + '%, var(--bg-color-2)' + value + '%, var(--bg-color-2) 100%)'
+    const gradient = 'linear-gradient(to right, ' + evColor + ' 0%, ' + evColor + value + '%, var(--bg-color-2)' + value + '%, var(--bg-color-2) 100%)';
+    this.evSliders.update(sliders =>
+    {
+      const updated = [...sliders];
+      updated[this.selectedStat()] = gradient;
+      return updated;
+    });
   }
 
   allAbilitiesSwitch() 
   { 
-    if(this.pokemon)
+    if(this.pokemon())
     {
-      this.allAbilities = !this.allAbilities;
-      this.pokemon.ability = undefined;
+      this.allAbilities.update(value => !value);
+      this.pokemon.update(pokemon => pokemon && { ...pokemon, ability: undefined})
     }
   }
 
   calculateAvailableEVs(newEVs: number) : boolean
   {
     //Selected more EVs than available
-    if(this.remainingEVs == 0 && newEVs >= this.currentEVs)
+    if(this.remainingEVs() <= 0 && newEVs >= this.currentEVs())
     {
-      this.evSlider().nativeElement.value = this.currentEVs;
+      this.evSlider().nativeElement.value = this.currentEVs();
       return false;
     }
-    
-    const previousEVs = this.pokemon!.evs[this.selectedStat].value;
+
+    const previousEVs = this.pokemon()?.evs[this.selectedStat()].value ?? 0;
     const evDiff = previousEVs - newEVs;
     //If after diff has remaining evs
-    if(this.remainingEVs + evDiff >= 0)
+    if(this.remainingEVs() + evDiff >= 0)
     {
-      this.remainingEVs = this.remainingEVs + evDiff;
-      this.currentEVs = newEVs;
+      this.remainingEVs.update(remaining => remaining + evDiff);
+      this.currentEVs.set(newEVs);
     }
     //If no remaining evs after diff -> add all remaining to current
     else
     {
-      this.currentEVs = this.currentEVs + this.remainingEVs;
-      this.remainingEVs = 0;
+      this.currentEVs.update(currentEVs => Math.max(0, currentEVs + this.remainingEVs()));
+      this.remainingEVs.set(0);
     }
-    this.evSlider().nativeElement.value = this.currentEVs;
+    this.evSlider().nativeElement.value = this.currentEVs();
     return true;
   }
 
   calcAllEVs()
   {
-    for (const pokemon of this.team.pokemons) 
+    for (const pokemon of this.team().pokemons) 
     {
       if(pokemon)
       {
-        for (const ev of pokemon?.evs) 
+        for (const ev of pokemon?.evs)
         {
-          this.remainingEVs -= ev.value;
+          this.remainingEVs.update(remaining => remaining - ev.value);
         }
       }
     }
@@ -446,106 +455,107 @@ export class PokemonEditorComponent
 
   selectStat(index: number)
   {
-    if(this.pokemon)
+    const pokemon = this.pokemon();
+    if(pokemon)
     {
-      if(this.selectedStat === index)
+      if(this.selectedStat() === index)
       {
         return;
       }
       else
       {
-        this.selectedStat = index;
-        this.currentIVs = this.pokemon.ivs[index].value;
-        this.pokemonForm.controls.ivs.setValue(this.currentIVs);
-        this.currentEVs = this.pokemon.evs[index].value;
-        this.pokemonForm.controls.evs.setValue(this.currentEVs);
-        this.evSlider().nativeElement.value = this.currentEVs;
+        this.selectedStat.set(index);
+        this.currentIVs.set(pokemon.ivs[index].value);
+        this.pokemonForm.controls.ivs.setValue(this.currentIVs());
+        this.currentEVs.set(pokemon.evs[index].value);
+        this.pokemonForm.controls.evs.setValue(this.currentEVs());
+        this.evSlider().nativeElement.value = this.currentEVs();
        const pokemonPreviewComponent = this.pokemonPreviewComponent();
        if(pokemonPreviewComponent)
         {
           pokemonPreviewComponent.showStats[0] = true;
         }
       }
-      this.calcIVSliderBackground(this.pokemon.ivs[index].value, 0, 31);
-      this.calcEVSliderBackground(this.pokemon.evs[index].value, 0, this.maxEVs);
+      this.calcIVSliderBackground(pokemon.ivs[index].value, 0, 31);
+      this.calcEVSliderBackground(pokemon.evs[index].value, 0, this.maxEVs);
     }
   }
 
   resetStatPicker()
   {
-    if(this.pokemon)
+    const pokemon = this.pokemon();
+    if(pokemon)
     {
-      this.selectedStat = 0;
-      this.calcIVSliderBackground(this.pokemon.ivs[0].value, 0, 31);
-      this.calcEVSliderBackground(this.pokemon.evs[0].value, 0, this.maxEVs);
-      this.currentIVs = this.pokemon.ivs[0].value;
-      this.pokemonForm.controls.ivs.setValue(this.currentIVs);
-      this.currentEVs = this.pokemon.evs[0].value;
-      this.pokemonForm.controls.evs.setValue(this.currentEVs);
-      this.evSlider().nativeElement.value = this.currentEVs;
+      this.selectedStat.set(0);
+      this.calcIVSliderBackground(pokemon.ivs[0].value, 0, 31);
+      this.calcEVSliderBackground(pokemon.evs[0].value, 0, this.maxEVs);
+      this.currentIVs.set(pokemon.ivs[0].value);
+      this.pokemonForm.controls.ivs.setValue(this.currentIVs());
+      this.currentEVs.set(pokemon.evs[0].value);
+      this.pokemonForm.controls.evs.setValue(this.currentEVs());
+      this.evSlider().nativeElement.value = this.currentEVs();
     }
   }
 
   resetIVs()
   {
-    if(this.pokemon)
+    const pokemon = this.pokemon();
+    if(pokemon)
     {
-      for (const iv of this.pokemon?.ivs) 
+      for (const iv of pokemon.ivs)
       {
         iv.value = 0;
       }
-      this.pokemon = 
-      { 
-        ...this.pokemon,
-        ivs: this.pokemon?.ivs
-      }
-      this.currentIVs = this.pokemon.ivs[0].value;
-      this.calcIVSliderBackground(this.pokemon.ivs[0].value, 0, 31);
+      this.pokemon.update(pk => pk && { ...pk, ivs: pokemon.ivs})
+      this.currentIVs.set(pokemon.ivs[this.selectedStat()].value);
+      this.pokemonForm.controls.ivs.setValue(this.currentIVs(), {emitEvent:false});
+      this.calcIVSliderBackground(pokemon.ivs[this.selectedStat()].value, 0, 31);
     }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
   }
 
   resetEVs()
   {
-    if(this.pokemon)
+    const pokemon = this.pokemon();
+    if(pokemon)
     {
-      for (const ev of this.pokemon?.evs) 
+      for (const ev of pokemon.evs)
       {
         ev.value = 0;
       }
-      this.pokemon = 
-      { 
-        ...this.pokemon,
-        evs: this.pokemon?.evs
-      }
-      this.currentEVs = this.pokemon.evs[0].value;
-      this.remainingEVs = this.maxEVsTotal;
-      this.calcEVSliderBackground(this.pokemon.evs[0].value, 0, this.maxEVs);
+      this.pokemon.update(pk => pk && { ...pk, evs: pokemon.evs})
+      this.currentEVs.set(pokemon.evs[this.selectedStat()].value);
+      this.pokemonForm.controls.evs.setValue(this.currentEVs(), {emitEvent:false});
+      this.evSlider().nativeElement.value = this.currentEVs();
+      this.remainingEVs.set(this.maxEVsTotal);
+      this.calcEVSliderBackground(pokemon.evs[this.selectedStat()].value, 0, this.maxEVs);
     }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
   }
 
   async pokemonSelectEvent(event?: QueryItem)
   {
-    if(this.pokemon)
+    const pokemon = this.pokemon();
+    if(pokemon)
     {
       if(event)
       {
         const data: PokemonData = await this.pokemonService.getPokemonDataByDexNumber(event.identifier);
-        this.pokemon = 
-        { 
-          ...this.pokemon,
-          name: data.name,
-          dexNumber: data.dexNumber,
-          pokemonId: data.pokemonId,
-          types: data.types,
-          sprite: data.sprite,
-          evolutions: data.evolutions,
-          preEvolution: data.preEvolution,
-          formId: data.formId,
-          forms: data.forms,
-          stats: [...data.stats]
-        };
+        this.pokemon.update(pokemon => pokemon && 
+          { 
+            ...pokemon,
+            name: data.name,
+            dexNumber: data.dexNumber,
+            pokemonId: data.pokemonId,
+            types: data.types,
+            sprite: data.sprite,
+            evolutions: data.evolutions,
+            preEvolution: data.preEvolution,
+            formId: data.formId,
+            forms: data.forms,
+            stats: [...data.stats]
+          }
+        )
         const pokemonPreviewComponent = this.pokemonPreviewComponent();
         if(pokemonPreviewComponent)
         {
@@ -554,20 +564,21 @@ export class PokemonEditorComponent
       }
       else
       {
-        this.pokemon = 
-        { 
-          ...this.pokemon,
-          name: undefined,
-          dexNumber: undefined,
-          pokemonId: undefined,
-          types: undefined,
-          sprite: undefined,
-          evolutions: [],
-          preEvolution: undefined,
-          formId: undefined,
-          forms: undefined,
-          stats: []
-        }
+        this.pokemon.update(pokemon => pokemon && 
+          { 
+            ...pokemon,
+            name: undefined,
+            dexNumber: undefined,
+            pokemonId: undefined,
+            types: undefined,
+            sprite: undefined,
+            evolutions: [],
+            preEvolution: undefined,
+            formId: undefined,
+            forms: undefined,
+            stats: []
+          }
+        )
         const pokemonPreviewComponent = this.pokemonPreviewComponent();
         if(pokemonPreviewComponent)
         {
@@ -575,122 +586,103 @@ export class PokemonEditorComponent
         }
       }
     }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
   }
 
   async itemSelectEvent(event?: QueryItem)
   {
-    if(this.pokemon)
-    {
-      this.pokemon = { ...this.pokemon, item: event ? await this.pokemonService.getItemByName(event.name) : undefined }
-    }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    const item = event ? await this.pokemonService.getItemByName(event.name) : undefined;
+    this.pokemon.update(pokemon => pokemon && { ...pokemon, item: item })
+    this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
   }
 
   async abilitySelectEvent(event?: QueryItem)
   {
-    if(this.pokemon)
+    const ability = await this.pokemonService.getAbilityByName(event?.name || "");
+    if(event?.icon?.includes("hidden"))
     {
-      if(event)
-      {
-        const ability = await this.pokemonService.getAbilityByName(event.name);
-        if(event.icon?.includes("hidden"))
-        {
-          ability.hidden = true;
-        }
-        this.pokemon.ability = event ? ability : undefined;
-      }
-      else
-      {
-        this.pokemon.ability = undefined;
-      }
+      ability.hidden = true;
     }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    this.pokemon.update(pokemon => pokemon && { ...pokemon, ability: event ? ability : undefined })
+    this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
   }
 
   async move1SelectEvent(event?: QueryItem)
   {
-    if(this.pokemon)
+    const move = event ? await this.pokemonService.getMove(event.name) : undefined;
+    this.pokemon.update(pokemon => pokemon && 
     {
-      this.pokemon.moves[0] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+      ...pokemon,
+      moves: pokemon.moves.map((m, i) => i === 0 ? move : m)
+    });
+    this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
   }
 
   async move2SelectEvent(event?: QueryItem)
   {
-    if(this.pokemon)
+    const move = event ? await this.pokemonService.getMove(event.name) : undefined;
+    this.pokemon.update(pokemon => pokemon && 
     {
-      this.pokemon.moves[1] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+      ...pokemon,
+      moves: pokemon.moves.map((m, i) => i === 1 ? move : m)
+    });
+    this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
   }
 
   async move3SelectEvent(event?: QueryItem)
   {
-    if(this.pokemon)
+    const move = event ? await this.pokemonService.getMove(event.name) : undefined;
+    this.pokemon.update(pokemon => pokemon && 
     {
-      this.pokemon.moves[2] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+      ...pokemon,
+      moves: pokemon.moves.map((m, i) => i === 2 ? move : m)
+    });
+    this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
   }
 
   async move4SelectEvent(event?: QueryItem)
   {
-    if(this.pokemon)
+    const move = event ? await this.pokemonService.getMove(event.name) : undefined;
+    this.pokemon.update(pokemon => pokemon && 
     {
-      this.pokemon.moves[3] = event ? await this.pokemonService.getMove(event.name) : undefined;
-    }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+      ...pokemon,
+      moves: pokemon.moves.map((m, i) => i === 3 ? move : m)
+    });
+    this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
   }
 
   async natureSelectEvent(event?: QueryItem)
   {
-    if(this.pokemon)
-    {
-      this.pokemon.nature = event ? await this.pokemonService.getNatureByName(event.name) : undefined;
-    }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    const nature = event ? await this.pokemonService.getNatureByName(event.name) : undefined;
+    this.pokemon.update(pokemon => pokemon && { ...pokemon, nature: nature })
+    this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
   }
 
   async teraTypeSelectEvent(event?: QueryItem)
   {
-    if(this.pokemon)
-    {
-      this.pokemon.teraType = event ? await this.pokemonService.getType(event.identifier, true) : undefined;
-    }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    const teraType = event ? await this.pokemonService.getType(event.identifier, true) : undefined;
+    this.pokemon.update(pokemon => pokemon && { ...pokemon, teraType: teraType })
+    this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
   }
 
   shinySelectEvent(event: boolean)
   {
-    if(this.pokemon && this.pokemon.shiny !== event)
+    if(this.pokemon() && this.pokemon()?.shiny !== event)
     {
-      this.pokemon = 
-      { 
-        ...this.pokemon,
-        shiny: event
-      }
+      this.pokemon.update(pokemon => pokemon && { ...pokemon, shiny: event})
     }
-    this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
+    this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
   }
 
   genderSelectEvent(event?: any)
   {
-    if(this.pokemon)
-    {
-      this.pokemon = 
-      { 
-        ...this.pokemon,
-        gender: event
-      }
-      this.teamEditorService.updatePokemon(this.pokemon, this.selectedPokemonIndex);
-    }
+    this.pokemon.update(pokemon => pokemon && { ...pokemon, gender: event})
+    this.teamEditorService.updatePokemon(this.pokemon(), this.selectedPokemonIndex());
   }
 
-  triggerNotes($event)
+  triggerNotes($event: boolean)
   {
-    this.showNotes = $event;
+    this.showNotes.set($event);
   }
 
   isFormValid()
@@ -703,7 +695,7 @@ export class PokemonEditorComponent
     var control = this.pokemonForm.get(key);
     let invalid = (control?.errors
       && (control?.dirty || control?.touched
-        || this.pokemonFormSubmitted)) 
+        || this.pokemonFormSubmitted())) 
       ?? false;
     return invalid;
   }
