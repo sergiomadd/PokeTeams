@@ -75,6 +75,10 @@ Most feature/shared services hold state in **Angular signals**, not `BehaviorSub
 
 NgRx (`core/store/`) is intentionally reserved for cross-cutting, hydrated app state (auth session, config/theme/lang) — don't add new feature state to it; use a signal-based service instead.
 
+**When to use `toSignal()` + `effect()` vs. a plain `.subscribe()`:** if something needs to *react* to a stream over time — a form field that live-syncs into app state on every keystroke (see `team-editor.component.ts`'s `formPlayer`/`formRental`/`formTitle`), a field with async cross-field validation (`auth-form.component.ts`'s `formUsername`/`formEmail` checking availability), or an external event stream like `SocialAuthService.authState` — bridge it with `toSignal()` and drive the side effect from an `effect()`, not a manual `.subscribe()` in the constructor/`ngOnInit`. A manual `.subscribe()` is never auto-unsubscribed by Angular, so on any component that isn't a singleton (anything created/destroyed via `@if`/routing, e.g. a modal), every mount leaks that subscription and its captured `this` — and if the source is a long-lived singleton stream, this can also cause the same event to double-fire across the leaked instances. `toSignal()`/`effect()` tie cleanup to the component's `DestroyRef` automatically, so this class of leak isn't possible.
+
+Conversely, don't reach for `toSignal()`/`effect()` on forms that are purely submit-driven (`{ updateOn: "submit" }`, read via `this.xForm.controls.y.value` inside an `(ngSubmit)` handler, as in most of `user-settings.component.ts`/`auth-form.component.ts`'s login/signup/forgot forms) — nothing needs to observe those fields between keystrokes, so wrapping them in a signal + effect just adds reactive machinery with no reactive consumer. Read `.value` directly in the submit handler.
+
 ### i18n
 
 UI text is translated via `@ngx-translate/core`; translation files live in `ui/src/assets/i18n/*.json`, one file per language.
