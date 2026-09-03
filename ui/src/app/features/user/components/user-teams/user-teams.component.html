@@ -3,11 +3,11 @@
   <div class="flex justify-c-c align-i-c pad-l">
     <button 
     class="button search-button"
-    [ngClass]="{'button-selected': searchVisible}"
+    [ngClass]="{'button-selected': searchVisible()}"
     (click)="toggleSearch()"
     >{{'shared.search' | translate}}</button>
   </div>
-  <div class="search" [ngClass]="{'search-visible': searchVisible}">
+  <div class="search" [ngClass]="{'search-visible': searchVisible()}">
     <app-team-search [userSearch]="true"></app-team-search>
   </div>
   <app-team-table></app-team-table>
