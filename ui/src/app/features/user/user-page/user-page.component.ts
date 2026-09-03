@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -34,46 +34,52 @@ export class UserPageComponent
 
   selectedLang$: Observable<string> = this.store.select(selectLang);
   loggedUser$ = this.store.select(selectLoggedUser);
-  loggedUsername?: string;
+  loggedUsername = signal<string | undefined>(undefined);
 
-  username?: string;
-  user?: User;
-  userTeams: TeamPreviewData[] = [];
-  loading: boolean = false;
+  username = signal<string | undefined>(undefined);
+  user = signal<User | undefined>(undefined);
+  userTeams = signal<TeamPreviewData[]>([]);
+  loading = signal<boolean>(false);
 
-  tabs: boolean[] = [true, false]
+  tabs = signal<boolean[]>([true, false]);
   country?: string;
-  userPrivate: boolean = false;
+  userPrivate = signal<boolean>(false);
 
-  ngOnInit()
+  constructor()
   {
-    this.username = this.router.url.slice(6);
+    effect(() =>
+    {
+      this.userTeams.set(this.searchService.teams());
+    })
+
+    this.username.set(this.router.url.slice(6));
     this.seo.updateMetaData({
-      title: `${this.username}`,
+      title: `${this.username()}`,
       description: 'The user page. It has a list of the users teams, and a settings page where the user can change their profile and account details.',
-      slug: `user/${this.username}`,
+      slug: `user/${this.username()}`,
     });
     this.route.params.subscribe(params =>
     {
-      this.username = params["username"];
-      if(this.username)
+      this.username.set(params["username"]);
+      const username = this.username();
+      if(username)
       {
-        this.loading = true;
-        this.userService.getUser(this.username).subscribe(
+        this.loading.set(true);
+        this.userService.getUser(username).subscribe(
           {
             next: (response) =>
             {
-              this.user = response;
+              this.user.set(response);
               this.userPageService.setUser(response);
               this.load();
             },
-            error: () => 
+            error: () =>
             {
-              this.loading = false;
+              this.loading.set(false);
             },
-            complete: () => 
+            complete: () =>
             {
-              this.loading = false;
+              this.loading.set(false);
             }
           }
         )
@@ -81,41 +87,37 @@ export class UserPageComponent
     })
     this.loggedUser$.subscribe(value =>
     {
-      if(value) 
+      if(value)
       {
-        this.loggedUsername = value?.username;
-        if(this.username && this.loggedUsername && this.username === this.loggedUsername)
+        this.loggedUsername.set(value?.username);
+        if(this.username() && this.loggedUsername() && this.username() === this.loggedUsername())
         {
           this.userPageService.getloggedUserEmail(value)
-          this.user = value;
+          this.user.set(value);
           this.userPageService.setUser(value);
         }
       }
       else
       {
-        this.loggedUsername = undefined;
+        this.loggedUsername.set(undefined);
       }
     })
 
     //needed to not repeat same query twice
     this.loggedUser$.pipe(skip(1)).subscribe(value =>
       {
-        if(value) 
+        if(value)
         {
-          if(this.username && this.loggedUsername && this.username === this.loggedUsername)
+          if(this.username() && this.loggedUsername() && this.username() === this.loggedUsername())
           {
             this.load();
           }
         }
         else
         {
-          this.loggedUsername = undefined;
+          this.loggedUsername.set(undefined);
         }
       })
-    this.searchService.teams.subscribe((value: TeamPreviewData[]) =>
-    {
-      this.userTeams = value;
-    })
     this.selectedLang$.pipe(skip(1)).subscribe(value =>
     {
       this.load();
@@ -129,26 +131,23 @@ export class UserPageComponent
 
   load()
   {
-    if(this.user) 
-    { 
-      if(!this.user.visibility && !(this.loggedUsername === this.user.username))
+    const user = this.user();
+    if(user)
+    {
+      if(!user.visibility && !(this.loggedUsername() === user.username))
       {
-        this.userPrivate = true;
+        this.userPrivate.set(true);
       }
       else
       {
-        this.userPrivate = false;
-        this.searchService.userOnlySearch(this.user.username);
-      }    
+        this.userPrivate.set(false);
+        this.searchService.userOnlySearch(user.username);
+      }
     }
   }
 
   changeTab(index: number)
   {
-    for (let i=0; i<this.tabs.length; i++) 
-    {
-      this.tabs[i] = false;
-    }
-    this.tabs[index] = true;
+    this.tabs.update(tabs => tabs.map((_, i) => i === index));
   }
 }
