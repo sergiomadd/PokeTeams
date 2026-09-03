@@ -1,10 +1,10 @@
 import { GoogleLoginProvider, GoogleSigninButtonDirective, SocialAuthService } from '@abacritt/angularx-social-login';
-import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
-import { Component, inject, output } from '@angular/core';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { Component, computed, effect, inject, output, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { combineLatest } from 'rxjs';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { ExternalAuthDTO } from '../../../../core/models/user/externalAuth.dto';
 import { LogInDTO } from '../../../../core/models/user/login.dto';
@@ -21,9 +21,9 @@ import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
     selector: 'app-auth-form',
     templateUrl: './auth-form.component.html',
     styleUrl: './auth-form.component.scss',
-    imports: [FormsModule, ReactiveFormsModule, NgTemplateOutlet, NgClass, TooltipComponent, GoogleSigninButtonDirective, AsyncPipe, TranslatePipe, IsFormFieldInvalidPipe, GetFormControlErrorPipe]
+    imports: [FormsModule, ReactiveFormsModule, NgTemplateOutlet, NgClass, TooltipComponent, GoogleSigninButtonDirective, TranslatePipe, IsFormFieldInvalidPipe, GetFormControlErrorPipe]
 })
-export class AuthFormComponent 
+export class AuthFormComponent
 {
   userService = inject(UserService);
   formBuilder = inject(FormBuilder);
@@ -31,33 +31,36 @@ export class AuthFormComponent
   util = inject(UtilService);
   socialAuthService = inject(SocialAuthService);
 
-  data$ = combineLatest(
+  isSubmitting = this.store.selectSignal(selectIsSubmitting);
+  backendError = this.store.selectSignal(selectError);
+  success = this.store.selectSignal(selectSuccess);
+  data = computed(() => (
     {
-      isSubmitting: this.store.select(selectIsSubmitting),
-      backendError: this.store.select(selectError),
-      success: this.store.select(selectSuccess)
+      isSubmitting: this.isSubmitting(),
+      backendError: this.backendError(),
+      success: this.success()
     }
-  )
+  ));
 
   readonly close = output();
 
-  login: boolean = true;
-  signup: boolean = false;
-  forgot: boolean = false;
-  userNameAvailable: boolean = false;
-  emailAvailable: boolean = false;
+  login = signal<boolean>(true);
+  signup = signal<boolean>(false);
+  forgot = signal<boolean>(false);
+  userNameAvailable = signal<boolean>(false);
+  emailAvailable = signal<boolean>(false);
 
-  logInFormSubmitted: boolean = false;
-  showLogInPassword: boolean = false;
+  logInFormSubmitted = signal<boolean>(false);
+  showLogInPassword = signal<boolean>(false);
   logInForm = this.formBuilder.group(
   {
     userNameOrEmail: ['', [Validators.required, Validators.maxLength(256)]],
     password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256)]],
   }, { updateOn: "submit" });
 
-  signUpFormSubmitted: boolean = false;
-  showSignUpPassword: boolean = false;
-  showSignUpConfirmPassword: boolean = false;
+  signUpFormSubmitted = signal<boolean>(false);
+  showSignUpPassword = signal<boolean>(false);
+  showSignUpConfirmPassword = signal<boolean>(false);
   signUpForm = this.formBuilder.group(
   {
     username: new FormControl('', 
@@ -79,8 +82,11 @@ export class AuthFormComponent
       updateOn: 'change'
     }),
   });
-  
-  forgotFormSubmitted: boolean = false;
+  formUsername = toSignal(this.signUpForm.controls.username.valueChanges);
+  formEmail = toSignal(this.signUpForm.controls.email.valueChanges);
+  authState = toSignal(this.socialAuthService.authState);
+
+  forgotFormSubmitted = signal<boolean>(false);
   forgotForm = this.formBuilder.group(
   {
     email: new FormControl('', 
@@ -90,55 +96,71 @@ export class AuthFormComponent
     }),  
   }, { updateOn: "submit" });
 
-  async ngOnInit()
+  constructor()
   {
-    this.socialAuthService.authState.subscribe((user) => 
-    {
-      const externalAuthDTO: ExternalAuthDTO = 
-      {
-        provider: GoogleLoginProvider.PROVIDER_ID,
-        idToken: user.idToken
-      };
-      this.store.dispatch(authActions.externalLogIn({ request: externalAuthDTO }));
-    });
-
-    this.signUpForm.controls.username.valueChanges.subscribe(async (value) => 
-    {
-      if(this.signUpForm.controls.username.valid)
-      {
-        this.userNameAvailable = value ? await this.userService.checkUserNameAvailable(value) : false;
-        if(!this.userNameAvailable) { this.signUpForm.controls.username.setErrors({ "usernameTaken": true }); }
-      }
-    });
-
-    this.signUpForm.controls.email.valueChanges.subscribe(async (value) => 
-    {
-      if(this.signUpForm.controls.email.valid)
-      {
-        this.emailAvailable = value ? await this.userService.checkEmailAvailable(value) : false;
-        if(!this.emailAvailable) { this.signUpForm.controls.email.setErrors({ "emailTaken": true }); }
-      }
-    });
-    
     //Close form when login/signup is completed
     //Do not close if forgot password is completed
-    this.data$.subscribe(value =>
+    effect(() =>
     {
-      if(value && value.success && !this.forgot)
+      if(this.success() && !this.forgot())
       {
         this.closeSelf();
       }
-    })
+    });
+
+    effect(() =>
+    {
+      const user = this.authState();
+      if(user)
+      {
+        const externalAuthDTO: ExternalAuthDTO =
+        {
+          provider: GoogleLoginProvider.PROVIDER_ID,
+          idToken: user.idToken
+        };
+        this.store.dispatch(authActions.externalLogIn({ request: externalAuthDTO }));
+      }
+    });
+
+    effect(() =>
+    {
+      const username = this.formUsername();
+      if(this.signUpForm.controls.username.valid)
+      {
+        this.checkUsernameAvailable(username);
+      }
+    });
+
+    effect(() =>
+    {
+      const email = this.formEmail();
+      if(this.signUpForm.controls.email.valid)
+      {
+        this.checkEmailAvailable(email);
+      }
+    });
+  }
+
+  async checkUsernameAvailable(username: string | null | undefined)
+  {
+    this.userNameAvailable.set(username ? await this.userService.checkUserNameAvailable(username) : false);
+    if(!this.userNameAvailable()) { this.signUpForm.controls.username.setErrors({ "usernameTaken": true }); }
+  }
+
+  async checkEmailAvailable(email: string | null | undefined)
+  {
+    this.emailAvailable.set(email ? await this.userService.checkEmailAvailable(email) : false);
+    if(!this.emailAvailable()) { this.signUpForm.controls.email.setErrors({ "emailTaken": true }); }
   }
 
   async logIn()
   {
-    this.logInFormSubmitted = true;
+    this.logInFormSubmitted.set(true);
     if(this.logInForm.valid)
     {
-      let loginDTO: LogInDTO = 
+      let loginDTO: LogInDTO =
       {
-        userNameOrEmail: this.logInForm.get('userNameOrEmail')?.value!, 
+        userNameOrEmail: this.logInForm.get('userNameOrEmail')?.value!,
         password: this.logInForm.get('password')?.value!,
         rememberMe: true
       }
@@ -148,10 +170,10 @@ export class AuthFormComponent
 
   async signUp()
   {
-    this.signUpFormSubmitted = true;
+    this.signUpFormSubmitted.set(true);
     if(this.signUpForm.valid)
     {
-      let signupdto: SignUpDTO = 
+      let signupdto: SignUpDTO =
       {
         username: this.signUpForm.get('username')?.value!,
         email: this.signUpForm.get('email')?.value!,
@@ -164,10 +186,10 @@ export class AuthFormComponent
 
   forgotPassword()
   {
-    this.forgotFormSubmitted = true;
+    this.forgotFormSubmitted.set(true);
     if(this.forgotForm.valid)
     {
-      let updateDTO: UserUpdateDTO = 
+      let updateDTO: UserUpdateDTO =
       {
         currentEmail: this.forgotForm.controls.email.value!
       }
@@ -177,49 +199,49 @@ export class AuthFormComponent
 
   showLogInForm()
   {
-    this.login = true;
-    this.signup = false;
-    this.forgot = false;
+    this.login.set(true);
+    this.signup.set(false);
+    this.forgot.set(false);
     this.clearLogInForm();
   }
 
   showSignUpForm()
   {
-    this.signup = true;
-    this.login = false;
-    this.forgot = false;
+    this.signup.set(true);
+    this.login.set(false);
+    this.forgot.set(false);
     this.clearSignUpForm();
   }
 
   showForgotForm()
   {
-    this.signup = false;
-    this.login = false;
-    this.forgot = true;
+    this.signup.set(false);
+    this.login.set(false);
+    this.forgot.set(true);
     this.clearForgotForm();
   }
 
   clearLogInForm()
   {
     this.logInForm.reset({ userNameOrEmail: '', password: ''});
-    this.logInFormSubmitted = false;
-    this.userNameAvailable = false;
+    this.logInFormSubmitted.set(false);
+    this.userNameAvailable.set(false);
     this.store.dispatch(authActions.toggleAuthForm());
   }
 
   clearSignUpForm()
   {
     this.signUpForm.reset({ username: '', email: '', password: '', confirmPassword: ''});
-    this.signUpFormSubmitted = false;
-    this.userNameAvailable = false;
-    this.emailAvailable = false;
+    this.signUpFormSubmitted.set(false);
+    this.userNameAvailable.set(false);
+    this.emailAvailable.set(false);
     this.store.dispatch(authActions.toggleAuthForm());
   }
 
   clearForgotForm()
   {
     this.forgotForm.reset({ email: '' });
-    this.forgotFormSubmitted = false;
+    this.forgotFormSubmitted.set(false);
     this.store.dispatch(authActions.toggleAuthForm());
   }
 
@@ -234,13 +256,13 @@ export class AuthFormComponent
     switch(key)
     {
       case "logInPassword":
-        this.showLogInPassword = !this.showLogInPassword;
+        this.showLogInPassword.update(value => !value);
         break;
       case "signUpPassword":
-        this.showSignUpPassword = !this.showSignUpPassword;
+        this.showSignUpPassword.update(value => !value);
         break;
       case "signUpConfirmPassword":
-        this.showSignUpConfirmPassword = !this.showSignUpConfirmPassword;
+        this.showSignUpConfirmPassword.update(value => !value);
         break;
     }
   }

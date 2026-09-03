@@ -1,4 +1,5 @@
-import { SocialAuthService } from '@abacritt/angularx-social-login';
+import { GoogleSigninButtonDirective, SocialAuthService } from '@abacritt/angularx-social-login';
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
@@ -39,6 +40,7 @@ describe('AuthFormComponent', () => {
           useValue: {
             dispatch: jest.fn(),
             select: jest.fn().mockReturnValue(of(false)),
+            selectSignal: jest.fn().mockReturnValue(signal(false)),
           },
         },
         {
@@ -66,10 +68,7 @@ describe('AuthFormComponent', () => {
     {
       remove: {
         imports: [
-          // REMOVE the real social login directive/module
-          // (one of these will apply depending on how you imported it)
-          // SocialLoginModule,
-          // GoogleSigninButtonDirective
+          GoogleSigninButtonDirective
         ],
       },
       add: {
@@ -83,8 +82,6 @@ describe('AuthFormComponent', () => {
 
     store = TestBed.inject(Store) as jest.Mocked<Store>;
     userService = TestBed.inject(UserService) as jest.Mocked<UserService>;
-
-    component.ngOnInit();
   });
 
   it('should create', () => {
@@ -117,27 +114,27 @@ describe('AuthFormComponent', () => {
   {
     component.showSignUpForm();
 
-    expect(component.signup).toBe(true);
-    expect(component.login).toBe(false);
-    expect(component.forgot).toBe(false);
+    expect(component.signup()).toBe(true);
+    expect(component.login()).toBe(false);
+    expect(component.forgot()).toBe(false);
   });
 
-  it('should switch to forgot form', () => 
+  it('should switch to forgot form', () =>
   {
     component.showForgotForm();
 
-    expect(component.forgot).toBe(true);
-    expect(component.login).toBe(false);
-    expect(component.signup).toBe(false);
+    expect(component.forgot()).toBe(true);
+    expect(component.login()).toBe(false);
+    expect(component.signup()).toBe(false);
   });
 
-  it('should switch back to login form', () => 
+  it('should switch back to login form', () =>
   {
     component.showLogInForm();
 
-    expect(component.login).toBe(true);
-    expect(component.signup).toBe(false);
-    expect(component.forgot).toBe(false);
+    expect(component.login()).toBe(true);
+    expect(component.signup()).toBe(false);
+    expect(component.forgot()).toBe(false);
   });
 
   //Login
@@ -220,29 +217,29 @@ describe('AuthFormComponent', () => {
 
   //Availability
 
-  it('should mark username as taken when not available', async () => 
+  it('should mark username as taken when not available', async () =>
   {
     userService.checkUserNameAvailable.mockResolvedValue(false);
 
     component.signUpForm.controls.username.setValue('takenName');
+    fixture.detectChanges();
+    await fixture.whenStable();
 
-    await Promise.resolve();
-
-    expect(component.userNameAvailable).toBe(false);
+    expect(component.userNameAvailable()).toBe(false);
     expect(component.signUpForm.controls.username.errors).toEqual(
       expect.objectContaining({ usernameTaken: true })
     );
   });
 
-  it('should mark email as taken when not available', async () => 
+  it('should mark email as taken when not available', async () =>
   {
     userService.checkEmailAvailable.mockResolvedValue(false);
 
     component.signUpForm.controls.email.setValue('test@test.com');
+    fixture.detectChanges();
+    await fixture.whenStable();
 
-    await Promise.resolve();
-
-    expect(component.emailAvailable).toBe(false);
+    expect(component.emailAvailable()).toBe(false);
     expect(component.signUpForm.controls.email.errors).toEqual(
       expect.objectContaining({ emailTaken: true })
     );
@@ -266,10 +263,10 @@ describe('AuthFormComponent', () => {
 
   it('should toggle login password visibility', () => 
   {
-    expect(component.showLogInPassword).toBe(false);
+    expect(component.showLogInPassword()).toBe(false);
 
     component.toggleShowPassword('logInPassword');
 
-    expect(component.showLogInPassword).toBe(true);
+    expect(component.showLogInPassword()).toBe(true);
   });
 });
