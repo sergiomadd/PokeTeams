@@ -1,5 +1,4 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -12,21 +11,21 @@ import { selectError, selectIsSubmitting, selectSuccess } from '../../../../core
     selector: 'app-email-confirmation',
     templateUrl: './email-confirmation.component.html',
     styleUrl: './email-confirmation.component.scss',
-    imports: [RouterLink, AsyncPipe, TranslatePipe]
+    imports: [RouterLink, TranslatePipe]
 })
 export class EmailConfirmationComponent
 {
   route = inject(ActivatedRoute);
   store = inject(Store);
 
-  isSubmitting$ = this.store.select(selectIsSubmitting);
-  backendError$ = this.store.select(selectError);
-  success$ = this.store.select(selectSuccess);
+  isSubmitting = this.store.selectSignal(selectIsSubmitting);
+  backendError = this.store.selectSignal(selectError);
+  success = this.store.selectSignal(selectSuccess);
 
   readonly feedbackColors = FeedbackColors;
 
-  email?: string;
-  token?: string;
+  email = signal<string | undefined>(undefined);
+  token = signal<string | undefined>(undefined);
 
   ngOnInit()
   {
@@ -35,14 +34,14 @@ export class EmailConfirmationComponent
 
   confirmEmail()
   {
-    this.email = this.route.snapshot.queryParams['email'];
-    this.token = this.route.snapshot.queryParams['token'];
+    this.email.set(this.route.snapshot.queryParams['email']);
+    this.token.set(this.route.snapshot.queryParams['token']);
 
-    if(this.email && this.token)
+    if(this.email() && this.token())
     {
-      const confirmUpdateDTO: UserUpdateDTO = 
+      const confirmUpdateDTO: UserUpdateDTO =
       {
-        emailConfirmationCode: this.token
+        emailConfirmationCode: this.token()
       }
       this.store.dispatch(authActions.confirmEmail({request: confirmUpdateDTO}))
     }
