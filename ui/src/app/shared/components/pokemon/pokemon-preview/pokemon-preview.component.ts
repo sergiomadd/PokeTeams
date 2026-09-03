@@ -1,10 +1,10 @@
-import { Component, inject, SimpleChanges, input } from '@angular/core';
+import { NgClass, NgStyle } from '@angular/common';
+import { Component, effect, inject, input, signal } from '@angular/core';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { WindowService } from '../../../../core/helpers/window.service';
 import { PokemonPreview } from '../../../../core/models/pokemon/pokemonPreview.model';
-import { NgClass, NgStyle } from '@angular/common';
-import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
 import { GetMoveColorPipe } from '../../../pipes/color-pipes/getMoveColor.pipe';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
 
 @Component({
     selector: 'app-pokemon-preview',
@@ -19,28 +19,25 @@ export class PokemonPreviewComponent
 
   readonly pokemon = input<PokemonPreview>();
 
-  expanded: boolean = false;
-  pokemonSpritePath: string | undefined = undefined;
-  movesOpen: boolean[] = [false, false, false, false];
+  expanded = signal<boolean>(false);
+  pokemonSpritePath = signal<string | undefined>(undefined);
+  movesOpen = signal<boolean[]>([false, false, false, false]);
 
-  ngOnInit()
+  constructor()
   {
     this.getSprite();
-  }
 
-  ngOnChanges(changes: SimpleChanges)
-  {
-    if(changes["pokemon"])
+    effect(() => 
     {
+      this.pokemon();
       this.getSprite();
-    }
+    })
   }
 
   getMoveNameRows(index: number)
   {
     const pokemon = this.pokemon();
-    if(pokemon?.moves && pokemon?.moves[index] 
-      && pokemon?.moves[index].name?.content)
+    if(pokemon?.moves && pokemon?.moves[index] && pokemon?.moves[index].name?.content)
     {
       if(pokemon?.moves[index].name?.content.split(" ").length === 1)
       {
@@ -59,19 +56,19 @@ export class PokemonPreviewComponent
 
   expand()
   {
-    this.expanded = !this.expanded;
+    this.expanded.update(value => !value)
   }
 
   getSprite()
   {
-      const pokemon = this.pokemon();
-      if(pokemon?.gender === "female")
-      {
-        this.pokemonSpritePath = pokemon?.shiny ? pokemon?.sprite?.shinyFemale : pokemon?.sprite?.female
-      }
-      else
-      {
-        this.pokemonSpritePath = pokemon?.shiny ? pokemon?.sprite?.shiny : pokemon?.sprite?.base
-      }
+    const pokemon = this.pokemon();
+    if(pokemon?.gender === "female")
+    {
+      this.pokemonSpritePath.set(pokemon?.shiny ? pokemon?.sprite?.shinyFemale : pokemon?.sprite?.female);
+    }
+    else
+    {
+      this.pokemonSpritePath.set(pokemon?.shiny ? pokemon?.sprite?.shiny : pokemon?.sprite?.base);
+    }
   }
 }

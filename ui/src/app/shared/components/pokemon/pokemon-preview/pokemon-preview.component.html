@@ -11,8 +11,8 @@
           <span class="row-one">{{getMoveNameRows(i)[0]}}</span>
           <span class="row-two">{{getMoveNameRows(i)[1]}}</span>
           @if (!window.isSmallMobile()) {
-            <img src="{{move?.pokeType?.iconPath}}" title="{{move?.pokeType?.name?.content}}"
-              alt="{{move?.pokeType?.name?.content}}" class="type"
+            <img src="{{move.pokeType.iconPath}}" title="{{move.pokeType.name.content}}"
+              alt="{{move.pokeType.name.content}}" class="type"
           [ngClass]="
           {
             'icon-s': window.isSmallMobile(),
@@ -25,7 +25,7 @@
       <div class="no-overflow">
         <div class='center'>
           <div class="pointer tooltip-wrapper">
-            <img [src]="pokemonSpritePath"
+            <img [src]="pokemonSpritePath()"
               [alt]="pokemon()?.name?.content"
           [ngClass]="
           {
