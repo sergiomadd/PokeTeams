@@ -1,5 +1,4 @@
-import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
 import { EmailDTO } from '../../../core/models/user/email.dto';
 import { User } from '../../../core/models/user/user.model';
 import { AuthService } from '../../../core/services/auth.service';
@@ -7,13 +6,11 @@ import { AuthService } from '../../../core/services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class UserPageService 
+export class UserPageService
 {
   authService = inject(AuthService);
 
-  private user$: BehaviorSubject<User | undefined>
-    = new BehaviorSubject<User | undefined>(undefined);
-    user = this.user$.asObservable();
+  user = signal<User | undefined>(undefined);
 
   loggedUserEmail?: EmailDTO;
 
@@ -21,7 +18,7 @@ export class UserPageService
 
   setUser(user: User | undefined)
   {
-    this.user$.next(user);
+    this.user.set(user);
   }
 
   getloggedUserEmail(user: User | undefined)
