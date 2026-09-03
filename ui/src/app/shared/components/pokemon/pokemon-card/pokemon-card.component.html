@@ -681,7 +681,7 @@
                                 </div>
                               </div>
                               <div class="moves pad-m">
-                                @for (move of pokemon.moves; track move; let i = $index) {
+                                @for (move of pokemon.moves; track i; let i = $index) {
                                   @if (move) {
                                     <div
                                       (click)="move?.identifier !== 'error' ? clickSection(i, 'right') : false"

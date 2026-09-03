@@ -244,7 +244,7 @@
           (mouseenter)="expand()"
           (mouseleave)="expand()"
           >
-          @for (pokemon of pokemons(); track pokemon) {
+          @for (pokemon of pokemons(); track $index) {
             <app-pokemon-preview [pokemon]="pokemon"></app-pokemon-preview>
           }
         </div>

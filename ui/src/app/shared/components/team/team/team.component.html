@@ -170,7 +170,7 @@
     }
     <div class="flex justify-c-c gap-l" [ngClass]="{'flex-col': window.isTabletPortraitOrLess()}">
       <div class="flex-col gap-l">
-        @for (pokemon of team()?.pokemons; track pokemon; let i = $index) {
+        @for (pokemon of team()?.pokemons; track i; let i = $index) {
           @if (i % 2 === 0) {
             <app-pokemon-card
               [pokemon]="pokemon"
@@ -182,7 +182,7 @@
         }
       </div>
       <div class="flex-col gap-l">
-        @for (pokemon of team()?.pokemons; track pokemon; let i = $index) {
+        @for (pokemon of team()?.pokemons; track i; let i = $index) {
           @if (i % 2 !== 0) {
             <app-pokemon-card
               [pokemon]="pokemon"
