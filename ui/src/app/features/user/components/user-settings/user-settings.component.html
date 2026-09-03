@@ -5,27 +5,27 @@
         {{'user.settings.picture-title' | translate}}
       </div>
       <div class="subtitle">
-        {{'user.settings.picture_selected-subtitle' | translate}}: {{getPictureKey(user?.picture)}}
+        {{'user.settings.picture_selected-subtitle' | translate}}: {{getPictureKey(user()?.picture)}}
       </div>
     </div>
     <div class="flex align-i-c gap-s relative">
-      @if (changePictureSubmitted) {
-        @if ((backendError$ | async); as error) {
+      @if (changePictureSubmitted()) {
+        @if (backendError(); as error) {
           <span class="formFeedbackError backendErrors">{{error}}</span>
         }
       }
-      <img src="{{user?.picture}}" alt="" class="picture">
+      <img src="{{user()?.picture}}" alt="" class="picture">
       <div class="flex justify-c-c align-i-c relative">
         <button type="submit" (click)="clickPictureSelector()" data-testid="picture-change-btn">{{'user.settings.change-button' | translate}}</button>
-        <div class="catalog-wrapper" [ngClass]="{catalogShow: showCatalog}">
+        <div class="catalog-wrapper" [ngClass]="{catalogShow: showCatalog()}">
           <div class="catalog custom-scrollbar">
-            @for (pic of pictures; track pic) {
+            @for (pic of pictures(); track pic) {
               <img src="{{pic}}" alt="" class="picture animated-border" (click)="changePicture(pic)">
             }
           </div>
         </div>
       </div>
-      @if (changePictureSubmitted) {
+      @if (changePictureSubmitted()) {
         <ng-container *ngTemplateOutlet="feedback"></ng-container>
       }
     </div>
@@ -36,18 +36,18 @@
         {{'user.settings.country-title' | translate}}
       </div>
       <div class="flex align-i-c gap-s">
-        @if (user?.country) {
-          <img src="{{user?.country?.iconPath}}" alt="{{user?.country?.name}}" class="icon-l bor-rad-5">
-          <span class="subtitle">{{user?.country?.name}}</span>
+        @if (user()?.country) {
+          <img src="{{user()?.country?.iconPath}}" alt="{{user()?.country?.name}}" class="icon-l bor-rad-5">
+          <span class="subtitle">{{user()?.country?.name}}</span>
         }
-        @if (!user?.country) {
+        @if (!user()?.country) {
           <span class="error">{{'user.settings.country_undefined-feedback' | translate}}</span>
         }
       </div>
     </div>
     <div class="flex align-i-c relative">
-      @if (changeCountrySubmitted) {
-        @if ((backendError$ | async); as error) {
+      @if (changeCountrySubmitted()) {
+        @if (backendError(); as error) {
           <span class="formFeedbackError backendErrors">{{error}}</span>
         }
       }
@@ -59,7 +59,7 @@
         class="smart-input-custom-wrapper"
         data-testid="country-selector"
       ></app-smart-input>
-      @if (changeCountrySubmitted) {
+      @if (changeCountrySubmitted()) {
         <ng-container *ngTemplateOutlet="feedback"></ng-container>
       }
     </div>
@@ -70,29 +70,29 @@
         {{'user.settings.visibility-title' | translate}}
       </div>
       <div class="subtitle">
-        @if (user?.visibility) {
+        @if (user()?.visibility) {
           {{'user.settings.visibility_public-subtitle' | translate}}
         }
-        @if (!user?.visibility) {
+        @if (!user()?.visibility) {
           {{'user.settings.visibility_private-subtitle' | translate}}
         }
       </div>
     </div>
     <div class="flex align-i-c gap-s relative">
-      @if (changeVisibilitySubmitted) {
-        @if ((backendError$ | async); as error) {
+      @if (changeVisibilitySubmitted()) {
+        @if (backendError(); as error) {
           <span class="formFeedbackError backendErrors">{{error}}</span>
         }
       }
       <app-switch
-        [state]="user?.visibility ?? false"
+        [state]="user()?.visibility ?? false"
         [leftSVG]="leftSVG"
         [rightSVG]="rightSVG"
         [sizeSVG]="'1.5em'"
         (checkEvent)="changeVisibility($event)"
         data-testid="visibility-switch"
       ></app-switch>
-      @if (changeVisibilitySubmitted) {
+      @if (changeVisibilitySubmitted()) {
         <ng-container *ngTemplateOutlet="feedback"></ng-container>
       }
     </div>
@@ -103,10 +103,10 @@
         {{'user.settings.name-title' | translate}}
       </div>
       <div class="current">
-        @if (user?.name) {
-          <span class="subtitle">{{user?.name}}</span>
+        @if (user()?.name) {
+          <span class="subtitle">{{user()?.name}}</span>
         }
-        @if (!user?.name) {
+        @if (!user()?.name) {
           <span class="error">{{'user.settings.name_undefined-feedback' | translate}}</span>
         }
       </div>
@@ -117,8 +117,8 @@
           @if (isInvalid('newName', 'changeNameForm')) {
             <span class="formFeedbackError">{{getError('newName', 'changeNameForm')}}</span>
           }
-          @if (changeNameSubmitted) {
-            @if ((backendError$ | async); as error) {
+          @if (changeNameSubmitted()) {
+            @if (backendError(); as error) {
               <span class="formFeedbackError backendErrors">{{error}}</span>
             }
           }
@@ -131,7 +131,7 @@
             [ngClass]="{controlInvalid: isInvalid('newName', 'changeNameForm')}"
             >
             <button type="submit" data-testid="name-submit">{{'user.settings.change-button' | translate}}</button>
-            @if (changeNameSubmitted) {
+            @if (changeNameSubmitted()) {
               <ng-container *ngTemplateOutlet="feedback"></ng-container>
             }
           </div>
@@ -144,7 +144,7 @@
           {{'user.settings.username-title' | translate}}
         </div>
         <div class="subtitle">
-          {{user?.username}}
+          {{user()?.username}}
         </div>
       </div>
       <form [formGroup]="changeUserNameForm" (ngSubmit)="changeUserName()">
@@ -153,8 +153,8 @@
             @if (isInvalid('newUserName', 'changeUserNameForm')) {
               <span class="formFeedbackError">{{getError('newUserName', 'changeUserNameForm')}}</span>
             }
-            @if (changeUserNameSubmitted) {
-              @if ((backendError$ | async); as error) {
+            @if (changeUserNameSubmitted()) {
+              @if (backendError(); as error) {
                 <span class="formFeedbackError backendErrors">{{error}}</span>
               }
             }
@@ -167,7 +167,7 @@
               [ngClass]="{controlInvalid: isInvalid('newUserName', 'changeUserNameForm')}"
               >
               <button type="submit" data-testid="username-submit">{{'user.settings.change-button' | translate}}</button>
-              @if (changeUserNameSubmitted) {
+              @if (changeUserNameSubmitted()) {
                 <ng-container *ngTemplateOutlet="feedback"></ng-container>
               }
             </div>
@@ -212,8 +212,8 @@
               @if (isInvalid('newEmail', 'changeEmailForm')) {
                 <span class="formFeedbackError">{{getError('newEmail', 'changeEmailForm')}}</span>
               }
-              @if (changeEmailSubmitted) {
-                @if ((backendError$ | async); as error) {
+              @if (changeEmailSubmitted()) {
+                @if (backendError(); as error) {
                   <span class="formFeedbackError backendErrors">{{error}}</span>
                 }
               }
@@ -226,20 +226,20 @@
                 [ngClass]="{controlInvalid: isInvalid('newEmail', 'changeEmailForm')}"
                 >
                 <button type="submit" data-testid="email-submit">{{'user.settings.change-button' | translate}}</button>
-                @if (changeEmailSubmitted) {
+                @if (changeEmailSubmitted()) {
                   <ng-container *ngTemplateOutlet="feedback"></ng-container>
                 }
               </div>
             </form>
             @if (!userPageService.loggedUserEmail?.emailConfirmed) {
               <div class="flex justify-c-e gap-s relative">
-                @if (sendEmailVerificationCodeSubmitted) {
-                  @if ((backendError$ | async); as error) {
+                @if (sendEmailVerificationCodeSubmitted()) {
+                  @if (backendError(); as error) {
                     <span class="formFeedbackError backendErrors">{{error}}</span>
                   }
                 }
                 <button (click)="sendEmailVerificationCode()">{{'user.settings.email_verification-button' | translate}}</button>
-                @if (sendEmailVerificationCodeSubmitted) {
+                @if (sendEmailVerificationCodeSubmitted()) {
                   <ng-container *ngTemplateOutlet="feedback"></ng-container>
                 }
               </div>
@@ -258,8 +258,8 @@
           <form class="flex justify-c-e align-i-c gap-m relative"
             [ngClass]="{'flex-col': window.isTabletPortraitOrLess()}"
             [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
-            @if (changePasswordSubmitted) {
-              @if ((backendError$ | async); as error) {
+            @if (changePasswordSubmitted()) {
+              @if (backendError(); as error) {
                 <span class="formFeedbackError backendErrors">{{error}}</span>
               }
             }
@@ -303,7 +303,7 @@
                     }
                   </div>
                   <button type="submit" data-testid="password-submit">{{'user.settings.change-button' | translate}}</button>
-                  @if (changePasswordSubmitted) {
+                  @if (changePasswordSubmitted()) {
                     <ng-container *ngTemplateOutlet="feedback"></ng-container>
                   }
                 </form>
@@ -317,24 +317,24 @@
                 </div>
               </div>
             </div>
-            @if (deleteDialog) {
+            @if (deleteDialog()) {
               <app-dialog
                 [title]="'Are you sure you want to delete your account?'"
                 [body]="'All your teams will be removed'"
                 [trueButtonText]="'No'"
                 [falseButtonText]="'Yes'"
-                [visible]="deleteDialog"
+                [visible]="deleteDialog()"
                 (choose)="chooseEvent($event)"
                 data-testid="delete-confirm-dialog"
               ></app-dialog>
             }
             <ng-template #feedback>
-              @if (isSubmitting$ | async) {
+              @if (isSubmitting()) {
                 <div class="feedback">
                   <div class="pokemon-spinner"></div>
                 </div>
               }
-              @if ((success$ | async); as error) {
+              @if (success(); as error) {
                 <svg class="feedback" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                   <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -344,7 +344,7 @@
                   </g>
                 </svg>
               }
-              @if ((backendError$ | async); as error) {
+              @if (backendError(); as error) {
                 @if (!window.isMobile()) {
                   <svg class="feedback" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>

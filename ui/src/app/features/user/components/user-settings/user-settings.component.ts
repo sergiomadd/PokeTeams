@@ -1,6 +1,6 @@
 import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { Component, effect, inject, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -25,9 +25,9 @@ import { UserPageService } from '../../services/user-page.service';
     selector: 'app-user-settings',
     templateUrl: './user-settings.component.html',
     styleUrl: './user-settings.component.scss',
-    imports: [NgClass, NgTemplateOutlet, SmartInputComponent, SwitchComponent, FormsModule, ReactiveFormsModule, TooltipComponent, DialogComponent, AsyncPipe, TranslatePipe]
+    imports: [NgClass, NgTemplateOutlet, SmartInputComponent, SwitchComponent, FormsModule, ReactiveFormsModule, TooltipComponent, DialogComponent, TranslatePipe]
 })
-export class UserSettingsComponent 
+export class UserSettingsComponent
 {
   store = inject(Store);
   formBuilder = inject(FormBuilder);
@@ -39,47 +39,47 @@ export class UserSettingsComponent
   window = inject(WindowService);
   socialAuthService = inject(SocialAuthService);
 
-  loggedUser$ = this.store.select(selectLoggedUser);
-  isSubmitting$ = this.store.select(selectIsSubmitting);
-  backendError$ = this.store.select(selectError);
-  success$ = this.store.select(selectSuccess);
+  loggedUser = this.store.selectSignal(selectLoggedUser);
+  isSubmitting = this.store.selectSignal(selectIsSubmitting);
+  backendError = this.store.selectSignal(selectError);
+  success = this.store.selectSignal(selectSuccess);
 
-  user?: User;
-  deleteDialog: boolean = false;
-  
+  user = signal<User | undefined>(undefined);
+  deleteDialog = signal<boolean>(false);
+
   readonly feedbackColors = FeedbackColors;
 
-  pictures: string[] = [];
-  showCatalog: boolean = false;
-  changePictureSubmitted: boolean = false;
-  countries: Country[] = [];
-  changeCountrySubmitted: boolean = false;
-  changeVisibilitySubmitted: boolean = false;
-  sendEmailVerificationCodeSubmitted: boolean = false;
+  pictures = signal<string[]>([]);
+  showCatalog = signal<boolean>(false);
+  changePictureSubmitted = signal<boolean>(false);
+  countries = signal<Country[]>([]);
+  changeCountrySubmitted = signal<boolean>(false);
+  changeVisibilitySubmitted = signal<boolean>(false);
+  sendEmailVerificationCodeSubmitted = signal<boolean>(false);
 
-  changeNameButtonClicked: boolean = false;
-  changeNameSubmitted: boolean = false;
+  changeNameButtonClicked = signal<boolean>(false);
+  changeNameSubmitted = signal<boolean>(false);
   changeNameForm = this.formBuilder.group(
   {
     newName: ['', [Validators.required, Validators.maxLength(32)]],
   }, { updateOn: "submit" });
 
-  changeUserNameButtonClicked: boolean = false;
-  changeUserNameSubmitted: boolean = false;
+  changeUserNameButtonClicked = signal<boolean>(false);
+  changeUserNameSubmitted = signal<boolean>(false);
   changeUserNameForm = this.formBuilder.group(
   {
     newUserName: ['', [Validators.required, Validators.maxLength(32)]],
   }, { updateOn: "submit" });
 
-  changeEmailButtonClicked: boolean = false;
-  changeEmailSubmitted: boolean = false;
+  changeEmailButtonClicked = signal<boolean>(false);
+  changeEmailSubmitted = signal<boolean>(false);
   changeEmailForm = this.formBuilder.group(
   {
     newEmail: ['', [Validators.required, Validators.maxLength(256), Validators.email]],
   }, { updateOn: "submit" });
 
-  changePasswordButtonClicked: boolean = false;
-  changePasswordSubmitted: boolean = false;
+  changePasswordButtonClicked = signal<boolean>(false);
+  changePasswordSubmitted = signal<boolean>(false);
   changePasswordForm = this.formBuilder.group(
   {
     currentPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.samePassword()]],
@@ -88,43 +88,48 @@ export class UserSettingsComponent
 
   }, { updateOn: "submit" });
 
-  async ngOnInit()
+  constructor()
   {
-    this.userPageService.user.subscribe((value) => 
+    effect(() =>
     {
-      this.user = value;
+      this.user.set(this.userPageService.user());
     });
 
-    this.pictures = await this.userService.getAllProfilePics();
-
-    this.success$.subscribe(value => 
+    effect(() =>
+    {
+      if(this.success())
       {
-        if(value)
+        if(this.changeNameSubmitted())
         {
-          if(this.changeNameSubmitted)
-          {
-            this.changeNameForm.reset();
-            this.changeNameForm.controls.newName.setErrors(null);
-          }
-          if(this.changeUserNameSubmitted)
-          {
-            this.changeUserNameForm.reset();
-            this.changeUserNameForm.controls.newUserName.setErrors(null);
-          }
-          if(this.changeEmailSubmitted)
-          {
-            this.changeEmailForm.reset();
-            this.changeEmailForm.controls.newEmail.setErrors(null);
-          }
-          if(this.changePasswordSubmitted)
-          {
-            this.changePasswordForm.reset();
-            this.changePasswordForm.controls.currentPassword.setErrors(null);
-            this.changePasswordForm.controls.password.setErrors(null);
-            this.changePasswordForm.controls.confirmPassword.setErrors(null);
-          }
+          this.changeNameForm.reset();
+          this.changeNameForm.controls.newName.setErrors(null);
         }
-      })
+        if(this.changeUserNameSubmitted())
+        {
+          this.changeUserNameForm.reset();
+          this.changeUserNameForm.controls.newUserName.setErrors(null);
+        }
+        if(this.changeEmailSubmitted())
+        {
+          this.changeEmailForm.reset();
+          this.changeEmailForm.controls.newEmail.setErrors(null);
+        }
+        if(this.changePasswordSubmitted())
+        {
+          this.changePasswordForm.reset();
+          this.changePasswordForm.controls.currentPassword.setErrors(null);
+          this.changePasswordForm.controls.password.setErrors(null);
+          this.changePasswordForm.controls.confirmPassword.setErrors(null);
+        }
+      }
+    });
+
+    this.loadPictures();
+  }
+
+  async loadPictures()
+  {
+    this.pictures.set(await this.userService.getAllProfilePics());
   }
 
   chooseEvent($event)
@@ -132,17 +137,17 @@ export class UserSettingsComponent
     if($event)
     {
       this.deleteAccount();
-      this.deleteDialog = !this.deleteDialog;
+      this.deleteDialog.update(value => !value);
     }
     else
     {
-      this.deleteDialog = !this.deleteDialog;
+      this.deleteDialog.update(value => !value);
     }
   }
 
   clickPictureSelector()
   {
-    this.showCatalog = !this.showCatalog;
+    this.showCatalog.update(value => !value);
   }
 
   getPictureKey(path: string | undefined) : string
@@ -157,11 +162,11 @@ export class UserSettingsComponent
   changePicture(path: string)
   {
     this.resetSubmitted();
-    if(path !== this.user?.picture)
+    if(path !== this.user()?.picture)
     {
-      this.changePictureSubmitted = true;
+      this.changePictureSubmitted.set(true);
       const key: string = this.getPictureKey(path);
-      let updateDTO: UserUpdateDTO = 
+      let updateDTO: UserUpdateDTO =
       {
         newPictureKey: key
       }
@@ -173,8 +178,8 @@ export class UserSettingsComponent
   changeCountry($event)
   {
     this.resetSubmitted();
-    this.changeCountrySubmitted = true;
-    let updateDTO: UserUpdateDTO = 
+    this.changeCountrySubmitted.set(true);
+    let updateDTO: UserUpdateDTO =
     {
       newCountryCode: $event.identifier
     }
@@ -184,8 +189,8 @@ export class UserSettingsComponent
   changeVisibility($event)
   {
     this.resetSubmitted();
-    this.changeVisibilitySubmitted = true;
-    let updateDTO: UserUpdateDTO = 
+    this.changeVisibilitySubmitted.set(true);
+    let updateDTO: UserUpdateDTO =
     {
       newVisibility: $event
     }
@@ -195,11 +200,11 @@ export class UserSettingsComponent
   changeName()
   {
     this.resetSubmitted();
-    this.changeNameButtonClicked = true;
+    this.changeNameButtonClicked.set(true);
     if(this.changeNameForm.valid && this.changeNameForm.controls.newName.value != null)
     {
-      this.changeNameSubmitted = true;
-      let updateDTO: UserUpdateDTO = 
+      this.changeNameSubmitted.set(true);
+      let updateDTO: UserUpdateDTO =
       {
         newName: this.changeNameForm.controls.newName.value
       }
@@ -210,11 +215,11 @@ export class UserSettingsComponent
   changeUserName()
   {
     this.resetSubmitted();
-    this.changeUserNameButtonClicked = true;
+    this.changeUserNameButtonClicked.set(true);
     if(this.changeUserNameForm.valid && this.changeUserNameForm.controls.newUserName.value != null)
     {
-      this.changeUserNameSubmitted = true;
-      let updateDTO: UserUpdateDTO = 
+      this.changeUserNameSubmitted.set(true);
+      let updateDTO: UserUpdateDTO =
       {
         newUserName: this.changeUserNameForm.controls.newUserName.value
       }
@@ -225,11 +230,11 @@ export class UserSettingsComponent
   changeEmail()
   {
     this.resetSubmitted();
-    this.changeEmailButtonClicked = true;
+    this.changeEmailButtonClicked.set(true);
     if(this.changeEmailForm.valid && this.changeEmailForm.controls.newEmail.value != null)
     {
-      this.changeEmailSubmitted = true;
-      let updateDTO: UserUpdateDTO = 
+      this.changeEmailSubmitted.set(true);
+      let updateDTO: UserUpdateDTO =
       {
         newEmail: this.changeEmailForm.controls.newEmail.value
       }
@@ -240,13 +245,13 @@ export class UserSettingsComponent
   changePassword()
   {
     this.resetSubmitted();
-    this.changePasswordButtonClicked = true;
+    this.changePasswordButtonClicked.set(true);
     if(this.changePasswordForm.valid
       && this.changePasswordForm.controls.currentPassword.value != null
       && this.changePasswordForm.controls.password.value != null)
     {
-      this.changePasswordSubmitted = true;
-      let updateDTO: UserUpdateDTO = 
+      this.changePasswordSubmitted.set(true);
+      let updateDTO: UserUpdateDTO =
       {
         currentPassword: this.changePasswordForm.controls.currentPassword.value,
         newPassword: this.changePasswordForm.controls.password.value
@@ -257,24 +262,24 @@ export class UserSettingsComponent
 
   tryDeleteAccout()
   {
-    this.deleteDialog = !this.deleteDialog;
+    this.deleteDialog.update(value => !value);
   }
 
   deleteAccount()
   {
     this.socialAuthService.signOut();
-    this.store.dispatch(authActions.deleteAccount()); 
+    this.store.dispatch(authActions.deleteAccount());
   }
-  
+
   logOut()
-  {    
+  {
     this.socialAuthService.signOut();
     this.store.dispatch(authActions.logOut());
   }
 
   sendEmailVerificationCode()
   {
-    this.sendEmailVerificationCodeSubmitted = true;
+    this.sendEmailVerificationCodeSubmitted.set(true);
     this.store.dispatch(authActions.sendVerification());
   }
 
@@ -316,28 +321,28 @@ export class UserSettingsComponent
     switch(formName)
     {
       case "changeNameForm":
-        submitted = this.changeNameButtonClicked;
+        submitted = this.changeNameButtonClicked();
         break;
       case "changeUserNameForm":
-        submitted = this.changeUserNameButtonClicked;
+        submitted = this.changeUserNameButtonClicked();
         break;
       case "changeEmailForm":
-        submitted = this.changeEmailButtonClicked;
+        submitted = this.changeEmailButtonClicked();
         break;
       case "changePasswordForm":
-        submitted = this.changePasswordButtonClicked;
+        submitted = this.changePasswordButtonClicked();
         break;
     }
     return submitted;
   }
 
-  samePassword() : ValidatorFn 
+  samePassword() : ValidatorFn
   {
-    return (control: AbstractControl): ValidationErrors | null => 
+    return (control: AbstractControl): ValidationErrors | null =>
     {
       const passwordControl = control.parent?.get('password');
       const currentPasswordControl = control.parent?.get('currentPassword');
-      if (!passwordControl || !currentPasswordControl) 
+      if (!passwordControl || !currentPasswordControl)
       {
         return null;
       }
@@ -345,13 +350,13 @@ export class UserSettingsComponent
       {
         return null;
       }
-      else if (passwordControl.value === currentPasswordControl.value) 
+      else if (passwordControl.value === currentPasswordControl.value)
       {
         //passwordControl.setErrors({ samePassword: true });
         currentPasswordControl.setErrors({ samePassword: true });
         return { samePassword: true };
       }
-      else 
+      else
       {
         //passwordControl.setErrors(null);
         currentPasswordControl.setErrors(null);
@@ -362,13 +367,13 @@ export class UserSettingsComponent
 
   resetSubmitted()
   {
-    this.changePictureSubmitted = false;
-    this.changeCountrySubmitted = false;
-    this.changeVisibilitySubmitted = false;
-    this.sendEmailVerificationCodeSubmitted = false;
-    this.changeNameSubmitted = false;
-    this.changeUserNameSubmitted = false;
-    this.changeEmailSubmitted = false;
-    this.changePasswordSubmitted = false;
+    this.changePictureSubmitted.set(false);
+    this.changeCountrySubmitted.set(false);
+    this.changeVisibilitySubmitted.set(false);
+    this.sendEmailVerificationCodeSubmitted.set(false);
+    this.changeNameSubmitted.set(false);
+    this.changeUserNameSubmitted.set(false);
+    this.changeEmailSubmitted.set(false);
+    this.changePasswordSubmitted.set(false);
   }
 }
