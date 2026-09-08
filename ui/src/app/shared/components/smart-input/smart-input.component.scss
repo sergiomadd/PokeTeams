@@ -23,7 +23,7 @@ $optionsMaxHeight: 20em;
   top: 100%;
   width: calc(100% - 0.4em);
   min-height: 4em;
-  max-height: 0;
+  max-height: calc($optionHeight * 12);
   margin-left: 0.4em;
   padding: 0.2em;
   box-sizing:border-box;
@@ -35,11 +35,15 @@ $optionsMaxHeight: 20em;
   font-size: small;
 
   visibility: hidden;
+  opacity: 0;
+  transform: translateY(-6px) scaleY(0.98);
+  transform-origin: top;
+  pointer-events: none;
   overflow-y: scroll;
   overflow-x: auto;
   z-index: 3;
 
-  transition: max-height ease-in-out 500ms, visibility ease-in-out 500ms;
+  transition: opacity ease-in-out 150ms, transform ease-in-out 150ms, visibility ease-in-out 150ms;
 }
 
 ul
@@ -47,10 +51,12 @@ ul
   margin: 0;
 }
 
-.results-visible 
+.results-visible
 {
-  max-height: calc($optionHeight * 12);
   visibility: visible !important;
+  opacity: 1;
+  transform: translateY(0) scaleY(1);
+  pointer-events: auto;
 }
 
 .results-loader
