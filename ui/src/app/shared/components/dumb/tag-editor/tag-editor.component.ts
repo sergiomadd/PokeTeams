@@ -1,4 +1,5 @@
-import { Component, ElementRef, inject, input, output, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, input, output, signal, viewChild } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -40,47 +41,52 @@ export class TagEditorComponent
     desc: ['', [Validators.maxLength(256)]],
     color: [0]
   });
+  formName = toSignal(this.form.controls.name.valueChanges);
+  formDesc = toSignal(this.form.controls.desc.valueChanges);
+  formColor = toSignal(this.form.controls.color.valueChanges);
   formSubmitted: boolean = false;
 
-  tag: Tag = 
+  tag = signal<Tag>(
   {
     name: "",
     identifier: "",
     description: "",
     color: 0
-  };
+  });
 
   colorPickerOpen: boolean = false;
   tagBackgroundColors = tagBackgroundColors;
 
-  async ngAfterContentInit()
+  constructor()
   {
     this.resetEditor();
 
-    this.form.controls.name.valueChanges.subscribe(async value => 
-      {
-        this.tag.name = value ?? "";
-        this.tag.identifier = value ?? "";
-      })
-    this.form.controls.desc.valueChanges.subscribe(value => 
-      {
-        this.tag.description = value ?? "";
-      })
-    this.form.controls.color.valueChanges.subscribe(value => 
-      {
-        this.tag = {...this.tag, color: value ?? 0}
-      })
+    effect(() =>
+    {
+      const name = this.formName();
+      this.tag.update(tag => ({...tag, name: name ?? "", identifier: name ?? ""}));
+    })
+    effect(() =>
+    {
+      const desc = this.formDesc();
+      this.tag.update(tag => ({...tag, description: desc ?? ""}));
+    })
+    effect(() =>
+    {
+      const color = this.formColor();
+      this.tag.update(tag => ({...tag, color: color ?? 0}));
+    })
   }
 
   resetEditor()
   {
-    this.tag = 
+    this.tag.set(
     {
       name: this.form.controls.name.value ?? "",
       identifier: "",
       description: this.form.controls.desc.value ?? "",
       color: this.form.controls.color.value ?? 0
-    };
+    });
     this.form.controls.name.setValue("");
     this.form.controls.name.markAsUntouched();
     this.form.controls.name.markAsPristine();
@@ -100,14 +106,21 @@ export class TagEditorComponent
     this.formSubmitted = true;
     if(this.form.valid)
     {
-      let tagAvailable: boolean = await this.teamService.checkTagAvailable(this.tag.name);
+      const name = this.form.controls.name.value ?? "";
+      let tagAvailable: boolean = await this.teamService.checkTagAvailable(name);
       if(!tagAvailable)
       {
         this.form.controls.name.setErrors({ "tagTaken": true });
       }
       else
       {
-        this.addEvent.emit(this.tag);
+        this.addEvent.emit(
+        {
+          ...this.tag(),
+          name,
+          identifier: name,
+          description: this.form.controls.desc.value ?? ""
+        });
         this.resetEditor();
       }
     }
@@ -134,7 +147,7 @@ export class TagEditorComponent
 
   chooseColor($event)
   {
-    this.tag.color = $event;
+    this.tag.update(tag => ({...tag, color: $event}));
   }
 
   isInvalid(key: string) : boolean
