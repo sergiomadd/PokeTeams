@@ -271,7 +271,7 @@ export class TeamEditorComponent
       const tags = this.team().tags;
       if(tags && tag)
       {
-        if(tags.length < 3 && tags.some(t => t.identifier == tag.identifier))
+        if(tags.length < 3 && !tags.some(t => t.identifier == tag.identifier))
         {
           this.team.update(team => team && {...team, tags: [...tags, tag]})
           const updatedTags = this.team().tags;
@@ -296,7 +296,7 @@ export class TeamEditorComponent
     const tags = this.team().tags;
     if(tags && tag)
     {
-      if(tags.length < 3 && tags.some(t => t.identifier == tag.identifier))
+      if(tags.length < 3 && !tags.some(t => t.identifier == tag.identifier))
       {
         this.team.update(team => team && {...team, tags: [...tags, tag]})
         const updatedTags = this.team().tags;
@@ -306,6 +306,13 @@ export class TeamEditorComponent
         }
         this.currentTags.set(updatedTags ? updatedTags.length : 0);
         this.teamEditorService.setExampleTeamModified(true);
+        this.queryService.addCachedTag(
+        {
+          name: tag.name,
+          identifier: tag.identifier,
+          icon: tag.color?.toString(),
+          type: "tag"
+        });
       }
       else if(tags.some(t => t.identifier == tag.identifier))
       {
