@@ -191,7 +191,7 @@ export class TeamComponent
 
   readonly removeEvent = output();
 
-  removeTag(index)
+  removeTag(index: number)
   {
     if(this.removableTags())
     {
