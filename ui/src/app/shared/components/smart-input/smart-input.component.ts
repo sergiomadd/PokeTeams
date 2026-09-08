@@ -1,5 +1,6 @@
 import { NgClass, NgStyle } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, input, model, output, SimpleChanges, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, ElementRef, HostListener, inject, input, model, output, signal, viewChild } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
@@ -51,7 +52,7 @@ export class SmartInputComponent
   {
     const inputValue = this.input();
     if(inputValue && inputValue.nativeElement === document.activeElement
-      && this.showOptions)
+      && this.showOptions())
     {
       this.hoverUp();
     }
@@ -62,7 +63,7 @@ export class SmartInputComponent
   {
     const inputValue = this.input();
     if(inputValue && inputValue.nativeElement === document.activeElement
-      && this.showOptions)
+      && this.showOptions())
     {
       this.hoverDown();
     }
@@ -73,9 +74,9 @@ export class SmartInputComponent
   {
     const targetElement = event.target as HTMLElement | null;
     if (targetElement && document.body.contains(targetElement) 
-      && !this.smartInput().nativeElement.contains(targetElement)) 
+      && !this.smartInput().nativeElement.contains(targetElement))
     {
-      this.showOptions = false;
+      this.showOptions.set(false);
     }
   }
 
@@ -83,48 +84,68 @@ export class SmartInputComponent
   {
     key: [''],
   });
+  formKey = toSignal(this.searchForm.controls.key.valueChanges);
 
-  selected?: QueryItem | undefined;
-  results: QueryItem[] = [];
-  showOptions: boolean = false;
-  activeResult: number = 0;
-  position: number = 0;
-  searching: boolean = false;
+  selected = signal<QueryItem | undefined>(undefined);
+  results = signal<QueryItem[]>([]);
+  showOptions = signal<boolean>(false);
+  activeResult = signal<number>(0);
+  position = signal<number>(0);
+  searching = signal<boolean>(false);
 
   customQueryResult!: QueryItem
 
-  async ngOnInit()
+  constructor()
   {
-    this.customQueryResult = 
+    this.customQueryResult =
     {
       name: "",
       identifier: "",
       type: this.customType() ?? "new"
     }
-    this.searchForm.controls.key.valueChanges.subscribe(async (value) => 
+
+    let previousValueName: string | undefined;
+    effect(() =>
     {
+      const value = this.value();
+      if(value?.name !== previousValueName)
+      {
+        this.selected.set(value);
+        previousValueName = value?.name;
+      }
+    });
+
+    effect(() =>
+    {
+      const value = this.formKey();
+      if(value === undefined) { return; }
       if(value)
       {
         if(this.allowCustom())
         {
-          this.results[0] = 
+          this.results.update(results =>
           {
-            name: "",
-            identifier: "new",
-            type: this.customType() ?? "new"
-          }
-        }          
+            const updated = [...results];
+            updated[0] =
+            {
+              name: "",
+              identifier: "new",
+              type: this.customType() ?? "new"
+            }
+            return updated;
+          });
+        }
         if(this.updateOnChange())
         {
           this.updateEvent.emit(value);
         }
         else
         {
-          await this.search(value);
+          this.search(value);
         }
         if(this.disableSearch()){return;}
-        this.activeResult = 0;
-        this.position = 0;
+        this.activeResult.set(0);
+        this.position.set(0);
       }
       else
       {
@@ -141,21 +162,13 @@ export class SmartInputComponent
         {
           if(this.searchWithEmpty())
           {
-            await this.search(value);
+            this.search(value);
           }
-          this.results = [];
-          this.showOptions = false;
+          this.results.set([]);
+          this.showOptions.set(false);
         }
       }
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges)
-  {
-    if(changes["value"] && changes["value"].currentValue?.name !== changes["value"].previousValue?.name)
-    {
-      this.selected = this.value();
-    }
   }
 
   async search(key: string | null)
@@ -163,25 +176,25 @@ export class SmartInputComponent
     const getter = this.getter();
     if(getter)
     {
-      this.searching = true;
-      this.showOptions = true;
+      this.searching.set(true);
+      this.showOptions.set(true);
       getter(key).subscribe(
         {
-          next: (response) => 
+          next: (response) =>
           {
-            this.results = response;
+            this.results.set(response);
             if(this.allowCustom() && key)
             {
               this.customQueryResult.name = key;
               this.customQueryResult.identifier = key;
-              this.results = [this.customQueryResult].concat(this.results);
+              this.results.update(results => [this.customQueryResult].concat(results));
             }
-            this.searching = false;
+            this.searching.set(false);
           },
-          error: (error) => 
+          error: (error) =>
           {
-            this.results = [];
-            this.searching = false;
+            this.results.set([]);
+            this.searching.set(false);
           }
         }
       )
@@ -192,10 +205,10 @@ export class SmartInputComponent
   {
     if(this.keepSelected())
     {
-      this.selected = selectedResult;
+      this.selected.set(selectedResult);
     }
     this.searchForm.controls.key.setValue("");
-    this.showOptions = false;
+    this.showOptions.set(false);
     this.input().nativeElement.blur();
     this.selectEvent.emit(selectedResult);
     this.focusNext();
@@ -203,12 +216,12 @@ export class SmartInputComponent
 
   removeSelected()
   {
-    this.selected = undefined;
+    this.selected.set(undefined);
     this.searchForm.controls.key.setValue("");
-    setTimeout(() => 
+    setTimeout(() =>
     {
       const inputValue = this.input();
-      if (inputValue) 
+      if (inputValue)
       {
         inputValue.nativeElement.focus();
       }
@@ -221,25 +234,25 @@ export class SmartInputComponent
     const allGetter = this.allGetter();
     if(allGetter)
     {
-      this.searching = true;
+      this.searching.set(true);
       const allGetterIndex = this.allGetterIndex();
       if(allGetterIndex)
       {
         allGetter(allGetterIndex).subscribe(
           {
-            next: (response) => 
+            next: (response) =>
             {
-              this.results = response;
+              this.results.set(response);
               if(this.allowCustom())
               {
-                this.results = [this.customQueryResult].concat(this.results);
+                this.results.update(results => [this.customQueryResult].concat(results));
               }
-              this.searching = false;
+              this.searching.set(false);
             },
-            error: (error) => 
+            error: (error) =>
             {
-              this.results = [];
-              this.searching = false;
+              this.results.set([]);
+              this.searching.set(false);
             }
           }
         )
@@ -248,18 +261,18 @@ export class SmartInputComponent
       {
         allGetter().subscribe(
           {
-            next: (response) => 
+            next: (response) =>
             {
-              this.results = response;
+              this.results.set(response);
               if(this.allowCustom())
               {
-                this.results = [this.customQueryResult].concat(this.results);
+                this.results.update(results => [this.customQueryResult].concat(results));
               }
-              this.searching = false;
+              this.searching.set(false);
             },
-            error: (error) => 
+            error: (error) =>
             {
-              this.results = [];
+              this.results.set([]);
             }
           }
         )
@@ -276,15 +289,16 @@ export class SmartInputComponent
   {
     if(!this.disabled() && !this.disableSearch())
     {
-      if((this.results.length > 0 && (this.allowCustom() || this.results.length > 1)) 
+      const results = this.results();
+      if((results.length > 0 && (this.allowCustom() || results.length > 1))
         || this.searchForm.controls.key.value)
       {
-        this.showOptions = true;
+        this.showOptions.set(true);
       }
       else if(this.allGetter())
       {
         this.getAllResults();
-        this.showOptions = true;
+        this.showOptions.set(true);
       }
     }
   }
@@ -296,15 +310,15 @@ export class SmartInputComponent
 
   hoverUp()
   {
-    if(this.activeResult > 0)
+    if(this.activeResult() > 0)
     {
-      this.activeResult--;
+      this.activeResult.update(activeResult => activeResult - 1);
     }
-    if(this.position > 0)
+    if(this.position() > 0)
     {
-      this.position--;
+      this.position.update(position => position - 1);
     }
-    if(this.position === 0)
+    if(this.position() === 0)
     {
       this.resultsDiv().nativeElement.scrollBy(0, -38);
     }
@@ -312,15 +326,15 @@ export class SmartInputComponent
 
   hoverDown()
   {
-    if(this.activeResult < this.results.length - 1)
+    if(this.activeResult() < this.results().length - 1)
     {
-      this.activeResult++;
+      this.activeResult.update(activeResult => activeResult + 1);
     }
-    if(this.position >= 0 && this.position < 9)
+    if(this.position() >= 0 && this.position() < 9)
     {
-      this.position++;
+      this.position.update(position => position + 1);
     }
-    if(this.position === 9)
+    if(this.position() === 9)
     {
       this.resultsDiv().nativeElement.scrollBy(0, 38);
     }
