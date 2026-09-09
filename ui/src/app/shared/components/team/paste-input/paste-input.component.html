@@ -7,7 +7,7 @@
       <div class="pointer pad-m bor-rad-10" (click)="selectTab(1)" data-testid="editor-tab">
         {{"team.input.editor" | translate}}
       </div>
-      <div class="selector" [ngClass]="{right: tabs[1]}"></div>
+      <div class="selector" [ngClass]="{right: tabs()[1]}"></div>
     </div>
   </div>
   @if (tabs()[0]) {
