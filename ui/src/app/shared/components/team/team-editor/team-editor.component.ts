@@ -218,7 +218,8 @@ export class TeamEditorComponent
   reset()
   {
     this.teamEditorService.setEmptyTeam();
-  }  
+    this.teamPrivateFeedback.set(false);
+  }
 
   matchUserToPlayer()
   {
@@ -361,10 +362,10 @@ export class TeamEditorComponent
 
   showIVsCheckEvent($event: boolean)
   {
-    this.teamEditorService.setExampleTeamModified(true);
     if(this.team().visibility)
     {
       this.team.update(team => team && {...team, options: {...team.options, ivsVisibility: $event}})
+      this.teamEditorService.setExampleTeamModified(true);
     }
     else
     {
@@ -374,10 +375,10 @@ export class TeamEditorComponent
 
   showEVsCheckEvent($event: boolean)
   {
-    this.teamEditorService.setExampleTeamModified(true);
     if(this.team().visibility)
     {
       this.team.update(team => team && {...team, options: {...team.options, evsVisibility: $event}})
+      this.teamEditorService.setExampleTeamModified(true);
     }
     else
     {
@@ -387,10 +388,10 @@ export class TeamEditorComponent
 
   showNatureCheckEvent($event: boolean)
   {
-    this.teamEditorService.setExampleTeamModified(true);
     if(this.team().visibility)
     {
       this.team.update(team => team && {...team, options: {...team.options, naturesVisibility: $event}})
+      this.teamEditorService.setExampleTeamModified(true);
     }
     else
     {
@@ -404,7 +405,8 @@ export class TeamEditorComponent
     this.team.update(team => team && {...team, visibility: $event})
     if($event)
     {
-      this.team.update(team => team && {...team, options: 
+      this.teamPrivateFeedback.set(false);
+      this.team.update(team => team && {...team, options:
       {
         ...team.options,
         ivsVisibility: false,
