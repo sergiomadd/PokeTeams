@@ -85,7 +85,6 @@ export class TeamEditorComponent
   exampleTeamModified = signal<boolean | undefined>(undefined);
   readonly feedbackColors = FeedbackColors;
 
-  readonly playerInput = viewChild<SmartInputComponent>('playerInput');
 
   constructor()
   {
@@ -158,7 +157,7 @@ export class TeamEditorComponent
       {
         if(player.length <= 32)
         {
-          this.team.update(team => team && {...team, user: 
+          this.team.update(team => team && {...team, player:
             {
               username: player,
               picture: undefined,
@@ -170,8 +169,8 @@ export class TeamEditorComponent
       }
       else
       {
-        this.team.update(team => team && {...team, user: undefined});
-        this.teamEditorService.setExampleTeamModified(false); 
+        this.team.update(team => team && {...team, player: undefined});
+        this.teamEditorService.setExampleTeamModified(false);
       }
     })
 
@@ -223,16 +222,18 @@ export class TeamEditorComponent
 
   matchUserToPlayer()
   {
-    if(this.loggedUser() && this.team().user)
+    const loggedUser = this.loggedUser();
+    if(loggedUser)
     {
-      this.team.update(team => team && {...team, user: team.player})
+      this.team.update(team => team && {...team, player:
+        {
+          username: loggedUser.username,
+          picture: loggedUser.picture,
+          registered: true
+        }
+      });
+      this.teamForm.controls.player.setValue(loggedUser.username);
       this.teamComponent().checkUserToPlayer();
-      const playerInput = this.playerInput();
-      const username = this.team().user?.username
-      if(playerInput && username)
-      {
-        playerInput.setInputValue(username)
-      }
     }
   }
 
