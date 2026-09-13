@@ -78,7 +78,7 @@
       >{{'shared.team.team' | translate}} {{which}}</span>
     </div>
     <form [formGroup]="which === 'A' ? teamAForm : teamBForm" class="relative inputs">
-      @if (which === 'A' ? !showPasteAInput : !showPasteBInput) {
+      @if (which === 'A' ? !showPasteAInput() : !showPasteBInput()) {
         <div class="flex flex-col align-i-c gap-m">
           <input
             type="text"
@@ -106,7 +106,7 @@
             }
           </div>
         }
-        @if (which === 'A' ? showPasteAInput : showPasteBInput) {
+        @if (which === 'A' ? showPasteAInput() : showPasteBInput()) {
           <div class="relative flex flex-col align-i-c gap-m">
             <textarea
               formControlName="{{which === 'A' ? 'pasteA' : 'pasteB'}}"
@@ -135,7 +135,7 @@
             }
             <button type="button"
               class="no-shadow button compare-paste-box-toggle icon-m pad-s"
-              [ngClass]="{'compare-paste-box-toggle-rotate': which === 'A' ? shrinkPasteAInput : shrinkPasteBInput}"
+              [ngClass]="{'compare-paste-box-toggle-rotate': which === 'A' ? shrinkPasteAInput() : shrinkPasteBInput()}"
               (click)="which === 'A' ? toggleAPasteInput() : toggleBPasteInput()"
               >
               <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
@@ -148,16 +148,16 @@
         }
         <app-switch
           class="input-toggle"
-          [state]="which === 'A' ? !showPasteAInput : !showPasteBInput"
+          [state]="which === 'A' ? !showPasteAInput() : !showPasteBInput()"
           [leftSVG]="leftSVG"
           [rightSVG]="rightSVG"
           [sizeSVG]="'1em'"
           (checkEvent)="which === 'A' ? toggleAInputs() : toggleBInputs()"
         ></app-switch>
       </form>
-      @if (which === 'A' ? !teamANotFound : !teamBNotFound) {
-        @if (which === 'A' ? !teamALoading : !teamBLoading) {
-          @if (which === 'A' ? teamA : teamB) {
+      @if (which === 'A' ? !teamANotFound() : !teamBNotFound()) {
+        @if (which === 'A' ? !teamALoading() : !teamBLoading()) {
+          @if (which === 'A' ? teamA() : teamB()) {
             <app-team-battle
               [team]="which === 'A' ? teamA() : teamB()"
               [which]="which"

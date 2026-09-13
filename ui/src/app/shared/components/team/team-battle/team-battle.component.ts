@@ -1,4 +1,4 @@
-import { Component, inject, SimpleChanges, input, output, viewChildren, signal, effect } from '@angular/core';
+import { Component, inject, SimpleChanges, input, output, viewChildren, signal, effect, untracked } from '@angular/core';
 import { ParserService } from '../../../../core/helpers/parser.service';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -64,8 +64,14 @@ export class TeamBattleComponent
     effect(() =>
     {
       this.team();
-      this.selectPokemon(0, true, 1);
-      this.selectPokemon(1, true, 2);
+      // untracked: selectPokemon(force) reads pokemonIndex1/pokemonIndex2 to build its emit
+      // payload. Without untracked, this effect would also depend on those signals and
+      // re-fire (resetting the selection back to [0, 1]) every time a real click updates them.
+      untracked(() =>
+      {
+        this.selectPokemon(0, true, 1);
+        this.selectPokemon(1, true, 2);
+      });
     })
   }
 
@@ -92,17 +98,17 @@ export class TeamBattleComponent
     {
       this.pokemonIndex2.set(-1);
     }
-    else if(!this.pokemonIndex1() || this.order() === 1)
+    else if(this.pokemonIndex1() === -1 || this.order() === 1)
     {
       this.pokemonIndex1.set(index);
       this.order.set(2);
     }
-    else if(!this.pokemonIndex2() || this.order() === 2)
+    else if(this.pokemonIndex2() === -1 || this.order() === 2)
     {
       this.pokemonIndex2.set(index);
       this.order.set(1);
     }
-    if(this.pokemonIndex1() && this.pokemonIndex2())
+    if(this.pokemonIndex1() !== -1 && this.pokemonIndex2() !== -1)
     {
       this.closeAllTooltips();
     }

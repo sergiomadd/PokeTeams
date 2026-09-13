@@ -60,7 +60,7 @@ export class TeamTableComponent
 
   teamsToCompare = this.compareService.teamsToCompare;
   teamsToCompareFeedback = signal<string | undefined>(undefined);
-  teamsToCompareOpen = signal<boolean>(false);
+  teamsToCompareOpen = signal<boolean>(true);
 
   firstLoad = true;
   teamsPerPage = this.store.selectSignal(selectTeamsPerPage);

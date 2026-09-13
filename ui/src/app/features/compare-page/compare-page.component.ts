@@ -1,5 +1,5 @@
 import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -145,6 +145,9 @@ export class ComparePageComponent
   selectedStat: Stat = this.statSelectors[this.selectedStatIndex];
   statList = signal<ComparePokemon[] | undefined>(undefined);
 
+  firstFormIdARun: boolean = true;
+  firstFormIdBRun: boolean = true;
+
   constructor()
   {
     effect(() =>
@@ -186,9 +189,11 @@ export class ComparePageComponent
       this.calculateStatList(this.selectedStatIndex);
     })
 
-    effect(() => 
+    effect(() =>
     {
-      const id = this.tryGetTeamId(this.formIdA())
+      const formIdA = this.formIdA();
+      if(this.firstFormIdARun) { this.firstFormIdARun = false; return; }
+      const id = this.tryGetTeamId(formIdA)
       this.teamAId.set(id);
       if(id && this.teamAForm.controls.idA.valid)
       {
@@ -203,9 +208,11 @@ export class ComparePageComponent
       }
     });
 
-    effect(() => 
+    effect(() =>
     {
-      const id = this.tryGetTeamId(this.formIdB())
+      const formIdB = this.formIdB();
+      if(this.firstFormIdBRun) { this.firstFormIdBRun = false; return; }
+      const id = this.tryGetTeamId(formIdB)
       this.teamBId.set(id);
       if(id && this.teamBForm.controls.idB.valid)
       {
@@ -225,7 +232,7 @@ export class ComparePageComponent
       const pasteA = this.formPasteA();
       if(pasteA && this.teamAForm.controls.pasteA.valid)
       {
-        this.teamA.set(
+        untracked(() => this.teamA.set(
         {
           ...this.teamA(),
           id: "",
@@ -234,7 +241,7 @@ export class ComparePageComponent
           viewCount: 0,
           date: "",
           visibility: true
-        } as Team);
+        } as Team));
         this.teamANotFound.set(false);
         this.teamALoading.set(true);
         let formData = pasteA;
@@ -279,7 +286,7 @@ export class ComparePageComponent
       const pasteB = this.formPasteB();
       if(pasteB && this.teamBForm.controls.pasteB.valid)
       {
-        this.teamB.set(
+        untracked(() => this.teamB.set(
         {
           ...this.teamB(),
           id: "",
@@ -288,7 +295,7 @@ export class ComparePageComponent
           viewCount: 0,
           date: "",
           visibility: true
-        } as Team);
+        } as Team));
         this.teamBNotFound.set(false);
         this.teamBLoading.set(true);
         let formData = pasteB;
@@ -328,7 +335,7 @@ export class ComparePageComponent
       }
     });
 
-    effect(() => 
+    effect(() =>
     {
       this.selectedLang(); //Dependency only
       const teamAId = this.teamAId()
@@ -421,71 +428,77 @@ export class ComparePageComponent
 
   calculateStatList(statIndex: number)
   {
-    this.teamA.update(team => 
+    // untracked: this reads and writes teamA/teamB in the same call, and it's invoked from
+    // several effects that must NOT end up depending on teamA/teamB (that would make them
+    // re-trigger themselves every time they write, looping forever)
+    untracked(() =>
     {
-      if (!team) return team;
-      return {
-        ...team,
-        pokemons: team.pokemons.map(pokemon => 
-        {
-          if (!pokemon) { return pokemon; }
-          return {
-            ...pokemon,
-            calculatedStats: this.pokemonStatService.calculateStats(pokemon, team.options)
-          };
-        })
-      }
-    });
-    this.teamB.update(team => 
-    {
-      if (!team) return team;
-      return {
-        ...team,
-        pokemons: team.pokemons.map(pokemon => 
-        {
-          if (!pokemon) { return pokemon; }
-          return {
-            ...pokemon,
-            calculatedStats: this.pokemonStatService.calculateStats(pokemon, team.options)
-          };
-        })
-      }
-    });
-    
-    if((this.teamA()?.pokemons || this.teamB()?.pokemons) && statIndex !== undefined)
-    {
-      const statListA: ComparePokemon[] | undefined =  this.teamA()?.pokemons.map((pokemon, index) => (
+      this.teamA.update(team =>
       {
-        dexNumber: pokemon?.dexNumber,
-        pokemonName: pokemon?.name,
-        sprite: pokemon?.sprite,
-        stats: pokemon?.calculatedStats,
-        whichTeam: "A",
-        sourceIndex: index
-      }));
-      const statListB: ComparePokemon[] | undefined =  this.teamB()?.pokemons.map((pokemon, index) => (
+        if (!team) return team;
+        return {
+          ...team,
+          pokemons: team.pokemons.map(pokemon =>
+          {
+            if (!pokemon) { return pokemon; }
+            return {
+              ...pokemon,
+              calculatedStats: this.pokemonStatService.calculateStats(pokemon, team.options)
+            };
+          })
+        }
+      });
+      this.teamB.update(team =>
       {
-        dexNumber: pokemon?.dexNumber,
-        pokemonName: pokemon?.name,
-        sprite: pokemon?.sprite,
-        stats: pokemon?.calculatedStats,
-        whichTeam: "B",
-        sourceIndex: index
-      }));
+        if (!team) return team;
+        return {
+          ...team,
+          pokemons: team.pokemons.map(pokemon =>
+          {
+            if (!pokemon) { return pokemon; }
+            return {
+              ...pokemon,
+              calculatedStats: this.pokemonStatService.calculateStats(pokemon, team.options)
+            };
+          })
+        }
+      });
 
-      if(!statListA && statListB)
+      if((this.teamA()?.pokemons || this.teamB()?.pokemons) && statIndex !== undefined)
       {
-        this.statList.set([...this.handleMismatch(this.sortByStatIndex(statListB?.concat(statListA ?? []), statIndex, false), statIndex)]);
+        const statListA: ComparePokemon[] | undefined =  this.teamA()?.pokemons.map((pokemon, index) => (
+        {
+          dexNumber: pokemon?.dexNumber,
+          pokemonName: pokemon?.name,
+          sprite: pokemon?.sprite,
+          stats: pokemon?.calculatedStats,
+          whichTeam: "A",
+          sourceIndex: index
+        }));
+        const statListB: ComparePokemon[] | undefined =  this.teamB()?.pokemons.map((pokemon, index) => (
+        {
+          dexNumber: pokemon?.dexNumber,
+          pokemonName: pokemon?.name,
+          sprite: pokemon?.sprite,
+          stats: pokemon?.calculatedStats,
+          whichTeam: "B",
+          sourceIndex: index
+        }));
+
+        if(!statListA && statListB)
+        {
+          this.statList.set([...this.handleMismatch(this.sortByStatIndex(statListB?.concat(statListA ?? []), statIndex, false), statIndex)]);
+        }
+        else
+        {
+          this.statList.set([...this.handleMismatch(this.sortByStatIndex(statListA?.concat(statListB ?? []), statIndex, false), statIndex)]);
+        }
       }
       else
       {
-        this.statList.set([...this.handleMismatch(this.sortByStatIndex(statListA?.concat(statListB ?? []), statIndex, false), statIndex)]);
+        this.statList.set(undefined);
       }
-    }
-    else
-    {
-      this.statList.set(undefined);
-    }
+    });
   }
 
   sortByStatIndex(statList: ComparePokemon[] | undefined, statIndex: number, ascending: boolean = true): any[] 
