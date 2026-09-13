@@ -24,7 +24,7 @@
             <button
               class="button relative"
               (click)="editTeam()"
-              [routerLink]="['/edit/', teamKey]"
+              [routerLink]="['/edit/', teamKey()]"
               >
               {{"team.view.edit-button" | translate}}
             </button>

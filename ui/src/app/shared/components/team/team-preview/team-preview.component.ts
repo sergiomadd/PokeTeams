@@ -224,19 +224,12 @@ export class TeamPreviewComponent
   }
 
   clickSection(index: number)
-  {    
-    if(this.tooltips[index])
+  {
+    this.tooltips.update(tooltips =>
     {
-      this.tooltips[index] = false;
-    }
-    else
-    {
-      for(var i = 0; i < this.tooltips.length; i++) 
-      {
-        this.tooltips[i] = false;
-      }
-      this.tooltips[index] = true;
-    }
+      const wasOpen = tooltips[index];
+      return tooltips.map((_, i) => i === index ? !wasOpen : false);
+    });
   }
 
   compare()

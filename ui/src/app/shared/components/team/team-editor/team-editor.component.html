@@ -2,7 +2,7 @@
   <div class="flex-col gap-l" style="margin-top: 1em;">
     <form class="flex-col justify-c-c align-i-c" [formGroup]="teamForm">
       <div class="team-editor-inputs-wrapper flex wrap justify-c-c align-i-c gap-m"
-        [ngClass]="{'team-editor-inputs-wrapper-user': loggedUser}"
+        [ngClass]="{'team-editor-inputs-wrapper-user': loggedUser()}"
         >
         <div class="editor-input relative">
           @if (!loggedUser()) {

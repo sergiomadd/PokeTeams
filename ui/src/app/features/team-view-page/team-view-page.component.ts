@@ -202,7 +202,7 @@ export class TeamViewPageComponent
   copyLink()
   {
     this.linkCopied.set(true);
-    this.util.copyToClipboard(environment.url + this.teamKey);
+    this.util.copyToClipboard(environment.url + this.teamKey());
     setTimeout(()=>
     {
       this.linkCopied.set(false);

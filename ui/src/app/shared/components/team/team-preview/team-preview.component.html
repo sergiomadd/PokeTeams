@@ -62,7 +62,7 @@
           [ngClass]="
           {
             section: true,
-            'poke-tooltip-selected-outline': tooltips[1],
+            'poke-tooltip-selected-outline': tooltips()[1],
             'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
           }"
             >
@@ -76,7 +76,7 @@
               <app-poke-tooltip
                 [content]="tournamentPreview"
                 [side]="'top'"
-                [visible]="tooltips[1]"
+                [visible]="tooltips()[1]"
                 [mobileChanged]="window.isTabletPortraitOrLess()"
                 class="tooltip-component"
                 >
@@ -95,7 +95,7 @@
           [ngClass]="
           {
             section: true,
-            'poke-tooltip-selected-outline': tooltips[2],
+            'poke-tooltip-selected-outline': tooltips()[2],
             'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
           }"
             >
@@ -106,7 +106,7 @@
               <app-poke-tooltip
                 [content]="regulationPreview"
                 [side]="'top'"
-                [visible]="tooltips[2]"
+                [visible]="tooltips()[2]"
                 [mobileChanged]="window.isTabletPortraitOrLess()"
                 class="tooltip-component"
                 >
