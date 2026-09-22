@@ -338,16 +338,19 @@ export class ComparePageComponent
     effect(() =>
     {
       this.selectedLang(); //Dependency only
-      const teamAId = this.teamAId()
-      const teamBId = this.teamBId()
-      if(teamAId)
+      untracked(() =>
       {
-        this.getTeamA(teamAId);
-      }
-      if(teamBId)
-      {
-        this.getTeamB(teamBId);
-      }
+        const teamAId = this.teamAId()
+        const teamBId = this.teamBId()
+        if(teamAId)
+        {
+          this.getTeamA(teamAId);
+        }
+        if(teamBId)
+        {
+          this.getTeamB(teamBId);
+        }
+      });
     })
   }
 
