@@ -63,13 +63,17 @@ namespace api.Services
         {
             PokemonDataDTO pokemonData = await GetPokemonDataByTeamPokemonModel(pokemon, langId);
 
-            List<MoveDTO?> moves = new List<MoveDTO?>
+            List<string> moveIdentifiers = new List<string>
             {
-                await _moveService.GetMoveByIdentifier(pokemon.Move1Identifier ?? "", langId),
-                await _moveService.GetMoveByIdentifier(pokemon.Move2Identifier ?? "", langId),
-                await _moveService.GetMoveByIdentifier(pokemon.Move3Identifier ?? "", langId),
-                await _moveService.GetMoveByIdentifier(pokemon.Move4Identifier ?? "", langId)
+                pokemon.Move1Identifier ?? "",
+                pokemon.Move2Identifier ?? "",
+                pokemon.Move3Identifier ?? "",
+                pokemon.Move4Identifier ?? ""
             };
+            Dictionary<string, MoveDTO> movesByIdentifier = await _moveService.GetMovesByIdentifiers(moveIdentifiers, langId);
+            List<MoveDTO?> moves = moveIdentifiers
+                .Select(identifier => movesByIdentifier.TryGetValue(identifier, out MoveDTO? move) ? move : null)
+                .ToList();
 
             PokemonDTO pokemonDTO = new PokemonDTO
             {
@@ -139,13 +143,17 @@ namespace api.Services
 
         public async Task<PokemonPreviewDTO> BuildPokemonPreviewDTO(TeamPokemon teamPokemon, int langId)
         {
-            List<MovePreviewDTO?> moves = new List<MovePreviewDTO?>()
+            List<string> moveIdentifiers = new List<string>
             {
-                await _moveService.GetMovePreviewByIdentifier(teamPokemon.Move1Identifier ?? "", langId),
-                await _moveService.GetMovePreviewByIdentifier(teamPokemon.Move2Identifier ?? "", langId),
-                await _moveService.GetMovePreviewByIdentifier(teamPokemon.Move3Identifier ?? "", langId),
-                await _moveService.GetMovePreviewByIdentifier(teamPokemon.Move4Identifier ?? "", langId)
+                teamPokemon.Move1Identifier ?? "",
+                teamPokemon.Move2Identifier ?? "",
+                teamPokemon.Move3Identifier ?? "",
+                teamPokemon.Move4Identifier ?? ""
             };
+            Dictionary<string, MovePreviewDTO> movePreviewsByIdentifier = await _moveService.GetMovePreviewsByIdentifiers(moveIdentifiers, langId);
+            List<MovePreviewDTO?> moves = moveIdentifiers
+                .Select(identifier => movePreviewsByIdentifier.TryGetValue(identifier, out MovePreviewDTO? move) ? move : null)
+                .ToList();
 
             return new PokemonPreviewDTO
             {
