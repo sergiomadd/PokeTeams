@@ -55,8 +55,8 @@ builder.Services.AddAuthentication(option =>
     })
     .AddGoogle("google", opt =>
     {
-        opt.ClientId = builder.Configuration["Google:Secret"] ?? "";
-        opt.ClientSecret = builder.Configuration["Google:Id"] ?? "";
+        opt.ClientId = builder.Configuration["Google:Id"] ?? "";
+        opt.ClientSecret = builder.Configuration["Google:Secret"] ?? "";
         opt.SignInScheme = JwtBearerDefaults.AuthenticationScheme;
         opt.CallbackPath = "/auth/signin-google";
     })
