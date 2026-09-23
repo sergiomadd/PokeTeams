@@ -133,8 +133,8 @@ namespace api.Middlewares
                     var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
                     return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
                     {
-                        PermitLimit = 2,
-                        Window = TimeSpan.FromSeconds(2),
+                        PermitLimit = 5,
+                        Window = TimeSpan.FromSeconds(1),
                         QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                         QueueLimit = 0
                     });
