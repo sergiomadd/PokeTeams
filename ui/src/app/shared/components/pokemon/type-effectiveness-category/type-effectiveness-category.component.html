@@ -1,0 +1,13 @@
+@if (types()?.length) {
+  <div class="type-category">
+    <div class="type-category-text">
+      <span class="bold">{{multiplier()}}</span>
+    </div>
+    <div class="type-category-icons">
+      @for (type of types(); track type; let i = $index; let last = $last) {
+        <img src="{{type.iconPath}}" title="{{type.name.content}}" alt="{{type.name.content}}" class="icon-s"
+          [ngClass]="{lastType: last && (i | shouldBeInMiddlePipe:types())}">
+      }
+    </div>
+  </div>
+}

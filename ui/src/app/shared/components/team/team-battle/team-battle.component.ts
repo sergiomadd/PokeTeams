@@ -124,7 +124,7 @@ export class TeamBattleComponent
         this.showAllStats.update(value => !value)
         this.pokemonComponents().forEach(pokemon => 
         {
-          pokemon.showStats[0] = this.showAllStats();
+          pokemon.setStatsVisible(this.showAllStats());
         });
       break;
       case 1:
@@ -133,7 +133,7 @@ export class TeamBattleComponent
         {
           if(pokemon.pokemon()?.notes)
           {
-            pokemon.showNotes[0] = this.showAllNotes();
+            pokemon.setNotesVisible(this.showAllNotes());
           }
         });
         break;

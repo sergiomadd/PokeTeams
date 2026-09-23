@@ -1,0 +1,165 @@
+// Shared between PokemonCardComponent and the components extracted from its template
+// (PokemonStatRowComponent, PokemonMoveSlotComponent). Angular scopes component styles
+// per component, so each of those components @use's this partial in its own stylesheet
+// rather than duplicating these rules by hand.
+@use "/src/app/core/styles/variables.scss" as *;
+
+$padding: 0.2em;
+
+.section
+{
+  height: 100%;
+  cursor: pointer;
+  border-radius: 5px;
+  position: relative;
+  border: 1px solid transparent;
+  padding: 2px;
+}
+
+.section-content
+{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.move
+{
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  border-radius:5px;
+  display: grid;
+  grid-template-columns: 20% 80% 0%;
+  grid-template-rows: 100%;
+  justify-items: start;
+  align-content: center;
+}
+
+.move-head
+{
+  display: flex;
+  justify-content: space-between;
+}
+
+.type
+{
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+}
+
+.type-category
+{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  padding: 0.2em;
+}
+
+.type-category-text
+{
+  display: flex;
+  justify-content: end;
+}
+
+.type-category-icons
+{
+  display: grid;
+  grid-template-columns: 50% 50%;
+
+  .lastType
+  {
+    grid-column: 1 / 3;
+    justify-self: center;
+  }
+}
+
+.stat
+{
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  grid-template-columns: 2em 1fr 2em;
+  column-gap: 0.2em;
+  width: 100%;
+}
+
+.stat-atribute
+{
+  background-color: var(--bg-color-3);
+  padding: $padding;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.stat-property-title
+{
+  font-weight: bold;
+  margin-right: $padding;
+}
+
+.maxed
+{
+  border: 0.15em solid black;
+}
+
+.maxed
+{
+  outline: 0.1em solid black;
+}
+
+.empty-line
+{
+  width: 1em;
+  height: 1px;
+  padding: 0.05em;
+  background-color: var(--text-color);
+  border-radius: 20px;
+}
+
+.poke-tooltip-selected
+{
+  border: 1px solid var(--text-color);
+  background: none !important;
+  border-radius: 5px;
+}
+
+.one-piece
+{
+  padding: $padding;
+  background-color: var(--bg-color-2);
+  border-radius: 5px;
+}
+
+.one-line
+{
+  background-color: var(--bg-color-2);
+  padding: $padding;
+  border-radius: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+@media (max-width: $tabletPortrait)
+{
+  .section
+  {
+    position: static;
+  }
+
+  .section-content
+  {
+    position: static;
+  }
+
+  .move
+  {
+    position: static;
+    min-height: 2.4em;
+  }
+}

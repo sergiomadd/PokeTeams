@@ -1,0 +1,187 @@
+@let m = move();
+@let p = pokemon();
+@let i = index();
+<div
+  (click)="m?.identifier !== 'error' && sectionClick.emit({index: i, type: 'right'})"
+  [ngClass]="
+  {
+    section: m?.identifier !== 'error',
+    'animated-border': m?.identifier !== 'error' && !window.isTabletPortraitOrLess(),
+    'poke-tooltip-selected': tooltipVisible(),
+    'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
+  }"
+  >
+  <div class="move section-content gap-m"
+    [ngStyle]="{'background': m?.pokeType?.identifier ?? '' | getMoveColor:theme.selectedThemeName}"
+    >
+    <div class="pad-s flex justify-c-c align-i-c bor-rad-5" style="margin-left: 0.3em;"
+      [ngStyle]="{'background': m?.pokeType?.identifier ?? '' | getTypeColor}">
+      @if (m?.identifier === 'error') {
+        <div class="icon-m">
+          <ng-container *ngTemplateOutlet="errorSvg()"></ng-container>
+        </div>
+      } @else {
+        <img src="{{m?.pokeType?.iconPath}}" title="{{m?.pokeType?.name?.content}}"
+          alt="{{m?.pokeType?.name?.content}}" class="icon-m">
+        }
+      </div>
+      <div class="text-start space-nowrap no-overflow w-90">
+        {{m?.name?.content}}
+        @if (m?.name?.content && m?.name?.language != (selectedLang$ | async)) {
+          <app-no-translation [noTooltip]="true"></app-no-translation>
+        }
+      </div>
+      @if (m?.identifier !== 'error') {
+        <app-poke-tooltip
+          [content]="moveTooltip"
+          [side]="window.isLaptopOrLess() ? 'left' : 'right'"
+          [visible]="tooltipVisible() && (!compareTeam() || window.isTabletPortraitOrLess())"
+          [mobileChanged]="window.isTabletPortraitOrLess()"
+          class="tooltip-component"
+          >
+        </app-poke-tooltip>
+      }
+      <ng-template #moveTooltip>
+        <div class="poke-tooltip-content poke-tooltip-content-bound">
+          <div class="poke-tooltip-head move-head"
+            [ngStyle]="{'background': m?.pokeType?.identifier ?? '' | getMoveColor:theme.selectedThemeName}"
+            >
+            <div class="section animated-border poke-tooltip-wrapper"
+              (click)="sectionClick.emit({index: i, type: 'rightType', event: $event})"
+              [ngClass]="{'poke-tooltip-selected':  tooltipTypeVisible()}"
+              >
+              <div class="type section-content">
+                <app-poke-tooltip
+                  [content]="moveTypeTooltip"
+                  [side]="'top'"
+                  [visible]="tooltipTypeVisible() && (!compareTeam() || window.isTabletPortraitOrLess())"
+                  class="tooltip-component"
+                  >
+                </app-poke-tooltip>
+                <ng-template #moveTypeTooltip>
+                  <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
+                    @if (m?.pokeType?.effectivenessAttack?.superEffective?.length ?? false) {
+                      <app-type-effectiveness-category [types]="m?.pokeType?.effectivenessAttack?.superEffective" multiplier="x2"></app-type-effectiveness-category>
+                      <div class="flex align-i-c">
+                        <div class="divider"></div>
+                      </div>
+                    }
+                    @if (m?.pokeType?.effectivenessAttack?.notVeryEffective?.length ?? false) {
+                      <app-type-effectiveness-category [types]="m?.pokeType?.effectivenessAttack?.notVeryEffective" multiplier="x0.5"></app-type-effectiveness-category>
+                      @if (m?.pokeType?.effectivenessAttack?.inmune?.length ?? false) {
+                        <div class="flex align-i-c">
+                          <div class="divider"></div>
+                        </div>
+                      }
+                    }
+                    @if (m?.pokeType?.effectivenessAttack?.inmune?.length ?? false) {
+                      <app-type-effectiveness-category [types]="m?.pokeType?.effectivenessAttack?.inmune" multiplier="x0"></app-type-effectiveness-category>
+                    }
+                  </div>
+                </ng-template>
+                      <img src="{{m?.pokeType?.iconPath}}" title="{{m?.pokeType?.name?.content}}" alt="{{m?.pokeType?.name?.content}}" class="icon-m">
+                    </div>
+                  </div>
+                  <div class="poke-tooltip-head-text">
+                    {{m?.name?.content}}
+                    @if (m?.name?.content && m?.name?.language != (selectedLang$ | async)) {
+                      <app-no-translation></app-no-translation>
+                    }
+                  </div>
+                  <div class="section animated-border poke-tooltip-wrapper"
+                    (click)="sectionClick.emit({index: i, type: 'rightClass'}); $event.stopPropagation()"
+                    [ngClass]="{'poke-tooltip-selected': tooltipClassVisible()}"
+                    >
+                    <div class="flex justify-c-c align-i-c bg-2 bor-rad-20 section-content">
+                      <img src="{{m?.damageClass?.iconPath}}" alt="" class="icon-m">
+                      <app-poke-tooltip
+                        [content]="moveClassTooltip"
+                        [side]="'top'"
+                        [visible]="tooltipClassVisible() && (!compareTeam() || window.isTabletPortraitOrLess())"
+                        class="tooltip-component"
+                        >
+                      </app-poke-tooltip>
+                      <ng-template #moveClassTooltip>
+                        <div class="one-piece">
+                          <span class="one-line">
+                            {{m?.damageClass?.name}}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+                <div class="poke-tooltip-body">
+                  <div class="flex justify-c-c wrap gap-m">
+                    <div class="stat-atribute">
+                      <span class="stat-property-title">{{'pokemon.move.power' | translate}}: </span>
+                      @if (m?.power) {
+                        {{m?.power}}
+                      } @else {
+                        <div class="empty-line"></div>
+                      }
+                    </div>
+                    <div class="stat-atribute"><span class="stat-property-title">PP: </span>{{m?.pp}}</div>
+                    <div class="stat-atribute">
+                      <span class="stat-property-title">{{'pokemon.move.accuracy' | translate}}: </span>
+                      @if (m?.accuracy) {
+                        {{m?.accuracy}}%
+                      } @else {
+                        <div class="empty-line"></div>
+                      }
+                    </div>
+                    <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.priority' | translate}}: </span>{{m?.priority}}</div>
+                    @if (m?.meta?.minHits) {
+                      <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.min_hits' | translate}}: </span>{{m?.meta?.minHits}}</div>
+                    }
+                    @if (m?.meta?.maxHits) {
+                      <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.max_hits' | translate}}: </span>{{m?.meta?.maxHits}}</div>
+                    }
+                    @if (m?.meta?.minTurns) {
+                      <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.min_turns' | translate}}: </span>{{m?.meta?.minTurns}}</div>
+                    }
+                    @if (m?.meta?.maxTurns) {
+                      <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.max_turns' | translate}}: </span>{{m?.meta?.maxTurns}}</div>
+                    }
+                    @if (m?.meta?.drain) {
+                      <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.drain' | translate}}: </span>{{m?.meta?.drain}}</div>
+                    }
+                    @if (m?.meta?.healing) {
+                      <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.healing' | translate}}: </span>{{m?.meta?.healing}}</div>
+                    }
+                    @if (m?.meta?.statusChance) {
+                      <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.status_chance' | translate}}: </span>{{m?.meta?.statusChance}}%</div>
+                    }
+                    @if (m?.meta?.flinchChance) {
+                      <div class="stat-atribute"><span class="stat-property-title">{{'pokemon.move.flinch_chance' | translate}}: </span>{{m?.meta?.flinchChance}}%</div>
+                    }
+                  </div>
+                  <div class="flex-col pad-s gap-m">
+                    @if (m?.effect?.short?.content) {
+                      <div class="flex">
+                        <span class="stat-property-title">{{'pokemon.move.effect' | translate}}: </span>
+                        <span class="text-start">
+                          <app-pokemon-prose [chunks]="moveEffectShort()" iconClass="icon"></app-pokemon-prose>
+                          @if (m?.effect?.short?.content && m?.effect?.short?.language != (selectedLang$ | async)) {
+                            <app-no-translation></app-no-translation>
+                          }
+                        </span>
+                      </div>
+                    }
+                    @if (m?.target?.description?.content) {
+                      <div class="flex">
+                        <span class="stat-property-title">{{'pokemon.move.target' | translate}}: </span>
+                        <span class="text-start">
+                          <app-pokemon-prose [chunks]="moveTarget()" iconClass="icon"></app-pokemon-prose>
+                          @if (m?.target?.description?.content && m?.target?.description?.language != (selectedLang$ | async)) {
+                            <app-no-translation></app-no-translation>
+                          }
+                        </span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>

@@ -473,7 +473,7 @@ export class PokemonEditorComponent
        const pokemonPreviewComponent = this.pokemonPreviewComponent();
        if(pokemonPreviewComponent)
         {
-          pokemonPreviewComponent.showStats[0] = true;
+          pokemonPreviewComponent.setStatsVisible(true);
         }
       }
       this.calcIVSliderBackground(pokemon.ivs[index].value, 0, 31);
@@ -559,7 +559,7 @@ export class PokemonEditorComponent
         const pokemonPreviewComponent = this.pokemonPreviewComponent();
         if(pokemonPreviewComponent)
         {
-          pokemonPreviewComponent.showStats[0] = true;
+          pokemonPreviewComponent.setStatsVisible(true);
         }
       }
       else
@@ -582,7 +582,7 @@ export class PokemonEditorComponent
         const pokemonPreviewComponent = this.pokemonPreviewComponent();
         if(pokemonPreviewComponent)
         {
-          pokemonPreviewComponent.showStats[0] = false;
+          pokemonPreviewComponent.setStatsVisible(false);
         }
       }
     }
