@@ -1,4 +1,4 @@
-import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from "@abacritt/angularx-social-login";
+import { GoogleLoginProvider, SOCIAL_AUTH_CONFIG, SocialAuthServiceConfig, SocialLoginModule } from "@abacritt/angularx-social-login";
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from "@angular/core";
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -14,7 +14,7 @@ export const appConfig: ApplicationConfig =
     provideCore(),
     importProvidersFrom(SocialLoginModule),
     {
-      provide: 'SocialAuthServiceConfig',
+      provide: SOCIAL_AUTH_CONFIG,
       useValue: {
         autoLogin: false,
         lang: 'en',

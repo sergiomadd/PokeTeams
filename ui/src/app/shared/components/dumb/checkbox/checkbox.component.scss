@@ -28,3 +28,9 @@
   border: 1px solid var(--text-color);
   opacity: 1;
 }
+
+.locked
+{
+  cursor: not-allowed;
+  opacity: 0.4;
+}

@@ -230,9 +230,20 @@ export class QueryService
     let url = this.apiUrl + 'tag/query/all';
     return this.http.get<QueryItem[]>(url).pipe(timeout(this.dataTimeout), tap(data => this.cachedTags = data));
   }
-  tagAllCallback = (): Observable<QueryItem[]> => 
+  tagAllCallback = (): Observable<QueryItem[]> =>
   {
     return this.queryAllTags();
+  }
+
+  addCachedTag(tag: QueryItem)
+  {
+    this.queryAllTags().subscribe(() =>
+    {
+      if(!this.cachedTags.some(t => t.identifier === tag.identifier))
+      {
+        this.cachedTags = [tag, ...this.cachedTags];
+      }
+    });
   }
 
   //Pokemon

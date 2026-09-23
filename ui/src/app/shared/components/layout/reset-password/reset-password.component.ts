@@ -1,5 +1,5 @@
-import { AsyncPipe, NgClass, NgTemplateOutlet } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -15,9 +15,9 @@ import { selectError, selectIsSubmitting, selectSuccess } from '../../../../core
     selector: 'app-reset-password',
     templateUrl: './reset-password.component.html',
     styleUrl: './reset-password.component.scss',
-    imports: [FormsModule, ReactiveFormsModule, NgClass, RouterLink, NgTemplateOutlet, AsyncPipe, TranslatePipe]
+    imports: [FormsModule, ReactiveFormsModule, NgClass, RouterLink, NgTemplateOutlet, TranslatePipe]
 })
-export class ResetPasswordComponent 
+export class ResetPasswordComponent
 {
   route = inject(ActivatedRoute);
   store = inject(Store);
@@ -25,51 +25,52 @@ export class ResetPasswordComponent
   util = inject(UtilService);
   window = inject(WindowService);
 
-  isSubmitting$ = this.store.select(selectIsSubmitting);
-  backendError$ = this.store.select(selectError);
-  success$ = this.store.select(selectSuccess);
+  isSubmitting = this.store.selectSignal(selectIsSubmitting);
+  backendError = this.store.selectSignal(selectError);
+  success = this.store.selectSignal(selectSuccess);
 
   readonly feedbackColors = FeedbackColors;
 
-  email?: string;
-  token?: string;
+  email = signal<string | undefined>(undefined);
+  token = signal<string | undefined>(undefined);
 
-  resetPasswordButtonClicked: boolean = false;
-  resetPasswordSubmitted: boolean = false;
+  resetPasswordButtonClicked = signal<boolean>(false);
+  resetPasswordSubmitted = signal<boolean>(false);
   resetPasswordForm = this.formBuilder.group(
     {
       password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(256), this.util.passwordsMatch()]],
-  
+
     }, { updateOn: "submit" });
 
-  ngOnInit()
+  constructor()
   {
-    this.email = this.route.snapshot.queryParams['email'];
-    this.token = this.route.snapshot.queryParams['token'];
+    this.email.set(this.route.snapshot.queryParams['email']);
+    this.token.set(this.route.snapshot.queryParams['token']);
   }
 
   resetPassword()
   {
-    this.resetPasswordButtonClicked = true;
-    if(this.email && this.token && this.resetPasswordForm.valid)
+    this.resetPasswordButtonClicked.set(true);
+    const email = this.email();
+    const token = this.token();
+    if(email && token && this.resetPasswordForm.valid)
     {
-      this.resetPasswordSubmitted = true;
-      const resetPasswordUpdateDTO: UserUpdateDTO = 
+      this.resetPasswordSubmitted.set(true);
+      const resetPasswordUpdateDTO: UserUpdateDTO =
       {
-        currentEmail: this.email,
+        currentEmail: email,
         newPassword: this.resetPasswordForm.controls.password.value ?? undefined,
-        passwordResetCode: this.token
+        passwordResetCode: token
       }
       this.store.dispatch(authActions.resetPassword({request: resetPasswordUpdateDTO}))
     }
   }
 
-  
   isInvalid(key: string) : boolean
   {
     var control = this.resetPasswordForm.get(key);
-    return (control?.errors && (control?.dirty || control?.touched || this.resetPasswordButtonClicked)) ?? false;
+    return (control?.errors && (control?.dirty || control?.touched || this.resetPasswordButtonClicked())) ?? false;
   }
 
   getError(key: string) : string

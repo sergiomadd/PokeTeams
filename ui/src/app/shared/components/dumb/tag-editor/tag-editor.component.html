@@ -51,12 +51,13 @@
         </div>
         <div class="flex justify-c-sb align-i-c">
           <div class="tag-preview bor-rad-5 no-overflow" style="width: 48%;">
+            @let color = tag().color;
             <app-chip
-              [name]="tag.name"
-              [tooltipText]="tag.description"
+              [name]="tag().name"
+              [tooltipText]="tag().description"
               [minWidth]="'100%'"
-              [bgColor]="tag.color !== undefined ? tagBackgroundColors[tag.color] : undefined"
-              [textColor]="tag.color !== undefined ? (tag.color | getTagTextColor:theme.selectedThemeName) : undefined"
+              [bgColor]="color !== undefined ? tagBackgroundColors[color] : undefined"
+              [textColor]="color !== undefined ? (color | getTagTextColor:theme.selectedThemeName) : undefined"
             ></app-chip>
           </div>
           <div style="width: 48%;">

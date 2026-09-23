@@ -1,11 +1,11 @@
 <div class="email-confirmation flex justify-c-c align-i-c gap-m">
-  @if (email && token) {
-    @if (isSubmitting$ | async) {
+  @if (email() && token()) {
+    @if (isSubmitting()) {
       <div class="feedback">
         <div class="pokemon-spinner"></div>
       </div>
     }
-    @if (success$ | async) {
+    @if (success()) {
       <div class="flex-col align-i-c gap-m">
         <div class="flex justify-c-c align-i-c gap-m">
           <svg class="feedback" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +21,7 @@
         <button class="button-primary" [routerLink]="['/']">{{'shared.go_home-button' | translate}}</button>
       </div>
     } @else {
-      @if (backendError$ | async) {
+      @if (backendError()) {
         <div class="flex-col align-i-c gap-m">
           <div class="flex justify-c-c align-i-c gap-m">
             <svg class="feedback" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -33,7 +33,7 @@
                 <path fill="var(--bg-color-1)" d="M12 17C12.5523 17 13 16.5523 13 16C13 15.4477 12.5523 15 12 15C11.4477 15 11 15.4477 11 16C11 16.5523 11.4477 17 12 17Z"></path>
               </g>
               </svg>
-            <span class="formFeedbackError">{{backendError$ | async}}</span>
+            <span class="formFeedbackError">{{backendError()}}</span>
           </div>
           <button class="button-primary" [routerLink]="['/']">{{'shared.go_home-button' | translate}}</button>
         </div>

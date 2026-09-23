@@ -1,5 +1,5 @@
-import { Component, SimpleChanges, TemplateRef, input, output } from '@angular/core';
-import { NgStyle, NgClass, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { Component, TemplateRef, input, output } from '@angular/core';
 
 @Component({
     selector: 'app-switch',
@@ -7,9 +7,10 @@ import { NgStyle, NgClass, NgTemplateOutlet } from '@angular/common';
     styleUrls: ['./switch.component.scss'],
     imports: [NgStyle, NgClass, NgTemplateOutlet]
 })
+
 export class SwitchComponent 
 {
-  readonly inputState = input<boolean>();
+  readonly state = input<boolean>(false);
   readonly leftText = input<string>();
   readonly rightText = input<string>();
   readonly leftSVG = input<TemplateRef<any> | null>(null);
@@ -17,24 +18,9 @@ export class SwitchComponent
   readonly sizeSVG = input<string>();
   readonly checkEvent = output<boolean>();
 
-  state: boolean = false;
-
-  ngOnInit() 
-  {
-    const inputState = this.inputState();
-    if(inputState) {this.state = inputState}
-  }
-
-  ngOnChanges(changes: SimpleChanges) 
-  {
-    if(changes["inputState"] && changes["inputState"].currentValue !== changes["inputState"].previousValue) 
-    {
-      this.state = changes["inputState"].currentValue
-    }
-  }
-
   onClick()
   {
-    this.checkEvent.emit(!this.state);
+    //Se updatea en el parent
+    this.checkEvent.emit(!this.state());
   }
 }

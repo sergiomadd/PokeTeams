@@ -12,13 +12,13 @@
         data-testid="save-team-btn"
       >{{"team.upload.save-button" | translate}}</button>
     </div>
-    @if (teamSubmitted) {
+    @if (teamSubmitted()) {
       <div class="spinner-wrapper">
         <div class="pokemon-spinner"></div>
       </div>
     }
-    @if (feedback) {
-      <span class="formFeedbackError text-center">{{feedback}}</span>
+    @if (feedback()) {
+      <span class="formFeedbackError text-center">{{feedback()}}</span>
     }
   </div>
 </div>

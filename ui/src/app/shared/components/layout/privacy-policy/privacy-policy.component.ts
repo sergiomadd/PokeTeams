@@ -8,8 +8,8 @@ import { SeoService } from '../../../../core/helpers/seo.service';
 export class PrivacyPolicyComponent 
 {
   seo = inject(SeoService);
-  
-  ngOnInit()
+
+  constructor()
   {
     this.seo.updateMetaData({
       title: "Privacy Policy",

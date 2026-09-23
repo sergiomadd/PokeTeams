@@ -1,4 +1,4 @@
-import { Component, inject, SimpleChanges, input, output, viewChildren } from '@angular/core';
+import { Component, inject, SimpleChanges, input, output, viewChildren, signal, effect, untracked } from '@angular/core';
 import { ParserService } from '../../../../core/helpers/parser.service';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
@@ -34,54 +34,45 @@ export class TeamBattleComponent
 
   readonly pokemonComponents = viewChildren(PokemonCardComponent);
 
-  showAllStats: boolean = false;
-  showAllNotes: boolean = false;
-  hasAnyNotes: boolean = false;
-  maxStat: number = 0;
-  tooltips: boolean[] = [false, false, false]
+  showAllStats = signal<boolean>(false);
+  showAllNotes = signal<boolean>(false);
+  hasAnyNotes = signal<boolean>(false);
+  maxStat = signal<number>(0);
+  tooltips = signal<boolean[]>([false, false, false]);
 
-  pokemonIndex1: number = -1;
-  pokemonIndex2: number = -1;
-  order: number = 1;
-  moveA: Move | undefined;
-  moveB: Move | undefined;
-  teraTypeEnabled: boolean[] = [];
+  pokemonIndex1 = signal<number>(-1);
+  pokemonIndex2 = signal<number>(-1);
+  order = signal<number>(1);
+  selectedMoveA = this.compareService.selectedMoveA;
+  selectedMoveB = this.compareService.selectedMoveB;
+  teraTypeEnabled = signal<boolean[]>([]);
 
-  ngOnInit()
+  constructor()
   {
-    this.compareService.selectedMoveA$.subscribe(value => 
+    effect(() =>
     {
-      this.moveA = value;
-    })
-    this.compareService.selectedMoveB$.subscribe(value => 
-    {
-      this.moveB = value;
+      const which = this.which();
+      const value = which === 'A' ? this.compareService.teratypeEnabledIndexesA()
+        : which === 'B' ? this.compareService.teratypeEnabledIndexesB()
+        : undefined;
+      if(value)
+      {
+        this.teraTypeEnabled.set([...value]);
+      }
     })
 
-    const which = this.which();
-    if(which === 'A')
+    effect(() =>
     {
-      this.compareService.teratypeEnabledIndexesAObservable$.subscribe(value => 
+      this.team();
+      // untracked: selectPokemon(force) reads pokemonIndex1/pokemonIndex2 to build its emit
+      // payload. Without untracked, this effect would also depend on those signals and
+      // re-fire (resetting the selection back to [0, 1]) every time a real click updates them.
+      untracked(() =>
       {
-        this.teraTypeEnabled = [...value];
-      })
-    }
-    else if(which === 'A')
-    {
-      this.compareService.teratypeEnabledIndexesBObservable$.subscribe(value => 
-      {
-        this.teraTypeEnabled = [...value];
-      })
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges)
-  {
-    if(changes["team"])
-    {
-      this.selectPokemon(0, true, 1);
-      this.selectPokemon(1, true, 2);
-    }
+        this.selectPokemon(0, true, 1);
+        this.selectPokemon(1, true, 2);
+      });
+    })
   }
 
   selectPokemon(index, force: boolean = false, indexToForce: number = -1)
@@ -90,39 +81,39 @@ export class TeamBattleComponent
     {
       if(indexToForce === 1)
       {
-        this.pokemonIndex1 = index;
+        this.pokemonIndex1.set(index);
       }
       if(indexToForce === 2)
       {
-        this.pokemonIndex2 = index;
+        this.pokemonIndex2.set(index);
       }
-      this.selectedIndexesEvent.emit([this.pokemonIndex1, this.pokemonIndex2])
+      this.selectedIndexesEvent.emit([this.pokemonIndex1(), this.pokemonIndex2()])
       return;
     }
-    if(index === this.pokemonIndex1)
+    if(index === this.pokemonIndex1())
     {
-      this.pokemonIndex1 = -1;
+      this.pokemonIndex1.set(-1);
     }
-    else if(index === this.pokemonIndex2)
+    else if(index === this.pokemonIndex2())
     {
-      this.pokemonIndex2 = -1;
+      this.pokemonIndex2.set(-1);
     }
-    else if(!this.pokemonIndex1 || this.order === 1)
+    else if(this.pokemonIndex1() === -1 || this.order() === 1)
     {
-      this.pokemonIndex1 = index;
-      this.order = 2;
+      this.pokemonIndex1.set(index);
+      this.order.set(2);
     }
-    else if(!this.pokemonIndex2 || this.order === 2)
+    else if(this.pokemonIndex2() === -1 || this.order() === 2)
     {
-      this.pokemonIndex2 = index;
-      this.order = 1;
+      this.pokemonIndex2.set(index);
+      this.order.set(1);
     }
-    if(this.pokemonIndex1 && this.pokemonIndex2)
+    if(this.pokemonIndex1() !== -1 && this.pokemonIndex2() !== -1)
     {
       this.closeAllTooltips();
     }
 
-    this.selectedIndexesEvent.emit([this.pokemonIndex1, this.pokemonIndex2])
+    this.selectedIndexesEvent.emit([this.pokemonIndex1(), this.pokemonIndex2()])
   }
 
   clickOptions(index: number)
@@ -130,19 +121,19 @@ export class TeamBattleComponent
     switch(index)
     {
       case 0:
-        this.showAllStats = !this.showAllStats;
+        this.showAllStats.update(value => !value)
         this.pokemonComponents().forEach(pokemon => 
         {
-          pokemon.showStats[0] = this.showAllStats;
+          pokemon.setStatsVisible(this.showAllStats());
         });
       break;
       case 1:
-        this.showAllNotes = !this.showAllNotes;
+        this.showAllNotes.update(value => !value)
         this.pokemonComponents().forEach(pokemon => 
         {
           if(pokemon.pokemon()?.notes)
           {
-            pokemon.showNotes[0] = this.showAllNotes;
+            pokemon.setNotesVisible(this.showAllNotes());
           }
         });
         break;

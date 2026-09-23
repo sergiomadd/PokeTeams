@@ -8,8 +8,8 @@ import { SeoService } from '../../../../core/helpers/seo.service';
 export class AboutComponent 
 {
   seo = inject(SeoService);
-  
-  ngOnInit()
+
+  constructor()
   {
     this.seo.updateMetaData({
       title: "About",

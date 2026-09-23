@@ -1,0 +1,167 @@
+@let p = pokemon();
+<div class="flex">
+  @if (p.teraType) {
+    @if (p.teraType.identifier !== 'error') {
+      <div
+        (click)="sectionClick.emit({index: 0, type: 'types'})"
+      [ngClass]="
+      {
+        section: p.teraType.identifier !== 'error',
+        'animated-border': p.teraType.identifier !== 'error' && !window.isTabletPortraitOrLess() && p.teraType.identifier !== 'stellar',
+        'poke-tooltip-selected': tooltipTeraVisible() && p.teraType.identifier !== 'stellar',
+        'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
+      }"
+        >
+        <div class="section-content type">
+          @if (p.teraType.effectivenessAttack || p.teraType.effectivenessDefense) {
+            <app-poke-tooltip
+              [content]="teraTypeTooltip"
+              [side]="'top'"
+              [visible]="tooltipTeraVisible() && (!compareTeam() || window.isTabletPortraitOrLess())"
+              [mobileChanged]="window.isTabletPortraitOrLess()"
+              class="tooltip-component"
+              >
+            </app-poke-tooltip>
+            <ng-template #teraTypeTooltip>
+              <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
+                @if (p.teraType.effectivenessDefense.superEffective?.length ?? false) {
+                  <app-type-effectiveness-category [types]="p.teraType.effectivenessDefense.superEffective" multiplier="x2"></app-type-effectiveness-category>
+                  <div class="flex align-i-c pad-s-l">
+                    <div class="divider"></div>
+                  </div>
+                }
+                @if (p.teraType.effectivenessDefense.notVeryEffective?.length ?? false) {
+                  <app-type-effectiveness-category [types]="p.teraType.effectivenessDefense.notVeryEffective" multiplier="x0.5"></app-type-effectiveness-category>
+                  @if (p.teraType.effectivenessDefense.inmune?.length ?? false) {
+                    <div class="flex align-i-c pad-s-l">
+                      <div class="divider"></div>
+                    </div>
+                  }
+                }
+                @if (p.teraType.effectivenessDefense.inmune?.length ?? false) {
+                  <app-type-effectiveness-category [types]="p.teraType.effectivenessDefense.inmune" multiplier="x0"></app-type-effectiveness-category>
+                }
+              </div>
+            </ng-template>
+          }
+          <div class="icon-s relative" [ngClass]="{'teratype-background': teratypeEnabled()}">
+            <img src="{{p.teraType.iconPath}}" title="{{p.teraType.name.content}}" alt="{{p.teraType.name.content}}" class="icon-s">
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="icon-s"><ng-container *ngTemplateOutlet="errorSvg()"></ng-container></div>
+    }
+    <div class="flex align-i-c" style="height: 1.5em; padding-right: 0.1em;">
+      <div class="divider"></div>
+    </div>
+  }
+  @if (p.types) {
+    @if (p.types.type1?.identifier !== 'error') {
+      <div
+        (click)="sectionClick.emit({index: 1, type: 'types'})"
+        [ngClass]="
+        {
+          section: p.types.type1?.identifier !== 'error',
+          'animated-border': p.types.type1?.identifier !== 'error' && !window.isTabletPortraitOrLess(),
+          'poke-tooltip-selected': tooltipType1Visible() && !compareTeam(),
+          'poke-tooltip-wrapper': !window.isTabletPortraitOrLess()
+        }"
+        >
+        <div class="section-content type icon-s">
+          @if (p.types.type1?.effectivenessAttack || p.types.type1?.effectivenessDefense || p.types.dualEffectiveness) {
+            <app-poke-tooltip
+              [content]="typesTooltip"
+              [side]="'top'"
+              [visible]="tooltipType1Visible() && (!compareTeam() || window.isTabletPortraitOrLess())"
+              [mobileChanged]="window.isTabletPortraitOrLess()"
+              class="tooltip-component"
+              >
+            </app-poke-tooltip>
+            <ng-template #typesTooltip>
+              <div [ngClass]="
+              {
+                'single-type': !p.types.dualEffectiveness,
+                'dual-type': p.types.dualEffectiveness,
+              }"
+                >
+                <div class="flex justify-c-c bg-2 bor-rad-5 h-100 pad-s">
+                  @if (p.types.dualEffectiveness ?? false) {
+                    @if (p.types.dualEffectiveness?.doubleSuperEffective?.length ?? false) {
+                      <app-type-effectiveness-category [types]="p.types.dualEffectiveness?.doubleSuperEffective" multiplier="x4"></app-type-effectiveness-category>
+                      @if (p.types.dualEffectiveness?.superEffective?.length
+                        || p.types.dualEffectiveness?.notVeryEffective?.length
+                        || p.types.dualEffectiveness?.doubleNotVeryEffective?.length
+                        || (p.types.dualEffectiveness?.inmune?.length ?? false)) {
+                        <div class="flex align-i-c pad-s-l">
+                          <div class="divider"></div>
+                        </div>
+                      }
+                    }
+                    @if (p.types.dualEffectiveness?.superEffective?.length ?? false) {
+                      <app-type-effectiveness-category [types]="p.types.dualEffectiveness?.superEffective" multiplier="x2"></app-type-effectiveness-category>
+                      @if (p.types.dualEffectiveness?.notVeryEffective?.length
+                        || p.types.dualEffectiveness?.doubleNotVeryEffective?.length
+                        || (p.types.dualEffectiveness?.inmune?.length ?? false)) {
+                        <div></div>
+                        <div class="flex align-i-c pad-s-l">
+                          <div class="divider"></div>
+                        </div>
+                      }
+                    }
+                    @if (p.types.dualEffectiveness?.notVeryEffective?.length ?? false) {
+                      <app-type-effectiveness-category [types]="p.types.dualEffectiveness?.notVeryEffective" multiplier="x0.5"></app-type-effectiveness-category>
+                      @if (p.types.dualEffectiveness?.doubleNotVeryEffective?.length
+                        || (p.types.dualEffectiveness?.inmune?.length ?? false)) {
+                        <div class="flex align-i-c pad-s-l">
+                          <div class="divider"></div>
+                        </div>
+                      }
+                    }
+                    @if (p.types.dualEffectiveness?.doubleNotVeryEffective?.length ?? false) {
+                      <app-type-effectiveness-category [types]="p.types.dualEffectiveness?.doubleNotVeryEffective" multiplier="x0.25"></app-type-effectiveness-category>
+                      @if (p.types.dualEffectiveness?.inmune?.length ?? false) {
+                        <div class="flex align-i-c pad-s-l">
+                          <div class="divider"></div>
+                        </div>
+                      }
+                    }
+                    @if (p.types.dualEffectiveness?.inmune?.length ?? false) {
+                      <app-type-effectiveness-category [types]="p.types.dualEffectiveness?.inmune" multiplier="x0"></app-type-effectiveness-category>
+                    }
+                  } @else {
+                    @if (p.types.type1?.effectivenessDefense?.superEffective?.length ?? false) {
+                      <app-type-effectiveness-category [types]="p.types.type1?.effectivenessDefense?.superEffective" multiplier="x2"></app-type-effectiveness-category>
+                      <div class="flex align-i-c pad-s-l">
+                        <div class="divider"></div>
+                      </div>
+                    }
+                    @if (p.types.type1?.effectivenessDefense?.notVeryEffective?.length ?? false) {
+                      <app-type-effectiveness-category [types]="p.types.type1?.effectivenessDefense?.notVeryEffective" multiplier="x0.5"></app-type-effectiveness-category>
+                      @if (p.types.type1?.effectivenessDefense?.inmune?.length ?? false) {
+                        <div class="flex align-i-c pad-s-l">
+                          <div class="divider"></div>
+                        </div>
+                      }
+                    }
+                    @if (p.types.type1?.effectivenessDefense?.inmune?.length ?? false) {
+                      <app-type-effectiveness-category [types]="p.types.type1?.effectivenessDefense?.inmune" multiplier="x0"></app-type-effectiveness-category>
+                    }
+                  }
+                </div>
+              </div>
+            </ng-template>
+          }
+          @if (p.types.dualEffectiveness ?? false) {
+            <img src="{{p.types.type1?.iconPath}}" title="{{p.types.type1?.name?.content}}" alt="{{p.types.type1?.name?.content}}" class="icon-s">
+            <img src="{{p.types.type2?.iconPath}}" title="{{p.types.type2?.name?.content}}" alt="{{p.types.type2?.name?.content}}" class="icon-s">
+          } @else {
+            <img src="{{p.types.type1?.iconPath}}" title="{{p.types.type1?.name?.content}}" alt="{{p.types.type1?.name?.content}}" class="icon-s">
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="icon-s"><ng-container *ngTemplateOutlet="errorSvg()"></ng-container></div>
+    }
+  }
+</div>

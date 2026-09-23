@@ -55,12 +55,12 @@ namespace api.Services
             }
         }
 
-        public async Task<TeamDataDTO?> BuildTeamDataDTO(Team? team, int langId)
+        public async Task<TeamDataDTO?> BuildTeamDataDTO(Team? team, int langId, List<TeamPokemon>? teamPokemons = null)
         {
             TeamDataDTO? teamDataDTO = null;
             if (team != null)
             {
-                List<TeamPokemon> teamPokemons = await _pokeTeamContext.TeamPokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
+                teamPokemons ??= await _pokeTeamContext.TeamPokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
                 TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(team.IVsVisibility, team.EVsVisibility, team.NaturesVisibility);
                 UserPreviewDTO? userPreview = null;
                 if (team.UserId != null)
@@ -110,21 +110,14 @@ namespace api.Services
             TeamDTO? teamDTO = null;
             if (team != null)
             {
-                TeamDataDTO? teamDataDTO = await BuildTeamDataDTO(team, langId);
+                List<TeamPokemon> teamPokemons = await _pokeTeamContext.TeamPokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
+                TeamDataDTO? teamDataDTO = await BuildTeamDataDTO(team, langId, teamPokemons);
                 List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
                 if (teamDataDTO != null)
                 {
-                    if(teamDataDTO.PokemonIDs.Count > 0)
+                    foreach (TeamPokemon teamPokemon in teamPokemons)
                     {
-                        List<TeamPokemon> teamPokemons = await _pokeTeamContext.TeamPokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
-                        foreach (int pokemonId in teamDataDTO.PokemonIDs)
-                        {
-                            TeamPokemon? teamPokemon = await _pokeTeamContext.TeamPokemon.FindAsync(pokemonId);
-                            if (teamPokemon != null)
-                            {
-                                pokemonDTOs.Add(await _pokemonService.BuildPokemonDTO(teamPokemon, langId, teamDataDTO.Options));
-                            }
-                        }
+                        pokemonDTOs.Add(await _pokemonService.BuildPokemonDTO(teamPokemon, langId, teamDataDTO.Options));
                     }
                     teamDTO = new TeamDTO(teamDataDTO, pokemonDTOs);
                 }

@@ -1,0 +1,94 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project overview
+
+PokeTeams (poketeams.com) lets players save, share and study Pokemon teams (pokepastes). Stack: Angular frontend (`ui/`), ASP.NET Core 9 API (`api/`), PostgreSQL.
+
+## Commands
+
+### Frontend (`ui/`)
+
+```
+npm install                    # install deps
+npm start                      # ng serve, dev server on :4200
+npm run build:dev              # development build
+npm run build:prod             # production build
+npm test                       # run all Jest unit tests
+npm run test:watch             # watch mode
+npm run test:coverage          # with coverage
+npx jest path/to/file.spec.ts  # run a single spec file
+npm run cypress:open           # open Cypress for e2e authoring
+npm run cypress:run             # run e2e headless
+```
+
+Jest uses `jest-preset-angular` (config in `ui/jest.config.ts`); spec files are colocated with source as `*.spec.ts`.
+
+### Backend (`api/`, run from repo root)
+
+```
+dotnet restore
+dotnet build --configuration Release
+dotnet test ./api.Test/api.Test.csproj              # unit + integration tests (xUnit, Moq/FakeItEasy)
+dotnet test ./api.PokedexTest/api.PokedexTest.csproj # pokedex-data service tests
+dotnet test ./api.Test/api.Test.csproj --filter "FullyQualifiedName~TeamControllerTest"  # single test class
+dotnet run --project api                              # run the API locally
+```
+
+The `api.Test` integration tests run against a real Postgres instance (`ASPNETCORE_ENVIRONMENT=Test`, connection string `ConnectionStrings__PostgrePoketeamTest`) — see `.github/workflows/dev-build-test.yaml` for the CI setup (spins up a `postgres:15` service container).
+
+EF Core migrations (target the app DB context, `PokeTeamContext`) are managed via the `dotnet-ef` local tool declared in `api/.config/dotnet-tools.json`:
+
+```
+dotnet tool restore
+dotnet ef migrations add <Name> --project api --context PokeTeamContext
+dotnet ef database update --project api --context PokeTeamContext
+```
+
+Migrations auto-apply on API startup (`context.Database.Migrate()` in `api/Program.cs`) — no manual `database update` needed for local dev once the container/DB is reachable.
+
+## Commit conventions
+
+Commits are scoped to the section of the project they touch: `feat(api): ...` / `fix(api): ...` for backend (`api/`) changes, `feat(ui): ...` / `fix(ui): ...` for frontend (`ui/`) changes. A commit that only touches one section always carries its scope; don't drop it for convenience.
+
+## Architecture
+
+### Two separate databases / DbContexts
+
+The API talks to **two independent Postgres databases** via two EF Core contexts, wired up separately in `api/Program.cs`:
+
+- **`PokedexContext`** (`ConnectionStrings:PostgrePokedex`) — static, reference Pokemon data (abilities, items, moves, natures, types, stats) sourced from PokeAPI. Its controllers live under `api/Controllers/PokedexControllers/`, services under `api/Services/PokedexServices/`, models under `api/Models/DBPokedexModels/`. Tested by the separate `api.PokedexTest` project.
+- **`PokeTeamContext`** (`ConnectionStrings:PostgrePoketeam`) — the app's own data: users, teams, tournaments, regulations, tags. Also backs ASP.NET Identity (`AddEntityFrameworkStores<PokeTeamContext>()`). Controllers/services live at the top level of `api/Controllers/` and `api/Services/`, models under `api/Models/DBPoketeamModels/`. This is the only context that auto-migrates and the only one with EF migrations checked in (`api/Migrations/`).
+
+When adding a feature, decide up front which DB it belongs to — reference/pokemon data vs. user-owned app data — since it determines which context, controller folder, and service folder it goes in.
+
+### Auth
+
+JWT bearer auth, but tokens are read from **httpOnly cookies** (`accessToken` / `refreshToken`), not the `Authorization` header — see the custom `OnMessageReceived` handler in `api/Program.cs`. Google OAuth is also wired up (`AddGoogle`). The custom `OnChallenge` handler distinguishes three 401 cases by response body text (`NoTokensProvided`, `NoRefreshTokenProvided`, `NoAccessTokenProvided`) so the frontend's `auth-interceptor.service.ts` can decide whether to attempt a silent refresh or force logout — keep both sides in sync if this contract changes.
+
+### Frontend structure (`ui/src/app/`)
+
+- **`core/`** — app-wide singletons: NgRx store (`store/` — currently only `auth`, `config`, and a `hydration` effect for rehydrating state; most features do *not* use NgRx), HTTP interceptors (`interceptors/`), route guards (`guards/`), and core services/models. Wired up in `core.providers.ts` via `provideCore()`.
+- **`features/`** — routed top-level pages (`search-page`, `team-edit-page`, `team-view-page`, `upload-page`, `compare-page`, `user`). Each owns its own page-specific components/services.
+- **`shared/`** — components, pipes, directives, and services reused across multiple features (e.g. `shared/components/team/`, `shared/components/pokemon/`, `shared/services/*.service.ts`).
+
+### State management convention: signals over RxJS subjects
+
+Most feature/shared services hold state in **Angular signals**, not `BehaviorSubject`s — e.g. `shared/services/team-editor.service.ts`, `team-compare.service.ts`, `search.service.ts` expose plain `signal<T>()` properties (mutated via `.set()`/`.update()`) rather than `private $subject` + `public $observable` pairs. When updating or extending a service, follow this pattern rather than reintroducing RxJS subjects; only use RxJS where the source is genuinely async/event-based (HTTP calls, route params, form `valueChanges`), and bridge those into signals with `toSignal()` at the point of use rather than manually subscribing in `ngOnInit` — `effect()` requires an Angular injection context, so side effects that need to react to signal changes belong in the constructor, not lifecycle hooks like `ngOnInit`.
+
+NgRx (`core/store/`) is intentionally reserved for cross-cutting, hydrated app state (auth session, config/theme/lang) — don't add new feature state to it; use a signal-based service instead.
+
+**When to use `toSignal()` + `effect()` vs. a plain `.subscribe()`:** if something needs to *react* to a stream over time — a form field that live-syncs into app state on every keystroke (see `team-editor.component.ts`'s `formPlayer`/`formRental`/`formTitle`), a field with async cross-field validation (`auth-form.component.ts`'s `formUsername`/`formEmail` checking availability), or an external event stream like `SocialAuthService.authState` — bridge it with `toSignal()` and drive the side effect from an `effect()`, not a manual `.subscribe()` in the constructor/`ngOnInit`. A manual `.subscribe()` is never auto-unsubscribed by Angular, so on any component that isn't a singleton (anything created/destroyed via `@if`/routing, e.g. a modal), every mount leaks that subscription and its captured `this` — and if the source is a long-lived singleton stream, this can also cause the same event to double-fire across the leaked instances. `toSignal()`/`effect()` tie cleanup to the component's `DestroyRef` automatically, so this class of leak isn't possible.
+
+Conversely, don't reach for `toSignal()`/`effect()` on forms that are purely submit-driven (`{ updateOn: "submit" }`, read via `this.xForm.controls.y.value` inside an `(ngSubmit)` handler, as in most of `user-settings.component.ts`/`auth-form.component.ts`'s login/signup/forgot forms) — nothing needs to observe those fields between keystrokes, so wrapping them in a signal + effect just adds reactive machinery with no reactive consumer. Read `.value` directly in the submit handler.
+
+### Pokemon-card component family
+
+`shared/components/pokemon/pokemon-card/` is fully signal-based (converted from a legacy `ngOnChanges`/plain-mutable-field implementation) and split into several presentational sub-components under `shared/components/pokemon/`: `pokemon-prose` (linked-prose text rendering), `pokemon-stat-row` (one stat's base/IV/EV bars), `pokemon-move-slot` (one move slot), `type-effectiveness-category` (one "xN + type icons" row), and `pokemon-type-badges` (tera-type/type1/type2 badges + tooltips). Each takes plain `input()`s from `PokemonCardComponent` and emits click/toggle intents via `output()` — the parent remains the single owner of all tooltip-visibility state (`signal<boolean[]>()` per group) and dispatches through its `clickSection()` method; children never own or mutate that state themselves.
+
+Because Angular scopes component styles per component (`ViewEncapsulation.Emulated`), a parent's stylesheet never reaches into a child's own template. Classes shared between `pokemon-card.component.scss` and any of its extracted children (`.section`, `.type-category`, `.stat-atribute`, etc.) live in `pokemon-card/pokemon-card-shared.scss`, which each consuming component's own stylesheet pulls in via `@use "../pokemon-card/pokemon-card-shared.scss" as *;`. When adding a new class used by both the parent and a child (or extracting another sub-component from `pokemon-card`), add the rule to this shared partial rather than duplicating it or leaving it only in the parent's stylesheet — the latter silently renders unstyled in any child that uses the class.
+
+### i18n
+
+UI text is translated via `@ngx-translate/core`; translation files live in `ui/src/assets/i18n/*.json`, one file per language.

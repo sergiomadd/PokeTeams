@@ -1,4 +1,4 @@
-import { Component, inject, input, model, output, SimpleChanges } from '@angular/core';
+import { Component, effect, inject, input, model, output, signal, untracked, WritableSignal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { LinkifierService } from '../../../../core/helpers/linkifier.service';
@@ -7,9 +7,8 @@ import { PokemonStatService } from '../../../../core/helpers/pokemon-stat.servic
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
-import { FeedbackColors, GenderColors, NatureColors, shinyColor } from '../../../../core/models/misc/colors';
+import { FeedbackColors, GenderColors, shinyColor } from '../../../../core/models/misc/colors';
 import { ProcessedString } from '../../../../core/models/misc/processedString.model';
-import { Move } from '../../../../core/models/pokemon/move.model';
 import { Pokemon } from '../../../../core/models/pokemon/pokemon.model';
 import { TeamOptions } from '../../../../core/models/team/teamOptions.model';
 import { selectLang } from '../../../../core/store/config/config.selectors';
@@ -21,15 +20,11 @@ import { NgClass, NgTemplateOutlet, NgStyle, AsyncPipe } from '@angular/common';
 import { PokeTooltipComponent } from '../poke-tooltip/poke-tooltip.component';
 import { EvolutionComponent } from '../evolution/evolution.component';
 import { NoTranslationComponent } from '../../dumb/no-translation/no-translation.component';
+import { PokemonProseComponent } from '../pokemon-prose/pokemon-prose.component';
+import { PokemonStatRowComponent } from '../pokemon-stat-row/pokemon-stat-row.component';
+import { PokemonMoveSlotComponent } from '../pokemon-move-slot/pokemon-move-slot.component';
+import { PokemonTypeBadgesComponent } from '../pokemon-type-badges/pokemon-type-badges.component';
 import { TranslatePipe } from '@ngx-translate/core';
-import { GetPokemonStatSizePipe } from '../../../pipes/pokemon-pipes/getPokemonStatSize.pipe';
-import { GetPokemonStatBorderRadiusPipe } from '../../../pipes/pokemon-pipes/getPokemonStatBorderRadius.pipe';
-import { ShouldBeInMiddlePipe } from '../../../pipes/pokemon-pipes/shouldBeInMiddle.pipe';
-import { GetTypeColorPipe } from '../../../pipes/color-pipes/getTypeColor.pipe';
-import { GetMoveColorPipe } from '../../../pipes/color-pipes/getMoveColor.pipe';
-import { GetStatColorPipe } from '../../../pipes/color-pipes/getStatColor.pipe';
-import { GetStatCodePipe } from '../../../pipes/converters/getStatCode.pipe';
-import { GetStatShortIdentifierPipe } from '../../../pipes/converters/getStatShortIdentifier.pipe';
 
 @Component({
     selector: 'app-pokemon-card',
@@ -40,9 +35,9 @@ import { GetStatShortIdentifierPipe } from '../../../pipes/converters/getStatSho
         GetDefenseEffectivenessPipe,
         GetPokemonSpritePathPipe
     ],
-    imports: [NgClass, PokeTooltipComponent, EvolutionComponent, NoTranslationComponent, NgTemplateOutlet, NgStyle, AsyncPipe, TranslatePipe, GetPokemonStatSizePipe, GetPokemonStatBorderRadiusPipe, ShouldBeInMiddlePipe, GetTypeColorPipe, GetMoveColorPipe, GetStatColorPipe, GetStatCodePipe, GetStatShortIdentifierPipe]
+    imports: [NgClass, PokeTooltipComponent, EvolutionComponent, NoTranslationComponent, PokemonProseComponent, PokemonStatRowComponent, PokemonMoveSlotComponent, PokemonTypeBadgesComponent, NgTemplateOutlet, NgStyle, AsyncPipe, TranslatePipe]
 })
-export class PokemonCardComponent 
+export class PokemonCardComponent
 {
   parser = inject(ParserService);
   util = inject(UtilService);
@@ -69,106 +64,114 @@ export class PokemonCardComponent
   selectedLang$: Observable<string> = this.store.select(selectLang);
   selectedLang?: string;
 
-  pokemonSpritePath?: string = '';
+  pokemonSpritePath = signal<string | undefined>('');
   spriteCategory: number = 0;
-  copied?: boolean;
+  copied = signal<boolean | undefined>(undefined);
   readonly genderColors = GenderColors;
-  readonly natureColors = NatureColors;
   readonly shinyColor = shinyColor;
   readonly feedbackColors = FeedbackColors;
-  
-  maxStat: number = 0;
 
-  abilityProse: ProcessedString[] = [];
-  itemProse: ProcessedString[] = [];
-  moveEffectsShort: ProcessedString[][] = [];
+  maxStat = signal<number>(0);
+
+  abilityProse = signal<ProcessedString[]>([]);
+  itemProse = signal<ProcessedString[]>([]);
+  moveEffectsShort = signal<ProcessedString[][]>([[], [], [], []]);
   moveEffectsLong: ProcessedString[][] = [];
-  moveTargets: ProcessedString[][] = [];
+  moveTargets = signal<ProcessedString[][]>([[], [], [], []]);
 
-  tooltipEvol: boolean[] = [false];
-  tooltipTypes: boolean[] = [false, false];
-  tooltipLeft: boolean[] = [false, false];
-  tooltipMiddle: boolean[] = [false];
-  tooltipRight: boolean[] = [false, false, false, false];
-  tooltipRightType: boolean[] = [false, false, false, false];
-  tooltipRightClass: boolean[] = [false, false, false, false];
-  showStats: boolean[] = [false]
-  showNotes: boolean[] = [false]
-  tooltipStats: boolean[] = [false, false, false, false, false, false]
+  tooltipEvol = signal<boolean[]>([false]);
+  tooltipTypes = signal<boolean[]>([false, false]);
+  tooltipLeft = signal<boolean[]>([false, false]);
+  tooltipMiddle = signal<boolean[]>([false]);
+  tooltipRight = signal<boolean[]>([false, false, false, false]);
+  tooltipRightType = signal<boolean[]>([false, false, false, false]);
+  tooltipRightClass = signal<boolean[]>([false, false, false, false]);
+  showStats = signal<boolean[]>([false]);
+  showNotes = signal<boolean[]>([false]);
+  tooltipStats = signal<boolean[]>([false, false, false, false, false, false]);
 
-  compareEffectiveness?: number;
-  teratypeEnabled: boolean = false;
+  private readonly tooltipGroups: WritableSignal<boolean[]>[] = [
+    this.tooltipEvol, this.tooltipTypes, this.tooltipLeft, this.tooltipMiddle,
+    this.tooltipRight, this.tooltipRightType, this.tooltipRightClass, this.tooltipStats
+  ];
 
-  constructor() 
+  compareEffectiveness = signal<number | undefined>(undefined);
+  teratypeEnabled = signal<boolean>(false);
+
+  constructor()
   {
-
-  }
-
-  async ngOnChanges(changes: SimpleChanges)
-  {
-    const pokemon = this.pokemon();
-    if(changes['teamOptions'])
+    effect(() =>
     {
-      this.teamOptions.set(changes['teamOptions'].currentValue);
-      this.pokemonSpritePath = this.getPokemonSpritePath.transform(this.pokemon());
-      if(pokemon)
-      {
-        pokemon.calculatedStats = this.pokemonStatService.calculateStats(pokemon, this.teamOptions());
-        this.calculateMaxStat();
-      }
-    }
-    if(changes['pokemon'])
-    {
-      this.pokemon.set(changes['pokemon'].currentValue);
-      this.pokemonSpritePath = this.getPokemonSpritePath.transform(pokemon);
-      await this.linkify();
-      if(pokemon)
-      {
-        pokemon.calculatedStats = this.pokemonStatService.calculateStats(pokemon, this.teamOptions());
-        this.calculateMaxStat();
-      }
-    }
-  }
-
-  async ngOnInit()
-  {
-    if(this.showStatsStart())
-    {
-      this.showStats[0] = true;
-    }
-
-    const compareTeam = this.compareTeam();
-    if(compareTeam)
-    {
-      //Missmatch this compareTeam to the other team results
+      const moveA = this.compareService.selectedMoveA();
+      const compareTeam = untracked(() => this.compareTeam());
       if(compareTeam === "A")
       {
-        this.compareService.selectedMoveA$.subscribe((move?: Move) => 
+        if(moveA)
         {
-          if(move)
-          {
-            this.closeAllProfileTooltips();
-          }
-        })
-        this.compareService.selectedMoveB$.subscribe((move?: Move) => 
-        {
-          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon(), this.teratypeEnabled), move);
-        })
+          this.closeAllProfileTooltips();
+        }
       }
       else if(compareTeam === "B")
       {
-        this.compareService.selectedMoveA$.subscribe((move?: Move) => 
-        {
-          this.compareEffectiveness = this.calcMoveEffectivenessPipe.transform(this.getDefenseEffectiveness.transform(this.pokemon(), this.teratypeEnabled), move);
-        })
-        this.compareService.selectedMoveB$.subscribe((move?: Move) => 
-        {
-          if(move)
-          {
-            this.closeAllProfileTooltips();
-          }        
-        })
+        this.compareEffectiveness.set(this.calcMoveEffectivenessPipe.transform(
+          this.getDefenseEffectiveness.transform(untracked(() => this.pokemon()), untracked(() => this.teratypeEnabled())), moveA));
       }
+    });
+
+    effect(() =>
+    {
+      const moveB = this.compareService.selectedMoveB();
+      const compareTeam = untracked(() => this.compareTeam());
+      if(compareTeam === "A")
+      {
+        this.compareEffectiveness.set(this.calcMoveEffectivenessPipe.transform(
+          this.getDefenseEffectiveness.transform(untracked(() => this.pokemon()), untracked(() => this.teratypeEnabled())), moveB));
+      }
+      else if(compareTeam === "B")
+      {
+        if(moveB)
+        {
+          this.closeAllProfileTooltips();
+        }
+      }
+    });
+
+    effect(() =>
+    {
+      const pokemon = this.pokemon();
+      const teamOptions = this.teamOptions();
+      this.pokemonSpritePath.set(this.getPokemonSpritePath.transform(pokemon));
+      if(pokemon)
+      {
+        pokemon.calculatedStats = this.pokemonStatService.calculateStats(pokemon, teamOptions);
+        this.calculateMaxStat();
+      }
+    });
+
+    let previousPokemon: Pokemon | null | undefined;
+    effect(() =>
+    {
+      const pokemon = this.pokemon();
+      const shouldRelink = !previousPokemon || !pokemon
+        || previousPokemon.ability !== pokemon.ability
+        || previousPokemon.item !== pokemon.item
+        || previousPokemon.moves[0] !== pokemon.moves[0]
+        || previousPokemon.moves[1] !== pokemon.moves[1]
+        || previousPokemon.moves[2] !== pokemon.moves[2]
+        || previousPokemon.moves[3] !== pokemon.moves[3];
+      previousPokemon = pokemon;
+      if(shouldRelink)
+      {
+        untracked(() => this.linkify());
+      }
+    });
+  }
+
+  ngOnInit()
+  {
+    if(this.showStatsStart())
+    {
+      this.showStats.set([true]);
     }
   }
 
@@ -177,74 +180,55 @@ export class PokemonCardComponent
     const pokemon = this.pokemon();
     if(pokemon?.ability?.prose)
     {
-      this.abilityProse = this.linkifier.linkifyProse(pokemon.ability?.prose.content);
+      this.abilityProse.set(this.linkifier.linkifyProse(pokemon.ability?.prose.content));
     }
     if(pokemon?.item?.prose)
     {
-      this.itemProse = this.linkifier.linkifyProse(pokemon.item?.prose.content);
+      this.itemProse.set(this.linkifier.linkifyProse(pokemon.item?.prose.content));
     }
-    if(pokemon?.moves && pokemon.moves[0] && pokemon.moves[0].effect)
+    const moveEffectsShort = [...this.moveEffectsShort()];
+    const moveTargets = [...this.moveTargets()];
+    for(let i = 0; i < 4; i++)
     {
-      this.moveEffectsShort[0] = this.linkifier.linkifyProse(pokemon.moves[0].effect.short.content);
-      this.moveEffectsLong[0] = this.linkifier.linkifyProse(pokemon.moves[0].effect.long.content);
-      this.moveTargets[0] = this.linkifier.linkifyProse(pokemon.moves[0].target?.description.content);
+      const move = pokemon?.moves?.[i];
+      if(move && move.effect)
+      {
+        moveEffectsShort[i] = this.linkifier.linkifyProse(move.effect.short.content);
+        this.moveEffectsLong[i] = this.linkifier.linkifyProse(move.effect.long.content);
+        moveTargets[i] = this.linkifier.linkifyProse(move.target?.description.content);
+      }
     }
-    if(pokemon?.moves && pokemon.moves[1] && pokemon.moves[1].effect)
-    {
-      this.moveEffectsShort[1] = this.linkifier.linkifyProse(pokemon.moves[1].effect.short.content);
-      this.moveEffectsLong[1] = this.linkifier.linkifyProse(pokemon.moves[1].effect.long.content);
-      this.moveTargets[1] = this.linkifier.linkifyProse(pokemon.moves[1].target?.description.content);
-    }
-    if(pokemon?.moves && pokemon.moves[2] && pokemon.moves[2].effect)
-    {
-      this.moveEffectsShort[2] = this.linkifier.linkifyProse(pokemon.moves[2].effect.short.content);
-      this.moveEffectsLong[2] = this.linkifier.linkifyProse(pokemon.moves[2].effect.long.content);
-      this.moveTargets[2] = this.linkifier.linkifyProse(pokemon.moves[2].target?.description.content);
-    }
-    if(pokemon?.moves && pokemon.moves[3] && pokemon.moves[3].effect)
-    {
-      this.moveEffectsShort[3] = this.linkifier.linkifyProse(pokemon.moves[3].effect.short.content);
-      this.moveEffectsLong[3] = this.linkifier.linkifyProse(pokemon.moves[3].effect.long.content);
-      this.moveTargets[3] = this.linkifier.linkifyProse(pokemon.moves[3].target?.description.content);
-    }
+    this.moveEffectsShort.set(moveEffectsShort);
+    this.moveTargets.set(moveTargets);
   }
 
   //For tooltip
   clickSection(index: number, type: string, event?)
   {
-    let list: boolean[] = [];
+    const groupSignal = this.getTooltipGroup(type);
+    if(!groupSignal) { return; }
     const compareTeam = this.compareTeam();
     switch(type)
     {
-      case "evol":
-        list = this.tooltipEvol;
-      break;
       case "types":
-        list = this.tooltipTypes;
         if(compareTeam && index === 0)
         {
-          this.teratypeEnabled = !this.teratypeEnabled;
+          const teratypeEnabled = !this.teratypeEnabled();
+          this.teratypeEnabled.set(teratypeEnabled);
           if(compareTeam === 'A')
           {
-            this.compareService.setTeratypeSelectedIndexA(index, this.teratypeEnabled);
+            this.compareService.setTeratypeSelectedIndexA(index, teratypeEnabled);
           }
           else if(compareTeam === 'B')
           {
-            this.compareService.setTeratypeSelectedIndexB(index, this.teratypeEnabled);          
+            this.compareService.setTeratypeSelectedIndexB(index, teratypeEnabled);
           }
-        } 
+        }
       break;
-      case "left":
-        list = this.tooltipLeft;
-      break;
-      case "middle":
-        list = this.tooltipMiddle;
-        break;
       case "right":
-        list = this.tooltipRight;
-        if(this.compareTeam())
+        if(compareTeam)
         {
-          if(!list[index])
+          if(!groupSignal()[index])
           {
             this.compareMove(index)
           }
@@ -256,29 +240,22 @@ export class PokemonCardComponent
         break;
       case "rightType":
         event.stopPropagation();
-        list = this.tooltipRightType;
-        break;
-      case "rightClass":
-        list = this.tooltipRightClass;
-        break;
-      case "stat":
-        list = this.tooltipStats;
         break;
     }
-    
+
     //If tooltip visible -> hide it
-    if(list[index])
+    if(groupSignal()[index])
     {
       //Close nested tooltip if open
-      if(type === "right" && this.tooltipRightType[index])
+      if(type === "right" && this.tooltipRightType()[index])
       {
-        this.tooltipRightType[index] = false;
+        this.closeAt(this.tooltipRightType, index);
       }
-      if(type === "right" && this.tooltipRightClass[index])
+      if(type === "right" && this.tooltipRightClass()[index])
       {
-        this.tooltipRightClass[index] = false;
+        this.closeAt(this.tooltipRightClass, index);
       }
-      list[index] = false;
+      this.closeAt(groupSignal, index);
     }
     //else -> hide all other tooltips in group
     //     -> show selected tooltip
@@ -289,17 +266,39 @@ export class PokemonCardComponent
         this.closeAllProfileTooltips();
         this.triggerTooltip.emit();
       }
-      for(var i = 0; i < list.length; i++) 
+      const previous = groupSignal();
+      const currentRightType = this.tooltipRightType();
+      for(let i = 0; i < previous.length; i++)
       {
         //Close nested tooltip if open
-        if(list[i] && this.tooltipRightType[i])
+        if(previous[i] && currentRightType[i])
         {
-          this.tooltipRightType[i] = false;
+          this.closeAt(this.tooltipRightType, i);
         }
-        list[i] = false;
       }
-      list[index] = true;
+      groupSignal.update(arr => arr.map((_, i) => i === index));
     }
+  }
+
+  private getTooltipGroup(type: string): WritableSignal<boolean[]> | undefined
+  {
+    switch(type)
+    {
+      case "evol": return this.tooltipEvol;
+      case "types": return this.tooltipTypes;
+      case "left": return this.tooltipLeft;
+      case "middle": return this.tooltipMiddle;
+      case "right": return this.tooltipRight;
+      case "rightType": return this.tooltipRightType;
+      case "rightClass": return this.tooltipRightClass;
+      case "stat": return this.tooltipStats;
+      default: return undefined;
+    }
+  }
+
+  private closeAt(sig: WritableSignal<boolean[]>, index: number)
+  {
+    sig.update(arr => arr.map((v, i) => i === index ? false : v));
   }
 
   triggerStats()
@@ -307,12 +306,12 @@ export class PokemonCardComponent
     const pokemon = this.pokemon();
     if(pokemon && pokemon.stats.length > 0)
     {
-      if(this.showStats[0]) { this.tooltipStats = this.tooltipStats.fill(false); }
-      this.showStats[0] = !this.showStats[0];
-      if(this.editorPreview() && this.showNotes[0] ) 
+      if(this.showStats()[0]) { this.tooltipStats.set(this.tooltipStats().map(() => false)); }
+      this.showStats.update(s => [!s[0]]);
+      if(this.editorPreview() && this.showNotes()[0])
       {
-        this.showNotes[0] = false; 
-        this.triggerNotesEvent.emit(this.showNotes[0]);
+        this.showNotes.set([false]);
+        this.triggerNotesEvent.emit(false);
       }
     }
   }
@@ -323,28 +322,36 @@ export class PokemonCardComponent
     const editorPreview = this.editorPreview();
     if((pokemon && pokemon.notes) || editorPreview)
     {
-      this.showNotes[0] = !this.showNotes[0];
-      this.triggerNotesEvent.emit(this.showNotes[0]);
-      if(editorPreview && this.showStats[0] ) { this.showStats[0] = false; }
+      const nextShowNotes = !this.showNotes()[0];
+      this.showNotes.set([nextShowNotes]);
+      this.triggerNotesEvent.emit(nextShowNotes);
+      if(editorPreview && this.showStats()[0]) { this.showStats.set([false]); }
     }
+  }
+
+  setStatsVisible(visible: boolean)
+  {
+    this.showStats.set([visible]);
+  }
+
+  setNotesVisible(visible: boolean)
+  {
+    this.showNotes.set([visible]);
   }
 
   closeAllProfileTooltips()
   {
-    this.tooltipEvol = this.tooltipEvol.fill(false);
-    this.tooltipTypes = this.tooltipTypes.fill(false);
-    this.tooltipLeft = this.tooltipLeft.fill(false);
-    this.tooltipMiddle = this.tooltipMiddle.fill(false);
-    this.tooltipRight = this.tooltipRight.fill(false);
-    this.tooltipRightType = this.tooltipRightType.fill(false);
-    this.tooltipStats = this.tooltipStats.fill(false);
+    for(const group of this.tooltipGroups)
+    {
+      group.set(group().map(() => false));
+    }
   }
 
   closeAllTooltips()
   {
     this.closeAllProfileTooltips();
-    this.showStats = this.showStats.fill(false);
-    this.showNotes = this.showNotes.fill(false);
+    this.showStats.set(this.showStats().map(() => false));
+    this.showNotes.set(this.showNotes().map(() => false));
     this.triggerNotesEvent.emit(false);
   }
 
@@ -353,24 +360,24 @@ export class PokemonCardComponent
     const pokemon = this.pokemon();
     if(pokemon && this.util.copyToClipboard(this.parser.reverseParsePokemon(pokemon)))
     {
-      this.copied = true;
+      this.copied.set(true);
     }
     else
     {
-      this.copied = false;
+      this.copied.set(false);
     }
   }
 
   copyReset()
   {
-    if(this.copied != undefined) { this.copied = undefined }
+    if(this.copied() != undefined) { this.copied.set(undefined) }
   }
 
   formatItemProse(value: string | undefined) : string
   {
     if(value)
     {
-      let aux = value?.split(':'); 
+      let aux = value?.split(':');
       aux[0] = `<span class="bold">${aux[0]}</span>`
       return aux.join(':');
     }
@@ -393,7 +400,7 @@ export class PokemonCardComponent
         {
           this.compareService.setMoveB(pokemon.moves[moveIndex]);
         }
-      }   
+      }
     }
     else
     {
@@ -414,8 +421,9 @@ export class PokemonCardComponent
     const pokemon = this.pokemon();
     if(pokemon?.calculatedStats)
     {
-      this.maxStat = Math.max(...pokemon.calculatedStats.total.map(v => v.value));
-      this.updateStats.emit(this.maxStat);
+      const maxStat = Math.max(...pokemon.calculatedStats.total.map(v => v.value));
+      this.maxStat.set(maxStat);
+      this.updateStats.emit(maxStat);
     }
   }
 }

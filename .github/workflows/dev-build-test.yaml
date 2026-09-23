@@ -60,13 +60,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
           cache-dependency-path: ui/package-lock.json
 
       - name: Install UI dependencies
         working-directory: ui
-        run: npm ci
+        run: npm install --no-audit
 
       - name: Run Angular Jest tests
         working-directory: ui

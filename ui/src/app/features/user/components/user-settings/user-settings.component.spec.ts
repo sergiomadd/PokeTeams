@@ -1,10 +1,9 @@
 import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { BehaviorSubject } from 'rxjs';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
 import { User } from '../../../../core/models/user/user.model';
@@ -89,7 +88,7 @@ describe('UserSettingsComponent', () => {
     };
 
     const userPageServiceMock = {
-      user: new BehaviorSubject<User | undefined>(mockUser),
+      user: signal<User | undefined>(mockUser),
       loggedUserEmail: {
         email: 'test@example.com',
         emailConfirmed: true
@@ -154,13 +153,13 @@ describe('UserSettingsComponent', () => {
     });
 
     it('should initialize user data from userPageService', () => {
-      expect(component.user).toEqual(mockUser);
+      expect(component.user()).toEqual(mockUser);
     });
 
     it('should load profile pictures on init', async () => {
       await fixture.whenStable();
       expect(userService.getAllProfilePics).toHaveBeenCalled();
-      expect(component.pictures.length).toBeGreaterThan(0);
+      expect(component.pictures().length).toBeGreaterThan(0);
     });
 
     it('should initialize all forms with correct validators', () => {
@@ -173,11 +172,11 @@ describe('UserSettingsComponent', () => {
 
   describe('Picture Management', () => {
     it('should toggle picture catalog visibility', () => {
-      expect(component.showCatalog).toBe(false);
+      expect(component.showCatalog()).toBe(false);
       component.clickPictureSelector();
-      expect(component.showCatalog).toBe(true);
+      expect(component.showCatalog()).toBe(true);
       component.clickPictureSelector();
-      expect(component.showCatalog).toBe(false);
+      expect(component.showCatalog()).toBe(false);
     });
 
     it('should extract picture key from path correctly', () => {
@@ -187,27 +186,27 @@ describe('UserSettingsComponent', () => {
     });
 
     it('should dispatch changePicture action when selecting a different picture', () => {
-      component.showCatalog = true; // Open catalog first
+      component.showCatalog.set(true); // Open catalog first
       const newPicture = '/assets/pics/avatar2.png';
       component.changePicture(newPicture);
-      
+
       expect(store.dispatch).toHaveBeenCalledWith(
         authActions.changePicture({
           request: { newPictureKey: 'avatar2' }
         })
       );
-      expect(component.changePictureSubmitted).toBe(true);
-      expect(component.showCatalog).toBe(false);
+      expect(component.changePictureSubmitted()).toBe(true);
+      expect(component.showCatalog()).toBe(false);
     });
 
     it('should not dispatch action when selecting the same picture', () => {
       jest.clearAllMocks();
-      component.showCatalog = true;
+      component.showCatalog.set(true);
       component.changePicture(mockUser.picture!);
-      
+
       expect(store.dispatch).not.toHaveBeenCalled();
       // Catalog should remain open when selecting same picture
-      expect(component.showCatalog).toBe(true);
+      expect(component.showCatalog()).toBe(true);
     });
   });
 
@@ -215,26 +214,26 @@ describe('UserSettingsComponent', () => {
     it('should dispatch changeCountry action', () => {
       const newCountry = { identifier: 'FR' };
       component.changeCountry(newCountry);
-      
+
       expect(store.dispatch).toHaveBeenCalledWith(
         authActions.changeCountry({
           request: { newCountryCode: 'FR' }
         })
       );
-      expect(component.changeCountrySubmitted).toBe(true);
+      expect(component.changeCountrySubmitted()).toBe(true);
     });
   });
 
   describe('Visibility Management', () => {
     it('should dispatch changeVisibility action with true', () => {
       component.changeVisibility(true);
-      
+
       expect(store.dispatch).toHaveBeenCalledWith(
         authActions.changeVisibility({
           request: { newVisibility: true }
         })
       );
-      expect(component.changeVisibilitySubmitted).toBe(true);
+      expect(component.changeVisibilitySubmitted()).toBe(true);
     });
 
     it('should dispatch changeVisibility action with false', () => {
@@ -258,22 +257,22 @@ describe('UserSettingsComponent', () => {
           request: { newName: 'New Name' }
         })
       );
-      expect(component.changeNameSubmitted).toBe(true);
-      expect(component.changeNameButtonClicked).toBe(true);
+      expect(component.changeNameSubmitted()).toBe(true);
+      expect(component.changeNameButtonClicked()).toBe(true);
     });
 
     it('should not dispatch action with invalid form', () => {
       jest.clearAllMocks();
       component.changeNameForm.controls.newName.setValue('');
       component.changeName();
-      
+
       expect(store.dispatch).not.toHaveBeenCalled();
-      expect(component.changeNameButtonClicked).toBe(true);
+      expect(component.changeNameButtonClicked()).toBe(true);
     });
 
     it('should reset form on success', async () => {
       component.changeNameForm.controls.newName.setValue('New Name');
-      component.changeNameSubmitted = true;
+      component.changeNameSubmitted.set(true);
       
       // Override the success selector to emit true
       store.overrideSelector(selectSuccess as any, true);
@@ -298,7 +297,7 @@ describe('UserSettingsComponent', () => {
           request: { newUserName: 'newusername' }
         })
       );
-      expect(component.changeUserNameSubmitted).toBe(true);
+      expect(component.changeUserNameSubmitted()).toBe(true);
     });
 
     it('should validate username length', () => {
@@ -316,7 +315,7 @@ describe('UserSettingsComponent', () => {
 
     it('should reset form on success', async () => {
       component.changeUserNameForm.controls.newUserName.setValue('newusername');
-      component.changeUserNameSubmitted = true;
+      component.changeUserNameSubmitted.set(true);
       
       store.overrideSelector(selectSuccess as any, true);
       store.refreshState();
@@ -339,28 +338,28 @@ describe('UserSettingsComponent', () => {
           request: { newEmail: 'newemail@example.com' }
         })
       );
-      expect(component.changeEmailSubmitted).toBe(true);
+      expect(component.changeEmailSubmitted()).toBe(true);
     });
 
     it('should not dispatch action with invalid email format', () => {
       jest.clearAllMocks();
       component.changeEmailForm.controls.newEmail.setValue('invalid-email');
       component.changeEmail();
-      
+
       expect(component.changeEmailForm.valid).toBe(false);
       expect(store.dispatch).not.toHaveBeenCalled();
     });
 
     it('should dispatch sendVerification action', () => {
       component.sendEmailVerificationCode();
-      
+
       expect(store.dispatch).toHaveBeenCalledWith(authActions.sendVerification());
-      expect(component.sendEmailVerificationCodeSubmitted).toBe(true);
+      expect(component.sendEmailVerificationCodeSubmitted()).toBe(true);
     });
 
     it('should reset form on success', async () => {
       component.changeEmailForm.controls.newEmail.setValue('newemail@example.com');
-      component.changeEmailSubmitted = true;
+      component.changeEmailSubmitted.set(true);
       
       store.overrideSelector(selectSuccess as any, true);
       store.refreshState();
@@ -389,7 +388,7 @@ describe('UserSettingsComponent', () => {
           }
         })
       );
-      expect(component.changePasswordSubmitted).toBe(true);
+      expect(component.changePasswordSubmitted()).toBe(true);
     });
 
     it('should validate password minimum length', () => {
@@ -418,7 +417,7 @@ describe('UserSettingsComponent', () => {
       component.changePasswordForm.controls.currentPassword.setValue('oldpass123');
       component.changePasswordForm.controls.password.setValue('newpass123');
       component.changePasswordForm.controls.confirmPassword.setValue('newpass123');
-      component.changePasswordSubmitted = true;
+      component.changePasswordSubmitted.set(true);
       
       store.overrideSelector(selectSuccess as any, true);
       store.refreshState();
@@ -437,28 +436,28 @@ describe('UserSettingsComponent', () => {
 
   describe('Account Management', () => {
     it('should toggle delete dialog', () => {
-      expect(component.deleteDialog).toBe(false);
+      expect(component.deleteDialog()).toBe(false);
       component.tryDeleteAccout();
-      expect(component.deleteDialog).toBe(true);
+      expect(component.deleteDialog()).toBe(true);
     });
 
     it('should delete account when confirmed', () => {
-      component.deleteDialog = true;
+      component.deleteDialog.set(true);
       component.chooseEvent(true);
-      
+
       expect(socialAuthService.signOut).toHaveBeenCalled();
       expect(store.dispatch).toHaveBeenCalledWith(authActions.deleteAccount());
-      expect(component.deleteDialog).toBe(false);
+      expect(component.deleteDialog()).toBe(false);
     });
 
     it('should cancel delete when not confirmed', () => {
       jest.clearAllMocks();
-      component.deleteDialog = true;
+      component.deleteDialog.set(true);
       component.chooseEvent(false);
-      
+
       expect(socialAuthService.signOut).not.toHaveBeenCalled();
       expect(store.dispatch).not.toHaveBeenCalledWith(authActions.deleteAccount());
-      expect(component.deleteDialog).toBe(false);
+      expect(component.deleteDialog()).toBe(false);
     });
 
     it('should log out user', () => {
@@ -505,7 +504,7 @@ describe('UserSettingsComponent', () => {
     });
 
     it('should select correct form submitted flag', () => {
-      component.changeNameButtonClicked = true;
+      component.changeNameButtonClicked.set(true);
       const flag = component.selectFormSubmittedFlag('changeNameForm');
       expect(flag).toBe(true);
     });
@@ -513,52 +512,40 @@ describe('UserSettingsComponent', () => {
 
   describe('State Management', () => {
     it('should reset all submitted flags', () => {
-      component.changePictureSubmitted = true;
-      component.changeCountrySubmitted = true;
-      component.changeVisibilitySubmitted = true;
-      component.changeNameSubmitted = true;
-      
+      component.changePictureSubmitted.set(true);
+      component.changeCountrySubmitted.set(true);
+      component.changeVisibilitySubmitted.set(true);
+      component.changeNameSubmitted.set(true);
+
       component.resetSubmitted();
-      
-      expect(component.changePictureSubmitted).toBe(false);
-      expect(component.changeCountrySubmitted).toBe(false);
-      expect(component.changeVisibilitySubmitted).toBe(false);
-      expect(component.changeNameSubmitted).toBe(false);
+
+      expect(component.changePictureSubmitted()).toBe(false);
+      expect(component.changeCountrySubmitted()).toBe(false);
+      expect(component.changeVisibilitySubmitted()).toBe(false);
+      expect(component.changeNameSubmitted()).toBe(false);
     });
 
     it('should reset submitted flags before each action', () => {
-      component.changePictureSubmitted = true;
-      component.changeCountrySubmitted = true;
-      
+      component.changePictureSubmitted.set(true);
+      component.changeCountrySubmitted.set(true);
+
       component.changeName();
-      
-      expect(component.changePictureSubmitted).toBe(false);
-      expect(component.changeCountrySubmitted).toBe(false);
+
+      expect(component.changePictureSubmitted()).toBe(false);
+      expect(component.changeCountrySubmitted()).toBe(false);
     });
   });
 
   describe('Store Selectors', () => {
     it('should select logged user from store', () => {
-      let result: User | null = null;
-      const subscription = component.loggedUser$.subscribe(user => {
-        result = user;
-      });
-      
-      expect(result).toEqual(mockUser);
-      subscription.unsubscribe();
+      expect(component.loggedUser()).toEqual(mockUser);
     });
 
     it('should select isSubmitting state', () => {
       store.overrideSelector(selectIsSubmitting as any, true);
       store.refreshState();
-      
-      let result = false;
-      const subscription = component.isSubmitting$.subscribe(isSubmitting => {
-        result = isSubmitting;
-      });
 
-      expect(result).toBe(true);
-      subscription.unsubscribe();
+      expect(component.isSubmitting()).toBe(true);
     });
 
     it('should select error state', () => {
@@ -566,26 +553,14 @@ describe('UserSettingsComponent', () => {
       store.overrideSelector(selectError as any, errorMessage);
       store.refreshState();
 
-      let result: string | null = null;
-      const subscription = component.backendError$.subscribe(error => {
-        result = error;
-      });
-      
-      expect(result).toBe(errorMessage);
-      subscription.unsubscribe();
+      expect(component.backendError()).toBe(errorMessage);
     });
 
     it('should select success state', () => {
       store.overrideSelector(selectSuccess as any, true);
       store.refreshState();
 
-      let result = false;
-      const subscription = component.success$.subscribe(success => {
-        result = success;
-      });
-      
-      expect(result).toBe(true);
-      subscription.unsubscribe();
+      expect(component.success()).toBe(true);
     });
   });
 });

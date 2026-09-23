@@ -12,12 +12,12 @@ import { TeamService } from '../../core/services/team.service';
 import { SearchService } from './search.service';
 
 class MockTeamService
-{ 
+{
   searchTeams(searchQuery: SearchQueryDTO) : Observable<SearchQueryResponseDTO> | undefined
   {
     const response: SearchQueryResponseDTO =
     {
-      teams: 
+      teams:
       [
         {
           id: "testFromMock",
@@ -28,7 +28,7 @@ class MockTeamService
         }
       ],
       totalTeams: 0
-    } 
+    }
 
     return of(response)
   }
@@ -39,7 +39,7 @@ describe('SearchService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: 
+      providers:
       [
         { provide: TeamService, useClass: MockTeamService },
       ]
@@ -51,12 +51,12 @@ describe('SearchService', () => {
     expect(service).toBeTruthy();
   });
 
-  let resetQuery: SearchQueryDTO = 
+  let resetQuery: SearchQueryDTO =
   {
     queries: [],
     teamsPerPage: 10,
     selectedPage: 1,
-    sortOrder: 
+    sortOrder:
     {
       type: SortType.date,
       way: SortWay.descending
@@ -64,30 +64,16 @@ describe('SearchService', () => {
     setOperation: SetOperation.intersection
   }
 
-  it('should initiate with query reset', () => 
+  it('should initiate with query reset', () =>
   {
-    let currentQuery: SearchQueryDTO | undefined;
-
-    service.query.subscribe(value => 
-    {
-      currentQuery = value
-    })
-
-    expect(currentQuery).toStrictEqual(resetQuery);
+    expect(service.query()).toStrictEqual(resetQuery);
   })
 
-  describe("setTeams()", () => 
+  describe("setTeams()", () =>
   {
     it("should set the correct teams", () =>
     {
-      let currentTeams: TeamPreviewData[] = [];
-
-      service.teams.subscribe(value => 
-      {
-        currentTeams = value
-      })
-  
-      let newTeams: TeamPreviewData[] = 
+      let newTeams: TeamPreviewData[] =
       [
         {
           id: "test",
@@ -99,20 +85,13 @@ describe('SearchService', () => {
       ]
 
       service.setTeams(newTeams);
-  
-      expect(currentTeams).toStrictEqual(newTeams);
+
+      expect(service.teams()).toStrictEqual(newTeams);
     })
 
-    it("should set empty teams", () => 
+    it("should set empty teams", () =>
     {
-      let currentTeams: TeamPreviewData[] = [];
-
-      service.teams.subscribe(value => 
-      {
-        currentTeams = value
-      })
-  
-      let newTeams: TeamPreviewData[] = 
+      let newTeams: TeamPreviewData[] =
       [
         {
           id: "test",
@@ -125,87 +104,59 @@ describe('SearchService', () => {
 
       service.setTeams(newTeams);
       service.setTeams([]);
-  
-      expect(currentTeams).toStrictEqual([]);
+
+      expect(service.teams()).toStrictEqual([]);
     })
   })
 
-  describe("setSearched()", () => 
+  describe("setSearched()", () =>
   {
     it("should set the correct searched flag", () =>
     {
-      let currentSearched: boolean | undefined;
-
-      service.searched.subscribe(value => 
-      {
-        currentSearched = value
-      })
-
-      expect(currentSearched).toBe(false);
+      expect(service.searched()).toBe(false);
 
       service.setSearched(true);
-  
-      expect(currentSearched).toBe(true);
+
+      expect(service.searched()).toBe(true);
     })
   })
 
-  describe("setSearchError()", () => 
+  describe("setSearchError()", () =>
   {
     it("should set the correct search error", () =>
     {
-      let currentSearchError: string | undefined;
-
-      service.searchError.subscribe(value => 
-      {
-        currentSearchError = value
-      })
-
-      expect(currentSearchError).toMatch("");
+      expect(service.searchError()).toMatch("");
 
       service.setSearchError("testSearchError");
-  
-      expect(currentSearchError).toMatch("testSearchError");
+
+      expect(service.searchError()).toMatch("testSearchError");
     })
   })
 
-  describe("setTotalTeams()", () => 
+  describe("setTotalTeams()", () =>
   {
     it("should set the correct total teams", () =>
     {
-      let currentTotalTeams: number | undefined;
-
-      service.totalTeams.subscribe(value => 
-      {
-        currentTotalTeams = value
-      })
-
-      expect(currentTotalTeams).toBe(0);
+      expect(service.totalTeams()).toBe(0);
 
       service.setTotalTeams(5);
-  
-      expect(currentTotalTeams).toBe(5);
+
+      expect(service.totalTeams()).toBe(5);
     })
   })
 
-  describe("setQuery()", () => 
+  describe("setQuery()", () =>
   {
     it("should set the correct query", () =>
     {
-      let currentQuery: SearchQueryDTO | undefined;
+      expect(service.query()).toStrictEqual(resetQuery);
 
-      service.query.subscribe(value => 
-      {
-        currentQuery = value
-      })
-  
-      expect(currentQuery).toStrictEqual(resetQuery);
-
-      let newQuery: SearchQueryDTO = 
+      let newQuery: SearchQueryDTO =
       {
         queries: [],
         teamsPerPage: 30,
         selectedPage: 5,
-        sortOrder: 
+        sortOrder:
         {
           type: SortType.views,
           way: SortWay.ascending
@@ -214,25 +165,18 @@ describe('SearchService', () => {
       }
 
       service.setQuery(newQuery);
-  
-      expect(currentQuery).toStrictEqual(newQuery);
+
+      expect(service.query()).toStrictEqual(newQuery);
     })
   })
 
-  describe("setQueryItems()", () => 
+  describe("setQueryItems()", () =>
   {
     it("should set the correct query items", () =>
     {
-      let currentQuery: SearchQueryDTO | undefined;
+      expect(service.query()).toStrictEqual(resetQuery);
 
-      service.query.subscribe(value => 
-      {
-        currentQuery = value
-      })
-  
-      expect(currentQuery).toStrictEqual(resetQuery);
-
-      const newQueryItems: QueryItem[] = 
+      const newQueryItems: QueryItem[] =
       [
         {
           name: "test",
@@ -242,9 +186,9 @@ describe('SearchService', () => {
 
       service.setQueryItems(newQueryItems);
 
-      let newQuery: SearchQueryDTO = 
+      let newQuery: SearchQueryDTO =
       {
-        queries: 
+        queries:
         [
           {
             name: "test",
@@ -253,7 +197,7 @@ describe('SearchService', () => {
         ],
         teamsPerPage: 10,
         selectedPage: 1,
-        sortOrder: 
+        sortOrder:
         {
           type: SortType.date,
           way: SortWay.descending
@@ -261,21 +205,14 @@ describe('SearchService', () => {
         setOperation: SetOperation.intersection
       }
 
-      expect(currentQuery).toStrictEqual(newQuery);
+      expect(service.query()).toStrictEqual(newQuery);
     })
 
     it("should set empty query items", () =>
     {
-      let currentQuery: SearchQueryDTO | undefined;
+      expect(service.query()).toStrictEqual(resetQuery);
 
-      service.query.subscribe(value => 
-      {
-        currentQuery = value
-      })
-  
-      expect(currentQuery).toStrictEqual(resetQuery);
-
-      const newQueryItems: QueryItem[] = 
+      const newQueryItems: QueryItem[] =
       [
         {
           name: "test",
@@ -285,9 +222,9 @@ describe('SearchService', () => {
 
       service.setQueryItems(newQueryItems);
 
-      let newQuery: SearchQueryDTO = 
+      let newQuery: SearchQueryDTO =
       {
-        queries: 
+        queries:
         [
           {
             name: "test",
@@ -296,7 +233,7 @@ describe('SearchService', () => {
         ],
         teamsPerPage: 10,
         selectedPage: 1,
-        sortOrder: 
+        sortOrder:
         {
           type: SortType.date,
           way: SortWay.descending
@@ -304,37 +241,30 @@ describe('SearchService', () => {
         setOperation: SetOperation.intersection
       }
 
-      expect(currentQuery).toStrictEqual(newQuery);
+      expect(service.query()).toStrictEqual(newQuery);
 
       service.setQueryItems([]);
 
-      expect(currentQuery).toStrictEqual(resetQuery);
+      expect(service.query()).toStrictEqual(resetQuery);
     })
   })
 
-  describe("setQueryTeamsPerPage()", () => 
+  describe("setQueryTeamsPerPage()", () =>
   {
     it("should set the correct query teams per page", () =>
     {
-      let currentQuery: SearchQueryDTO | undefined;
-
-      service.query.subscribe(value => 
-      {
-        currentQuery = value
-      })
-  
-      expect(currentQuery).toStrictEqual(resetQuery);
+      expect(service.query()).toStrictEqual(resetQuery);
 
       const newQueryTeamsPerPage: number = 60;
 
       service.setQueryTeamsPerPage(newQueryTeamsPerPage);
 
-      let newQuery: SearchQueryDTO = 
+      let newQuery: SearchQueryDTO =
       {
         queries: [],
         teamsPerPage: 60,
         selectedPage: 1,
-        sortOrder: 
+        sortOrder:
         {
           type: SortType.date,
           way: SortWay.descending
@@ -342,33 +272,26 @@ describe('SearchService', () => {
         setOperation: SetOperation.intersection
       }
 
-      expect(currentQuery).toStrictEqual(newQuery);
+      expect(service.query()).toStrictEqual(newQuery);
     })
   })
 
-  describe("setQuerySelectedPage()", () => 
+  describe("setQuerySelectedPage()", () =>
   {
     it("should set the correct query selected page", () =>
     {
-      let currentQuery: SearchQueryDTO | undefined;
-
-      service.query.subscribe(value => 
-      {
-        currentQuery = value
-      })
-  
-      expect(currentQuery).toStrictEqual(resetQuery);
+      expect(service.query()).toStrictEqual(resetQuery);
 
       const newQuerySelectedPage: number = 7;
 
       service.setQuerySelectedPage(newQuerySelectedPage);
 
-      let newQuery: SearchQueryDTO = 
+      let newQuery: SearchQueryDTO =
       {
         queries: [],
         teamsPerPage: 10,
         selectedPage: 7,
-        sortOrder: 
+        sortOrder:
         {
           type: SortType.date,
           way: SortWay.descending
@@ -376,29 +299,22 @@ describe('SearchService', () => {
         setOperation: SetOperation.intersection
       }
 
-      expect(currentQuery).toStrictEqual(newQuery);
+      expect(service.query()).toStrictEqual(newQuery);
     })
   })
 
-  describe("setQuerySortOrder()", () => 
+  describe("setQuerySortOrder()", () =>
   {
     it("should set the correct query sort order", () =>
     {
-      let currentQuery: SearchQueryDTO | undefined;
+      expect(service.query()).toStrictEqual(resetQuery);
 
-      service.query.subscribe(value => 
-      {
-        currentQuery = value
-      })
-  
-      expect(currentQuery).toStrictEqual(resetQuery);
-
-      let preQuery: SearchQueryDTO = 
+      let preQuery: SearchQueryDTO =
       {
         queries: [],
         teamsPerPage: 10,
         selectedPage: 13,
-        sortOrder: 
+        sortOrder:
         {
           type: SortType.date,
           way: SortWay.descending
@@ -408,9 +324,9 @@ describe('SearchService', () => {
 
       service.setQuerySelectedPage(13);
 
-      expect(currentQuery).toStrictEqual(preQuery);
+      expect(service.query()).toStrictEqual(preQuery);
 
-      const newQuerySortOrder: SortOrder = 
+      const newQuerySortOrder: SortOrder =
       {
         type: SortType.views,
         way: SortWay.ascending
@@ -418,12 +334,12 @@ describe('SearchService', () => {
 
       service.setQuerySortOrder(newQuerySortOrder);
 
-      let newQuery: SearchQueryDTO = 
+      let newQuery: SearchQueryDTO =
       {
         queries: [],
         teamsPerPage: 10,
         selectedPage: 1,
-        sortOrder: 
+        sortOrder:
         {
           type: SortType.views,
           way: SortWay.ascending
@@ -431,29 +347,22 @@ describe('SearchService', () => {
         setOperation: SetOperation.intersection
       }
 
-      expect(currentQuery).toStrictEqual(newQuery);
+      expect(service.query()).toStrictEqual(newQuery);
     })
   })
 
-  describe("setQuerySetOperation()", () => 
+  describe("setQuerySetOperation()", () =>
   {
     it("should set the correct query set operation", () =>
     {
-      let currentQuery: SearchQueryDTO | undefined;
+      expect(service.query()).toStrictEqual(resetQuery);
 
-      service.query.subscribe(value => 
-      {
-        currentQuery = value
-      })
-  
-      expect(currentQuery).toStrictEqual(resetQuery);
-
-      let preQuery: SearchQueryDTO = 
+      let preQuery: SearchQueryDTO =
       {
         queries: [],
         teamsPerPage: 10,
         selectedPage: 8,
-        sortOrder: 
+        sortOrder:
         {
           type: SortType.date,
           way: SortWay.descending
@@ -463,18 +372,18 @@ describe('SearchService', () => {
 
       service.setQuerySelectedPage(8);
 
-      expect(currentQuery).toStrictEqual(preQuery);
+      expect(service.query()).toStrictEqual(preQuery);
 
       const newQuerySetOperation: SetOperation = SetOperation.union;
 
       service.setQuerySetOperation(newQuerySetOperation);
 
-      let newQuery: SearchQueryDTO = 
+      let newQuery: SearchQueryDTO =
       {
         queries: [],
         teamsPerPage: 10,
         selectedPage: 1,
-        sortOrder: 
+        sortOrder:
         {
           type: SortType.date,
           way: SortWay.descending
@@ -482,29 +391,22 @@ describe('SearchService', () => {
         setOperation: SetOperation.union
       }
 
-      expect(currentQuery).toStrictEqual(newQuery);
+      expect(service.query()).toStrictEqual(newQuery);
     })
   })
 
-  describe("getCurrentPage()", () => 
+  describe("getCurrentPage()", () =>
   {
     it("should get the correct current page", () =>
     {
-      let currentQuery: SearchQueryDTO | undefined;
+      expect(service.query()).toStrictEqual(resetQuery);
 
-      service.query.subscribe(value => 
-      {
-        currentQuery = value
-      })
-  
-      expect(currentQuery).toStrictEqual(resetQuery);
-
-      let preQuery: SearchQueryDTO = 
+      let preQuery: SearchQueryDTO =
       {
         queries: [],
         teamsPerPage: 10,
         selectedPage: 16,
-        sortOrder: 
+        sortOrder:
         {
           type: SortType.date,
           way: SortWay.descending
@@ -514,59 +416,27 @@ describe('SearchService', () => {
 
       service.setQuerySelectedPage(16);
 
-      expect(currentQuery).toStrictEqual(preQuery);
+      expect(service.query()).toStrictEqual(preQuery);
       expect(service.getCurrentPage()).toBe(16);
     })
   })
 
   describe("search()", () =>
   {
-    let currentQuery: SearchQueryDTO | undefined;
-    let currentTeams: TeamPreviewData[] | undefined;
-    let totalTeams: number | undefined;
-    let searchError: string | undefined;
-    let searched: boolean | undefined;
-
-    beforeEach(() => 
+    beforeEach(() =>
     {
-      service.query.subscribe(value => 
-      {
-        currentQuery = value
-      })
-      expect(currentQuery).toStrictEqual(resetQuery);
-
-      service.teams.subscribe(value => 
-      {
-        currentTeams = value
-      })
-      expect(currentTeams).toStrictEqual([]);
-
-      
-      service.totalTeams.subscribe(value => 
-      {
-        totalTeams = value
-      })
-      expect(currentTeams).toStrictEqual([]);
-
-      service.searchError.subscribe(value => 
-      {
-        searchError = value
-      })
-      expect(currentTeams).toStrictEqual([]);
-
-      service.searched.subscribe(value => 
-      {
-        searched = value
-      })
-      expect(currentTeams).toStrictEqual([]);
-      
+      expect(service.query()).toStrictEqual(resetQuery);
+      expect(service.teams()).toStrictEqual([]);
+      expect(service.totalTeams()).toBe(0);
+      expect(service.searchError()).toBe("");
+      expect(service.searched()).toBe(false);
     })
 
-    it("should search successfully", () => 
+    it("should search successfully", () =>
     {
       const response: SearchQueryResponseDTO =
       {
-        teams: 
+        teams:
         [
           {
             id: "testFromMock",
@@ -577,16 +447,16 @@ describe('SearchService', () => {
           }
         ],
         totalTeams: 0
-      } 
+      }
 
       const teamService = TestBed.inject(TeamService);
       jest.spyOn(teamService, 'searchTeams').mockReturnValue(of(response));
 
       service.search(resetQuery);
 
-      expect(currentTeams).toStrictEqual(response.teams);
-      expect(totalTeams).toStrictEqual(response.totalTeams);
-      expect(searchError).toStrictEqual("");
+      expect(service.teams()).toStrictEqual(response.teams);
+      expect(service.totalTeams()).toStrictEqual(response.totalTeams);
+      expect(service.searchError()).toStrictEqual("");
 
     })
   })

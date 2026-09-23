@@ -58,6 +58,40 @@ namespace api.Services.PokedexServices
             return pokeType;
         }
 
+        public async Task<Dictionary<int, PokeTypeDTO>> GetTypesByIds(List<int> ids, int langId, bool teraType = false)
+        {
+            if (ids == null || ids.Count == 0)
+            {
+                return new Dictionary<int, PokeTypeDTO>();
+            }
+
+            var query =
+                from types in _pokedexContext.types.Where(t => ids.Contains(t.id))
+
+                join typeNames in _pokedexContext.type_names
+                on new { Key1 = types.id, Key2 = langId } equals new { Key1 = typeNames.type_id, Key2 = typeNames.local_language_id } into typeNamesJoin
+                from typeNames in typeNamesJoin.DefaultIfEmpty()
+
+                join typeNamesDefault in _pokedexContext.type_names
+                on new { Key1 = types.id, Key2 = (int)Lang.en } equals new { Key1 = typeNamesDefault.type_id, Key2 = typeNamesDefault.local_language_id } into typeNamesDefaultJoin
+                from typeNamesDefault in typeNamesDefaultJoin.DefaultIfEmpty()
+
+                select new
+                {
+                    types.id,
+                    PokeType = new PokeTypeDTO(
+                        types.identifier,
+                        typeNames != null ?
+                            new LocalizedText(typeNames.name, typeNames.local_language_id, typeNamesDefault.name) :
+                            new LocalizedText(typeNamesDefault.name, typeNames.local_language_id, typeNamesDefault.name),
+                        teraType ? $"{pokeTypeTeraIconPath}{types.identifier}.png" : $"{pokeTypeIconPath}{types.identifier}.png",
+                        teraType)
+                };
+
+            var results = await query.ToListAsync();
+            return results.ToDictionary(r => r.id, r => r.PokeType);
+        }
+
         public async Task<PokeTypeDTO?> GetTypeByIdentifier(string identifier, bool teraType, int langId)
         {
             PokeTypeDTO? pokeType = null;
@@ -167,10 +201,10 @@ namespace api.Services.PokedexServices
             List<type_efficacy> typeEfficacyList = await _pokedexContext.type_efficacy.Where(t => t.damage_type_id == id && t.damage_factor != 100).ToListAsync();
             if (typeEfficacyList != null)
             {
+                Dictionary<int, PokeTypeDTO> typesById = await GetTypesByIds(typeEfficacyList.Select(t => t.target_type_id).Distinct().ToList(), langId);
                 foreach (var typeEfficacy in typeEfficacyList)
                 {
-                    PokeTypeDTO? type = await GetTypeById(typeEfficacy.target_type_id, langId);
-                    if (type != null)
+                    if (typesById.TryGetValue(typeEfficacy.target_type_id, out PokeTypeDTO? type))
                     {
                         allValues.Add(new(type, typeEfficacy.damage_factor / (double)100));
                     }
@@ -191,10 +225,10 @@ namespace api.Services.PokedexServices
             List<type_efficacy> typeEfficacyList = await _pokedexContext.type_efficacy.Where(t => t.target_type_id == id && t.damage_factor != 100).ToListAsync();
             if (typeEfficacyList != null)
             {
+                Dictionary<int, PokeTypeDTO> typesById = await GetTypesByIds(typeEfficacyList.Select(t => t.damage_type_id).Distinct().ToList(), langId);
                 foreach (var typeEfficacy in typeEfficacyList)
                 {
-                    PokeTypeDTO? type = await GetTypeById(typeEfficacy.damage_type_id, langId);
-                    if (type != null)
+                    if (typesById.TryGetValue(typeEfficacy.damage_type_id, out PokeTypeDTO? type))
                     {
                         allValues.Add(new(type, typeEfficacy.damage_factor / (double)100));
                     }

@@ -1,7 +1,7 @@
 <div
   class="team-table flex-col align-i-c w-80"
   #results
-  [ngClass]="{searching: searched}"
+  [ngClass]="{searching: searched()}"
   >
   <div class="bar w-100 pad-m flex justify-c-sb">
     <div class="flex justify-c-c gap-m">
@@ -34,22 +34,22 @@
       }
     </div>
     <div class="flex justify-c-c gap-m">
-      <div class="flex pad-m gap-m bor-1-3 bor-rad-10">{{totalTeams ?? '?'}} {{totalTeams == 1 ? ('search.team_table.total_teams_single' | translate) : ('search.team_table.total_teams' | translate)}}</div>
+      <div class="flex pad-m gap-m bor-1-3 bor-rad-10">{{totalTeams() ?? '?'}} {{totalTeams() == 1 ? ('search.team_table.total_teams_single' | translate) : ('search.team_table.total_teams' | translate)}}</div>
     </div>
   </div>
   <div class="relative flex-col align-i-c gap-l m-auto w-100">
     <div class="w-100 flex wrap justify-c-c align-i-s gap-l"  style="min-height: 60vh;">
-      @if (searched) {
+      @if (searched()) {
         <div class="loader-wrapper">
           <div class="pokemon-spinner"></div>
         </div>
       }
-      @if (teams && teams.length > 0) {
-        @for (team of teams; track team) {
+      @if (teams()?.length) {
+        @for (team of teams(); track team) {
           <div class="w-100 record">
             <app-team-preview
               [team]="team"
-              [logged]="logged"
+              [logged]="loggedUser() ?? undefined"
               (deleteEvent)="deleteTeam()"
             ></app-team-preview>
           </div>
@@ -65,7 +65,7 @@
       <div></div>
       <app-pagination
         [itemsPerPage]="paginationForm.controls.teamsPerPage.valid ? paginationForm.controls.teamsPerPage.value ?? defaultTeams : defaultTeams"
-        [totalItems]="totalTeams ?? 0"
+        [totalItems]="totalTeams() ?? 0"
         (pageChanged)="pageChange($event, results)"
       ></app-pagination>
       @if (window.currentDevice === window.DeviceType.desktop) {
@@ -86,13 +86,13 @@
         }
       </div>
     </div>
-    @if (teamsToCompare && teamsToCompare.length > 0) {
+    @if (teamsToCompare().length) {
       <div class="to-compare">
         <div class="relative w-100 flex justify-c-c align-i-c pointer" (click)="toggleTeamsToCompare()">
-          <span class="no-select">{{'team.compare.popup_title' | translate:{ teamsToCompare: teamsToCompare.length } }}</span>
+          <span class="no-select">{{'team.compare.popup_title' | translate:{ teamsToCompare: teamsToCompare().length } }}</span>
           <button type="button"
             class="no-shadow button to-compare-toggle icon-m pad-s"
-            [ngClass]="{'to-compare-toggle-rotate': !teamsToCompareOpen}"
+            [ngClass]="{'to-compare-toggle-rotate': !teamsToCompareOpen()}"
             >
             <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
               <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="var(--text-color)" stroke="none">
@@ -102,10 +102,10 @@
           </button>
         </div>
         <div class="flex flex-col justify-c-c align-i-c gap-l to-compare-content"
-          [ngClass]="{'to-compare-content-closed': !teamsToCompareOpen}"
+          [ngClass]="{'to-compare-content-closed': !teamsToCompareOpen()}"
           >
           <div class="flex flex-col justify-c-c align-i-c gap-l" style="margin-top: 0.8em;">
-            @for (team of teamsToCompare; track team; let i = $index) {
+            @for (team of teamsToCompare(); track team; let i = $index) {
               <div class="w-100 bor-1-3"></div>
               <div class="flex justify-c-c align-i-c gap-l">
                 <div class="pad-s bor-rad-20 icon text-center flex justify-c-c align-i-c" style="font-size: 1.3em; color: var(--white);"
@@ -124,7 +124,7 @@
           <div class="w-100 bor-1-3"></div>
           <div class="relative w-100 flex align-i-c justify-c-c">
             <button class="button button-primary" style="font-size: 0.9em;" (click)="compare()">{{'team.compare.popup_button' | translate}}</button>
-            @if (teamsToCompare.length === 2) {
+            @if (teamsToCompare().length === 2) {
               <button class="swap-button button icon-l pad-s" (click)="swapTeamsToCompare()">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M8 3.5L8 16.5M8 3.5L3.5 7.83333M8 3.5L12.5 7.83333" stroke="var(--text-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -133,8 +133,8 @@
               </button>
             }
           </div>
-          @if (teamsToCompareFeedback) {
-            <span class="formFeedbackError">{{teamsToCompareFeedback}}</span>
+          @if (teamsToCompareFeedback()) {
+            <span class="formFeedbackError">{{teamsToCompareFeedback()}}</span>
           }
         </div>
       </div>

@@ -6,7 +6,7 @@ import { SwitchComponent } from './switch.component';
 @Component({
   template: `
     <app-switch
-      [inputState]="inputState"
+      [state]="state"
       [leftText]="leftText"
       [rightText]="rightText"
       [leftSVG]="leftSVG"
@@ -20,7 +20,7 @@ import { SwitchComponent } from './switch.component';
 })
 class HostComponent 
 {
-  inputState = false;
+  state = false;
   leftText = 'Off';
   rightText = 'On';
   leftSVG: TemplateRef<any> | null = null;
@@ -63,10 +63,10 @@ describe('SwitchComponent', () =>
 
   it('should apply selectedLeft class when state=false', () => 
   {
-    const selector = fixture.debugElement.query(By.css('.selector.option'));
-    const switchComp = selector.componentInstance as SwitchComponent;
-    switchComp.state = false;
+    host.state = false;
     fixture.detectChanges();
+
+    const selector = fixture.debugElement.query(By.css('.selector.option'));
 
     expect(selector.nativeElement.classList).toContain('selectedLeft');
     expect(selector.nativeElement.classList).not.toContain('selectedRight');
@@ -74,10 +74,10 @@ describe('SwitchComponent', () =>
 
   it('should apply selectedRight class when state=true', () => 
   {
-    const selector = fixture.debugElement.query(By.css('.selector.option'));
-    const switchComp = selector.componentInstance as SwitchComponent;
-    switchComp.state = true;
+    host.state = true;
     fixture.detectChanges();
+
+    const selector = fixture.debugElement.query(By.css('.selector.option'));
 
     expect(selector.nativeElement.classList).toContain('selectedRight');
     expect(selector.nativeElement.classList).not.toContain('selectedLeft');
@@ -115,14 +115,14 @@ describe('SwitchComponent', () =>
 
   it('should update state when inputState changes', () => 
   {
-    host.inputState = true;
+    host.state = true;
     fixture.detectChanges();
 
     const switchComp = fixture.debugElement.query(By.css('app-switch')).componentInstance as SwitchComponent;
-    expect(switchComp.state).toBe(true);
+    expect(switchComp.state()).toBe(true);
 
-    host.inputState = false;
+    host.state = false;
     fixture.detectChanges();
-    expect(switchComp.state).toBe(false);
+    expect(switchComp.state()).toBe(false);
   });
 });

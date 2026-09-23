@@ -1,21 +1,21 @@
-import { Component, inject, input, model, output, SimpleChanges, viewChildren } from '@angular/core';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
+import { Component, effect, inject, input, model, output, signal, viewChildren } from '@angular/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ParserService } from '../../../../core/helpers/parser.service';
 import { ThemeService } from '../../../../core/helpers/theme.service';
 import { UtilService } from '../../../../core/helpers/util.service';
 import { WindowService } from '../../../../core/helpers/window.service';
 import { Team } from '../../../../core/models/team/team.model';
 import { TeamOptions } from '../../../../core/models/team/teamOptions.model';
-import { PokemonCardComponent } from '../../pokemon/pokemon-card/pokemon-card.component';
-import { NgTemplateOutlet, NgClass } from '@angular/common';
-import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
-import { PokeTooltipComponent } from '../../pokemon/poke-tooltip/poke-tooltip.component';
-import { TournamentPreviewComponent } from '../tournament-preview/tournament-preview.component';
-import { RegulationPreviewComponent } from '../regulation-preview/regulation-preview.component';
-import { ChipComponent } from '../../dumb/chip/chip.component';
-import { TranslatePipe } from '@ngx-translate/core';
 import { GetTagBgColorPipe } from '../../../pipes/color-pipes/getTagBgColor.pipe';
 import { GetTagTextColorPipe } from '../../../pipes/color-pipes/getTagTextColor.pipe';
 import { CustomFormatDatePipe } from '../../../pipes/converters/customFormatDate.pipe';
+import { ChipComponent } from '../../dumb/chip/chip.component';
+import { TooltipComponent } from '../../dumb/tooltip/tooltip.component';
+import { PokeTooltipComponent } from '../../pokemon/poke-tooltip/poke-tooltip.component';
+import { PokemonCardComponent } from '../../pokemon/pokemon-card/pokemon-card.component';
+import { RegulationPreviewComponent } from '../regulation-preview/regulation-preview.component';
+import { TournamentPreviewComponent } from '../tournament-preview/tournament-preview.component';
 
 @Component({
     selector: 'app-team',
@@ -35,22 +35,22 @@ export class TeamComponent
 
   readonly pokemonComponents = viewChildren(PokemonCardComponent);
 
-  showAllStats: boolean = false;
-  showAllNotes: boolean = false;
-  hasAnyNotes: boolean = false;
-  maxStat: number = 0;
-  rentalCodeCopied: boolean = false;
-  tooltips: boolean[] = [false, false, false]
-  isPlayerSameAsUser: boolean = false;
+  showAllStats = signal<boolean>(false);
+  showAllNotes = signal<boolean>(false);
+  hasAnyNotes = signal<boolean>(false);
+  maxStat = signal<number>(0);
+  rentalCodeCopied = signal<boolean>(false);
+  tooltips = signal<boolean[]>([false, false, false]);
+  isPlayerSameAsUser = signal<boolean>(false);
 
-  ngOnChanges(changes: SimpleChanges)
+  constructor()
   {
-    if(changes['team'])
+    effect(() => 
     {
-      this.team.set(changes['team'].currentValue);
+      this.team();
       this.updateOptions();
-      this.checkUserToPlayer()
-    }
+      this.checkUserToPlayer();
+    })
   }
 
   checkUserToPlayer()
@@ -60,15 +60,15 @@ export class TeamComponent
         && (team.player.username === team.user.username 
           || team.player.username === team.user.name))
     {
-      this.isPlayerSameAsUser = true;
+      this.isPlayerSameAsUser.set(true);
       if(team.user.picture)
       {
         team.player.picture = team.user.picture;
       }
       return;
     }
-    this.isPlayerSameAsUser = false;
-    if(team?.player) { team.player.picture = undefined; }
+    this.isPlayerSameAsUser.set(false);
+    //if(team?.player) { team.player.picture = undefined; }
   }  
 
   updateOptions()
@@ -95,7 +95,7 @@ export class TeamComponent
         team.options.showNature = undefined;
       }
 
-      this.hasAnyNotes = this.anyNotes();
+      this.hasAnyNotes.set(this.anyNotes());
     }
   }
 
@@ -149,19 +149,19 @@ export class TeamComponent
     switch(index)
     {
       case 0:
-        this.showAllStats = !this.showAllStats;
+        this.showAllStats.update(value => !value);
         this.pokemonComponents().forEach(pokemon => 
         {
-          pokemon.showStats[0] = this.showAllStats;
+          pokemon.setStatsVisible(this.showAllStats());
         });
       break;
       case 1:
-        this.showAllNotes = !this.showAllNotes;
+        this.showAllNotes.update(value => !value);
         this.pokemonComponents().forEach(pokemon => 
         {
           if(pokemon.pokemon()?.notes)
           {
-            pokemon.showNotes[0] = this.showAllNotes;
+            pokemon.setNotesVisible(this.showAllNotes());
           }
         });
         break;
@@ -191,7 +191,7 @@ export class TeamComponent
 
   readonly removeEvent = output();
 
-  removeTag(index)
+  removeTag(index: number)
   {
     if(this.removableTags())
     {
@@ -203,13 +203,13 @@ export class TeamComponent
 
   statsUpdated(newMax)
   {
-    if(newMax > this.maxStat) 
+    if(newMax > this.maxStat())
     {
-      this.maxStat = newMax;
+      this.maxStat.set(newMax);
       const team = this.team();
-      if(team && team.options) 
+      if(team && team.options)
       {
-        team.options = {...team.options, maxStat: this.maxStat}
+        team.options = {...team.options, maxStat: this.maxStat()}
       }
     }
   }
@@ -219,11 +219,11 @@ export class TeamComponent
     const team = this.team();
     if(team?.rentalCode)
     {
-      this.rentalCodeCopied = true;
+      this.rentalCodeCopied.set(true);
       this.util.copyToClipboard(team?.rentalCode);
       setTimeout(()=>
       {
-        this.rentalCodeCopied = false;
+        this.rentalCodeCopied.set(false);
       }, 1000);
     }
   }
@@ -256,18 +256,11 @@ export class TeamComponent
   }
 
   clickSection(index: number)
-  {    
-    if(this.tooltips[index])
+  {
+    this.tooltips.update(tooltips =>
     {
-      this.tooltips[index] = false;
-    }
-    else
-    {
-      for(var i = 0; i < this.tooltips.length; i++) 
-      {
-        this.tooltips[i] = false;
-      }
-      this.tooltips[index] = true;
-    }
+      const wasOpen = tooltips[index];
+      return tooltips.map((_, i) => i === index ? !wasOpen : false);
+    });
   }
 }

@@ -1,0 +1,13 @@
+@for (chunk of chunks(); track chunk) {
+  @switch (chunk.type) {
+    @case ('text') {
+      {{ chunk.value }}
+    }
+    @case ('link') {
+      <a [href]="chunk.path">{{ chunk.value }}</a>
+    }
+    @case ('img') {
+      <img src="{{chunk.path}}" alt="{{chunk.value}}" [class]="iconClass()">
+    }
+  }
+}

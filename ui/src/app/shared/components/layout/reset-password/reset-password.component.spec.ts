@@ -1,3 +1,4 @@
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -29,6 +30,7 @@ describe('ResetPasswordComponent', () => {
           provide: Store,
           useValue: {
             select: jest.fn().mockReturnValue(of(null)),
+            selectSignal: jest.fn().mockReturnValue(signal(null)),
             dispatch: jest.fn(),
           },
         },
@@ -67,24 +69,24 @@ describe('ResetPasswordComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should mark password as invalid when empty and button clicked', () => 
+  it('should mark password as invalid when empty and button clicked', () =>
   {
-    component.resetPasswordButtonClicked = true;
+    component.resetPasswordButtonClicked.set(true);
     expect(component.isInvalid('password')).toBe(true);
   });
 
-  it('should mark confirmPassword as invalid when empty and button clicked', () => 
+  it('should mark confirmPassword as invalid when empty and button clicked', () =>
   {
-    component.resetPasswordButtonClicked = true;
+    component.resetPasswordButtonClicked.set(true);
     expect(component.isInvalid('confirmPassword')).toBe(true);
   });
 
-  it('should call store.dispatch with resetPassword when form is valid', () => 
+  it('should call store.dispatch with resetPassword when form is valid', () =>
   {
     component.resetPasswordForm.setValue({ password: 'abc123', confirmPassword: 'abc123' });
     component.resetPassword();
 
-    expect(component.resetPasswordSubmitted).toBe(true);
+    expect(component.resetPasswordSubmitted()).toBe(true);
     expect(store.dispatch).toHaveBeenCalledWith(
       authActions.resetPassword({
         request: {
@@ -101,7 +103,7 @@ describe('ResetPasswordComponent', () => {
     component.resetPasswordForm.setValue({ password: '', confirmPassword: '' });
     component.resetPassword();
 
-    expect(component.resetPasswordSubmitted).toBe(false);
+    expect(component.resetPasswordSubmitted()).toBe(false);
     expect(store.dispatch).not.toHaveBeenCalled();
   });
 

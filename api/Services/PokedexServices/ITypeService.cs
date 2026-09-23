@@ -6,6 +6,7 @@ namespace api.Services.PokedexServices
     public interface ITypeService
     {
         public Task<PokeTypeDTO?> GetTypeById(int id, int langId, bool teraType = false);
+        public Task<Dictionary<int, PokeTypeDTO>> GetTypesByIds(List<int> ids, int langId, bool teraType = false);
         public Task<PokeTypeDTO?> GetTypeByIdentifier(string identifier, bool teraType, int langId);
         public Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessById(int id, int langId);
         public Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessByIdentifier(string identifier, int langId, bool teraType = false);

@@ -1,5 +1,4 @@
-import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
 import { QueryItem } from '../../core/models/misc/queryResult.model';
 import { SearchQueryDTO } from '../../core/models/search/searchQuery.dto';
 import { SearchQueryResponseDTO } from '../../core/models/search/searchQueryResponse.dto';
@@ -11,33 +10,24 @@ import { TeamService } from '../../core/services/team.service';
 @Injectable({
   providedIn: 'root'
 })
-export class SearchService 
+export class SearchService
 {
   teamService = inject(TeamService);
 
-  private query$: BehaviorSubject<SearchQueryDTO> = new BehaviorSubject<SearchQueryDTO>(<SearchQueryDTO>{});
-  query = this.query$.asObservable();
+  query = signal<SearchQueryDTO>(<SearchQueryDTO>{});
+  teams = signal<TeamPreviewData[]>([]);
+  totalTeams = signal<number>(0);
+  searched = signal<boolean>(false);
+  searchError = signal<string>("");
 
-  private teams$: BehaviorSubject<TeamPreviewData[]> = new BehaviorSubject<TeamPreviewData[]>([]);
-  teams = this.teams$.asObservable();
-
-  private totalTeams$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  totalTeams = this.totalTeams$.asObservable();
-
-  private searched$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  searched = this.searched$.asObservable();
-
-  private searchError$: BehaviorSubject<string> = new BehaviorSubject<string>("");
-  searchError = this.searchError$.asObservable();
-
-  constructor() 
+  constructor()
   {
     this.resetQuery();
   }
 
   resetTeams()
   {
-    this.teams$.next([]);
+    this.teams.set([]);
   }
 
   resetQuery()
@@ -56,44 +46,44 @@ export class SearchService
 
   setTeams(teams: TeamPreviewData[])
   {
-    this.teams$.next(teams);
+    this.teams.set(teams);
   }
 
   setSearched(searched: boolean)
   {
-    this.searched$.next(searched);
+    this.searched.set(searched);
   }
 
   setSearchError(searchError: string)
   {
-    this.searchError$.next(searchError);
+    this.searchError.set(searchError);
   }
 
   setTotalTeams(totalTeams: number)
   {
-    this.totalTeams$.next(totalTeams);
+    this.totalTeams.set(totalTeams);
   }
 
   resetDefaultSearch()
   {
     this.resetQuery();
-    this.search(this.query$.getValue());
+    this.search(this.query());
   }
-  
+
   defaultSearch()
   {
     this.setQuerySelectedPage(1);
-    this.search(this.query$.getValue());
+    this.search(this.query());
   }
 
   pageChangeSearch()
   {
-    this.search(this.query$.getValue());
+    this.search(this.query());
   }
 
   userOnlySearch(username: string)
   {
-    const queryItems: QueryItem[] = 
+    const queryItems: QueryItem[] =
     [
       {
         name: username,
@@ -102,28 +92,28 @@ export class SearchService
       }
     ]
     this.setQueryItems(queryItems);
-    this.search(this.query$.getValue());
+    this.search(this.query());
   }
-  
+
   search(searchQuery: SearchQueryDTO)
   {
     this.setSearched(true);
     this.teamService.searchTeams(searchQuery)?.subscribe(
       {
-        next: (response: SearchQueryResponseDTO) => 
+        next: (response: SearchQueryResponseDTO) =>
         {
           this.setTeams(response.teams);
           this.setTotalTeams(response.totalTeams);
           this.setSearchError("");
         },
-        error: (error) => 
+        error: (error) =>
         {
           this.setSearched(false);
           this.setSearchError(error.message);
           this.setTeams([]);
           this.setTotalTeams(0);
         },
-        complete: () => 
+        complete: () =>
         {
           this.setSearched(false);
         }
@@ -133,48 +123,38 @@ export class SearchService
 
   setQuery(query: SearchQueryDTO)
   {
-    this.query$.next(query);
+    this.query.set(query);
   }
 
   setQueryItems(queryItems: QueryItem[])
   {
-    this.query$.next(
-      {...this.query$.getValue(), queries: [...queryItems]}
-    )
+    this.query.update(query => ({...query, queries: [...queryItems]}));
   }
 
   setQueryTeamsPerPage(teamsPerPage: number)
   {
-    this.query$.next(
-      {...this.query$.getValue(), teamsPerPage: teamsPerPage}
-    )
+    this.query.update(query => ({...query, teamsPerPage: teamsPerPage}));
   }
 
   setQuerySelectedPage(selectedPage: number)
   {
-    this.query$.next(
-      {...this.query$.getValue(), selectedPage: selectedPage}
-    )
+    this.query.update(query => ({...query, selectedPage: selectedPage}));
   }
 
   setQuerySortOrder(sortOrder: SortOrder)
   {
     this.setQuerySelectedPage(1);
-    this.query$.next(
-      {...this.query$.getValue(), sortOrder: sortOrder}
-    )
+    this.query.update(query => ({...query, sortOrder: sortOrder}));
   }
 
   setQuerySetOperation(setOperation: SetOperation)
   {
     this.setQuerySelectedPage(1);
-    this.query$.next(
-      {...this.query$.getValue(), setOperation: setOperation}
-    )
+    this.query.update(query => ({...query, setOperation: setOperation}));
   }
 
   getCurrentPage(): number
   {
-    return this.query$.getValue().selectedPage ?? 1;
+    return this.query().selectedPage ?? 1;
   }
 }

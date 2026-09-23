@@ -55,7 +55,6 @@ describe('CheckboxComponent', () =>
     
     fixture = TestBed.createComponent(HostComponent);
     host = fixture.componentInstance;
-    fixture.detectChanges();
 
 
     // Reset inputs to default values
@@ -64,9 +63,6 @@ describe('CheckboxComponent', () =>
     host.tooltip = '';
     host.lock = false;
     host.svgTemplateInput = null;
-
-    // Ensure svg is null
-    fixture.componentRef.setInput('svg', null);
 
     fixture.detectChanges(); // update DOM
   });
@@ -110,7 +106,8 @@ describe('CheckboxComponent', () =>
   it('renders label when no icon and no svg', () => 
   {
     host.icon = '';
-    fixture.componentRef.setInput('svg', null);
+    host.svgTemplateInput = null;
+    fixture.detectChanges();
     const el: HTMLElement = fixture.nativeElement;
     expect(el.textContent).toContain('Test title');
   });
