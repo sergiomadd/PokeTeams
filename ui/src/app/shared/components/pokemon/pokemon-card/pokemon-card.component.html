@@ -1020,7 +1020,7 @@
                                                       {
                                                         width: (pokemon?.calculatedStats ? pokemon?.calculatedStats?.base?.[i]?.value : undefined) | getPokemonStatSizePipe:teamOptions(),
                                                         backgroundColor: (stat | getStatShortIdentifier) | getStatColor:theme.selectedThemeName,
-                                                        borderRadius: pokemon ?? (pokemon! | getPokemonStatBorderRadiusPipe:i:'base':teamOptions())
+                                                        borderRadius: pokemon | getPokemonStatBorderRadiusPipe:i:'base':teamOptions()
                                                       }"
                                                       >
                                                     </div>
@@ -1031,7 +1031,7 @@
                                                         {
                                                           width: pokemon?.ivs ? ((pokemon?.calculatedStats ? pokemon?.calculatedStats?.ivs?.[i]?.value : undefined) | getPokemonStatSizePipe:teamOptions()) : 'none',
                                                           backgroundColor: 'iv' | getStatColor:theme.selectedThemeName,
-                                                          borderRadius: pokemon ?? (pokemon! | getPokemonStatBorderRadiusPipe:i:'iv':teamOptions())
+                                                          borderRadius: pokemon | getPokemonStatBorderRadiusPipe:i:'iv':teamOptions()
                                                         }"
                                                         >
                                                       </div>
