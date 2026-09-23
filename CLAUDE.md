@@ -48,6 +48,10 @@ dotnet ef database update --project api --context PokeTeamContext
 
 Migrations auto-apply on API startup (`context.Database.Migrate()` in `api/Program.cs`) — no manual `database update` needed for local dev once the container/DB is reachable.
 
+## Commit conventions
+
+Commits are scoped to the section of the project they touch: `feat(api): ...` / `fix(api): ...` for backend (`api/`) changes, `feat(ui): ...` / `fix(ui): ...` for frontend (`ui/`) changes. A commit that only touches one section always carries its scope; don't drop it for convenience.
+
 ## Architecture
 
 ### Two separate databases / DbContexts
@@ -78,6 +82,12 @@ NgRx (`core/store/`) is intentionally reserved for cross-cutting, hydrated app s
 **When to use `toSignal()` + `effect()` vs. a plain `.subscribe()`:** if something needs to *react* to a stream over time — a form field that live-syncs into app state on every keystroke (see `team-editor.component.ts`'s `formPlayer`/`formRental`/`formTitle`), a field with async cross-field validation (`auth-form.component.ts`'s `formUsername`/`formEmail` checking availability), or an external event stream like `SocialAuthService.authState` — bridge it with `toSignal()` and drive the side effect from an `effect()`, not a manual `.subscribe()` in the constructor/`ngOnInit`. A manual `.subscribe()` is never auto-unsubscribed by Angular, so on any component that isn't a singleton (anything created/destroyed via `@if`/routing, e.g. a modal), every mount leaks that subscription and its captured `this` — and if the source is a long-lived singleton stream, this can also cause the same event to double-fire across the leaked instances. `toSignal()`/`effect()` tie cleanup to the component's `DestroyRef` automatically, so this class of leak isn't possible.
 
 Conversely, don't reach for `toSignal()`/`effect()` on forms that are purely submit-driven (`{ updateOn: "submit" }`, read via `this.xForm.controls.y.value` inside an `(ngSubmit)` handler, as in most of `user-settings.component.ts`/`auth-form.component.ts`'s login/signup/forgot forms) — nothing needs to observe those fields between keystrokes, so wrapping them in a signal + effect just adds reactive machinery with no reactive consumer. Read `.value` directly in the submit handler.
+
+### Pokemon-card component family
+
+`shared/components/pokemon/pokemon-card/` is fully signal-based (converted from a legacy `ngOnChanges`/plain-mutable-field implementation) and split into several presentational sub-components under `shared/components/pokemon/`: `pokemon-prose` (linked-prose text rendering), `pokemon-stat-row` (one stat's base/IV/EV bars), `pokemon-move-slot` (one move slot), `type-effectiveness-category` (one "xN + type icons" row), and `pokemon-type-badges` (tera-type/type1/type2 badges + tooltips). Each takes plain `input()`s from `PokemonCardComponent` and emits click/toggle intents via `output()` — the parent remains the single owner of all tooltip-visibility state (`signal<boolean[]>()` per group) and dispatches through its `clickSection()` method; children never own or mutate that state themselves.
+
+Because Angular scopes component styles per component (`ViewEncapsulation.Emulated`), a parent's stylesheet never reaches into a child's own template. Classes shared between `pokemon-card.component.scss` and any of its extracted children (`.section`, `.type-category`, `.stat-atribute`, etc.) live in `pokemon-card/pokemon-card-shared.scss`, which each consuming component's own stylesheet pulls in via `@use "../pokemon-card/pokemon-card-shared.scss" as *;`. When adding a new class used by both the parent and a child (or extracting another sub-component from `pokemon-card`), add the rule to this shared partial rather than duplicating it or leaving it only in the parent's stylesheet — the latter silently renders unstyled in any child that uses the class.
 
 ### i18n
 
