@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      AWS_HOST: ${{ secrets.AWS_HOST }}
-      AWS_USERNAME: ${{ secrets.AWS_USERNAME }}
+      DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+      DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
       DEPLOY_PATH_API: ${{ secrets.DEPLOY_PATH_API }}
       DEPLOY_PATH_UI: ${{ secrets.DEPLOY_PATH_UI }}
-      AWS_SSH_KEY: ${{ secrets.AWS_SSH_KEY }}
+      DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
 
     services:
       postgres:
@@ -65,34 +65,29 @@ jobs:
         run: dotnet test ./api.Test/api.Test.csproj --verbosity normal
 
       - name: Publish
-        if: false
         run: dotnet publish ./api/api.csproj --configuration Release --output ./api/bin/Release/net9.0/publish
 
-      - name: Deploy to AWS EC2
-        if: false
+      - name: Deploy API to server
         run: |
-          printf "%s" "$AWS_SSH_KEY" > key.pem
+          printf "%s" "$DEPLOY_SSH_KEY" > key.pem
           chmod 600 key.pem
 
-          echo "Cleaning remote directory (except wwwroot)..."
-          ssh -o StrictHostKeyChecking=no -i key.pem $AWS_USERNAME@$AWS_HOST << EOF
-            find $DEPLOY_PATH_API -mindepth 1 -maxdepth 1 ! -name 'wwwroot' -exec rm -rf {} +
-          EOF
-
-          echo "Uploading files (excluding wwwroot)..."
-          rsync -avz --exclude='wwwroot' -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
-            ./api/bin/Release/net9.0/publish/ $AWS_USERNAME@$AWS_HOST:$DEPLOY_PATH_API
+          echo "Uploading files..."
+          rsync -avzc --delete -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
+            ./api/bin/Release/net9.0/publish/ $DEPLOY_USERNAME@$DEPLOY_HOST:$DEPLOY_PATH_API
 
           echo "Restarting service..."
-          ssh -o StrictHostKeyChecking=no -i key.pem $AWS_USERNAME@$AWS_HOST << EOF
-            sudo systemctl restart poketeams-api-service.service
+          ssh -o StrictHostKeyChecking=no -i key.pem $DEPLOY_USERNAME@$DEPLOY_HOST << EOF
+            sudo systemctl restart poketeams-api.service
           EOF
+
+          rm -f key.pem
         shell: bash
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 24
 
       - name: Install Angular dependencies
         working-directory: ./ui
@@ -102,22 +97,13 @@ jobs:
         working-directory: ./ui
         run: npm run build:prod
 
-      - name: Deploy Angular to EC2
-        if: false
+      - name: Deploy Angular to server
         run: |
-          printf "%s" "$AWS_SSH_KEY" > key.pem
+          printf "%s" "$DEPLOY_SSH_KEY" > key.pem
           chmod 600 key.pem
 
-          echo "Cleaning remote Angular directory..."
-          ssh -o StrictHostKeyChecking=no -i key.pem $AWS_USERNAME@$AWS_HOST << EOF
-            rm -rf $DEPLOY_PATH_UI/*
-          EOF
-
           echo "Uploading Angular build..."
-          rsync -avz --delete -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
-            ./ui/dist/ui/browser/ $AWS_USERNAME@$AWS_HOST:$DEPLOY_PATH_UI
+          rsync -avzc --delete -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
+            ./ui/dist/ui/browser/ $DEPLOY_USERNAME@$DEPLOY_HOST:$DEPLOY_PATH_UI
 
-          echo "Reloading Nginx"
-          ssh -o StrictHostKeyChecking=no -i key.pem $AWS_USERNAME@$AWS_HOST << EOF
-            sudo service nginx restart
-          EOF
+          rm -f key.pem
