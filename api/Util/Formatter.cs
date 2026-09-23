@@ -169,6 +169,13 @@ namespace api.Util
             return text.ToUpperInvariant();
         }
 
+        public static string DeriveShortName(string name)
+        {
+            string shortName = Regex.Replace(name, @"\bRegional Championships?\b", "RC", RegexOptions.IgnoreCase);
+            shortName = Regex.Replace(shortName, @"\bInternational Championships?\b", "IC", RegexOptions.IgnoreCase);
+            return shortName;
+        }
+
         public static string CapitalizeFirst(string text)
         {
             string firstCapitalized = text.Substring(0, 1).ToUpper();

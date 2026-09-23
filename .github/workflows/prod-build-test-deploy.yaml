@@ -89,6 +89,9 @@ jobs:
         with:
           node-version: 24
 
+      - name: Pin npm version
+        run: npm install -g npm@11.6.2
+
       - name: Install Angular dependencies
         working-directory: ./ui
         run: npm ci
