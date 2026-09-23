@@ -45,8 +45,9 @@ namespace api.Models.DBPoketeamModels
 
         public Tournament(TournamentDTO tournamentDTO)
         {
-            Name = tournamentDTO.Name;
             NormalizedName = Formatter.NormalizeString(tournamentDTO.Name);
+            Name = tournamentDTO.Name;
+            ShortName = tournamentDTO.ShortName ?? Formatter.DeriveShortName(tournamentDTO.Name);
             City = tournamentDTO.City;
             CountryCode = tournamentDTO.CountryCode;
             Official = tournamentDTO.Official;
