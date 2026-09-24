@@ -2,7 +2,9 @@
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Models.DBModels;
+using api.Util;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 
 namespace api.Services.PokedexServices
@@ -11,14 +13,16 @@ namespace api.Services.PokedexServices
     {
         private readonly IPokedexContext _pokedexContext;
         private readonly IConfiguration _config;
+        private readonly IMemoryCache _cache;
         private readonly string pokeTypeIconPath;
         private readonly string pokeTypeTeraIconPath;
         private string baseUrl;
 
-        public TypeService(IPokedexContext pokedexContext, IConfiguration config)
+        public TypeService(IPokedexContext pokedexContext, IConfiguration config, IMemoryCache cache)
         {
             _pokedexContext = pokedexContext;
             _config = config;
+            _cache = cache;
 
             baseUrl = "";
             string? baseUrlTemp = _config["BaseUrl"];
@@ -94,6 +98,11 @@ namespace api.Services.PokedexServices
 
         public async Task<PokeTypeDTO?> GetTypeByIdentifier(string identifier, bool teraType, int langId)
         {
+            return await PokedexCache.GetOrCreateAsync(_cache, "type", $"{identifier}:{teraType}", langId, async () => await FetchTypeByIdentifier(identifier, teraType, langId));
+        }
+
+        private async Task<PokeTypeDTO?> FetchTypeByIdentifier(string identifier, bool teraType, int langId)
+        {
             PokeTypeDTO? pokeType = null;
 
             var query =
@@ -158,6 +167,11 @@ namespace api.Services.PokedexServices
 
         public async Task<PokeTypeWithEffectivenessDTO?> GetTypeWithEffectivenessByIdentifier(string identifier, int langId, bool teraType = false)
         {
+            return await PokedexCache.GetOrCreateAsync(_cache, "type-effectiveness", $"{identifier}:{teraType}", langId, async () => await FetchTypeWithEffectivenessByIdentifier(identifier, langId, teraType));
+        }
+
+        private async Task<PokeTypeWithEffectivenessDTO?> FetchTypeWithEffectivenessByIdentifier(string identifier, int langId, bool teraType)
+        {
             PokeTypeWithEffectivenessDTO? pokeType = null;
 
             var query =
@@ -196,6 +210,11 @@ namespace api.Services.PokedexServices
 
         public async Task<EffectivenessDTO?> GetTypeEffectivenessAttack(int id, int langId)
         {
+            return await PokedexCache.GetOrCreateAsync(_cache, "type-eff-atk", id.ToString(), langId, async () => await FetchTypeEffectivenessAttack(id, langId));
+        }
+
+        private async Task<EffectivenessDTO?> FetchTypeEffectivenessAttack(int id, int langId)
+        {
             EffectivenessDTO? effectiveness = null;
             List<Tuple<PokeTypeDTO, double>> allValues = new List<Tuple<PokeTypeDTO, double>>();
             List<type_efficacy> typeEfficacyList = await _pokedexContext.type_efficacy.Where(t => t.damage_type_id == id && t.damage_factor != 100).ToListAsync();
@@ -219,6 +238,11 @@ namespace api.Services.PokedexServices
         }
 
         public async Task<EffectivenessDTO?> GetTypeEffectivenessDefense(int id, int langId)
+        {
+            return await PokedexCache.GetOrCreateAsync(_cache, "type-eff-def", id.ToString(), langId, async () => await FetchTypeEffectivenessDefense(id, langId));
+        }
+
+        private async Task<EffectivenessDTO?> FetchTypeEffectivenessDefense(int id, int langId)
         {
             EffectivenessDTO? effectiveness = null;
             List<Tuple<PokeTypeDTO, double>> allValues = new List<Tuple<PokeTypeDTO, double>>(); ;

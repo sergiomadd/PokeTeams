@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using api.Services.PokedexServices;
 using api.Middlewares;
 using System.Configuration;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,12 @@ builder.Services.AddDbContext<PokedexContext>(options => options.UseNpgsql(build
 builder.Services.AddDbContext<PokeTeamContext>(options => options.UseNpgsql(builder.Configuration["ConnectionStrings:PostgrePoketeam"]), ServiceLifetime.Scoped);
 builder.Services.AddScoped<IPokedexContext, PokedexContext>();
 builder.Services.AddScoped<IPokeTeamContext, PokeTeamContext>();
+
+builder.Services.AddMemoryCache();
+
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<PokeTeamContext>("poketeam-db")
+    .AddDbContextCheck<PokedexContext>("pokedex-db");
 
 builder.Services.AddTransient<IIdentityService, IdentityService>();
 builder.Services.AddTransient<Printer>();
@@ -242,11 +249,17 @@ if (!app.Environment.IsEnvironment("Test"))
 }
 
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "..", "static-assets", "images")),
+    RequestPath = "/images"
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/api/health");
 
 app.Run();
 

@@ -7,6 +7,7 @@ using api.Services.PokedexServices;
 using api.Test.Data;
 using api.Util;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -47,7 +48,7 @@ namespace api.Test.Services
             }).CreateLogger<Printer>());
 
             //sut
-            _service = new AbilityService(_dbContext, _configuration, Printer);
+            _service = new AbilityService(_dbContext, _configuration, Printer, new MemoryCache(new MemoryCacheOptions()));
         }
 
         [Theory]

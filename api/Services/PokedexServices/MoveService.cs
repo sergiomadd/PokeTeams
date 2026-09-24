@@ -5,6 +5,7 @@ using api.Models.DBModels;
 using static api.DTOs.PokemonDTOs.MoveDTO;
 using Microsoft.EntityFrameworkCore;
 using api.Util;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace api.Services.PokedexServices
 {
@@ -13,15 +14,17 @@ namespace api.Services.PokedexServices
         private readonly IPokedexContext _pokedexContext;
         private readonly ITypeService _typeService;
         private readonly IConfiguration _config;
+        private readonly IMemoryCache _cache;
         private string baseUrl;
         private string pokeTypeIconPath;
         private string damageClassIconPath;
 
-        public MoveService(IPokedexContext pokedexContext, ITypeService typeService, IConfiguration config)
+        public MoveService(IPokedexContext pokedexContext, ITypeService typeService, IConfiguration config, IMemoryCache cache)
         {
             _pokedexContext = pokedexContext;
             _typeService = typeService;
             _config = config;
+            _cache = cache;
 
             baseUrl = "";
             string? baseUrlTemp = _config["BaseUrl"];
@@ -34,6 +37,11 @@ namespace api.Services.PokedexServices
         }
 
         public async Task<MoveDTO?> GetMoveByIdentifier(string identifier, int langId)
+        {
+            return await PokedexCache.GetOrCreateAsync(_cache, "move", identifier, langId, async () => await FetchMoveByIdentifier(identifier, langId));
+        }
+
+        private async Task<MoveDTO?> FetchMoveByIdentifier(string identifier, int langId)
         {
             MoveDTO? move = null;
 
@@ -62,11 +70,17 @@ namespace api.Services.PokedexServices
 
         public async Task<Dictionary<string, MoveDTO>> GetMovesByIdentifiers(List<string> identifiers, int langId)
         {
-            Dictionary<string, MoveDTO> movesByIdentifier = new Dictionary<string, MoveDTO>();
             if (identifiers == null || identifiers.Count == 0)
             {
-                return movesByIdentifier;
+                return new Dictionary<string, MoveDTO>();
             }
+
+            return await PokedexCache.GetOrCreateManyAsync<MoveDTO>(_cache, "move", identifiers, langId, async missing => await FetchMovesByIdentifiers(missing, langId));
+        }
+
+        private async Task<Dictionary<string, MoveDTO>> FetchMovesByIdentifiers(List<string> identifiers, int langId)
+        {
+            Dictionary<string, MoveDTO> movesByIdentifier = new Dictionary<string, MoveDTO>();
 
             var query =
                 from moves in _pokedexContext.moves.Where(m => identifiers.Contains(m.identifier))
@@ -364,6 +378,11 @@ namespace api.Services.PokedexServices
 
         public async Task<MovePreviewDTO?> GetMovePreviewByIdentifier(string identifier, int langId)
         {
+            return await PokedexCache.GetOrCreateAsync(_cache, "move-preview", identifier, langId, async () => await FetchMovePreviewByIdentifier(identifier, langId));
+        }
+
+        private async Task<MovePreviewDTO?> FetchMovePreviewByIdentifier(string identifier, int langId)
+        {
             MovePreviewDTO? movePreview = null;
 
             var query =
@@ -407,11 +426,17 @@ namespace api.Services.PokedexServices
 
         public async Task<Dictionary<string, MovePreviewDTO>> GetMovePreviewsByIdentifiers(List<string> identifiers, int langId)
         {
-            Dictionary<string, MovePreviewDTO> movePreviewsByIdentifier = new Dictionary<string, MovePreviewDTO>();
             if (identifiers == null || identifiers.Count == 0)
             {
-                return movePreviewsByIdentifier;
+                return new Dictionary<string, MovePreviewDTO>();
             }
+
+            return await PokedexCache.GetOrCreateManyAsync<MovePreviewDTO>(_cache, "move-preview", identifiers, langId, async missing => await FetchMovePreviewsByIdentifiers(missing, langId));
+        }
+
+        private async Task<Dictionary<string, MovePreviewDTO>> FetchMovePreviewsByIdentifiers(List<string> identifiers, int langId)
+        {
+            Dictionary<string, MovePreviewDTO> movePreviewsByIdentifier = new Dictionary<string, MovePreviewDTO>();
 
             var query =
                 from moves in _pokedexContext.moves.Where(m => identifiers.Contains(m.identifier))

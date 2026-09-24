@@ -5,6 +5,7 @@ namespace api.Services
 {
     public interface ITournamentService
     {
+        public Task<TournamentDTO?> BuildTournamentDTO(Tournament tournament);
         public Task<TournamentDTO?> GetTournamentByNormalizedName(string name);
         public Task<List<TournamentDTO>> GetAllTournaments();
         public Task<Tournament?> SaveTournament(TournamentDTO tournamentDTO);

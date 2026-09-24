@@ -1,20 +1,29 @@
 ﻿using api.Data;
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
+using api.Util;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace api.Services.PokedexServices
 {
     public class StatService : IStatService
     {
         private readonly IPokedexContext _pokedexContext;
+        private readonly IMemoryCache _cache;
 
-        public StatService(IPokedexContext pokedexContext)
+        public StatService(IPokedexContext pokedexContext, IMemoryCache cache)
         {
             _pokedexContext = pokedexContext;
+            _cache = cache;
         }
 
         public async Task<string?> GetStatNameByIdentifier(string identifier, int langId)
+        {
+            return await PokedexCache.GetOrCreateAsync(_cache, "stat-name", identifier, langId, async () => await FetchStatNameByIdentifier(identifier, langId));
+        }
+
+        private async Task<string?> FetchStatNameByIdentifier(string identifier, int langId)
         {
             string? statName = null;
 
@@ -33,6 +42,11 @@ namespace api.Services.PokedexServices
         }
 
         public async Task<List<StatDTO>> GetDefaultStatList(int langId)
+        {
+            return await PokedexCache.GetOrCreateAsync(_cache, "default-stats", "all", langId, async () => await FetchDefaultStatList(langId)) ?? new List<StatDTO>();
+        }
+
+        private async Task<List<StatDTO>> FetchDefaultStatList(int langId)
         {
             List<StatDTO> pokeStats = new List<StatDTO>();
             var query =
@@ -57,6 +71,11 @@ namespace api.Services.PokedexServices
         }
 
         public async Task<List<StatDTO>> GetPokemonStats(int id, int langId)
+        {
+            return await PokedexCache.GetOrCreateAsync(_cache, "pokemon-stats", id.ToString(), langId, async () => await FetchPokemonStats(id, langId)) ?? new List<StatDTO>();
+        }
+
+        private async Task<List<StatDTO>> FetchPokemonStats(int id, int langId)
         {
             List<StatDTO> pokeStats = new List<StatDTO>();
             var query =
