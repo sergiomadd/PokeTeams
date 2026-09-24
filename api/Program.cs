@@ -28,6 +28,10 @@ builder.Services.AddDbContext<PokeTeamContext>(options => options.UseNpgsql(buil
 builder.Services.AddScoped<IPokedexContext, PokedexContext>();
 builder.Services.AddScoped<IPokeTeamContext, PokeTeamContext>();
 
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<PokeTeamContext>("poketeam-db")
+    .AddDbContextCheck<PokedexContext>("pokedex-db");
+
 builder.Services.AddTransient<IIdentityService, IdentityService>();
 builder.Services.AddTransient<Printer>();
 builder.Services.AddTransient<IExternalAuthService, ExternalAuthService>();
@@ -253,6 +257,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/api/health");
 
 app.Run();
 
