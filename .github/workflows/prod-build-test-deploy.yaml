@@ -12,9 +12,9 @@ jobs:
     env:
       DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
       DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
-      DEPLOY_PATH_API: ${{ secrets.DEPLOY_PATH_API }}
-      DEPLOY_PATH_UI: ${{ secrets.DEPLOY_PATH_UI }}
-      DEPLOY_PATH_IMAGES: ${{ secrets.DEPLOY_PATH_IMAGES }}
+      DEPLOY_PATH_API: ${{ vars.DEPLOY_PATH_API }}
+      DEPLOY_PATH_UI: ${{ vars.DEPLOY_PATH_UI }}
+      DEPLOY_PATH_IMAGES: ${{ vars.DEPLOY_PATH_IMAGES }}
       DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
 
     services:
