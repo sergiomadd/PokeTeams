@@ -10,7 +10,7 @@ namespace api.Models.DBPoketeamModels
 
         [Key]
         [Required(ErrorMessage = "Regulation identifier is required")]
-        [StringLength(2, ErrorMessage = "Regulation identifier is too long")]
+        [StringLength(8, ErrorMessage = "Regulation identifier is too long")]
         public string Identifier { get; set; }
 
         public DateOnly? StartDate { get; set; }
