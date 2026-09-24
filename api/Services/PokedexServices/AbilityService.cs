@@ -4,6 +4,7 @@ using api.DTOs.PokemonDTOs;
 using api.Models.DBPokedexModels;
 using api.Util;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace api.Services.PokedexServices
 {
@@ -11,14 +12,16 @@ namespace api.Services.PokedexServices
     {
         private readonly IPokedexContext _pokedexContext;
         private readonly IConfiguration _config;
+        private readonly IMemoryCache _cache;
         private readonly Printer Printer;
         private string baseUrl;
 
-        public AbilityService(IPokedexContext pokedexContext, IConfiguration config, Printer printer)
+        public AbilityService(IPokedexContext pokedexContext, IConfiguration config, Printer printer, IMemoryCache cache)
         {
             _pokedexContext = pokedexContext;
             Printer = printer;
             _config = config;
+            _cache = cache;
 
             baseUrl = "";
             string? baseUrlTemp = _config["BaseUrl"];
@@ -29,6 +32,11 @@ namespace api.Services.PokedexServices
         }
 
         public async Task<AbilityDTO?> GetAbilityByIdentifier(string identifier, int langId)
+        {
+            return await PokedexCache.GetOrCreateAsync(_cache, "ability", identifier, langId, async () => await FetchAbilityByIdentifier(identifier, langId));
+        }
+
+        private async Task<AbilityDTO?> FetchAbilityByIdentifier(string identifier, int langId)
         {
             AbilityDTO? ability = null;
 

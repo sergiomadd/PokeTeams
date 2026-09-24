@@ -28,6 +28,8 @@ builder.Services.AddDbContext<PokeTeamContext>(options => options.UseNpgsql(buil
 builder.Services.AddScoped<IPokedexContext, PokedexContext>();
 builder.Services.AddScoped<IPokeTeamContext, PokeTeamContext>();
 
+builder.Services.AddMemoryCache();
+
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<PokeTeamContext>("poketeam-db")
     .AddDbContextCheck<PokedexContext>("pokedex-db");

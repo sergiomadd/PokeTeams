@@ -2,20 +2,29 @@
 using api.DTOs;
 using api.DTOs.PokemonDTOs;
 using api.Models.DBModels;
+using api.Util;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace api.Services.PokedexServices
 {
     public class NatureService : INatureService
     {
         private readonly IPokedexContext _pokedexContext;
+        private readonly IMemoryCache _cache;
 
-        public NatureService(IPokedexContext pokedexContext)
+        public NatureService(IPokedexContext pokedexContext, IMemoryCache cache)
         {
             _pokedexContext = pokedexContext;
+            _cache = cache;
         }
 
         public async Task<NatureDTO?> GetNatureByIdentifier(string identifier, int langId)
+        {
+            return await PokedexCache.GetOrCreateAsync(_cache, "nature", identifier, langId, async () => await FetchNatureByIdentifier(identifier, langId));
+        }
+
+        private async Task<NatureDTO?> FetchNatureByIdentifier(string identifier, int langId)
         {
             NatureDTO? nature = null;
 

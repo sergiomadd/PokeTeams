@@ -4,6 +4,7 @@ using api.DTOs.PokemonDTOs;
 using api.Models.DBModels;
 using api.Util;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace api.Services.PokedexServices
 {
@@ -11,18 +12,25 @@ namespace api.Services.PokedexServices
     {
         private readonly IPokedexContext _pokedexContext;
         private readonly IConfiguration _config;
+        private readonly IMemoryCache _cache;
         private string baseUrl;
         private string itemIconPath;
 
-        public ItemService(IPokedexContext pokedexContext, IConfiguration config)
+        public ItemService(IPokedexContext pokedexContext, IConfiguration config, IMemoryCache cache)
         {
             _pokedexContext = pokedexContext;
             _config = config;
+            _cache = cache;
             baseUrl = _config["BaseUrl"];
             itemIconPath = $"{baseUrl}images/items/";
         }
 
         public async Task<ItemDTO?> GetItemByIdentifier(string identifier, int langId)
+        {
+            return await PokedexCache.GetOrCreateAsync(_cache, "item", identifier, langId, async () => await FetchItemByIdentifier(identifier, langId));
+        }
+
+        private async Task<ItemDTO?> FetchItemByIdentifier(string identifier, int langId)
         {
             ItemDTO? item = null;
 

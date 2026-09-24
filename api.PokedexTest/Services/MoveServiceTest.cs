@@ -6,6 +6,7 @@ using api.PokedexTest;
 using api.Services.PokedexServices;
 using api.Test.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 
 namespace api.Test.Services
@@ -37,10 +38,10 @@ namespace api.Test.Services
                 _expectedResults = input;
             }
 
-            _typeService = new TypeService(_dbContext, _configuration);
+            _typeService = new TypeService(_dbContext, _configuration, new MemoryCache(new MemoryCacheOptions()));
 
             //sut
-            _service = new MoveService(_dbContext, _typeService, _configuration);
+            _service = new MoveService(_dbContext, _typeService, _configuration, new MemoryCache(new MemoryCacheOptions()));
         }
 
         [Theory]
