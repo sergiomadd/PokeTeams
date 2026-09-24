@@ -60,12 +60,14 @@ namespace api.Services
             TeamDataDTO? teamDataDTO = null;
             if (team != null)
             {
-                teamPokemons ??= await _pokeTeamContext.TeamPokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
+                teamPokemons ??= team.Pokemons != null
+                    ? team.Pokemons.ToList()
+                    : await _pokeTeamContext.TeamPokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
                 TeamOptionsDTO teamOptionsDTO = new TeamOptionsDTO(team.IVsVisibility, team.EVsVisibility, team.NaturesVisibility);
                 UserPreviewDTO? userPreview = null;
                 if (team.UserId != null)
                 {
-                    User? teamUser = await _userService.GetUserById(team.UserId);
+                    User? teamUser = team.User;
                     if (teamUser != null)
                     {
                         if (teamUser.Id == _identityService.GetLoggedUserID())
@@ -92,7 +94,7 @@ namespace api.Services
                     playerPreview,
                     userPreview,
                     team.Title,
-                    team.TournamentNormalizedName != null ? await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName) : null,
+                    team.Tournament != null ? await _tournamentService.BuildTournamentDTO(team.Tournament) : null,
                     team.Regulation != null ? await _regulationService.GetRegulationByIdentifier(team.Regulation) : null,
                     team.RentalCode,
                     team.ViewCount,
@@ -110,7 +112,9 @@ namespace api.Services
             TeamDTO? teamDTO = null;
             if (team != null)
             {
-                List<TeamPokemon> teamPokemons = await _pokeTeamContext.TeamPokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
+                List<TeamPokemon> teamPokemons = team.Pokemons != null
+                    ? team.Pokemons.ToList()
+                    : await _pokeTeamContext.TeamPokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
                 TeamDataDTO? teamDataDTO = await BuildTeamDataDTO(team, langId, teamPokemons);
                 List<PokemonDTO> pokemonDTOs = new List<PokemonDTO>();
                 if (teamDataDTO != null)
@@ -128,7 +132,9 @@ namespace api.Services
         public async Task<TeamPreviewDTO?> BuildTeamPreviewDTO(Team team, int langId)
         {
             TeamPreviewDTO? teamPreviewDTO = null;
-            List<TeamPokemon> pokemons = await _pokeTeamContext.TeamPokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
+            List<TeamPokemon> pokemons = team.Pokemons != null
+                ? team.Pokemons.ToList()
+                : await _pokeTeamContext.TeamPokemon.Where(p => p.TeamId.Equals(team.Id)).ToListAsync();
             List<int> pokemonPreviewIDs = new List<int>();
 
             foreach (TeamPokemon pokemon in pokemons)
@@ -139,7 +145,7 @@ namespace api.Services
             UserPreviewDTO? userPreview = null;
             if (team.UserId != null)
             {
-                User? teamPlayer = await _userService.GetUserById(team.UserId);
+                User? teamPlayer = team.User;
                 if (teamPlayer != null)
                 {
                     if ((!teamPlayer.Visibility || !team.Visibility) && teamPlayer.Id != _identityService.GetLoggedUserID())
@@ -163,7 +169,7 @@ namespace api.Services
                 Player = playerPreview,
                 User = userPreview,
                 Title = team.Title,
-                Tournament = team.TournamentNormalizedName != null ? await _tournamentService.GetTournamentByNormalizedName(team.TournamentNormalizedName) : null,
+                Tournament = team.Tournament != null ? await _tournamentService.BuildTournamentDTO(team.Tournament) : null,
                 Regulation = team.Regulation != null ? await _regulationService.GetRegulationByIdentifier(team.Regulation) : null,
                 ViewCount = team.ViewCount,
                 Date = team.DateCreated.ToString("yyyy-MM-dd"),
@@ -270,7 +276,11 @@ namespace api.Services
             TeamDTO? teamDTO = null;
             try
             {
-                Team? team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == id);
+                Team? team = await _pokeTeamContext.Team
+                    .Include(t => t.User)
+                    .Include(t => t.Tournament)
+                    .Include(t => t.Pokemons)
+                    .FirstOrDefaultAsync(t => t.Id == id);
                 teamDTO = await BuildTeamDTO(team, langId);
             }
             catch (Exception ex)
@@ -286,7 +296,11 @@ namespace api.Services
             TeamDataDTO? teamDataDTO = null;
             try
             {
-                Team? team = await _pokeTeamContext.Team.FirstOrDefaultAsync(t => t.Id == id);
+                Team? team = await _pokeTeamContext.Team
+                    .Include(t => t.User)
+                    .Include(t => t.Tournament)
+                    .Include(t => t.Pokemons)
+                    .FirstOrDefaultAsync(t => t.Id == id);
                 teamDataDTO = await BuildTeamDataDTO(team, langId);
             }
             catch (Exception ex)
@@ -302,10 +316,14 @@ namespace api.Services
             List<TagDTO> tags = new List<TagDTO>();
             if(team.TagIds != null && team.TagIds.Count > 0)
             {
-                foreach (string tadId in team.TagIds)
+                List<Tag> foundTags = await _pokeTeamContext.Tag
+                    .Where(t => team.TagIds.Contains(t.Identifier))
+                    .ToListAsync();
+                Dictionary<string, Tag> tagsByIdentifier = foundTags.ToDictionary(t => t.Identifier);
+
+                foreach (string tagId in team.TagIds)
                 {
-                    Tag? tag = await _pokeTeamContext.Tag.FirstOrDefaultAsync(t => t.Identifier == tadId);
-                    if (tag != null)
+                    if (tagsByIdentifier.TryGetValue(tagId, out Tag? tag))
                     {
                         TagDTO tagDTO = new TagDTO(tag.Name, tag.Identifier, description: tag.Description, color: tag.Color);
                         tags.Add(tagDTO);

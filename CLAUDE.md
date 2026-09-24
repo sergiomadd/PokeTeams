@@ -48,6 +48,10 @@ dotnet ef database update --project api --context PokeTeamContext
 
 Migrations auto-apply on API startup (`context.Database.Migrate()` in `api/Program.cs`) — no manual `database update` needed for local dev once the container/DB is reachable.
 
+## Git workflow
+
+Work happens on `dev`; `main` only moves via a deliberate merge from `dev`, not direct pushes. The user is intentionally stacking multiple changes on `dev` before merging into `main` — don't suggest or perform a push/merge to `main` just because `dev` has new commits. Only push to `main` (or merge `dev` into it) when the user explicitly asks for that merge specifically, separately from asking to commit or push work to `dev`.
+
 ## Commit conventions
 
 Commits are scoped to the section of the project they touch: `feat(api): ...` / `fix(api): ...` for backend (`api/`) changes, `feat(ui): ...` / `fix(ui): ...` for frontend (`ui/`) changes. A commit that only touches one section always carries its scope; don't drop it for convenience.
