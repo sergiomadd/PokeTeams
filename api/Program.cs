@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using api.Services.PokedexServices;
 using api.Middlewares;
 using System.Configuration;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -242,6 +243,11 @@ if (!app.Environment.IsEnvironment("Test"))
 }
 
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "..", "static-assets", "images")),
+    RequestPath = "/images"
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
