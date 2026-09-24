@@ -14,6 +14,7 @@ jobs:
       DEPLOY_USERNAME: ${{ secrets.DEPLOY_USERNAME }}
       DEPLOY_PATH_API: ${{ secrets.DEPLOY_PATH_API }}
       DEPLOY_PATH_UI: ${{ secrets.DEPLOY_PATH_UI }}
+      DEPLOY_PATH_IMAGES: ${{ secrets.DEPLOY_PATH_IMAGES }}
       DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
 
     services:
@@ -108,5 +109,16 @@ jobs:
           echo "Uploading Angular build..."
           rsync -avzc --delete -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
             ./ui/dist/ui/browser/ $DEPLOY_USERNAME@$DEPLOY_HOST:$DEPLOY_PATH_UI
+
+          rm -f key.pem
+
+      - name: Deploy static images to server
+        run: |
+          printf "%s" "$DEPLOY_SSH_KEY" > key.pem
+          chmod 600 key.pem
+
+          echo "Uploading static images..."
+          rsync -avzc --delete -e "ssh -i key.pem -o StrictHostKeyChecking=no" \
+            ./static-assets/images/ $DEPLOY_USERNAME@$DEPLOY_HOST:$DEPLOY_PATH_IMAGES
 
           rm -f key.pem

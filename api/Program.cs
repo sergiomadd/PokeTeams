@@ -249,11 +249,25 @@ if (!app.Environment.IsEnvironment("Test"))
 }
 
 app.UseStaticFiles();
-app.UseStaticFiles(new StaticFileOptions
+
+//StaticAssetsImagesPath lets each environment point at its actual images folder (the server's
+//deploy layout puts them at /var/www/images, not next to the API like the local monorepo does)
+//instead of guessing a relative path. Missing directory only disables this handler rather than
+//crashing the app at startup — nginx already serves /images/ directly in production regardless.
+string staticImagesPath = builder.Configuration["StaticAssetsImagesPath"]
+    ?? Path.Combine(builder.Environment.ContentRootPath, "..", "static-assets", "images");
+if (Directory.Exists(staticImagesPath))
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "..", "static-assets", "images")),
-    RequestPath = "/images"
-});
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(staticImagesPath),
+        RequestPath = "/images"
+    });
+}
+else
+{
+    app.Logger.LogWarning("StaticAssetsImagesPath '{Path}' does not exist — /images/* will not be served by the API directly.", staticImagesPath);
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
